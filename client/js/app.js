@@ -889,15 +889,103 @@ formAdminSettings.addEventListener('submit', async (e) => {
 // 10. NAVIGATION & EVENT LISTENERS
 // ============================================================
 function setupEventListeners() {
-  tabClient.addEventListener('click', () => switchView('client'));
-  tabSeller.addEventListener('click', () => switchView('seller'));
-  tabAdmin.addEventListener('click', () => switchView('admin'));
+  if (tabClient) tabClient.addEventListener('click', () => switchView('client'));
+  if (tabSeller) tabSeller.addEventListener('click', () => switchView('seller'));
+  if (tabAdmin) tabAdmin.addEventListener('click', () => switchView('admin'));
+
+  const navLinkVender = document.getElementById('nav-link-vender');
+  if (navLinkVender) {
+    navLinkVender.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchView('seller');
+    });
+  }
 
   if (btnHeroShareCta) btnHeroShareCta.addEventListener('click', () => switchView('seller'));
   if (btnHalfPublish) btnHalfPublish.addEventListener('click', () => switchView('seller'));
 
-  btnOpenDepositModal.addEventListener('click', openDepositModal);
-  btnCloseDepositModal.addEventListener('click', closeDepositModal);
+  if (btnOpenDepositModal) btnOpenDepositModal.addEventListener('click', openDepositModal);
+  if (btnCloseDepositModal) btnCloseDepositModal.addEventListener('click', closeDepositModal);
+
+  // Auth Modal Setup
+  const modalAuth = document.getElementById('modal-auth');
+  const btnOpenLoginModal = document.getElementById('btn-open-login-modal');
+  const btnOpenRegisterModal = document.getElementById('btn-open-register-modal');
+  const btnCloseAuthModal = document.getElementById('btn-close-auth-modal');
+  const authTabLogin = document.getElementById('auth-tab-login');
+  const authTabRegister = document.getElementById('auth-tab-register');
+  const authNameGroup = document.getElementById('auth-name-group');
+  const authRoleGroup = document.getElementById('auth-role-group');
+  const authModalTitle = document.getElementById('auth-modal-title');
+  const btnAuthSubmit = document.getElementById('btn-auth-submit');
+  const formAuth = document.getElementById('form-auth');
+
+  let authMode = 'login'; // 'login' | 'register'
+
+  function openAuthModal(mode = 'login') {
+    authMode = mode;
+    if (modalAuth) modalAuth.classList.add('active');
+    updateAuthModalState();
+  }
+
+  function closeAuthModal() {
+    if (modalAuth) modalAuth.classList.remove('active');
+  }
+
+  function updateAuthModalState() {
+    if (authMode === 'login') {
+      if (authTabLogin) authTabLogin.classList.add('active');
+      if (authTabRegister) authTabRegister.classList.remove('active');
+      if (authNameGroup) authNameGroup.style.display = 'none';
+      if (authRoleGroup) authRoleGroup.style.display = 'none';
+      if (authModalTitle) authModalTitle.textContent = 'Iniciar Sesión';
+      if (btnAuthSubmit) btnAuthSubmit.textContent = 'Ingresar a GamesBoy';
+    } else {
+      if (authTabLogin) authTabLogin.classList.remove('active');
+      if (authTabRegister) authTabRegister.classList.add('active');
+      if (authNameGroup) authNameGroup.style.display = 'block';
+      if (authRoleGroup) authRoleGroup.style.display = 'block';
+      if (authModalTitle) authModalTitle.textContent = 'Crear Cuenta';
+      if (btnAuthSubmit) btnAuthSubmit.textContent = 'Crear Cuenta en GamesBoy';
+    }
+  }
+
+  if (btnOpenLoginModal) btnOpenLoginModal.addEventListener('click', () => openAuthModal('login'));
+  if (btnOpenRegisterModal) btnOpenRegisterModal.addEventListener('click', () => openAuthModal('register'));
+  if (btnCloseAuthModal) btnCloseAuthModal.addEventListener('click', closeAuthModal);
+  if (authTabLogin) authTabLogin.addEventListener('click', () => { authMode = 'login'; updateAuthModalState(); });
+  if (authTabRegister) authTabRegister.addEventListener('click', () => { authMode = 'register'; updateAuthModalState(); });
+
+  if (formAuth) {
+    formAuth.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('auth-email-input').value;
+      const role = authMode === 'register' ? document.getElementById('auth-role-select').value : 'client';
+      const name = authMode === 'register' ? (document.getElementById('auth-name-input').value || email.split('@')[0]) : email.split('@')[0];
+
+      state.currentUser = {
+        id: 'usr_' + Date.now(),
+        name,
+        email,
+        role,
+        avatar: role === 'seller' ? '💼' : (role === 'admin' ? '👑' : '🎮')
+      };
+      
+      updateHeaderDisplay();
+      closeAuthModal();
+      alert(`🎉 ¡Bienvenido a GamesBoy.net, ${state.currentUser.name}!`);
+      if (role === 'seller') switchView('seller');
+    });
+  }
+
+  // Search Button
+  const btnNavSearch = document.getElementById('btn-nav-search');
+  if (btnNavSearch) {
+    btnNavSearch.addEventListener('click', () => {
+      const catalog = document.getElementById('section-catalog');
+      if (catalog) catalog.scrollIntoView({ behavior: 'smooth' });
+    });
+  }
 
   document.querySelectorAll('.filter-pill').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -923,28 +1011,30 @@ function setupEventListeners() {
     });
   });
 
-  btnPersonaToggle.addEventListener('click', async () => {
-    const roles = ['client', 'seller', 'admin'];
-    const nextRole = roles[(roles.indexOf(state.currentUser.role) + 1) % roles.length];
-    
-    try {
-      const res = await fetch('/api/auth/switch-role', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ role: nextRole })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        state.currentUser = data.user;
-        state.wallet = data.wallet;
-        updateHeaderDisplay();
-        switchView(nextRole);
-        await loadMyVault();
-        if (nextRole === 'seller') loadSellerDashboard();
-        if (nextRole === 'admin') loadAdminOverview();
-      }
-    } catch (e) {}
-  });
+  if (btnPersonaToggle) {
+    btnPersonaToggle.addEventListener('click', async () => {
+      const roles = ['client', 'seller', 'admin'];
+      const nextRole = roles[(roles.indexOf(state.currentUser.role) + 1) % roles.length];
+      
+      try {
+        const res = await fetch('/api/auth/switch-role', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ role: nextRole })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          state.currentUser = data.user;
+          state.wallet = data.wallet;
+          updateHeaderDisplay();
+          switchView(nextRole);
+          await loadMyVault();
+          if (nextRole === 'seller') loadSellerDashboard();
+          if (nextRole === 'admin') loadAdminOverview();
+        }
+      } catch (e) {}
+    });
+  }
 }
 
 function switchView(viewName) {
