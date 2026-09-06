@@ -126,3 +126,19 @@ CREATE TABLE IF NOT EXISTS gamesboy.gb_platform_settings (
     binance_details JSONB NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 10. BANNERS DINÁMICOS ESTILO ENEBA (ACORDEÓN EXPANDIBLE HERO)
+CREATE TABLE IF NOT EXISTS gamesboy.gb_hero_banners (
+    id VARCHAR(64) PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    tagline VARCHAR(255),
+    badge VARCHAR(64) DEFAULT 'PS5',
+    img_horizontal TEXT NOT NULL,
+    img_vertical TEXT NOT NULL,
+    cta_text VARCHAR(64) DEFAULT 'Comprar ahora',
+    cta_url TEXT DEFAULT '#',
+    sort_order INT DEFAULT 0,
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+

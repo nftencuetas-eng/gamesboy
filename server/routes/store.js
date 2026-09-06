@@ -8,7 +8,7 @@ const router = Router();
 // Get digital store products
 router.get('/products', (req, res) => {
   const db = getDb();
-  const products = db.store_products.map(p => ({
+  const products = (db.store_products || []).map(p => ({
     id: p.id,
     title: p.title,
     category: p.category,
@@ -17,6 +17,8 @@ router.get('/products', (req, res) => {
     pricePyg: convertFromUsd(p.priceUsd, 'PYG'),
     badge: p.badge,
     icon: p.icon,
+    coverUrl: p.coverUrl,
+    brandTheme: p.brandTheme,
     description: p.description,
     stockCount: (p.codes || []).length
   }));

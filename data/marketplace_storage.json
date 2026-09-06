@@ -20,20 +20,6 @@
       "email": "lucas@cliente.com",
       "role": "client",
       "avatar": "🎮"
-    },
-    {
-      "id": "usr_g_1788689482236",
-      "name": "Lucas Gamer Pro",
-      "email": "lucas.pro@gmail.com",
-      "role": "client",
-      "avatar": "🌐"
-    },
-    {
-      "id": "usr_1788689483504",
-      "name": "test.user",
-      "email": "test.user@gmail.com",
-      "role": "client",
-      "avatar": "🎮"
     }
   ],
   "wallets": {
@@ -47,14 +33,6 @@
     },
     "usr_client1": {
       "balanceUsd": 25,
-      "pendingEscrowUsd": 0
-    },
-    "usr_g_1788689482236": {
-      "balanceUsd": 0,
-      "pendingEscrowUsd": 0
-    },
-    "usr_1788689483504": {
-      "balanceUsd": 0,
       "pendingEscrowUsd": 0
     }
   },
@@ -72,7 +50,57 @@
       "reference": "SIPAP-REF-892144",
       "receiptUrl": "",
       "notes": "Recarga aprobada por administración",
-      "createdAt": "2026-09-05T02:03:44.019Z"
+      "createdAt": "2026-09-05T10:37:13.045Z"
+    }
+  ],
+  "hero_banners": [
+    {
+      "id": "banner_fc25",
+      "title": "EA SPORTS FC 25",
+      "tagline": "CLUBES, ULTIMATE TEAM & MODO CARRERA",
+      "badge": "PS5 • XBOX • PC",
+      "imgHorizontal": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1600&q=80",
+      "imgVertical": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80",
+      "ctaText": "Ver Ediciones",
+      "ctaUrl": "#section-games",
+      "sortOrder": 0,
+      "isActive": true
+    },
+    {
+      "id": "banner_spiderman2",
+      "title": "Marvel Spider-Man 2",
+      "tagline": "BE GREATER. TOGETHER.",
+      "badge": "PS5 EXCLUSIVE",
+      "imgHorizontal": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1600&q=80",
+      "imgVertical": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
+      "ctaText": "Comprar ahora ➔",
+      "ctaUrl": "#section-games",
+      "sortOrder": 1,
+      "isActive": true
+    },
+    {
+      "id": "banner_cod_bo6",
+      "title": "Call of Duty: Black Ops 6",
+      "tagline": "LA VERDAD MIENTE. VUELVE EL REY DEL SHOOTER",
+      "badge": "CROSS-GEN BUNDLE",
+      "imgHorizontal": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80",
+      "imgVertical": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+      "ctaText": "Comprar Código",
+      "ctaUrl": "#section-games",
+      "sortOrder": 2,
+      "isActive": true
+    },
+    {
+      "id": "banner_gta6",
+      "title": "Grand Theft Auto VI",
+      "tagline": "BIENVENIDO A LEONIDA & VICE CITY",
+      "badge": "NEXT-GEN PRE-ORDER",
+      "imgHorizontal": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1600&q=80",
+      "imgVertical": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
+      "ctaText": "Reservar Ahora",
+      "ctaUrl": "#section-games",
+      "sortOrder": 3,
+      "isActive": true
     }
   ],
   "subscriptions": [
@@ -86,46 +114,29 @@
       "planName": "Ultra HD 4 Pantallas",
       "totalSlots": 4,
       "availableSlots": 3,
-      "pricePerSlotUsd": 3.5,
-      "credentialsEncrypted": "007715dfcda75da356fb4c2ace04e57f:a0fa0295c904de4e298f0a4572e06bfc35f70fbfc1d19c9598273b15c00c5ec139ee667ec84bf00b1a1a4ddf4930728f",
-      "pinsEncrypted": "33c82e021afaf7625878eab65ad33e54:b6aa1641debf8e322cdb34b0644b7d2334c7c6f3fdf51d4aeefefd1961720d8bc8848a2c4fa64f56f61f875e8e2d169c",
+      "pricePerSlotUsd": 4.99,
+      "credentialsEncrypted": "94fcccbf08ac56e1f1dbbf89d2b6d5be:b43184a103e7921a7adf3b7e259f686c47f57e1c6b413874cefa25a97399192451a194dc43c1e10c165cd000329fe42c",
+      "pinsEncrypted": "fe5fbcad4ce159a1747bfa704a0868a7:9691087790b91b967e536a9168c21baa93093516043476c36bcd0544d2c7cd1b9244b8e14d5d668be02a097b752ea346",
       "instructions": "Ingresa con el correo y contraseña provistos. Usa exclusivamente tu Perfil y PIN asignado. Prohibido cambiar credenciales.",
       "status": "active",
-      "createdAt": "2026-09-04T02:03:44.046Z"
+      "createdAt": "2026-09-04T10:37:13.048Z"
     },
     {
-      "id": "sub_chatgpt_official",
+      "id": "sub_spotify_official",
       "sellerId": "usr_admin",
       "sellerName": "GamesBoy Oficial",
       "isOfficial": true,
-      "serviceName": "ChatGPT Plus (GPT-4o)",
-      "category": "ai",
-      "planName": "Plus Team Seat",
-      "totalSlots": 3,
-      "availableSlots": 2,
-      "pricePerSlotUsd": 6,
-      "credentialsEncrypted": "58d1c48b580ccfb9270da56877b55532:74a023530f21d4c9bc2e9f4dacab57036e642f957b1c08c2ee54586a302ecbaa80c7765c38f6102ab17e887b15e2dc52",
-      "pinsEncrypted": "895fb75c4fd130b36530bf091a660efb:31f204574b32c969b278d2735502b5eb9f144563063153b0d2cdd751600d4583c60d9b6809e5cc979489a6227ae21756",
-      "instructions": "Acceso directo a ChatGPT Plus con GPT-4o, generación de imágenes DALL-E y Canvas.",
-      "status": "active",
-      "createdAt": "2026-09-04T02:03:44.046Z"
-    },
-    {
-      "id": "sub_spotify_seller1",
-      "sellerId": "usr_seller1",
-      "sellerName": "Carlos_Streams",
-      "isOfficial": false,
       "serviceName": "Spotify Premium Familiar",
       "category": "streaming",
       "planName": "Plan Familiar 6 Cuentas",
       "totalSlots": 5,
       "availableSlots": 4,
-      "pricePerSlotUsd": 1.8,
-      "credentialsEncrypted": "e2b10f856e56ec9c03f276a9ac2819e9:b210e8ffdfbcf3b5efc4a353d34680088ed3cb045925109f6232c728c7f3a7a3c457275e68a5adabeb4dc3fb3d76555e2b62b81e5ec05e9780454a0a9e468c24737376372425d861d743fcd5ce786247",
-      "pinsEncrypted": "3e076355087d090cd8ad85f955beb16f:dc8b2698ca942180803d1cd2fdc2c71c",
+      "pricePerSlotUsd": 3.99,
+      "credentialsEncrypted": "c24e350987e12fb3c5ee7a523fa4e704:6219bc027c41770477cd252e72cc9d239909217c3b3e25faae6fb37a58445a868e9e48a3e2eb5d8a746db98b37623fcbf861b876ba96097176bbde3b0a6640c60c339c84501a5355f221ae728f5c80ba",
+      "pinsEncrypted": "56cbbfa86b94ca14ccc5b1222543b4a4:9576af9e8578b2ab5e8adf99f36fe46f",
       "instructions": "Recibirás un enlace de invitación oficial para activar Spotify Premium en tu propia cuenta personal.",
       "status": "active",
-      "createdAt": "2026-09-05T02:03:44.046Z"
+      "createdAt": "2026-09-05T10:37:13.048Z"
     },
     {
       "id": "sub_disney_official",
@@ -136,47 +147,98 @@
       "category": "streaming",
       "planName": "Plan Premium 4K HDR",
       "totalSlots": 4,
-      "availableSlots": 3,
-      "pricePerSlotUsd": 2.8,
-      "credentialsEncrypted": "cdb9151bbd51154b97446800d0badfeb:02dac6539443244ff7b41a271a7527fdabf03699e049e80c1a4ac9d3a3839ce4743fcfaff450038726f457cdf18cf2a8",
-      "pinsEncrypted": "c75f4b6109acb5144aeccacd8da44e19:1f56db6ad2bbe0f87b90bdc77d148242bd70bde9022a1a584753b960f73749d11c0bd36e28daee55c43d71a3b57902e2",
+      "availableSlots": 2,
+      "pricePerSlotUsd": 4.99,
+      "credentialsEncrypted": "7691e9c01e3dcbdf903f184f39515c0d:327e49341b65eba0c2f4a4296137ecba4f21797bf1c40b713400605beb830d8f5ab6c006836dbca78a4cc0d372dfb963",
+      "pinsEncrypted": "183c33186005f72a1cea8127b506d609:f59a78393a23a96d7ecc30a311d4584a2a69a19b1c3ae056393826c075ded13f43d97d04f6d4afc9f0ecd34c22056b18",
       "instructions": "Acceso al catálogo completo de Disney, Marvel, Star Wars y deportes de ESPN.",
       "status": "active",
-      "createdAt": "2026-09-05T14:03:44.047Z"
+      "createdAt": "2026-09-05T22:37:13.048Z"
     },
     {
-      "id": "sub_canva_official",
+      "id": "sub_max_official",
       "sellerId": "usr_admin",
       "sellerName": "GamesBoy Oficial",
       "isOfficial": true,
-      "serviceName": "Canva Pro Diseñador",
-      "category": "ai",
-      "planName": "Equipo Pro Ilimitado",
-      "totalSlots": 5,
-      "availableSlots": 4,
-      "pricePerSlotUsd": 2.5,
-      "credentialsEncrypted": "7c08c6f4578d335dc9180fd6c46b2876:5377443da1515f90346cdabb732fdadb610972330c7bfe537737a47dcdf6440ac7f759ee63cbd0f13d43ca276d6bf56881ad0ebc357bfaaeb7bfd76fc1acd03f5f74552394486a7e8a6da86976f1a921",
-      "pinsEncrypted": "5e48f935e993ba3b9bb6dbafaa62845d:0c9cc472dc3e3cbb2856489012630703",
-      "instructions": "Te unes a nuestro equipo de Canva Pro con tu propio correo, manteniendo todos tus diseños privados.",
+      "serviceName": "Max (HBO Max) 4K",
+      "category": "streaming",
+      "planName": "Platino 4K Dolby Atmos",
+      "totalSlots": 3,
+      "availableSlots": 2,
+      "pricePerSlotUsd": 4.99,
+      "credentialsEncrypted": "ca2914f21d1cbcab56b220d196562670:31e113fdc521fdbb0271cdb91ce6d265a0959b0bdfc589f3bc1e29fc33b9bd0bfc2e4d4aa0d90eaebca59b92c86b1435",
+      "pinsEncrypted": "6131243346adfc9e44b9ea4f589a3cbc:3ecca7524aa5abac89c92f33b05f6df523fbcdadc14d10caab0913960fe3ce5b78eedb23752ad47fbb6fe217865b3777",
+      "instructions": "Disfruta de películas de Warner Bros, HBO Originales y Champions League.",
       "status": "active",
-      "createdAt": "2026-09-05T14:03:44.047Z"
+      "createdAt": "2026-09-06T00:37:13.048Z"
     },
     {
-      "id": "sub_youtube_seller1",
-      "sellerId": "usr_seller1",
-      "sellerName": "Carlos_Streams",
-      "isOfficial": false,
+      "id": "sub_youtube_official",
+      "sellerId": "usr_admin",
+      "sellerName": "GamesBoy Oficial",
+      "isOfficial": true,
       "serviceName": "YouTube Premium & Music",
       "category": "streaming",
       "planName": "Familiar Sin Anuncios",
       "totalSlots": 5,
       "availableSlots": 3,
-      "pricePerSlotUsd": 2,
-      "credentialsEncrypted": "b9f1306ee4ad319572c7c3dce7aa6f07:676363e9187888e960fa2e7436a867b8b3840efcccfa005d9aac2ae3d4c44e924bd69ec2b04e7336ac402c97f15438e8b8f63ecfc8445ee8e68860b3282dc7b7709ba41e4fe0f7a621be1f14935e5ea0",
-      "pinsEncrypted": "df190fd15012ea804c1eff9d14ca27c7:86ff47964de59cc762879f6b3118eca2",
+      "pricePerSlotUsd": 3.99,
+      "credentialsEncrypted": "92cf21344309a663bf602b5c0b6ede8e:33fb08c1724149fc234518ec90709744250e57e1df0f56db662643e7dde8fe316227b5ac1cb19e26f6cef61de8b2a588fbd0fb0a96f99b9ba3633d2a97e1273da4b6d65fbe429f545c2a87e28aca1bc2",
+      "pinsEncrypted": "7386984fe24a6af26601751fde08e94f:42094fed2a7933c22e371f17cf614b1e",
       "instructions": "YouTube sin anuncios, descargas offline y YouTube Music en tu propia cuenta de Google.",
       "status": "active",
-      "createdAt": "2026-09-05T20:03:44.048Z"
+      "createdAt": "2026-09-06T04:37:13.048Z"
+    },
+    {
+      "id": "sub_crunchyroll_official",
+      "sellerId": "usr_admin",
+      "sellerName": "GamesBoy Oficial",
+      "isOfficial": true,
+      "serviceName": "Crunchyroll Mega Fan",
+      "category": "streaming",
+      "planName": "Mega Fan 4 Pantallas",
+      "totalSlots": 4,
+      "availableSlots": 3,
+      "pricePerSlotUsd": 3.99,
+      "credentialsEncrypted": "157cb284ef027dd9a20e7d1702d0cd53:afadc50365f5031ba3d7f706bc56746d4bc79ed94c509e7f384a0bcd0aa55d665a9637ec8c4b0485745b669085f16768",
+      "pinsEncrypted": "b2e7c2a163b8037540671d332f3491df:bf6d074aa58092d3067681a7839b408eb46084925b8d57cce2fa119ab4f8a9d108a4ad150de368221f628a022a3d4027",
+      "instructions": "Anime en simulcast desde Japón sin anuncios en calidad 1080p/4K.",
+      "status": "active",
+      "createdAt": "2026-09-06T05:37:13.049Z"
+    },
+    {
+      "id": "sub_appletv_official",
+      "sellerId": "usr_admin",
+      "sellerName": "GamesBoy Oficial",
+      "isOfficial": true,
+      "serviceName": "Apple TV+ 4K",
+      "category": "streaming",
+      "planName": "Suscripción Compartida 4K",
+      "totalSlots": 3,
+      "availableSlots": 1,
+      "pricePerSlotUsd": 4.99,
+      "credentialsEncrypted": "e56dd7122876d192fdde059a3d06a621:d7d747f04ff9aa9875c5da47c025a9935a46d54699dbbc537126fb328019fc15ede0137e291bcb72ec9861cc98c45c53",
+      "pinsEncrypted": "c347e33467ce05d67a6643ca9af24c0b:ce7246a421f526090a0b1a20db21bdeba45936b5bf7c2e4fab4b45e59cbad8fc5b285dc30b1597f1925ef2f2a9f890ca",
+      "instructions": "Acceso a series galardonadas de Apple Original en todos tus dispositivos.",
+      "status": "active",
+      "createdAt": "2026-09-06T06:43:53.049Z"
+    },
+    {
+      "id": "sub_paramount_official",
+      "sellerId": "usr_admin",
+      "sellerName": "GamesBoy Oficial",
+      "isOfficial": true,
+      "serviceName": "Paramount+ Premium",
+      "category": "streaming",
+      "planName": "Plan Estándar 3 Pantallas",
+      "totalSlots": 3,
+      "availableSlots": 2,
+      "pricePerSlotUsd": 3.99,
+      "credentialsEncrypted": "9732e8036584878d5c0a2850d3103433:8210601676574255db2eabbc3936d033fb9078eb82e2e257aa1a183efd914cd808e9ba9b75cf1ff97bc1ff3c15ca616a21234036fd977e357e4fd16121c8b131",
+      "pinsEncrypted": "242e1d5cdbd3f287e6695b0c7ec57422:c061609c6681d017861e57df838e1aa44ba21ec398f9f98b086eb73fbf5a46c127bf5f0b96a34492b132cc27f6984aa2",
+      "instructions": "Películas de estreno, deportes en vivo y series exclusivas de Paramount.",
+      "status": "active",
+      "createdAt": "2026-09-06T07:50:33.049Z"
     }
   ],
   "user_slots": [
@@ -188,87 +250,264 @@
       "buyerName": "Lucas_Py",
       "slotNumber": 1,
       "assignedPin": "1244",
-      "credentialsEncrypted": "f8b73ebcff208f530159a34c163b3a52:39f729a970269750526eb32f3d5f4a7632a66821d1a6ea51e3ebe73c544b83cb3cf0ab1c6b293dae2588201d6a9313c6",
-      "pricePaidUsd": 3.5,
-      "expiresAt": "2026-10-06T02:03:44.048Z",
-      "createdAt": "2026-09-05T02:03:44.048Z"
+      "credentialsEncrypted": "1a22b51e454db38ce68271f5e5ceeb32:7b38e539dc7b21450231626f8e79e1221eee33d27a9df58f253146fd610a592f89462bbd7480e2e5afb827278ad61ebf",
+      "pricePaidUsd": 4.99,
+      "expiresAt": "2026-10-06T10:37:13.049Z",
+      "createdAt": "2026-09-05T10:37:13.049Z"
     }
   ],
   "store_products": [
     {
-      "id": "prod_steam_10",
-      "title": "Steam Gift Card $10 USD",
-      "category": "gift_card",
-      "platform": "Steam",
-      "priceUsd": 10,
-      "badge": "Entrega Inmediata",
-      "icon": "🎮",
-      "description": "Tarjeta de regalo digital oficial para recargar tu billetera de Steam.",
-      "stockCount": 15,
-      "codes": [
-        "STEAM-9821-KLA9-9921",
-        "STEAM-4412-ZZMA-7712",
-        "STEAM-1902-OPPA-5511"
-      ]
-    },
-    {
-      "id": "prod_psn_10",
-      "title": "PlayStation Network Card $10 USD",
-      "category": "gift_card",
-      "platform": "PlayStation",
-      "priceUsd": 10.5,
-      "badge": "Código Digital",
-      "icon": "🟦",
-      "description": "Código digital de PlayStation Store para compras de juegos y suscripciones.",
-      "stockCount": 8,
-      "codes": [
-        "PSN-9844-3312-8841",
-        "PSN-1123-5599-2244"
-      ]
-    },
-    {
-      "id": "prod_xbox_pass",
-      "title": "Xbox Game Pass Ultimate (1 Mes)",
-      "category": "gift_card",
-      "platform": "Xbox",
-      "priceUsd": 8.5,
-      "badge": "Mejor Precio",
-      "icon": "🟩",
-      "description": "Acceso ilimitado a más de 100 juegos de consola y PC + EA Play.",
+      "id": "game_fc25",
+      "title": "EA SPORTS FC 25",
+      "category": "game_key",
+      "platform": "PS5",
+      "priceUsd": 59.99,
+      "badge": "TOP VENTAS",
+      "icon": "⚽",
+      "coverUrl": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80",
+      "description": "Edición Estándar para PS5. Código digital oficial con entrega instantánea.",
       "stockCount": 12,
       "codes": [
-        "XBOX-GPU1-9988-2233-1122",
-        "XBOX-GPU1-5544-7766-3344"
+        "FC25-PS5-9988-1122-3344",
+        "FC25-PS5-7766-5544-2211"
       ]
     },
     {
-      "id": "prod_google_play_10",
-      "title": "Google Play Gift Card $10 USD",
+      "id": "game_cod_bo6",
+      "title": "Call of Duty: Black Ops 6",
+      "category": "game_key",
+      "platform": "PS5",
+      "priceUsd": 69.99,
+      "badge": "NUEVO LANZAMIENTO",
+      "icon": "🎯",
+      "coverUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+      "description": "Lote Cross-Gen para PS4 y PS5. Campaña cinematográfica, Multijugador y Zombies.",
+      "stockCount": 15,
+      "codes": [
+        "BO6-PS5-4433-2211-9988",
+        "BO6-PS5-1199-8877-6655"
+      ]
+    },
+    {
+      "id": "game_rdr2",
+      "title": "Red Dead Redemption II",
+      "category": "game_key",
+      "platform": "PS5",
+      "priceUsd": 39.99,
+      "badge": "OBRA MAESTRA",
+      "icon": "🤠",
+      "coverUrl": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80",
+      "description": "La aclamada aventura de Arthur Morgan y la banda de Van der Linde en el salvaje oeste.",
+      "stockCount": 8,
+      "codes": [
+        "RDR2-PS5-8822-1144-7733"
+      ]
+    },
+    {
+      "id": "game_minecraft",
+      "title": "Minecraft: Bedrock & Java",
+      "category": "game_key",
+      "platform": "PS5",
+      "priceUsd": 26.99,
+      "badge": "FAMILIAR",
+      "icon": "🧱",
+      "coverUrl": "https://images.unsplash.com/photo-1627856013091-fed6e4e30025?auto=format&fit=crop&w=600&q=80",
+      "description": "Construye y explora mundos infinitos. Incluye 3500 Minecoins de regalo.",
+      "stockCount": 20,
+      "codes": [
+        "MC-PS5-9911-3377-5522",
+        "MC-PS5-4488-2266-1133"
+      ]
+    },
+    {
+      "id": "game_eldenring",
+      "title": "Elden Ring",
+      "category": "game_key",
+      "platform": "PS5",
+      "priceUsd": 39.99,
+      "badge": "GOTY",
+      "icon": "⚔️",
+      "coverUrl": "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80",
+      "description": "El galardonado RPG de acción de FromSoftware y George R. R. Martin.",
+      "stockCount": 10,
+      "codes": [
+        "ELDEN-PS5-7711-9944-2288"
+      ]
+    },
+    {
+      "id": "game_gtav",
+      "title": "Grand Theft Auto V: Premium",
+      "category": "game_key",
+      "platform": "PS5",
+      "priceUsd": 19.99,
+      "badge": "POPULAR",
+      "icon": "🚗",
+      "coverUrl": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
+      "description": "Incluye Modo Historia completo, GTA Online y Criminal Enterprise Starter Pack.",
+      "stockCount": 18,
+      "codes": [
+        "GTAV-PS5-5533-8811-4477",
+        "GTAV-PS5-2244-6688-9900"
+      ]
+    },
+    {
+      "id": "game_lastofus",
+      "title": "The Last of Us Part I",
+      "category": "game_key",
+      "platform": "PS5",
+      "priceUsd": 49.99,
+      "badge": "REMAKE PS5",
+      "icon": "🌿",
+      "coverUrl": "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=600&q=80",
+      "description": "Reconstruido desde cero para PS5 con gráficos de última generación y audio 3D.",
+      "stockCount": 7,
+      "codes": [
+        "TLOU1-PS5-8833-2211-7744"
+      ]
+    },
+    {
+      "id": "game_spiderman2_game",
+      "title": "Marvel Spider-Man 2",
+      "category": "game_key",
+      "platform": "PS5",
+      "priceUsd": 59.99,
+      "badge": "DESTACADO",
+      "icon": "🕷️",
+      "coverUrl": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
+      "description": "Juega como Peter Parker y Miles Morales enfrentando al temible Venom.",
+      "stockCount": 14,
+      "codes": [
+        "SPIDY2-PS5-9922-1133-4488",
+        "SPIDY2-PS5-3377-5511-2299"
+      ]
+    },
+    {
+      "id": "gc_psn_10",
+      "title": "PlayStation Store Gift Card",
+      "category": "gift_card",
+      "platform": "PlayStation",
+      "priceUsd": 10,
+      "badge": "OFICIAL PSN",
+      "icon": "🟦",
+      "brandTheme": "psn",
+      "description": "Tarjeta oficial de PlayStation Network con entrega digital de código PIN.",
+      "stockCount": 25,
+      "codes": [
+        "PSN-10-8844-3312-8841",
+        "PSN-10-1123-5599-2244"
+      ]
+    },
+    {
+      "id": "gc_xbox_10",
+      "title": "Xbox Gift Card",
+      "category": "gift_card",
+      "platform": "Xbox",
+      "priceUsd": 10,
+      "badge": "OFICIAL XBOX",
+      "icon": "🟩",
+      "brandTheme": "xbox",
+      "description": "Saldo oficial para compras de juegos, pases y complementos en Microsoft Store y Xbox.",
+      "stockCount": 20,
+      "codes": [
+        "XBOX-10-GPU1-9988-2233",
+        "XBOX-10-GPU1-5544-7766"
+      ]
+    },
+    {
+      "id": "gc_nintendo_20",
+      "title": "Nintendo eShop Card",
+      "category": "gift_card",
+      "platform": "Nintendo",
+      "priceUsd": 20,
+      "badge": "OFICIAL SWITCH",
+      "icon": "🔴",
+      "brandTheme": "nintendo",
+      "description": "Canjea juegos digitales y DLCs en la Nintendo eShop para Nintendo Switch.",
+      "stockCount": 15,
+      "codes": [
+        "NIN-20-8899-2211-4433",
+        "NIN-20-5577-1133-9988"
+      ]
+    },
+    {
+      "id": "gc_steam_5",
+      "title": "Steam Wallet Card",
+      "category": "gift_card",
+      "platform": "Steam",
+      "priceUsd": 5,
+      "badge": "ENTREGA INMEDIATA",
+      "icon": "🎮",
+      "brandTheme": "steam",
+      "description": "Añade fondos a tu billetera de Steam para comprar juegos de PC y cosméticos.",
+      "stockCount": 30,
+      "codes": [
+        "STEAM-5-9821-KLA9-9921",
+        "STEAM-5-4412-ZZMA-7712"
+      ]
+    },
+    {
+      "id": "gc_googleplay_10",
+      "title": "Google Play Gift Card",
       "category": "gift_card",
       "platform": "Google Play",
       "priceUsd": 10,
-      "badge": "Oficial",
+      "badge": "ANDROID & APPS",
       "icon": "📱",
-      "description": "Recarga saldo en tu cuenta de Google Play para apps, juegos y gemas.",
-      "stockCount": 20,
+      "brandTheme": "googleplay",
+      "description": "Saldo para juegos móviles, suscripciones y compras dentro de apps en Google Play.",
+      "stockCount": 25,
       "codes": [
-        "GPLAY-8899-2233-4455",
-        "GPLAY-1122-3344-5566"
+        "GPLAY-10-8899-2233-4455",
+        "GPLAY-10-1122-3344-5566"
       ]
     },
     {
-      "id": "prod_roblox_10",
-      "title": "Roblox 800 Robux Card ($10)",
+      "id": "gc_apple_25",
+      "title": "Apple Gift Card",
       "category": "gift_card",
-      "platform": "Roblox",
-      "priceUsd": 9.8,
-      "badge": "Popular",
-      "icon": "🟥",
-      "description": "Tarjeta de 800 Robux para avatares, skins y pases de juego en Roblox.",
-      "stockCount": 10,
+      "platform": "Apple",
+      "priceUsd": 25,
+      "badge": "APP STORE & ICLOUD",
+      "icon": "🍎",
+      "brandTheme": "apple",
+      "description": "Todo lo relacionado con Apple: apps, juegos, música, iCloud y suscripciones.",
+      "stockCount": 12,
       "codes": [
-        "ROBLOX-8833-2299-1144",
-        "ROBLOX-5566-7788-9900"
+        "APPLE-25-8833-2299-1144",
+        "APPLE-25-5566-7788-9900"
+      ]
+    },
+    {
+      "id": "gc_riot_10",
+      "title": "Riot Games Prepaid Card",
+      "category": "gift_card",
+      "platform": "Riot Games",
+      "priceUsd": 10,
+      "badge": "VALORANT & LOL",
+      "icon": "👊",
+      "brandTheme": "riot",
+      "description": "Canjea Valorant Points (VP) o Riot Points (RP) para skins y pases de batalla.",
+      "stockCount": 18,
+      "codes": [
+        "RIOT-10-8811-3322-7744",
+        "RIOT-10-5599-1144-8833"
+      ]
+    },
+    {
+      "id": "gc_blizzard_20",
+      "title": "Blizzard Battle.net Card",
+      "category": "gift_card",
+      "platform": "Blizzard",
+      "priceUsd": 20,
+      "badge": "BATTLE.NET",
+      "icon": "❄️",
+      "brandTheme": "blizzard",
+      "description": "Saldo oficial para World of Warcraft, Overwatch 2, Diablo IV y Hearthstone.",
+      "stockCount": 14,
+      "codes": [
+        "BLIZZ-20-9944-1133-7722",
+        "BLIZZ-20-4488-3311-6655"
       ]
     }
   ],
@@ -288,7 +527,7 @@
         "accountNumber": "03-998877-1",
         "aliasSipap": "carlos.stream.py"
       },
-      "createdAt": "2026-09-06T01:03:44.048Z"
+      "createdAt": "2026-09-06T09:37:13.049Z"
     }
   ],
   "platform_settings": {

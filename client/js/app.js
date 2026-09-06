@@ -1,1252 +1,682 @@
-// GamesBoy.net - Master Client Platform Application
+// GamesBoy.net - Master ENEBA Marketplace Core Engine
 
 const state = {
   activeView: 'client', // 'client' | 'seller' | 'admin'
+  adminSubView: 'dashboard', // 'dashboard' | 'banners' | 'settings'
   currency: localStorage.getItem('gb_currency') || 'USD',
   currentUser: { id: 'usr_client1', name: 'Lucas_Py', role: 'client', avatar: '🎮' },
-  wallet: { balanceUsd: 0.0, pendingEscrowUsd: 0.0 },
+  wallet: { balanceUsd: 25.0, pendingEscrowUsd: 0.0 },
   exchangeRates: { PYG: 7500 },
+  heroBanners: [],
+  activeSlideIndex: 1, // Default Spider-Man 2
+  heroInterval: null,
   subscriptions: [],
   storeProducts: [],
   myVault: [],
-  activeCategory: 'all',
-  depositMethod: 'sipap', // 'sipap' | 'binance'
-  
-  // Interactive Calculator State
-  calculatorServices: [
-    { id: 'calc_netflix', name: 'Netflix 4K', official: 15.00, gamesboy: 3.50, icon: '🍿', selected: true },
-    { id: 'calc_spotify', name: 'Spotify Familiar', official: 11.00, gamesboy: 1.80, icon: '🎧', selected: true },
-    { id: 'calc_chatgpt', name: 'ChatGPT Plus', official: 20.00, gamesboy: 6.00, icon: '🤖', selected: true },
-    { id: 'calc_disney', name: 'Disney+ / Star+', official: 11.00, gamesboy: 2.80, icon: '🏰', selected: false },
-    { id: 'calc_youtube', name: 'YouTube Premium', official: 14.00, gamesboy: 2.00, icon: '▶️', selected: false },
-    { id: 'calc_canva', name: 'Canva Pro', official: 13.00, gamesboy: 2.50, icon: '🎨', selected: false }
-  ]
+  cart: [],
+  depositMethod: 'sipap'
 };
 
-// DOM Elements
-const brandLogo = document.getElementById('brand-logo');
-const tabClient = document.getElementById('tab-client');
-const tabSeller = document.getElementById('tab-seller');
-const tabAdmin = document.getElementById('tab-admin');
-const viewClient = document.getElementById('view-client');
-const viewSeller = document.getElementById('view-seller');
-const viewAdmin = document.getElementById('view-admin');
+// SMM Social Media Packages (Base API Ready)
+const smmServices = [
+  { id: 'smm_ig_followers', platform: 'Instagram', name: 'Seguidores Reales Latinos', priceUsd: 4.50, icon: '📸', desc: '1,000 Seguidores de alta calidad con entrega gradual y garantía de reposición.' },
+  { id: 'smm_tiktok_views', platform: 'TikTok', name: 'Visualizaciones Virales', priceUsd: 2.00, icon: '🎵', desc: '10,000 Views para impulsar tus videos en el algoritmo Para Ti.' },
+  { id: 'smm_yt_subscribers', platform: 'YouTube', name: 'Suscriptores para Monetización', priceUsd: 8.00, icon: '▶️', desc: '500 Suscriptores orgánicos compatibles con el programa de socios.' },
+  { id: 'smm_x_retweets', platform: 'X (Twitter)', name: 'Likes & Retweets', priceUsd: 3.00, icon: '✖️', desc: '500 Interacciones rápidas para posicionar tus publicaciones y tendencias.' }
+];
 
-const currencySelector = document.getElementById('currency-selector');
-const navWalletBalance = document.getElementById('nav-wallet-balance');
-const navUserAvatar = document.getElementById('nav-user-avatar');
-const navUserName = document.getElementById('nav-user-name');
-const btnPersonaToggle = document.getElementById('btn-persona-toggle');
-
-const subscriptionsGrid = document.getElementById('subscriptions-grid');
-const storeProductsGrid = document.getElementById('store-products-grid');
-const vaultListContainer = document.getElementById('vault-list-container');
-
-// Calculator Elements
-const calcServicesContainer = document.getElementById('calc-services-container');
-const calcSavingsTotal = document.getElementById('calc-savings-total');
-const calcSavingsPyg = document.getElementById('calc-savings-pyg');
-const calcOfficialPrice = document.getElementById('calc-official-price');
-const calcGamesboyPrice = document.getElementById('calc-gamesboy-price');
-
-// Deposit Modal Elements
-const btnOpenDepositModal = document.getElementById('btn-open-deposit-modal');
-const btnCloseDepositModal = document.getElementById('btn-close-deposit-modal');
-const modalDeposit = document.getElementById('modal-deposit');
-const tabPaySipap = document.getElementById('tab-pay-sipap');
-const tabPayBinance = document.getElementById('tab-pay-binance');
-const boxPaySipap = document.getElementById('box-pay-sipap');
-const boxPayBinance = document.getElementById('box-pay-binance');
-const depositAmountInput = document.getElementById('deposit-amount-input');
-const labelDepositAmount = document.getElementById('label-deposit-amount');
-const depositConvertedPreview = document.getElementById('deposit-converted-preview');
-const depositReferenceInput = document.getElementById('deposit-reference-input');
-const depositReceiptFile = document.getElementById('deposit-receipt-file');
-const formSubmitDeposit = document.getElementById('form-submit-deposit');
-
-// Seller Portal Elements
-const sellerStatBalance = document.getElementById('seller-stat-balance');
-const sellerStatBalancePyg = document.getElementById('seller-stat-balance-pyg');
-const sellerStatEscrow = document.getElementById('seller-stat-escrow');
-const sellerStatSlots = document.getElementById('seller-stat-slots');
-const sellerStatCommission = document.getElementById('seller-stat-commission');
-const formPublishSubscription = document.getElementById('form-publish-subscription');
-const sellerListingsTableBody = document.getElementById('seller-listings-table-body');
-const btnOpenPayoutModal = document.getElementById('btn-open-payout-modal');
-const btnClosePayoutModal = document.getElementById('btn-close-payout-modal');
-const modalPayout = document.getElementById('modal-payout');
-const formSubmitPayout = document.getElementById('form-submit-payout');
-const payoutAmountUsd = document.getElementById('payout-amount-usd');
-const payoutAmountPygPreview = document.getElementById('payout-amount-pyg-preview');
-
-// Admin Portal Elements
-const adminStatPendingDeposits = document.getElementById('admin-stat-pending-deposits');
-const adminStatPendingPayouts = document.getElementById('admin-stat-pending-payouts');
-const adminStatSalesVolume = document.getElementById('admin-stat-sales-volume');
-const adminStatBalance = document.getElementById('admin-stat-balance');
-const adminPendingDepositsBody = document.getElementById('admin-pending-deposits-body');
-const adminPendingPayoutsBody = document.getElementById('admin-pending-payouts-body');
-const formAdminSettings = document.getElementById('form-admin-settings');
-const setCommissionPercent = document.getElementById('set-commission-percent');
-const setExchangeRate = document.getElementById('set-exchange-rate');
-const setBankHolder = document.getElementById('set-bank-holder');
-const setBankAccount = document.getElementById('set-bank-account');
-const setBinanceId = document.getElementById('set-binance-id');
-const setBinanceWallet = document.getElementById('set-binance-wallet');
-
-// CTA Buttons
-const btnHeroShareCta = document.getElementById('btn-hero-share-cta');
-const btnHalfPublish = document.getElementById('btn-half-publish');
-
-// ============================================================
-// 1. INITIALIZATION & STATE
-// ============================================================
-async function init() {
-  currencySelector.value = state.currency;
-  setupEventListeners();
-  initCalculator();
-  await loadUserData();
-  await loadCatalog();
-  await loadStoreProducts();
-  await loadMyVault();
-  connectWebSocket();
-}
-
-async function loadUserData() {
-  try {
-    const res = await fetch('/api/auth/me', {
-      headers: { 'x-user-id': state.currentUser.id }
-    });
-    if (res.ok) {
-      const data = await res.json();
-      state.currentUser = data.user;
-      state.wallet = data.wallet;
-      updateHeaderDisplay();
-    }
-  } catch (err) {
-    console.error('Error loading user data:', err);
+// Fallback Default Hero Banners (ENEBA Style)
+const defaultBanners = [
+  {
+    id: 'banner_fc25',
+    title: 'EA SPORTS FC 25',
+    tagline: 'CLUBES, ULTIMATE TEAM & MODO CARRERA',
+    badge: 'PS5 • XBOX • PC',
+    imgHorizontal: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1600&q=80',
+    imgVertical: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80',
+    ctaText: 'Ver Ediciones',
+    ctaUrl: '#section-games',
+    sortOrder: 0
+  },
+  {
+    id: 'banner_spiderman2',
+    title: 'MARVEL SPIDER-MAN 2',
+    tagline: 'BE GREATER. TOGETHER.',
+    badge: 'PS5 EXCLUSIVE',
+    imgHorizontal: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1600&q=80',
+    imgVertical: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80',
+    ctaText: 'Comprar ahora',
+    ctaUrl: '#section-games',
+    sortOrder: 1
+  },
+  {
+    id: 'banner_cod_bo6',
+    title: 'CALL OF DUTY: BLACK OPS 6',
+    tagline: 'LA VERDAD MIENTE. VUELVE EL REY DEL SHOOTER',
+    badge: 'CROSS-GEN BUNDLE',
+    imgHorizontal: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80',
+    imgVertical: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
+    ctaText: 'Comprar Código',
+    ctaUrl: '#section-games',
+    sortOrder: 2
+  },
+  {
+    id: 'banner_gta6',
+    title: 'GRAND THEFT AUTO VI',
+    tagline: 'BIENVENIDO A LEONIDA & VICE CITY',
+    badge: 'NEXT-GEN PRE-ORDER',
+    imgHorizontal: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1600&q=80',
+    imgVertical: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80',
+    ctaText: 'Reservar Ahora',
+    ctaUrl: '#section-games',
+    sortOrder: 3
   }
-}
+];
 
-function updateHeaderDisplay() {
-  navUserAvatar.textContent = state.currentUser.avatar;
-  navUserName.textContent = `${state.currentUser.name} (${state.currentUser.role.toUpperCase()})`;
-
-  if (state.currency === 'PYG') {
-    const pyg = Math.round(state.wallet.balanceUsd * (state.exchangeRates.PYG || 7500));
-    navWalletBalance.textContent = `₲ ${pyg.toLocaleString('es-PY')}`;
-  } else {
-    navWalletBalance.textContent = `$ ${state.wallet.balanceUsd.toFixed(2)} USDT`;
-  }
-}
-
-// ============================================================
-// 2. SAVINGS CALCULATOR LOGIC
-// ============================================================
-function initCalculator() {
-  if (!calcServicesContainer) return;
-  calcServicesContainer.innerHTML = '';
-
-  state.calculatorServices.forEach(item => {
-    const btn = document.createElement('div');
-    btn.className = `calc-service-item ${item.selected ? 'selected' : ''}`;
-    btn.innerHTML = `
-      <span style="font-size: 1.25rem;">${item.icon}</span>
-      <div style="flex: 1;">
-        <div style="font-weight: 700; font-size: 0.85rem; color: var(--text-primary);">${item.name}</div>
-        <div style="font-size: 0.72rem; color: var(--text-tertiary);">Oficial: $${item.official}</div>
-      </div>
-      <span style="color: ${item.selected ? 'var(--accent-orange)' : 'var(--text-tertiary)'}; font-size: 1rem;">
-        ${item.selected ? '✔' : '○'}
-      </span>
-    `;
-
-    btn.addEventListener('click', () => {
-      item.selected = !item.selected;
-      initCalculator();
-      updateCalculatorResults();
-    });
-
-    calcServicesContainer.appendChild(btn);
-  });
-
-  updateCalculatorResults();
-}
-
-function updateCalculatorResults() {
-  let totalOfficial = 0;
-  let totalGamesBoy = 0;
-
-  state.calculatorServices.forEach(s => {
-    if (s.selected) {
-      totalOfficial += s.official;
-      totalGamesBoy += s.gamesboy;
-    }
-  });
-
-  const monthlySavings = Math.max(0, totalOfficial - totalGamesBoy);
-  const annualSavingsUsd = monthlySavings * 12;
-  const rate = state.exchangeRates.PYG || 7500;
-  const annualSavingsPyg = Math.round(annualSavingsUsd * rate);
-
-  calcSavingsTotal.textContent = `$ ${annualSavingsUsd.toFixed(2)} USD`;
-  calcSavingsPyg.textContent = `Aprox. ₲ ${annualSavingsPyg.toLocaleString('es-PY')} Guaraníes / año`;
-  calcOfficialPrice.textContent = `$ ${totalOfficial.toFixed(2)}/m`;
-  calcGamesboyPrice.textContent = `$ ${totalGamesBoy.toFixed(2)}/m`;
-}
-
-// ============================================================
-// 3. CURRENCY & FORMATTING HELPERS
-// ============================================================
+// --- FORMAT CURRENCY HELPER ---
 function formatPrice(amountUsd) {
-  const rate = state.exchangeRates.PYG || 7500;
   if (state.currency === 'PYG') {
-    const pyg = Math.round(amountUsd * rate);
-    return {
-      main: `₲ ${pyg.toLocaleString('es-PY')}`,
-      secondary: `$ ${amountUsd.toFixed(2)} USDT`
-    };
-  } else {
-    const pyg = Math.round(amountUsd * rate);
-    return {
-      main: `$ ${amountUsd.toFixed(2)} USDT`,
-      secondary: `₲ ${pyg.toLocaleString('es-PY')}`
-    };
+    const pyg = Math.round(amountUsd * state.exchangeRates.PYG);
+    return `₲ ${pyg.toLocaleString('es-PY')}`;
   }
+  return `USD $${amountUsd.toFixed(2)}`;
 }
 
-currencySelector.addEventListener('change', (e) => {
-  state.currency = e.target.value;
-  localStorage.setItem('gb_currency', state.currency);
-  updateHeaderDisplay();
-  renderSubscriptions();
-  renderStoreProducts();
-  renderVault();
-  updateCalculatorResults();
-  if (state.activeView === 'seller') loadSellerDashboard();
-});
+// --- 1. HERO ACCORDION BANNER MODULE (ENEBA STYLE) ---
+function initHeroAccordion() {
+  const container = document.getElementById('eneba-accordion-slides');
+  const dotsContainer = document.getElementById('hero-dots-container');
+  const prevBtn = document.getElementById('btn-hero-prev');
+  const nextBtn = document.getElementById('btn-hero-next');
 
-// ============================================================
-// 4. CATALOG & SUBSCRIPTIONS
-// ============================================================
-async function loadCatalog() {
-  try {
-    const res = await fetch('/api/subscriptions');
-    if (res.ok) {
-      state.subscriptions = await res.json();
-      renderSubscriptions();
-    }
-  } catch (err) {
-    console.error('Error loading subscriptions:', err);
+  if (!container) return;
+
+  const banners = (state.heroBanners && state.heroBanners.length >= 4) ? state.heroBanners : defaultBanners;
+
+  // Render Slides
+  container.innerHTML = banners.slice(0, 4).map((b, idx) => {
+    const isActive = idx === state.activeSlideIndex;
+    return `
+      <div class="eneba-slide ${isActive ? 'active' : ''}" data-slide-index="${idx}">
+        <div class="eneba-slide-bg horizontal-bg" style="background-image: url('${b.imgHorizontal || ''}');"></div>
+        <div class="eneba-slide-bg vertical-bg" style="background-image: url('${b.imgVertical || ''}');"></div>
+        <div class="eneba-slide-overlay"></div>
+        
+        <!-- Collapsed Info -->
+        <div class="eneba-collapsed-info">
+          <span class="eneba-collapsed-badge">${b.badge || 'DESTACADO'}</span>
+          <span class="eneba-collapsed-title">${b.title}</span>
+        </div>
+
+        <!-- Expanded Content -->
+        <div class="eneba-expanded-content">
+          <div class="eneba-platform-tag">
+            <span>${b.badge || 'OFICIAL'}</span>
+          </div>
+          <h2 class="eneba-expanded-title">${b.title}</h2>
+          <p class="eneba-expanded-tagline">${b.tagline || ''}</p>
+          <div class="eneba-expanded-actions">
+            <a href="${b.ctaUrl || '#section-games'}" class="btn-eneba-cta">
+              <span>${b.ctaText || 'Comprar ahora'}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // Render Dots
+  if (dotsContainer) {
+    dotsContainer.innerHTML = banners.slice(0, 4).map((_, idx) => `
+      <span class="hero-dot ${idx === state.activeSlideIndex ? 'active' : ''}" data-index="${idx}"></span>
+    `).join('');
   }
-}
 
-function renderSubscriptions() {
-  if (!subscriptionsGrid) return;
-  subscriptionsGrid.innerHTML = '';
-
-  const filtered = state.subscriptions.filter(s => {
-    if (state.activeCategory === 'all') return true;
-    if (state.activeCategory === 'streaming') return s.category === 'streaming';
-    if (state.activeCategory === 'ai') return s.category === 'ai';
-    if (state.activeCategory === 'store') return false;
-    return true;
+  // Attach Click / Hover listeners to each slide
+  const slides = container.querySelectorAll('.eneba-slide');
+  slides.forEach((slide) => {
+    const idx = parseInt(slide.dataset.slideIndex, 10);
+    slide.addEventListener('click', (e) => {
+      // If clicking inside a CTA link, allow navigation
+      if (e.target.closest('a')) return;
+      setActiveSlide(idx);
+    });
+    slide.addEventListener('mouseenter', () => {
+      stopHeroAutoplay();
+    });
+    slide.addEventListener('mouseleave', () => {
+      startHeroAutoplay();
+    });
   });
 
-  if (filtered.length === 0) {
-    subscriptionsGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-tertiary);">No hay suscripciones en esta categoría por el momento.</div>`;
+  // Dots click
+  if (dotsContainer) {
+    dotsContainer.querySelectorAll('.hero-dot').forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.dataset.index, 10);
+        setActiveSlide(idx);
+      });
+    });
+  }
+
+  // Arrows
+  if (prevBtn) {
+    prevBtn.onclick = () => {
+      const prevIdx = (state.activeSlideIndex - 1 + banners.length) % banners.length;
+      setActiveSlide(prevIdx);
+    };
+  }
+  if (nextBtn) {
+    nextBtn.onclick = () => {
+      const nextIdx = (state.activeSlideIndex + 1) % banners.length;
+      setActiveSlide(nextIdx);
+    };
+  }
+
+  startHeroAutoplay();
+}
+
+function setActiveSlide(index) {
+  state.activeSlideIndex = index;
+  const slides = document.querySelectorAll('.eneba-slide');
+  const dots = document.querySelectorAll('.hero-dot');
+
+  slides.forEach((s, i) => {
+    if (i === index) {
+      s.classList.add('active');
+    } else {
+      s.classList.remove('active');
+    }
+  });
+
+  dots.forEach((d, i) => {
+    if (i === index) {
+      d.classList.add('active');
+    } else {
+      d.classList.remove('active');
+    }
+  });
+}
+
+function startHeroAutoplay() {
+  stopHeroAutoplay();
+  state.heroInterval = setInterval(() => {
+    const banners = (state.heroBanners && state.heroBanners.length >= 4) ? state.heroBanners : defaultBanners;
+    const nextIdx = (state.activeSlideIndex + 1) % banners.length;
+    setActiveSlide(nextIdx);
+  }, 6000);
+}
+
+function stopHeroAutoplay() {
+  if (state.heroInterval) {
+    clearInterval(state.heroInterval);
+    state.heroInterval = null;
+  }
+}
+
+// --- 2. RENDER STREAMING SERVICES (8 SERVICES WITH SLOTS) ---
+function renderStreamingServices() {
+  const container = document.getElementById('streaming-services-grid');
+  if (!container) return;
+
+  const services = state.subscriptions.filter(s => s.category === 'streaming');
+  if (services.length === 0) {
+    container.innerHTML = `<p style="color: var(--text-tertiary); grid-column: 1/-1;">Cargando servicios de streaming...</p>`;
     return;
   }
 
-  filtered.forEach(sub => {
-    const card = document.createElement('div');
-    card.className = 'subscription-card';
+  container.innerHTML = services.map(s => {
+    const isAvail = s.availableSlots > 0;
+    const slotsIcons = Array(s.totalSlots).fill(0).map((_, i) => 
+      `<span style="color: ${i < (s.totalSlots - s.availableSlots) ? 'var(--text-tertiary)' : 'var(--accent-cyan)'}; font-size: 0.8rem;">👤</span>`
+    ).join('');
 
-    const price = formatPrice(sub.pricePerSlotUsd);
-    const occupiedSlots = sub.totalSlots - sub.availableSlots;
-    const progressPercent = Math.round((occupiedSlots / sub.totalSlots) * 100);
+    let logoIcon = '🍿';
+    if (s.serviceName.includes('Spotify')) logoIcon = '🎧';
+    if (s.serviceName.includes('Disney')) logoIcon = '🏰';
+    if (s.serviceName.includes('Max')) logoIcon = '🎬';
+    if (s.serviceName.includes('YouTube')) logoIcon = '▶️';
+    if (s.serviceName.includes('Crunchyroll')) logoIcon = '🍥';
+    if (s.serviceName.includes('Apple')) logoIcon = '🍎';
+    if (s.serviceName.includes('Paramount')) logoIcon = '⭐';
 
-    const isOfficial = sub.isOfficial;
-    const badgeHtml = isOfficial
-      ? `<span class="badge-official">🛡️ Oficial GamesBoy</span>`
-      : `<span class="badge-community">👤 Vendedor: ${sub.sellerName}</span>`;
-
-    card.innerHTML = `
-      <div class="card-top">
-        <div class="service-icon">
-          ${getServiceIcon(sub.serviceName)}
+    return `
+      <div class="stream-card" onclick="openBuySubscriptionModal('${s.id}')">
+        <div class="stream-logo-box">${logoIcon}</div>
+        <h3 class="stream-title">${s.serviceName.split(' ')[0]}</h3>
+        <div class="stream-price-label">Desde</div>
+        <div class="stream-price-val">${formatPrice(s.pricePerSlotUsd)}</div>
+        <div class="stream-slots-row" title="${s.availableSlots} cupos libres de ${s.totalSlots}">
+          ${slotsIcons}
         </div>
-        ${badgeHtml}
-      </div>
-      <h3 class="card-title">${sub.serviceName}</h3>
-      <p class="card-plan">${sub.planName}</p>
-
-      <div class="slots-bar-wrapper">
-        <div class="slots-label">
-          <span>Cupos Disponibles</span>
-          <strong>${sub.availableSlots} de ${sub.totalSlots} libres</strong>
-        </div>
-        <div class="slots-progress">
-          <div class="slots-fill" style="width: ${progressPercent}%;"></div>
-        </div>
-      </div>
-
-      <div class="card-footer">
-        <div class="price-box">
-          <span class="price-main">${price.main} <span style="font-size: 0.75rem; color: var(--text-tertiary);">/mes</span></span>
-          <span class="price-converted">${price.secondary}</span>
-        </div>
-        <button class="btn-buy-slot" data-id="${sub.id}">
-          Adquirir Perfil
+        <button class="stream-action-btn">
+          ${isAvail ? 'Ver perfiles ➔' : 'Agotado'}
         </button>
       </div>
     `;
-
-    card.querySelector('.btn-buy-slot').addEventListener('click', () => buySubscriptionSlot(sub));
-    subscriptionsGrid.appendChild(card);
-  });
+  }).join('');
 }
 
-function getServiceIcon(name) {
-  const n = name.toLowerCase();
-  if (n.includes('netflix')) return '🍿';
-  if (n.includes('spotify')) return '🎧';
-  if (n.includes('chatgpt') || n.includes('gpt')) return '🤖';
-  if (n.includes('canva')) return '🎨';
-  if (n.includes('disney')) return '🏰';
-  if (n.includes('youtube')) return '▶️';
-  if (n.includes('max') || n.includes('hbo')) return '🎬';
-  return '⚡';
-}
+// --- 3. RENDER DIGITAL GAMES (8 PS5 COVER CARDS) ---
+function renderDigitalGames() {
+  const container = document.getElementById('digital-games-grid');
+  if (!container) return;
 
-async function buySubscriptionSlot(sub) {
-  if (state.wallet.balanceUsd < sub.pricePerSlotUsd) {
-    const needed = sub.pricePerSlotUsd - state.wallet.balanceUsd;
-    alert(`Saldo insuficiente en tu billetera. Necesitas $${needed.toFixed(2)} USDT adicionales. Abre la recarga de saldo para acreditar tu cuenta.`);
-    openDepositModal();
+  const games = state.storeProducts.filter(p => p.category === 'game_key');
+  if (games.length === 0) {
+    container.innerHTML = `<p style="color: var(--text-tertiary); grid-column: 1/-1;">Cargando juegos digitales...</p>`;
     return;
   }
 
-  const confirmBuy = confirm(`¿Confirmas la compra de 1 perfil en ${sub.serviceName} por $${sub.pricePerSlotUsd.toFixed(2)} USDT?`);
-  if (!confirmBuy) return;
-
-  try {
-    const res = await fetch(`/api/subscriptions/${sub.id}/buy`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-user-id': state.currentUser.id
-      }
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      alert(`🎉 ¡Compra exitosa!\n\nServicio: ${data.slot.serviceName}\nPerfil Asignado: Perfil #${data.slot.slotNumber}\nPIN: ${data.slot.assignedPin}\nCredenciales: ${data.slot.credentials}\n\nLas credenciales han sido guardadas en tu Bóveda.`);
-      await loadUserData();
-      await loadCatalog();
-      await loadMyVault();
-    } else {
-      alert(`Error: ${data.error}`);
-    }
-  } catch (err) {
-    alert(`Error al procesar la compra: ${err.message}`);
-  }
+  container.innerHTML = games.map(g => {
+    return `
+      <div class="game-card" onclick="openBuyGameModal('${g.id}')">
+        <div class="game-platform-band">${g.platform || 'PS5'}</div>
+        <div class="game-cover-container">
+          <img src="${g.coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'}" alt="${g.title}" class="game-cover-img" loading="lazy">
+        </div>
+        <div class="game-card-body">
+          <h3 class="game-title">${g.title}</h3>
+          <div class="game-price-box">
+            <div class="game-price-label">Desde</div>
+            <div class="game-price-val">${formatPrice(g.priceUsd)}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
-// ============================================================
-// 5. MY VAULT (CREDENTIALS VAULT)
-// ============================================================
-async function loadMyVault() {
-  try {
-    const res = await fetch('/api/subscriptions/my-vault', {
-      headers: { 'x-user-id': state.currentUser.id }
-    });
-    if (res.ok) {
-      state.myVault = await res.json();
-      renderVault();
-    }
-  } catch (err) {
-    console.error('Error loading vault:', err);
+// --- 4. RENDER REALISTIC RETAIL GIFT CARDS WITH HANG-TAB ---
+function renderRetailGiftCards() {
+  const container = document.getElementById('retail-giftcards-grid');
+  if (!container) return;
+
+  const giftcards = state.storeProducts.filter(p => p.category === 'gift_card');
+  if (giftcards.length === 0) {
+    container.innerHTML = `<p style="color: var(--text-tertiary); grid-column: 1/-1;">Cargando tarjetas de regalo...</p>`;
+    return;
   }
+
+  container.innerHTML = giftcards.map(gc => {
+    const themeClass = `theme-${gc.brandTheme || 'psn'}`;
+    const denom = gc.title.includes('$') ? gc.title.match(/\$[0-9]+/)?.[0] || '$10' : '$10';
+
+    return `
+      <div class="retail-gift-card" onclick="openBuyGiftCardModal('${gc.id}')">
+        <div class="giftcard-hang-header">
+          <div class="hang-hole"></div>
+        </div>
+        <div class="giftcard-face ${themeClass}">
+          <div class="giftcard-logo-icon">${gc.icon || '🎁'}</div>
+          <div class="giftcard-denom-badge">${denom}</div>
+        </div>
+        <div class="giftcard-body">
+          <h3 class="giftcard-title">${gc.title}</h3>
+          <div class="giftcard-price-label">Desde</div>
+          <div class="giftcard-price-val">${formatPrice(gc.priceUsd)}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
-function renderVault() {
-  if (!vaultListContainer) return;
-  vaultListContainer.innerHTML = '';
+// --- 5. RENDER SMM SERVICES ---
+function renderSmmServices() {
+  const container = document.getElementById('smm-services-grid');
+  if (!container) return;
+
+  container.innerHTML = smmServices.map(smm => `
+    <div class="smm-card">
+      <div class="smm-icon-box" style="background: rgba(168, 85, 247, 0.12); color: var(--accent-purple);">${smm.icon}</div>
+      <h3 style="font-family: var(--font-heading); font-size: 1rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">${smm.name}</h3>
+      <div style="font-size: 0.72rem; color: var(--accent-purple); text-transform: uppercase; font-weight: 700; margin-bottom: 8px;">${smm.platform}</div>
+      <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 1rem;">${smm.desc}</p>
+      <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-family: var(--font-mono); font-size: 1rem; font-weight: 800; color: #ffffff;">${formatPrice(smm.priceUsd)}</span>
+        <button class="btn-primary-block" style="width: auto; padding: 6px 14px; font-size: 0.8rem;" onclick="alert('Servicio SMM vinculado a la API del proveedor. Tu orden se enviará de forma instantánea al saldo disponible.')">Comprar</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// --- 6. RENDER USER VAULT (CREDENTIALS) ---
+function renderMyVault() {
+  const container = document.getElementById('vault-list-container');
+  if (!container) return;
 
   if (state.myVault.length === 0) {
-    vaultListContainer.innerHTML = `<div style="text-align: center; color: var(--text-tertiary); padding: 1.5rem;">Aún no tienes suscripciones activas. Explora el catálogo abajo para adquirir tu primer perfil.</div>`;
+    container.innerHTML = `
+      <div style="background: var(--bg-surface); border: 1px dashed var(--border-subtle); border-radius: var(--radius-lg); padding: 2.5rem; text-align: center; color: var(--text-tertiary);">
+        <div style="font-size: 2.5rem; margin-bottom: 10px;">🔐</div>
+        <p style="font-size: 0.95rem; color: var(--text-secondary);">Tu bóveda está vacía.</p>
+        <p style="font-size: 0.8rem;">Adquiere una suscripción de streaming o un juego digital para visualizar tus credenciales, claves y PINs encriptados.</p>
+      </div>
+    `;
     return;
   }
 
-  state.myVault.forEach(item => {
-    const el = document.createElement('div');
-    el.className = 'vault-item';
-
-    const parts = (item.credentials || '').split(':::');
-    const userOrUrl = parts[0] || item.credentials;
-    const passOrNote = parts[1] || '';
-
-    el.innerHTML = `
-      <div class="vault-info">
-        <h4>${item.serviceName} • <span style="color: var(--accent-orange);">Perfil #${item.slotNumber} (PIN: ${item.assignedPin})</span></h4>
-        <div class="vault-meta">Vence: ${new Date(item.expiresAt).toLocaleDateString()} • ${item.instructions}</div>
-      </div>
-      <div class="vault-credentials-box">
-        <span>Acceso: <strong>${userOrUrl}</strong></span>
-        ${passOrNote ? `<span style="margin-left: 8px;">Clave: <strong>${passOrNote}</strong></span>` : ''}
-        <button class="btn-copy" title="Copiar credenciales">📋</button>
-      </div>
-    `;
-
-    el.querySelector('.btn-copy').addEventListener('click', () => {
-      navigator.clipboard.writeText(`${userOrUrl} ${passOrNote ? '| ' + passOrNote : ''}`);
-      alert('¡Credenciales copiadas al portapapeles!');
-    });
-
-    vaultListContainer.appendChild(el);
-  });
-}
-
-// ============================================================
-// 6. DIGITAL STORE (GIFT CARDS)
-// ============================================================
-async function loadStoreProducts() {
-  try {
-    const res = await fetch('/api/store/products');
-    if (res.ok) {
-      state.storeProducts = await res.json();
-      renderStoreProducts();
-    }
-  } catch (err) {
-    console.error('Error loading store products:', err);
-  }
-}
-
-function renderStoreProducts() {
-  if (!storeProductsGrid) return;
-  storeProductsGrid.innerHTML = '';
-
-  state.storeProducts.forEach(prod => {
-    const card = document.createElement('div');
-    card.className = 'store-card';
-    const price = formatPrice(prod.priceUsd);
-
-    card.innerHTML = `
-      <div class="card-top">
-        <span style="font-size: 2rem;">${prod.icon}</span>
-        <span style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--accent-emerald); background: rgba(16, 185, 129, 0.1); padding: 2px 8px; border-radius: 4px;">${prod.stockCount} en stock</span>
-      </div>
-      <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;">${prod.title}</h3>
-      <p style="font-size: 0.82rem; color: var(--text-tertiary); margin-bottom: 1.2rem;">${prod.description}</p>
-      
-      <div class="card-footer">
-        <div class="price-box">
-          <span class="price-main">${price.main}</span>
-          <span class="price-converted">${price.secondary}</span>
+  container.innerHTML = state.myVault.map(v => `
+    <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: gap: 1rem;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+          <span style="font-size: 1.2rem;">⚡</span>
+          <strong style="color: #ffffff; font-size: 1.05rem;">${v.serviceName}</strong>
+          <span class="badge-official">ACTIVO</span>
         </div>
-        <button class="btn-buy-slot" data-id="${prod.id}">
-          Comprar
-        </button>
+        <div style="font-size: 0.82rem; color: var(--text-secondary);">Perfil Asignado: <strong>#${v.slotNumber}</strong> | PIN: <strong style="color: var(--accent-cyan);">${v.assignedPin}</strong></div>
       </div>
-    `;
-
-    card.querySelector('.btn-buy-slot').addEventListener('click', () => buyStoreProduct(prod));
-    storeProductsGrid.appendChild(card);
-  });
+      <button class="btn-primary-block" style="width: auto; padding: 8px 16px; font-size: 0.85rem;" onclick="alert('Credenciales: ${v.credentialsEncrypted || 'Acceso directo'}')">🔑 Ver Claves</button>
+    </div>
+  `).join('');
 }
 
-async function buyStoreProduct(prod) {
-  if (state.wallet.balanceUsd < prod.priceUsd) {
-    alert('Saldo insuficiente. Recarga saldo para comprar este producto digital.');
-    openDepositModal();
-    return;
-  }
+// --- 7. ADMIN BANNER MANAGER ---
+function renderAdminBannersForm() {
+  const container = document.getElementById('admin-banners-form-container');
+  if (!container) return;
 
-  const confirmBuy = confirm(`¿Confirmas la compra de ${prod.title} por $${prod.priceUsd.toFixed(2)} USDT?`);
-  if (!confirmBuy) return;
+  const banners = (state.heroBanners && state.heroBanners.length >= 4) ? state.heroBanners : defaultBanners;
 
+  container.innerHTML = banners.slice(0, 4).map((b, idx) => `
+    <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.5rem;">
+      <h3 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 1rem;">
+        🖼️ Portada #${idx + 1}: ${b.title || 'Slide ' + (idx + 1)}
+      </h3>
+      
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Título Principal</label>
+          <input type="text" class="form-input banner-in-title" data-idx="${idx}" value="${b.title || ''}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subtítulo / Tagline</label>
+          <input type="text" class="form-input banner-in-tagline" data-idx="${idx}" value="${b.tagline || ''}">
+        </div>
+      </div>
+
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Badge / Plataforma (ej: PS5, XBOX, PC)</label>
+          <input type="text" class="form-input banner-in-badge" data-idx="${idx}" value="${b.badge || 'PS5'}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Texto del Botón CTA</label>
+          <input type="text" class="form-input banner-in-cta-text" data-idx="${idx}" value="${b.ctaText || 'Comprar ahora'}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">URL Imagen Horizontal (Expandida ~16:9)</label>
+        <input type="url" class="form-input banner-in-img-h" data-idx="${idx}" value="${b.imgHorizontal || ''}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">URL Imagen Vertical (Comprimida ~3:4)</label>
+        <input type="url" class="form-input banner-in-img-v" data-idx="${idx}" value="${b.imgVertical || ''}" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Enlace de Destino (Link al tocar la imagen)</label>
+        <input type="text" class="form-input banner-in-cta-url" data-idx="${idx}" value="${b.ctaUrl || '#section-games'}">
+      </div>
+    </div>
+  `).join('');
+}
+
+// --- 8. FETCH INITIAL DATA FROM API ---
+async function fetchStoreData() {
   try {
-    const res = await fetch(`/api/store/products/${prod.id}/buy`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-user-id': state.currentUser.id
-      }
-    });
+    const [subRes, storeRes, bannersRes] = await Promise.all([
+      fetch('/api/subscriptions').then(r => r.json()).catch(() => []),
+      fetch('/api/store/products').then(r => r.json()).catch(() => []),
+      fetch('/api/banners').then(r => r.json()).catch(() => ({ banners: defaultBanners }))
+    ]);
 
-    const data = await res.json();
-    if (res.ok) {
-      alert(`🎁 ¡Código de ${data.order.productTitle} Entregado!\n\nTu Código: ${data.order.code}\n\nPuedes canjearlo directamente en ${data.order.platform}.`);
-      await loadUserData();
-      await loadStoreProducts();
-    } else {
-      alert(`Error: ${data.error}`);
+    if (Array.isArray(subRes)) {
+      state.subscriptions = subRes;
+    } else if (subRes.subscriptions) {
+      state.subscriptions = subRes.subscriptions;
     }
+
+    if (Array.isArray(storeRes)) {
+      state.storeProducts = storeRes;
+    } else if (storeRes.products) {
+      state.storeProducts = storeRes.products;
+    }
+
+    if (bannersRes && bannersRes.banners && bannersRes.banners.length >= 4) {
+      state.heroBanners = bannersRes.banners;
+    } else {
+      state.heroBanners = defaultBanners;
+    }
+
+    // Render all modules
+    initHeroAccordion();
+    renderStreamingServices();
+    renderDigitalGames();
+    renderRetailGiftCards();
+    renderSmmServices();
+    renderMyVault();
+    renderAdminBannersForm();
   } catch (err) {
-    alert(`Error en la compra: ${err.message}`);
+    console.error('Error loading initial marketplace data:', err);
+    initHeroAccordion();
+    renderSmmServices();
   }
 }
 
-// ============================================================
-// 7. DEPOSIT MODAL & PAYMENTS
-// ============================================================
-function openDepositModal() {
-  modalDeposit.classList.add('active');
-  updateDepositPreview();
-}
-function closeDepositModal() {
-  modalDeposit.classList.remove('active');
-}
+// --- 9. PURCHASE FLOW MODALS ---
+window.openBuySubscriptionModal = function(id) {
+  const sub = state.subscriptions.find(s => s.id === id);
+  if (!sub) return;
 
-tabPaySipap.addEventListener('click', () => {
-  state.depositMethod = 'sipap';
-  tabPaySipap.classList.add('active');
-  tabPayBinance.classList.remove('active');
-  boxPaySipap.style.display = 'block';
-  boxPayBinance.style.display = 'none';
-  labelDepositAmount.textContent = 'Monto a Transferir en Guaraníes (₲ PYG):';
-  depositAmountInput.placeholder = 'ej: 100000';
-  depositAmountInput.min = '10000';
-  depositAmountInput.step = '5000';
-  updateDepositPreview();
-});
-
-tabPayBinance.addEventListener('click', () => {
-  state.depositMethod = 'binance';
-  tabPayBinance.classList.add('active');
-  tabPaySipap.classList.remove('active');
-  boxPaySipap.style.display = 'none';
-  boxPayBinance.style.display = 'block';
-  labelDepositAmount.textContent = 'Monto a Transferir en USD / USDT:';
-  depositAmountInput.placeholder = 'ej: 15.00';
-  depositAmountInput.min = '5';
-  depositAmountInput.step = '1';
-  updateDepositPreview();
-});
-
-depositAmountInput.addEventListener('input', updateDepositPreview);
-
-function updateDepositPreview() {
-  const val = parseFloat(depositAmountInput.value) || 0;
-  const rate = state.exchangeRates.PYG || 7500;
-
-  if (state.depositMethod === 'sipap') {
-    const usd = val > 0 ? (val / rate).toFixed(2) : '0.00';
-    depositConvertedPreview.innerHTML = `Recibirás aprox: <strong>$ ${usd} USDT</strong> (Tasa: 1 USD = ${rate.toLocaleString()} ₲)`;
-  } else {
-    const pyg = Math.round(val * rate);
-    depositConvertedPreview.innerHTML = `Equivalente: <strong>₲ ${pyg.toLocaleString('es-PY')}</strong>`;
+  const priceText = formatPrice(sub.pricePerSlotUsd);
+  if (confirm(`¿Deseas comprar un cupo para "${sub.serviceName}" por ${priceText} / mes con entrega inmediata a tu Bóveda?`)) {
+    executePurchase('/api/subscriptions/purchase', { subscriptionId: sub.id, paymentMethod: 'internal_wallet' });
   }
-}
+};
 
-formSubmitDeposit.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const val = parseFloat(depositAmountInput.value) || 0;
-  const ref = depositReferenceInput.value.trim();
+window.openBuyGameModal = function(id) {
+  const game = state.storeProducts.find(p => p.id === id);
+  if (!game) return;
 
-  if (val <= 0) {
-    alert('Ingresa un monto válido para recargar');
-    return;
+  const priceText = formatPrice(game.priceUsd);
+  if (confirm(`¿Deseas comprar el código digital de "${game.title}" (${game.platform}) por ${priceText}?`)) {
+    executePurchase('/api/store/purchase', { productId: game.id, paymentMethod: 'internal_wallet' });
   }
+};
 
-  let receiptBase64 = '';
-  if (depositReceiptFile.files && depositReceiptFile.files[0]) {
-    const reader = new FileReader();
-    receiptBase64 = await new Promise((resolve) => {
-      reader.onload = () => resolve(reader.result);
-      reader.readAsDataURL(depositReceiptFile.files[0]);
-    });
+window.openBuyGiftCardModal = function(id) {
+  const gc = state.storeProducts.find(p => p.id === id);
+  if (!gc) return;
+
+  const priceText = formatPrice(gc.priceUsd);
+  if (confirm(`¿Deseas comprar la tarjeta de regalo "${gc.title}" por ${priceText} con código instantáneo?`)) {
+    executePurchase('/api/store/purchase', { productId: gc.id, paymentMethod: 'internal_wallet' });
   }
+};
 
+async function executePurchase(url, body) {
   try {
-    const body = {
-      amount: val,
-      currency: state.depositMethod === 'sipap' ? 'PYG' : 'USD',
-      method: state.depositMethod === 'sipap' ? 'sipap_paraguay' : 'binance_usdt',
-      reference: ref,
-      receiptData: receiptBase64 || 'comprobante_captura.png'
-    };
-
-    const submitRes = await fetch('/api/wallet/deposit', {
+    const res = await fetch(url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-user-id': state.currentUser.id
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
-
-    const data = await submitRes.json();
-    if (submitRes.ok) {
-      alert('✅ ' + data.message);
-      closeDepositModal();
-      depositAmountInput.value = '';
-      depositReferenceInput.value = '';
-    } else {
-      alert('Error: ' + data.error);
-    }
-  } catch (err) {
-    alert('Error al enviar recarga: ' + err.message);
-  }
-});
-
-// ============================================================
-// 8. SELLER PORTAL
-// ============================================================
-async function loadSellerDashboard() {
-  try {
-    const res = await fetch('/api/seller/dashboard', {
-      headers: { 'x-user-id': state.currentUser.id }
-    });
-    if (res.ok) {
-      const data = await res.json();
-      sellerStatBalance.textContent = `$ ${data.wallet.balanceUsd.toFixed(2)} USDT`;
-      sellerStatBalancePyg.textContent = `₲ ${data.balancePyg.toLocaleString('es-PY')}`;
-      sellerStatEscrow.textContent = `$ ${data.wallet.pendingEscrowUsd.toFixed(2)} USDT`;
-      sellerStatSlots.textContent = data.stats.totalSoldSlots;
-      sellerStatCommission.textContent = `${data.stats.commissionPercent}%`;
-
-      renderSellerListings(data.listings);
-    }
-  } catch (err) {
-    console.error('Error loading seller dashboard:', err);
-  }
-}
-
-function renderSellerListings(listings) {
-  if (!sellerListingsTableBody) return;
-  sellerListingsTableBody.innerHTML = '';
-
-  if (listings.length === 0) {
-    sellerListingsTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-tertiary);">Aún no has publicado ninguna suscripción compartida.</td></tr>`;
-    return;
-  }
-
-  listings.forEach(l => {
-    const row = document.createElement('tr');
-    const occupied = l.totalSlots - l.availableSlots;
-    row.innerHTML = `
-      <td><strong>${l.serviceName}</strong><br><span style="font-size: 0.75rem; color: var(--text-tertiary);">${l.planName}</span></td>
-      <td><strong>${l.availableSlots} libres</strong> (${occupied} vendidos)</td>
-      <td><strong>$ ${l.pricePerSlotUsd.toFixed(2)}</strong> (${l.pricePyg.toLocaleString('es-PY')} ₲)</td>
-      <td><span class="badge-official">Activo</span></td>
-      <td><code style="font-size: 0.75rem; color: var(--accent-orange);">${l.credentialsDecrypted.slice(0, 30)}...</code></td>
-    `;
-    sellerListingsTableBody.appendChild(row);
-  });
-}
-
-formPublishSubscription.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const serviceName = document.getElementById('pub-service-name').value;
-  const category = document.getElementById('pub-category').value;
-  const totalSlots = document.getElementById('pub-slots').value;
-  const pricePerSlotUsd = document.getElementById('pub-price').value;
-  const credentials = document.getElementById('pub-credentials').value;
-  const pins = document.getElementById('pub-pins').value;
-  const instructions = document.getElementById('pub-instructions').value;
-
-  try {
-    const res = await fetch('/api/seller/publish', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-user-id': state.currentUser.id
-      },
-      body: JSON.stringify({
-        serviceName,
-        category,
-        totalSlots,
-        pricePerSlotUsd,
-        credentials,
-        pins,
-        instructions
-      })
-    });
-
     const data = await res.json();
-    if (res.ok) {
-      alert('✅ ' + data.message);
-      formPublishSubscription.reset();
-      loadSellerDashboard();
-      loadCatalog();
+    if (data.success) {
+      alert(`🎉 ¡Compra exitosa! Revisa tu Bóveda de credenciales y códigos.`);
+      fetchStoreData();
     } else {
-      alert('Error: ' + data.error);
-    }
-  } catch (err) {
-    alert('Error al publicar: ' + err.message);
-  }
-});
-
-btnOpenPayoutModal.addEventListener('click', () => {
-  modalPayout.classList.add('active');
-  payoutAmountUsd.max = state.wallet.balanceUsd;
-  updatePayoutPreview();
-});
-btnClosePayoutModal.addEventListener('click', () => modalPayout.classList.remove('active'));
-
-payoutAmountUsd.addEventListener('input', updatePayoutPreview);
-
-function updatePayoutPreview() {
-  const val = parseFloat(payoutAmountUsd.value) || 0;
-  const rate = state.exchangeRates.PYG || 7500;
-  const pyg = Math.round(val * rate);
-  payoutAmountPygPreview.textContent = `₲ ${pyg.toLocaleString('es-PY')}`;
-}
-
-formSubmitPayout.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const amount = parseFloat(payoutAmountUsd.value) || 0;
-  const method = document.getElementById('payout-method').value;
-  const details = document.getElementById('payout-bank-details').value;
-
-  try {
-    const res = await fetch('/api/seller/payout-request', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-user-id': state.currentUser.id
-      },
-      body: JSON.stringify({
-        amountUsd: amount,
-        method,
-        accountDetails: { details }
-      })
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      alert('✅ ' + data.message);
-      modalPayout.classList.remove('active');
-      loadSellerDashboard();
-      loadUserData();
-    } else {
-      alert('Error: ' + data.error);
-    }
-  } catch (err) {
-    alert('Error: ' + err.message);
-  }
-});
-
-// ============================================================
-// 9. ADMIN PORTAL
-// ============================================================
-async function loadAdminOverview() {
-  try {
-    const res = await fetch('/api/admin/overview');
-    if (res.ok) {
-      const data = await res.json();
-      adminStatPendingDeposits.textContent = data.stats.pendingDepositsCount;
-      adminStatPendingPayouts.textContent = data.stats.pendingPayoutsCount;
-      adminStatSalesVolume.textContent = `$ ${data.stats.totalSalesVolumeUsd.toFixed(2)}`;
-      adminStatBalance.textContent = `$ ${data.adminWallet.balanceUsd.toFixed(2)}`;
-
-      setCommissionPercent.value = data.settings.commissionPercent;
-      setExchangeRate.value = data.settings.exchangeRatePyg;
-      setBankHolder.value = data.settings.paraguayBankDetails.accountHolder;
-      setBankAccount.value = `${data.settings.paraguayBankDetails.aliasSipap} / ${data.settings.paraguayBankDetails.accountNumber}`;
-      setBinanceId.value = data.settings.binanceDetails.payId;
-      setBinanceWallet.value = data.settings.binanceDetails.walletAddress;
-
-      renderAdminPendingDeposits(data.pendingDeposits);
-      renderAdminPendingPayouts(data.pendingPayouts);
-    }
-  } catch (err) {
-    console.error('Error loading admin overview:', err);
-  }
-}
-
-function renderAdminPendingDeposits(deposits) {
-  if (!adminPendingDepositsBody) return;
-  adminPendingDepositsBody.innerHTML = '';
-
-  if (deposits.length === 0) {
-    adminPendingDepositsBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 1.5rem;">No hay comprobantes de recarga pendientes de revisión.</td></tr>`;
-    return;
-  }
-
-  deposits.forEach(d => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td><strong>${d.userName}</strong></td>
-      <td><strong style="color: var(--accent-emerald);">$ ${d.amountUsd.toFixed(2)} USDT</strong></td>
-      <td>₲ ${d.localAmount.toLocaleString('es-PY')}</td>
-      <td><span class="badge-community">${d.method === 'sipap_paraguay' ? '🇵🇾 SIPAP' : '🌐 Binance'}</span></td>
-      <td><code>${d.reference}</code></td>
-      <td>
-        <button class="btn-action-sm btn-approve" data-id="${d.id}">Aprobar</button>
-        <button class="btn-action-sm btn-reject" data-id="${d.id}" style="margin-left: 4px;">Rechazar</button>
-      </td>
-    `;
-
-    row.querySelector('.btn-approve').addEventListener('click', () => approveDeposit(d.id));
-    row.querySelector('.btn-reject').addEventListener('click', () => rejectDeposit(d.id));
-    adminPendingDepositsBody.appendChild(row);
-  });
-}
-
-async function approveDeposit(id) {
-  try {
-    const res = await fetch(`/api/admin/approve-deposit/${id}`, { method: 'POST' });
-    const data = await res.json();
-    if (res.ok) {
-      alert('✅ ' + data.message);
-      loadAdminOverview();
-      loadUserData();
-    } else {
-      alert('Error: ' + data.error);
-    }
-  } catch (err) {
-    alert('Error: ' + err.message);
-  }
-}
-
-async function rejectDeposit(id) {
-  const reason = prompt('Motivo del rechazo:', 'Comprobante no coincide con la cuenta bancaria');
-  if (!reason) return;
-
-  try {
-    const res = await fetch(`/api/admin/reject-deposit/${id}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ reason })
-    });
-    const data = await res.json();
-    if (res.ok) {
-      alert('✅ ' + data.message);
-      loadAdminOverview();
-    } else {
-      alert('Error: ' + data.error);
-    }
-  } catch (err) {
-    alert('Error: ' + err.message);
-  }
-}
-
-function renderAdminPendingPayouts(payouts) {
-  if (!adminPendingPayoutsBody) return;
-  adminPendingPayoutsBody.innerHTML = '';
-
-  if (payouts.length === 0) {
-    adminPendingPayoutsBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-tertiary); padding: 1.5rem;">No hay solicitudes de retiro pendientes.</td></tr>`;
-    return;
-  }
-
-  payouts.forEach(p => {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td><strong>${p.sellerName}</strong></td>
-      <td><strong style="color: var(--accent-amber);">$ ${p.amountUsd.toFixed(2)} USDT</strong> (₲ ${p.amountPyg.toLocaleString('es-PY')})</td>
-      <td>${p.method === 'sipap_paraguay' ? '🇵🇾 SIPAP' : '🌐 Binance USDT'}</td>
-      <td><small>${JSON.stringify(p.accountDetails)}</small></td>
-      <td>
-        <button class="btn-action-sm btn-approve" data-id="${p.id}">Marcar como Pagado</button>
-      </td>
-    `;
-    row.querySelector('.btn-approve').addEventListener('click', async () => {
-      const res = await fetch(`/api/admin/approve-payout/${p.id}`, { method: 'POST' });
-      const data = await res.json();
-      if (res.ok) {
-        alert('✅ ' + data.message);
-        loadAdminOverview();
+      if (data.error && data.error.includes('Saldo insuficiente')) {
+        if (confirm('Saldo insuficiente en tu billetera. ¿Deseas recargar saldo ahora con SIPAP Paraguay o USDT Binance?')) {
+          document.getElementById('modal-deposit').style.display = 'grid';
+        }
+      } else {
+        alert(`Aviso: ${data.error || 'No se pudo completar la orden.'}`);
       }
-    });
-    adminPendingPayoutsBody.appendChild(row);
-  });
+    }
+  } catch (e) {
+    alert('Error al procesar la compra.');
+  }
 }
 
-formAdminSettings.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const comm = setCommissionPercent.value;
-  const rate = setExchangeRate.value;
-
-  try {
-    const res = await fetch('/api/admin/settings', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        commissionPercent: comm,
-        exchangeRatePyg: rate
-      })
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      alert('✅ ' + data.message);
-      state.exchangeRates.PYG = parseFloat(rate);
-      loadCatalog();
-      loadStoreProducts();
-      updateHeaderDisplay();
-      updateCalculatorResults();
-    }
-  } catch (err) {
-    alert('Error al guardar configuración: ' + err.message);
-  }
-});
-
-// ============================================================
-// 10. NAVIGATION & EVENT LISTENERS
-// ============================================================
+// --- 10. SETUP EVENT LISTENERS & ROUTING ---
 function setupEventListeners() {
-  if (tabClient) tabClient.addEventListener('click', () => switchView('client'));
-  if (tabSeller) tabSeller.addEventListener('click', () => switchView('seller'));
-  if (tabAdmin) tabAdmin.addEventListener('click', () => switchView('admin'));
+  // Currency Switcher
+  const currencySelector = document.getElementById('currency-selector');
+  if (currencySelector) {
+    currencySelector.value = state.currency;
+    currencySelector.addEventListener('change', (e) => {
+      state.currency = e.target.value;
+      localStorage.setItem('gb_currency', state.currency);
+      const indicator = document.getElementById('footer-currency-indicator');
+      if (indicator) indicator.textContent = `${state.currency} (${state.currency === 'USD' ? '$' : '₲'})`;
+      renderStreamingServices();
+      renderDigitalGames();
+      renderRetailGiftCards();
+      renderSmmServices();
+    });
+  }
 
-  const navLinkVender = document.getElementById('nav-link-vender');
-  if (navLinkVender) {
-    navLinkVender.addEventListener('click', (e) => {
+  // Portal Switcher (Client / Seller / Admin)
+  const tabClient = document.getElementById('tab-client');
+  const tabSeller = document.getElementById('tab-seller');
+  const tabAdmin = document.getElementById('tab-admin');
+  const viewClient = document.getElementById('view-client');
+  const viewSeller = document.getElementById('view-seller');
+  const viewAdmin = document.getElementById('view-admin');
+
+  function switchPortalView(view) {
+    state.activeView = view;
+    if (tabClient) tabClient.classList.toggle('active', view === 'client');
+    if (tabSeller) tabSeller.classList.toggle('active', view === 'seller');
+    if (tabAdmin) tabAdmin.classList.toggle('active', view === 'admin');
+
+    if (viewClient) viewClient.style.display = view === 'client' ? 'block' : 'none';
+    if (viewSeller) viewSeller.style.display = view === 'seller' ? 'block' : 'none';
+    if (viewAdmin) viewAdmin.style.display = view === 'admin' ? 'block' : 'none';
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  if (tabClient) tabClient.onclick = () => switchPortalView('client');
+  if (tabSeller) tabSeller.onclick = () => switchPortalView('seller');
+  if (tabAdmin) tabAdmin.onclick = () => switchPortalView('admin');
+
+  // Admin Subviews Tabs
+  const tabAdminDash = document.getElementById('tab-admin-dash');
+  const tabAdminBanners = document.getElementById('tab-admin-banners');
+  const tabAdminSettings = document.getElementById('tab-admin-settings');
+  const subviewDash = document.getElementById('admin-subview-dashboard');
+  const subviewBanners = document.getElementById('admin-subview-banners');
+  const subviewSettings = document.getElementById('admin-subview-settings');
+
+  function switchAdminSubView(sub) {
+    state.adminSubView = sub;
+    if (tabAdminDash) tabAdminDash.classList.toggle('active', sub === 'dashboard');
+    if (tabAdminBanners) tabAdminBanners.classList.toggle('active', sub === 'banners');
+    if (tabAdminSettings) tabAdminSettings.classList.toggle('active', sub === 'settings');
+
+    if (subviewDash) subviewDash.style.display = sub === 'dashboard' ? 'block' : 'none';
+    if (subviewBanners) subviewBanners.style.display = sub === 'banners' ? 'block' : 'none';
+    if (subviewSettings) subviewSettings.style.display = sub === 'settings' ? 'block' : 'none';
+  }
+
+  if (tabAdminDash) tabAdminDash.onclick = () => switchAdminSubView('dashboard');
+  if (tabAdminBanners) tabAdminBanners.onclick = () => switchAdminSubView('banners');
+  if (tabAdminSettings) tabAdminSettings.onclick = () => switchAdminSubView('settings');
+
+  // Admin Banners Form Submit
+  const formAdminBanners = document.getElementById('form-admin-banners');
+  if (formAdminBanners) {
+    formAdminBanners.addEventListener('submit', async (e) => {
       e.preventDefault();
-      switchView('seller');
-    });
-  }
+      const titles = formAdminBanners.querySelectorAll('.banner-in-title');
+      const taglines = formAdminBanners.querySelectorAll('.banner-in-tagline');
+      const badges = formAdminBanners.querySelectorAll('.banner-in-badge');
+      const ctaTexts = formAdminBanners.querySelectorAll('.banner-in-cta-text');
+      const ctaUrls = formAdminBanners.querySelectorAll('.banner-in-cta-url');
+      const imgHs = formAdminBanners.querySelectorAll('.banner-in-img-h');
+      const imgVs = formAdminBanners.querySelectorAll('.banner-in-img-v');
 
-  if (btnHeroShareCta) btnHeroShareCta.addEventListener('click', () => switchView('seller'));
-  if (btnHalfPublish) btnHalfPublish.addEventListener('click', () => switchView('seller'));
+      const updatedBanners = [];
+      titles.forEach((t, i) => {
+        updatedBanners.push({
+          id: `banner_custom_${i}`,
+          title: t.value,
+          tagline: taglines[i]?.value || '',
+          badge: badges[i]?.value || 'DESTACADO',
+          ctaText: ctaTexts[i]?.value || 'Comprar ahora',
+          ctaUrl: ctaUrls[i]?.value || '#section-games',
+          imgHorizontal: imgHs[i]?.value || '',
+          imgVertical: imgVs[i]?.value || '',
+          sortOrder: i,
+          isActive: true
+        });
+      });
 
-  if (btnOpenDepositModal) btnOpenDepositModal.addEventListener('click', openDepositModal);
-  if (btnCloseDepositModal) btnCloseDepositModal.addEventListener('click', closeDepositModal);
-
-  // Ultra-Premium Auth Modal Setup
-  const modalAuth = document.getElementById('modal-auth');
-  const btnOpenLoginModal = document.getElementById('btn-open-login-modal');
-  const btnOpenRegisterModal = document.getElementById('btn-open-register-modal');
-  const btnCloseAuthModal = document.getElementById('btn-close-auth-modal');
-  const btnGoogleSignin = document.getElementById('btn-google-signin');
-
-  const formAuthMain = document.getElementById('form-auth-main');
-  const formAuthRecovery = document.getElementById('form-auth-recovery');
-  
-  const authMainTitle = document.getElementById('auth-main-title');
-  const authMainSubtitle = document.getElementById('auth-main-subtitle');
-  const groupAuthName = document.getElementById('group-auth-name');
-  const groupAuthRole = document.getElementById('group-auth-role');
-  const authLoginOptions = document.getElementById('auth-login-options');
-  const textAuthSubmit = document.getElementById('text-auth-submit');
-  
-  const authSwitchQuestion = document.getElementById('auth-switch-question');
-  const btnSwitchAuthMode = document.getElementById('btn-switch-auth-mode');
-  const linkForgotPassword = document.getElementById('link-forgot-password');
-  const linkBackToLogin = document.getElementById('link-back-to-login');
-  
-  const btnTogglePassword = document.getElementById('btn-toggle-password');
-  const inputAuthPassword = document.getElementById('input-auth-password');
-  const recoveryStep2 = document.getElementById('recovery-step-2');
-  const textRecoverySubmit = document.getElementById('text-recovery-submit');
-
-  let currentAuthMode = 'login'; // 'login' | 'register' | 'recovery'
-
-  function openAuthModal(mode = 'login') {
-    currentAuthMode = mode;
-    if (modalAuth) modalAuth.classList.add('active');
-    renderAuthMode();
-  }
-
-  function closeAuthModal() {
-    if (modalAuth) modalAuth.classList.remove('active');
-  }
-
-  function renderAuthMode() {
-    if (currentAuthMode === 'login') {
-      if (formAuthMain) formAuthMain.style.display = 'block';
-      if (formAuthRecovery) formAuthRecovery.style.display = 'none';
-      if (authMainTitle) authMainTitle.textContent = '¡Bienvenido de nuevo!';
-      if (authMainSubtitle) authMainSubtitle.textContent = 'Accede a tus suscripciones, bóveda segura y saldo.';
-      if (groupAuthName) groupAuthName.style.display = 'none';
-      if (groupAuthRole) groupAuthRole.style.display = 'none';
-      if (authLoginOptions) authLoginOptions.style.display = 'flex';
-      if (textAuthSubmit) textAuthSubmit.textContent = 'Iniciar Sesión';
-      if (authSwitchQuestion) authSwitchQuestion.textContent = '¿No tienes una cuenta?';
-      if (btnSwitchAuthMode) {
-        btnSwitchAuthMode.textContent = 'Regístrate gratis';
-        btnSwitchAuthMode.style.display = 'inline';
-      }
-    } else if (currentAuthMode === 'register') {
-      if (formAuthMain) formAuthMain.style.display = 'block';
-      if (formAuthRecovery) formAuthRecovery.style.display = 'none';
-      if (authMainTitle) authMainTitle.textContent = 'Crea tu Cuenta';
-      if (authMainSubtitle) authMainSubtitle.textContent = 'Únete a GamesBoy y disfruta de los mejores precios garantizados.';
-      if (groupAuthName) groupAuthName.style.display = 'block';
-      if (groupAuthRole) groupAuthRole.style.display = 'block';
-      if (authLoginOptions) authLoginOptions.style.display = 'none';
-      if (textAuthSubmit) textAuthSubmit.textContent = 'Crear Cuenta en GamesBoy';
-      if (authSwitchQuestion) authSwitchQuestion.textContent = '¿Ya tienes una cuenta?';
-      if (btnSwitchAuthMode) {
-        btnSwitchAuthMode.textContent = 'Inicia sesión';
-        btnSwitchAuthMode.style.display = 'inline';
-      }
-    } else if (currentAuthMode === 'recovery') {
-      if (formAuthMain) formAuthMain.style.display = 'none';
-      if (formAuthRecovery) formAuthRecovery.style.display = 'block';
-      if (authMainTitle) authMainTitle.textContent = 'Recuperar Contraseña';
-      if (authMainSubtitle) authMainSubtitle.textContent = 'Te enviaremos un código para restablecer tu acceso.';
-      if (authSwitchQuestion) authSwitchQuestion.textContent = '';
-      if (btnSwitchAuthMode) btnSwitchAuthMode.style.display = 'none';
-      if (recoveryStep2) recoveryStep2.style.display = 'none';
-      if (textRecoverySubmit) textRecoverySubmit.textContent = 'Enviar Código de Recuperación';
-    }
-  }
-
-  if (btnOpenLoginModal) btnOpenLoginModal.addEventListener('click', () => openAuthModal('login'));
-  if (btnOpenRegisterModal) btnOpenRegisterModal.addEventListener('click', () => openAuthModal('register'));
-  if (btnCloseAuthModal) btnCloseAuthModal.addEventListener('click', closeAuthModal);
-
-  if (btnSwitchAuthMode) {
-    btnSwitchAuthMode.addEventListener('click', () => {
-      openAuthModal(currentAuthMode === 'login' ? 'register' : 'login');
-    });
-  }
-
-  if (linkForgotPassword) {
-    linkForgotPassword.addEventListener('click', (e) => {
-      e.preventDefault();
-      openAuthModal('recovery');
-    });
-  }
-
-  if (linkBackToLogin) {
-    linkBackToLogin.addEventListener('click', (e) => {
-      e.preventDefault();
-      openAuthModal('login');
-    });
-  }
-
-  // Show / Hide Password toggle
-  if (btnTogglePassword && inputAuthPassword) {
-    btnTogglePassword.addEventListener('click', () => {
-      const type = inputAuthPassword.getAttribute('type') === 'password' ? 'text' : 'password';
-      inputAuthPassword.setAttribute('type', type);
-      btnTogglePassword.textContent = type === 'password' ? '👁️' : '🙈';
-    });
-  }
-
-  // Google Sign-In Integration
-  if (btnGoogleSignin) {
-    btnGoogleSignin.addEventListener('click', async () => {
       try {
-        const res = await fetch('/api/auth/google', {
+        const res = await fetch('/api/banners/admin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            googleUser: {
-              name: 'Usuario Google',
-              email: 'usuario.google@gmail.com'
-            }
-          })
+          body: JSON.stringify({ banners: updatedBanners })
         });
         const data = await res.json();
-        if (res.ok) {
-          state.currentUser = data.user;
-          state.wallet = data.wallet;
-          updateHeaderDisplay();
-          closeAuthModal();
-          alert(`🎉 ¡Autenticado exitosamente con Google como ${data.user.name}!`);
+        if (data.success) {
+          alert('✅ ¡Banners actualizados y publicados en el Hero con éxito!');
+          state.heroBanners = data.banners;
+          initHeroAccordion();
+        } else {
+          alert('Error al actualizar banners');
         }
       } catch (err) {
-        alert('Error al conectar con Google: ' + err.message);
+        alert('Error al conectar con el servidor.');
       }
     });
   }
 
-  // Main Auth Form Submit (Login / Register)
-  if (formAuthMain) {
-    formAuthMain.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('input-auth-email').value;
-      const password = document.getElementById('input-auth-password').value;
+  // Modals Open/Close
+  const modalDeposit = document.getElementById('modal-deposit');
+  const btnOpenDeposit = document.getElementById('btn-open-deposit-modal');
+  const btnCloseDeposit = document.getElementById('btn-close-deposit-modal');
+  if (btnOpenDeposit && modalDeposit) btnOpenDeposit.onclick = () => modalDeposit.style.display = 'grid';
+  if (btnCloseDeposit && modalDeposit) btnCloseDeposit.onclick = () => modalDeposit.style.display = 'none';
 
-      if (currentAuthMode === 'login') {
-        try {
-          const res = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-          });
-          const data = await res.json();
-          if (res.ok) {
-            state.currentUser = data.user;
-            state.wallet = data.wallet;
-            updateHeaderDisplay();
-            closeAuthModal();
-            alert(`✅ ${data.message}`);
-            if (data.user.role === 'seller') switchView('seller');
-          } else {
-            alert('❌ ' + (data.error || 'Error al iniciar sesión'));
-          }
-        } catch (err) {
-          alert('Error de conexión: ' + err.message);
-        }
-      } else {
-        // Register Mode
-        const name = document.getElementById('input-auth-name').value;
-        const role = document.getElementById('select-auth-role').value;
+  const modalAuth = document.getElementById('modal-auth');
+  const btnOpenLogin = document.getElementById('btn-open-login-modal');
+  const btnOpenReg = document.getElementById('btn-open-register-modal');
+  const btnCloseAuth = document.getElementById('btn-close-auth-modal');
+  if (btnOpenLogin && modalAuth) btnOpenLogin.onclick = () => modalAuth.style.display = 'grid';
+  if (btnOpenReg && modalAuth) btnOpenReg.onclick = () => modalAuth.style.display = 'grid';
+  if (btnCloseAuth && modalAuth) btnCloseAuth.onclick = () => modalAuth.style.display = 'none';
 
-        try {
-          const res = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, password, role })
-          });
-          const data = await res.json();
-          if (res.ok) {
-            state.currentUser = data.user;
-            state.wallet = data.wallet;
-            updateHeaderDisplay();
-            closeAuthModal();
-            alert(`🎉 ¡Bienvenido a GamesBoy.net, ${data.user.name}! Cuenta creada.`);
-            if (role === 'seller') switchView('seller');
-          } else {
-            alert('❌ ' + (data.error || 'Error al registrarte'));
-          }
-        } catch (err) {
-          alert('Error de conexión: ' + err.message);
-        }
-      }
-    });
-  }
+  // Deposit Methods Tab Toggle
+  const tabPaySipap = document.getElementById('tab-pay-sipap');
+  const tabPayBinance = document.getElementById('tab-pay-binance');
+  const boxPaySipap = document.getElementById('box-pay-sipap');
+  const boxPayBinance = document.getElementById('box-pay-binance');
 
-  // Password Recovery Form Submit
-  if (formAuthRecovery) {
-    formAuthRecovery.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = document.getElementById('input-recovery-email').value;
-      const isStep2 = recoveryStep2 && recoveryStep2.style.display === 'block';
-
-      if (!isStep2) {
-        try {
-          const res = await fetch('/api/auth/forgot-password', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
-          });
-          const data = await res.json();
-          if (res.ok) {
-            alert(`📨 ${data.message} \n(Código de prueba generado: ${data.resetCodeHint})`);
-            if (recoveryStep2) recoveryStep2.style.display = 'block';
-            if (document.getElementById('input-recovery-code')) {
-              document.getElementById('input-recovery-code').value = data.resetCodeHint;
-            }
-            if (textRecoverySubmit) textRecoverySubmit.textContent = 'Actualizar Contraseña';
-          } else {
-            alert('❌ ' + data.error);
-          }
-        } catch (err) {
-          alert('Error: ' + err.message);
-        }
-      } else {
-        const code = document.getElementById('input-recovery-code').value;
-        const newPassword = document.getElementById('input-recovery-newpass').value;
-
-        try {
-          const res = await fetch('/api/auth/reset-password', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, newPassword, code })
-          });
-          const data = await res.json();
-          if (res.ok) {
-            alert('✅ ' + data.message);
-            openAuthModal('login');
-          } else {
-            alert('❌ ' + data.error);
-          }
-        } catch (err) {
-          alert('Error: ' + err.message);
-        }
-      }
-    });
-  }
-
-  // Search Button
-  const btnNavSearch = document.getElementById('btn-nav-search');
-  if (btnNavSearch) {
-    btnNavSearch.addEventListener('click', () => {
-      const catalog = document.getElementById('section-catalog');
-      if (catalog) catalog.scrollIntoView({ behavior: 'smooth' });
-    });
-  }
-
-  document.querySelectorAll('.filter-pill').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      state.activeCategory = btn.getAttribute('data-category');
-      
-      const storeSection = document.getElementById('section-store');
-      const catalogSection = document.getElementById('section-catalog');
-      
-      if (state.activeCategory === 'store') {
-        catalogSection.style.display = 'none';
-        storeSection.style.display = 'block';
-      } else if (state.activeCategory === 'all') {
-        catalogSection.style.display = 'block';
-        storeSection.style.display = 'block';
-        renderSubscriptions();
-      } else {
-        catalogSection.style.display = 'block';
-        storeSection.style.display = 'none';
-        renderSubscriptions();
-      }
-    });
-  });
-
-  if (btnPersonaToggle) {
-    btnPersonaToggle.addEventListener('click', async () => {
-      const roles = ['client', 'seller', 'admin'];
-      const nextRole = roles[(roles.indexOf(state.currentUser.role) + 1) % roles.length];
-      
-      try {
-        const res = await fetch('/api/auth/switch-role', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ role: nextRole })
-        });
-        if (res.ok) {
-          const data = await res.json();
-          state.currentUser = data.user;
-          state.wallet = data.wallet;
-          updateHeaderDisplay();
-          switchView(nextRole);
-          await loadMyVault();
-          if (nextRole === 'seller') loadSellerDashboard();
-          if (nextRole === 'admin') loadAdminOverview();
-        }
-      } catch (e) {}
-    });
+  if (tabPaySipap && tabPayBinance) {
+    tabPaySipap.onclick = () => {
+      tabPaySipap.classList.add('active');
+      tabPayBinance.classList.remove('active');
+      if (boxPaySipap) boxPaySipap.style.display = 'block';
+      if (boxPayBinance) boxPayBinance.style.display = 'none';
+    };
+    tabPayBinance.onclick = () => {
+      tabPayBinance.classList.add('active');
+      tabPaySipap.classList.remove('active');
+      if (boxPaySipap) boxPaySipap.style.display = 'none';
+      if (boxPayBinance) boxPayBinance.style.display = 'block';
+    };
   }
 }
 
-function switchView(viewName) {
-  state.activeView = viewName;
-
-  tabClient.classList.toggle('active', viewName === 'client');
-  tabSeller.classList.toggle('active', viewName === 'seller');
-  tabAdmin.classList.toggle('active', viewName === 'admin');
-
-  viewClient.style.display = viewName === 'client' ? 'block' : 'none';
-  viewSeller.style.display = viewName === 'seller' ? 'block' : 'none';
-  viewAdmin.style.display = viewName === 'admin' ? 'block' : 'none';
-
-  if (viewName === 'seller') loadSellerDashboard();
-  if (viewName === 'admin') loadAdminOverview();
-}
-
-function connectWebSocket() {
-  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  const ws = new WebSocket(`${protocol}//${window.location.host}/ws`);
-
-  ws.onmessage = (event) => {
-    try {
-      const data = JSON.parse(event.data);
-      if (data.type === 'NEW_DEPOSIT_REQUEST' && state.activeView === 'admin') {
-        loadAdminOverview();
-      }
-    } catch (e) {}
-  };
-
-  ws.onclose = () => {
-    setTimeout(connectWebSocket, 5000);
-  };
-}
-
-document.addEventListener('DOMContentLoaded', init);
+// Initialize on DOM Loaded
+document.addEventListener('DOMContentLoaded', () => {
+  setupEventListeners();
+  fetchStoreData();
+});

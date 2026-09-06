@@ -16,6 +16,7 @@ import subscriptionsRouter from './routes/subscriptions.js';
 import storeRouter from './routes/store.js';
 import sellerRouter from './routes/seller.js';
 import adminRouter from './routes/admin.js';
+import bannersRouter from './routes/banners.js';
 import { notFoundHandler, globalErrorHandler } from './middleware/errorHandler.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -81,6 +82,7 @@ app.use('/api/subscriptions', subscriptionsRouter);
 app.use('/api/store', storeRouter);
 app.use('/api/seller', sellerRouter);
 app.use('/api/admin', adminRouter);
+app.use('/api/banners', bannersRouter);
 
 // Fallback for SPA routing
 app.get('*', (req, res, next) => {

@@ -51,11 +51,25 @@ export function getPool() {
 }
 
 export function isPgConnected() {
-  return isConnected;
+  return isConnected && pool !== null;
+}
+
+export function isConnectedFunc() {
+  return isConnected && pool !== null;
+}
+
+export async function query(text, params) {
+  if (!isConnected || !pool) {
+    throw new Error('PostgreSQL is not connected');
+  }
+  return pool.query(text, params);
 }
 
 export default {
   initPostgres,
   getPool,
-  isPgConnected
+  isPgConnected,
+  isConnected: isConnectedFunc,
+  query
 };
+
