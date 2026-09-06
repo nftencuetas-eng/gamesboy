@@ -14,12 +14,12 @@
     * { border-radius: 0px !important; }
     .admin-layout {
       display: grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 280px 1fr;
       min-height: 100vh;
       background: var(--bg-body);
     }
     .admin-sidebar {
-      background: var(--bg-surface);
+      background: #060c1c;
       border-right: 1px solid var(--border-subtle);
       padding: 1.5rem;
       display: flex;
@@ -34,7 +34,7 @@
       align-items: center;
       gap: 12px;
       width: 100%;
-      padding: 10px 14px;
+      padding: 12px 16px;
       background: transparent;
       border: 1px solid transparent;
       color: var(--text-secondary);
@@ -46,9 +46,17 @@
       transition: all 0.15s ease;
     }
     .admin-menu-btn:hover, .admin-menu-btn.active {
-      background: var(--bg-surface-elevated);
+      background: #0d1733;
       border-color: var(--border-medium);
       color: var(--accent-cyan);
+    }
+    .badge-count {
+      margin-left: auto;
+      background: var(--accent-amber);
+      color: #000;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 7px;
     }
     @media (max-width: 900px) {
       .admin-layout { grid-template-columns: 1fr; }
@@ -65,22 +73,27 @@
     <aside class="admin-sidebar">
       <div style="margin-bottom: 2rem;">
         <a href="/">
-          <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 32px; width: auto; filter: none;">
+          <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 34px; width: auto; filter: none;">
         </a>
-        <div class="badge-official" style="margin-top: 8px; font-size: 0.7rem;">ADMIN MASTER</div>
+        <div class="badge-official" style="margin-top: 8px; font-size: 0.72rem; letter-spacing: 0.5px;">ADMINISTRADOR MASTER</div>
       </div>
 
       <nav style="flex: 1;">
-        <button class="admin-menu-btn active" data-tab="tab-finances">📊 Finanzas & Recargas</button>
-        <button class="admin-menu-btn" data-tab="tab-prices">🏷️ Catálogo & Precios Oficiales</button>
-        <button class="admin-menu-btn" data-tab="tab-escrow">🛡️ Garantía Escrow & Vendedores</button>
-        <button class="admin-menu-btn" data-tab="tab-banners">🎨 Portadas ENEBA Hero</button>
-        <button class="admin-menu-btn" data-tab="tab-branches">🏢 Sucursales (PY / PA)</button>
+        <button class="admin-menu-btn active" data-tab="tab-approvals">
+          <span>📥 Aprobación de Cuentas</span>
+          <span class="badge-count" id="badge-pending-subs">0</span>
+        </button>
+        <button class="admin-menu-btn" data-tab="tab-finances">📊 Finanzas & Recargas</button>
+        <button class="admin-menu-btn" data-tab="tab-prices">🏷️ Precios Oficiales</button>
+        <button class="admin-menu-btn" data-tab="tab-escrow">🛡️ Garantía Escrow (30 Días)</button>
+        <button class="admin-menu-btn" data-tab="tab-banners">🎨 Portadas ENEBA</button>
+        <button class="admin-menu-btn" data-tab="tab-branches">🏢 Sucursales & Bancos</button>
       </nav>
 
-      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+      <div style="margin-top: auto; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle);">
+        <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-bottom: 8px;">Sesión: <strong>admin@gamesboy.net</strong></div>
         <a href="/" style="display: block; font-size: 0.82rem; color: var(--accent-cyan); text-decoration: none; margin-bottom: 8px;">➔ Ver Tienda Pública</a>
-        <button onclick="localStorage.removeItem('gb_admin_session'); window.location.href='/admin-login.html';" style="background: none; border: none; color: var(--accent-red); font-size: 0.8rem; cursor: pointer;">Cerrar Sesión Admin</button>
+        <button onclick="localStorage.removeItem('gb_admin_session'); window.location.href='/admin/login';" style="background: none; border: none; color: var(--accent-red); font-size: 0.8rem; cursor: pointer;">Cerrar Sesión Admin</button>
       </div>
     </aside>
 
@@ -90,26 +103,63 @@
       <!-- Top Header Bar -->
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle);">
         <div>
-          <h1 id="admin-view-heading" style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; color: #ffffff;">Finanzas & Bandeja de Recargas</h1>
-          <p style="font-size: 0.82rem; color: var(--text-secondary);">Sucursal Activa: <strong>🇵🇾 Paraguay (SIPAP Bancos / Guaraníes)</strong></p>
+          <h1 id="admin-view-heading" style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: #ffffff;">📥 Aprobación y Prueba de Cuentas de Vendedores</h1>
+          <p style="font-size: 0.84rem; color: var(--text-secondary);">Revisa, prueba las credenciales al 100% y aprueba las cuentas para publicarlas en la tienda.</p>
         </div>
         <div style="display: flex; gap: 10px;">
-          <a href="/" class="btn-action-sm" style="background: rgba(255,255,255,0.06); padding: 8px 14px; text-decoration: none; color: #fff;">Marketplace ↗</a>
+          <button class="btn-action-sm" style="background: var(--bg-surface-elevated); color: #fff; padding: 8px 14px;" onclick="loadAdminData()">🔄 Actualizar Datos</button>
+          <a href="/" class="btn-action-sm" style="background: var(--accent-cyan); color: #040c1e; font-weight: 800; padding: 8px 14px; text-decoration: none;">Ver Tienda ↗</a>
         </div>
       </div>
 
-      <!-- Tab 1: Finanzas & Aprobación de Recargas -->
-      <div id="view-tab-finances" class="admin-tab-pane">
+      <!-- Tab 1: Aprobación de Cuentas de Vendedores (CORE APPROVAL FLOW) -->
+      <div id="view-tab-approvals" class="admin-tab-pane">
+        <div class="form-box" style="margin-bottom: 2rem;">
+          <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem;">⚙️ Flujo Obligatorio de Verificación de Cuentas</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+            Ninguna cuenta subida por un vendedor se publica automáticamente en la tienda. El Administrador debe:
+            <br>1. Copiar las credenciales ingresadas por el vendedor y probar el acceso real en la plataforma (Netflix, Spotify, Max, etc.).
+            <br>2. Verificar que los perfiles y PINs estén configurados de forma correcta.
+            <br>3. Hacer clic en <strong>"Aprobar y Publicar en Tienda"</strong> para habilitar los cupos para venta inmediata al cliente.
+          </p>
+        </div>
+
+        <div class="table-wrapper">
+          <div class="section-header" style="padding: 12px 16px; margin-bottom: 0;">
+            <h3 class="section-title">📋 Cuentas Pendientes de Verificación Técnica</h3>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Vendedor</th>
+                <th>Servicio / Plataforma</th>
+                <th>Slots</th>
+                <th>Precio / Slot</th>
+                <th>Credenciales para Probar</th>
+                <th>Acción de Administración</th>
+              </tr>
+            </thead>
+            <tbody id="admin-pending-subs-table-body">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando cuentas pendientes...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 2: Finanzas & Aprobación de Recargas -->
+      <div id="view-tab-finances" class="admin-tab-pane" style="display: none;">
         <div class="portal-stats-grid">
           <div class="portal-stat-card">
             <div class="portal-stat-title">Recargas Pendientes</div>
-            <div class="portal-stat-val" style="color: var(--accent-amber);">0</div>
+            <div class="portal-stat-val" id="stat-pending-deposits-count" style="color: var(--accent-amber);">0</div>
             <div style="font-size: 0.75rem; color: var(--text-tertiary);">Comprobantes por verificar</div>
           </div>
           <div class="portal-stat-card">
             <div class="portal-stat-title">Saldo en Garantía (Escrow)</div>
             <div class="portal-stat-val" style="color: var(--accent-cyan);">$ 45.00</div>
-            <div style="font-size: 0.75rem; color: var(--text-tertiary);">₲ 337.500 retenidos hasta fin de mes</div>
+            <div style="font-size: 0.75rem; color: var(--text-tertiary);">₲ 337.500 retenidos 30 días</div>
           </div>
           <div class="portal-stat-card">
             <div class="portal-stat-title">Saldo Liquidable a Vendedores</div>
@@ -125,7 +175,7 @@
 
         <div class="table-wrapper">
           <div class="section-header" style="padding: 12px 16px; margin-bottom: 0;">
-            <h3 class="section-title">📥 Comprobantes de Recarga Bancaria (SIPAP / Binance)</h3>
+            <h3 class="section-title">📥 Bandeja de Comprobantes de Recarga (SIPAP Paraguay / Binance)</h3>
           </div>
           <table class="data-table">
             <thead>
@@ -134,7 +184,7 @@
                 <th>Monto Local</th>
                 <th>Equiv. USD</th>
                 <th>Método</th>
-                <th>Referencia</th>
+                <th>Referencia / TXID</th>
                 <th>Acción</th>
               </tr>
             </thead>
@@ -146,7 +196,7 @@
                 <td>SIPAP Familiar</td>
                 <td><code>SIPAP-981244</code></td>
                 <td>
-                  <button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; padding: 4px 10px; font-weight: 700;" onclick="alert('Recarga de ₲ 100.000 aprobada y acreditada al saldo del usuario.')">Aprobar</button>
+                  <button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; padding: 4px 10px; font-weight: 700;" onclick="alert('Recarga aprobada y acreditada al saldo del usuario.')">Aprobar</button>
                   <button class="btn-action-sm" style="background: var(--accent-red); color: #fff; padding: 4px 10px;" onclick="alert('Comprobante rechazado.')">Rechazar</button>
                 </td>
               </tr>
@@ -155,71 +205,61 @@
         </div>
       </div>
 
-      <!-- Tab 2: Control de Precios Oficiales y Stock -->
+      <!-- Tab 3: Control de Precios Oficiales -->
       <div id="view-tab-prices" class="admin-tab-pane" style="display: none;">
         <div class="form-box">
-          <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem;">🏷️ Definir Precios y Reglas de Membresías Compartidas</h2>
+          <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem;">🏷️ Tabla de Precios Oficiales Establecidos por la Administración</h2>
           <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-            El Administrador establece los precios fijos propuestos que los vendedores aceptan al compartir sus cuentas.
+            El Administrador es quien fija las tarifas de venta al cliente y la remuneración al vendedor. Los vendedores aceptan estos precios al publicar.
           </p>
 
-          <div class="table-wrapper">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Servicio</th>
-                  <th>Precio Venta Cliente (USD)</th>
-                  <th>Precio Venta en Gs.</th>
-                  <th>Pago a Vendedor / Mes</th>
-                  <th>Margen GamesBoy</th>
-                  <th>Acción</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Netflix Premium 4K</strong></td>
-                  <td><input type="number" class="form-input" value="3.50" style="width: 80px; padding: 4px 8px;"></td>
-                  <td>₲ 26.250</td>
-                  <td>$ 2.95 (₲ 22.000)</td>
-                  <td>15%</td>
-                  <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio actualizado')">Guardar</button></td>
-                </tr>
-                <tr>
-                  <td><strong>Spotify Premium Familiar</strong></td>
-                  <td><input type="number" class="form-input" value="2.50" style="width: 80px; padding: 4px 8px;"></td>
-                  <td>₲ 18.750</td>
-                  <td>$ 2.10 (₲ 15.750)</td>
-                  <td>15%</td>
-                  <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio actualizado')">Guardar</button></td>
-                </tr>
-                <tr>
-                  <td><strong>Disney+ & Star+</strong></td>
-                  <td><input type="number" class="form-input" value="3.00" style="width: 80px; padding: 4px 8px;"></td>
-                  <td>₲ 22.500</td>
-                  <td>$ 2.50 (₲ 18.750)</td>
-                  <td>15%</td>
-                  <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio actualizado')">Guardar</button></td>
-                </tr>
-                <tr>
-                  <td><strong>Max (HBO Max) 4K</strong></td>
-                  <td><input type="number" class="form-input" value="2.80" style="width: 80px; padding: 4px 8px;"></td>
-                  <td>₲ 21.000</td>
-                  <td>$ 2.35 (₲ 17.600)</td>
-                  <td>15%</td>
-                  <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio actualizado')">Guardar</button></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Servicio</th>
+                <th>Precio Venta Cliente (USD)</th>
+                <th>Precio Venta en Gs.</th>
+                <th>Pago al Vendedor / Mes</th>
+                <th>Margen GamesBoy</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Netflix Premium 4K</strong></td>
+                <td><input type="number" class="form-input" value="3.50" style="width: 80px; padding: 4px 8px;"></td>
+                <td>₲ 26.250</td>
+                <td>$ 2.95 (₲ 22.000)</td>
+                <td>15%</td>
+                <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio guardado')">Guardar</button></td>
+              </tr>
+              <tr>
+                <td><strong>Spotify Premium Familiar</strong></td>
+                <td><input type="number" class="form-input" value="2.50" style="width: 80px; padding: 4px 8px;"></td>
+                <td>₲ 18.750</td>
+                <td>$ 2.10 (₲ 15.750)</td>
+                <td>15%</td>
+                <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio guardado')">Guardar</button></td>
+              </tr>
+              <tr>
+                <td><strong>Disney+ & Star+</strong></td>
+                <td><input type="number" class="form-input" value="3.00" style="width: 80px; padding: 4px 8px;"></td>
+                <td>₲ 22.500</td>
+                <td>$ 2.50 (₲ 18.750)</td>
+                <td>15%</td>
+                <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio guardado')">Guardar</button></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <!-- Tab 3: Garantía Escrow & Gestión de Fallas -->
+      <!-- Tab 4: Garantía Escrow (30 Días) -->
       <div id="view-tab-escrow" class="admin-tab-pane" style="display: none;">
         <div class="form-box">
-          <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem;">🛡️ Sistema de Garantía & Liquidación de Vendedores</h2>
+          <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem;">🛡️ Sistema de Garantía Escrow & Liquidación de Vendedores</h2>
           <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-            Los pagos a vendedores se liberan exclusivamente al culminar los 30 días de servicio sin reportes. Regla de falla: 1 falla = reposición obligatoria; 2da falla = reembolso total al cliente.
+            GamesBoy actúa como intermediario de garantía. Si el cliente reporta 1 falla, el vendedor debe reponer; a la 2da falla, el administrador reembolsa directamente al cliente.
           </p>
 
           <table class="data-table">
@@ -228,21 +268,21 @@
                 <th>Vendedor</th>
                 <th>Servicio / Cuenta</th>
                 <th>Cliente Asignado</th>
-                <th>Días Restantes</th>
-                <th>Monto Escrow</th>
+                <th>Progreso</th>
+                <th>Monto en Garantía</th>
                 <th>Estado</th>
                 <th>Acción Admin</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Carlos_PY (Verificado ⭐)</td>
+                <td>Carlos_PY ⭐ (Verificado)</td>
                 <td>Netflix 4K - Perfil #2</td>
                 <td>Rodrigo Vera</td>
                 <td>Día 30 de 30 (Finalizado)</td>
                 <td>$ 2.95 (₲ 22.000)</td>
-                <td><span class="badge-official" style="background: rgba(16,185,129,0.15); color: #10b981;">Listo para liberar</span></td>
-                <td><button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; padding: 4px 10px;" onclick="alert('Ganancia liberada a la billetera del vendedor')">Liberar Pago</button></td>
+                <td><span class="badge-official" style="background: rgba(16,185,129,0.15); color: #10b981;">Listo para liquidar</span></td>
+                <td><button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; padding: 4px 10px; font-weight: 800;" onclick="alert('Ganancia liquidada a la billetera del vendedor')">Liberar Pago</button></td>
               </tr>
               <tr>
                 <td>Marcos_Store</td>
@@ -250,28 +290,26 @@
                 <td>Ana Benítez</td>
                 <td>Día 12 de 30</td>
                 <td>$ 2.10 (₲ 15.750)</td>
-                <td><span style="color: var(--accent-amber); font-size: 0.8rem;">En Garantía Escrow</span></td>
-                <td><button class="btn-action-sm" style="background: rgba(239,68,68,0.2); color: #ef4444; padding: 4px 10px;" onclick="alert('Reembolso efectuado al saldo del cliente')">Reembolsar</button></td>
+                <td><span style="color: var(--accent-amber); font-size: 0.8rem;">Retenido en Escrow</span></td>
+                <td><button class="btn-action-sm" style="background: rgba(239,68,68,0.2); color: #ef4444; padding: 4px 10px;" onclick="alert('Reembolso efectuado al cliente')">Reembolsar</button></td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Tab 4: Portadas ENEBA Hero -->
+      <!-- Tab 5: Portadas ENEBA Hero -->
       <div id="view-tab-banners" class="admin-tab-pane" style="display: none;">
         <div class="form-box">
           <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem;">🎨 Personalizar Portadas del Acordeón Hero</h2>
           <form id="form-admin-banners-page">
-            <div id="admin-page-banners-container">
-              <!-- Rendered via script -->
-            </div>
+            <div id="admin-page-banners-container"></div>
             <button type="submit" class="btn-primary-block" style="margin-top: 1rem;">💾 Guardar Banners</button>
           </form>
         </div>
       </div>
 
-      <!-- Tab 5: Sucursales & Datos Bancarios -->
+      <!-- Tab 6: Sucursales & Bancos Locales -->
       <div id="view-tab-branches" class="admin-tab-pane" style="display: none;">
         <div class="form-box">
           <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem;">🏢 Configuración de Sucursales y Bancos Locales</h2>
@@ -279,7 +317,7 @@
             <div class="form-group">
               <label class="form-label">País de Sucursal</label>
               <select class="form-select">
-                <option value="PY">🇵🇾 Paraguay (Matriz SIPAP)</option>
+                <option value="PY">🇵🇾 Paraguay (Matriz SIPAP / Bancos)</option>
                 <option value="PA">🇵🇦 Panamá (Sucursal Dólares)</option>
               </select>
             </div>
@@ -298,7 +336,7 @@
               <input type="text" class="form-input" value="gamesboy.py / 01-445566-7">
             </div>
           </div>
-          <button class="btn-primary-block" style="margin-top: 1rem;" onclick="alert('Configuración de sucursal guardada con éxito.')">Guardar Cambios de Sucursal</button>
+          <button class="btn-primary-block" style="margin-top: 1rem;" onclick="alert('Configuración guardada.')">Guardar Cambios de Sucursal</button>
         </div>
       </div>
 
@@ -316,8 +354,81 @@
         document.querySelectorAll('.admin-tab-pane').forEach(p => p.style.display = 'none');
         const targetPane = document.getElementById(targetId);
         if (targetPane) targetPane.style.display = 'block';
-        document.getElementById('admin-view-heading').textContent = tab.textContent;
+        document.getElementById('admin-view-heading').textContent = tab.querySelector('span')?.textContent || tab.textContent;
       });
+    });
+
+    // Load Live Pending Subscriptions
+    async function loadAdminData() {
+      try {
+        const res = await fetch('/api/admin/pending-subscriptions');
+        const data = await res.json();
+        const tbody = document.getElementById('admin-pending-subs-table-body');
+        const badge = document.getElementById('badge-pending-subs');
+
+        if (badge) badge.textContent = data.pendingCount || 0;
+
+        if (!data.subscriptions || data.subscriptions.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">
+                ✅ No hay cuentas pendientes de revisión. Todas las cuentas activas están verificadas y publicadas en la tienda.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = data.subscriptions.map(s => `
+          <tr>
+            <td><strong>${s.sellerName || 'Vendedor'}</strong></td>
+            <td><span style="color: var(--accent-cyan); font-weight: 700;">${s.serviceName}</span></td>
+            <td>${s.totalSlots} slots</td>
+            <td>$ ${s.pricePerSlotUsd.toFixed(2)}</td>
+            <td>
+              <button class="btn-action-sm" style="background: rgba(255,255,255,0.08); padding: 4px 8px; font-size: 0.78rem;" onclick="alert('Credenciales para probar:\n\n${s.credentialsDecrypted || 'No provisto'}\n\nPINs: ${s.pinsDecrypted || 'N/A'}')">🔑 Ver Claves & Probar</button>
+            </td>
+            <td>
+              <button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; font-weight: 800; padding: 4px 10px; margin-right: 4px;" onclick="approveSub('${s.id}')">✅ Aprobar y Publicar</button>
+              <button class="btn-action-sm" style="background: var(--accent-red); color: #fff; padding: 4px 8px;" onclick="rejectSub('${s.id}')">❌ Rechazar</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error('Error loading pending subscriptions:', err);
+      }
+    }
+
+    async function approveSub(id) {
+      if (!confirm('¿Has probado las credenciales y confirmas que la cuenta funciona al 100% para publicarla en la tienda?')) return;
+      try {
+        const res = await fetch('/api/admin/approve-subscription/' + id, { method: 'POST' });
+        const data = await res.json();
+        alert(data.message || 'Cuenta aprobada');
+        loadAdminData();
+      } catch (e) {
+        alert('Error al aprobar');
+      }
+    }
+
+    async function rejectSub(id) {
+      if (!confirm('¿Deseas rechazar y descartar esta publicación?')) return;
+      try {
+        const res = await fetch('/api/admin/reject-subscription/' + id, { method: 'POST' });
+        const data = await res.json();
+        alert(data.message || 'Cuenta rechazada');
+        loadAdminData();
+      } catch (e) {
+        alert('Error al rechazar');
+      }
+    }
+
+    window.approveSub = approveSub;
+    window.rejectSub = rejectSub;
+    window.loadAdminData = loadAdminData;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAdminData();
     });
   </script>
 </body>

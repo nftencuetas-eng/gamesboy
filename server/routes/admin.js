@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getDb, saveStorage } from '../config/database.js';
 import { approveDeposit, rejectDeposit, getWallet } from '../services/walletService.js';
 import { setExchangeRate, convertFromUsd } from '../services/currencyService.js';
+import cryptoService from '../services/cryptoService.js';
 
 const router = Router();
 
@@ -113,6 +114,73 @@ router.post('/settings', (req, res) => {
       success: true,
       message: 'Configuraciones de la plataforma actualizadas exitosamente.',
       settings: db.platform_settings
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get pending subscriptions submitted by sellers for admin review & testing
+router.get('/pending-subscriptions', (req, res) => {
+  try {
+    const db = getDb();
+    const pending = db.subscriptions
+      .filter(s => s.status === 'pending_approval' || s.status === 'pending')
+      .map(s => ({
+        ...s,
+        credentialsDecrypted: cryptoService.decrypt(s.credentialsEncrypted),
+        pinsDecrypted: cryptoService.decrypt(s.pinsEncrypted || '')
+      }));
+
+    res.json({
+      success: true,
+      pendingCount: pending.length,
+      subscriptions: pending
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Approve a seller subscription after testing
+router.post('/approve-subscription/:id', (req, res) => {
+  try {
+    const db = getDb();
+    const sub = db.subscriptions.find(s => s.id === req.params.id);
+    if (!sub) {
+      return res.status(404).json({ error: 'Suscripción no encontrada' });
+    }
+
+    sub.status = 'active';
+    sub.approvedAt = new Date().toISOString();
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `¡Suscripción "${sub.serviceName}" aprobada y publicada en la tienda!`,
+      subscription: sub
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Reject a seller subscription
+router.post('/reject-subscription/:id', (req, res) => {
+  try {
+    const db = getDb();
+    const subIndex = db.subscriptions.findIndex(s => s.id === req.params.id);
+    if (subIndex === -1) {
+      return res.status(404).json({ error: 'Suscripción no encontrada' });
+    }
+
+    const removed = db.subscriptions.splice(subIndex, 1)[0];
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `Suscripción rechazada y eliminada.`,
+      subscription: removed
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

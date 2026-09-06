@@ -84,6 +84,12 @@ app.use('/api/seller', sellerRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/banners', bannersRouter);
 
+// Clean Routes without .html extension
+app.get('/login', (req, res) => res.sendFile(path.join(clientPath, 'login.html')));
+app.get('/admin', (req, res) => res.sendFile(path.join(clientPath, 'admin.html')));
+app.get('/admin/login', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
+app.get('/admin-login', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
+
 // Fallback for SPA routing
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api') || req.path.startsWith('/health')) {

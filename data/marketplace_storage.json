@@ -105,6 +105,23 @@
   ],
   "subscriptions": [
     {
+      "id": "sub_1788700823091_yysk",
+      "sellerId": "usr_client1",
+      "sellerName": "Lucas_Py",
+      "isOfficial": false,
+      "serviceName": "Disney+ Premium & Star+",
+      "category": "streaming",
+      "planName": "Plan 4K 4 Pantallas Compartidas",
+      "totalSlots": 4,
+      "availableSlots": 4,
+      "pricePerSlotUsd": 4.5,
+      "credentialsEncrypted": "d4a0707c49ae7c6774d7dcb9bc640d64:ddba33df080d01d043d6df5c4d17961e101d2bb36a17355a839bc5ef03f7792bf3002401ecd858bdabd034c952d937e6",
+      "pinsEncrypted": "e3d27f3b249509c32c51ac605052757e:7f2b7a5647d0c96d368961d84728b9c1c0edc1dd725fab67c71838b81ca41928db57cfc24fd129de12756ac8105ed91e",
+      "instructions": "Usa exclusivamente tu perfil asignado y no cambies contraseña.",
+      "status": "active",
+      "createdAt": "2026-09-06T13:20:23.092Z"
+    },
+    {
       "id": "sub_netflix_official",
       "sellerId": "usr_admin",
       "sellerName": "GamesBoy Oficial",
@@ -546,5 +563,38 @@
       "network": "USDT (Binance Pay / BEP-20 / TRC-20)",
       "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F"
     }
+  },
+  "group_chats": {
+    "sub_netflix_official": [
+      {
+        "id": "msg_init_sub_netflix_official",
+        "senderId": "usr_admin",
+        "senderName": "GamesBoy Oficial",
+        "senderAvatar": "👑",
+        "isOwnerAdmin": true,
+        "text": "¡Bienvenidos al grupo oficial de Netflix Premium 4K! Por favor respeten su perfil y PIN asignado. Dudas o consultas aquí.",
+        "timestamp": "2026-09-04T10:37:13.048Z"
+      },
+      {
+        "id": "msg_1788700823076_kk9m",
+        "senderId": "usr_client1",
+        "senderName": "Lucas_Py",
+        "senderAvatar": "🎮",
+        "isOwnerAdmin": false,
+        "text": "¡Hola a todos! Este es un mensaje de prueba en el grupo.",
+        "timestamp": "2026-09-06T13:20:23.076Z"
+      }
+    ],
+    "sub_1788700823091_yysk": [
+      {
+        "id": "msg_init_sub_1788700823091_yysk",
+        "senderId": "usr_client1",
+        "senderName": "Lucas_Py",
+        "senderAvatar": "👑",
+        "isOwnerAdmin": true,
+        "text": "¡Hola a todos! Soy el administrador de esta cuenta de Disney+ Premium & Star+. Aquí compartiremos novedades e instrucciones del servicio.",
+        "timestamp": "2026-09-06T13:20:23.092Z"
+      }
+    ]
   }
 }

@@ -1,11 +1,115 @@
 // GamesBoy.net - Master ENEBA Marketplace Core Engine
 
+// Multi-Country & Multi-Currency Universal Configuration
+const countryConfig = {
+  'PY': {
+    code: 'PY',
+    name: 'Paraguay',
+    flag: '🇵🇾',
+    currency: 'PYG',
+    symbol: '₲',
+    rateToUsd: 7500, // 1 USD = 7,500 PYG
+    format: (amtUsd) => `₲ ${Math.round(amtUsd * 7500).toLocaleString('es-PY')}`,
+    localPayment: {
+      title: '🇵🇾 Transferencia Bancaria Paraguay (SIPAP)',
+      bank: 'Banco Familiar / Itaú Paraguay',
+      holder: 'GamesBoy Paraguay S.A.',
+      doc: 'RUC: 80091234-5',
+      account: '01-445566-7',
+      alias: 'gamesboy.py'
+    }
+  },
+  'AR': {
+    code: 'AR',
+    name: 'Argentina',
+    flag: '🇦🇷',
+    currency: 'ARS',
+    symbol: '$',
+    rateToUsd: 1250, // 1 USD = 1,250 ARS
+    format: (amtUsd) => `$ ${(amtUsd * 1250).toLocaleString('es-AR')} ARS`,
+    localPayment: {
+      title: '🇦🇷 Transferencia Bancaria Argentina (CBU / CVU)',
+      bank: 'Banco Santander / Mercado Pago Argentina',
+      holder: 'GamesBoy Argentina SRL',
+      doc: 'CUIT: 30-71829910-4',
+      account: 'CBU: 0720192888000034829102',
+      alias: 'GAMESBOY.ARG.MP'
+    }
+  },
+  'BR': {
+    code: 'BR',
+    name: 'Brasil',
+    flag: '🇧🇷',
+    currency: 'BRL',
+    symbol: 'R$',
+    rateToUsd: 5.60, // 1 USD = 5.60 BRL
+    format: (amtUsd) => `R$ ${(amtUsd * 5.60).toFixed(2).replace('.', ',')}`,
+    localPayment: {
+      title: '🇧🇷 Pix Instantâneo Brasil (Chave Pix)',
+      bank: 'Banco Nubank / Itaú Brasil',
+      holder: 'GamesBoy Brasil Pagamentos Ltda.',
+      doc: 'CNPJ: 48.910.234/0001-50',
+      account: 'Chave Pix (E-mail): pagamentos@gamesboy.net',
+      alias: 'pix.gamesboy.br'
+    }
+  },
+  'PA': {
+    code: 'PA',
+    name: 'Panamá',
+    flag: '🇵🇦',
+    currency: 'USD',
+    symbol: '$',
+    rateToUsd: 1.00,
+    format: (amtUsd) => `$ ${amtUsd.toFixed(2)} USD`,
+    localPayment: {
+      title: '🇵🇦 Transferencia Bancaria Panamá (ACH / Yappy)',
+      bank: 'Banco General Panamá',
+      holder: 'GamesBoy Latin America Corp.',
+      doc: 'RUC: 155692019-2-2024 DV 88',
+      account: 'Cuenta Corriente: 03-99-01-445566-0',
+      alias: 'Yappy: +507 6899-2311'
+    }
+  },
+  'GLOBAL': {
+    code: 'GLOBAL',
+    name: 'Global Cripto',
+    flag: '🌐',
+    currency: 'USDT',
+    symbol: '₮',
+    rateToUsd: 1.00,
+    format: (amtUsd) => `$ ${amtUsd.toFixed(2)} USDT`,
+    localPayment: {
+      title: '🌐 Criptomoneda USDT (Binance Pay / BEP20)',
+      bank: 'Binance Pay / Trust Wallet',
+      holder: 'GamesBoy Global Treasury',
+      doc: 'Red: BEP-20 / TRC-20',
+      account: '0x71C9414B3b27bA134a6C3f07a757657A82e4b92F',
+      alias: 'Binance Pay ID: 849201934'
+    }
+  }
+};
+
+function autoDetectUserCountry() {
+  const saved = localStorage.getItem('gb_country');
+  if (saved && countryConfig[saved]) return saved;
+
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+    if (tz.includes('Asuncion')) return 'PY';
+    if (tz.includes('Buenos_Aires') || tz.includes('Cordoba') || tz.includes('Argentina')) return 'AR';
+    if (tz.includes('Sao_Paulo') || tz.includes('Fortaleza') || tz.includes('Manaus') || tz.includes('Brazil')) return 'BR';
+    if (tz.includes('Panama')) return 'PA';
+  } catch (e) {}
+
+  return 'PY';
+}
+
 const state = {
-  country: localStorage.getItem('gb_country') || 'PY',
-  currency: localStorage.getItem('gb_currency') || 'PYG',
+  country: autoDetectUserCountry(),
+  currency: 'PYG',
   currentUser: JSON.parse(localStorage.getItem('gb_user') || 'null'),
   wallet: { balanceUsd: 25.0, pendingEscrowUsd: 0.0 },
-  exchangeRates: { PYG: 7500, USD: 1.0 },
+  exchangeRates: { PYG: 7500, ARS: 1250, BRL: 5.60, USD: 1.0, USDT: 1.0 },
   heroBanners: [],
   activeSlideIndex: 1, // Default Spider-Man 2
   heroInterval: null,
@@ -13,8 +117,10 @@ const state = {
   storeProducts: [],
   myVault: [],
   cart: [],
-  depositMethod: 'sipap'
+  depositMethod: 'local'
 };
+
+state.currency = countryConfig[state.country]?.currency || 'PYG';
 
 // SMM Social Media Packages (Base API Ready)
 const smmServices = [
@@ -72,13 +178,10 @@ const defaultBanners = [
   }
 ];
 
-// --- FORMAT CURRENCY HELPER ---
+// --- UNIVERSAL FORMAT CURRENCY HELPER ---
 function formatPrice(amountUsd) {
-  if (state.currency === 'PYG' || state.country === 'PY') {
-    const pyg = Math.round(amountUsd * state.exchangeRates.PYG);
-    return `₲ ${pyg.toLocaleString('es-PY')}`;
-  }
-  return `USD $${amountUsd.toFixed(2)}`;
+  const cfg = countryConfig[state.country] || countryConfig['PY'];
+  return cfg.format(amountUsd);
 }
 
 // --- GLOBAL CAROUSEL SCROLLER ---
@@ -100,35 +203,14 @@ function initHeroAccordion() {
 
   const banners = (state.heroBanners && state.heroBanners.length >= 4) ? state.heroBanners : defaultBanners;
 
-  // Render Slides
+  // Render Slides with pure artwork without dark text overlay
   container.innerHTML = banners.slice(0, 4).map((b, idx) => {
     const isActive = idx === state.activeSlideIndex;
+    const targetUrl = b.ctaUrl || '#section-games';
     return `
-      <div class="eneba-slide ${isActive ? 'active' : ''}" data-slide-index="${idx}">
+      <div class="eneba-slide ${isActive ? 'active' : ''}" data-slide-index="${idx}" data-target-url="${targetUrl}">
         <div class="eneba-slide-bg horizontal-bg" style="background-image: url('${b.imgHorizontal || ''}');"></div>
         <div class="eneba-slide-bg vertical-bg" style="background-image: url('${b.imgVertical || ''}');"></div>
-        <div class="eneba-slide-overlay"></div>
-        
-        <!-- Collapsed Info -->
-        <div class="eneba-collapsed-info">
-          <span class="eneba-collapsed-badge">${b.badge || 'DESTACADO'}</span>
-          <span class="eneba-collapsed-title">${b.title}</span>
-        </div>
-
-        <!-- Expanded Content -->
-        <div class="eneba-expanded-content">
-          <div class="eneba-platform-tag">
-            <span>${b.badge || 'OFICIAL'}</span>
-          </div>
-          <h2 class="eneba-expanded-title">${b.title}</h2>
-          <p class="eneba-expanded-tagline">${b.tagline || ''}</p>
-          <div class="eneba-expanded-actions">
-            <a href="${b.ctaUrl || '#section-games'}" class="btn-eneba-cta">
-              <span>${b.ctaText || 'Comprar ahora'}</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-            </a>
-          </div>
-        </div>
       </div>
     `;
   }).join('');
@@ -144,9 +226,13 @@ function initHeroAccordion() {
   const slides = container.querySelectorAll('.eneba-slide');
   slides.forEach((slide) => {
     const idx = parseInt(slide.dataset.slideIndex, 10);
-    slide.addEventListener('click', (e) => {
-      if (e.target.closest('a')) return;
-      setActiveSlide(idx);
+    slide.addEventListener('click', () => {
+      if (slide.classList.contains('active')) {
+        const url = slide.dataset.targetUrl;
+        if (url && url !== '#') window.location.href = url;
+      } else {
+        setActiveSlide(idx);
+      }
     });
     slide.addEventListener('mouseenter', () => stopHeroAutoplay());
     slide.addEventListener('mouseleave', () => startHeroAutoplay());
@@ -209,7 +295,7 @@ function stopHeroAutoplay() {
   }
 }
 
-// --- 2. RENDER STREAMING SERVICES (SINGLE ROW SCROLL) ---
+// --- 2. RENDER STREAMING SERVICES (WIDESCREEN HORIZONTAL CARDS & SVG SILHOUETTES) ---
 function renderStreamingServices() {
   const container = document.getElementById('streaming-services-grid');
   if (!container) return;
@@ -220,39 +306,87 @@ function renderStreamingServices() {
     return;
   }
 
+  const brandImages = {
+    'Netflix': 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80',
+    'Spotify': 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=400&q=80',
+    'Disney': 'https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=400&q=80',
+    'Max': 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80',
+    'YouTube': 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=400&q=80',
+    'Crunchyroll': 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80',
+    'Apple': 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80',
+    'Paramount': 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80',
+    'ChatGPT': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=400&q=80'
+  };
+
+  const brandColors = {
+    'Netflix': '#E50914',
+    'Spotify': '#1DB954',
+    'Disney': '#113CCF',
+    'Max': '#002BE7',
+    'YouTube': '#FF0000',
+    'Crunchyroll': '#F47521',
+    'Apple': '#A2AAAD',
+    'Paramount': '#0064FF',
+    'ChatGPT': '#10A37F'
+  };
+
   container.innerHTML = services.map(s => {
     const isAvail = s.availableSlots > 0;
-    const slotsIcons = Array(s.totalSlots).fill(0).map((_, i) => 
-      `<span style="color: ${i < (s.totalSlots - s.availableSlots) ? 'var(--text-tertiary)' : 'var(--accent-cyan)'};">👤</span>`
-    ).join('');
+    
+    let matchedBrand = 'Netflix';
+    for (const key of Object.keys(brandImages)) {
+      if (s.serviceName.toLowerCase().includes(key.toLowerCase())) {
+        matchedBrand = key;
+        break;
+      }
+    }
+    const coverImg = brandImages[matchedBrand] || brandImages['Netflix'];
+    const accentColor = brandColors[matchedBrand] || '#00c2ff';
 
-    let logoIcon = '🍿';
-    if (s.serviceName.includes('Spotify')) logoIcon = '🎧';
-    if (s.serviceName.includes('Disney')) logoIcon = '🏰';
-    if (s.serviceName.includes('Max')) logoIcon = '🎬';
-    if (s.serviceName.includes('YouTube')) logoIcon = '▶️';
-    if (s.serviceName.includes('Crunchyroll')) logoIcon = '🍥';
-    if (s.serviceName.includes('Apple')) logoIcon = '🍎';
-    if (s.serviceName.includes('Paramount')) logoIcon = '⭐';
+    // SVG silhouette human icons for profiles
+    const occupiedSlots = s.totalSlots - s.availableSlots;
+    let slotsSvg = '';
+    for (let i = 0; i < s.totalSlots; i++) {
+      const isOccupied = i < occupiedSlots;
+      slotsSvg += `
+        <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+      `;
+    }
 
     return `
-      <div class="stream-card" onclick="openBuySubscriptionModal('${s.id}')">
-        <div class="stream-logo-box">${logoIcon}</div>
-        <h3 class="stream-title">${s.serviceName}</h3>
-        <div class="stream-price-label">Desde</div>
-        <div class="stream-price-val">${formatPrice(s.pricePerSlotUsd)}</div>
-        <div class="stream-slots-row" title="${s.availableSlots} cupos libres de ${s.totalSlots}">
-          ${slotsIcons}
+      <div class="stream-card-wide" onclick="openBuySubscriptionModal('${s.id}')">
+        <div class="stream-card-visual" style="background-image: url('${coverImg}');">
+          <div class="stream-visual-overlay"></div>
+          <span class="stream-brand-badge" style="background: ${accentColor};">${matchedBrand}</span>
         </div>
-        <button class="stream-action-btn">
-          ${isAvail ? 'Ver perfiles ➔' : 'Agotado'}
-        </button>
+        <div class="stream-card-content">
+          <div class="stream-card-header">
+            <h3 class="stream-card-title">${s.serviceName}</h3>
+            <span class="stream-card-plan">${s.planName}</span>
+          </div>
+          
+          <div class="stream-card-pricing">
+            <span class="stream-price-tag-label">Desde</span>
+            <span class="stream-price-tag-val">${formatPrice(s.pricePerSlotUsd)}</span>
+          </div>
+
+          <div class="stream-card-slots">
+            <div class="stream-slots-icons">${slotsSvg}</div>
+            <span class="stream-slots-text">${s.availableSlots} de ${s.totalSlots} libres</span>
+          </div>
+
+          <button class="btn-stream-cta-modern ${isAvail ? '' : 'disabled'}">
+            ${isAvail ? 'Ver Perfiles ➔' : 'Agotado'}
+          </button>
+        </div>
       </div>
     `;
   }).join('');
 }
 
-// --- 3. RENDER DIGITAL GAMES (CLEAN PS4 / PS5 BOX ART) ---
+// --- 3. RENDER DIGITAL GAMES (CLEAN 3D BOX ART WITH STRAIGHT EDGES) ---
 function renderDigitalGames() {
   const container = document.getElementById('digital-games-grid');
   if (!container) return;
@@ -268,6 +402,7 @@ function renderDigitalGames() {
       <div class="game-card" onclick="openBuyGameModal('${g.id}')">
         <div class="game-cover-container">
           <img src="${g.coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'}" alt="${g.title}" class="game-cover-img" loading="lazy">
+          <div class="game-spine-highlight"></div>
         </div>
         <div class="game-card-body">
           <h3 class="game-title">${g.title}</h3>
@@ -281,7 +416,7 @@ function renderDigitalGames() {
   }).join('');
 }
 
-// --- 4. RENDER REALISTIC RETAIL GIFT CARDS (VERTICAL & STRAIGHT) ---
+// --- 4. RENDER REALISTIC HORIZONTAL GIFT CARDS (ROUNDED CORNERS) ---
 function renderRetailGiftCards() {
   const container = document.getElementById('retail-giftcards-grid');
   if (!container) return;
@@ -297,48 +432,67 @@ function renderRetailGiftCards() {
     const denom = gc.title.includes('$') ? gc.title.match(/\$[0-9]+/)?.[0] || '$10' : '$10';
 
     return `
-      <div class="retail-gift-card" onclick="openBuyGiftCardModal('${gc.id}')">
-        <div class="giftcard-hang-header">
-          <div class="hang-hole"></div>
+      <div class="horizontal-gift-card" onclick="openBuyGiftCardModal('${gc.id}')">
+        <div class="giftcard-h-face ${themeClass}">
+          <div class="giftcard-h-chip">
+            <svg width="22" height="18" viewBox="0 0 24 20" fill="none"><rect width="24" height="20" rx="3" fill="#D4AF37" fill-opacity="0.85"/><line x1="0" y1="7" x2="24" y2="7" stroke="#7A600D" stroke-width="1.5"/><line x1="0" y1="13" x2="24" y2="13" stroke="#7A600D" stroke-width="1.5"/><line x1="12" y1="0" x2="12" y2="20" stroke="#7A600D" stroke-width="1.5"/></svg>
+          </div>
+          <div class="giftcard-h-logo">${gc.icon || '🎁'}</div>
+          <div class="giftcard-h-denom">${denom}</div>
+          <div class="giftcard-h-gloss"></div>
         </div>
-        <div class="giftcard-face ${themeClass}">
-          <div class="giftcard-logo-icon">${gc.icon || '🎁'}</div>
-          <div class="giftcard-denom-badge">${denom}</div>
-        </div>
-        <div class="giftcard-body">
-          <h3 class="giftcard-title">${gc.title}</h3>
-          <div class="giftcard-price-label">Desde</div>
-          <div class="giftcard-price-val">${formatPrice(gc.priceUsd)}</div>
+        <div class="giftcard-h-info">
+          <h3 class="giftcard-h-title">${gc.title}</h3>
+          <div class="giftcard-h-pricing">
+            <span class="giftcard-h-label">Desde</span>
+            <span class="giftcard-h-val">${formatPrice(gc.priceUsd)}</span>
+          </div>
         </div>
       </div>
     `;
   }).join('');
 }
 
-// --- 5. RENDER SMM SERVICES ---
+// --- 5. RENDER SMM SERVICES (HORIZONTAL BANNERS & ROUNDED CORNERS) ---
 function renderSmmServices() {
   const container = document.getElementById('smm-services-grid');
   if (!container) return;
 
   container.innerHTML = smmServices.map(smm => `
-    <div class="smm-card">
-      <div class="smm-icon-box" style="background: rgba(168, 85, 247, 0.12); color: var(--accent-purple);">${smm.icon}</div>
-      <h3 style="font-family: var(--font-heading); font-size: 0.95rem; font-weight: 700; color: #ffffff; margin-bottom: 4px;">${smm.name}</h3>
-      <div style="font-size: 0.72rem; color: var(--accent-purple); text-transform: uppercase; font-weight: 700; margin-bottom: 6px;">${smm.platform}</div>
-      <p style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.35; margin-bottom: 0.85rem;">${smm.desc}</p>
-      <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; color: #ffffff;">${formatPrice(smm.priceUsd)}</span>
-        <button class="btn-primary-block" style="width: auto; padding: 4px 12px; font-size: 0.75rem;" onclick="alert('Servicio SMM vinculado a la API del proveedor.')">Comprar</button>
+    <div class="smm-banner-card">
+      <div class="smm-banner-header">
+        <span class="smm-platform-badge">${smm.platform}</span>
+        <span class="smm-icon-large">${smm.icon}</span>
+      </div>
+      <div class="smm-banner-body">
+        <h3 class="smm-banner-title">${smm.name}</h3>
+        <p class="smm-banner-desc">${smm.desc}</p>
+        <div class="smm-banner-footer">
+          <span class="smm-banner-price">${formatPrice(smm.priceUsd)}</span>
+          <button class="btn-smm-buy" onclick="alert('Servicio SMM vinculado a la API del proveedor.')">Adquirir ➔</button>
+        </div>
       </div>
     </div>
   `).join('');
 }
 
-// --- 6. RENDER USER VAULT (CREDENTIALS) ---
-function renderMyVault() {
+// --- 6. RENDER USER VAULT (CREDENTIALS & GROUP CHAT ACCESS) ---
+async function renderMyVault() {
   const container = document.getElementById('vault-list-container');
   const section = document.getElementById('my-vault-section');
   if (!container || !section) return;
+
+  const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
+
+  try {
+    const res = await fetch('/api/subscriptions/my-vault', {
+      headers: { 'x-user-id': userId }
+    });
+    const slots = await res.json();
+    state.myVault = Array.isArray(slots) ? slots : [];
+  } catch (e) {
+    console.error('Error fetching user vault:', e);
+  }
 
   if (state.myVault.length === 0) {
     section.style.display = 'none';
@@ -346,19 +500,40 @@ function renderMyVault() {
   }
 
   section.style.display = 'block';
-  container.innerHTML = state.myVault.map(v => `
-    <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); padding: 1.25rem; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-          <span>⚡</span>
-          <strong style="color: #ffffff; font-size: 1rem;">${v.serviceName}</strong>
-          <span class="badge-official">ACTIVO</span>
+  container.innerHTML = state.myVault.map(v => {
+    const isExpiringSoon = v.daysRemaining <= 3;
+    const discountBadge = isExpiringSoon 
+      ? `<span class="renewal-countdown-badge urgent">⚡ Renovar Anticipado (-5% OFF)</span>`
+      : `<span class="renewal-countdown-badge">⏳ Vence en ${v.daysRemaining} días</span>`;
+
+    return `
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: 12px; padding: 1.25rem; margin-bottom: 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <span>⚡</span>
+            <strong style="color: #ffffff; font-size: 1.05rem;">${v.serviceName}</strong>
+            <span class="badge-official">ACTIVO</span>
+            ${discountBadge}
+          </div>
+          <div style="font-size: 0.84rem; color: var(--text-secondary);">
+            Perfil Asignado: <strong style="color: #ffffff;">#${v.slotNumber || 1}</strong> | 
+            PIN: <strong style="color: var(--accent-cyan); font-family: var(--font-mono);">${v.assignedPin || '1234'}</strong> | 
+            Vencimiento: <span style="color: ${isExpiringSoon ? 'var(--accent-red)' : 'var(--text-tertiary)'}; font-weight: 700;">${new Date(v.expiresAt).toLocaleDateString('es-PY')}</span>
+          </div>
         </div>
-        <div style="font-size: 0.82rem; color: var(--text-secondary);">Perfil Asignado: <strong>#${v.slotNumber || 1}</strong> | PIN: <strong style="color: var(--accent-cyan);">${v.assignedPin || '1234'}</strong></div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="btn-primary-block" style="width: auto; padding: 8px 16px; font-size: 0.82rem; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); border-radius: 8px !important;" onclick="openGroupChatModal('${v.subscriptionId}')">
+            💬 Ver Grupo & Chat
+          </button>
+          ${isExpiringSoon ? `
+            <button class="btn-renew-discount-cta" style="width: auto; padding: 8px 14px; margin-top: 0; font-size: 0.82rem;" onclick="renewSubscriptionWithDiscount('${v.subscriptionId}')">
+              ⚡ Renovar (-5%)
+            </button>
+          ` : ''}
+        </div>
       </div>
-      <button class="btn-primary-block" style="width: auto; padding: 6px 14px; font-size: 0.8rem;" onclick="alert('Credenciales: ${v.credentialsEncrypted || 'Acceso directo'}')">🔑 Ver Claves</button>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 // --- 7. FETCH INITIAL DATA FROM API ---
@@ -398,8 +573,8 @@ window.openBuySubscriptionModal = function(id) {
   if (!sub) return;
 
   const priceText = formatPrice(sub.pricePerSlotUsd);
-  if (confirm(`¿Deseas comprar un cupo para "${sub.serviceName}" por ${priceText} / mes con entrega inmediata a tu Bóveda?`)) {
-    executePurchase('/api/subscriptions/purchase', { subscriptionId: sub.id, paymentMethod: 'internal_wallet' }, sub.serviceName);
+  if (confirm(`¿Deseas comprar un cupo para "${sub.serviceName}" por ${priceText} / mes con entrega inmediata a tu Bóveda y acceso al grupo privado?`)) {
+    executePurchase(`/api/subscriptions/${sub.id}/buy`, {}, sub.serviceName, sub.id);
   }
 };
 
@@ -423,24 +598,24 @@ window.openBuyGiftCardModal = function(id) {
   }
 };
 
-async function executePurchase(url, body, productName) {
+async function executePurchase(url, body, productName, subId = null) {
+  const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
   try {
     const res = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-user-id': userId
+      },
       body: JSON.stringify(body)
     });
     const data = await res.json();
     if (data.success) {
       alert(`🎉 ¡Compra exitosa de "${productName}"! Se ha añadido de forma inmediata a tus Productos / Bóveda.`);
-      state.myVault.push({
-        serviceName: productName,
-        slotNumber: 1,
-        assignedPin: '4455',
-        credentialsEncrypted: 'Entrega instantánea GamesBoy.net'
-      });
-      renderMyVault();
-      fetchStoreData();
+      await fetchStoreData();
+      if (subId) {
+        openGroupChatModal(subId);
+      }
     } else {
       if (data.error && data.error.includes('Saldo insuficiente')) {
         if (confirm('Saldo insuficiente en tu billetera. ¿Deseas recargar saldo ahora con SIPAP Paraguay o USDT Binance?')) {
@@ -456,7 +631,164 @@ async function executePurchase(url, body, productName) {
   }
 }
 
-// --- 9. LIVE SEARCH & INSTANT AUTOCOMPLETE ---
+// --- 9. STREAMING GROUP & INTERNAL CHAT ENGINE ---
+state.activeGroupSubId = null;
+
+window.openGroupChatModal = async function(subId) {
+  state.activeGroupSubId = subId;
+  const modal = document.getElementById('modal-group-chat');
+  if (!modal) return;
+
+  modal.style.display = 'grid';
+  await refreshGroupChatView(subId);
+};
+
+async function refreshGroupChatView(subId) {
+  const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
+  
+  try {
+    const res = await fetch(`/api/subscriptions/${subId}/group`, {
+      headers: { 'x-user-id': userId }
+    });
+    const data = await res.json();
+
+    if (!data.success || !data.group) {
+      alert(data.error || 'No se pudo cargar la información del grupo.');
+      return;
+    }
+
+    const group = data.group;
+
+    // Header info
+    document.getElementById('group-modal-title').textContent = group.serviceName;
+    document.getElementById('group-modal-plan-badge').textContent = group.planName;
+    document.getElementById('group-modal-admin-name').innerHTML = `Admin: <strong style="color: var(--accent-cyan);">${group.adminName}</strong> • ${group.occupiedSlots} de ${group.totalSlots} cupos ocupados`;
+
+    // Credentials & Instructions
+    document.getElementById('group-credentials-content').textContent = group.credentials || '🔐 Solo miembros confirmados del grupo tienen acceso.';
+    document.getElementById('group-instructions-text').textContent = group.instructions || 'Usa exclusivamente tu perfil asignado y no modifiques la contraseña.';
+
+    // Expiration & Renewal Box
+    const renewalBox = document.getElementById('group-renewal-box');
+    const countdownBadge = document.getElementById('group-renewal-countdown');
+    const renewBtn = document.getElementById('btn-group-renew-discount');
+    const priceSpan = document.getElementById('group-renew-discount-price');
+    const myProfileNum = document.getElementById('group-my-profile-num');
+    const myPin = document.getElementById('group-my-pin');
+    const myExpDate = document.getElementById('group-my-expiration-date');
+
+    if (group.isOwner) {
+      countdownBadge.textContent = '👑 Eres el Administrador de la Cuenta';
+      countdownBadge.className = 'renewal-countdown-badge';
+      myProfileNum.textContent = 'Cuenta Principal';
+      myPin.textContent = 'Control Total';
+      myExpDate.textContent = 'Monitoreando y administrando grupo';
+      if (renewBtn) renewBtn.style.display = 'none';
+    } else if (group.userSlot) {
+      const isUrgent = group.userSlot.daysRemaining <= 3;
+      countdownBadge.textContent = `⏳ Vence en ${group.userSlot.daysRemaining} días`;
+      countdownBadge.className = isUrgent ? 'renewal-countdown-badge urgent' : 'renewal-countdown-badge';
+      myProfileNum.textContent = `#${group.userSlot.slotNumber}`;
+      myPin.textContent = group.userSlot.assignedPin || 'N/A';
+      myExpDate.textContent = `Vence el: ${new Date(group.userSlot.expiresAt).toLocaleDateString('es-PY')}`;
+
+      if (group.userSlot.eligibleForDiscount && renewBtn) {
+        renewBtn.style.display = 'flex';
+        priceSpan.textContent = formatPrice(group.userSlot.discountedPriceUsd);
+      } else if (renewBtn) {
+        renewBtn.style.display = 'none';
+      }
+    } else {
+      countdownBadge.textContent = 'Visualizador';
+      myProfileNum.textContent = '-';
+      myPin.textContent = '-';
+      myExpDate.textContent = 'No tienes un cupo activo en esta cuenta';
+      if (renewBtn) renewBtn.style.display = 'none';
+    }
+
+    // Members list (Strict Privacy: Avatar & Display Name ONLY, NO emails)
+    const membersContainer = document.getElementById('group-members-list-container');
+    document.getElementById('group-members-count').textContent = group.members.length;
+
+    membersContainer.innerHTML = group.members.map(m => `
+      <div class="group-member-item ${m.isOwner ? 'is-admin' : ''}">
+        <div class="member-avatar-box">${m.avatar || '🎮'}</div>
+        <div style="flex: 1; overflow: hidden;">
+          <div class="member-name-text">${m.name} ${m.isOwner ? '👑' : ''}</div>
+          <span class="member-role-tag">${m.role}</span>
+        </div>
+      </div>
+    `).join('');
+
+    // Chat messages
+    const chatContainer = document.getElementById('group-chat-messages');
+    chatContainer.innerHTML = group.chatMessages.map(msg => {
+      if (msg.isSystem) {
+        return `<div class="chat-system-notification">${msg.text}</div>`;
+      }
+
+      const isMe = msg.senderId === userId;
+      const isAdminMsg = msg.isOwnerAdmin;
+      const timeStr = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      return `
+        <div class="chat-msg-row ${isMe ? 'sent-by-me' : ''} ${isAdminMsg ? 'is-admin-msg' : ''}">
+          <div class="chat-msg-avatar">${msg.senderAvatar || '🎮'}</div>
+          <div class="chat-bubble">
+            <div class="chat-sender-header">
+              <span class="chat-sender-name">${msg.senderName}</span>
+              ${isAdminMsg ? `<span class="chat-admin-badge">👑 Administrador</span>` : ''}
+            </div>
+            <div class="chat-msg-text">${msg.text}</div>
+            <div class="chat-msg-time">${timeStr}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+  } catch (e) {
+    console.error('Error refreshing group view:', e);
+  }
+}
+
+// Renew with 5% Discount
+window.renewSubscriptionWithDiscount = async function(subId) {
+  const targetSubId = subId || state.activeGroupSubId;
+  if (!targetSubId) return;
+
+  const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
+
+  if (!confirm('¿Deseas renovar tu suscripción por 30 días más aplicando el 5% de descuento anticipado desde tu saldo?')) {
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/subscriptions/${targetSubId}/renew`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-user-id': userId
+      }
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      alert(`🎉 ${data.message}`);
+      await fetchStoreData();
+      if (state.activeGroupSubId === targetSubId) {
+        refreshGroupChatView(targetSubId);
+      }
+    } else {
+      alert(`Aviso: ${data.error || 'No se pudo procesar la renovación.'}`);
+    }
+  } catch (e) {
+    alert('Error al renovar suscripción.');
+  }
+};
+
+// --- 10. LIVE SEARCH & INSTANT AUTOCOMPLETE ---
 function initLiveSearch() {
   const searchInput = document.getElementById('main-search-input');
   const dropdown = document.getElementById('search-dropdown-results');
@@ -522,7 +854,62 @@ window.handleSearchResultClick = function(category, id) {
   else openBuyGameModal(id);
 };
 
-// --- 10. SETUP USER SESSION & COUNTRY SELECTOR ---
+// --- 11. SETUP USER SESSION, MULTI-CURRENCY, LIVE BALANCE & DEPOSIT MODAL ---
+function updateUserBalanceDisplay() {
+  const balanceEl = document.getElementById('nav-user-balance-amount');
+  if (!balanceEl) return;
+
+  const balUsd = state.currentUser?.balanceUsd !== undefined ? state.currentUser.balanceUsd : (state.wallet?.balanceUsd || 25.0);
+  balanceEl.textContent = `$ ${balUsd.toFixed(2)} USDT`;
+}
+
+function updateDepositModalForCountry() {
+  const cfg = countryConfig[state.country] || countryConfig['PY'];
+  const flagIcon = document.getElementById('header-flag-icon');
+  if (flagIcon) flagIcon.textContent = cfg.flag;
+
+  const tabLocalLabel = document.getElementById('tab-pay-local-label');
+  if (tabLocalLabel) tabLocalLabel.textContent = `${cfg.flag} Pago Local (${cfg.name})`;
+
+  const localFieldsContainer = document.getElementById('box-pay-local-fields');
+  if (localFieldsContainer && cfg.localPayment) {
+    const p = cfg.localPayment;
+    localFieldsContainer.innerHTML = `
+      <div style="font-weight: 800; font-size: 0.88rem; color: #ffffff; margin-bottom: 8px;">${p.title}</div>
+      <div class="payment-field-row"><span>Entidad / Banco:</span><strong>${p.bank}</strong></div>
+      <div class="payment-field-row"><span>Titular:</span><strong>${p.holder}</strong></div>
+      <div class="payment-field-row"><span>Identificación:</span><strong>${p.doc}</strong></div>
+      <div class="payment-field-row"><span>N° Cuenta / Chave:</span><strong>${p.account}</strong></div>
+      <div class="payment-field-row"><span>Alias / Referencia:</span><strong style="color: var(--accent-cyan);">${p.alias}</strong></div>
+    `;
+  }
+
+  const labelAmount = document.getElementById('label-deposit-amount');
+  const amountInput = document.getElementById('deposit-amount-input');
+  const convertedPreview = document.getElementById('deposit-converted-preview');
+
+  if (labelAmount) {
+    labelAmount.textContent = `Monto a Transferir en ${cfg.name} (${cfg.symbol} ${cfg.currency}):`;
+  }
+
+  if (amountInput) {
+    amountInput.placeholder = (cfg.currency === 'PYG') ? 'ej: 100000' : (cfg.currency === 'ARS' ? 'ej: 15000' : (cfg.currency === 'BRL' ? 'ej: 100' : 'ej: 25'));
+    
+    // Live calculation listener
+    amountInput.oninput = () => {
+      const val = parseFloat(amountInput.value);
+      if (isNaN(val) || val <= 0) {
+        if (convertedPreview) convertedPreview.innerHTML = `⚡ Acreditación estimada: <strong>$ 0.00 USDT</strong>`;
+        return;
+      }
+      const usdt = (val / cfg.rateToUsd).toFixed(2);
+      if (convertedPreview) {
+        convertedPreview.innerHTML = `⚡ Acreditación estimada en tu cuenta: <strong style="color: var(--accent-emerald);">$ ${usdt} USDT</strong>`;
+      }
+    };
+  }
+}
+
 function initUserSession() {
   const unloggedGroup = document.getElementById('auth-unlogged-group');
   const loggedGroup = document.getElementById('auth-logged-group');
@@ -532,6 +919,7 @@ function initUserSession() {
     if (unloggedGroup) unloggedGroup.style.display = 'none';
     if (loggedGroup) loggedGroup.style.display = 'flex';
     if (navUserName) navUserName.textContent = state.currentUser.name;
+    updateUserBalanceDisplay();
   } else {
     if (unloggedGroup) unloggedGroup.style.display = 'flex';
     if (loggedGroup) loggedGroup.style.display = 'none';
@@ -542,34 +930,165 @@ function initUserSession() {
     countrySelect.value = state.country;
     countrySelect.addEventListener('change', (e) => {
       state.country = e.target.value;
-      state.currency = (state.country === 'PY') ? 'PYG' : 'USD';
+      state.currency = countryConfig[state.country]?.currency || 'PYG';
       localStorage.setItem('gb_country', state.country);
       localStorage.setItem('gb_currency', state.currency);
 
       const indicator = document.getElementById('footer-currency-indicator');
-      if (indicator) indicator.textContent = (state.country === 'PY') ? 'PYG (₲)' : 'USD ($)';
+      if (indicator) {
+        const cfg = countryConfig[state.country];
+        indicator.textContent = `${cfg.currency} (${cfg.symbol})`;
+      }
 
+      updateDepositModalForCountry();
       renderStreamingServices();
       renderDigitalGames();
       renderRetailGiftCards();
       renderSmmServices();
+      renderMyVault();
     });
   }
 
-  // Modals
+  // Initial deposit modal setup
+  updateDepositModalForCountry();
+
+  // Deposit Modal Tabs (Local vs Binance USDT)
+  const tabLocal = document.getElementById('tab-pay-local');
+  const tabBinance = document.getElementById('tab-pay-binance');
+  const boxLocal = document.getElementById('box-pay-local');
+  const boxBinance = document.getElementById('box-pay-binance');
+
+  if (tabLocal && tabBinance && boxLocal && boxBinance) {
+    tabLocal.onclick = () => {
+      tabLocal.classList.add('active');
+      tabBinance.classList.remove('active');
+      boxLocal.style.display = 'block';
+      boxBinance.style.display = 'none';
+    };
+    tabBinance.onclick = () => {
+      tabBinance.classList.add('active');
+      tabLocal.classList.remove('active');
+      boxBinance.style.display = 'block';
+      boxLocal.style.display = 'none';
+    };
+  }
+
+  // Deposit Modal Open/Close
   const modalDeposit = document.getElementById('modal-deposit');
   const btnOpenDeposit = document.getElementById('btn-open-deposit-modal');
   const btnCloseDeposit = document.getElementById('btn-close-deposit-modal');
-  if (btnOpenDeposit && modalDeposit) btnOpenDeposit.onclick = () => modalDeposit.style.display = 'grid';
-  if (btnCloseDeposit && modalDeposit) btnCloseDeposit.onclick = () => modalDeposit.style.display = 'none';
+  if (btnOpenDeposit && modalDeposit) {
+    btnOpenDeposit.onclick = () => {
+      updateDepositModalForCountry();
+      modalDeposit.style.display = 'grid';
+    };
+  }
+  if (btnCloseDeposit && modalDeposit) {
+    btnCloseDeposit.onclick = () => modalDeposit.style.display = 'none';
+  }
 
-  // Deposit Submit Form
   const depositForm = document.getElementById('form-submit-deposit');
   if (depositForm) {
     depositForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      alert('¡Comprobante recibido con éxito! Tu saldo se acreditará una vez verificado por la administración.');
+      alert('¡Comprobante recibido con éxito! Tu saldo en USDT se acreditará en tu cuenta una vez verificado.');
       if (modalDeposit) modalDeposit.style.display = 'none';
+    });
+  }
+
+  // Group Chat Modal Handlers
+  const modalGroupChat = document.getElementById('modal-group-chat');
+  const btnCloseGroup = document.getElementById('btn-close-group-modal');
+  if (btnCloseGroup && modalGroupChat) {
+    btnCloseGroup.onclick = () => { modalGroupChat.style.display = 'none'; state.activeGroupSubId = null; };
+  }
+
+  const groupChatForm = document.getElementById('form-group-send-chat');
+  if (groupChatForm) {
+    groupChatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('group-chat-input-text');
+      const text = input.value.trim();
+      if (!text || !state.activeGroupSubId) return;
+
+      const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
+      try {
+        const res = await fetch(`/api/subscriptions/${state.activeGroupSubId}/group/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-user-id': userId
+          },
+          body: JSON.stringify({ text })
+        });
+        const data = await res.json();
+        if (data.success) {
+          input.value = '';
+          refreshGroupChatView(state.activeGroupSubId);
+        }
+      } catch (err) {
+        console.error('Error sending chat message:', err);
+      }
+    });
+  }
+
+  const btnRenewGroupModal = document.getElementById('btn-group-renew-discount');
+  if (btnRenewGroupModal) {
+    btnRenewGroupModal.onclick = () => renewSubscriptionWithDiscount(state.activeGroupSubId);
+  }
+
+  // Publish Streaming Account Modal Handlers
+  const modalPublish = document.getElementById('modal-publish-stream');
+  const btnOpenPublish = document.getElementById('btn-open-publish-modal');
+  const btnClosePublish = document.getElementById('btn-close-publish-modal');
+  const navSellerPills = document.querySelectorAll('.sub-nav-seller-pill');
+
+  if (btnOpenPublish && modalPublish) btnOpenPublish.onclick = () => modalPublish.style.display = 'grid';
+  if (btnClosePublish && modalPublish) btnClosePublish.onclick = () => modalPublish.style.display = 'none';
+  navSellerPills.forEach(pill => {
+    pill.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (modalPublish) modalPublish.style.display = 'grid';
+    });
+  });
+
+  const publishForm = document.getElementById('form-user-publish-stream');
+  if (publishForm) {
+    publishForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
+
+      const payload = {
+        serviceName: document.getElementById('user-pub-service').value,
+        planName: document.getElementById('user-pub-plan').value,
+        totalSlots: document.getElementById('user-pub-slots').value,
+        pricePerSlotUsd: document.getElementById('user-pub-price').value,
+        credentials: document.getElementById('user-pub-creds').value,
+        pins: document.getElementById('user-pub-pins').value || '{}',
+        instructions: document.getElementById('user-pub-instructions').value
+      };
+
+      try {
+        const res = await fetch('/api/subscriptions/publish', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-user-id': userId
+          },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('🎉 ¡Tu cuenta ha sido publicada con éxito! Eres el Administrador de este nuevo grupo.');
+          if (modalPublish) modalPublish.style.display = 'none';
+          await fetchStoreData();
+          openGroupChatModal(data.subscription.id);
+        } else {
+          alert(data.error || 'No se pudo publicar la cuenta.');
+        }
+      } catch (err) {
+        alert('Error al publicar cuenta de streaming.');
+      }
     });
   }
 }
@@ -580,3 +1099,4 @@ document.addEventListener('DOMContentLoaded', () => {
   initLiveSearch();
   fetchStoreData();
 });
+

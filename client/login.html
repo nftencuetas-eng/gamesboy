@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Iniciar Sesión / Registro - GamesBoy.net</title>
-  <meta name="description" content="Accede a tu cuenta de GamesBoy.net para comprar videojuegos, suscripciones de streaming y tarjetas de regalo con entrega inmediata.">
+  <meta name="description" content="Accede a tu cuenta de GamesBoy.net para comprar videojuegos, suscripciones de streaming, compartir tus cupos y recargar saldo.">
   
   <link rel="icon" type="image/png" href="/assets/branding/icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,14 +27,16 @@
       width: 100%;
       max-width: 980px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1.05fr 0.95fr;
       background: var(--bg-surface);
       border: 1px solid var(--border-medium);
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-      border-radius: 0px !important;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+      border-radius: 16px !important;
+      overflow: hidden;
+      position: relative;
     }
     .auth-left-col {
-      padding: 3rem 2.5rem;
+      padding: 3rem 2.75rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -47,18 +49,61 @@
       flex-direction: column;
       justify-content: space-between;
       position: relative;
-      overflow: hidden;
     }
-    .auth-showcase-art {
+    .auth-close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 36px;
+      height: 36px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      border-radius: 50% !important;
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      font-size: 1rem;
+      text-decoration: none;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.2s ease;
+    }
+    .auth-close-btn:hover {
+      background: var(--accent-red);
+      border-color: var(--accent-red);
+      transform: scale(1.08);
+    }
+    .auth-showcase-art-static {
       width: 100%;
-      max-height: 280px;
+      max-height: 290px;
       object-fit: contain;
-      margin: 1rem 0;
+      margin: 1.5rem auto;
+      display: block;
+      filter: drop-shadow(0 12px 25px rgba(0, 194, 255, 0.25));
+    }
+    .auth-value-props {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .auth-prop-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 8px 14px;
+      border-radius: 10px !important;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+    .auth-prop-icon {
+      font-size: 1.1rem;
     }
     @media (max-width: 840px) {
-      .auth-page-card { grid-template-columns: 1fr; }
+      .auth-page-card { grid-template-columns: 1fr; border-radius: 12px !important; }
       .auth-right-col { display: none; }
-      .auth-left-col { padding: 2rem 1.5rem; }
+      .auth-left-col { padding: 2.25rem 1.5rem; }
     }
   </style>
 </head>
@@ -67,26 +112,28 @@
   <div class="auth-page-container">
     <div class="auth-page-card">
       
-      <!-- Left Column: Form -->
+      <!-- Close (✕) Button Top Right -->
+      <a href="/" class="auth-close-btn" title="Volver a la tienda">✕</a>
+
+      <!-- Left Column: Unified Login Form -->
       <div class="auth-left-col">
-        <div style="margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between;">
-          <a href="/" title="Volver a GamesBoy.net">
-            <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 36px; width: auto; filter: none;">
+        <div style="margin-bottom: 1.5rem;">
+          <a href="/" title="GamesBoy.net">
+            <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 38px; width: auto; filter: none;">
           </a>
-          <a href="/" style="font-size: 0.82rem; color: var(--accent-cyan); text-decoration: none;">← Volver a la Tienda</a>
         </div>
 
         <div style="margin-bottom: 1.5rem;">
-          <h1 id="auth-form-title" style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
+          <h1 id="auth-form-title" style="font-family: var(--font-heading); font-size: 1.65rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
             ¡Bienvenido a GamesBoy!
           </h1>
-          <p id="auth-form-subtitle" style="font-size: 0.88rem; color: var(--text-secondary);">
-            Inicia sesión para gestionar tus juegos, suscripciones y saldo.
+          <p id="auth-form-subtitle" style="font-size: 0.86rem; color: var(--text-secondary);">
+            Compra juegos, comparte tus cuentas de streaming y gestiona tu saldo en un solo lugar.
           </p>
         </div>
 
         <!-- Google OAuth Button -->
-        <button type="button" class="btn-google-auth" id="btn-google-login" style="margin-bottom: 1.25rem; width: 100%; border-radius: 0px !important;">
+        <button type="button" class="btn-google-auth" id="btn-google-login" style="margin-bottom: 1.25rem; width: 100%; border-radius: 10px !important;">
           <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -103,17 +150,17 @@
         <form id="form-auth-page">
           <div class="form-group" id="field-name" style="display: none;">
             <label class="form-label">Nombre completo</label>
-            <input type="text" id="auth-input-name" class="form-input" placeholder="ej: Lucas González">
+            <input type="text" id="auth-input-name" class="form-input" placeholder="ej: Lucas González" style="border-radius: 8px !important;">
           </div>
 
           <div class="form-group">
             <label class="form-label">Correo electrónico</label>
-            <input type="email" id="auth-input-email" class="form-input" placeholder="tu-correo@ejemplo.com" required>
+            <input type="email" id="auth-input-email" class="form-input" placeholder="tu-correo@ejemplo.com" required style="border-radius: 8px !important;">
           </div>
 
           <div class="form-group">
             <label class="form-label">Contraseña</label>
-            <input type="password" id="auth-input-password" class="form-input" placeholder="••••••••" required>
+            <input type="password" id="auth-input-password" class="form-input" placeholder="••••••••" required style="border-radius: 8px !important;">
           </div>
 
           <div class="auth-options-row" id="row-auth-options" style="margin-bottom: 1.25rem;">
@@ -124,37 +171,60 @@
             <a href="#" class="auth-forgot-link" id="btn-forgot-password">¿Olvidaste tu contraseña?</a>
           </div>
 
-          <button type="submit" class="btn-primary-block" id="btn-auth-submit" style="padding: 12px; border-radius: 0px !important;">
+          <button type="submit" class="btn-primary-block" id="btn-auth-submit" style="padding: 12px; border-radius: 10px !important; font-weight: 800;">
             <span id="label-auth-submit">Iniciar Sesión</span> ➔
           </button>
         </form>
 
-        <div class="auth-switch-footer" style="margin-top: 1.5rem; text-align: center;">
-          <span id="text-switch-prompt" style="color: var(--text-secondary); font-size: 0.85rem;">¿No tienes una cuenta?</span>
+        <div class="auth-switch-footer" style="margin-top: 1.25rem; text-align: center;">
+          <span id="text-switch-prompt" style="color: var(--text-secondary); font-size: 0.84rem;">¿No tienes una cuenta?</span>
           <button type="button" id="btn-toggle-auth-mode" style="background: none; border: none; color: var(--accent-cyan); font-weight: 700; cursor: pointer; margin-left: 6px;">Regístrate gratis</button>
         </div>
+
+        <!-- Quick Demo Access Bar (Unified User Account) -->
+        <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle);">
+          <div style="font-size: 0.72rem; color: var(--text-tertiary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.65rem; text-align: center;">
+            ⚡ Acceso Rápido de Prueba (Usuario Comprador + Vendedor)
+          </div>
+          <button type="button" id="btn-quick-client" style="width: 100%; background: linear-gradient(135deg, rgba(0, 194, 255, 0.12), rgba(16, 185, 129, 0.12)); border: 1px solid var(--border-medium); color: #fff; padding: 10px 14px; font-size: 0.82rem; font-weight: 800; cursor: pointer; border-radius: 10px !important; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease;">
+            <span>🎮</span><span>Entrar como Usuario Demo (Lucas González) - Saldo $25 USD</span>
+          </button>
+          <div style="margin-top: 10px; text-align: center;">
+            <a href="/admin/login" style="font-size: 0.76rem; color: var(--accent-amber); text-decoration: none; font-weight: 700;">
+              ⚙️ ¿Eres Administrador Master? Accede aquí ➔
+            </a>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Right Column: Branding & Features -->
+      <!-- Right Column: Minimalist Value Props & Static Showcase Art -->
       <div class="auth-right-col">
         <div>
-          <span style="font-size: 0.75rem; color: var(--accent-cyan); font-weight: 800; letter-spacing: 1px; text-transform: uppercase;">PLATAFORMA OFICIAL</span>
+          <span style="font-size: 0.72rem; color: var(--accent-cyan); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;">MERCADO DIGITAL OFICIAL</span>
           <h2 style="font-family: var(--font-heading); font-size: 1.7rem; font-weight: 900; color: #ffffff; line-height: 1.2; margin-top: 6px;">
             TODO TU ENTRETENIMIENTO <span style="color: var(--accent-cyan);">EN UN SOLO LUGAR</span>
           </h2>
         </div>
 
-        <img src="/assets/branding/hero-showcase.png" alt="GamesBoy Showcase" class="auth-showcase-art floating">
+        <img src="/assets/branding/hero-showcase.png" alt="GamesBoy Showcase" class="auth-showcase-art-static">
 
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <div style="display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: var(--text-secondary);">
-            <span>🔒</span><span>Bóveda digital de credenciales y códigos encriptados</span>
+        <div class="auth-value-props">
+          <div class="auth-prop-item">
+            <span class="auth-prop-icon">🎮</span>
+            <span>Videojuegos digitales con entrega de claves y cuentas</span>
           </div>
-          <div style="display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: var(--text-secondary);">
-            <span>⚡</span><span>Entrega instantánea con saldo de cuenta</span>
+          <div class="auth-prop-item">
+            <span class="auth-prop-icon">📺</span>
+            <span>Streaming compartido con grupos privados y chat</span>
           </div>
-          <div style="display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: var(--text-secondary);">
-            <span>🇵🇾</span><span>Soporte para SIPAP Paraguay y Binance USDT</span>
+          <div class="auth-prop-item">
+            <span class="auth-prop-icon">💼</span>
+            <span>Monetiza y vende cupos de tus propias cuentas</span>
+          </div>
+          <div class="auth-prop-item">
+            <span class="auth-prop-icon">🇵🇾</span>
+            <span>Pagos locales por SIPAP Bancos y Binance USDT</span>
           </div>
         </div>
       </div>
@@ -176,7 +246,7 @@
       isRegisterMode = !isRegisterMode;
       if (isRegisterMode) {
         titleEl.textContent = 'Crear Cuenta en GamesBoy';
-        subTitleEl.textContent = 'Regístrate para comprar videojuegos, streaming y saldo.';
+        subTitleEl.textContent = 'Regístrate para comprar videojuegos, compartir streaming y saldo.';
         fieldName.style.display = 'block';
         optionsRow.style.display = 'none';
         submitLabel.textContent = 'Crear Cuenta';
@@ -184,7 +254,7 @@
         toggleBtn.textContent = 'Inicia sesión aquí';
       } else {
         titleEl.textContent = '¡Bienvenido a GamesBoy!';
-        subTitleEl.textContent = 'Inicia sesión para gestionar tus juegos, suscripciones y saldo.';
+        subTitleEl.textContent = 'Compra juegos, comparte tus cuentas de streaming y gestiona tu saldo en un solo lugar.';
         fieldName.style.display = 'none';
         optionsRow.style.display = 'flex';
         submitLabel.textContent = 'Iniciar Sesión';
@@ -201,11 +271,27 @@
         name: isRegisterMode ? document.getElementById('auth-input-name').value || 'Usuario' : email.split('@')[0],
         email: email,
         role: 'client',
-        avatar: '🎮'
+        avatar: '🎮',
+        balanceUsd: 25.00
       };
       localStorage.setItem('gb_user', JSON.stringify(userObj));
-      alert('¡Autenticado correctamente! Redirigiendo a GamesBoy.net...');
       window.location.href = '/';
+    });
+
+    // 1-Click Unified Demo Login
+    document.getElementById('btn-quick-client').addEventListener('click', () => {
+      document.getElementById('auth-input-email').value = 'usuario@gamesboy.net';
+      document.getElementById('auth-input-password').value = 'GamesBoyPass123!';
+      const userObj = {
+        id: 'usr_client_demo',
+        name: 'Lucas González',
+        email: 'usuario@gamesboy.net',
+        role: 'client',
+        avatar: '🎮',
+        balanceUsd: 25.00
+      };
+      localStorage.setItem('gb_user', JSON.stringify(userObj));
+      setTimeout(() => { window.location.href = '/'; }, 250);
     });
 
     document.getElementById('btn-google-login').addEventListener('click', () => {
@@ -214,10 +300,10 @@
         name: 'Lucas González (Google)',
         email: 'lucas.gonzalez@gmail.com',
         role: 'client',
-        avatar: '🎮'
+        avatar: '🎮',
+        balanceUsd: 25.00
       };
       localStorage.setItem('gb_user', JSON.stringify(userObj));
-      alert('¡Sesión iniciada con Google! Redirigiendo a GamesBoy.net...');
       window.location.href = '/';
     });
   </script>

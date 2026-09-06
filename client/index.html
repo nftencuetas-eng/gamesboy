@@ -39,45 +39,43 @@
       <!-- Center: Expandable Omnibar Search -->
       <div class="header-search-wrapper" id="header-search-wrapper">
         <div class="header-search-box">
-          <button class="header-search-icon-btn" id="btn-search-icon-toggle" title="Buscar">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          </button>
+          <span class="header-search-icon">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
           <input type="text" id="main-search-input" class="header-search-input" placeholder="Buscar videojuegos, tarjetas, streaming, software...">
-          <button class="header-search-clear-btn" id="btn-search-clear" style="display: none;">✕</button>
         </div>
         <!-- Live Instant Search Dropdown -->
         <div class="search-dropdown-results" id="search-dropdown-results" style="display: none;"></div>
       </div>
 
-      <!-- Right: Country/Wallet, Cart & Auth Actions -->
+      <!-- Right: Country/Wallet & Auth Actions -->
       <div class="header-right">
-        <!-- Branch / Country & Currency Selector -->
-        <div class="country-currency-pill" title="Selecciona tu País y Medios de Pago">
-          <span class="country-wallet-icon">👛</span>
-          <select id="country-branch-select" class="header-country-select">
-            <option value="PY">🇵🇾 PYG (₲)</option>
-            <option value="PA">🇵🇦 USD ($)</option>
-            <option value="GLOBAL">🌐 USDT ($)</option>
+        <!-- Minimalist Currency / Country Selector Pill -->
+        <div class="minimal-currency-pill" id="currency-dropdown-trigger" title="Cambiar País y Moneda">
+          <span class="currency-flag" id="header-flag-icon">🇵🇾</span>
+          <select id="country-branch-select" class="header-country-select-styled">
+            <option value="PY">🇵🇾 Paraguay (PYG ₲)</option>
+            <option value="AR">🇦🇷 Argentina (ARS $)</option>
+            <option value="BR">🇧🇷 Brasil (BRL R$)</option>
+            <option value="PA">🇵🇦 Panamá (USD $)</option>
+            <option value="GLOBAL">🌐 Global (USDT ₮)</option>
           </select>
         </div>
 
-        <!-- Cart Button -->
-        <button class="header-icon-action header-cart-btn" id="btn-nav-cart" title="Carrito de compras">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-          <span class="cart-count-badge" id="cart-counter">0</span>
-        </button>
-
         <!-- Auth Actions (Client Login / Register) -->
         <div class="header-auth-buttons" id="auth-unlogged-group">
-          <a href="/login.html" class="btn-header-login" id="btn-open-login-page">
-            Iniciar sesión / Registro
+          <a href="/login" class="btn-header-login-modern" id="btn-open-login-page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Iniciar sesión</span>
           </a>
         </div>
 
-        <!-- Quick Balance / Persona (Logged In Client) -->
+        <!-- Live Balance Display Pill / Persona (Logged In Client) -->
         <div class="header-user-group" id="auth-logged-group" style="display: none;">
-          <button class="btn-recharge-compact" id="btn-open-deposit-modal" title="Recargar Saldo">
-            + Saldo
+          <button class="btn-balance-display-pill" id="btn-open-deposit-modal" title="Saldo disponible en tu cuenta. Haz clic para recargar.">
+            <span class="balance-icon">💰</span>
+            <span id="nav-user-balance-amount">$25.00 USDT</span>
+            <span class="balance-add-badge">+ Recargar</span>
           </button>
           <button class="persona-btn" id="btn-persona-toggle" title="Perfil de usuario">
             <span id="nav-user-avatar">🎮</span>
@@ -109,10 +107,10 @@
           <li class="sub-nav-item"><a href="#section-social" class="sub-nav-link">Redes Sociales</a></li>
         </ul>
 
-        <!-- Seller Callout on Right side of sub-nav -->
+        <!-- High-Converting Seller Callout on Right side of sub-nav -->
         <div class="nav-seller-action-box">
           <a href="#section-seller-info" class="sub-nav-seller-pill">
-            💼 ¿Quieres vender o compartir membresías?
+            <span>💰 ¿Quieres ganar dinero vendiendo tus cuentas?</span>
           </a>
         </div>
       </div>
@@ -140,7 +138,7 @@
 
           <!-- Accordion Slides Container (Populated dynamically via JS) -->
           <div class="eneba-accordion-wrapper" id="eneba-accordion-slides">
-            <!-- Dynamic slides rendered cleanly -->
+            <!-- Dynamic pure artwork slides rendered cleanly without overlaid text -->
           </div>
 
           <!-- Right Arrow Button -->
@@ -153,55 +151,6 @@
         </div>
       </section>
 
-      <!-- ======================================================= -->
-      <!-- FAST-ACCESS CATEGORY PILLS BAR                          -->
-      <!-- ======================================================= -->
-      <section class="fast-categories-bar">
-        <a href="#section-streaming" class="fast-cat-pill">
-          <span class="fast-cat-icon">📺</span>
-          <span>Streaming</span>
-        </a>
-        <a href="#section-games" class="fast-cat-pill">
-          <span class="fast-cat-icon">🎮</span>
-          <span>Juegos</span>
-        </a>
-        <a href="#section-giftcards" class="fast-cat-pill">
-          <span class="fast-cat-icon">🎁</span>
-          <span>Tarjetas de regalo</span>
-        </a>
-        <a href="#section-streaming" class="fast-cat-pill">
-          <span class="fast-cat-icon">📄</span>
-          <span>Software & AI</span>
-        </a>
-        <a href="#section-streaming" class="fast-cat-pill">
-          <span class="fast-cat-icon">⏱️</span>
-          <span>Suscripciones</span>
-        </a>
-        <a href="#section-games" class="fast-cat-pill">
-          <span class="fast-cat-icon">🖥️</span>
-          <span>PC</span>
-        </a>
-        <a href="#section-games" class="fast-cat-pill">
-          <span class="fast-cat-icon">🎮</span>
-          <span>PlayStation</span>
-        </a>
-        <a href="#section-games" class="fast-cat-pill">
-          <span class="fast-cat-icon">🟢</span>
-          <span>Xbox</span>
-        </a>
-        <a href="#section-games" class="fast-cat-pill">
-          <span class="fast-cat-icon">🔴</span>
-          <span>Nintendo</span>
-        </a>
-        <a href="#section-giftcards" class="fast-cat-pill">
-          <span class="fast-cat-icon">📱</span>
-          <span>Móviles</span>
-        </a>
-        <a href="#section-social" class="fast-cat-pill">
-          <span class="fast-cat-icon">⋯</span>
-          <span>Más</span>
-        </a>
-      </section>
 
       <!-- ======================================================= -->
       <!-- SECTION 1: STREAMING Y ENTRETENIMIENTO (SINGLE ROW SCROLL) -->
@@ -303,9 +252,9 @@
             </div>
           </div>
           <div class="seller-invite-action">
-            <a href="/login.html" class="btn-seller-join-cta">
-              <span>Publicar Cuenta como Vendedor</span> ➔
-            </a>
+            <button type="button" class="btn-seller-join-cta" id="btn-open-publish-modal">
+              <span>💰 Publicar y Compartir Cuenta</span> ➔
+            </button>
           </div>
         </div>
       </section>
@@ -660,6 +609,167 @@
   </main>
 
   <!-- ======================================================= -->
+  <!-- MODAL: GRUPO Y CHAT EN VIVO DE SUSCRIPCIÓN STREAMING    -->
+  <!-- ======================================================= -->
+  <div class="modal-overlay" id="modal-group-chat" style="display: none;">
+    <div class="modal-content group-chat-modal-content">
+      <!-- Modal Header -->
+      <div class="group-modal-header">
+        <div class="group-header-info">
+          <div class="group-brand-avatar" id="group-modal-icon">📺</div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <h3 id="group-modal-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: #ffffff;">Netflix Premium 4K</h3>
+              <span class="badge-official" id="group-modal-plan-badge">Ultra HD</span>
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary);" id="group-modal-admin-name">
+              Admin: <strong style="color: var(--accent-cyan);">GamesBoy Oficial</strong> • <span id="group-modal-slots-count">4 perfiles</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-modal-close" id="btn-close-group-modal">✕</button>
+      </div>
+
+      <!-- Modal Body (Split Layout: Sidebar + Chat) -->
+      <div class="group-modal-body">
+        
+        <!-- Left Sidebar -->
+        <div class="group-sidebar">
+          
+          <!-- Expiration & Early Renewal Card -->
+          <div class="renewal-card" id="group-renewal-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <span style="font-size: 0.72rem; color: var(--text-secondary); font-weight: 700; text-transform: uppercase;">Estado de tu Cupo</span>
+              <span class="renewal-countdown-badge" id="group-renewal-countdown">⏳ Vence en 3 días</span>
+            </div>
+            <div style="font-size: 0.82rem; color: #ffffff; margin-bottom: 4px;">
+              Perfil Asignado: <strong style="color: var(--accent-cyan);" id="group-my-profile-num">#1</strong> | PIN: <strong id="group-my-pin">1244</strong>
+            </div>
+            <div style="font-size: 0.74rem; color: var(--text-tertiary);" id="group-my-expiration-date">
+              Vence el: 09/09/2026
+            </div>
+            
+            <!-- 5% Discount Early Renewal Button (shown when <= 3 days) -->
+            <button type="button" class="btn-renew-discount-cta" id="btn-group-renew-discount">
+              <span>⚡ Renovar con 5% OFF</span> • <span id="group-renew-discount-price">$4.74</span>
+            </button>
+          </div>
+
+          <!-- Account Access Details Card -->
+          <div class="group-sidebar-card">
+            <div style="font-size: 0.74rem; font-weight: 800; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 6px;">
+              🔐 Credenciales del Servicio
+            </div>
+            <div id="group-credentials-content" style="font-size: 0.8rem; color: #ffffff; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 6px; border: 1px solid var(--border-subtle); word-break: break-all; font-family: var(--font-mono);">
+              Cargando credenciales...
+            </div>
+            <div style="font-size: 0.7rem; color: var(--text-tertiary); margin-top: 6px;" id="group-instructions-text">
+              Usa exclusivamente tu perfil asignado y no modifiques la contraseña.
+            </div>
+          </div>
+
+          <!-- Members List (Privacy Protected: Avatar + Name ONLY, NO EMAILS) -->
+          <div>
+            <div class="group-members-header">
+              👥 Miembros del Grupo (<span id="group-members-count">0</span>)
+            </div>
+            <div id="group-members-list-container">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Chat Panel -->
+        <div class="group-chat-main">
+          <div class="chat-messages-box" id="group-chat-messages">
+            <!-- Messages rendered dynamically -->
+          </div>
+
+          <form id="form-group-send-chat" class="chat-input-bar">
+            <input type="text" id="group-chat-input-text" class="chat-text-input" placeholder="Escribe un mensaje al grupo o al administrador..." required autocomplete="off">
+            <button type="submit" class="btn-chat-send">
+              <span>Enviar</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================= -->
+  <!-- MODAL: PUBLICAR Y COMPARTIR CUENTA DE STREAMING         -->
+  <!-- ======================================================= -->
+  <div class="modal-overlay" id="modal-publish-stream" style="display: none;">
+    <div class="modal-content" style="max-width: 600px; border-radius: 16px !important;">
+      <div class="modal-header">
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff;">➕ Publicar y Monetizar tu Cuenta de Streaming</h3>
+        <button class="btn-modal-close" id="btn-close-publish-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+          Como usuario de GamesBoy, puedes compartir los cupos libres de tus cuentas oficiales de streaming. Administrarás tu propio grupo privado con chat y recibirás el saldo en tu billetera.
+        </p>
+        <form id="form-user-publish-stream">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Plataforma / Servicio</label>
+              <select id="user-pub-service" class="form-select" required style="border-radius: 8px !important;">
+                <option value="Netflix Premium 4K">Netflix Premium 4K</option>
+                <option value="Spotify Premium Familiar">Spotify Premium Familiar</option>
+                <option value="Disney+ Premium & Star+">Disney+ Premium & Star+</option>
+                <option value="Max (HBO Max) 4K">Max (HBO Max) 4K</option>
+                <option value="YouTube Premium & Music">YouTube Premium & Music</option>
+                <option value="Crunchyroll Mega Fan">Crunchyroll Mega Fan</option>
+                <option value="Apple TV+ 4K">Apple TV+ 4K</option>
+                <option value="Paramount+ Premium">Paramount+ Premium</option>
+                <option value="ChatGPT Plus & AI">ChatGPT Plus & AI</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nombre del Plan</label>
+              <input type="text" id="user-pub-plan" class="form-input" placeholder="ej: Ultra HD 4K / Familiar" value="Plan Premium 4K" required style="border-radius: 8px !important;">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Cupos / Perfiles a Compartir</label>
+              <input type="number" id="user-pub-slots" class="form-input" min="1" max="5" value="3" required style="border-radius: 8px !important;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Precio por Cupo / Mes (USD)</label>
+              <input type="number" id="user-pub-price" class="form-input" step="0.10" min="0.5" value="3.50" required style="border-radius: 8px !important;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Credenciales (Email ::: Contraseña o Enlace)</label>
+            <input type="text" id="user-pub-creds" class="form-input" placeholder="ej: micuenta@correo.com:::PassSeguro123!" required style="border-radius: 8px !important;">
+            <span style="font-size: 0.72rem; color: var(--text-tertiary);">🔒 Se almacenan encriptadas con AES-256 y solo se comparten con compradores confirmados.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">PINs por Perfil (Opcional - JSON)</label>
+            <input type="text" id="user-pub-pins" class="form-input" placeholder='{"1":"1122", "2":"3344", "3":"5566"}' style="border-radius: 8px !important;">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Instrucciones / Reglas del Grupo</label>
+            <input type="text" id="user-pub-instructions" class="form-input" placeholder="ej: Usa exclusivamente tu perfil asignado. No cambiar contraseña." required value="Usa exclusivamente tu perfil asignado y no modifiques las credenciales." style="border-radius: 8px !important;">
+          </div>
+
+          <button type="submit" class="btn-primary-block" style="border-radius: 10px !important; font-weight: 800; padding: 12px;">
+            🚀 Publicar Cuenta de Streaming
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================= -->
   <!-- MODAL: RECARGA DE SALDO (DEPOSIT MODAL)                 -->
   <!-- ======================================================= -->
   <div class="modal-overlay" id="modal-deposit">
@@ -670,22 +780,22 @@
       </div>
       <div class="modal-body">
         <div class="payment-tab-buttons">
-          <button class="payment-tab-btn active" data-method="sipap" id="tab-pay-sipap">
-            🇵🇾 Paraguay (SIPAP / Bancos)
+          <button class="payment-tab-btn active" data-method="local" id="tab-pay-local">
+            <span id="tab-pay-local-label">🇵🇾 Pago Local (Paraguay)</span>
           </button>
           <button class="payment-tab-btn" data-method="binance" id="tab-pay-binance">
-            🌐 Cripto USDT (Binance)
+            🌐 Cripto USDT (Binance Pay)
           </button>
         </div>
 
-        <div class="payment-info-box" id="box-pay-sipap">
-          <div class="payment-field-row"><span>Banco:</span><strong id="pay-info-bank">Banco Familiar / Itaú Paraguay</strong></div>
-          <div class="payment-field-row"><span>Titular:</span><strong id="pay-info-holder">GamesBoy Paraguay S.A.</strong></div>
-          <div class="payment-field-row"><span>RUC / CI:</span><strong id="pay-info-ruc">80091234-5</strong></div>
-          <div class="payment-field-row"><span>N° Cuenta:</span><strong id="pay-info-account">01-445566-7</strong></div>
-          <div class="payment-field-row"><span>Alias SIPAP:</span><strong id="pay-info-alias" style="color: var(--accent-cyan);">gamesboy.py</strong></div>
+        <!-- Local Country Payment Box -->
+        <div class="payment-info-box" id="box-pay-local">
+          <div id="box-pay-local-fields">
+            <!-- Injected dynamically by app.js based on active country -->
+          </div>
         </div>
 
+        <!-- Global Cripto USDT Box -->
         <div class="payment-info-box" id="box-pay-binance" style="display: none;">
           <div style="text-align: center; margin-bottom: 10px;">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F" alt="QR Binance" style="border-radius: 8px; border: 1px solid var(--border-medium);">
@@ -697,14 +807,16 @@
 
         <form id="form-submit-deposit">
           <div class="form-group">
-            <label class="form-label" id="label-deposit-amount">Monto a Transferir en Guaraníes (₲ PYG):</label>
-            <input type="number" id="deposit-amount-input" class="form-input" placeholder="ej: 100000" min="10000" step="5000" required>
-            <span style="font-size: 0.75rem; color: var(--text-tertiary);" id="deposit-converted-preview">Recibirás aprox: <strong>$ 13.33 USDT</strong></span>
+            <label class="form-label" id="label-deposit-amount">Monto a Transferir en Moneda Local:</label>
+            <input type="number" id="deposit-amount-input" class="form-input" placeholder="ej: 100000" min="1" step="any" required>
+            <div style="margin-top: 6px; font-size: 0.82rem; color: var(--accent-cyan); font-weight: 700;" id="deposit-converted-preview">
+              ⚡ Acreditación estimada: <strong>$ 0.00 USDT</strong>
+            </div>
           </div>
 
           <div class="form-group">
             <label class="form-label">N° de Comprobante / Referencia / TXID:</label>
-            <input type="text" id="deposit-reference-input" class="form-input" placeholder="ej: SIPAP-781923 o Hash Binance" required>
+            <input type="text" id="deposit-reference-input" class="form-input" placeholder="ej: SIPAP-781923, Transf-99182 o Hash Binance" required>
           </div>
 
           <div class="form-group">

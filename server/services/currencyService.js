@@ -4,7 +4,9 @@
 let exchangeRates = {
   PYG: 7500, // 1 USD = 7,500 Guaraníes
   ARS: 1250, // 1 USD = 1,250 Pesos Argentinos
-  BRL: 5.60  // 1 USD = 5.60 Reales
+  BRL: 5.60, // 1 USD = 5.60 Reales
+  USD: 1.00, // 1 USD = 1.00 USD
+  USDT: 1.00 // 1 USD = 1.00 USDT
 };
 
 export function setExchangeRate(currency, rate) {
@@ -35,6 +37,12 @@ export function convertToUsd(localAmount, sourceCurrency = 'PYG') {
 export function formatCurrency(amount, currency = 'USD') {
   if (currency === 'PYG') {
     return `₲ ${amount.toLocaleString('es-PY')}`;
+  }
+  if (currency === 'ARS') {
+    return `$ ${amount.toLocaleString('es-AR')} ARS`;
+  }
+  if (currency === 'BRL') {
+    return `R$ ${amount.toFixed(2).replace('.', ',')}`;
   }
   if (currency === 'USDT' || currency === 'USD') {
     return `$ ${amount.toFixed(2)} USDT`;
