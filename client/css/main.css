@@ -348,8 +348,9 @@ a.sub-nav-link,
   transform: translateY(-1px);
 }
 
-.balance-icon {
-  font-size: 0.95rem;
+.wallet-icon-svg {
+  color: #34d399;
+  flex-shrink: 0;
 }
 
 #nav-user-balance-amount {
@@ -367,6 +368,188 @@ a.sub-nav-link,
   border-radius: var(--radius-full);
   text-transform: uppercase;
   letter-spacing: 0.03em;
+}
+
+/* User Profile Dropdown (Netflix / Disney Style) */
+.user-profile-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.user-profile-btn {
+  background: rgba(13, 23, 51, 0.85);
+  border: 1px solid var(--border-medium);
+  padding: 4px 10px 4px 4px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #ffffff;
+}
+
+.user-profile-btn:hover {
+  background: rgba(20, 36, 78, 0.95);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0, 194, 255, 0.25);
+}
+
+.user-avatar-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00c2ff, #7928ca);
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.user-name-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ffffff;
+  max-width: 110px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-chevron {
+  color: var(--text-tertiary);
+  transition: transform 0.2s ease;
+}
+
+.user-profile-wrapper.open .profile-chevron {
+  transform: rotate(180deg);
+}
+
+.user-profile-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 260px;
+  background: rgba(7, 13, 30, 0.96);
+  border: 1px solid var(--border-medium);
+  border-radius: 14px;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 194, 255, 0.15);
+  backdrop-filter: blur(16px);
+  padding: 12px;
+  z-index: 100;
+  animation: fadeInDown 0.18s ease;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-user-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 6px 8px 6px;
+}
+
+.dropdown-user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00c2ff, #7928ca);
+  display: grid;
+  place-items: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.dropdown-user-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dropdown-user-info strong {
+  font-size: 0.88rem;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-user-info span {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-role-badge {
+  font-size: 0.65rem !important;
+  font-weight: 800;
+  color: var(--accent-cyan) !important;
+  margin-top: 2px;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 6px 0;
+}
+
+.dropdown-menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.dropdown-menu-item:hover {
+  background: rgba(0, 194, 255, 0.1);
+  color: #ffffff;
+}
+
+.dropdown-menu-item svg {
+  color: var(--accent-cyan);
+  flex-shrink: 0;
+}
+
+.dropdown-footer {
+  padding-top: 4px;
+}
+
+.dropdown-logout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: var(--accent-red);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.dropdown-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ffffff;
 }
 
 /* Secondary Sub-Navbar (Categories Strip) */
@@ -461,26 +644,31 @@ a.sub-nav-link,
 .eneba-accordion-wrapper {
   display: flex;
   flex-direction: row !important;
-  gap: 8px;
+  gap: 0px !important;
   height: 220px;
   width: 100%;
   overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
 }
 
 .eneba-slide {
   position: relative;
   flex: 1;
-  min-width: 55px;
+  min-width: 45px;
   border-radius: 0px !important;
   overflow: hidden;
-  border: 1px solid var(--border-subtle);
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
   cursor: pointer;
-  transition: flex 0.45s cubic-bezier(0.2, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: flex 0.45s cubic-bezier(0.2, 1, 0.3, 1);
   background: #050b18;
 }
 
 .eneba-slide:hover {
-  border-color: var(--border-medium);
+  filter: brightness(1.08);
 }
 
 .eneba-slide-bg {
@@ -499,65 +687,31 @@ a.sub-nav-link,
   opacity: 1;
 }
 
-/* ACTIVE STATE (Wide Horizontal Pure Artwork Banner) */
+/* ACTIVE STATE (Wide Horizontal Pure Artwork Banner - Flush Seamless) */
 .eneba-slide.active {
   flex: 5.5;
-  border-color: rgba(0, 194, 255, 0.55);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 194, 255, 0.2);
+  box-shadow: none !important;
+  border: none !important;
   cursor: pointer;
 }
 
 .eneba-slide.active .horizontal-bg {
   opacity: 1;
-  transform: scale(1.01);
+  transform: scale(1.0);
 }
 
 .eneba-slide.active .vertical-bg {
   opacity: 0;
 }
 
-/* Arrow Navigation Buttons */
+/* Arrow Navigation Buttons Hidden per User Request */
 .eneba-arrow-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(7, 13, 30, 0.85);
-  border: 1px solid var(--border-medium);
-  backdrop-filter: blur(10px);
-  color: #ffffff;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  z-index: 10;
-  transition: all 0.2s ease;
+  display: none !important;
 }
 
-.eneba-arrow-btn:hover {
-  background: var(--accent-cyan);
-  color: #040c1e;
-  border-color: var(--accent-cyan);
-  transform: translateY(-50%) scale(1.08);
-}
-
-.arrow-prev { left: 4px; }
-.arrow-next { right: 4px; }
-
-/* Pagination Dots */
 .eneba-pagination-dots {
-  position: absolute;
-  bottom: 10px;
-  right: 18px;
-  z-index: 10;
-  display: flex;
-  gap: 6px;
+  display: none !important;
 }
-
-.hero-dot {
-  width: 6px;
-  height: 6px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.3);
   cursor: pointer;
@@ -906,10 +1060,12 @@ a.sub-nav-link,
 /* ======================================================== */
 /* 6. HORIZONTAL GIFT CARDS (ROUNDED CORNERS)              */
 /* ======================================================== */
-.horizontal-gift-card {
-  flex: 0 0 230px;
-  width: 230px;
-  height: 145px;
+/* ======================================================== */
+/* 6. VERTICAL RETAIL GIFT CARDS (AUTHENTIC HANGING STYLE)  */
+/* ======================================================== */
+.giftcard-vertical-card {
+  flex: 0 0 160px;
+  width: 160px;
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 12px !important;
@@ -922,92 +1078,111 @@ a.sub-nav-link,
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
 }
 
-.horizontal-gift-card:hover {
-  transform: translateY(-3px);
+.giftcard-vertical-card:hover {
+  transform: translateY(-4px);
   border-color: var(--border-glow);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7);
 }
 
-.giftcard-h-face {
-  height: 90px;
-  padding: 0.65rem 0.85rem;
+.giftcard-v-face {
+  height: 155px;
+  padding: 0.75rem 0.65rem;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   position: relative;
   overflow: hidden;
   border-radius: 12px 12px 0 0 !important;
 }
 
-.giftcard-h-face.theme-psn { background: linear-gradient(135deg, #003791, #0070d1); }
-.giftcard-h-face.theme-xbox { background: linear-gradient(135deg, #107c10, #0a4d0a); }
-.giftcard-h-face.theme-nintendo { background: linear-gradient(135deg, #e60012, #8c000b); }
-.giftcard-h-face.theme-steam { background: linear-gradient(135deg, #171a21, #1b2838, #2a475e); }
-.giftcard-h-face.theme-googleplay { background: linear-gradient(135deg, #01875f, #00523a); }
-.giftcard-h-face.theme-apple { background: linear-gradient(135deg, #2c2c2e, #141416); }
-.giftcard-h-face.theme-netflix { background: linear-gradient(135deg, #e50914, #8b0000); }
-.giftcard-h-face.theme-spotify { background: linear-gradient(135deg, #1db954, #12632c); }
-.giftcard-h-face.theme-roblox { background: linear-gradient(135deg, #000000, #333333); }
+.giftcard-v-face.theme-psn { background: linear-gradient(180deg, #00439c 0%, #001e4d 100%); }
+.giftcard-v-face.theme-xbox { background: linear-gradient(180deg, #107c10 0%, #063806 100%); }
+.giftcard-v-face.theme-nintendo { background: linear-gradient(180deg, #e60012 0%, #7a000a 100%); }
+.giftcard-v-face.theme-steam { background: linear-gradient(180deg, #1b2838 0%, #0f1620 100%); }
+.giftcard-v-face.theme-googleplay { background: linear-gradient(180deg, #01875f 0%, #003827 100%); }
+.giftcard-v-face.theme-apple { background: linear-gradient(180deg, #2c2c2e 0%, #111113 100%); }
+.giftcard-v-face.theme-netflix { background: linear-gradient(180deg, #e50914 0%, #680005 100%); }
+.giftcard-v-face.theme-spotify { background: linear-gradient(180deg, #1db954 0%, #0b4f22 100%); }
+.giftcard-v-face.theme-roblox { background: linear-gradient(180deg, #222222 0%, #0a0a0a 100%); }
 
-.giftcard-h-gloss {
+.giftcard-peg-hole {
+  width: 26px;
+  height: 6px;
+  background: rgba(3, 7, 18, 0.75);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 6px;
+}
+
+.giftcard-v-logo-brand {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  margin: auto 0;
+}
+
+.giftcard-v-denom {
+  background: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 6px !important;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  width: 100%;
+  text-align: center;
+}
+
+.giftcard-v-gloss {
   position: absolute;
   top: 0;
   right: 0;
-  width: 60%;
+  width: 70%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 80%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, transparent 75%);
   pointer-events: none;
 }
 
-.giftcard-h-logo {
-  font-size: 1.5rem;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
-}
-
-.giftcard-h-denom {
-  background: rgba(0, 0, 0, 0.55);
-  color: #ffffff;
-  font-family: var(--font-heading);
-  font-size: 0.76rem;
-  font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 6px !important;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.giftcard-h-info {
-  padding: 0.55rem 0.85rem;
+.giftcard-v-body {
+  padding: 0.65rem 0.75rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   flex: 1;
   background: var(--bg-surface);
   border-radius: 0 0 12px 12px !important;
 }
 
-.giftcard-h-title {
+.giftcard-v-title {
   font-family: var(--font-heading);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-bottom: 4px;
 }
 
-.giftcard-h-pricing {
+.giftcard-v-pricing {
   display: flex;
   align-items: baseline;
   gap: 4px;
 }
 
-.giftcard-h-label {
+.giftcard-v-label {
   font-size: 0.62rem;
   color: var(--text-tertiary);
   text-transform: uppercase;
 }
 
-.giftcard-h-val {
+.giftcard-v-val {
   font-family: var(--font-mono);
   font-size: 0.88rem;
   font-weight: 800;
@@ -1110,143 +1285,227 @@ a.sub-nav-link,
 }
 
 /* ======================================================== */
-/* 8. SELLER INVITATION & ESCROW BANNER                    */
+/* 8. DUAL CALLOUT SECTION (SELLER ESCROW + WHATSAPP BANNER)*/
 /* ======================================================== */
-.seller-invitation-section {
+.dual-callout-section {
   max-width: 1460px;
   margin: 1.5rem auto 2.5rem auto;
   padding: 0 1.25rem;
 }
 
-.seller-invite-card {
+.dual-callout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .dual-callout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Compact Seller Escrow Card */
+.seller-compact-card {
   background: linear-gradient(135deg, #071026 0%, #0d1b40 100%);
   border: 1px solid var(--border-glow);
   border-radius: 12px !important;
-  padding: 2rem;
+  padding: 1.5rem;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+  gap: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
-.seller-invite-features {
+.seller-compact-top {
   display: flex;
-  gap: 1.25rem;
-  flex-wrap: wrap;
-  color: var(--accent-cyan-light);
-  font-size: 0.82rem;
-  font-weight: 700;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.btn-seller-join-cta {
+.badge-escrow-subtle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--accent-cyan);
+  background: rgba(0, 194, 255, 0.1);
+  border: 1px solid rgba(0, 194, 255, 0.25);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  width: fit-content;
+  text-transform: uppercase;
+}
+
+.seller-compact-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.seller-compact-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.seller-compact-perks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-cyan-light);
+}
+
+.btn-seller-compact-cta {
   background: linear-gradient(135deg, var(--accent-cyan), var(--accent-cyan-dark));
   color: #040c1e;
   font-weight: 800;
-  padding: 10px 20px;
-  text-decoration: none;
-  white-space: nowrap !important;
+  font-size: 0.82rem;
+  padding: 8px 16px;
   border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  width: fit-content;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 16px rgba(0, 194, 255, 0.4);
+  box-shadow: 0 4px 14px rgba(0, 194, 255, 0.35);
 }
 
-.btn-seller-join-cta:hover {
+.btn-seller-compact-cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 194, 255, 0.6);
+  box-shadow: 0 6px 18px rgba(0, 194, 255, 0.5);
 }
 
-/* ======================================================== */
-/* 9. OFFICIAL WHATSAPP CHANNEL BANNER                     */
-/* ======================================================== */
-.official-whatsapp-channel-section {
-  max-width: 1460px;
-  margin: 1.5rem auto 2.5rem auto;
-  padding: 0 1.25rem;
-}
-
-.channel-banner-container {
+/* Compact WhatsApp Community Card (Half Width) */
+.community-compact-card {
   position: relative;
-  width: 100%;
-  overflow: hidden;
   border-radius: 12px !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
   background: #020713;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
-.channel-banner-bg-img {
-  width: 100%;
-  height: auto;
-  max-height: 260px;
-  object-fit: cover;
-  display: block;
-}
-
-.channel-banner-overlay-right {
+.community-card-bg-wrap {
   position: absolute;
-  bottom: 22px;
-  right: 28px;
-  z-index: 5;
+  inset: 0;
+  z-index: 1;
 }
 
-.btn-channel-join-minimal {
+.community-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.45;
+}
+
+.community-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(2, 7, 19, 0.5) 0%, rgba(2, 7, 19, 0.92) 100%);
+}
+
+.community-card-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.community-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #25D366;
+  background: rgba(37, 211, 102, 0.12);
+  border: 1px solid rgba(37, 211, 102, 0.3);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.community-card-title {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.community-card-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+  margin: 0 0 10px 0;
+}
+
+.btn-whatsapp-compact-cta {
   background: linear-gradient(135deg, #25D366, #128C7E);
   color: #ffffff;
   font-family: var(--font-heading);
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   font-weight: 800;
-  padding: 9px 20px;
+  padding: 8px 16px;
   border-radius: 9999px !important;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+  width: fit-content;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
   transition: all 0.2s ease;
 }
 
-.btn-channel-join-minimal:hover {
+.btn-whatsapp-compact-cta:hover {
   background: linear-gradient(135deg, #2bf074, #15a090);
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.65);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.6);
 }
 
-@media (max-width: 768px) {
-  .official-whatsapp-channel-section {
-    padding: 0 1rem;
-    margin: 1.5rem auto;
-  }
-  .channel-banner-container {
-    flex-direction: column;
-  }
-  .channel-banner-overlay-right {
-    position: static;
-    transform: none;
-    padding: 1rem;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    background: #070d1e;
-  }
-  .btn-channel-join-minimal {
-    width: 100%;
-    justify-content: center;
-  }
-  .seller-invite-card {
-    flex-direction: column;
-    padding: 1.5rem;
-    text-align: center;
-  }
-  .seller-invite-features {
-    justify-content: center;
-  }
-  .btn-seller-join-cta {
-    width: 100%;
-    justify-content: center;
-  }
+/* Avatar Choice Buttons in Profile Modal */
+.avatar-selection-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-avatar-choice {
+  width: 42px;
+  height: 42px;
+  border-radius: 50% !important;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-medium);
+  font-size: 1.25rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-avatar-choice:hover,
+.btn-avatar-choice.selected {
+  border-color: var(--accent-cyan);
+  background: rgba(0, 194, 255, 0.15);
+  transform: scale(1.08);
 }
 
 /* ======================================================== */

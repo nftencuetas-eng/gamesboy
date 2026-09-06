@@ -6,10 +6,10 @@ const countryConfig = {
     code: 'PY',
     name: 'Paraguay',
     flag: '🇵🇾',
-    currency: 'PYG',
-    symbol: '₲',
+    currency: 'Gs.',
+    symbol: 'Gs.',
     rateToUsd: 7500, // 1 USD = 7,500 PYG
-    format: (amtUsd) => `₲ ${Math.round(amtUsd * 7500).toLocaleString('es-PY')}`,
+    format: (amtUsd) => `${Math.round(amtUsd * 7500).toLocaleString('es-PY')} Gs.`,
     localPayment: {
       title: '🇵🇾 Transferencia Bancaria Paraguay (SIPAP)',
       bank: 'Banco Familiar / Itaú Paraguay',
@@ -416,7 +416,7 @@ function renderDigitalGames() {
   }).join('');
 }
 
-// --- 4. RENDER REALISTIC HORIZONTAL GIFT CARDS (ROUNDED CORNERS) ---
+// --- 4. RENDER REALISTIC VERTICAL RETAIL GIFT CARDS (ROUNDED CORNERS) ---
 function renderRetailGiftCards() {
   const container = document.getElementById('retail-giftcards-grid');
   if (!container) return;
@@ -427,25 +427,37 @@ function renderRetailGiftCards() {
     return;
   }
 
+  const brandDisplayNames = {
+    'psn': 'PlayStation',
+    'xbox': 'Xbox',
+    'nintendo': 'Nintendo eShop',
+    'steam': 'Steam Wallet',
+    'googleplay': 'Google Play',
+    'apple': 'Apple Store',
+    'netflix': 'Netflix Gift',
+    'spotify': 'Spotify Gift',
+    'roblox': 'Roblox'
+  };
+
   container.innerHTML = giftcards.map(gc => {
-    const themeClass = `theme-${gc.brandTheme || 'psn'}`;
+    const themeKey = gc.brandTheme || 'psn';
+    const themeClass = `theme-${themeKey}`;
+    const brandName = brandDisplayNames[themeKey] || gc.title.split(' ')[0] || 'Gift Card';
     const denom = gc.title.includes('$') ? gc.title.match(/\$[0-9]+/)?.[0] || '$10' : '$10';
 
     return `
-      <div class="horizontal-gift-card" onclick="openBuyGiftCardModal('${gc.id}')">
-        <div class="giftcard-h-face ${themeClass}">
-          <div class="giftcard-h-chip">
-            <svg width="22" height="18" viewBox="0 0 24 20" fill="none"><rect width="24" height="20" rx="3" fill="#D4AF37" fill-opacity="0.85"/><line x1="0" y1="7" x2="24" y2="7" stroke="#7A600D" stroke-width="1.5"/><line x1="0" y1="13" x2="24" y2="13" stroke="#7A600D" stroke-width="1.5"/><line x1="12" y1="0" x2="12" y2="20" stroke="#7A600D" stroke-width="1.5"/></svg>
-          </div>
-          <div class="giftcard-h-logo">${gc.icon || '🎁'}</div>
-          <div class="giftcard-h-denom">${denom}</div>
-          <div class="giftcard-h-gloss"></div>
+      <div class="giftcard-vertical-card" onclick="openBuyGiftCardModal('${gc.id}')">
+        <div class="giftcard-v-face ${themeClass}">
+          <div class="giftcard-peg-hole"></div>
+          <div class="giftcard-v-logo-brand">${brandName}</div>
+          <div class="giftcard-v-denom">${denom}</div>
+          <div class="giftcard-v-gloss"></div>
         </div>
-        <div class="giftcard-h-info">
-          <h3 class="giftcard-h-title">${gc.title}</h3>
-          <div class="giftcard-h-pricing">
-            <span class="giftcard-h-label">Desde</span>
-            <span class="giftcard-h-val">${formatPrice(gc.priceUsd)}</span>
+        <div class="giftcard-v-body">
+          <h3 class="giftcard-v-title">${gc.title}</h3>
+          <div class="giftcard-v-pricing">
+            <span class="giftcard-v-label">Desde</span>
+            <span class="giftcard-v-val">${formatPrice(gc.priceUsd)}</span>
           </div>
         </div>
       </div>
@@ -855,12 +867,30 @@ window.handleSearchResultClick = function(category, id) {
 };
 
 // --- 11. SETUP USER SESSION, MULTI-CURRENCY, LIVE BALANCE & DEPOSIT MODAL ---
-function updateUserBalanceDisplay() {
+// --- 11. SETUP USER SESSION, MULTI-CURRENCY, LIVE BALANCE & DEPOSIT MODAL ---
+async function updateUserBalanceDisplay() {
   const balanceEl = document.getElementById('nav-user-balance-amount');
   if (!balanceEl) return;
 
-  const balUsd = state.currentUser?.balanceUsd !== undefined ? state.currentUser.balanceUsd : (state.wallet?.balanceUsd || 25.0);
-  balanceEl.textContent = `$ ${balUsd.toFixed(2)} USDT`;
+  const userId = state.currentUser ? state.currentUser.id : null;
+  if (!userId) {
+    balanceEl.textContent = formatPrice(0);
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/wallet/balance', {
+      headers: { 'x-user-id': userId }
+    });
+    const data = await res.json();
+    if (data.wallet && data.wallet.balanceUsd !== undefined) {
+      state.wallet = data.wallet;
+      if (state.currentUser) state.currentUser.balanceUsd = data.wallet.balanceUsd;
+    }
+  } catch (e) {}
+
+  const balUsd = state.currentUser?.balanceUsd !== undefined ? state.currentUser.balanceUsd : (state.wallet?.balanceUsd || 0);
+  balanceEl.textContent = formatPrice(balUsd);
 }
 
 function updateDepositModalForCountry() {
@@ -893,7 +923,7 @@ function updateDepositModalForCountry() {
   }
 
   if (amountInput) {
-    amountInput.placeholder = (cfg.currency === 'PYG') ? 'ej: 100000' : (cfg.currency === 'ARS' ? 'ej: 15000' : (cfg.currency === 'BRL' ? 'ej: 100' : 'ej: 25'));
+    amountInput.placeholder = (cfg.currency === 'Gs.') ? 'ej: 100000' : (cfg.currency === 'ARS' ? 'ej: 15000' : (cfg.currency === 'BRL' ? 'ej: 100' : 'ej: 25'));
     
     // Live calculation listener
     amountInput.oninput = () => {
@@ -914,15 +944,140 @@ function initUserSession() {
   const unloggedGroup = document.getElementById('auth-unlogged-group');
   const loggedGroup = document.getElementById('auth-logged-group');
   const navUserName = document.getElementById('nav-user-name');
+  const navUserAvatar = document.getElementById('nav-user-avatar');
+  const dropdownUserName = document.getElementById('dropdown-user-name');
+  const dropdownUserEmail = document.getElementById('dropdown-user-email');
+  const dropdownUserAvatarLg = document.getElementById('dropdown-user-avatar-lg');
 
   if (state.currentUser && state.currentUser.name) {
     if (unloggedGroup) unloggedGroup.style.display = 'none';
     if (loggedGroup) loggedGroup.style.display = 'flex';
     if (navUserName) navUserName.textContent = state.currentUser.name;
+    if (navUserAvatar) navUserAvatar.textContent = state.currentUser.avatar || '🎮';
+    if (dropdownUserName) dropdownUserName.textContent = state.currentUser.name;
+    if (dropdownUserEmail) dropdownUserEmail.textContent = state.currentUser.email || 'usuario@gamesboy.net';
+    if (dropdownUserAvatarLg) dropdownUserAvatarLg.textContent = state.currentUser.avatar || '🎮';
     updateUserBalanceDisplay();
   } else {
     if (unloggedGroup) unloggedGroup.style.display = 'flex';
     if (loggedGroup) loggedGroup.style.display = 'none';
+  }
+
+  // Profile Dropdown Toggle
+  const profileWrapper = document.getElementById('user-profile-wrapper');
+  const btnProfileToggle = document.getElementById('btn-user-profile-toggle');
+  const dropdownMenu = document.getElementById('user-profile-dropdown-menu');
+
+  if (btnProfileToggle && dropdownMenu && profileWrapper) {
+    btnProfileToggle.onclick = (e) => {
+      e.stopPropagation();
+      const isOpen = dropdownMenu.style.display === 'block';
+      dropdownMenu.style.display = isOpen ? 'none' : 'block';
+      profileWrapper.classList.toggle('open', !isOpen);
+    };
+
+    document.addEventListener('click', (e) => {
+      if (!profileWrapper.contains(e.target)) {
+        dropdownMenu.style.display = 'none';
+        profileWrapper.classList.remove('open');
+      }
+    });
+  }
+
+  // Profile Dropdown Actions
+  const menuItemVault = document.getElementById('menu-item-vault');
+  if (menuItemVault) {
+    menuItemVault.onclick = () => {
+      if (dropdownMenu) dropdownMenu.style.display = 'none';
+      const vaultSec = document.getElementById('my-vault-section');
+      if (vaultSec) {
+        vaultSec.style.display = 'block';
+        vaultSec.scrollIntoView({ behavior: 'smooth' });
+      }
+    };
+  }
+
+  const menuItemDeposit = document.getElementById('menu-item-deposit');
+  if (menuItemDeposit) {
+    menuItemDeposit.onclick = () => {
+      if (dropdownMenu) dropdownMenu.style.display = 'none';
+      const modal = document.getElementById('modal-deposit');
+      if (modal) {
+        updateDepositModalForCountry();
+        modal.style.display = 'grid';
+      }
+    };
+  }
+
+  const menuItemPublish = document.getElementById('menu-item-publish');
+  if (menuItemPublish) {
+    menuItemPublish.onclick = () => {
+      if (dropdownMenu) dropdownMenu.style.display = 'none';
+      const modal = document.getElementById('modal-publish-stream');
+      if (modal) modal.style.display = 'grid';
+    };
+  }
+
+  const btnLogoutUser = document.getElementById('btn-logout-user');
+  if (btnLogoutUser) {
+    btnLogoutUser.onclick = () => {
+      localStorage.removeItem('gb_user');
+      window.location.reload();
+    };
+  }
+
+  // Profile Settings Modal Handlers
+  const modalProfile = document.getElementById('modal-profile-settings');
+  const menuItemEditProfile = document.getElementById('menu-item-edit-profile');
+  const btnCloseProfileModal = document.getElementById('btn-close-profile-modal');
+  const formEditProfile = document.getElementById('form-edit-user-profile');
+  const editProfileNameInput = document.getElementById('edit-profile-name');
+
+  if (menuItemEditProfile && modalProfile) {
+    menuItemEditProfile.onclick = () => {
+      if (dropdownMenu) dropdownMenu.style.display = 'none';
+      if (editProfileNameInput && state.currentUser) {
+        editProfileNameInput.value = state.currentUser.name || '';
+      }
+      modalProfile.style.display = 'grid';
+    };
+  }
+
+  if (btnCloseProfileModal && modalProfile) {
+    btnCloseProfileModal.onclick = () => modalProfile.style.display = 'none';
+  }
+
+  let selectedAvatar = state.currentUser?.avatar || '🎮';
+  const avatarButtons = document.querySelectorAll('.btn-avatar-choice');
+  avatarButtons.forEach(btn => {
+    btn.onclick = () => {
+      avatarButtons.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedAvatar = btn.dataset.avatar || '🎮';
+    };
+  });
+
+  if (formEditProfile) {
+    formEditProfile.onsubmit = (e) => {
+      e.preventDefault();
+      const newName = editProfileNameInput.value.trim();
+      if (!newName) return;
+
+      if (!state.currentUser) {
+        state.currentUser = { id: 'usr_client1', email: 'usuario@gamesboy.net', role: 'client' };
+      }
+      state.currentUser.name = newName;
+      state.currentUser.avatar = selectedAvatar;
+      localStorage.setItem('gb_user', JSON.stringify(state.currentUser));
+
+      if (navUserName) navUserName.textContent = newName;
+      if (navUserAvatar) navUserAvatar.textContent = selectedAvatar;
+      if (dropdownUserName) dropdownUserName.textContent = newName;
+      if (dropdownUserAvatarLg) dropdownUserAvatarLg.textContent = selectedAvatar;
+
+      if (modalProfile) modalProfile.style.display = 'none';
+      alert('✨ ¡Perfil actualizado con éxito!');
+    };
   }
 
   const countrySelect = document.getElementById('country-branch-select');
@@ -930,16 +1085,17 @@ function initUserSession() {
     countrySelect.value = state.country;
     countrySelect.addEventListener('change', (e) => {
       state.country = e.target.value;
-      state.currency = countryConfig[state.country]?.currency || 'PYG';
+      state.currency = countryConfig[state.country]?.currency || 'Gs.';
       localStorage.setItem('gb_country', state.country);
       localStorage.setItem('gb_currency', state.currency);
 
       const indicator = document.getElementById('footer-currency-indicator');
       if (indicator) {
         const cfg = countryConfig[state.country];
-        indicator.textContent = `${cfg.currency} (${cfg.symbol})`;
+        indicator.textContent = `${cfg.name} (${cfg.currency})`;
       }
 
+      updateUserBalanceDisplay();
       updateDepositModalForCountry();
       renderStreamingServices();
       renderDigitalGames();
@@ -1099,4 +1255,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initLiveSearch();
   fetchStoreData();
 });
+
 
