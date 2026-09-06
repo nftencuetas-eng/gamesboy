@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración Master - GamesBoy.net</title>
+  
+  <link rel="icon" type="image/png" href="/assets/branding/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <style>
+    * { border-radius: 0px !important; }
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+      background: var(--bg-body);
+    }
+    .admin-sidebar {
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border-subtle);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .admin-content {
+      padding: 2rem 2.5rem;
+      overflow-y: auto;
+    }
+    .admin-menu-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 10px 14px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      margin-bottom: 6px;
+      transition: all 0.15s ease;
+    }
+    .admin-menu-btn:hover, .admin-menu-btn.active {
+      background: var(--bg-surface-elevated);
+      border-color: var(--border-medium);
+      color: var(--accent-cyan);
+    }
+    @media (max-width: 900px) {
+      .admin-layout { grid-template-columns: 1fr; }
+      .admin-sidebar { display: none; }
+      .admin-content { padding: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-layout">
+    
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div style="margin-bottom: 2rem;">
+        <a href="/">
+          <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 32px; width: auto; filter: none;">
+        </a>
+        <div class="badge-official" style="margin-top: 8px; font-size: 0.7rem;">ADMIN MASTER</div>
+      </div>
+
+      <nav style="flex: 1;">
+        <button class="admin-menu-btn active" data-tab="tab-finances">📊 Finanzas & Recargas</button>
+        <button class="admin-menu-btn" data-tab="tab-prices">🏷️ Catálogo & Precios Oficiales</button>
+        <button class="admin-menu-btn" data-tab="tab-escrow">🛡️ Garantía Escrow & Vendedores</button>
+        <button class="admin-menu-btn" data-tab="tab-banners">🎨 Portadas ENEBA Hero</button>
+        <button class="admin-menu-btn" data-tab="tab-branches">🏢 Sucursales (PY / PA)</button>
+      </nav>
+
+      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+        <a href="/" style="display: block; font-size: 0.82rem; color: var(--accent-cyan); text-decoration: none; margin-bottom: 8px;">➔ Ver Tienda Pública</a>
+        <button onclick="localStorage.removeItem('gb_admin_session'); window.location.href='/admin-login.html';" style="background: none; border: none; color: var(--accent-red); font-size: 0.8rem; cursor: pointer;">Cerrar Sesión Admin</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-content">
+      
+      <!-- Top Header Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle);">
+        <div>
+          <h1 id="admin-view-heading" style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; color: #ffffff;">Finanzas & Bandeja de Recargas</h1>
+          <p style="font-size: 0.82rem; color: var(--text-secondary);">Sucursal Activa: <strong>🇵🇾 Paraguay (SIPAP Bancos / Guaraníes)</strong></p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <a href="/" class="btn-action-sm" style="background: rgba(255,255,255,0.06); padding: 8px 14px; text-decoration: none; color: #fff;">Marketplace ↗</a>
+        </div>
+      </div>
+
+      <!-- Tab 1: Finanzas & Aprobación de Recargas -->
+      <div id="view-tab-finances" class="admin-tab-pane">
+        <div class="portal-stats-grid">
+          <div class="portal-stat-card">
+            <div class="portal-stat-title">Recargas Pendientes</div>
+            <div class="portal-stat-val" style="color: var(--accent-amber);">0</div>
+            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Comprobantes por verificar</div>
+          </div>
+          <div class="portal-stat-card">
+            <div class="portal-stat-title">Saldo en Garantía (Escrow)</div>
+            <div class="portal-stat-val" style="color: var(--accent-cyan);">$ 45.00</div>
+            <div style="font-size: 0.75rem; color: var(--text-tertiary);">₲ 337.500 retenidos hasta fin de mes</div>
+          </div>
+          <div class="portal-stat-card">
+            <div class="portal-stat-title">Saldo Liquidable a Vendedores</div>
+            <div class="portal-stat-val" style="color: var(--accent-emerald);">$ 120.00</div>
+            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Listo para transferir por SIPAP</div>
+          </div>
+          <div class="portal-stat-card">
+            <div class="portal-stat-title">Comisión Neta GamesBoy</div>
+            <div class="portal-stat-val" style="color: var(--accent-purple);">$ 34.50</div>
+            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Margen de plataforma</div>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <div class="section-header" style="padding: 12px 16px; margin-bottom: 0;">
+            <h3 class="section-title">📥 Comprobantes de Recarga Bancaria (SIPAP / Binance)</h3>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Monto Local</th>
+                <th>Equiv. USD</th>
+                <th>Método</th>
+                <th>Referencia</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="admin-deposits-table-body">
+              <tr>
+                <td>Lucas González</td>
+                <td><strong>₲ 100.000</strong></td>
+                <td>$ 13.33</td>
+                <td>SIPAP Familiar</td>
+                <td><code>SIPAP-981244</code></td>
+                <td>
+                  <button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; padding: 4px 10px; font-weight: 700;" onclick="alert('Recarga de ₲ 100.000 aprobada y acreditada al saldo del usuario.')">Aprobar</button>
+                  <button class="btn-action-sm" style="background: var(--accent-red); color: #fff; padding: 4px 10px;" onclick="alert('Comprobante rechazado.')">Rechazar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 2: Control de Precios Oficiales y Stock -->
+      <div id="view-tab-prices" class="admin-tab-pane" style="display: none;">
+        <div class="form-box">
+          <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem;">🏷️ Definir Precios y Reglas de Membresías Compartidas</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+            El Administrador establece los precios fijos propuestos que los vendedores aceptan al compartir sus cuentas.
+          </p>
+
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Servicio</th>
+                  <th>Precio Venta Cliente (USD)</th>
+                  <th>Precio Venta en Gs.</th>
+                  <th>Pago a Vendedor / Mes</th>
+                  <th>Margen GamesBoy</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Netflix Premium 4K</strong></td>
+                  <td><input type="number" class="form-input" value="3.50" style="width: 80px; padding: 4px 8px;"></td>
+                  <td>₲ 26.250</td>
+                  <td>$ 2.95 (₲ 22.000)</td>
+                  <td>15%</td>
+                  <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio actualizado')">Guardar</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Spotify Premium Familiar</strong></td>
+                  <td><input type="number" class="form-input" value="2.50" style="width: 80px; padding: 4px 8px;"></td>
+                  <td>₲ 18.750</td>
+                  <td>$ 2.10 (₲ 15.750)</td>
+                  <td>15%</td>
+                  <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio actualizado')">Guardar</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Disney+ & Star+</strong></td>
+                  <td><input type="number" class="form-input" value="3.00" style="width: 80px; padding: 4px 8px;"></td>
+                  <td>₲ 22.500</td>
+                  <td>$ 2.50 (₲ 18.750)</td>
+                  <td>15%</td>
+                  <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio actualizado')">Guardar</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Max (HBO Max) 4K</strong></td>
+                  <td><input type="number" class="form-input" value="2.80" style="width: 80px; padding: 4px 8px;"></td>
+                  <td>₲ 21.000</td>
+                  <td>$ 2.35 (₲ 17.600)</td>
+                  <td>15%</td>
+                  <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio actualizado')">Guardar</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Garantía Escrow & Gestión de Fallas -->
+      <div id="view-tab-escrow" class="admin-tab-pane" style="display: none;">
+        <div class="form-box">
+          <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem;">🛡️ Sistema de Garantía & Liquidación de Vendedores</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+            Los pagos a vendedores se liberan exclusivamente al culminar los 30 días de servicio sin reportes. Regla de falla: 1 falla = reposición obligatoria; 2da falla = reembolso total al cliente.
+          </p>
+
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Vendedor</th>
+                <th>Servicio / Cuenta</th>
+                <th>Cliente Asignado</th>
+                <th>Días Restantes</th>
+                <th>Monto Escrow</th>
+                <th>Estado</th>
+                <th>Acción Admin</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Carlos_PY (Verificado ⭐)</td>
+                <td>Netflix 4K - Perfil #2</td>
+                <td>Rodrigo Vera</td>
+                <td>Día 30 de 30 (Finalizado)</td>
+                <td>$ 2.95 (₲ 22.000)</td>
+                <td><span class="badge-official" style="background: rgba(16,185,129,0.15); color: #10b981;">Listo para liberar</span></td>
+                <td><button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; padding: 4px 10px;" onclick="alert('Ganancia liberada a la billetera del vendedor')">Liberar Pago</button></td>
+              </tr>
+              <tr>
+                <td>Marcos_Store</td>
+                <td>Spotify Familiar #4</td>
+                <td>Ana Benítez</td>
+                <td>Día 12 de 30</td>
+                <td>$ 2.10 (₲ 15.750)</td>
+                <td><span style="color: var(--accent-amber); font-size: 0.8rem;">En Garantía Escrow</span></td>
+                <td><button class="btn-action-sm" style="background: rgba(239,68,68,0.2); color: #ef4444; padding: 4px 10px;" onclick="alert('Reembolso efectuado al saldo del cliente')">Reembolsar</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 4: Portadas ENEBA Hero -->
+      <div id="view-tab-banners" class="admin-tab-pane" style="display: none;">
+        <div class="form-box">
+          <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem;">🎨 Personalizar Portadas del Acordeón Hero</h2>
+          <form id="form-admin-banners-page">
+            <div id="admin-page-banners-container">
+              <!-- Rendered via script -->
+            </div>
+            <button type="submit" class="btn-primary-block" style="margin-top: 1rem;">💾 Guardar Banners</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Tab 5: Sucursales & Datos Bancarios -->
+      <div id="view-tab-branches" class="admin-tab-pane" style="display: none;">
+        <div class="form-box">
+          <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem;">🏢 Configuración de Sucursales y Bancos Locales</h2>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">País de Sucursal</label>
+              <select class="form-select">
+                <option value="PY">🇵🇾 Paraguay (Matriz SIPAP)</option>
+                <option value="PA">🇵🇦 Panamá (Sucursal Dólares)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tasa de Cambio (1 USD en Guaraníes)</label>
+              <input type="number" class="form-input" value="7500">
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Titular de Cuenta Bancaria Local</label>
+              <input type="text" class="form-input" value="GamesBoy Paraguay S.A.">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Alias SIPAP / N° de Cuenta</label>
+              <input type="text" class="form-input" value="gamesboy.py / 01-445566-7">
+            </div>
+          </div>
+          <button class="btn-primary-block" style="margin-top: 1rem;" onclick="alert('Configuración de sucursal guardada con éxito.')">Guardar Cambios de Sucursal</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Tab switching
+    const tabs = document.querySelectorAll('.admin-menu-btn');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const targetId = 'view-' + tab.dataset.tab;
+        document.querySelectorAll('.admin-tab-pane').forEach(p => p.style.display = 'none');
+        const targetPane = document.getElementById(targetId);
+        if (targetPane) targetPane.style.display = 'block';
+        document.getElementById('admin-view-heading').textContent = tab.textContent;
+      });
+    });
+  </script>
+</body>
+</html>

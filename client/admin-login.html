@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso Administrativo - GamesBoy.net</title>
+  
+  <link rel="icon" type="image/png" href="/assets/branding/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+  <style>
+    .admin-login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      background: #02050e;
+      background-image: radial-gradient(circle at 50% 30%, rgba(0, 194, 255, 0.08) 0%, transparent 60%);
+    }
+    .admin-login-box {
+      width: 100%;
+      max-width: 440px;
+      background: #070d1e;
+      border: 1px solid var(--border-medium);
+      padding: 2.5rem 2rem;
+      border-radius: 0px !important;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-login-wrap">
+    <div class="admin-login-box">
+      
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 38px; width: auto; filter: none; margin-bottom: 0.75rem;">
+        <div class="badge-official" style="display: inline-block; margin-bottom: 0.5rem; border-radius: 0px !important;">PORTAL DE ADMINISTRADOR MASTER</div>
+        <h1 style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; color: #ffffff;">Control & Gestión Global</h1>
+        <p style="font-size: 0.82rem; color: var(--text-tertiary); margin-top: 4px;">Acceso restringido para administración y sucursales</p>
+      </div>
+
+      <form id="form-admin-login">
+        <div class="form-group">
+          <label class="form-label">Sucursal / Región</label>
+          <select id="admin-branch" class="form-select" style="border-radius: 0px !important;">
+            <option value="PY">🇵🇾 Paraguay (Matriz SIPAP / Gs.)</option>
+            <option value="PA">🇵🇦 Panamá (Sucursal Dólares / USD)</option>
+            <option value="GLOBAL">🌐 Global / Cripto USDT</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Usuario Administrador / Email</label>
+          <input type="text" id="admin-user-input" class="form-input" placeholder="admin@gamesboy.net" value="admin@gamesboy.net" required style="border-radius: 0px !important;">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Clave de Seguridad Master</label>
+          <input type="password" id="admin-pass-input" class="form-input" placeholder="••••••••••••" value="GamesBoy2026Master!" required style="border-radius: 0px !important;">
+        </div>
+
+        <button type="submit" class="btn-primary-block" style="padding: 12px; margin-top: 1.5rem; border-radius: 0px !important; font-weight: 800;">
+          Entrar al Panel de Control ➔
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.5rem;">
+        <a href="/" style="font-size: 0.8rem; color: var(--text-tertiary); text-decoration: none;">← Volver al Marketplace Público</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('form-admin-login').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const branch = document.getElementById('admin-branch').value;
+      const adminSession = {
+        id: 'usr_admin_master',
+        name: 'Administrador Master (' + branch + ')',
+        role: 'admin',
+        branch: branch,
+        avatar: '⚙️'
+      };
+      localStorage.setItem('gb_admin_session', JSON.stringify(adminSession));
+      localStorage.setItem('gb_user', JSON.stringify(adminSession));
+      window.location.href = '/admin.html';
+    });
+  </script>
+</body>
+</html>
