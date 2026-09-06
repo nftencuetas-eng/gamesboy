@@ -1,0 +1,30 @@
+{
+  "name": "gamesboy-platform",
+  "version": "1.0.0",
+  "description": "GamesBoy.net - Gaming & Web Platform Engine",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "gamesboy",
+    "gaming",
+    "server",
+    "platform"
+  ],
+  "author": "GamesBoy Team",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.13.1",
+    "mysql2": "^3.12.0",
+    "ws": "^8.18.0"
+  }
+}

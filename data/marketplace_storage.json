@@ -1,0 +1,289 @@
+{
+  "users": [
+    {
+      "id": "usr_admin",
+      "name": "Admin GamesBoy",
+      "email": "admin@gamesboy.net",
+      "role": "admin",
+      "avatar": "👑"
+    },
+    {
+      "id": "usr_seller1",
+      "name": "Carlos_Streams",
+      "email": "carlos@vendedor.com",
+      "role": "seller",
+      "avatar": "💼"
+    },
+    {
+      "id": "usr_client1",
+      "name": "Lucas_Py",
+      "email": "lucas@cliente.com",
+      "role": "client",
+      "avatar": "🎮"
+    }
+  ],
+  "wallets": {
+    "usr_admin": {
+      "balanceUsd": 1250,
+      "pendingEscrowUsd": 0
+    },
+    "usr_seller1": {
+      "balanceUsd": 85.5,
+      "pendingEscrowUsd": 22
+    },
+    "usr_client1": {
+      "balanceUsd": 25,
+      "pendingEscrowUsd": 0
+    }
+  },
+  "wallet_transactions": [
+    {
+      "id": "tx_init_1",
+      "userId": "usr_client1",
+      "userName": "Lucas_Py",
+      "type": "deposit",
+      "amountUsd": 25,
+      "currency": "PYG",
+      "localAmount": 187500,
+      "method": "sipap_paraguay",
+      "status": "approved",
+      "reference": "SIPAP-REF-892144",
+      "receiptUrl": "",
+      "notes": "Recarga aprobada por administración",
+      "createdAt": "2026-09-05T02:03:44.019Z"
+    }
+  ],
+  "subscriptions": [
+    {
+      "id": "sub_netflix_official",
+      "sellerId": "usr_admin",
+      "sellerName": "GamesBoy Oficial",
+      "isOfficial": true,
+      "serviceName": "Netflix Premium 4K",
+      "category": "streaming",
+      "planName": "Ultra HD 4 Pantallas",
+      "totalSlots": 4,
+      "availableSlots": 3,
+      "pricePerSlotUsd": 3.5,
+      "credentialsEncrypted": "007715dfcda75da356fb4c2ace04e57f:a0fa0295c904de4e298f0a4572e06bfc35f70fbfc1d19c9598273b15c00c5ec139ee667ec84bf00b1a1a4ddf4930728f",
+      "pinsEncrypted": "33c82e021afaf7625878eab65ad33e54:b6aa1641debf8e322cdb34b0644b7d2334c7c6f3fdf51d4aeefefd1961720d8bc8848a2c4fa64f56f61f875e8e2d169c",
+      "instructions": "Ingresa con el correo y contraseña provistos. Usa exclusivamente tu Perfil y PIN asignado. Prohibido cambiar credenciales.",
+      "status": "active",
+      "createdAt": "2026-09-04T02:03:44.046Z"
+    },
+    {
+      "id": "sub_chatgpt_official",
+      "sellerId": "usr_admin",
+      "sellerName": "GamesBoy Oficial",
+      "isOfficial": true,
+      "serviceName": "ChatGPT Plus (GPT-4o)",
+      "category": "ai",
+      "planName": "Plus Team Seat",
+      "totalSlots": 3,
+      "availableSlots": 2,
+      "pricePerSlotUsd": 6,
+      "credentialsEncrypted": "58d1c48b580ccfb9270da56877b55532:74a023530f21d4c9bc2e9f4dacab57036e642f957b1c08c2ee54586a302ecbaa80c7765c38f6102ab17e887b15e2dc52",
+      "pinsEncrypted": "895fb75c4fd130b36530bf091a660efb:31f204574b32c969b278d2735502b5eb9f144563063153b0d2cdd751600d4583c60d9b6809e5cc979489a6227ae21756",
+      "instructions": "Acceso directo a ChatGPT Plus con GPT-4o, generación de imágenes DALL-E y Canvas.",
+      "status": "active",
+      "createdAt": "2026-09-04T02:03:44.046Z"
+    },
+    {
+      "id": "sub_spotify_seller1",
+      "sellerId": "usr_seller1",
+      "sellerName": "Carlos_Streams",
+      "isOfficial": false,
+      "serviceName": "Spotify Premium Familiar",
+      "category": "streaming",
+      "planName": "Plan Familiar 6 Cuentas",
+      "totalSlots": 5,
+      "availableSlots": 4,
+      "pricePerSlotUsd": 1.8,
+      "credentialsEncrypted": "e2b10f856e56ec9c03f276a9ac2819e9:b210e8ffdfbcf3b5efc4a353d34680088ed3cb045925109f6232c728c7f3a7a3c457275e68a5adabeb4dc3fb3d76555e2b62b81e5ec05e9780454a0a9e468c24737376372425d861d743fcd5ce786247",
+      "pinsEncrypted": "3e076355087d090cd8ad85f955beb16f:dc8b2698ca942180803d1cd2fdc2c71c",
+      "instructions": "Recibirás un enlace de invitación oficial para activar Spotify Premium en tu propia cuenta personal.",
+      "status": "active",
+      "createdAt": "2026-09-05T02:03:44.046Z"
+    },
+    {
+      "id": "sub_disney_official",
+      "sellerId": "usr_admin",
+      "sellerName": "GamesBoy Oficial",
+      "isOfficial": true,
+      "serviceName": "Disney+ Premium & Star+",
+      "category": "streaming",
+      "planName": "Plan Premium 4K HDR",
+      "totalSlots": 4,
+      "availableSlots": 3,
+      "pricePerSlotUsd": 2.8,
+      "credentialsEncrypted": "cdb9151bbd51154b97446800d0badfeb:02dac6539443244ff7b41a271a7527fdabf03699e049e80c1a4ac9d3a3839ce4743fcfaff450038726f457cdf18cf2a8",
+      "pinsEncrypted": "c75f4b6109acb5144aeccacd8da44e19:1f56db6ad2bbe0f87b90bdc77d148242bd70bde9022a1a584753b960f73749d11c0bd36e28daee55c43d71a3b57902e2",
+      "instructions": "Acceso al catálogo completo de Disney, Marvel, Star Wars y deportes de ESPN.",
+      "status": "active",
+      "createdAt": "2026-09-05T14:03:44.047Z"
+    },
+    {
+      "id": "sub_canva_official",
+      "sellerId": "usr_admin",
+      "sellerName": "GamesBoy Oficial",
+      "isOfficial": true,
+      "serviceName": "Canva Pro Diseñador",
+      "category": "ai",
+      "planName": "Equipo Pro Ilimitado",
+      "totalSlots": 5,
+      "availableSlots": 4,
+      "pricePerSlotUsd": 2.5,
+      "credentialsEncrypted": "7c08c6f4578d335dc9180fd6c46b2876:5377443da1515f90346cdabb732fdadb610972330c7bfe537737a47dcdf6440ac7f759ee63cbd0f13d43ca276d6bf56881ad0ebc357bfaaeb7bfd76fc1acd03f5f74552394486a7e8a6da86976f1a921",
+      "pinsEncrypted": "5e48f935e993ba3b9bb6dbafaa62845d:0c9cc472dc3e3cbb2856489012630703",
+      "instructions": "Te unes a nuestro equipo de Canva Pro con tu propio correo, manteniendo todos tus diseños privados.",
+      "status": "active",
+      "createdAt": "2026-09-05T14:03:44.047Z"
+    },
+    {
+      "id": "sub_youtube_seller1",
+      "sellerId": "usr_seller1",
+      "sellerName": "Carlos_Streams",
+      "isOfficial": false,
+      "serviceName": "YouTube Premium & Music",
+      "category": "streaming",
+      "planName": "Familiar Sin Anuncios",
+      "totalSlots": 5,
+      "availableSlots": 3,
+      "pricePerSlotUsd": 2,
+      "credentialsEncrypted": "b9f1306ee4ad319572c7c3dce7aa6f07:676363e9187888e960fa2e7436a867b8b3840efcccfa005d9aac2ae3d4c44e924bd69ec2b04e7336ac402c97f15438e8b8f63ecfc8445ee8e68860b3282dc7b7709ba41e4fe0f7a621be1f14935e5ea0",
+      "pinsEncrypted": "df190fd15012ea804c1eff9d14ca27c7:86ff47964de59cc762879f6b3118eca2",
+      "instructions": "YouTube sin anuncios, descargas offline y YouTube Music en tu propia cuenta de Google.",
+      "status": "active",
+      "createdAt": "2026-09-05T20:03:44.048Z"
+    }
+  ],
+  "user_slots": [
+    {
+      "id": "slot_active_1",
+      "subscriptionId": "sub_netflix_official",
+      "serviceName": "Netflix Premium 4K",
+      "buyerId": "usr_client1",
+      "buyerName": "Lucas_Py",
+      "slotNumber": 1,
+      "assignedPin": "1244",
+      "credentialsEncrypted": "f8b73ebcff208f530159a34c163b3a52:39f729a970269750526eb32f3d5f4a7632a66821d1a6ea51e3ebe73c544b83cb3cf0ab1c6b293dae2588201d6a9313c6",
+      "pricePaidUsd": 3.5,
+      "expiresAt": "2026-10-06T02:03:44.048Z",
+      "createdAt": "2026-09-05T02:03:44.048Z"
+    }
+  ],
+  "store_products": [
+    {
+      "id": "prod_steam_10",
+      "title": "Steam Gift Card $10 USD",
+      "category": "gift_card",
+      "platform": "Steam",
+      "priceUsd": 10,
+      "badge": "Entrega Inmediata",
+      "icon": "🎮",
+      "description": "Tarjeta de regalo digital oficial para recargar tu billetera de Steam.",
+      "stockCount": 15,
+      "codes": [
+        "STEAM-9821-KLA9-9921",
+        "STEAM-4412-ZZMA-7712",
+        "STEAM-1902-OPPA-5511"
+      ]
+    },
+    {
+      "id": "prod_psn_10",
+      "title": "PlayStation Network Card $10 USD",
+      "category": "gift_card",
+      "platform": "PlayStation",
+      "priceUsd": 10.5,
+      "badge": "Código Digital",
+      "icon": "🟦",
+      "description": "Código digital de PlayStation Store para compras de juegos y suscripciones.",
+      "stockCount": 8,
+      "codes": [
+        "PSN-9844-3312-8841",
+        "PSN-1123-5599-2244"
+      ]
+    },
+    {
+      "id": "prod_xbox_pass",
+      "title": "Xbox Game Pass Ultimate (1 Mes)",
+      "category": "gift_card",
+      "platform": "Xbox",
+      "priceUsd": 8.5,
+      "badge": "Mejor Precio",
+      "icon": "🟩",
+      "description": "Acceso ilimitado a más de 100 juegos de consola y PC + EA Play.",
+      "stockCount": 12,
+      "codes": [
+        "XBOX-GPU1-9988-2233-1122",
+        "XBOX-GPU1-5544-7766-3344"
+      ]
+    },
+    {
+      "id": "prod_google_play_10",
+      "title": "Google Play Gift Card $10 USD",
+      "category": "gift_card",
+      "platform": "Google Play",
+      "priceUsd": 10,
+      "badge": "Oficial",
+      "icon": "📱",
+      "description": "Recarga saldo en tu cuenta de Google Play para apps, juegos y gemas.",
+      "stockCount": 20,
+      "codes": [
+        "GPLAY-8899-2233-4455",
+        "GPLAY-1122-3344-5566"
+      ]
+    },
+    {
+      "id": "prod_roblox_10",
+      "title": "Roblox 800 Robux Card ($10)",
+      "category": "gift_card",
+      "platform": "Roblox",
+      "priceUsd": 9.8,
+      "badge": "Popular",
+      "icon": "🟥",
+      "description": "Tarjeta de 800 Robux para avatares, skins y pases de juego en Roblox.",
+      "stockCount": 10,
+      "codes": [
+        "ROBLOX-8833-2299-1144",
+        "ROBLOX-5566-7788-9900"
+      ]
+    }
+  ],
+  "user_store_orders": [],
+  "payout_requests": [
+    {
+      "id": "payout_sample_1",
+      "sellerId": "usr_seller1",
+      "sellerName": "Carlos_Streams",
+      "amountUsd": 30,
+      "method": "sipap_paraguay",
+      "status": "pending",
+      "accountDetails": {
+        "bank": "Banco Familiar",
+        "accountHolder": "Carlos Vendedor",
+        "ci": "3.456.789",
+        "accountNumber": "03-998877-1",
+        "aliasSipap": "carlos.stream.py"
+      },
+      "createdAt": "2026-09-06T01:03:44.048Z"
+    }
+  ],
+  "platform_settings": {
+    "commissionPercent": 15,
+    "exchangeRatePyg": 7500,
+    "paraguayBankDetails": {
+      "bank": "Banco Familiar / Itaú Paraguay",
+      "accountHolder": "GamesBoy Paraguay S.A.",
+      "rucOrCi": "80091234-5",
+      "accountNumber": "01-445566-7",
+      "aliasSipap": "gamesboy.py"
+    },
+    "binanceDetails": {
+      "payId": "849201934",
+      "walletAddress": "0x71C9414B3b27bA134a6C3f07a757657A82e4b92F",
+      "network": "USDT (Binance Pay / BEP-20 / TRC-20)",
+      "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F"
+    }
+  }
+}

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GamesBoy.net - Divide Gastos, Disfruta Juntos | Co-Suscripciones & Gift Cards</title>
+  <meta name="description" content="GamesBoy.net - Ahorra hasta un 75% en Netflix, Spotify, ChatGPT Plus, Disney+ y compra Gift Cards digitales con garantía en Paraguay y Latinoamérica.">
+  
+  <!-- Modern Clean Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <a href="#" class="brand" id="brand-logo">
+        <div class="brand-icon-box">🎮</div>
+        <div class="brand-title">GamesBoy<span>.net</span></div>
+      </a>
+
+      <!-- Navigation Links -->
+      <ul class="nav-links">
+        <li><a href="#section-catalog" class="nav-link">Suscripciones</a></li>
+        <li><a href="#section-store" class="nav-link">Gift Cards</a></li>
+        <li><a href="#section-calculator" class="nav-link">Calculadora de Ahorro</a></li>
+        <li><a href="#section-how-it-works" class="nav-link">Cómo Funciona</a></li>
+      </ul>
+
+      <!-- 3-Portal Switcher Tabs -->
+      <div class="nav-tabs">
+        <button class="nav-tab-btn active" data-view="client" id="tab-client">
+          🛒 Marketplace
+        </button>
+        <button class="nav-tab-btn" data-view="seller" id="tab-seller">
+          💼 Vender Cuenta
+        </button>
+        <button class="nav-tab-btn" data-view="admin" id="tab-admin">
+          ⚙️ Admin
+        </button>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <!-- Currency Switcher -->
+      <select id="currency-selector" class="currency-select" title="Moneda">
+        <option value="USD">USD / USDT ($)</option>
+        <option value="PYG">Guaraníes (₲ PYG)</option>
+      </select>
+
+      <!-- Wallet Balance -->
+      <div class="wallet-badge">
+        <span>Saldo:</span>
+        <strong id="nav-wallet-balance">$ 0.00</strong>
+      </div>
+
+      <!-- Quick Deposit Button -->
+      <button class="btn-recharge" id="btn-open-deposit-modal">
+        + Recargar
+      </button>
+
+      <!-- User Persona Dropdown -->
+      <button class="persona-btn" id="btn-persona-toggle" title="Cambiar usuario de prueba">
+        <span id="nav-user-avatar">🎮</span>
+        <span id="nav-user-name">Lucas_Py</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-container">
+
+    <!-- ======================================================= -->
+    <!-- VIEW 1: CLIENT / LANDING & MARKETPLACE                  -->
+    <!-- ======================================================= -->
+    <div id="view-client" class="app-view">
+      
+      <!-- HERO SECTION -->
+      <section class="hero-section">
+        <div class="hero-left">
+          <div class="hero-pill">
+            <span>🚀 Plataforma #1 de Co-Suscripciones en LatAm</span>
+          </div>
+          <h1 class="hero-title">
+            Divide Gastos,<br>
+            <span>Disfruta Juntos !</span>
+          </h1>
+          <p class="hero-subtitle">
+            ¡Libertad de suscripción ahora! Ahorra hasta un 75% en Netflix, Spotify, ChatGPT Plus, Disney+ y Canva Pro compartiendo cuentas con total seguridad y garantía.
+          </p>
+
+          <div class="hero-cta-group">
+            <a href="#section-catalog" class="btn-hero-primary">
+              🔥 Explorar Suscripciones
+            </a>
+            <button class="btn-hero-secondary" id="btn-hero-share-cta">
+              💼 Compartir mi Cuenta
+            </button>
+          </div>
+
+          <div class="hero-trust-metrics">
+            <div class="metric-item">
+              <strong>+10,000</strong>
+              <span>Perfiles Gestionados</span>
+            </div>
+            <div class="metric-item">
+              <strong>98%</strong>
+              <span>Opiniones Excelentes</span>
+            </div>
+            <div class="metric-item">
+              <strong>100%</strong>
+              <span>Garantía de Reemplazo</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Right: 3D Mascot & Floating Brand Bubbles -->
+        <div class="hero-visual-wrapper">
+          <div class="mascot-image-card floating">
+            <img src="/assets/mascot_hero.jpg" alt="GamesBoy Mascot">
+          </div>
+
+          <!-- Floating Badges -->
+          <div class="floating-badge badge-1 floating-slow">
+            <div class="floating-icon" style="background: #e50914;">🍿</div>
+            <div>
+              <div style="font-size: 0.72rem; color: var(--text-tertiary);">Netflix 4K</div>
+              <strong style="color: #fff;">$ 3.50 /mes</strong>
+            </div>
+          </div>
+
+          <div class="floating-badge badge-2 floating">
+            <div class="floating-icon" style="background: #10a37f;">🤖</div>
+            <div>
+              <div style="font-size: 0.72rem; color: var(--text-tertiary);">ChatGPT Plus</div>
+              <strong style="color: #fff;">$ 6.00 /mes</strong>
+            </div>
+          </div>
+
+          <div class="floating-badge badge-3 floating-slow">
+            <div class="floating-icon" style="background: #1db954;">🎧</div>
+            <div>
+              <div style="font-size: 0.72rem; color: var(--text-tertiary);">Spotify Premium</div>
+              <strong style="color: #fff;">$ 1.80 /mes</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Planet Orbit Banner -->
+      <section class="community-orbit-banner">
+        <div style="font-size: 2rem; margin-bottom: 8px;">🤩</div>
+        <h2 class="orbit-title">Encuentra co-suscriptores y alcanza la libertad de suscripción</h2>
+        <p class="orbit-desc">Conecta con miles de usuarios en Paraguay y toda Latinoamérica para compartir gastos de forma automatizada y con garantía de reembolso.</p>
+      </section>
+
+      <!-- MY VAULT (CREDENTIALS SECTION) -->
+      <section class="vault-container" id="my-vault-section">
+        <div class="section-header">
+          <h2 class="section-title">🔐 Mi Bóveda de Suscripciones & Códigos</h2>
+          <span style="font-size: 0.8rem; color: var(--text-tertiary);">Tus credenciales, perfiles y códigos de Gift Cards activos</span>
+        </div>
+        <div id="vault-list-container">
+          <!-- Injected via JavaScript -->
+        </div>
+      </section>
+
+      <!-- INTERACTIVE SAVINGS CALCULATOR -->
+      <section class="calculator-card" id="section-calculator">
+        <div class="section-header" style="border: none; padding-bottom: 0;">
+          <h2 class="section-title">📊 Calculadora Interactiva de Ahorro</h2>
+          <span style="font-size: 0.82rem; color: var(--text-tertiary);">Selecciona tus servicios y mira cuánto dinero ahorras</span>
+        </div>
+        
+        <div class="calc-grid" style="margin-top: 1.5rem;">
+          <div>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">Haz clic en los servicios que usas actualmente:</p>
+            <div class="calc-services-list" id="calc-services-container">
+              <!-- Injected by app.js -->
+            </div>
+          </div>
+
+          <div class="calc-result-box">
+            <div style="font-size: 0.85rem; color: var(--text-tertiary); text-transform: uppercase; font-weight: 700;">Tu Ahorro Anual Estimado</div>
+            <div class="calc-savings-number" id="calc-savings-total">$ 420.00</div>
+            <div style="font-size: 0.9rem; color: var(--text-secondary);" id="calc-savings-pyg">Aprox. ₲ 3.150.000 Guaraníes / año</div>
+            
+            <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle); font-size: 0.82rem; color: var(--text-tertiary);">
+              Precio Oficial: <span id="calc-official-price">$ 45.00/m</span> | Con GamesBoy: <strong id="calc-gamesboy-price" style="color: var(--accent-orange);">$ 10.00/m</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUBSCRIPTIONS CATALOG SECTION -->
+      <section id="section-catalog">
+        <div class="section-header">
+          <div class="section-title">
+            <span>📦 Catálogo de Suscripciones Compartidas</span>
+          </div>
+          <div class="filter-pills">
+            <button class="filter-pill active" data-category="all">Todos</button>
+            <button class="filter-pill" data-category="streaming">Streaming & Cine</button>
+            <button class="filter-pill" data-category="ai">Inteligencia Artificial</button>
+            <button class="filter-pill" data-category="store">Tienda Gift Cards</button>
+          </div>
+        </div>
+
+        <div class="catalog-grid" id="subscriptions-grid">
+          <!-- Injected via JavaScript -->
+        </div>
+      </section>
+
+      <!-- DIGITAL GOODS & GIFT CARDS STORE -->
+      <section id="section-store">
+        <div class="section-header">
+          <h2 class="section-title">🎁 Tienda de Tarjetas de Regalo & Licencias</h2>
+          <span style="font-size: 0.82rem; color: var(--text-tertiary);">Códigos digitales oficiales con entrega inmediata</span>
+        </div>
+        <div class="store-grid" id="store-products-grid">
+          <!-- Injected via JavaScript -->
+        </div>
+      </section>
+
+      <!-- TWO HALVES: OWNER VS JOINER (GOSPLIT STYLE) -->
+      <section class="two-halves-section" id="section-how-it-works">
+        
+        <!-- Half 1: Host / Owner -->
+        <div class="half-card">
+          <span class="half-badge" style="background: rgba(255, 122, 0, 0.12); color: var(--accent-orange); border: 1px solid rgba(255, 122, 0, 0.3);">
+            Para Dueños de Cuentas
+          </span>
+          <h3 class="half-title">¿Cupos libres en tus suscripciones? <span style="color: var(--accent-orange);">¡No los desperdicies!</span></h3>
+          <p class="half-desc">
+            Si pagas un plan familiar de Netflix, Spotify o Canva Pro y te sobran perfiles, compártelos en GamesBoy.net. Nosotros gestionamos los cobros y tú recibes tus ganancias todos los meses directo a tu banco o Binance.
+          </p>
+          <button class="btn-hero-primary" id="btn-half-publish" style="margin-bottom: 1.5rem; align-self: flex-start;">
+            Compartir Cuenta Ahora >
+          </button>
+          <div class="half-illustration">
+            <img src="/assets/mascot_share.jpg" alt="Compartir suscripciones GamesBoy">
+          </div>
+        </div>
+
+        <!-- Half 2: Joiner / Buyer -->
+        <div class="half-card">
+          <span class="half-badge" style="background: rgba(59, 130, 246, 0.12); color: var(--accent-blue); border: 1px solid rgba(59, 130, 246, 0.3);">
+            Para Co-Suscriptores
+          </span>
+          <h3 class="half-title">¿Quieres pagar menos? <span style="color: var(--accent-blue);">¡Es fácil unirte!</span></h3>
+          <p class="half-desc">
+            Disfruta de tus suscripciones favoritas pagando únicamente por tu perfil. Recarga tu saldo con transferencia bancaria SIPAP en Paraguay o con USDT en Binance y accede de forma inmediata con total garantía.
+          </p>
+          <a href="#section-catalog" class="btn-hero-secondary" style="margin-bottom: 1.5rem; align-self: flex-start; text-align: center;">
+            Unirse a un Grupo >
+          </a>
+          <div class="half-illustration">
+            <img src="/assets/mascot_hero.jpg" alt="Ahorrar en suscripciones GamesBoy">
+          </div>
+        </div>
+
+      </section>
+
+      <!-- 4 VALUE PILLARS (GARANTÍAS) -->
+      <section class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-icon-circle">🔒</div>
+          <h3 class="pillar-title">Pago Seguro & Escrow</h3>
+          <p class="pillar-desc">Los fondos se resguardan de forma segura hasta que confirmas que tu acceso al servicio funciona al 100%.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon-circle">🔐</div>
+          <h3 class="pillar-title">Bóveda Encriptada</h3>
+          <p class="pillar-desc">Tus contraseñas y PINs de perfil se protegen bajo cifrado de grado militar AES-256 en servidores blindados.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon-circle">🇵🇾</div>
+          <h3 class="pillar-title">Pagos Locales & Cripto</h3>
+          <p class="pillar-desc">Paga en Guaraníes con SIPAP en bancos de Paraguay o globalmente con USDT a través de Binance Pay.</p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon-circle">⚡</div>
+          <h3 class="pillar-title">Garantía de Reembolso</h3>
+          <p class="pillar-desc">Si una cuenta presenta inconvenientes, nuestro sistema automatizado la reemplaza o te devuelve tu saldo al instante.</p>
+        </div>
+      </section>
+
+      <!-- REVIEWS & SOCIAL PROOF -->
+      <section class="reviews-section">
+        <div class="reviews-score">98% Reseñas Positivas</div>
+        <p style="color: var(--text-secondary); max-width: 500px; margin: 0 auto;">Miles de clientes en Paraguay y Latinoamérica confían en GamesBoy.net para optimizar sus gastos digitales.</p>
+
+        <div class="reviews-grid">
+          <div class="review-card">
+            "Excelente plataforma. Llevo 4 meses compartiendo mi cuenta de Netflix 4K y cobro puntual todos los meses a mi cuenta de Banco Familiar. 10/10."
+            <div class="review-author">
+              <div class="author-avatar" style="background: #e11d48;">MR</div>
+              <div>
+                <strong style="color: #fff; font-size: 0.85rem;">Marcos R.</strong>
+                <div style="font-size: 0.75rem; color: var(--accent-emerald);">✔ Host Verificado (Asunción)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="review-card">
+            "Compré un perfil de ChatGPT Plus y me entregaron el acceso en el acto con mi PIN personal. Ahorro más de $14 dólares al mes comparado con pagar solo."
+            <div class="review-author">
+              <div class="author-avatar" style="background: #2563eb;">SB</div>
+              <div>
+                <strong style="color: #fff; font-size: 0.85rem;">Sofía B.</strong>
+                <div style="font-size: 0.75rem; color: var(--accent-emerald);">✔ Cliente Verificado (CDE)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="review-card">
+            "Recargué con USDT por Binance Pay, subí la captura y me acreditaron en 3 minutos. Compré una tarjeta de Steam de $10 y el código funcionó perfecto."
+            <div class="review-author">
+              <div class="author-avatar" style="background: #d97706;">DG</div>
+              <div>
+                <strong style="color: #fff; font-size: 0.85rem;">Diego G.</strong>
+                <div style="font-size: 0.75rem; color: var(--accent-emerald);">✔ Cliente Verificado (Encarnación)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- VIEW 2: SELLER / HOST PORTAL                            -->
+    <!-- ======================================================= -->
+    <div id="view-seller" class="app-view" style="display: none;">
+      
+      <div class="section-header">
+        <h1 class="section-title">💼 Panel de Vendedor / Proveedor</h1>
+        <button class="btn-recharge" id="btn-open-payout-modal">
+          💸 Solicitar Retiro de Ganancias
+        </button>
+      </div>
+
+      <!-- Seller Stats Grid -->
+      <div class="portal-stats-grid">
+        <div class="portal-stat-card">
+          <div class="portal-stat-title">Saldo Disponible para Retiro</div>
+          <div class="portal-stat-val" id="seller-stat-balance" style="color: var(--accent-emerald);">$ 0.00</div>
+          <div style="font-size: 0.75rem; color: var(--text-tertiary);" id="seller-stat-balance-pyg">₲ 0</div>
+        </div>
+        <div class="portal-stat-card">
+          <div class="portal-stat-title">Saldo en Garantía (Escrow)</div>
+          <div class="portal-stat-val" id="seller-stat-escrow" style="color: var(--accent-amber);">$ 0.00</div>
+          <div style="font-size: 0.75rem; color: var(--text-tertiary);">Se libera durante el ciclo</div>
+        </div>
+        <div class="portal-stat-card">
+          <div class="portal-stat-title">Slots Totales Vendidos</div>
+          <div class="portal-stat-val" id="seller-stat-slots">0</div>
+          <div style="font-size: 0.75rem; color: var(--text-tertiary);">Suscriptores activos</div>
+        </div>
+        <div class="portal-stat-card">
+          <div class="portal-stat-title">Comisión de Plataforma</div>
+          <div class="portal-stat-val" id="seller-stat-commission">15%</div>
+          <div style="font-size: 0.75rem; color: var(--text-tertiary);">Por slot completado</div>
+        </div>
+      </div>
+
+      <!-- Publish Subscription Form -->
+      <div class="form-box">
+        <h2 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem;">➕ Publicar Nueva Cuenta Compartida</h2>
+        <form id="form-publish-subscription">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Servicio / Plataforma</label>
+              <select id="pub-service-name" class="form-select" required>
+                <option value="Netflix Premium 4K">Netflix Premium 4K</option>
+                <option value="Spotify Premium Familiar">Spotify Premium Familiar</option>
+                <option value="Disney+ Premium & Star+">Disney+ Premium & Star+</option>
+                <option value="Max (HBO) 4K">Max (HBO) 4K</option>
+                <option value="YouTube Premium">YouTube Premium</option>
+                <option value="ChatGPT Plus (GPT-4o)">ChatGPT Plus (GPT-4o)</option>
+                <option value="Canva Pro Diseñador">Canva Pro Diseñador</option>
+                <option value="Midjourney AI">Midjourney AI</option>
+                <option value="Claude Pro">Claude Pro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Categoría</label>
+              <select id="pub-category" class="form-select" required>
+                <option value="streaming">Streaming & Video</option>
+                <option value="ai">Inteligencia Artificial & Software</option>
+                <option value="gaming">Gaming & Juegos</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Cupos / Slots a Compartir (1 - 5)</label>
+              <input type="number" id="pub-slots" class="form-input" min="1" max="5" value="3" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Precio por Slot / Mes (USD / USDT)</label>
+              <input type="number" id="pub-price" class="form-input" step="0.10" min="0.5" value="3.00" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Credenciales (Email ::: Contraseña o Enlace de Invitación)</label>
+            <input type="text" id="pub-credentials" class="form-input" placeholder="ej: micuenta@gmail.com:::PassSeguro123! o https://enlace-invitacion.com" required>
+            <span style="font-size: 0.75rem; color: var(--text-tertiary);">🔒 Se encriptan automáticamente con AES-256 en la base de datos blindada.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">PINs por Perfil (Formato JSON: {"1":"1122", "2":"3344", "3":"5566"})</label>
+            <input type="text" id="pub-pins" class="form-input" placeholder='{"1":"1122", "2":"3344", "3":"5566"}'>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Instrucciones para el Comprador</label>
+            <input type="text" id="pub-instructions" class="form-input" placeholder="ej: Usa exclusivamente tu perfil asignado y no modifiques la contraseña." required>
+          </div>
+
+          <button type="submit" class="btn-primary-block">Publicar Suscripción</button>
+        </form>
+      </div>
+
+      <!-- Seller Active Listings Table -->
+      <div class="table-wrapper">
+        <div class="section-header" style="padding: 12px 16px; margin-bottom: 0;">
+          <h3 class="section-title">📋 Mis Publicaciones Activas</h3>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Servicio</th>
+              <th>Slots Disponibles</th>
+              <th>Precio / Slot</th>
+              <th>Estado</th>
+              <th>Bóveda Encriptada</th>
+            </tr>
+          </thead>
+          <tbody id="seller-listings-table-body">
+            <!-- Injected via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- VIEW 3: ADMIN / MANAGEMENT PORTAL                       -->
+    <!-- ======================================================= -->
+    <div id="view-admin" class="app-view" style="display: none;">
+      
+      <div class="section-header">
+        <h1 class="section-title">⚙️ Panel de Administración & Control</h1>
+        <div class="badge-official">ADMINISTRADOR MASTER</div>
+      </div>
+
+      <!-- Admin Stats Grid -->
+      <div class="portal-stats-grid">
+        <div class="portal-stat-card">
+          <div class="portal-stat-title">Recargas Pendientes</div>
+          <div class="portal-stat-val" id="admin-stat-pending-deposits" style="color: var(--accent-amber);">0</div>
+        </div>
+        <div class="portal-stat-card">
+          <div class="portal-stat-title">Retiros Pendientes</div>
+          <div class="portal-stat-val" id="admin-stat-pending-payouts" style="color: var(--accent-red);">0</div>
+        </div>
+        <div class="portal-stat-card">
+          <div class="portal-stat-title">Volumen Total Ventas</div>
+          <div class="portal-stat-val" id="admin-stat-sales-volume">$ 0.00</div>
+        </div>
+        <div class="portal-stat-card">
+          <div class="portal-stat-title">Balance Caja Admin</div>
+          <div class="portal-stat-val" id="admin-stat-balance" style="color: var(--accent-emerald);">$ 0.00</div>
+        </div>
+      </div>
+
+      <!-- Pending Deposit Approvals Table -->
+      <div class="table-wrapper">
+        <div class="section-header" style="padding: 12px 16px; margin-bottom: 0;">
+          <h3 class="section-title">📥 Bandeja de Comprobantes de Recarga Pendientes</h3>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Monto USD</th>
+              <th>Monto Local</th>
+              <th>Método</th>
+              <th>Referencia / Comprobante</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="admin-pending-deposits-body">
+            <!-- Injected via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pending Payout Requests Table -->
+      <div class="table-wrapper">
+        <div class="section-header" style="padding: 12px 16px; margin-bottom: 0;">
+          <h3 class="section-title">📤 Solicitudes de Retiro de Vendedores</h3>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Vendedor</th>
+              <th>Monto Retiro</th>
+              <th>Método</th>
+              <th>Datos de Transferencia</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="admin-pending-payouts-body">
+            <!-- Injected via JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Platform Global Settings Form -->
+      <div class="form-box">
+        <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;">⚙️ Configuración Global de GamesBoy.net</h2>
+        <form id="form-admin-settings">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Comisión de la Plataforma (%)</label>
+              <input type="number" id="set-commission-percent" class="form-input" min="0" max="50" step="0.5" value="15" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tasa de Cambio (1 USD = X Guaraníes)</label>
+              <input type="number" id="set-exchange-rate" class="form-input" min="1000" max="15000" step="50" value="7500" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Banco / Titular (Paraguay SIPAP)</label>
+              <input type="text" id="set-bank-holder" class="form-input" placeholder="GamesBoy Paraguay S.A." required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Alias SIPAP / N° Cuenta</label>
+              <input type="text" id="set-bank-account" class="form-input" placeholder="gamesboy.py / 01-445566-7" required>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Binance Pay ID</label>
+              <input type="text" id="set-binance-id" class="form-input" placeholder="849201934" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Billetera USDT (BEP-20 / TRC-20)</label>
+              <input type="text" id="set-binance-wallet" class="form-input" placeholder="0x71C9414B3b27bA134a6C3f07a757657A82e4b92F" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary-block">Guardar Configuración</button>
+        </form>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ======================================================= -->
+  <!-- MODAL: RECARGA DE SALDO (DEPOSIT MODAL)                 -->
+  <!-- ======================================================= -->
+  <div class="modal-overlay" id="modal-deposit">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-size: 1.1rem; font-weight: 700;">💳 Recargar Saldo en Cuenta</h3>
+        <button class="btn-modal-close" id="btn-close-deposit-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Payment Method Tabs -->
+        <div class="payment-tab-buttons">
+          <button class="payment-tab-btn active" data-method="sipap" id="tab-pay-sipap">
+            🇵🇾 Paraguay (SIPAP / Bancos)
+          </button>
+          <button class="payment-tab-btn" data-method="binance" id="tab-pay-binance">
+            🌐 Cripto USDT (Binance)
+          </button>
+        </div>
+
+        <!-- Paraguay Bank Details Box -->
+        <div class="payment-info-box" id="box-pay-sipap">
+          <div class="payment-field-row">
+            <span>Banco:</span>
+            <strong id="pay-info-bank">Banco Familiar / Itaú Paraguay</strong>
+          </div>
+          <div class="payment-field-row">
+            <span>Titular:</span>
+            <strong id="pay-info-holder">GamesBoy Paraguay S.A.</strong>
+          </div>
+          <div class="payment-field-row">
+            <span>RUC / CI:</span>
+            <strong id="pay-info-ruc">80091234-5</strong>
+          </div>
+          <div class="payment-field-row">
+            <span>N° Cuenta:</span>
+            <strong id="pay-info-account">01-445566-7</strong>
+          </div>
+          <div class="payment-field-row">
+            <span>Alias SIPAP:</span>
+            <strong id="pay-info-alias" style="color: var(--accent-orange);">gamesboy.py</strong>
+          </div>
+        </div>
+
+        <!-- Binance USDT Details Box -->
+        <div class="payment-info-box" id="box-pay-binance" style="display: none;">
+          <div style="text-align: center; margin-bottom: 10px;">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F" alt="QR Binance" style="border-radius: 8px; border: 1px solid var(--border-medium);">
+          </div>
+          <div class="payment-field-row">
+            <span>Binance Pay ID:</span>
+            <strong id="pay-info-binance-id">849201934</strong>
+          </div>
+          <div class="payment-field-row">
+            <span>Red:</span>
+            <strong>USDT (BEP-20 / TRC-20)</strong>
+          </div>
+          <div class="payment-field-row">
+            <span>Dirección:</span>
+            <strong style="font-size: 0.72rem; word-break: break-all;" id="pay-info-binance-wallet">0x71C9414B3b27bA134a6C3f07a757657A82e4b92F</strong>
+          </div>
+        </div>
+
+        <!-- Deposit Form -->
+        <form id="form-submit-deposit">
+          <div class="form-group">
+            <label class="form-label" id="label-deposit-amount">Monto a Transferir en Guaraníes (₲ PYG):</label>
+            <input type="number" id="deposit-amount-input" class="form-input" placeholder="ej: 100000" min="10000" step="5000" required>
+            <span style="font-size: 0.75rem; color: var(--text-tertiary);" id="deposit-converted-preview">Recibirás aprox: <strong>$ 13.33 USDT</strong></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">N° de Comprobante / Referencia / TXID:</label>
+            <input type="text" id="deposit-reference-input" class="form-input" placeholder="ej: SIPAP-781923 o Hash Binance" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Adjuntar Captura del Comprobante:</label>
+            <input type="file" id="deposit-receipt-file" class="form-input" accept="image/*" required>
+          </div>
+
+          <button type="submit" class="btn-primary-block" id="btn-submit-deposit-form">Enviar Comprobante para Verificación</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================= -->
+  <!-- MODAL: SOLICITUD DE RETIRO DE VENDEDOR                  -->
+  <!-- ======================================================= -->
+  <div class="modal-overlay" id="modal-payout">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-size: 1.1rem; font-weight: 700;">💸 Solicitar Retiro de Ganancias</h3>
+        <button class="btn-modal-close" id="btn-close-payout-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-submit-payout">
+          <div class="form-group">
+            <label class="form-label">Monto a Retirar en USD / USDT:</label>
+            <input type="number" id="payout-amount-usd" class="form-input" step="1" min="5" placeholder="ej: 30" required>
+            <span style="font-size: 0.75rem; color: var(--text-tertiary);">Equivalente aprox: <strong id="payout-amount-pyg-preview">₲ 0</strong></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Método de Cobro:</label>
+            <select id="payout-method" class="form-select" required>
+              <option value="sipap_paraguay">Transferencia Bancaria Paraguay (SIPAP)</option>
+              <option value="binance_usdt">Binance Pay / Criptomoneda USDT</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="payout-bank-fields">
+            <label class="form-label">Banco, N° Cuenta, Titular y CI / Alias SIPAP:</label>
+            <textarea id="payout-bank-details" class="form-textarea" rows="3" placeholder="Banco Familiar&#10;Titular: Juan Pérez&#10;CI: 3.821.990&#10;Cuenta: 03-998877-1&#10;Alias: juan.perez.py" required></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary-block">Confirmar Solicitud de Retiro</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================= -->
+  <!-- RICH FOOTER WITH SECURITY & TRUST BADGES                -->
+  <!-- ======================================================= -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="brand" style="margin-bottom: 1rem;">
+          <div class="brand-icon-box">🎮</div>
+          <div class="brand-title">GamesBoy<span>.net</span></div>
+        </div>
+        <p style="color: var(--text-tertiary); font-size: 0.85rem; line-height: 1.6; max-width: 300px;">
+          La plataforma líder en Paraguay y Latinoamérica para co-suscripciones, streaming compartido y tarjetas de regalo digitales seguras.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Suscripciones</h4>
+        <ul>
+          <li><a href="#section-catalog">Netflix Premium 4K</a></li>
+          <li><a href="#section-catalog">Spotify Familiar</a></li>
+          <li><a href="#section-catalog">ChatGPT Plus GPT-4o</a></li>
+          <li><a href="#section-catalog">Disney+ & Star+</a></li>
+          <li><a href="#section-catalog">YouTube Premium</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Tienda Digital</h4>
+        <ul>
+          <li><a href="#section-store">Steam Gift Cards</a></li>
+          <li><a href="#section-store">PlayStation Network</a></li>
+          <li><a href="#section-store">Xbox Game Pass</a></li>
+          <li><a href="#section-store">Google Play Cards</a></li>
+          <li><a href="#section-store">Roblox Robux</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Seguridad & Legal</h4>
+        <ul>
+          <li><a href="#">Términos y Condiciones</a></li>
+          <li><a href="#">Política de Garantía</a></li>
+          <li><a href="#">Bóveda Encriptada AES-256</a></li>
+          <li><a href="#">Soporte 24/7 en Vivo</a></li>
+          <li><a href="#">Centro de Ayuda</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Security Badges Row -->
+    <div class="footer-badges-row">
+      <div class="trust-badge">🛡️ SSL 256-bit Secure</div>
+      <div class="trust-badge">🇵🇾 SIPAP Paraguay Verified</div>
+      <div class="trust-badge">🌐 Binance Pay Official Integration</div>
+      <div class="trust-badge">🔒 AES-256 Encrypted Vault</div>
+      <div class="trust-badge">✅ Google Safe Browsing Compliant</div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>© 2026 <strong>GamesBoy.net</strong> • Todos los derechos reservados.</div>
+      <div>Desarrollado con arquitectura blindada SRP para Paraguay y Latinoamérica.</div>
+    </div>
+  </footer>
+
+  <!-- App Client Scripts -->
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
