@@ -1437,9 +1437,294 @@ footer {
   padding: 5px 12px;
   border-radius: var(--radius-sm);
   font-size: 0.78rem;
-  font-weight: 700;
+  font-weight: 600;
   border: none;
   cursor: pointer;
 }
+
+/* ======================================================== */
+/* ULTRA-PREMIUM AUTHENTICATION PAGE & MODAL (LOGIN/SIGNUP) */
+/* ======================================================== */
+.auth-split-layout {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  min-height: 520px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+}
+
+@media (max-width: 900px) {
+  .auth-split-layout {
+    grid-template-columns: 1fr;
+  }
+  .auth-showcase-panel {
+    display: none;
+  }
+}
+
+.auth-form-panel {
+  padding: 2.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--bg-surface);
+}
+
+.auth-brand-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.25rem;
+}
+
+.auth-brand-logo {
+  height: 32px;
+  width: auto;
+}
+
+.auth-header-text h2 {
+  font-family: var(--font-heading);
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.auth-header-text p {
+  font-size: 0.86rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-bottom: 1.25rem;
+}
+
+/* Google Sign-In Official Button */
+.btn-google-auth {
+  width: 100%;
+  background: #ffffff;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-md);
+  padding: 11px 16px;
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-google-auth:hover {
+  background: #f3f4f6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.btn-google-auth .google-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Auth Divider */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.25rem 0;
+  color: var(--text-tertiary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.auth-divider span {
+  padding: 0 12px;
+}
+
+/* Form Inputs with Icons & Password Toggle */
+.input-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon-wrapper .input-leading-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.input-icon-wrapper .form-input {
+  width: 100%;
+  padding-left: 38px;
+  padding-right: 38px;
+  background: rgba(5, 10, 23, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: #ffffff;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.input-icon-wrapper .form-input:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(0, 194, 255, 0.25);
+}
+
+.btn-toggle-password {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 4px;
+  display: grid;
+  place-items: center;
+  transition: color 0.15s ease;
+}
+
+.btn-toggle-password:hover {
+  color: var(--accent-cyan);
+}
+
+.auth-options-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  margin-bottom: 1.25rem;
+}
+
+.auth-remember-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.auth-forgot-link {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease;
+  cursor: pointer;
+}
+
+.auth-forgot-link:hover {
+  color: var(--accent-cyan-light);
+  text-decoration: underline;
+}
+
+/* Auth Submit Button */
+.btn-auth-action {
+  width: 100%;
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color: #040c1e;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 12px 20px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 20px rgba(0, 194, 255, 0.35);
+}
+
+.btn-auth-action:hover {
+  background: linear-gradient(135deg, #38d6ff, #0088ff);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px rgba(0, 194, 255, 0.5);
+}
+
+.auth-switch-footer {
+  margin-top: 1.25rem;
+  text-align: center;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+
+.auth-switch-footer a,
+.auth-switch-footer button {
+  background: transparent;
+  border: none;
+  color: var(--accent-cyan);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  margin-left: 4px;
+}
+
+.auth-switch-footer a:hover,
+.auth-switch-footer button:hover {
+  text-decoration: underline;
+}
+
+/* Auth Showcase Right Panel */
+.auth-showcase-panel {
+  background: linear-gradient(135deg, #071026, #0b1a3d);
+  border-left: 1px solid var(--border-subtle);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-showcase-panel .showcase-art-img {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 35px rgba(0, 150, 255, 0.3));
+  animation: float 4s ease-in-out infinite;
+}
+
+.auth-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 360px;
+  margin-top: 1.5rem;
+}
+
+.auth-feature-badge {
+  background: rgba(8, 16, 36, 0.7);
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: blur(12px);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
 .btn-approve { background: var(--accent-emerald); color: #000; }
 .btn-reject { background: var(--accent-red); color: #fff; }

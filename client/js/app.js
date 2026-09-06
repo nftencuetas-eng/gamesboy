@@ -907,74 +907,253 @@ function setupEventListeners() {
   if (btnOpenDepositModal) btnOpenDepositModal.addEventListener('click', openDepositModal);
   if (btnCloseDepositModal) btnCloseDepositModal.addEventListener('click', closeDepositModal);
 
-  // Auth Modal Setup
+  // Ultra-Premium Auth Modal Setup
   const modalAuth = document.getElementById('modal-auth');
   const btnOpenLoginModal = document.getElementById('btn-open-login-modal');
   const btnOpenRegisterModal = document.getElementById('btn-open-register-modal');
   const btnCloseAuthModal = document.getElementById('btn-close-auth-modal');
-  const authTabLogin = document.getElementById('auth-tab-login');
-  const authTabRegister = document.getElementById('auth-tab-register');
-  const authNameGroup = document.getElementById('auth-name-group');
-  const authRoleGroup = document.getElementById('auth-role-group');
-  const authModalTitle = document.getElementById('auth-modal-title');
-  const btnAuthSubmit = document.getElementById('btn-auth-submit');
-  const formAuth = document.getElementById('form-auth');
+  const btnGoogleSignin = document.getElementById('btn-google-signin');
 
-  let authMode = 'login'; // 'login' | 'register'
+  const formAuthMain = document.getElementById('form-auth-main');
+  const formAuthRecovery = document.getElementById('form-auth-recovery');
+  
+  const authMainTitle = document.getElementById('auth-main-title');
+  const authMainSubtitle = document.getElementById('auth-main-subtitle');
+  const groupAuthName = document.getElementById('group-auth-name');
+  const groupAuthRole = document.getElementById('group-auth-role');
+  const authLoginOptions = document.getElementById('auth-login-options');
+  const textAuthSubmit = document.getElementById('text-auth-submit');
+  
+  const authSwitchQuestion = document.getElementById('auth-switch-question');
+  const btnSwitchAuthMode = document.getElementById('btn-switch-auth-mode');
+  const linkForgotPassword = document.getElementById('link-forgot-password');
+  const linkBackToLogin = document.getElementById('link-back-to-login');
+  
+  const btnTogglePassword = document.getElementById('btn-toggle-password');
+  const inputAuthPassword = document.getElementById('input-auth-password');
+  const recoveryStep2 = document.getElementById('recovery-step-2');
+  const textRecoverySubmit = document.getElementById('text-recovery-submit');
+
+  let currentAuthMode = 'login'; // 'login' | 'register' | 'recovery'
 
   function openAuthModal(mode = 'login') {
-    authMode = mode;
+    currentAuthMode = mode;
     if (modalAuth) modalAuth.classList.add('active');
-    updateAuthModalState();
+    renderAuthMode();
   }
 
   function closeAuthModal() {
     if (modalAuth) modalAuth.classList.remove('active');
   }
 
-  function updateAuthModalState() {
-    if (authMode === 'login') {
-      if (authTabLogin) authTabLogin.classList.add('active');
-      if (authTabRegister) authTabRegister.classList.remove('active');
-      if (authNameGroup) authNameGroup.style.display = 'none';
-      if (authRoleGroup) authRoleGroup.style.display = 'none';
-      if (authModalTitle) authModalTitle.textContent = 'Iniciar Sesión';
-      if (btnAuthSubmit) btnAuthSubmit.textContent = 'Ingresar a GamesBoy';
-    } else {
-      if (authTabLogin) authTabLogin.classList.remove('active');
-      if (authTabRegister) authTabRegister.classList.add('active');
-      if (authNameGroup) authNameGroup.style.display = 'block';
-      if (authRoleGroup) authRoleGroup.style.display = 'block';
-      if (authModalTitle) authModalTitle.textContent = 'Crear Cuenta';
-      if (btnAuthSubmit) btnAuthSubmit.textContent = 'Crear Cuenta en GamesBoy';
+  function renderAuthMode() {
+    if (currentAuthMode === 'login') {
+      if (formAuthMain) formAuthMain.style.display = 'block';
+      if (formAuthRecovery) formAuthRecovery.style.display = 'none';
+      if (authMainTitle) authMainTitle.textContent = '¡Bienvenido de nuevo!';
+      if (authMainSubtitle) authMainSubtitle.textContent = 'Accede a tus suscripciones, bóveda segura y saldo.';
+      if (groupAuthName) groupAuthName.style.display = 'none';
+      if (groupAuthRole) groupAuthRole.style.display = 'none';
+      if (authLoginOptions) authLoginOptions.style.display = 'flex';
+      if (textAuthSubmit) textAuthSubmit.textContent = 'Iniciar Sesión';
+      if (authSwitchQuestion) authSwitchQuestion.textContent = '¿No tienes una cuenta?';
+      if (btnSwitchAuthMode) {
+        btnSwitchAuthMode.textContent = 'Regístrate gratis';
+        btnSwitchAuthMode.style.display = 'inline';
+      }
+    } else if (currentAuthMode === 'register') {
+      if (formAuthMain) formAuthMain.style.display = 'block';
+      if (formAuthRecovery) formAuthRecovery.style.display = 'none';
+      if (authMainTitle) authMainTitle.textContent = 'Crea tu Cuenta';
+      if (authMainSubtitle) authMainSubtitle.textContent = 'Únete a GamesBoy y disfruta de los mejores precios garantizados.';
+      if (groupAuthName) groupAuthName.style.display = 'block';
+      if (groupAuthRole) groupAuthRole.style.display = 'block';
+      if (authLoginOptions) authLoginOptions.style.display = 'none';
+      if (textAuthSubmit) textAuthSubmit.textContent = 'Crear Cuenta en GamesBoy';
+      if (authSwitchQuestion) authSwitchQuestion.textContent = '¿Ya tienes una cuenta?';
+      if (btnSwitchAuthMode) {
+        btnSwitchAuthMode.textContent = 'Inicia sesión';
+        btnSwitchAuthMode.style.display = 'inline';
+      }
+    } else if (currentAuthMode === 'recovery') {
+      if (formAuthMain) formAuthMain.style.display = 'none';
+      if (formAuthRecovery) formAuthRecovery.style.display = 'block';
+      if (authMainTitle) authMainTitle.textContent = 'Recuperar Contraseña';
+      if (authMainSubtitle) authMainSubtitle.textContent = 'Te enviaremos un código para restablecer tu acceso.';
+      if (authSwitchQuestion) authSwitchQuestion.textContent = '';
+      if (btnSwitchAuthMode) btnSwitchAuthMode.style.display = 'none';
+      if (recoveryStep2) recoveryStep2.style.display = 'none';
+      if (textRecoverySubmit) textRecoverySubmit.textContent = 'Enviar Código de Recuperación';
     }
   }
 
   if (btnOpenLoginModal) btnOpenLoginModal.addEventListener('click', () => openAuthModal('login'));
   if (btnOpenRegisterModal) btnOpenRegisterModal.addEventListener('click', () => openAuthModal('register'));
   if (btnCloseAuthModal) btnCloseAuthModal.addEventListener('click', closeAuthModal);
-  if (authTabLogin) authTabLogin.addEventListener('click', () => { authMode = 'login'; updateAuthModalState(); });
-  if (authTabRegister) authTabRegister.addEventListener('click', () => { authMode = 'register'; updateAuthModalState(); });
 
-  if (formAuth) {
-    formAuth.addEventListener('submit', (e) => {
+  if (btnSwitchAuthMode) {
+    btnSwitchAuthMode.addEventListener('click', () => {
+      openAuthModal(currentAuthMode === 'login' ? 'register' : 'login');
+    });
+  }
+
+  if (linkForgotPassword) {
+    linkForgotPassword.addEventListener('click', (e) => {
       e.preventDefault();
-      const email = document.getElementById('auth-email-input').value;
-      const role = authMode === 'register' ? document.getElementById('auth-role-select').value : 'client';
-      const name = authMode === 'register' ? (document.getElementById('auth-name-input').value || email.split('@')[0]) : email.split('@')[0];
+      openAuthModal('recovery');
+    });
+  }
 
-      state.currentUser = {
-        id: 'usr_' + Date.now(),
-        name,
-        email,
-        role,
-        avatar: role === 'seller' ? '💼' : (role === 'admin' ? '👑' : '🎮')
-      };
-      
-      updateHeaderDisplay();
-      closeAuthModal();
-      alert(`🎉 ¡Bienvenido a GamesBoy.net, ${state.currentUser.name}!`);
-      if (role === 'seller') switchView('seller');
+  if (linkBackToLogin) {
+    linkBackToLogin.addEventListener('click', (e) => {
+      e.preventDefault();
+      openAuthModal('login');
+    });
+  }
+
+  // Show / Hide Password toggle
+  if (btnTogglePassword && inputAuthPassword) {
+    btnTogglePassword.addEventListener('click', () => {
+      const type = inputAuthPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+      inputAuthPassword.setAttribute('type', type);
+      btnTogglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+  }
+
+  // Google Sign-In Integration
+  if (btnGoogleSignin) {
+    btnGoogleSignin.addEventListener('click', async () => {
+      try {
+        const res = await fetch('/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            googleUser: {
+              name: 'Usuario Google',
+              email: 'usuario.google@gmail.com'
+            }
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          state.currentUser = data.user;
+          state.wallet = data.wallet;
+          updateHeaderDisplay();
+          closeAuthModal();
+          alert(`🎉 ¡Autenticado exitosamente con Google como ${data.user.name}!`);
+        }
+      } catch (err) {
+        alert('Error al conectar con Google: ' + err.message);
+      }
+    });
+  }
+
+  // Main Auth Form Submit (Login / Register)
+  if (formAuthMain) {
+    formAuthMain.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('input-auth-email').value;
+      const password = document.getElementById('input-auth-password').value;
+
+      if (currentAuthMode === 'login') {
+        try {
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await res.json();
+          if (res.ok) {
+            state.currentUser = data.user;
+            state.wallet = data.wallet;
+            updateHeaderDisplay();
+            closeAuthModal();
+            alert(`✅ ${data.message}`);
+            if (data.user.role === 'seller') switchView('seller');
+          } else {
+            alert('❌ ' + (data.error || 'Error al iniciar sesión'));
+          }
+        } catch (err) {
+          alert('Error de conexión: ' + err.message);
+        }
+      } else {
+        // Register Mode
+        const name = document.getElementById('input-auth-name').value;
+        const role = document.getElementById('select-auth-role').value;
+
+        try {
+          const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password, role })
+          });
+          const data = await res.json();
+          if (res.ok) {
+            state.currentUser = data.user;
+            state.wallet = data.wallet;
+            updateHeaderDisplay();
+            closeAuthModal();
+            alert(`🎉 ¡Bienvenido a GamesBoy.net, ${data.user.name}! Cuenta creada.`);
+            if (role === 'seller') switchView('seller');
+          } else {
+            alert('❌ ' + (data.error || 'Error al registrarte'));
+          }
+        } catch (err) {
+          alert('Error de conexión: ' + err.message);
+        }
+      }
+    });
+  }
+
+  // Password Recovery Form Submit
+  if (formAuthRecovery) {
+    formAuthRecovery.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('input-recovery-email').value;
+      const isStep2 = recoveryStep2 && recoveryStep2.style.display === 'block';
+
+      if (!isStep2) {
+        try {
+          const res = await fetch('/api/auth/forgot-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+          const data = await res.json();
+          if (res.ok) {
+            alert(`📨 ${data.message} \n(Código de prueba generado: ${data.resetCodeHint})`);
+            if (recoveryStep2) recoveryStep2.style.display = 'block';
+            if (document.getElementById('input-recovery-code')) {
+              document.getElementById('input-recovery-code').value = data.resetCodeHint;
+            }
+            if (textRecoverySubmit) textRecoverySubmit.textContent = 'Actualizar Contraseña';
+          } else {
+            alert('❌ ' + data.error);
+          }
+        } catch (err) {
+          alert('Error: ' + err.message);
+        }
+      } else {
+        const code = document.getElementById('input-recovery-code').value;
+        const newPassword = document.getElementById('input-recovery-newpass').value;
+
+        try {
+          const res = await fetch('/api/auth/reset-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, newPassword, code })
+          });
+          const data = await res.json();
+          if (res.ok) {
+            alert('✅ ' + data.message);
+            openAuthModal('login');
+          } else {
+            alert('❌ ' + data.error);
+          }
+        } catch (err) {
+          alert('Error: ' + err.message);
+        }
+      }
     });
   }
 
