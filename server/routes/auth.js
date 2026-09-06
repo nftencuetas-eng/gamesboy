@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getDb, saveStorage } from '../config/database.js';
 import postgresAdapter from '../db/postgresAdapter.js';
-import { getWallet, initUserWallet } from '../services/walletService.js';
+import { getWallet } from '../services/walletService.js';
 import cryptoService from '../services/cryptoService.js';
 
 const router = Router();
@@ -70,7 +70,7 @@ router.post('/login', async (req, res) => {
       avatar: '🎮'
     };
     db.users.push(user);
-    initUserWallet(user.id);
+    getWallet(user.id);
     saveStorage();
 
     if (postgresAdapter.isPgConnected()) {
@@ -125,7 +125,7 @@ router.post('/register', async (req, res) => {
   };
 
   db.users.push(user);
-  initUserWallet(user.id);
+  getWallet(user.id);
   saveStorage();
 
   if (postgresAdapter.isPgConnected()) {
@@ -174,7 +174,7 @@ router.post('/google', async (req, res) => {
       avatar: '🌐'
     };
     db.users.push(user);
-    initUserWallet(user.id);
+    getWallet(user.id);
     saveStorage();
 
     if (postgresAdapter.isPgConnected()) {
