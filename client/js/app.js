@@ -1183,12 +1183,6 @@ function initPayoutModal() {
 }
 
 function initUserSession() {
-  // If logged in as admin on the client store, automatically isolate and redirect to /admin
-  if (state.currentUser && (state.currentUser.role === 'admin' || state.currentUser.email === 'admin@gamesboy.net')) {
-    window.location.replace('/admin');
-    return;
-  }
-
   const unloggedGroup = document.getElementById('auth-unlogged-group');
   const loggedGroup = document.getElementById('auth-logged-group');
   const navUserName = document.getElementById('nav-user-name');
@@ -1234,7 +1228,7 @@ function initUserSession() {
     if (dropdownUserAvatarImg) dropdownUserAvatarImg.src = avatarSrc;
   };
 
-  if (state.currentUser && state.currentUser.name && state.currentUser.role !== 'admin') {
+  if (state.currentUser && state.currentUser.name) {
     if (unloggedGroup) {
       unloggedGroup.classList.add('is-hidden');
       unloggedGroup.style.display = 'none';
