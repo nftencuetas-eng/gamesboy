@@ -904,33 +904,67 @@ router.post('/smm/test-connection', (req, res) => {
 });
 
 // =======================================================
-// 6. GESTIÓN DE USUARIOS & BILLETERAS
+// 6. GESTIÓN DE USUARIOS & BILLETERAS AUDITADAS
 // =======================================================
 router.get('/users', (req, res) => {
   try {
     const db = getDb();
     const rate = db.platform_settings?.exchangeRatePyg || 7500;
     
+    let totalWalletBalanceUsd = 0;
+    let totalPendingEscrowUsd = 0;
+
     const usersList = (db.users || []).map(u => {
       const wallet = getWallet(u.id);
       const ordersCount = (db.user_slots || []).filter(s => s.buyerId === u.id).length + 
                           (db.user_store_orders || []).filter(o => o.buyerId === u.id).length;
+      
+      const balUsd = wallet.balanceUsd || 0;
+      const escrowUsd = wallet.pendingEscrowUsd || 0;
+      totalWalletBalanceUsd += balUsd;
+      totalPendingEscrowUsd += escrowUsd;
+
       return {
         id: u.id,
         name: u.name,
         email: u.email,
         role: u.role || 'client',
         avatar: u.avatar || '/assets/branding/icon.png',
-        balanceUsd: wallet.balanceUsd || 0,
-        balancePyg: Math.round((wallet.balanceUsd || 0) * rate),
-        pendingEscrowUsd: wallet.pendingEscrowUsd || 0,
+        balanceUsd: balUsd,
+        balancePyg: Math.round(balUsd * rate),
+        pendingEscrowUsd: escrowUsd,
+        pendingEscrowPyg: Math.round(escrowUsd * rate),
         ordersCount,
         phone: u.phone || '',
         createdAt: u.createdAt || new Date().toISOString()
       };
     });
 
-    res.json({ success: true, count: usersList.length, users: usersList });
+    // Compute approved deposits and payouts
+    const approvedDepositsUsd = (db.wallet_transactions || [])
+      .filter(t => t.type === 'deposit' && t.status === 'approved')
+      .reduce((sum, t) => sum + (t.amountUsd || 0), 0);
+
+    const approvedPayoutsUsd = (db.wallet_transactions || [])
+      .filter(t => t.type === 'payout' && t.status === 'approved')
+      .reduce((sum, t) => sum + (t.amountUsd || 0), 0);
+
+    const stats = {
+      totalUsers: usersList.length,
+      clientsCount: usersList.filter(u => u.role === 'client').length,
+      sellersCount: usersList.filter(u => u.role === 'seller').length,
+      adminsCount: usersList.filter(u => u.role === 'admin').length,
+      totalBalanceUsd: parseFloat(totalWalletBalanceUsd.toFixed(2)),
+      totalBalancePyg: Math.round(totalWalletBalanceUsd * rate),
+      totalEscrowUsd: parseFloat(totalPendingEscrowUsd.toFixed(2)),
+      totalEscrowPyg: Math.round(totalPendingEscrowUsd * rate),
+      approvedDepositsUsd: parseFloat(approvedDepositsUsd.toFixed(2)),
+      approvedDepositsPyg: Math.round(approvedDepositsUsd * rate),
+      approvedPayoutsUsd: parseFloat(approvedPayoutsUsd.toFixed(2)),
+      approvedPayoutsPyg: Math.round(approvedPayoutsUsd * rate)
+    };
+
+    res.json({ success: true, count: usersList.length, users: usersList, stats });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

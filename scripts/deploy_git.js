@@ -39,7 +39,7 @@ async function deploy() {
     }
 
     // 3. Commit
-    const commitMsg = 'feat: Dedicated Streaming Platform Hubs with horizontal & vertical desktop banners, live AI releases sync, host group privacy and Escrow Guarantee protection';
+    const commitMsg = 'feat: Master Admin overhaul - Hero Accordion Banners Editor, strict auditor role separation, professional categorized sidebar, 10-per-page paginated Users directory with accounting KPIs';
     const sha = await git.commit({
       fs,
       dir,

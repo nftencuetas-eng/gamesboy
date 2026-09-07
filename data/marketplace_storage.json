@@ -382,14 +382,50 @@
   "hero_banners": [
     {
       "id": "banner_fc25",
-      "title": "EA SPORTS FC 25",
-      "tagline": "CLUBES & ULTIMATE TEAM",
+      "title": "EA SPORTS FC 25 (Edición Campeones)",
+      "tagline": "CLUBES, ULTIMATE TEAM & MODO CARRERA",
       "badge": "PS5 • XBOX • PC",
-      "imgHorizontal": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2",
-      "imgVertical": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2",
+      "imgHorizontal": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1600&q=80",
+      "imgVertical": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80",
       "ctaText": "Ver Ediciones",
       "ctaUrl": "#section-games",
       "sortOrder": 0,
+      "isActive": true
+    },
+    {
+      "id": "banner_spiderman2",
+      "title": "MARVEL SPIDER-MAN 2",
+      "tagline": "BE GREATER. TOGETHER.",
+      "badge": "PS5 EXCLUSIVE",
+      "imgHorizontal": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1600&q=80",
+      "imgVertical": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
+      "ctaText": "Comprar ahora",
+      "ctaUrl": "#section-games",
+      "sortOrder": 1,
+      "isActive": true
+    },
+    {
+      "id": "banner_cod_bo6",
+      "title": "CALL OF DUTY: BLACK OPS 6",
+      "tagline": "LA VERDAD MIENTE. VUELVE EL REY DEL SHOOTER",
+      "badge": "CROSS-GEN BUNDLE",
+      "imgHorizontal": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80",
+      "imgVertical": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+      "ctaText": "Comprar Código",
+      "ctaUrl": "#section-games",
+      "sortOrder": 2,
+      "isActive": true
+    },
+    {
+      "id": "banner_gta6",
+      "title": "GRAND THEFT AUTO VI",
+      "tagline": "BIENVENIDO A LEONIDA & VICE CITY",
+      "badge": "NEXT-GEN PRE-ORDER",
+      "imgHorizontal": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1600&q=80",
+      "imgVertical": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
+      "ctaText": "Reservar Ahora",
+      "ctaUrl": "#section-games",
+      "sortOrder": 3,
       "isActive": true
     }
   ],
