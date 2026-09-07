@@ -12,17 +12,30 @@ router.get('/balance', (req, res) => {
   const db = getDb();
   
   const userTransactions = db.wallet_transactions.filter(t => t.userId === userId);
-  const settings = db.platform_settings;
+  const settings = db.platform_settings || {};
+  const rate = settings.exchangeRatePyg || 7500;
   const rates = getExchangeRates();
 
   res.json({
     wallet,
-    balancePyg: convertFromUsd(wallet.balanceUsd, 'PYG'),
+    balancePyg: Math.round((wallet.balanceUsd || 0) * rate),
+    exchangeRatePyg: rate,
     rates,
     transactions: userTransactions,
     paymentMethods: {
-      paraguay: settings.paraguayBankDetails,
-      binance: settings.binanceDetails
+      paraguay: settings.paraguayBankDetails || {
+        bank: 'Banco Familiar / Itaú Paraguay',
+        accountHolder: 'GamesBoy Paraguay S.A.',
+        rucOrCi: '80091234-5',
+        accountNumber: '01-445566-7',
+        aliasSipap: 'gamesboy.py'
+      },
+      binance: settings.binanceDetails || {
+        payId: '849201934',
+        walletAddress: '0x71C9414B3b27bA134a6C3f07a757657A82e4b92F',
+        network: 'USDT (Binance Pay / BEP-20 / TRC-20)',
+        qrUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F'
+      }
     }
   });
 });
@@ -33,29 +46,33 @@ router.post('/deposit', (req, res) => {
     const userId = req.headers['x-user-id'] || 'usr_client1';
     const db = getDb();
     const user = db.users.find(u => u.id === userId) || { name: 'Cliente' };
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
 
     const { amount, currency, method, reference, receiptData } = req.body;
 
-    if (!amount || amount <= 0) {
-      return res.status(400).json({ error: 'Monto inválido' });
+    const parsedAmt = parseFloat(amount);
+    if (!parsedAmt || parsedAmt <= 0) {
+      return res.status(400).json({ error: 'Por favor ingresa un monto válido a recargar.' });
     }
 
-    let amountUsd = parseFloat(amount);
-    let localAmount = parseFloat(amount);
+    let amountUsd = parsedAmt;
+    let localAmount = parsedAmt;
 
-    if (currency === 'PYG') {
-      amountUsd = convertToUsd(localAmount, 'PYG');
-    } else {
-      localAmount = convertFromUsd(amountUsd, 'PYG');
+    if (currency === 'USDT' || currency === 'USD') {
+      amountUsd = parsedAmt;
+      localAmount = Math.round(parsedAmt * rate);
+    } else { // Guaraníes (PYG / Gs.)
+      localAmount = parsedAmt;
+      amountUsd = parseFloat((parsedAmt / rate).toFixed(2));
     }
 
     const tx = createDepositRequest(
       userId,
-      user.name,
+      user.name || 'Cliente',
       amountUsd,
-      currency || 'PYG',
+      currency === 'USDT' ? 'USDT' : 'PYG',
       localAmount,
-      method || 'sipap_paraguay',
+      method || (currency === 'USDT' ? 'binance_usdt' : 'sipap_paraguay'),
       reference || 'Comprobante subido',
       receiptData || ''
     );
@@ -73,9 +90,10 @@ router.post('/deposit', (req, res) => {
       });
     }
 
+    const formattedGs = localAmount.toLocaleString('es-PY');
     res.json({
       success: true,
-      message: 'Comprobante de recarga recibido. Acreditaremos tu saldo una vez verificado.',
+      message: `¡Comprobante recibido con éxito! Una vez verificado por administración, se acreditarán ${formattedGs} Gs. en tu cuenta.`,
       transaction: tx
     });
   } catch (err) {

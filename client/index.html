@@ -48,20 +48,8 @@
         <div class="search-dropdown-results" id="search-dropdown-results" style="display: none;"></div>
       </div>
 
-      <!-- Right: Country/Wallet & Auth Actions -->
+      <!-- Right: Wallet & Auth Actions -->
       <div class="header-right">
-        <!-- Minimalist Currency / Country Selector Pill -->
-        <div class="minimal-currency-pill" id="currency-dropdown-trigger" title="Cambiar País y Moneda">
-          <span class="currency-flag" id="header-flag-icon">🇵🇾</span>
-          <select id="country-branch-select" class="header-country-select-styled">
-            <option value="PY">🇵🇾 Paraguay (Gs.)</option>
-            <option value="AR">🇦🇷 Argentina (ARS)</option>
-            <option value="BR">🇧🇷 Brasil (BRL)</option>
-            <option value="PA">🇵🇦 Panamá (USD)</option>
-            <option value="GLOBAL">🌐 Global (USDT)</option>
-          </select>
-        </div>
-
         <!-- Auth Actions (Client Login / Register) -->
         <div class="header-auth-buttons" id="auth-unlogged-group">
           <a href="/login" class="btn-header-login-modern" id="btn-open-login-page">
@@ -824,97 +812,183 @@
   </div>
 
   <!-- ======================================================= -->
-  <!-- MODAL: RECARGA DE SALDO (DEPOSIT MODAL)                 -->
+  <!-- MODAL: RECARGA DE SALDO (DEPOSIT MODAL - Gs. & USDT)    -->
   <!-- ======================================================= -->
   <div class="modal-overlay" id="modal-deposit">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 520px;">
       <div class="modal-header">
-        <h3 style="font-size: 1.1rem; font-weight: 700;">💳 Recargar Saldo en Cuenta</h3>
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+          <span>💳</span> Recargar Saldo en Cuenta
+        </h3>
         <button class="btn-modal-close" id="btn-close-deposit-modal">✕</button>
       </div>
       <div class="modal-body">
-        <div class="payment-tab-buttons">
-          <button class="payment-tab-btn active" data-method="local" id="tab-pay-local">
-            <span id="tab-pay-local-label">🇵🇾 Pago Local (Paraguay)</span>
+        
+        <!-- Payment Tabs -->
+        <div class="payment-tab-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem;">
+          <button type="button" class="payment-tab-btn active" data-method="sipap" id="tab-pay-local" style="padding: 10px 8px; font-weight: 700; font-size: 0.82rem; border-radius: 8px !important;">
+            <span id="tab-pay-local-label">🇵🇾 SIPAP (Paraguay)</span>
           </button>
-          <button class="payment-tab-btn" data-method="binance" id="tab-pay-binance">
-            🌐 Cripto USDT (Binance Pay)
+          <button type="button" class="payment-tab-btn" data-method="binance" id="tab-pay-binance" style="padding: 10px 8px; font-weight: 700; font-size: 0.82rem; border-radius: 8px !important;">
+            🌐 Binance (USDT)
           </button>
         </div>
 
-        <!-- Local Country Payment Box -->
-        <div class="payment-info-box" id="box-pay-local">
-          <div id="box-pay-local-fields">
-            <!-- Injected dynamically by app.js based on active country -->
+        <!-- 1. SIPAP Box -->
+        <div class="payment-info-box" id="box-pay-local" style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 10px !important; padding: 1rem; margin-bottom: 1.25rem;">
+          <div style="font-weight: 800; font-size: 0.88rem; color: var(--accent-emerald); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <span>🇵🇾</span> Transferencia Bancaria Paraguay (SIPAP)
+          </div>
+          <div id="box-pay-local-fields" style="display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem;">
+            <div class="payment-field-row" style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
+              <span style="color: var(--text-tertiary);">Banco / Entidad:</span>
+              <strong id="deposit-info-bank" style="color: #ffffff;">Banco Familiar / Itaú</strong>
+            </div>
+            <div class="payment-field-row" style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
+              <span style="color: var(--text-tertiary);">Titular:</span>
+              <strong id="deposit-info-holder" style="color: #ffffff;">GamesBoy Paraguay S.A.</strong>
+            </div>
+            <div class="payment-field-row" style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
+              <span style="color: var(--text-tertiary);">RUC / CI:</span>
+              <strong id="deposit-info-doc" style="color: #ffffff;">80091234-5</strong>
+            </div>
+            <div class="payment-field-row" style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
+              <span style="color: var(--text-tertiary);">N° de Cuenta:</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <strong id="deposit-info-account" style="color: var(--accent-cyan);">01-445566-7</strong>
+                <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('deposit-info-account').textContent); alert('N° de cuenta copiado');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(0,194,255,0.15); color: var(--accent-cyan); border-radius: 4px !important;">Copiar</button>
+              </div>
+            </div>
+            <div class="payment-field-row" style="display: flex; justify-content: space-between; padding-top: 2px;">
+              <span style="color: var(--text-tertiary);">Alias SIPAP:</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <strong id="deposit-info-alias" style="color: var(--accent-emerald);">gamesboy.py</strong>
+                <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('deposit-info-alias').textContent); alert('Alias copiado');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(16,185,129,0.15); color: var(--accent-emerald); border-radius: 4px !important;">Copiar</button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Global Cripto USDT Box -->
-        <div class="payment-info-box" id="box-pay-binance" style="display: none;">
-          <div style="text-align: center; margin-bottom: 10px;">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F" alt="QR Binance" style="border-radius: 8px; border: 1px solid var(--border-medium);">
+        <!-- 2. Binance USDT Box -->
+        <div class="payment-info-box" id="box-pay-binance" style="display: none; background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 10px !important; padding: 1rem; margin-bottom: 1.25rem;">
+          <div style="font-weight: 800; font-size: 0.88rem; color: #f59e0b; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+            <span>🌐</span> Pago Cripto USDT (Binance Pay)
           </div>
-          <div class="payment-field-row"><span>Binance Pay ID:</span><strong id="pay-info-binance-id">849201934</strong></div>
-          <div class="payment-field-row"><span>Red:</span><strong>USDT (BEP-20 / TRC-20)</strong></div>
-          <div class="payment-field-row"><span>Dirección:</span><strong style="font-size: 0.72rem; word-break: break-all;" id="pay-info-binance-wallet">0x71C9414B3b27bA134a6C3f07a757657A82e4b92F</strong></div>
+          
+          <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 10px;">
+            <div style="background: #ffffff; padding: 4px; border-radius: 6px !important; flex-shrink: 0;">
+              <img id="pay-info-binance-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F" alt="QR Binance" style="width: 100px; height: 100px; display: block;">
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; gap: 5px; font-size: 0.78rem;">
+              <div>
+                <span style="color: var(--text-tertiary); display: block;">Binance Pay ID:</span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <strong id="pay-info-binance-id" style="color: #ffffff; font-size: 0.88rem;">849201934</strong>
+                  <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('pay-info-binance-id').textContent); alert('Pay ID copiado');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(245,158,11,0.15); color: #f59e0b; border-radius: 4px !important;">Copiar</button>
+                </div>
+              </div>
+              <div>
+                <span style="color: var(--text-tertiary); display: block;">Red:</span>
+                <strong id="pay-info-binance-network" style="color: #ffffff;">USDT (BEP-20 / TRC-20)</strong>
+              </div>
+              <div>
+                <span style="color: var(--text-tertiary); display: block;">Dirección USDT:</span>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <strong style="font-size: 0.7rem; word-break: break-all; color: var(--accent-cyan);" id="pay-info-binance-wallet">0x71C9414B3b27bA134a6C3f07a757657A82e4b92F</strong>
+                  <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('pay-info-binance-wallet').textContent); alert('Dirección copiada');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(0,194,255,0.15); color: var(--accent-cyan); border-radius: 4px !important;">Copiar</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
+        <!-- Deposit Form -->
         <form id="form-submit-deposit">
-          <div class="form-group">
-            <label class="form-label" id="label-deposit-amount">Monto a Transferir en Moneda Local:</label>
-            <input type="number" id="deposit-amount-input" class="form-input" placeholder="ej: 100000" min="1" step="any" required>
-            <div style="margin-top: 6px; font-size: 0.82rem; color: var(--accent-cyan); font-weight: 700;" id="deposit-converted-preview">
-              ⚡ Acreditación estimada: <strong>$ 0.00 USDT</strong>
+          <input type="hidden" id="deposit-selected-currency" value="PYG">
+          
+          <div class="form-group" id="deposit-amount-group">
+            <label class="form-label" id="label-deposit-amount">Monto a Transferir en Guaraníes (Gs.):</label>
+            <input type="number" id="deposit-amount-input" class="form-input" placeholder="ej: 100000" min="1" step="any" required style="border-radius: 8px !important; font-size: 1rem; font-weight: 700;">
+            
+            <!-- Dynamic Conversion Highlight Box -->
+            <div id="deposit-converted-box" style="margin-top: 8px; background: rgba(0, 194, 255, 0.08); border: 1px solid rgba(0, 194, 255, 0.25); border-radius: 8px !important; padding: 10px 12px; font-size: 0.82rem; line-height: 1.45;">
+              <div id="deposit-converted-preview" style="color: var(--accent-cyan); font-weight: 700;">
+                ⚡ Se acreditarán: <strong>0 Gs.</strong> en tu saldo
+              </div>
+              <div id="deposit-rate-note" style="color: var(--text-tertiary); font-size: 0.72rem; margin-top: 2px;">
+                Tasa de cambio activa: 1 USDT = 7.500 Gs. Tu saldo se acreditará directamente en Guaraníes.
+              </div>
             </div>
           </div>
 
           <div class="form-group">
-            <label class="form-label">N° de Comprobante / Referencia / TXID:</label>
-            <input type="text" id="deposit-reference-input" class="form-input" placeholder="ej: SIPAP-781923, Transf-99182 o Hash Binance" required>
+            <label class="form-label" id="label-deposit-ref">N° de Comprobante / Referencia / TXID:</label>
+            <input type="text" id="deposit-reference-input" class="form-input" placeholder="ej: SIPAP-781923 o ID de Orden Binance" required style="border-radius: 8px !important;">
           </div>
 
           <div class="form-group">
-            <label class="form-label">Adjuntar Captura del Comprobante:</label>
-            <input type="file" id="deposit-receipt-file" class="form-input" accept="image/*" required>
+            <label class="form-label">Adjuntar Captura del Comprobante (Opcional):</label>
+            <input type="file" id="deposit-receipt-file" class="form-input" accept="image/*" style="border-radius: 8px !important; font-size: 0.82rem;">
           </div>
 
-          <button type="submit" class="btn-primary-block" id="btn-submit-deposit-form">Enviar Comprobante para Verificación</button>
+          <button type="submit" class="btn-primary-block" id="btn-submit-deposit-form" style="border-radius: 10px !important; padding: 13px; font-weight: 800; font-size: 0.95rem; margin-top: 1rem;">
+            🚀 Enviar Comprobante de Recarga
+          </button>
         </form>
       </div>
     </div>
   </div>
 
   <!-- ======================================================= -->
-  <!-- MODAL: SOLICITUD DE RETIRO DE VENDEDOR                  -->
+  <!-- MODAL: SOLICITUD DE RETIRO DE SALDO (PAYOUT MODAL)      -->
   <!-- ======================================================= -->
   <div class="modal-overlay" id="modal-payout">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 480px;">
       <div class="modal-header">
-        <h3 style="font-size: 1.1rem; font-weight: 700;">💸 Solicitar Retiro de Ganancias</h3>
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+          <span>💸</span> Solicitar Retiro de Saldo
+        </h3>
         <button class="btn-modal-close" id="btn-close-payout-modal">✕</button>
       </div>
       <div class="modal-body">
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-medium); border-radius: 8px !important; padding: 10px 14px; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.82rem; color: var(--text-secondary);">Saldo disponible retirable:</span>
+          <strong id="payout-available-balance-gs" style="font-size: 1rem; color: var(--accent-emerald); font-family: var(--font-mono);">0 Gs.</strong>
+        </div>
+
         <form id="form-submit-payout">
           <div class="form-group">
-            <label class="form-label">Monto a Retirar en USD / USDT:</label>
-            <input type="number" id="payout-amount-usd" class="form-input" step="1" min="5" placeholder="ej: 30" required>
-            <span style="font-size: 0.75rem; color: var(--text-tertiary);">Equivalente aprox: <strong id="payout-amount-pyg-preview">₲ 0</strong></span>
-          </div>
-
-          <div class="form-group">
             <label class="form-label">Método de Cobro:</label>
-            <select id="payout-method" class="form-select" required>
-              <option value="sipap_paraguay">Transferencia Bancaria Paraguay (SIPAP)</option>
-              <option value="binance_usdt">Binance Pay / Criptomoneda USDT</option>
+            <select id="payout-method-select" class="form-select" required style="border-radius: 8px !important;">
+              <option value="sipap_paraguay">🇵🇾 Transferencia Bancaria Paraguay (SIPAP - Guaraníes)</option>
+              <option value="binance_usdt">🌐 Binance Pay / Criptomoneda USDT</option>
             </select>
           </div>
 
-          <div class="form-group" id="payout-bank-fields">
-            <label class="form-label">Banco, N° Cuenta, Titular y CI / Alias SIPAP:</label>
-            <textarea id="payout-bank-details" class="form-textarea" rows="3" placeholder="Banco Familiar&#10;Titular: Juan Pérez&#10;CI: 3.821.990&#10;Cuenta: 03-998877-1&#10;Alias: juan.perez.py" required></textarea>
+          <div class="form-group">
+            <label class="form-label">Monto a Retirar en Guaraníes (Gs.):</label>
+            <input type="number" id="payout-amount-pyg-input" class="form-input" min="10000" step="1000" placeholder="ej: 100000" required style="border-radius: 8px !important; font-size: 1rem; font-weight: 700;">
+            
+            <div id="payout-conversion-preview-box" style="margin-top: 6px; font-size: 0.82rem; color: var(--accent-cyan); font-weight: 700;">
+              ⚡ Recibirás aproximadamente: <strong id="payout-amount-converted-preview">100.000 Gs.</strong>
+            </div>
           </div>
 
-          <button type="submit" class="btn-primary-block">Confirmar Solicitud de Retiro</button>
+          <!-- SIPAP Destination Fields -->
+          <div class="form-group" id="payout-fields-sipap">
+            <label class="form-label">Datos Bancarios (Banco, Titular, CI/RUC, Cuenta y Alias SIPAP):</label>
+            <textarea id="payout-bank-details" class="form-textarea" rows="3" placeholder="Banco Familiar&#10;Titular: Juan Pérez&#10;CI: 3.821.990&#10;Cuenta: 03-998877-1&#10;Alias: juan.perez.py" style="border-radius: 8px !important;"></textarea>
+          </div>
+
+          <!-- Binance Destination Fields -->
+          <div class="form-group" id="payout-fields-binance" style="display: none;">
+            <label class="form-label">Binance Pay ID o Dirección USDT (BEP20 / TRC20):</label>
+            <input type="text" id="payout-binance-dest" class="form-input" placeholder="ej: Binance Pay ID 849201934 o 0x..." style="border-radius: 8px !important;">
+          </div>
+
+          <button type="submit" class="btn-primary-block" style="border-radius: 10px !important; padding: 13px; font-weight: 800; font-size: 0.95rem; margin-top: 1rem;">
+            Confirmar Solicitud de Retiro
+          </button>
         </form>
       </div>
     </div>

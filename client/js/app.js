@@ -178,10 +178,11 @@ const defaultBanners = [
   }
 ];
 
-// --- UNIVERSAL FORMAT CURRENCY HELPER ---
+// --- UNIVERSAL FORMAT CURRENCY HELPER (NATIVE GUARANÍES Gs.) ---
 function formatPrice(amountUsd) {
-  const cfg = countryConfig[state.country] || countryConfig['PY'];
-  return cfg.format(amountUsd);
+  const rate = state.exchangeRatePyg || 7500;
+  const pyg = Math.round((parseFloat(amountUsd) || 0) * rate);
+  return `${pyg.toLocaleString('es-PY')} Gs.`;
 }
 
 // --- GLOBAL CAROUSEL SCROLLER ---
@@ -867,16 +868,13 @@ window.handleSearchResultClick = function(category, id) {
 };
 
 // --- 11. SETUP USER SESSION, MULTI-CURRENCY, LIVE BALANCE & DEPOSIT MODAL ---
-// --- 11. SETUP USER SESSION, MULTI-CURRENCY, LIVE BALANCE & DEPOSIT MODAL ---
+// --- 11. SETUP USER SESSION, LIVE BALANCE, DEPOSIT MODAL & PAYOUT MODAL ---
 async function updateUserBalanceDisplay() {
   const balanceEl = document.getElementById('nav-user-balance-amount');
-  if (!balanceEl) return;
+  const payoutBalEl = document.getElementById('payout-available-balance-gs');
+  if (!balanceEl && !payoutBalEl) return;
 
-  const userId = state.currentUser ? state.currentUser.id : null;
-  if (!userId) {
-    balanceEl.textContent = formatPrice(0);
-    return;
-  }
+  const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
 
   try {
     const res = await fetch('/api/wallet/balance', {
@@ -887,56 +885,278 @@ async function updateUserBalanceDisplay() {
       state.wallet = data.wallet;
       if (state.currentUser) state.currentUser.balanceUsd = data.wallet.balanceUsd;
     }
+    if (data.exchangeRatePyg) {
+      state.exchangeRatePyg = data.exchangeRatePyg;
+    }
+    if (data.paymentMethods) {
+      state.paymentMethods = data.paymentMethods;
+      populatePaymentMethodsData();
+    }
   } catch (e) {}
 
+  const rate = state.exchangeRatePyg || 7500;
   const balUsd = state.currentUser?.balanceUsd !== undefined ? state.currentUser.balanceUsd : (state.wallet?.balanceUsd || 0);
-  balanceEl.textContent = formatPrice(balUsd);
+  const balPyg = Math.round(balUsd * rate);
+  const formattedGs = `${balPyg.toLocaleString('es-PY')} Gs.`;
+
+  if (balanceEl) balanceEl.textContent = formattedGs;
+  if (payoutBalEl) payoutBalEl.textContent = formattedGs;
 }
 
-function updateDepositModalForCountry() {
-  const cfg = countryConfig[state.country] || countryConfig['PY'];
-  const flagIcon = document.getElementById('header-flag-icon');
-  if (flagIcon) flagIcon.textContent = cfg.flag;
+function populatePaymentMethodsData() {
+  if (!state.paymentMethods) return;
+  const p = state.paymentMethods.paraguay;
+  const b = state.paymentMethods.binance;
 
-  const tabLocalLabel = document.getElementById('tab-pay-local-label');
-  if (tabLocalLabel) tabLocalLabel.textContent = `${cfg.flag} Pago Local (${cfg.name})`;
-
-  const localFieldsContainer = document.getElementById('box-pay-local-fields');
-  if (localFieldsContainer && cfg.localPayment) {
-    const p = cfg.localPayment;
-    localFieldsContainer.innerHTML = `
-      <div style="font-weight: 800; font-size: 0.88rem; color: #ffffff; margin-bottom: 8px;">${p.title}</div>
-      <div class="payment-field-row"><span>Entidad / Banco:</span><strong>${p.bank}</strong></div>
-      <div class="payment-field-row"><span>Titular:</span><strong>${p.holder}</strong></div>
-      <div class="payment-field-row"><span>Identificación:</span><strong>${p.doc}</strong></div>
-      <div class="payment-field-row"><span>N° Cuenta / Chave:</span><strong>${p.account}</strong></div>
-      <div class="payment-field-row"><span>Alias / Referencia:</span><strong style="color: var(--accent-cyan);">${p.alias}</strong></div>
-    `;
+  if (p) {
+    if (document.getElementById('deposit-info-bank')) document.getElementById('deposit-info-bank').textContent = p.bank || 'Banco Familiar / Itaú';
+    if (document.getElementById('deposit-info-holder')) document.getElementById('deposit-info-holder').textContent = p.accountHolder || 'GamesBoy Paraguay S.A.';
+    if (document.getElementById('deposit-info-doc')) document.getElementById('deposit-info-doc').textContent = p.rucOrCi || '80091234-5';
+    if (document.getElementById('deposit-info-account')) document.getElementById('deposit-info-account').textContent = p.accountNumber || '01-445566-7';
+    if (document.getElementById('deposit-info-alias')) document.getElementById('deposit-info-alias').textContent = p.aliasSipap || 'gamesboy.py';
   }
 
+  if (b) {
+    if (document.getElementById('pay-info-binance-id')) document.getElementById('pay-info-binance-id').textContent = b.payId || '849201934';
+    if (document.getElementById('pay-info-binance-network')) document.getElementById('pay-info-binance-network').textContent = b.network || 'USDT (Binance Pay / BEP-20 / TRC-20)';
+    if (document.getElementById('pay-info-binance-wallet')) document.getElementById('pay-info-binance-wallet').textContent = b.walletAddress || '0x71C9414B3b27bA134a6C3f07a757657A82e4b92F';
+    const qrImg = document.getElementById('pay-info-binance-qr-img');
+    if (qrImg) {
+      qrImg.src = b.qrUrl || `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(b.walletAddress || '849201934')}`;
+    }
+  }
+
+  const rateNote = document.getElementById('deposit-rate-note');
+  if (rateNote) {
+    const rate = state.exchangeRatePyg || 7500;
+    rateNote.textContent = `Tasa de cambio activa: 1 USDT = ${rate.toLocaleString('es-PY')} Gs. Tu saldo se acreditará directamente en Guaraníes.`;
+  }
+}
+
+function updateDepositCalculator() {
+  const amountInput = document.getElementById('deposit-amount-input');
+  const currencyInput = document.getElementById('deposit-selected-currency');
+  const previewDiv = document.getElementById('deposit-converted-preview');
+  const rate = state.exchangeRatePyg || 7500;
+
+  if (!amountInput || !previewDiv) return;
+
+  const val = parseFloat(amountInput.value);
+  const currency = currencyInput ? currencyInput.value : 'PYG';
+
+  if (isNaN(val) || val <= 0) {
+    previewDiv.innerHTML = `⚡ Se acreditarán: <strong>0 Gs.</strong> en tu saldo`;
+    return;
+  }
+
+  if (currency === 'USDT') {
+    const gs = Math.round(val * rate);
+    previewDiv.innerHTML = `⚡ <strong>${val.toFixed(2)} USDT</strong> = <strong style="color: var(--accent-emerald); font-size: 0.95rem;">${gs.toLocaleString('es-PY')} Gs.</strong> (Se acreditarán en tu cuenta)`;
+  } else {
+    previewDiv.innerHTML = `⚡ Se acreditarán: <strong style="color: var(--accent-emerald); font-size: 0.95rem;">${Math.round(val).toLocaleString('es-PY')} Gs.</strong> en tu saldo`;
+  }
+}
+
+function initDepositModal() {
+  const modalDeposit = document.getElementById('modal-deposit');
+  const btnOpenDeposit = document.getElementById('btn-open-deposit-modal');
+  const btnCloseDeposit = document.getElementById('btn-close-deposit-modal');
+
+  const tabLocal = document.getElementById('tab-pay-local');
+  const tabBinance = document.getElementById('tab-pay-binance');
+  const boxLocal = document.getElementById('box-pay-local');
+  const boxBinance = document.getElementById('box-pay-binance');
+  const currencyInput = document.getElementById('deposit-selected-currency');
   const labelAmount = document.getElementById('label-deposit-amount');
   const amountInput = document.getElementById('deposit-amount-input');
-  const convertedPreview = document.getElementById('deposit-converted-preview');
+  const labelRef = document.getElementById('label-deposit-ref');
+  const refInput = document.getElementById('deposit-reference-input');
 
-  if (labelAmount) {
-    labelAmount.textContent = `Monto a Transferir en ${cfg.name} (${cfg.symbol} ${cfg.currency}):`;
+  if (tabLocal && tabBinance && boxLocal && boxBinance) {
+    tabLocal.onclick = () => {
+      tabLocal.classList.add('active');
+      tabBinance.classList.remove('active');
+      boxLocal.style.display = 'block';
+      boxBinance.style.display = 'none';
+      if (currencyInput) currencyInput.value = 'PYG';
+      if (labelAmount) labelAmount.textContent = 'Monto a Transferir en Guaraníes (Gs.):';
+      if (amountInput) { amountInput.placeholder = 'ej: 100000'; amountInput.step = '1000'; }
+      if (labelRef) labelRef.textContent = 'N° de Transferencia / Comprobante SIPAP:';
+      if (refInput) refInput.placeholder = 'ej: SIPAP-781923';
+      updateDepositCalculator();
+    };
+
+    tabBinance.onclick = () => {
+      tabBinance.classList.add('active');
+      tabLocal.classList.remove('active');
+      boxBinance.style.display = 'block';
+      boxLocal.style.display = 'none';
+      if (currencyInput) currencyInput.value = 'USDT';
+      if (labelAmount) labelAmount.textContent = 'Monto a Transferir en USDT (Cripto):';
+      if (amountInput) { amountInput.placeholder = 'ej: 10'; amountInput.step = 'any'; }
+      if (labelRef) labelRef.textContent = 'Binance Pay Order ID o TXID / Hash:';
+      if (refInput) refInput.placeholder = 'ej: 289102910 o Hash Binance';
+      updateDepositCalculator();
+    };
   }
 
   if (amountInput) {
-    amountInput.placeholder = (cfg.currency === 'Gs.') ? 'ej: 100000' : (cfg.currency === 'ARS' ? 'ej: 15000' : (cfg.currency === 'BRL' ? 'ej: 100' : 'ej: 25'));
-    
-    // Live calculation listener
-    amountInput.oninput = () => {
-      const val = parseFloat(amountInput.value);
-      if (isNaN(val) || val <= 0) {
-        if (convertedPreview) convertedPreview.innerHTML = `⚡ Acreditación estimada: <strong>$ 0.00 USDT</strong>`;
+    amountInput.oninput = updateDepositCalculator;
+  }
+
+  if (btnOpenDeposit && modalDeposit) {
+    btnOpenDeposit.onclick = () => {
+      updateUserBalanceDisplay();
+      modalDeposit.style.display = 'grid';
+    };
+  }
+  if (btnCloseDeposit && modalDeposit) {
+    btnCloseDeposit.onclick = () => modalDeposit.style.display = 'none';
+  }
+
+  const depositForm = document.getElementById('form-submit-deposit');
+  if (depositForm) {
+    depositForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
+      const amount = parseFloat(amountInput.value);
+      const currency = currencyInput ? currencyInput.value : 'PYG';
+      const reference = refInput.value.trim();
+      const fileInput = document.getElementById('deposit-receipt-file');
+
+      if (!amount || amount <= 0) {
+        alert('Por favor ingresa un monto válido a recargar.');
         return;
       }
-      const usdt = (val / cfg.rateToUsd).toFixed(2);
-      if (convertedPreview) {
-        convertedPreview.innerHTML = `⚡ Acreditación estimada en tu cuenta: <strong style="color: var(--accent-emerald);">$ ${usdt} USDT</strong>`;
+
+      // Helper to submit deposit request
+      const sendDeposit = async (receiptData = '') => {
+        try {
+          const res = await fetch('/api/wallet/deposit', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-user-id': userId
+            },
+            body: JSON.stringify({
+              amount,
+              currency,
+              method: currency === 'USDT' ? 'binance_usdt' : 'sipap_paraguay',
+              reference,
+              receiptData
+            })
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert(`🎉 ${data.message}`);
+            depositForm.reset();
+            updateDepositCalculator();
+            if (modalDeposit) modalDeposit.style.display = 'none';
+            updateUserBalanceDisplay();
+          } else {
+            alert(`Aviso: ${data.error || 'No se pudo registrar la recarga.'}`);
+          }
+        } catch (err) {
+          alert('Error de conexión al enviar comprobante.');
+        }
+      };
+
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        const reader = new FileReader();
+        reader.onload = () => sendDeposit(reader.result);
+        reader.readAsDataURL(file);
+      } else {
+        sendDeposit(reference);
       }
-    };
+    });
+  }
+}
+
+function initPayoutModal() {
+  const modalPayout = document.getElementById('modal-payout');
+  const btnClosePayout = document.getElementById('btn-close-payout-modal');
+  const formPayout = document.getElementById('form-submit-payout');
+  const methodSelect = document.getElementById('payout-method-select');
+  const amountInput = document.getElementById('payout-amount-pyg-input');
+  const previewText = document.getElementById('payout-amount-converted-preview');
+  const fieldsSipap = document.getElementById('payout-fields-sipap');
+  const fieldsBinance = document.getElementById('payout-fields-binance');
+
+  const updatePayoutPreview = () => {
+    const rate = state.exchangeRatePyg || 7500;
+    const gs = parseFloat(amountInput.value) || 0;
+    const method = methodSelect.value;
+
+    if (method === 'binance_usdt') {
+      const usdt = (gs / rate).toFixed(2);
+      previewText.innerHTML = `⚡ Retiras <strong>${gs.toLocaleString('es-PY')} Gs.</strong> ➔ Recibirás aprox. <strong style="color: var(--accent-emerald);">${usdt} USDT</strong> en Binance (Tasa: ${rate.toLocaleString('es-PY')} Gs./USDT)`;
+    } else {
+      previewText.innerHTML = `⚡ Se transferirán <strong style="color: var(--accent-emerald);">${gs.toLocaleString('es-PY')} Gs.</strong> directamente a tu cuenta bancaria.`;
+    }
+  };
+
+  if (methodSelect) {
+    methodSelect.addEventListener('change', () => {
+      if (methodSelect.value === 'binance_usdt') {
+        if (fieldsSipap) fieldsSipap.style.display = 'none';
+        if (fieldsBinance) fieldsBinance.style.display = 'block';
+      } else {
+        if (fieldsSipap) fieldsSipap.style.display = 'block';
+        if (fieldsBinance) fieldsBinance.style.display = 'none';
+      }
+      updatePayoutPreview();
+    });
+  }
+
+  if (amountInput) {
+    amountInput.oninput = updatePayoutPreview;
+  }
+
+  if (btnClosePayout && modalPayout) {
+    btnClosePayout.onclick = () => modalPayout.style.display = 'none';
+  }
+
+  if (formPayout) {
+    formPayout.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
+      const amountPyg = parseFloat(amountInput.value);
+      const method = methodSelect.value;
+
+      let accountDetails = {};
+      if (method === 'binance_usdt') {
+        accountDetails = { binanceDestination: document.getElementById('payout-binance-dest')?.value || '' };
+      } else {
+        accountDetails = { bankDetails: document.getElementById('payout-bank-details')?.value || '' };
+      }
+
+      try {
+        const res = await fetch('/api/seller/payout-request', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-user-id': userId
+          },
+          body: JSON.stringify({
+            amountPyg,
+            method,
+            accountDetails
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert(`🎉 ${data.message}`);
+          formPayout.reset();
+          if (modalPayout) modalPayout.style.display = 'none';
+          updateUserBalanceDisplay();
+        } else {
+          alert(`Aviso: ${data.error || 'No se pudo procesar la solicitud de retiro.'}`);
+        }
+      } catch (err) {
+        alert('Error al solicitar retiro.');
+      }
+    });
   }
 }
 
@@ -957,7 +1177,6 @@ function initUserSession() {
     if (dropdownUserName) dropdownUserName.textContent = state.currentUser.name;
     if (dropdownUserEmail) dropdownUserEmail.textContent = state.currentUser.email || 'usuario@gamesboy.net';
     if (dropdownUserAvatarLg) dropdownUserAvatarLg.textContent = state.currentUser.avatar || '🎮';
-    updateUserBalanceDisplay();
   } else {
     if (unloggedGroup) unloggedGroup.style.display = 'flex';
     if (loggedGroup) loggedGroup.style.display = 'none';
@@ -1003,7 +1222,7 @@ function initUserSession() {
       if (dropdownMenu) dropdownMenu.style.display = 'none';
       const modal = document.getElementById('modal-deposit');
       if (modal) {
-        updateDepositModalForCountry();
+        updateUserBalanceDisplay();
         modal.style.display = 'grid';
       }
     };
@@ -1080,77 +1299,10 @@ function initUserSession() {
     };
   }
 
-  const countrySelect = document.getElementById('country-branch-select');
-  if (countrySelect) {
-    countrySelect.value = state.country;
-    countrySelect.addEventListener('change', (e) => {
-      state.country = e.target.value;
-      state.currency = countryConfig[state.country]?.currency || 'Gs.';
-      localStorage.setItem('gb_country', state.country);
-      localStorage.setItem('gb_currency', state.currency);
-
-      const indicator = document.getElementById('footer-currency-indicator');
-      if (indicator) {
-        const cfg = countryConfig[state.country];
-        indicator.textContent = `${cfg.name} (${cfg.currency})`;
-      }
-
-      updateUserBalanceDisplay();
-      updateDepositModalForCountry();
-      renderStreamingServices();
-      renderDigitalGames();
-      renderRetailGiftCards();
-      renderSmmServices();
-      renderMyVault();
-    });
-  }
-
-  // Initial deposit modal setup
-  updateDepositModalForCountry();
-
-  // Deposit Modal Tabs (Local vs Binance USDT)
-  const tabLocal = document.getElementById('tab-pay-local');
-  const tabBinance = document.getElementById('tab-pay-binance');
-  const boxLocal = document.getElementById('box-pay-local');
-  const boxBinance = document.getElementById('box-pay-binance');
-
-  if (tabLocal && tabBinance && boxLocal && boxBinance) {
-    tabLocal.onclick = () => {
-      tabLocal.classList.add('active');
-      tabBinance.classList.remove('active');
-      boxLocal.style.display = 'block';
-      boxBinance.style.display = 'none';
-    };
-    tabBinance.onclick = () => {
-      tabBinance.classList.add('active');
-      tabLocal.classList.remove('active');
-      boxBinance.style.display = 'block';
-      boxLocal.style.display = 'none';
-    };
-  }
-
-  // Deposit Modal Open/Close
-  const modalDeposit = document.getElementById('modal-deposit');
-  const btnOpenDeposit = document.getElementById('btn-open-deposit-modal');
-  const btnCloseDeposit = document.getElementById('btn-close-deposit-modal');
-  if (btnOpenDeposit && modalDeposit) {
-    btnOpenDeposit.onclick = () => {
-      updateDepositModalForCountry();
-      modalDeposit.style.display = 'grid';
-    };
-  }
-  if (btnCloseDeposit && modalDeposit) {
-    btnCloseDeposit.onclick = () => modalDeposit.style.display = 'none';
-  }
-
-  const depositForm = document.getElementById('form-submit-deposit');
-  if (depositForm) {
-    depositForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      alert('¡Comprobante recibido con éxito! Tu saldo en USDT se acreditará en tu cuenta una vez verificado.');
-      if (modalDeposit) modalDeposit.style.display = 'none';
-    });
-  }
+  // Init Modals
+  initDepositModal();
+  initPayoutModal();
+  updateUserBalanceDisplay();
 
   // Group Chat Modal Handlers
   const modalGroupChat = document.getElementById('modal-group-chat');

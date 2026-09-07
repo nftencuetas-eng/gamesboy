@@ -90,23 +90,36 @@ router.post('/payout-request', (req, res) => {
     const db = getDb();
     const seller = db.users.find(u => u.id === sellerId) || { name: 'Vendedor' };
     const wallet = getWallet(sellerId);
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
 
-    const { amountUsd, method, accountDetails } = req.body;
-    const amount = parseFloat(amountUsd);
+    const { amountPyg, amountUsd, method, accountDetails } = req.body;
+    let finalAmountUsd = 0;
+    let finalAmountPyg = 0;
 
-    if (!amount || amount <= 0 || amount > wallet.balanceUsd) {
-      return res.status(400).json({ error: `Monto de retiro inválido o excede tu saldo disponible ($${wallet.balanceUsd.toFixed(2)} USDT).` });
+    if (amountPyg) {
+      finalAmountPyg = parseFloat(amountPyg);
+      finalAmountUsd = parseFloat((finalAmountPyg / rate).toFixed(2));
+    } else if (amountUsd) {
+      finalAmountUsd = parseFloat(amountUsd);
+      finalAmountPyg = Math.round(finalAmountUsd * rate);
+    }
+
+    if (!finalAmountUsd || finalAmountUsd <= 0 || finalAmountUsd > wallet.balanceUsd) {
+      const maxPyg = Math.round(wallet.balanceUsd * rate).toLocaleString('es-PY');
+      return res.status(400).json({
+        error: `Monto de retiro inválido o excede tu saldo disponible (${maxPyg} Gs. / $${wallet.balanceUsd.toFixed(2)} USDT).`
+      });
     }
 
     // Deduct available balance
-    wallet.balanceUsd = parseFloat((wallet.balanceUsd - amount).toFixed(2));
+    wallet.balanceUsd = parseFloat((wallet.balanceUsd - finalAmountUsd).toFixed(2));
 
     const payout = {
       id: `payout_${Date.now()}`,
       sellerId,
       sellerName: seller.name,
-      amountUsd: amount,
-      amountPyg: convertFromUsd(amount, 'PYG'),
+      amountUsd: finalAmountUsd,
+      amountPyg: finalAmountPyg,
       method: method || 'sipap_paraguay',
       accountDetails: accountDetails || {},
       status: 'pending',
@@ -116,9 +129,14 @@ router.post('/payout-request', (req, res) => {
     db.payout_requests.unshift(payout);
     saveStorage();
 
+    const formattedGs = finalAmountPyg.toLocaleString('es-PY');
+    const msg = method === 'binance_usdt'
+      ? `¡Solicitud de retiro de ${formattedGs} Gs. (~$${finalAmountUsd.toFixed(2)} USDT) enviada a Binance! Será procesada por administración.`
+      : `¡Solicitud de retiro de ${formattedGs} Gs. enviada por SIPAP! Será procesada por administración.`;
+
     res.json({
       success: true,
-      message: 'Solicitud de retiro enviada. Será procesada por administración.',
+      message: msg,
       payout,
       wallet
     });

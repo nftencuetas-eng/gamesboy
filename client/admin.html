@@ -58,6 +58,35 @@
       font-weight: 800;
       padding: 2px 7px;
     }
+    .badge-method-sipap {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 3px 8px;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+    .badge-method-binance {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 3px 8px;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+    .btn-receipt-view {
+      background: rgba(0, 194, 255, 0.15);
+      border: 1px solid rgba(0, 194, 255, 0.3);
+      color: var(--accent-cyan);
+      padding: 3px 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-receipt-view:hover {
+      background: var(--accent-cyan);
+      color: #000;
+    }
     @media (max-width: 900px) {
       .admin-layout { grid-template-columns: 1fr; }
       .admin-sidebar { display: none; }
@@ -83,11 +112,14 @@
           <span>📥 Aprobación de Cuentas</span>
           <span class="badge-count" id="badge-pending-subs">0</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-finances">📊 Finanzas & Recargas</button>
+        <button class="admin-menu-btn" data-tab="tab-finances">
+          <span>📊 Finanzas & Recargas</span>
+          <span class="badge-count" id="badge-pending-finances" style="background: var(--accent-cyan); display: none;">0</span>
+        </button>
         <button class="admin-menu-btn" data-tab="tab-prices">🏷️ Precios Oficiales</button>
         <button class="admin-menu-btn" data-tab="tab-escrow">🛡️ Garantía Escrow (30 Días)</button>
         <button class="admin-menu-btn" data-tab="tab-banners">🎨 Portadas ENEBA</button>
-        <button class="admin-menu-btn" data-tab="tab-branches">🏢 Sucursales & Bancos</button>
+        <button class="admin-menu-btn" data-tab="tab-branches">🏢 Configuración de Pagos & Bancos</button>
       </nav>
 
       <div style="margin-top: auto; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle);">
@@ -148,57 +180,76 @@
         </div>
       </div>
 
-      <!-- Tab 2: Finanzas & Aprobación de Recargas -->
+      <!-- Tab 2: Finanzas & Aprobación de Recargas y Retiros -->
       <div id="view-tab-finances" class="admin-tab-pane" style="display: none;">
         <div class="portal-stats-grid">
           <div class="portal-stat-card">
             <div class="portal-stat-title">Recargas Pendientes</div>
             <div class="portal-stat-val" id="stat-pending-deposits-count" style="color: var(--accent-amber);">0</div>
-            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Comprobantes por verificar</div>
+            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Comprobantes SIPAP & Binance</div>
           </div>
           <div class="portal-stat-card">
-            <div class="portal-stat-title">Saldo en Garantía (Escrow)</div>
-            <div class="portal-stat-val" style="color: var(--accent-cyan);">$ 45.00</div>
-            <div style="font-size: 0.75rem; color: var(--text-tertiary);">₲ 337.500 retenidos 30 días</div>
+            <div class="portal-stat-title">Retiros Solicitados</div>
+            <div class="portal-stat-val" id="stat-pending-payouts-count" style="color: var(--accent-cyan);">0</div>
+            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Pendientes de transferencia</div>
           </div>
           <div class="portal-stat-card">
-            <div class="portal-stat-title">Saldo Liquidable a Vendedores</div>
-            <div class="portal-stat-val" style="color: var(--accent-emerald);">$ 120.00</div>
-            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Listo para transferir por SIPAP</div>
+            <div class="portal-stat-title">Tasa de Cambio Activa</div>
+            <div class="portal-stat-val" id="stat-exchange-rate-preview" style="color: var(--accent-emerald);">7.500 Gs.</div>
+            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Por 1 USDT / USD</div>
           </div>
           <div class="portal-stat-card">
-            <div class="portal-stat-title">Comisión Neta GamesBoy</div>
-            <div class="portal-stat-val" style="color: var(--accent-purple);">$ 34.50</div>
-            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Margen de plataforma</div>
+            <div class="portal-stat-title">Comisión de Plataforma</div>
+            <div class="portal-stat-val" id="stat-commission-preview" style="color: var(--accent-purple);">15%</div>
+            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Margen GamesBoy</div>
           </div>
         </div>
 
-        <div class="table-wrapper">
-          <div class="section-header" style="padding: 12px 16px; margin-bottom: 0;">
-            <h3 class="section-title">📥 Bandeja de Comprobantes de Recarga (SIPAP Paraguay / Binance)</h3>
+        <!-- Pending Deposits Table -->
+        <div class="table-wrapper" style="margin-bottom: 2rem;">
+          <div class="section-header" style="padding: 12px 16px; margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
+            <h3 class="section-title">📥 Bandeja de Comprobantes de Recarga (SIPAP Paraguay / Binance USDT)</h3>
+            <span style="font-size: 0.75rem; color: var(--accent-cyan);">Al aprobar, el saldo se acredita inmediatamente al cliente en Guaraníes (Gs.)</span>
           </div>
           <table class="data-table">
             <thead>
               <tr>
                 <th>Usuario</th>
-                <th>Monto Local</th>
-                <th>Equiv. USD</th>
-                <th>Método</th>
+                <th>Método de Pago</th>
+                <th>Monto Transferido</th>
+                <th>Monto a Acreditar (Gs.)</th>
                 <th>Referencia / TXID</th>
-                <th>Acción</th>
+                <th>Comprobante</th>
+                <th>Acción de Administración</th>
               </tr>
             </thead>
             <tbody id="admin-deposits-table-body">
               <tr>
-                <td>Lucas González</td>
-                <td><strong>₲ 100.000</strong></td>
-                <td>$ 13.33</td>
-                <td>SIPAP Familiar</td>
-                <td><code>SIPAP-981244</code></td>
-                <td>
-                  <button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; padding: 4px 10px; font-weight: 700;" onclick="alert('Recarga aprobada y acreditada al saldo del usuario.')">Aprobar</button>
-                  <button class="btn-action-sm" style="background: var(--accent-red); color: #fff; padding: 4px 10px;" onclick="alert('Comprobante rechazado.')">Rechazar</button>
-                </td>
+                <td colspan="7" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando comprobantes de recarga...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pending Payouts Table -->
+        <div class="table-wrapper">
+          <div class="section-header" style="padding: 12px 16px; margin-bottom: 0;">
+            <h3 class="section-title">💸 Solicitudes de Retiro de Saldo de Vendedores</h3>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Vendedor</th>
+                <th>Monto a Retirar (Gs.)</th>
+                <th>Equivalente USD / USDT</th>
+                <th>Método de Cobro</th>
+                <th>Datos de Destino (Banco / Binance)</th>
+                <th>Acción de Administración</th>
+              </tr>
+            </thead>
+            <tbody id="admin-payouts-table-body">
+              <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando solicitudes de retiro...</td>
               </tr>
             </tbody>
           </table>
@@ -210,15 +261,15 @@
         <div class="form-box">
           <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem;">🏷️ Tabla de Precios Oficiales Establecidos por la Administración</h2>
           <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-            El Administrador es quien fija las tarifas de venta al cliente y la remuneración al vendedor. Los vendedores aceptan estos precios al publicar.
+            El Administrador es quien fija las tarifas de venta al cliente y la remuneración al vendedor. Los precios se expresan de forma nativa en Guaraníes.
           </p>
 
           <table class="data-table">
             <thead>
               <tr>
                 <th>Servicio</th>
-                <th>Precio Venta Cliente (USD)</th>
                 <th>Precio Venta en Gs.</th>
+                <th>Equivalente USD</th>
                 <th>Pago al Vendedor / Mes</th>
                 <th>Margen GamesBoy</th>
                 <th>Acción</th>
@@ -227,25 +278,25 @@
             <tbody>
               <tr>
                 <td><strong>Netflix Premium 4K</strong></td>
-                <td><input type="number" class="form-input" value="3.50" style="width: 80px; padding: 4px 8px;"></td>
-                <td>₲ 26.250</td>
-                <td>$ 2.95 (₲ 22.000)</td>
+                <td><input type="text" class="form-input" value="26.250 Gs." style="width: 120px; padding: 4px 8px;"></td>
+                <td>$ 3.50</td>
+                <td>22.000 Gs. ($ 2.95)</td>
                 <td>15%</td>
                 <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio guardado')">Guardar</button></td>
               </tr>
               <tr>
                 <td><strong>Spotify Premium Familiar</strong></td>
-                <td><input type="number" class="form-input" value="2.50" style="width: 80px; padding: 4px 8px;"></td>
-                <td>₲ 18.750</td>
-                <td>$ 2.10 (₲ 15.750)</td>
+                <td><input type="text" class="form-input" value="18.750 Gs." style="width: 120px; padding: 4px 8px;"></td>
+                <td>$ 2.50</td>
+                <td>15.750 Gs. ($ 2.10)</td>
                 <td>15%</td>
                 <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio guardado')">Guardar</button></td>
               </tr>
               <tr>
                 <td><strong>Disney+ & Star+</strong></td>
-                <td><input type="number" class="form-input" value="3.00" style="width: 80px; padding: 4px 8px;"></td>
-                <td>₲ 22.500</td>
-                <td>$ 2.50 (₲ 18.750)</td>
+                <td><input type="text" class="form-input" value="22.500 Gs." style="width: 120px; padding: 4px 8px;"></td>
+                <td>$ 3.00</td>
+                <td>18.750 Gs. ($ 2.50)</td>
                 <td>15%</td>
                 <td><button class="btn-action-sm" style="background: var(--accent-cyan); color: #000; padding: 4px 8px;" onclick="alert('Precio guardado')">Guardar</button></td>
               </tr>
@@ -280,7 +331,7 @@
                 <td>Netflix 4K - Perfil #2</td>
                 <td>Rodrigo Vera</td>
                 <td>Día 30 de 30 (Finalizado)</td>
-                <td>$ 2.95 (₲ 22.000)</td>
+                <td>22.000 Gs. ($ 2.95)</td>
                 <td><span class="badge-official" style="background: rgba(16,185,129,0.15); color: #10b981;">Listo para liquidar</span></td>
                 <td><button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; padding: 4px 10px; font-weight: 800;" onclick="alert('Ganancia liquidada a la billetera del vendedor')">Liberar Pago</button></td>
               </tr>
@@ -289,7 +340,7 @@
                 <td>Spotify Familiar #4</td>
                 <td>Ana Benítez</td>
                 <td>Día 12 de 30</td>
-                <td>$ 2.10 (₲ 15.750)</td>
+                <td>15.750 Gs. ($ 2.10)</td>
                 <td><span style="color: var(--accent-amber); font-size: 0.8rem;">Retenido en Escrow</span></td>
                 <td><button class="btn-action-sm" style="background: rgba(239,68,68,0.2); color: #ef4444; padding: 4px 10px;" onclick="alert('Reembolso efectuado al cliente')">Reembolsar</button></td>
               </tr>
@@ -309,38 +360,122 @@
         </div>
       </div>
 
-      <!-- Tab 6: Sucursales & Bancos Locales -->
+      <!-- Tab 6: Configuración de Pagos & Bancos (SIPAP Paraguay + Binance USDT + Tasa) -->
       <div id="view-tab-branches" class="admin-tab-pane" style="display: none;">
         <div class="form-box">
-          <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 1rem;">🏢 Configuración de Sucursales y Bancos Locales</h2>
-          <div class="form-grid-2">
-            <div class="form-group">
-              <label class="form-label">País de Sucursal</label>
-              <select class="form-select">
-                <option value="PY">🇵🇾 Paraguay (Matriz SIPAP / Bancos)</option>
-                <option value="PA">🇵🇦 Panamá (Sucursal Dólares)</option>
-              </select>
+          <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; color: #ffffff;">🏢 Configuración de Datos de Cobro, Bancos & Binance</h2>
+          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+            Configura las cuentas donde los clientes enviarán sus transferencias y recargas. Estos datos se mostrarán directamente en el modal de recarga de saldo de los usuarios.
+          </p>
+
+          <form id="form-admin-payment-settings">
+            
+            <!-- Section 1: SIPAP Paraguay -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-medium); padding: 1.25rem; margin-bottom: 1.5rem;">
+              <h3 style="font-size: 1rem; font-weight: 800; color: var(--accent-emerald); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+                <span>🇵🇾</span> Datos de Transferencia Bancaria Paraguay (SIPAP)
+              </h3>
+              
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Nombre del Banco / Entidad:</label>
+                  <input type="text" id="setting-bank-name" class="form-input" placeholder="ej: Banco Familiar / Itaú Paraguay" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Titular de la Cuenta:</label>
+                  <input type="text" id="setting-bank-holder" class="form-input" placeholder="ej: GamesBoy Paraguay S.A." required>
+                </div>
+              </div>
+
+              <div class="form-grid-3" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                  <label class="form-label">RUC / Cédula de Identidad:</label>
+                  <input type="text" id="setting-bank-ruc" class="form-input" placeholder="ej: 80091234-5" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Número de Cuenta Bancaria:</label>
+                  <input type="text" id="setting-bank-account" class="form-input" placeholder="ej: 01-445566-7" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Alias SIPAP:</label>
+                  <input type="text" id="setting-bank-alias" class="form-input" placeholder="ej: gamesboy.py" required>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label class="form-label">Tasa de Cambio (1 USD en Guaraníes)</label>
-              <input type="number" class="form-input" value="7500">
+
+            <!-- Section 2: Binance USDT -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-medium); padding: 1.25rem; margin-bottom: 1.5rem;">
+              <h3 style="font-size: 1rem; font-weight: 800; color: #f59e0b; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+                <span>🌐</span> Datos de Cobro Cripto USDT (Binance Pay)
+              </h3>
+              
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Binance Pay ID:</label>
+                  <input type="text" id="setting-binance-id" class="form-input" placeholder="ej: 849201934" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Red Cripto:</label>
+                  <input type="text" id="setting-binance-network" class="form-input" value="USDT (Binance Pay / BEP-20 / TRC-20)" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Dirección de Billetera USDT (BEP-20 / TRC-20):</label>
+                <input type="text" id="setting-binance-wallet" class="form-input" placeholder="ej: 0x71C9414B3b27bA134a6C3f07a757657A82e4b92F" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">URL del Código QR de Binance (Generación Automática o Imagen):</label>
+                <input type="text" id="setting-binance-qr" class="form-input" placeholder="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=...">
+              </div>
             </div>
-          </div>
-          <div class="form-grid-2">
-            <div class="form-group">
-              <label class="form-label">Titular de Cuenta Bancaria Local</label>
-              <input type="text" class="form-input" value="GamesBoy Paraguay S.A.">
+
+            <!-- Section 3: Exchange Rate & Commission -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-medium); padding: 1.25rem; margin-bottom: 1.5rem;">
+              <h3 style="font-size: 1rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+                <span>💱</span> Tasa de Cambio & Comisión de la Plataforma
+              </h3>
+              
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="form-label">Tasa de Cambio Oficial (1 USDT en Guaraníes):</label>
+                  <input type="number" id="setting-exchange-rate-pyg" class="form-input" value="7500" min="1" step="1" required>
+                  <span style="font-size: 0.74rem; color: var(--text-tertiary); display: block; margin-top: 4px;">Utilizada para convertir recargas en USDT a saldo en Guaraníes (Gs.) y calcular retiros.</span>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Comisión de Plataforma para Vendedores (%):</label>
+                  <input type="number" id="setting-commission-percent" class="form-input" value="15" min="0" max="100" step="0.5" required>
+                  <span style="font-size: 0.74rem; color: var(--text-tertiary); display: block; margin-top: 4px;">Porcentaje descontado a vendedores al liquidar suscripciones.</span>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label class="form-label">Alias SIPAP / N° de Cuenta</label>
-              <input type="text" class="form-input" value="gamesboy.py / 01-445566-7">
-            </div>
-          </div>
-          <button class="btn-primary-block" style="margin-top: 1rem;" onclick="alert('Configuración guardada.')">Guardar Cambios de Sucursal</button>
+
+            <button type="submit" class="btn-primary-block" style="padding: 14px; font-size: 0.95rem; font-weight: 800;">
+              💾 Guardar Configuración de Cobros y Billetera
+            </button>
+          </form>
         </div>
       </div>
 
     </main>
+  </div>
+
+  <!-- Receipt Viewer Modal -->
+  <div class="modal-overlay" id="modal-admin-receipt" style="display: none; z-index: 99999;">
+    <div class="modal-dialog-modern" style="max-width: 540px; background: #070d1e; border: 1px solid var(--border-medium); padding: 1.5rem;">
+      <div class="modal-header-modern" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff;" id="receipt-modal-title">📄 Comprobante de Recarga</h3>
+        <button class="modal-close-btn" onclick="document.getElementById('modal-admin-receipt').style.display='none'">✕</button>
+      </div>
+      <div id="receipt-modal-body" style="text-align: center;">
+        <img id="receipt-modal-img" src="" alt="Comprobante" style="max-width: 100%; max-height: 400px; border: 1px solid var(--border-medium); display: none; margin: 0 auto 1rem auto;">
+        <div id="receipt-modal-text" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-cyan); background: rgba(0,0,0,0.4); padding: 12px; word-break: break-all;"></div>
+      </div>
+      <div style="margin-top: 1rem; text-align: right;">
+        <button class="btn-action-sm" style="background: var(--bg-surface-elevated); color: #fff; padding: 8px 16px;" onclick="document.getElementById('modal-admin-receipt').style.display='none'">Cerrar</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -358,44 +493,265 @@
       });
     });
 
-    // Load Live Pending Subscriptions
+    let currentAdminOverview = null;
+
+    // Load Live Admin Data (Overview, Settings, Pending Subscriptions & Deposits)
     async function loadAdminData() {
       try {
-        const res = await fetch('/api/admin/pending-subscriptions');
-        const data = await res.json();
-        const tbody = document.getElementById('admin-pending-subs-table-body');
-        const badge = document.getElementById('badge-pending-subs');
+        // 1. Fetch Overview (Finances, Deposits, Payouts, Settings)
+        const overviewRes = await fetch('/api/admin/overview');
+        const overviewData = await overviewRes.json();
+        currentAdminOverview = overviewData;
 
-        if (badge) badge.textContent = data.pendingCount || 0;
+        // Update stats
+        const statDeposits = document.getElementById('stat-pending-deposits-count');
+        const statPayouts = document.getElementById('stat-pending-payouts-count');
+        const badgeFinances = document.getElementById('badge-pending-finances');
+        const statRate = document.getElementById('stat-exchange-rate-preview');
+        const statComm = document.getElementById('stat-commission-preview');
 
-        if (!data.subscriptions || data.subscriptions.length === 0) {
-          tbody.innerHTML = `
+        const pendingDepCount = overviewData.stats?.pendingDepositsCount || (overviewData.pendingDeposits ? overviewData.pendingDeposits.length : 0);
+        const pendingPayCount = overviewData.stats?.pendingPayoutsCount || (overviewData.pendingPayouts ? overviewData.pendingPayouts.length : 0);
+        const totalFinancesPending = pendingDepCount + pendingPayCount;
+
+        if (statDeposits) statDeposits.textContent = pendingDepCount;
+        if (statPayouts) statPayouts.textContent = pendingPayCount;
+        if (badgeFinances) {
+          badgeFinances.textContent = totalFinancesPending;
+          badgeFinances.style.display = totalFinancesPending > 0 ? 'inline-block' : 'none';
+        }
+
+        const rate = overviewData.settings?.exchangeRatePyg || 7500;
+        const comm = overviewData.settings?.commissionPercent || 15;
+        if (statRate) statRate.textContent = `${rate.toLocaleString('es-PY')} Gs.`;
+        if (statComm) statComm.textContent = `${comm}%`;
+
+        // Populate Settings Form Fields
+        if (overviewData.settings) {
+          const s = overviewData.settings;
+          const b = s.paraguayBankDetails || {};
+          const c = s.binanceDetails || {};
+
+          if (document.getElementById('setting-bank-name')) document.getElementById('setting-bank-name').value = b.bank || '';
+          if (document.getElementById('setting-bank-holder')) document.getElementById('setting-bank-holder').value = b.accountHolder || '';
+          if (document.getElementById('setting-bank-ruc')) document.getElementById('setting-bank-ruc').value = b.rucOrCi || '';
+          if (document.getElementById('setting-bank-account')) document.getElementById('setting-bank-account').value = b.accountNumber || '';
+          if (document.getElementById('setting-bank-alias')) document.getElementById('setting-bank-alias').value = b.aliasSipap || '';
+
+          if (document.getElementById('setting-binance-id')) document.getElementById('setting-binance-id').value = c.payId || '';
+          if (document.getElementById('setting-binance-network')) document.getElementById('setting-binance-network').value = c.network || 'USDT (Binance Pay / BEP-20 / TRC-20)';
+          if (document.getElementById('setting-binance-wallet')) document.getElementById('setting-binance-wallet').value = c.walletAddress || '';
+          if (document.getElementById('setting-binance-qr')) document.getElementById('setting-binance-qr').value = c.qrUrl || '';
+
+          if (document.getElementById('setting-exchange-rate-pyg')) document.getElementById('setting-exchange-rate-pyg').value = s.exchangeRatePyg || 7500;
+          if (document.getElementById('setting-commission-percent')) document.getElementById('setting-commission-percent').value = s.commissionPercent || 15;
+        }
+
+        // Render Pending Deposits Table
+        renderPendingDepositsTable(overviewData.pendingDeposits || [], rate);
+
+        // Render Pending Payouts Table
+        renderPendingPayoutsTable(overviewData.pendingPayouts || [], rate);
+
+        // 2. Fetch Pending Subscriptions
+        const subsRes = await fetch('/api/admin/pending-subscriptions');
+        const subsData = await subsRes.json();
+        const tbodySubs = document.getElementById('admin-pending-subs-table-body');
+        const badgeSubs = document.getElementById('badge-pending-subs');
+
+        if (badgeSubs) badgeSubs.textContent = subsData.pendingCount || 0;
+
+        if (!subsData.subscriptions || subsData.subscriptions.length === 0) {
+          tbodySubs.innerHTML = `
             <tr>
               <td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">
                 ✅ No hay cuentas pendientes de revisión. Todas las cuentas activas están verificadas y publicadas en la tienda.
               </td>
             </tr>
           `;
-          return;
+        } else {
+          tbodySubs.innerHTML = subsData.subscriptions.map(s => `
+            <tr>
+              <td><strong>${s.sellerName || 'Vendedor'}</strong></td>
+              <td><span style="color: var(--accent-cyan); font-weight: 700;">${s.serviceName}</span></td>
+              <td>${s.totalSlots} slots</td>
+              <td><strong>${Math.round(s.pricePerSlotUsd * rate).toLocaleString('es-PY')} Gs.</strong> <span style="font-size: 0.72rem; color: var(--text-tertiary);">($${s.pricePerSlotUsd.toFixed(2)})</span></td>
+              <td>
+                <button class="btn-action-sm" style="background: rgba(255,255,255,0.08); padding: 4px 8px; font-size: 0.78rem;" onclick="alert('Credenciales para probar:\n\n${s.credentialsDecrypted || 'No provisto'}\n\nPINs: ${s.pinsDecrypted || 'N/A'}')">🔑 Ver Claves & Probar</button>
+              </td>
+              <td>
+                <button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; font-weight: 800; padding: 4px 10px; margin-right: 4px;" onclick="approveSub('${s.id}')">✅ Aprobar y Publicar</button>
+                <button class="btn-action-sm" style="background: var(--accent-red); color: #fff; padding: 4px 8px;" onclick="rejectSub('${s.id}')">❌ Rechazar</button>
+              </td>
+            </tr>
+          `).join('');
         }
 
-        tbody.innerHTML = data.subscriptions.map(s => `
+      } catch (err) {
+        console.error('Error loading admin overview:', err);
+      }
+    }
+
+    function renderPendingDepositsTable(deposits, rate) {
+      const tbody = document.getElementById('admin-deposits-table-body');
+      if (!tbody) return;
+
+      if (!deposits || deposits.length === 0) {
+        tbody.innerHTML = `
           <tr>
-            <td><strong>${s.sellerName || 'Vendedor'}</strong></td>
-            <td><span style="color: var(--accent-cyan); font-weight: 700;">${s.serviceName}</span></td>
-            <td>${s.totalSlots} slots</td>
-            <td>$ ${s.pricePerSlotUsd.toFixed(2)}</td>
-            <td>
-              <button class="btn-action-sm" style="background: rgba(255,255,255,0.08); padding: 4px 8px; font-size: 0.78rem;" onclick="alert('Credenciales para probar:\n\n${s.credentialsDecrypted || 'No provisto'}\n\nPINs: ${s.pinsDecrypted || 'N/A'}')">🔑 Ver Claves & Probar</button>
-            </td>
-            <td>
-              <button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; font-weight: 800; padding: 4px 10px; margin-right: 4px;" onclick="approveSub('${s.id}')">✅ Aprobar y Publicar</button>
-              <button class="btn-action-sm" style="background: var(--accent-red); color: #fff; padding: 4px 8px;" onclick="rejectSub('${s.id}')">❌ Rechazar</button>
+            <td colspan="7" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">
+              ✅ No hay comprobantes de recarga pendientes de verificación.
             </td>
           </tr>
-        `).join('');
-      } catch (err) {
-        console.error('Error loading pending subscriptions:', err);
+        `;
+        return;
+      }
+
+      tbody.innerHTML = deposits.map(tx => {
+        const isBinance = tx.method === 'binance_usdt' || tx.currency === 'USDT';
+        const methodBadge = isBinance
+          ? `<span class="badge-method-binance">🌐 Binance Pay (USDT)</span>`
+          : `<span class="badge-method-sipap">🇵🇾 SIPAP Paraguay</span>`;
+        
+        const transferredText = isBinance
+          ? `<strong>${tx.amountUsd ? tx.amountUsd.toFixed(2) : '0.00'} USDT</strong>`
+          : `<strong>${Math.round(tx.localAmount || (tx.amountUsd * rate)).toLocaleString('es-PY')} Gs.</strong>`;
+
+        const creditAmountGs = Math.round((tx.localAmount || (tx.amountUsd * rate))).toLocaleString('es-PY');
+
+        const receiptEscaped = (tx.receiptData || tx.receiptUrl || '').replace(/'/g, "\\'");
+        const refEscaped = (tx.reference || 'Comprobante').replace(/'/g, "\\'");
+
+        return `
+          <tr>
+            <td>
+              <div style="font-weight: 700; color: #ffffff;">${tx.userName || tx.userId}</div>
+              <span style="font-size: 0.72rem; color: var(--text-tertiary); font-family: var(--font-mono);">${tx.userId}</span>
+            </td>
+            <td>${methodBadge}</td>
+            <td>${transferredText}</td>
+            <td><strong style="color: var(--accent-emerald); font-size: 0.95rem;">${creditAmountGs} Gs.</strong></td>
+            <td><code style="background: rgba(255,255,255,0.06); padding: 2px 6px; font-size: 0.78rem;">${tx.reference || 'N/A'}</code></td>
+            <td>
+              <button class="btn-receipt-view" onclick="openReceiptModal('${receiptEscaped}', '${refEscaped}')">👁️ Ver</button>
+            </td>
+            <td>
+              <button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; font-weight: 800; padding: 4px 10px; margin-right: 4px;" onclick="approveDeposit('${tx.id}')">✅ Aprobar y Acreditar</button>
+              <button class="btn-action-sm" style="background: var(--accent-red); color: #fff; padding: 4px 8px;" onclick="rejectDeposit('${tx.id}')">❌ Rechazar</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderPendingPayoutsTable(payouts, rate) {
+      const tbody = document.getElementById('admin-payouts-table-body');
+      if (!tbody) return;
+
+      if (!payouts || payouts.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">
+              ✅ No hay solicitudes de retiro pendientes de procesar.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = payouts.map(p => {
+        const isBinance = p.method === 'binance_usdt';
+        const methodBadge = isBinance
+          ? `<span class="badge-method-binance">🌐 Binance USDT</span>`
+          : `<span class="badge-method-sipap">🇵🇾 SIPAP Paraguay</span>`;
+
+        const amountGs = Math.round(p.amountPyg || (p.amountUsd * rate)).toLocaleString('es-PY');
+        const details = p.accountDetails ? JSON.stringify(p.accountDetails).replace(/"/g, ' ') : 'N/A';
+
+        return `
+          <tr>
+            <td><strong>${p.sellerName || p.sellerId}</strong></td>
+            <td><strong style="color: var(--accent-cyan); font-size: 0.92rem;">${amountGs} Gs.</strong></td>
+            <td>$ ${p.amountUsd ? p.amountUsd.toFixed(2) : '0.00'}</td>
+            <td>${methodBadge}</td>
+            <td><span style="font-size: 0.76rem; color: var(--text-secondary);">${details}</span></td>
+            <td>
+              <button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; font-weight: 800; padding: 4px 10px;" onclick="approvePayout('${p.id}')">✅ Marcar Transferido</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Modal Receipt Preview
+    function openReceiptModal(data, ref) {
+      const modal = document.getElementById('modal-admin-receipt');
+      const img = document.getElementById('receipt-modal-img');
+      const text = document.getElementById('receipt-modal-text');
+      const title = document.getElementById('receipt-modal-title');
+
+      if (title) title.textContent = `📄 Comprobante: ${ref}`;
+
+      if (data && (data.startsWith('data:image') || data.startsWith('http'))) {
+        img.src = data;
+        img.style.display = 'block';
+        text.textContent = `Referencia provista: ${ref}`;
+      } else {
+        img.style.display = 'none';
+        text.textContent = data ? `Datos del comprobante:\n${data}` : `Referencia: ${ref} (Sin imagen adjunta)`;
+      }
+
+      if (modal) modal.style.display = 'grid';
+    }
+
+    // Action Handlers
+    async function approveDeposit(id) {
+      if (!confirm('¿Confirmas que el pago ha sido recibido y deseas acreditar el saldo en Guaraníes al usuario?')) return;
+      try {
+        const res = await fetch('/api/admin/approve-deposit/' + id, { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          alert(`🎉 ${data.message}`);
+          loadAdminData();
+        } else {
+          alert(`Aviso: ${data.error || 'No se pudo aprobar la recarga.'}`);
+        }
+      } catch (e) {
+        alert('Error al aprobar recarga.');
+      }
+    }
+
+    async function rejectDeposit(id) {
+      const reason = prompt('Indica el motivo del rechazo del comprobante:', 'Comprobante no válido o pago no recibido');
+      if (reason === null) return;
+
+      try {
+        const res = await fetch('/api/admin/reject-deposit/' + id, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reason })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('Recarga rechazada.');
+          loadAdminData();
+        }
+      } catch (e) {
+        alert('Error al rechazar recarga.');
+      }
+    }
+
+    async function approvePayout(id) {
+      if (!confirm('¿Confirmas que ya has realizado la transferencia del dinero al vendedor?')) return;
+      try {
+        const res = await fetch('/api/admin/approve-payout/' + id, { method: 'POST' });
+        const data = await res.json();
+        if (data.success) {
+          alert(`🎉 ${data.message}`);
+          loadAdminData();
+        }
+      } catch (e) {
+        alert('Error al aprobar retiro.');
       }
     }
 
@@ -423,8 +779,55 @@
       }
     }
 
+    // Save Payment & Binance Settings
+    const formSettings = document.getElementById('form-admin-payment-settings');
+    if (formSettings) {
+      formSettings.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const payload = {
+          exchangeRatePyg: parseFloat(document.getElementById('setting-exchange-rate-pyg').value) || 7500,
+          commissionPercent: parseFloat(document.getElementById('setting-commission-percent').value) || 15,
+          paraguayBankDetails: {
+            bank: document.getElementById('setting-bank-name').value,
+            accountHolder: document.getElementById('setting-bank-holder').value,
+            rucOrCi: document.getElementById('setting-bank-ruc').value,
+            accountNumber: document.getElementById('setting-bank-account').value,
+            aliasSipap: document.getElementById('setting-bank-alias').value
+          },
+          binanceDetails: {
+            payId: document.getElementById('setting-binance-id').value,
+            network: document.getElementById('setting-binance-network').value,
+            walletAddress: document.getElementById('setting-binance-wallet').value,
+            qrUrl: document.getElementById('setting-binance-qr').value
+          }
+        };
+
+        try {
+          const res = await fetch('/api/admin/settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert('✨ ¡Configuraciones de cobro, bancos y Binance guardadas con éxito!');
+            loadAdminData();
+          } else {
+            alert(data.error || 'Error al guardar configuración.');
+          }
+        } catch (err) {
+          alert('Error de conexión al guardar configuración.');
+        }
+      });
+    }
+
+    window.approveDeposit = approveDeposit;
+    window.rejectDeposit = rejectDeposit;
+    window.approvePayout = approvePayout;
     window.approveSub = approveSub;
     window.rejectSub = rejectSub;
+    window.openReceiptModal = openReceiptModal;
     window.loadAdminData = loadAdminData;
 
     document.addEventListener('DOMContentLoaded', () => {

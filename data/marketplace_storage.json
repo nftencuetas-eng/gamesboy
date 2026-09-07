@@ -28,15 +28,49 @@
       "pendingEscrowUsd": 0
     },
     "usr_seller1": {
-      "balanceUsd": 85.5,
+      "balanceUsd": 65.5,
       "pendingEscrowUsd": 22
     },
     "usr_client1": {
-      "balanceUsd": 25,
+      "balanceUsd": 48.33,
       "pendingEscrowUsd": 0
     }
   },
   "wallet_transactions": [
+    {
+      "id": "tx_1788739685080_e1by",
+      "userId": "usr_client1",
+      "userName": "Lucas_Py",
+      "type": "deposit",
+      "amountUsd": 13.33,
+      "currency": "PYG",
+      "localAmount": 100000,
+      "method": "sipap_paraguay",
+      "status": "approved",
+      "reference": "SIPAP-TRANSF-992184",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T00:08:05.080Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T00:08:05.104Z"
+    },
+    {
+      "id": "tx_1788739685029_0r0g",
+      "userId": "usr_client1",
+      "userName": "Lucas_Py",
+      "type": "deposit",
+      "amountUsd": 10,
+      "currency": "USDT",
+      "localAmount": 75000,
+      "method": "binance_usdt",
+      "status": "approved",
+      "reference": "BINANCE-ORDER-8891024",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T00:08:05.029Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T00:08:05.096Z"
+    },
     {
       "id": "tx_init_1",
       "userId": "usr_client1",
@@ -530,6 +564,20 @@
   ],
   "user_store_orders": [],
   "payout_requests": [
+    {
+      "id": "payout_1788739685129",
+      "sellerId": "usr_seller1",
+      "sellerName": "Carlos_Streams",
+      "amountUsd": 20,
+      "amountPyg": 150000,
+      "method": "binance_usdt",
+      "accountDetails": {
+        "binanceDestination": "PayID: 998811223"
+      },
+      "status": "completed",
+      "createdAt": "2026-09-07T00:08:05.129Z",
+      "processedAt": "2026-09-07T00:08:05.139Z"
+    },
     {
       "id": "payout_sample_1",
       "sellerId": "usr_seller1",
