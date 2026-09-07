@@ -1191,6 +1191,29 @@ function initUserSession() {
     if (dropdownUserName) dropdownUserName.textContent = user.name || 'Usuario';
     if (dropdownUserEmail) dropdownUserEmail.textContent = user.email || 'usuario@gamesboy.net';
 
+    const roleBadge = document.querySelector('.user-role-badge');
+    const adminMenuContainer = document.getElementById('menu-item-admin-container');
+
+    if (user.role === 'admin') {
+      if (roleBadge) {
+        roleBadge.textContent = '👑 Administrador Master';
+        roleBadge.style.color = '#f59e0b';
+      }
+      if (adminMenuContainer) adminMenuContainer.style.display = 'block';
+    } else if (user.role === 'seller') {
+      if (roleBadge) {
+        roleBadge.textContent = '💼 Vendedor Verificado';
+        roleBadge.style.color = '#34d399';
+      }
+      if (adminMenuContainer) adminMenuContainer.style.display = 'none';
+    } else {
+      if (roleBadge) {
+        roleBadge.textContent = '🎮 Cliente Verificado';
+        roleBadge.style.color = '#00c2ff';
+      }
+      if (adminMenuContainer) adminMenuContainer.style.display = 'none';
+    }
+
     const avatarSrc = (user.avatar && (user.avatar.startsWith('http') || user.avatar.startsWith('data:') || user.avatar.startsWith('/assets'))) 
       ? user.avatar 
       : '/assets/branding/icon.png';
@@ -1277,6 +1300,7 @@ function initUserSession() {
   if (btnLogoutUser) {
     btnLogoutUser.onclick = () => {
       localStorage.removeItem('gb_user');
+      localStorage.removeItem('gb_admin_session');
       window.location.reload();
     };
   }

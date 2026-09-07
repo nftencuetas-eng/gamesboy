@@ -1,10 +1,25 @@
 import { getDb, saveStorage } from '../config/database.js';
+import postgresAdapter from '../db/postgresAdapter.js';
 
 export function getWallet(userId) {
   const db = getDb();
   if (!db.wallets[userId]) {
     db.wallets[userId] = { balanceUsd: 0.0, pendingEscrowUsd: 0.0 };
     saveStorage();
+
+    if (postgresAdapter.isPgConnected()) {
+      const pool = postgresAdapter.getPool();
+      pool.query('SELECT * FROM gamesboy.gb_wallets WHERE user_id = $1', [userId])
+        .then(res => {
+          if (res.rows.length > 0) {
+            db.wallets[userId] = {
+              balanceUsd: parseFloat(res.rows[0].balance_usd),
+              pendingEscrowUsd: parseFloat(res.rows[0].pending_escrow_usd)
+            };
+          }
+        })
+        .catch(err => console.error('Error reading wallet from Postgres:', err.message));
+    }
   }
   return db.wallets[userId];
 }
@@ -31,6 +46,16 @@ export function createDepositRequest(userId, userName, amountUsd, currency, loca
 
   db.wallet_transactions.unshift(transaction);
   saveStorage();
+
+  if (postgresAdapter.isPgConnected()) {
+    const pool = postgresAdapter.getPool();
+    pool.query(
+      `INSERT INTO gamesboy.gb_wallet_transactions (id, user_id, user_name, type, amount_usd, currency, local_amount, method, status, reference, receipt_url, notes)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+      [txId, userId, userName, 'deposit', amountUsd, currency, localAmount, method, 'pending', reference, receiptData ? 'receipt_uploaded' : '', 'Recarga pendiente']
+    ).catch(err => console.error('Error saving transaction in Postgres:', err.message));
+  }
+
   return transaction;
 }
 
@@ -51,6 +76,15 @@ export function approveDeposit(transactionId, adminId) {
   wallet.balanceUsd = parseFloat((wallet.balanceUsd + tx.amountUsd).toFixed(2));
 
   saveStorage();
+
+  if (postgresAdapter.isPgConnected()) {
+    const pool = postgresAdapter.getPool();
+    pool.query('UPDATE gamesboy.gb_wallets SET balance_usd = $1, updated_at = NOW() WHERE user_id = $2', [wallet.balanceUsd, tx.userId])
+      .catch(err => console.error('Error updating wallet in Postgres:', err.message));
+    pool.query('UPDATE gamesboy.gb_wallet_transactions SET status = $1, notes = $2 WHERE id = $3', ['approved', 'Recarga aprobada', transactionId])
+      .catch(err => console.error('Error updating transaction in Postgres:', err.message));
+  }
+
   return { tx, wallet };
 }
 

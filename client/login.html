@@ -181,17 +181,44 @@
           <button type="button" id="btn-toggle-auth-mode" style="background: none; border: none; color: var(--accent-cyan); font-weight: 700; cursor: pointer; margin-left: 6px;">Regístrate gratis</button>
         </div>
 
-        <!-- Quick Demo Access Bar (Unified User Account) -->
+        <!-- Quick Demo Access Bar (Test Accounts Grid) -->
         <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle);">
-          <div style="font-size: 0.72rem; color: var(--text-tertiary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.65rem; text-align: center;">
-            ⚡ Acceso Rápido de Prueba (Usuario Comprador + Vendedor)
+          <div style="font-size: 0.72rem; color: var(--text-tertiary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; text-align: center;">
+            ⚡ Cuentas y Accesos de Prueba Rápidos (1-Clic)
           </div>
-          <button type="button" id="btn-quick-client" style="width: 100%; background: linear-gradient(135deg, rgba(0, 194, 255, 0.12), rgba(16, 185, 129, 0.12)); border: 1px solid var(--border-medium); color: #fff; padding: 10px 14px; font-size: 0.82rem; font-weight: 800; cursor: pointer; border-radius: 10px !important; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease;">
-            <span>🎮</span><span>Entrar como Usuario Demo (Lucas González) - Saldo $25 USD</span>
-          </button>
-          <div style="margin-top: 10px; text-align: center;">
-            <a href="/admin/login" style="font-size: 0.76rem; color: var(--accent-amber); text-decoration: none; font-weight: 700;">
-              ⚙️ ¿Eres Administrador Master? Accede aquí ➔
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+            <button type="button" id="btn-demo-admin" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.4); color: #f59e0b; padding: 8px 10px; font-size: 0.78rem; font-weight: 800; cursor: pointer; border-radius: 8px !important; display: flex; align-items: center; gap: 6px; text-align: left;">
+              <span style="font-size: 1.1rem;">👑</span>
+              <div>
+                <div>Admin Master</div>
+                <small style="font-size: 0.68rem; color: #cbd5e1; font-weight: normal;">admin@gamesboy.net</small>
+              </div>
+            </button>
+            <button type="button" id="btn-demo-client-lucas" style="background: rgba(0, 194, 255, 0.1); border: 1px solid rgba(0, 194, 255, 0.35); color: #38d6ff; padding: 8px 10px; font-size: 0.78rem; font-weight: 800; cursor: pointer; border-radius: 8px !important; display: flex; align-items: center; gap: 6px; text-align: left;">
+              <span style="font-size: 1.1rem;">🎮</span>
+              <div>
+                <div>Lucas (Cliente)</div>
+                <small style="font-size: 0.68rem; color: #cbd5e1; font-weight: normal;">187.500 Gs. Saldo</small>
+              </div>
+            </button>
+            <button type="button" id="btn-demo-client-maria" style="background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.35); color: #f472b6; padding: 8px 10px; font-size: 0.78rem; font-weight: 800; cursor: pointer; border-radius: 8px !important; display: flex; align-items: center; gap: 6px; text-align: left;">
+              <span style="font-size: 1.1rem;">🌸</span>
+              <div>
+                <div>María (Cliente)</div>
+                <small style="font-size: 0.68rem; color: #cbd5e1; font-weight: normal;">375.000 Gs. Saldo</small>
+              </div>
+            </button>
+            <button type="button" id="btn-demo-seller" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399; padding: 8px 10px; font-size: 0.78rem; font-weight: 800; cursor: pointer; border-radius: 8px !important; display: flex; align-items: center; gap: 6px; text-align: left;">
+              <span style="font-size: 1.1rem;">💼</span>
+              <div>
+                <div>Carlos (Vendedor)</div>
+                <small style="font-size: 0.68rem; color: #cbd5e1; font-weight: normal;">641.250 Gs. Saldo</small>
+              </div>
+            </button>
+          </div>
+          <div style="margin-top: 12px; text-align: center;">
+            <a href="/admin/login" style="font-size: 0.78rem; color: var(--accent-amber); text-decoration: none; font-weight: 700;">
+              ⚙️ Portal Directo de Administrador Master (/admin/login) ➔
             </a>
           </div>
         </div>
@@ -263,48 +290,112 @@
       }
     });
 
+    async function handleLogin(email, password, directObj = null) {
+      if (directObj) {
+        localStorage.setItem('gb_user', JSON.stringify(directObj));
+        if (directObj.role === 'admin') {
+          localStorage.setItem('gb_admin_session', JSON.stringify(directObj));
+          window.location.href = '/admin';
+        } else {
+          window.location.href = '/';
+        }
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (data.success && data.user) {
+          localStorage.setItem('gb_user', JSON.stringify(data.user));
+          if (data.user.role === 'admin' || email.toLowerCase().includes('admin')) {
+            localStorage.setItem('gb_admin_session', JSON.stringify(data.user));
+            window.location.href = '/admin';
+          } else {
+            window.location.href = '/';
+          }
+        } else {
+          alert(data.error || 'Credenciales inválidas');
+        }
+      } catch (err) {
+        // Fallback local
+        if (email.toLowerCase().includes('admin')) {
+          const adminObj = { id: 'usr_admin', name: 'Admin GamesBoy', email: email, role: 'admin', avatar: '👑', balanceUsd: 1250 };
+          localStorage.setItem('gb_user', JSON.stringify(adminObj));
+          localStorage.setItem('gb_admin_session', JSON.stringify(adminObj));
+          window.location.href = '/admin';
+        } else {
+          const userObj = { id: 'usr_' + Date.now(), name: email.split('@')[0], email: email, role: 'client', avatar: '🎮', balanceUsd: 25.00 };
+          localStorage.setItem('gb_user', JSON.stringify(userObj));
+          window.location.href = '/';
+        }
+      }
+    }
+
     document.getElementById('form-auth-page').addEventListener('submit', (e) => {
       e.preventDefault();
-      const email = document.getElementById('auth-input-email').value;
-      const userObj = {
-        id: 'usr_' + Date.now(),
-        name: isRegisterMode ? document.getElementById('auth-input-name').value || 'Usuario' : email.split('@')[0],
-        email: email,
-        role: 'client',
-        avatar: '🎮',
-        balanceUsd: 25.00
-      };
-      localStorage.setItem('gb_user', JSON.stringify(userObj));
-      window.location.href = '/';
+      const email = document.getElementById('auth-input-email').value.trim();
+      const password = document.getElementById('auth-input-password').value;
+      handleLogin(email, password);
     });
 
-    // 1-Click Unified Demo Login
-    document.getElementById('btn-quick-client').addEventListener('click', () => {
-      document.getElementById('auth-input-email').value = 'usuario@gamesboy.net';
-      document.getElementById('auth-input-password').value = 'GamesBoyPass123!';
-      const userObj = {
-        id: 'usr_client_demo',
+    // 1-Click Demo Buttons
+    document.getElementById('btn-demo-admin')?.addEventListener('click', () => {
+      handleLogin('admin@gamesboy.net', 'GamesBoy2026Master!', {
+        id: 'usr_admin',
+        name: 'Admin GamesBoy',
+        email: 'admin@gamesboy.net',
+        role: 'admin',
+        avatar: '👑',
+        balanceUsd: 1250.00
+      });
+    });
+
+    document.getElementById('btn-demo-client-lucas')?.addEventListener('click', () => {
+      handleLogin('lucas@cliente.com', 'Cliente123!', {
+        id: 'usr_client1',
         name: 'Lucas González',
-        email: 'usuario@gamesboy.net',
+        email: 'lucas@cliente.com',
         role: 'client',
         avatar: '🎮',
         balanceUsd: 25.00
-      };
-      localStorage.setItem('gb_user', JSON.stringify(userObj));
-      setTimeout(() => { window.location.href = '/'; }, 250);
+      });
+    });
+
+    document.getElementById('btn-demo-client-maria')?.addEventListener('click', () => {
+      handleLogin('maria@cliente.com', 'Cliente123!', {
+        id: 'usr_client2',
+        name: 'María López',
+        email: 'maria@cliente.com',
+        role: 'client',
+        avatar: '🌸',
+        balanceUsd: 50.00
+      });
+    });
+
+    document.getElementById('btn-demo-seller')?.addEventListener('click', () => {
+      handleLogin('carlos@vendedor.com', 'Seller1234!', {
+        id: 'usr_seller1',
+        name: 'Carlos Streams',
+        email: 'carlos@vendedor.com',
+        role: 'seller',
+        avatar: '💼',
+        balanceUsd: 85.50
+      });
     });
 
     document.getElementById('btn-google-login').addEventListener('click', () => {
-      const userObj = {
+      handleLogin('lucas.google@gmail.com', 'google-oauth', {
         id: 'usr_google_' + Date.now(),
         name: 'Lucas González (Google)',
-        email: 'lucas.gonzalez@gmail.com',
+        email: 'lucas.google@gmail.com',
         role: 'client',
         avatar: '🎮',
         balanceUsd: 25.00
-      };
-      localStorage.setItem('gb_user', JSON.stringify(userObj));
-      window.location.href = '/';
+      });
     });
   </script>
 </body>

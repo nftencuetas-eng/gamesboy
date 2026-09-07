@@ -13,12 +13,14 @@ let db = {
   users: [
     { id: 'usr_admin', name: 'Admin GamesBoy', email: 'admin@gamesboy.net', role: 'admin', avatar: '👑' },
     { id: 'usr_seller1', name: 'Carlos_Streams', email: 'carlos@vendedor.com', role: 'seller', avatar: '💼' },
-    { id: 'usr_client1', name: 'Lucas_Py', email: 'lucas@cliente.com', role: 'client', avatar: '🎮' }
+    { id: 'usr_client1', name: 'Lucas_Py', email: 'lucas@cliente.com', role: 'client', avatar: '🎮' },
+    { id: 'usr_client2', name: 'María López', email: 'maria@cliente.com', role: 'client', avatar: '🌸' }
   ],
   wallets: {
     'usr_admin': { balanceUsd: 1250.00, pendingEscrowUsd: 0 },
     'usr_seller1': { balanceUsd: 85.50, pendingEscrowUsd: 22.00 },
-    'usr_client1': { balanceUsd: 25.00, pendingEscrowUsd: 0 }
+    'usr_client1': { balanceUsd: 25.00, pendingEscrowUsd: 0 },
+    'usr_client2': { balanceUsd: 50.00, pendingEscrowUsd: 0 }
   },
   wallet_transactions: [
     {

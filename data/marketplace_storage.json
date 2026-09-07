@@ -23,7 +23,7 @@
       "surname": "González",
       "birthday": "1998-05-14",
       "hasPassword": true,
-      "passwordUpdated": "2026-09-07T01:29:11.671Z"
+      "passwordUpdated": "2026-09-07T09:47:30.272Z"
     }
   ],
   "wallets": {
@@ -32,15 +32,49 @@
       "pendingEscrowUsd": 0
     },
     "usr_seller1": {
-      "balanceUsd": 25.5,
+      "balanceUsd": 5.5,
       "pendingEscrowUsd": 22
     },
     "usr_client1": {
-      "balanceUsd": 94.99,
+      "balanceUsd": 118.32,
       "pendingEscrowUsd": 0
     }
   },
   "wallet_transactions": [
+    {
+      "id": "tx_1788774785766_iuuu",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "deposit",
+      "amountUsd": 13.33,
+      "currency": "PYG",
+      "localAmount": 100000,
+      "method": "sipap_paraguay",
+      "status": "approved",
+      "reference": "SIPAP-TRANSF-992184",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T09:53:05.767Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T09:53:05.798Z"
+    },
+    {
+      "id": "tx_1788774785700_2uxk",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "deposit",
+      "amountUsd": 10,
+      "currency": "USDT",
+      "localAmount": 75000,
+      "method": "binance_usdt",
+      "status": "approved",
+      "reference": "BINANCE-ORDER-8891024",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T09:53:05.701Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T09:53:05.788Z"
+    },
     {
       "id": "tx_1788741827325_3009",
       "userId": "usr_client1",
@@ -174,6 +208,23 @@
     }
   ],
   "subscriptions": [
+    {
+      "id": "sub_1788774803495_mv03",
+      "sellerId": "usr_client1",
+      "sellerName": "Lucas",
+      "isOfficial": false,
+      "serviceName": "Disney+ Premium & Star+",
+      "category": "streaming",
+      "planName": "Plan 4K 4 Pantallas Compartidas",
+      "totalSlots": 4,
+      "availableSlots": 4,
+      "pricePerSlotUsd": 4.5,
+      "credentialsEncrypted": "e9c7bfc48a7c684056217e86c9068146:b6ab3dfcc38da82d72dca5268282cb6b855e494f40e0b60bf3e04169e121da7062dc6618ea25dcd5e3e255a87833be8a",
+      "pinsEncrypted": "6d706c89e7ec481466ccbf6ea46a8339:26012f32778c1e7108bb6dcfdc4188607fac0127c1e4d1d2edeb4eb69d2934ea94d94d588d23a1743e3d97115c7ffb3d",
+      "instructions": "Usa exclusivamente tu perfil asignado y no cambies contraseña.",
+      "status": "active",
+      "createdAt": "2026-09-07T09:53:23.496Z"
+    },
     {
       "id": "sub_1788700823091_yysk",
       "sellerId": "usr_client1",
@@ -601,6 +652,20 @@
   "user_store_orders": [],
   "payout_requests": [
     {
+      "id": "payout_1788774785832",
+      "sellerId": "usr_seller1",
+      "sellerName": "Carlos_Streams",
+      "amountUsd": 20,
+      "amountPyg": 150000,
+      "method": "binance_usdt",
+      "accountDetails": {
+        "binanceDestination": "PayID: 998811223"
+      },
+      "status": "completed",
+      "createdAt": "2026-09-07T09:53:05.832Z",
+      "processedAt": "2026-09-07T09:53:05.840Z"
+    },
+    {
       "id": "payout_1788741827380",
       "sellerId": "usr_seller1",
       "sellerName": "Carlos_Streams",
@@ -695,6 +760,15 @@
         "isOwnerAdmin": false,
         "text": "¡Hola a todos! Este es un mensaje de prueba en el grupo.",
         "timestamp": "2026-09-06T13:20:23.076Z"
+      },
+      {
+        "id": "msg_1788774803480_5db7",
+        "senderId": "usr_client1",
+        "senderName": "Lucas",
+        "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+        "isOwnerAdmin": false,
+        "text": "¡Hola a todos! Este es un mensaje de prueba en el grupo.",
+        "timestamp": "2026-09-07T09:53:23.480Z"
       }
     ],
     "sub_1788700823091_yysk": [
@@ -706,6 +780,17 @@
         "isOwnerAdmin": true,
         "text": "¡Hola a todos! Soy el administrador de esta cuenta de Disney+ Premium & Star+. Aquí compartiremos novedades e instrucciones del servicio.",
         "timestamp": "2026-09-06T13:20:23.092Z"
+      }
+    ],
+    "sub_1788774803495_mv03": [
+      {
+        "id": "msg_init_sub_1788774803495_mv03",
+        "senderId": "usr_client1",
+        "senderName": "Lucas",
+        "senderAvatar": "👑",
+        "isOwnerAdmin": true,
+        "text": "¡Hola a todos! Soy el administrador de esta cuenta de Disney+ Premium & Star+. Aquí compartiremos novedades e instrucciones del servicio.",
+        "timestamp": "2026-09-07T09:53:23.496Z"
       }
     ]
   }
