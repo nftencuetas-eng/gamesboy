@@ -18,6 +18,7 @@ import sellerRouter from './routes/seller.js';
 import adminRouter from './routes/admin.js';
 import bannersRouter from './routes/banners.js';
 import smmRouter from './routes/smm.js';
+import streamingHubsRouter from './routes/streamingHubs.js';
 import { notFoundHandler, globalErrorHandler } from './middleware/errorHandler.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -92,6 +93,8 @@ app.use('/api/seller', sellerRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/banners', bannersRouter);
 app.use('/api/smm', smmRouter);
+app.use('/api/streaming-hubs', streamingHubsRouter);
+app.use('/api/admin/streaming-hubs', streamingHubsRouter);
 
 // Clean Routes & Admin aliases
 app.get('/login', (req, res) => res.sendFile(path.join(clientPath, 'login.html')));
@@ -104,6 +107,9 @@ app.get('/admid', (req, res) => res.redirect('/admin'));
 app.get('/admid/login', (req, res) => res.redirect('/admin/login'));
 app.get('/profile', (req, res) => res.sendFile(path.join(clientPath, 'profile.html')));
 app.get('/profile.html', (req, res) => res.sendFile(path.join(clientPath, 'profile.html')));
+app.get('/service', (req, res) => res.sendFile(path.join(clientPath, 'service.html')));
+app.get('/service.html', (req, res) => res.sendFile(path.join(clientPath, 'service.html')));
+
 
 // Fallback for SPA routing
 app.get('*', (req, res, next) => {

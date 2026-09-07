@@ -39,7 +39,7 @@ async function deploy() {
     }
 
     // 3. Commit
-    const commitMsg = 'feat: Eliminate page reload flicker with 0ms synchronous instant catalog hydration, CSS layout stability & sub-ms banner cache';
+    const commitMsg = 'feat: Dedicated Streaming Platform Hubs with horizontal & vertical desktop banners, live AI releases sync, host group privacy and Escrow Guarantee protection';
     const sha = await git.commit({
       fs,
       dir,

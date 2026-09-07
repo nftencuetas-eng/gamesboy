@@ -642,8 +642,10 @@ function renderStreamingServices() {
       `;
     }
 
+    const platformSlug = matchedBrand.toLowerCase();
+
     return `
-      <div class="stream-card-wide" onclick="openBuySubscriptionModal('${s.id}')">
+      <div class="stream-card-wide" onclick="window.location.href='/service.html?platform=${platformSlug}'" style="cursor: pointer;">
         <div class="stream-card-visual" style="background-image: url('${coverImg}');">
           <div class="stream-visual-overlay"></div>
           <span class="stream-brand-badge" style="background: ${accentColor};">${matchedBrand}</span>
@@ -664,8 +666,8 @@ function renderStreamingServices() {
             <span class="stream-slots-text">${s.availableSlots} de ${s.totalSlots} libres</span>
           </div>
 
-          <button class="btn-stream-cta-modern ${isAvail ? '' : 'disabled'}">
-            ${isAvail ? 'Ver Perfiles ➔' : 'Agotado'}
+          <button class="btn-stream-cta-modern ${isAvail ? '' : 'disabled'}" onclick="event.stopPropagation(); window.location.href='/service.html?platform=${platformSlug}'">
+            ${isAvail ? 'Ver más ➔' : 'Agotado'}
           </button>
         </div>
       </div>

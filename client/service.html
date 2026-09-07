@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plataforma Streaming - GamesBoy.net | Cuentas Compartidas con Garantía Escrow</title>
+  <meta name="description" content="Página dedicada de membresía y cuentas compartidas de streaming en GamesBoy.net. Banners oficiales, estrenos del mes, perfiles privados y protección de pago Escrow.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/branding/icon.png">
+  <link rel="apple-touch-icon" href="/assets/branding/icon.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/main.css?v=3.5">
+</head>
+<body class="hub-page-body">
+
+  <!-- ======================================================= -->
+  <!-- MAIN SITE HEADER (GAMESBOY STYLE)                       -->
+  <!-- ======================================================= -->
+  <header class="site-header">
+    <div class="header-top-bar">
+      <div class="header-left">
+        <a href="/" class="brand" id="brand-logo" title="GamesBoy.net - Inicio">
+          <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" class="brand-logo-img">
+        </a>
+      </div>
+
+      <div class="header-right">
+        <!-- Auth Actions (Client Login / Register) -->
+        <div class="header-auth-buttons" id="auth-unlogged-group">
+          <a href="/login" class="btn-header-login-modern" id="btn-open-login-page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Iniciar sesión</span>
+          </a>
+        </div>
+
+        <!-- Live Balance Display Pill & Profile Dropdown (Logged In Client) -->
+        <div class="header-user-group is-hidden" id="auth-logged-group" style="display: none !important;">
+          <button class="btn-balance-display-pill" id="btn-open-deposit-modal" title="Saldo disponible en tu cuenta. Haz clic para recargar.">
+            <svg class="wallet-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+            <span id="nav-user-balance-amount">0 Gs.</span>
+          </button>
+
+          <!-- User Profile Dropdown Pill -->
+          <div class="user-profile-wrapper" id="user-profile-wrapper">
+            <button class="user-profile-btn" id="btn-user-profile-toggle" type="button" title="Mi Cuenta">
+              <div class="user-avatar-badge" id="nav-user-avatar-badge">
+                <img id="nav-user-avatar-img" src="/assets/branding/icon.png" alt="Avatar" class="header-avatar-img">
+              </div>
+              <span class="user-name-label" id="nav-user-name">Usuario</span>
+              <svg class="profile-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+
+            <div class="user-profile-dropdown-menu" id="user-profile-dropdown-menu" style="display: none;">
+              <div class="dropdown-user-header">
+                <div class="dropdown-user-avatar">
+                  <img id="dropdown-user-avatar-img" src="/assets/branding/icon.png" alt="Avatar">
+                </div>
+                <div class="dropdown-user-info">
+                  <strong id="dropdown-user-name">Usuario</strong>
+                  <span id="dropdown-user-email">usuario@gamesboy.net</span>
+                  <span class="user-role-badge">Cliente Verificado</span>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+              <ul class="dropdown-menu-list">
+                <li id="menu-item-admin-container" style="display: none;">
+                  <a href="/admin" class="dropdown-menu-item" style="color: #f59e0b !important; font-weight: 700;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Panel Administrador</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/profile.html" class="dropdown-menu-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Mi Cuenta & Perfil</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/profile.html#tab-purchases" class="dropdown-menu-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span>Mis Compras</span>
+                  </a>
+                </li>
+                <li style="border-top: 1px solid var(--border-subtle); margin-top: 4px; padding-top: 4px;">
+                  <button type="button" class="dropdown-menu-item" id="btn-header-logout" style="width: 100%; border: none; background: transparent; cursor: pointer; color: #ef4444; font-weight: 700; text-align: left; display: flex; align-items: center; gap: 8px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Cerrar Sesión</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================= -->
+  <!-- MAIN DEDICATED HUB VIEWPORT                             -->
+  <!-- ======================================================= -->
+  <main class="hub-container">
+    
+    <!-- Top Breadcrumb Navigation -->
+    <div class="hub-breadcrumb-bar">
+      <a href="/" class="btn-hub-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span>Volver a la Tienda Principal</span>
+      </a>
+      <div class="hub-breadcrumb-trail">
+        <span>Inicio</span>
+        <span>/</span>
+        <span>Suscripciones de Streaming</span>
+        <span>/</span>
+        <strong id="hub-breadcrumb-platform" style="color: var(--accent-cyan);">Netflix Premium 4K</strong>
+      </div>
+    </div>
+
+    <!-- 1. PANORAMIC HORIZONTAL HERO BANNER -->
+    <section class="hub-hero-banner" id="hub-hero-banner">
+      <div class="hub-hero-backdrop" id="hub-hero-backdrop"></div>
+      <div class="hub-hero-overlay"></div>
+      <div class="hub-hero-content">
+        <div class="hub-hero-badges-wrap">
+          <span class="hub-badge-quality" id="hub-badge-quality">ULTRA HD 4K • DOLBY ATMOS</span>
+          <span class="hub-badge-escrow">🛡️ Garantía Escrow GamesBoy</span>
+        </div>
+        <h1 class="hub-hero-title" id="hub-hero-title">Netflix Premium 4K HDR</h1>
+        <p class="hub-hero-tagline" id="hub-hero-tagline">Películas, series y documentales ilimitados en Ultra HD</p>
+        <p class="hub-hero-desc" id="hub-hero-desc">
+          Disfruta de tu propio perfil privado y PIN personal. Comparte el costo de la cuenta de forma 100% legal y protegida con la Garantía Escrow de GamesBoy.
+        </p>
+      </div>
+    </section>
+
+    <!-- 2. HORIZONTAL IMPACT METRICS BAR -->
+    <section class="hub-metrics-bar">
+      <div class="hub-metric-card cyan">
+        <div class="hub-metric-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+        </div>
+        <div class="hub-metric-body">
+          <div class="hub-metric-val" id="hub-metric-accounts">48 Cuentas</div>
+          <div class="hub-metric-label">Grupos Activos y Disponibles</div>
+        </div>
+      </div>
+
+      <div class="hub-metric-card emerald">
+        <div class="hub-metric-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        </div>
+        <div class="hub-metric-body">
+          <div class="hub-metric-val" id="hub-metric-users">+184 Usuarios</div>
+          <div class="hub-metric-label">Disfrutando este Mes</div>
+        </div>
+      </div>
+
+      <div class="hub-metric-card purple">
+        <div class="hub-metric-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+        </div>
+        <div class="hub-metric-body">
+          <div class="hub-metric-val" id="hub-metric-savings">Hasta -75% OFF</div>
+          <div class="hub-metric-label">Ahorro Promedio vs Cuenta Individual</div>
+        </div>
+      </div>
+
+      <div class="hub-metric-card gold">
+        <div class="hub-metric-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        </div>
+        <div class="hub-metric-body">
+          <div class="hub-metric-val" id="hub-metric-rating">4.95 / 5.0 ★</div>
+          <div class="hub-metric-label">Confianza & Garantía Escrow</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- 3. MAIN CONTENT GRID (2 COLUMNS: MAIN + SIDEBAR DESKTOP)-->
+    <!-- ======================================================= -->
+    <div class="hub-content-layout">
+      
+      <!-- LEFT / MAIN SECTION -->
+      <div class="hub-main-column">
+        
+        <!-- SECTION A: ESTRENOS & NOVEDADES DEL MES (IA / REALTIME) -->
+        <div class="hub-section-card">
+          <div class="hub-section-header">
+            <div>
+              <span class="hub-section-badge-pill">🎬 Cartelera en Vivo</span>
+              <h2 class="hub-section-title">Estrenos, Series & Novedades Destacadas</h2>
+              <p class="hub-section-subtitle">Lo más visto y próximos lanzamientos oficiales en esta plataforma.</p>
+            </div>
+            <div class="hub-ai-indicator" title="Cartelera sincronizada automáticamente con el catálogo oficial">
+              <span class="pulse-dot"></span>
+              <span>Actualizado con IA en Vivo</span>
+            </div>
+          </div>
+
+          <!-- Dynamic Releases Grid -->
+          <div class="hub-releases-grid" id="hub-releases-grid">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- SECTION B: LISTADO DE GRUPOS Y CUENTAS COMPARTIDAS -->
+        <div class="hub-section-card">
+          <div class="hub-section-header">
+            <div>
+              <span class="hub-section-badge-pill cyan">👥 Cuentas Compartidas</span>
+              <h2 class="hub-section-title">Elige tu Grupo de Cuenta & Anfitrión</h2>
+              <p class="hub-section-subtitle">Selecciona el anfitrión con quien deseas compartir tu membresía. Perfiles 100% privados con PIN.</p>
+            </div>
+          </div>
+
+          <!-- Groups List Container -->
+          <div class="hub-groups-list" id="hub-groups-list">
+            <!-- Populated dynamically with Host Privacy Protection -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT / SIDEBAR SECTION (DESKTOP VERTICAL BANNERS & ESCROW PROMISE) -->
+      <aside class="hub-sidebar-column">
+        
+        <!-- Vertical Banner 1: Featured Promo Poster -->
+        <div class="hub-vertical-banner-card" id="hub-vertical-banner-wrap">
+          <div class="hub-vertical-banner-bg" id="hub-vertical-banner-bg"></div>
+          <div class="hub-vertical-banner-overlay"></div>
+          <div class="hub-vertical-banner-content">
+            <span class="hub-v-badge">DESTACADO DEL MES</span>
+            <h3 class="hub-v-title" id="hub-v-title">Estrenos Imperdibles</h3>
+            <p class="hub-v-desc" id="hub-v-desc">Disfruta de todo el catálogo en calidad 4K HDR con soporte multilingüe y descargas.</p>
+          </div>
+        </div>
+
+        <!-- Vertical Banner 2: GamesBoy Escrow Shield -->
+        <div class="hub-escrow-trust-box">
+          <div class="hub-escrow-icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+          </div>
+          <h4 class="hub-escrow-box-title">Garantía Escrow GamesBoy</h4>
+          <p class="hub-escrow-box-desc">
+            Tu dinero se retiene de forma 100% segura y <strong>no se le libera al anfitrión hasta que concluyan los 30 días</strong> de tu membresía. Si ocurre alguna interrupción consecutiva, tienes derecho a reemplazo inmediato o reembolso.
+          </p>
+          <div class="hub-escrow-perks">
+            <div class="hub-escrow-perk-item">
+              <span class="perk-check">✓</span>
+              <span>Perfil privado con PIN exclusivo</span>
+            </div>
+            <div class="hub-escrow-perk-item">
+              <span class="perk-check">✓</span>
+              <span>Renovación garantizada mes a mes</span>
+            </div>
+            <div class="hub-escrow-perk-item">
+              <span class="perk-check">✓</span>
+              <span>Soporte prioritario WhatsApp 24/7</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vertical Banner 3: Monitization / Host CTA -->
+        <div class="hub-host-cta-box">
+          <div style="font-size: 1.5rem; margin-bottom: 6px;">💡</div>
+          <h4 style="font-size: 0.95rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">¿Tienes una cuenta familiar?</h4>
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 12px; line-height: 1.4;">
+            Gana dinero todos los meses compartiendo los perfiles libres de tus cuentas con otros usuarios de forma automatizada.
+          </p>
+          <button class="btn-hub-monetize" onclick="window.location.href='/?publish=true'">
+            <span>Publicar y Generar Ingresos ➔</span>
+          </button>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- ======================================================= -->
+  <!-- MODAL: POP-UP DE GARANTÍA ESCROW & ADHESIÓN AL GRUPO    -->
+  <!-- ======================================================= -->
+  <div class="modal-overlay" id="modal-escrow-join" style="display: none;">
+    <div class="modal-card modal-escrow-card">
+      <button type="button" class="btn-modal-close" id="btn-close-escrow-modal">✕</button>
+
+      <!-- Shield Header -->
+      <div class="escrow-modal-header">
+        <div class="escrow-shield-glow">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+        </div>
+        <h3 class="escrow-modal-title">Garantía Escrow GamesBoy</h3>
+        <p class="escrow-modal-subtitle">Tu pago y tu membresía están 100% protegidos</p>
+      </div>
+
+      <!-- Target Subscription Summary Box -->
+      <div class="escrow-selected-sub-box">
+        <div class="escrow-sub-info">
+          <span class="escrow-sub-plan-badge" id="modal-escrow-plan-badge">Plan Ultra HD 4K</span>
+          <h4 class="escrow-sub-name" id="modal-escrow-sub-name">Netflix Premium 4K HDR</h4>
+          <div class="escrow-sub-host-line">
+            <span>Anfitrión:</span>
+            <strong id="modal-escrow-host-name" style="color: #ffffff;">Lucas González</strong>
+            <span class="badge-verified-sm">⭐ Verificado</span>
+          </div>
+        </div>
+        <div class="escrow-sub-price-block">
+          <span style="font-size: 0.7rem; color: var(--text-tertiary); text-transform: uppercase;">Monto a debitar</span>
+          <div class="escrow-price-gs" id="modal-escrow-price-gs">30.000 Gs.</div>
+          <div class="escrow-price-usd" id="modal-escrow-price-usd">$3.99 USDT / mes</div>
+        </div>
+      </div>
+
+      <!-- 3 Key Safety Guarantees -->
+      <div class="escrow-steps-list">
+        <div class="escrow-step-item">
+          <div class="escrow-step-num">1</div>
+          <div class="escrow-step-text">
+            <strong>Retención Segura en Custodia (Escrow)</strong>
+            <span>El valor de tu membresía no se transfiere inmediatamente al anfitrión. Queda resguardado en custodia por GamesBoy.</span>
+          </div>
+        </div>
+
+        <div class="escrow-step-item">
+          <div class="escrow-step-num">2</div>
+          <div class="escrow-step-text">
+            <strong>Acreditación al Finalizar el Mes (30 días)</strong>
+            <span>El dueño de la cuenta recién cobra al completarse satisfactoriamente el mes completo de tu servicio.</span>
+          </div>
+        </div>
+
+        <div class="escrow-step-item">
+          <div class="escrow-step-num">3</div>
+          <div class="escrow-step-text">
+            <strong>Protección ante Cortes o Reembolso Garantizado</strong>
+            <span>Si sufres alguna interrupción de acceso, puedes reportarlo para asignarte un reemplazo inmediato o reembolso total.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Balance Check Notice -->
+      <div class="escrow-wallet-check-row">
+        <span style="font-size: 0.82rem; color: var(--text-secondary);">Tu Saldo Disponible:</span>
+        <strong id="modal-escrow-user-balance" style="color: var(--accent-emerald); font-family: var(--font-mono); font-size: 0.95rem;">0 Gs.</strong>
+      </div>
+
+      <!-- Actions -->
+      <div class="escrow-modal-actions">
+        <button type="button" class="btn-cancel-escrow" id="btn-cancel-escrow">Cancelar</button>
+        <button type="button" class="btn-confirm-escrow" id="btn-confirm-escrow-buy">
+          <span>Aceptar y Activar Perfil ➔</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Deposit Modal -->
+  <div class="modal-overlay" id="modal-deposit" style="display: none;">
+    <div class="modal-card modal-deposit-card">
+      <button type="button" class="btn-modal-close" id="btn-close-deposit-modal">✕</button>
+      <div class="modal-header">
+        <h3 class="modal-title">Recargar Saldo en GamesBoy</h3>
+        <p class="modal-subtitle">Elige tu método de recarga favorito con acreditación en Guaraníes (Gs.)</p>
+      </div>
+      <div class="deposit-methods-tabs">
+        <button type="button" class="deposit-tab-btn active" id="tab-pay-local">🇵🇾 SIPAP Paraguay</button>
+        <button type="button" class="deposit-tab-btn" id="tab-pay-binance">🌐 USDT Cripto</button>
+      </div>
+      <div style="padding: 1.25rem 0;">
+        <div id="box-pay-local">
+          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            Realiza tu transferencia a través de SIPAP y adjunta el comprobante para acreditación inmediata.
+          </p>
+          <a href="/profile.html" class="btn-primary-block" style="text-align: center; text-decoration: none; padding: 12px;">
+            Ir al Panel de Recargas en Mi Cuenta ➔
+          </a>
+        </div>
+        <div id="box-pay-binance" style="display: none;">
+          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            Envía USDT por Binance Pay o red BEP20 para acreditación automática.
+          </p>
+          <a href="/profile.html" class="btn-primary-block" style="text-align: center; text-decoration: none; padding: 12px;">
+            Ir al Panel de Recargas en Mi Cuenta ➔
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Script for Dedicated Service Hub -->
+  <script type="module" src="/js/service-page.js?v=1.0"></script>
+</body>
+</html>
