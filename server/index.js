@@ -84,11 +84,15 @@ app.use('/api/seller', sellerRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/banners', bannersRouter);
 
-// Clean Routes without .html extension
+// Clean Routes & Admin aliases
 app.get('/login', (req, res) => res.sendFile(path.join(clientPath, 'login.html')));
 app.get('/admin', (req, res) => res.sendFile(path.join(clientPath, 'admin.html')));
+app.get('/admin.html', (req, res) => res.sendFile(path.join(clientPath, 'admin.html')));
 app.get('/admin/login', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
 app.get('/admin-login', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
+app.get('/admin-login.html', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
+app.get('/admid', (req, res) => res.redirect('/admin'));
+app.get('/admid/login', (req, res) => res.redirect('/admin/login'));
 app.get('/profile', (req, res) => res.sendFile(path.join(clientPath, 'profile.html')));
 app.get('/profile.html', (req, res) => res.sendFile(path.join(clientPath, 'profile.html')));
 

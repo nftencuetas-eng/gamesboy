@@ -36,24 +36,25 @@
         </a>
       </div>
 
-      <!-- Center: Minimalist Expandable Search (Lupa Icon) -->
-      <div class="header-search-wrapper" id="header-search-wrapper">
-        <button type="button" class="btn-search-lupa-toggle" id="btn-search-toggle" title="Buscar videojuegos, tarjetas y streaming">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </button>
-        <div class="header-search-box-expandable" id="header-search-expandable">
-          <span class="header-search-icon-inside">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          </span>
-          <input type="text" id="main-search-input" class="header-search-input" placeholder="Buscar videojuegos, tarjetas, streaming...">
-          <button type="button" class="btn-search-close-sm" id="btn-search-close">✕</button>
-        </div>
-        <!-- Live Instant Search Dropdown -->
-        <div class="search-dropdown-results" id="search-dropdown-results" style="display: none;"></div>
-      </div>
-
-      <!-- Right: Wallet & Auth Actions -->
+      <!-- Right: Search Lupa + Wallet & Auth Actions -->
       <div class="header-right">
+        
+        <!-- Minimalist Expandable Search (Lupa Icon beside login) -->
+        <div class="header-search-wrapper" id="header-search-wrapper">
+          <button type="button" class="btn-search-lupa-toggle" id="btn-search-toggle" title="Buscar videojuegos, tarjetas y streaming">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </button>
+          <div class="header-search-box-expandable" id="header-search-expandable">
+            <span class="header-search-icon-inside">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </span>
+            <input type="text" id="main-search-input" class="header-search-input" placeholder="Buscar videojuegos, tarjetas, streaming...">
+            <button type="button" class="btn-search-close-sm" id="btn-search-close">✕</button>
+          </div>
+          <!-- Live Instant Search Dropdown -->
+          <div class="search-dropdown-results" id="search-dropdown-results" style="display: none;"></div>
+        </div>
+
         <!-- Auth Actions (Client Login / Register) -->
         <div class="header-auth-buttons" id="auth-unlogged-group">
           <a href="/login" class="btn-header-login-modern" id="btn-open-login-page">
@@ -156,13 +157,6 @@
           <li class="sub-nav-item"><a href="#section-giftcards" class="sub-nav-link">Móviles</a></li>
           <li class="sub-nav-item"><a href="#section-social" class="sub-nav-link">Redes Sociales</a></li>
         </ul>
-
-        <!-- High-Converting Seller Callout on Right side of sub-nav -->
-        <div class="nav-seller-action-box">
-          <a href="#section-seller-info" class="sub-nav-seller-pill">
-            <span>💰 ¿Quieres ganar dinero vendiendo tus cuentas?</span>
-          </a>
-        </div>
       </div>
     </div>
 
