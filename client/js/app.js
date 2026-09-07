@@ -605,20 +605,121 @@ window.openBuyGameModal = function(id) {
   const game = state.storeProducts.find(p => p.id === id);
   if (!game) return;
 
-  const priceText = formatPrice(game.priceUsd);
-  if (confirm(`¿Deseas comprar el código digital de "${game.title}" por ${priceText}?`)) {
-    executePurchase('/api/store/purchase', { productId: game.id, paymentMethod: 'internal_wallet' }, game.title);
-  }
+  const modal = document.getElementById('modal-product-buy');
+  if (!modal) return;
+
+  document.getElementById('modal-buy-cover').src = game.coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80';
+  document.getElementById('modal-buy-platform').textContent = game.platform || 'PS5';
+  document.getElementById('modal-buy-title').textContent = game.title;
+  document.getElementById('modal-buy-genre').textContent = game.genre || 'Videojuego Digital';
+  document.getElementById('modal-buy-description').textContent = game.description || 'Entrega digital con activación y soporte garantizado.';
+
+  // Screenshots
+  const screenshotsContainer = document.getElementById('modal-buy-screenshots-container');
+  const shots = (game.screenshots && game.screenshots.length > 0) ? game.screenshots : [
+    'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
+    'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
+  ];
+  screenshotsContainer.innerHTML = shots.map(url => `
+    <img src="${url}" style="height: 85px; width: 140px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1);">
+  `).join('');
+
+  // Options Grid
+  const rate = state.exchangeRatePyg || 7500;
+  const primaryPrice = game.primaryPriceUsd || game.priceUsd || 39.99;
+  const secondaryPrice = game.secondaryPriceUsd || Math.round(primaryPrice * 0.65);
+  const keyPrice = game.digitalKeyPriceUsd || game.priceUsd || 59.99;
+
+  let selectedPrice = primaryPrice;
+  let selectedOptionTitle = 'Cuenta Primaria';
+
+  const options = [
+    { key: 'primary', label: 'Cuenta Primaria', price: primaryPrice, desc: 'Juega con tu perfil propio' },
+    { key: 'secondary', label: 'Cuenta Secundaria', price: secondaryPrice, desc: 'Juega conectado al perfil del juego' },
+    { key: 'key', label: 'Código Digital Key', price: keyPrice, desc: 'Canje directo en tu consola' }
+  ];
+
+  const optionsContainer = document.getElementById('modal-buy-options-grid');
+  const updatePriceDisplay = (price) => {
+    selectedPrice = price;
+    const gs = Math.round(price * rate);
+    document.getElementById('modal-buy-total-gs').textContent = `${gs.toLocaleString('es-PY')} Gs.`;
+    document.getElementById('modal-buy-total-usd').textContent = `$${price.toFixed(2)} USDT`;
+  };
+
+  optionsContainer.innerHTML = options.map((opt, idx) => `
+    <div class="buy-option-card ${idx === 0 ? 'selected' : ''}" data-price="${opt.price}" data-label="${opt.label}" style="background: rgba(255,255,255,0.03); border: 1px solid ${idx === 0 ? 'var(--accent-cyan)' : 'rgba(255,255,255,0.08)'}; padding: 10px 12px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease;">
+      <div style="font-size: 0.82rem; font-weight: 800; color: #ffffff;">${opt.label}</div>
+      <div style="font-family: var(--font-mono); font-size: 0.92rem; font-weight: 800; color: var(--accent-cyan); margin: 3px 0;">$${opt.price.toFixed(2)}</div>
+      <div style="font-size: 0.7rem; color: var(--text-tertiary);">${opt.desc}</div>
+    </div>
+  `).join('');
+
+  updatePriceDisplay(primaryPrice);
+
+  const optionCards = optionsContainer.querySelectorAll('.buy-option-card');
+  optionCards.forEach(card => {
+    card.onclick = () => {
+      optionCards.forEach(c => {
+        c.style.borderColor = 'rgba(255,255,255,0.08)';
+        c.style.background = 'rgba(255,255,255,0.03)';
+      });
+      card.style.borderColor = 'var(--accent-cyan)';
+      card.style.background = 'rgba(0,194,255,0.08)';
+      const p = parseFloat(card.getAttribute('data-price'));
+      selectedOptionTitle = card.getAttribute('data-label');
+      updatePriceDisplay(p);
+    };
+  });
+
+  const confirmBtn = document.getElementById('btn-confirm-product-buy');
+  confirmBtn.onclick = () => {
+    modal.style.display = 'none';
+    executePurchase(`/api/store/products/${game.id}/buy`, { option: selectedOptionTitle, priceUsd: selectedPrice }, `${game.title} (${selectedOptionTitle})`);
+  };
+
+  document.getElementById('btn-close-product-buy-modal').onclick = () => modal.style.display = 'none';
+  modal.style.display = 'grid';
 };
 
 window.openBuyGiftCardModal = function(id) {
   const gc = state.storeProducts.find(p => p.id === id);
   if (!gc) return;
 
-  const priceText = formatPrice(gc.priceUsd);
-  if (confirm(`¿Deseas comprar la tarjeta de regalo "${gc.title}" por ${priceText}?`)) {
-    executePurchase('/api/store/purchase', { productId: gc.id, paymentMethod: 'internal_wallet' }, gc.title);
-  }
+  const modal = document.getElementById('modal-product-buy');
+  if (!modal) return;
+
+  document.getElementById('modal-buy-cover').src = gc.coverUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80';
+  document.getElementById('modal-buy-platform').textContent = gc.brand || 'GIFT CARD';
+  document.getElementById('modal-buy-title').textContent = gc.title;
+  document.getElementById('modal-buy-genre').textContent = 'Tarjeta de Regalo Digital';
+  document.getElementById('modal-buy-description').textContent = gc.description || 'Código oficial de activación inmediata. Se entrega directamente a tu cuenta al confirmar.';
+
+  document.getElementById('modal-buy-screenshots-container').innerHTML = '';
+
+  const rate = state.exchangeRatePyg || 7500;
+  const price = gc.priceUsd || 10.00;
+  const gs = Math.round(price * rate);
+
+  document.getElementById('modal-buy-options-grid').innerHTML = `
+    <div style="background: rgba(0,194,255,0.08); border: 1px solid var(--accent-cyan); padding: 12px; border-radius: 10px;">
+      <div style="font-size: 0.84rem; font-weight: 800; color: #ffffff;">Entrega Instantánea</div>
+      <div style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; color: var(--accent-cyan); margin-top: 4px;">$${price.toFixed(2)} USDT</div>
+      <div style="font-size: 0.72rem; color: var(--text-tertiary);">Código digital disponible en stock</div>
+    </div>
+  `;
+
+  document.getElementById('modal-buy-total-gs').textContent = `${gs.toLocaleString('es-PY')} Gs.`;
+  document.getElementById('modal-buy-total-usd').textContent = `$${price.toFixed(2)} USDT`;
+
+  const confirmBtn = document.getElementById('btn-confirm-product-buy');
+  confirmBtn.onclick = () => {
+    modal.style.display = 'none';
+    executePurchase(`/api/store/products/${gc.id}/buy`, { priceUsd: price }, gc.title);
+  };
+
+  document.getElementById('btn-close-product-buy-modal').onclick = () => modal.style.display = 'none';
+  modal.style.display = 'grid';
 };
 
 async function executePurchase(url, body, productName, subId = null) {

@@ -727,6 +727,52 @@
             Confirmar Solicitud de Retiro
           </button>
         </form>
+  <!-- ======================================================= -->
+  <!-- MODAL: COMPRA DE VIDEOJUEGO DIGITAL & DETALLES          -->
+  <!-- ======================================================= -->
+  <div class="modal-overlay" id="modal-product-buy" style="display: none;">
+    <div class="modal-content glass-modal" style="max-width: 660px; padding: 2rem; border-radius: 20px !important;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
+        <div style="display: flex; gap: 14px; align-items: center;">
+          <img id="modal-buy-cover" src="" style="width: 60px; height: 80px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+          <div>
+            <span class="badge-official" id="modal-buy-platform">PS5</span>
+            <h3 id="modal-buy-title" style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 800; color: #ffffff; margin-top: 4px;">Nombre del Juego</h3>
+            <div id="modal-buy-genre" style="font-size: 0.78rem; color: var(--text-tertiary);">Acción / Aventura</div>
+          </div>
+        </div>
+        <button class="btn-modal-close" id="btn-close-product-buy-modal">✕</button>
+      </div>
+
+      <!-- Screenshots / Gameplay Gallery -->
+      <div id="modal-buy-screenshots-container" style="display: flex; gap: 8px; overflow-x: auto; margin-bottom: 1.25rem; padding-bottom: 6px;">
+      </div>
+
+      <p id="modal-buy-description" style="font-size: 0.84rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1.25rem;">
+        Sinopsis del videojuego...
+      </p>
+
+      <!-- Account Type / Edition Selector -->
+      <div style="margin-bottom: 1.25rem;">
+        <label class="form-label" style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-tertiary); font-weight: 800; letter-spacing: 0.05em; margin-bottom: 8px; display: block;">
+          Selecciona la Edición / Tipo de Cuenta:
+        </label>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px;" id="modal-buy-options-grid">
+        </div>
+      </div>
+
+      <!-- Price & Buy Actions -->
+      <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+        <div>
+          <span style="font-size: 0.74rem; color: var(--text-tertiary); display: block;">Total a pagar:</span>
+          <div style="display: flex; align-items: baseline; gap: 8px;">
+            <strong id="modal-buy-total-gs" style="font-family: var(--font-mono); font-size: 1.25rem; color: #ffffff;">0 Gs.</strong>
+            <span id="modal-buy-total-usd" style="font-family: var(--font-mono); font-size: 0.84rem; color: var(--accent-cyan);">$0.00 USDT</span>
+          </div>
+        </div>
+        <button id="btn-confirm-product-buy" class="btn-primary-block" style="width: auto; padding: 12px 24px; border-radius: 10px !important; font-weight: 800;">
+          Comprar con Saldo ➔
+        </button>
       </div>
     </div>
   </div>
