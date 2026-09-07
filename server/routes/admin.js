@@ -393,28 +393,120 @@ router.post('/release-escrow/:id', (req, res) => {
   }
 });
 
-// 6. Refund Buyer upon reported issue
-router.post('/refund-slot/:id', (req, res) => {
+// --- USER MANAGEMENT & WALLET ADJUSTMENTS ---
+
+// 7. Get All Users with Live Balances and Stats
+router.get('/users', (req, res) => {
   try {
     const db = getDb();
     const rate = db.platform_settings?.exchangeRatePyg || 7500;
-    const slot = db.user_slots.find(s => s.id === req.params.id) || db.user_slots[0];
     
-    if (slot) {
-      const buyerWallet = getWallet(slot.buyerId);
-      buyerWallet.balanceUsd = parseFloat((buyerWallet.balanceUsd + slot.pricePaidUsd).toFixed(2));
-      saveStorage();
+    const usersList = (db.users || []).map(u => {
+      const wallet = getWallet(u.id);
+      const ordersCount = (db.user_slots || []).filter(s => s.buyerId === u.id).length + 
+                          (db.user_store_orders || []).filter(o => o.userId === u.id).length;
+      return {
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        role: u.role || 'client',
+        avatar: u.avatar || '🎮',
+        balanceUsd: wallet.balanceUsd || 0,
+        balancePyg: Math.round((wallet.balanceUsd || 0) * rate),
+        pendingEscrowUsd: wallet.pendingEscrowUsd || 0,
+        ordersCount,
+        hasPassword: !!u.hasPassword,
+        createdAt: u.createdAt || new Date().toISOString()
+      };
+    });
 
-      const refundGs = Math.round(slot.pricePaidUsd * rate).toLocaleString('es-PY');
-      return res.json({
-        success: true,
-        message: `¡Reembolso completado! Se devolvieron ${refundGs} Gs. al saldo de ${slot.buyerName}.`
-      });
+    res.json({ success: true, count: usersList.length, users: usersList });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 8. Adjust User Wallet Balance (Credit / Debit by Admin)
+router.post('/users/:id/adjust-balance', (req, res) => {
+  try {
+    const { amountPyg, amountUsd, action = 'credit', reason = 'Ajuste manual de administración' } = req.body;
+    const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    
+    const user = db.users.find(u => u.id === req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
     }
+
+    const wallet = getWallet(user.id);
+    const parsedAmountUsd = amountUsd !== undefined ? parseFloat(amountUsd) : (parseFloat(amountPyg) / rate);
+
+    if (isNaN(parsedAmountUsd) || parsedAmountUsd <= 0) {
+      return res.status(400).json({ error: 'Por favor ingresa un monto válido a ajustar.' });
+    }
+
+    if (action === 'credit') {
+      wallet.balanceUsd = parseFloat((wallet.balanceUsd + parsedAmountUsd).toFixed(2));
+    } else {
+      if (wallet.balanceUsd < parsedAmountUsd) {
+        return res.status(400).json({ error: `Saldo insuficiente para debitar. El usuario tiene $${wallet.balanceUsd.toFixed(2)} USD.` });
+      }
+      wallet.balanceUsd = parseFloat((wallet.balanceUsd - parsedAmountUsd).toFixed(2));
+    }
+
+    const tx = {
+      id: `tx_admin_adj_${Date.now()}`,
+      userId: user.id,
+      userName: user.name,
+      type: action === 'credit' ? 'deposit' : 'debit',
+      amountUsd: parsedAmountUsd,
+      currency: 'PYG',
+      localAmount: Math.round(parsedAmountUsd * rate),
+      method: 'admin_manual_adjustment',
+      status: 'approved',
+      reference: `ADMIN-${action.toUpperCase()}`,
+      notes: reason,
+      createdAt: new Date().toISOString()
+    };
+
+    db.wallet_transactions.unshift(tx);
+    saveStorage();
+
+    const formattedGs = Math.round(parsedAmountUsd * rate).toLocaleString('es-PY');
+    const newBalGs = Math.round(wallet.balanceUsd * rate).toLocaleString('es-PY');
 
     res.json({
       success: true,
-      message: 'Reembolso procesado y acreditado a la billetera del cliente.'
+      message: `¡Saldo ${action === 'credit' ? 'acreditado' : 'debitado'} con éxito! Nuevo saldo de ${user.name}: ${newBalGs} Gs. ($${wallet.balanceUsd.toFixed(2)} USD)`,
+      wallet,
+      newBalGs
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 9. Update User Role (Client / Seller / Admin)
+router.post('/users/:id/toggle-role', (req, res) => {
+  try {
+    const { role } = req.body;
+    if (!['admin', 'seller', 'client'].includes(role)) {
+      return res.status(400).json({ error: 'Rol no válido.' });
+    }
+
+    const db = getDb();
+    const user = db.users.find(u => u.id === req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    user.role = role;
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `Rol de "${user.name}" actualizado a: ${role.toUpperCase()}`,
+      user
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

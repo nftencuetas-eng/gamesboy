@@ -11,100 +11,310 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css">
   <style>
-    * { border-radius: 0px !important; }
+    /* Modern Rounded Admin Styling (Subtle 10-14px border radius) */
     .admin-layout {
       display: grid;
-      grid-template-columns: 280px 1fr;
+      grid-template-columns: 270px 1fr;
       min-height: 100vh;
-      background: var(--bg-body);
+      background: #030712;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 194, 255, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 25%, rgba(245, 158, 11, 0.04) 0%, transparent 45%);
     }
     .admin-sidebar {
       background: #060c1c;
       border-right: 1px solid var(--border-subtle);
-      padding: 1.5rem;
+      padding: 1.5rem 1.25rem;
       display: flex;
       flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      box-sizing: border-box;
+      z-index: 50;
     }
     .admin-content {
       padding: 2rem 2.5rem;
       overflow-y: auto;
+      max-height: 100vh;
+      box-sizing: border-box;
     }
     .admin-menu-btn {
       display: flex;
       align-items: center;
       gap: 12px;
       width: 100%;
-      padding: 12px 16px;
+      padding: 11px 14px;
       background: transparent;
       border: 1px solid transparent;
       color: var(--text-secondary);
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 600;
       cursor: pointer;
       text-align: left;
-      margin-bottom: 6px;
-      transition: all 0.15s ease;
+      margin-bottom: 5px;
+      border-radius: 10px !important;
+      transition: all 0.18s ease;
     }
-    .admin-menu-btn:hover, .admin-menu-btn.active {
-      background: #0d1733;
-      border-color: var(--border-medium);
-      color: var(--accent-cyan);
+    .admin-menu-btn:hover {
+      background: rgba(13, 23, 51, 0.8);
+      border-color: rgba(0, 194, 255, 0.2);
+      color: #ffffff;
+      transform: translateX(2px);
+    }
+    .admin-menu-btn.active {
+      background: linear-gradient(135deg, rgba(0, 194, 255, 0.15), rgba(0, 112, 243, 0.15));
+      border-color: var(--accent-cyan);
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(0, 194, 255, 0.15);
     }
     .badge-count {
       margin-left: auto;
       background: var(--accent-amber);
       color: #000;
       font-size: 0.72rem;
-      font-weight: 800;
+      font-weight: 900;
       padding: 2px 7px;
+      border-radius: 20px !important;
     }
-    .badge-method-sipap {
-      background: rgba(16, 185, 129, 0.15);
-      color: #10b981;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 3px 8px;
-      font-size: 0.74rem;
-      font-weight: 700;
+
+    /* Executive KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
     }
-    .badge-method-binance {
-      background: rgba(245, 158, 11, 0.15);
-      color: #f59e0b;
-      border: 1px solid rgba(245, 158, 11, 0.3);
-      padding: 3px 8px;
-      font-size: 0.74rem;
-      font-weight: 700;
-    }
-    .btn-receipt-view {
-      background: rgba(0, 194, 255, 0.15);
-      border: 1px solid rgba(0, 194, 255, 0.3);
-      color: var(--accent-cyan);
-      padding: 3px 8px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .btn-receipt-view:hover {
-      background: var(--accent-cyan);
-      color: #000;
-    }
-    .banner-slot-card {
-      background: rgba(255, 255, 255, 0.02);
+    .kpi-card {
+      background: var(--bg-surface);
       border: 1px solid var(--border-medium);
-      padding: 1.25rem;
-      margin-bottom: 1.5rem;
+      padding: 1.25rem 1.4rem;
+      border-radius: 14px !important;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      transition: all 0.2s ease;
     }
-    .product-row-preview {
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 12px 30px rgba(0, 194, 255, 0.15);
+    }
+    .kpi-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+    }
+    .kpi-card.cyan::after { background: var(--accent-cyan); }
+    .kpi-card.amber::after { background: var(--accent-amber); }
+    .kpi-card.emerald::after { background: var(--accent-emerald); }
+    .kpi-card.purple::after { background: var(--accent-purple); }
+
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .kpi-title {
+      font-size: 0.78rem;
+      color: var(--text-tertiary);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .kpi-icon {
+      font-size: 1.2rem;
+    }
+    .kpi-value-gs {
+      font-family: var(--font-mono);
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+    .kpi-sub-val {
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    /* Modern Table & Box Styling */
+    .admin-card-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-medium);
+      border-radius: 14px !important;
+      padding: 1.5rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .admin-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .admin-card-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ffffff;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
-    .product-thumb-sm {
-      width: 44px;
-      height: 44px;
-      object-fit: cover;
+
+    .admin-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.84rem;
+    }
+    .admin-table th {
+      background: rgba(3, 7, 18, 0.7);
+      color: var(--text-tertiary);
+      font-weight: 700;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-medium);
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.04em;
+    }
+    .admin-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      vertical-align: middle;
+    }
+    .admin-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: #ffffff;
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      border-radius: 6px !important;
+      text-transform: uppercase;
+    }
+    .badge-status.approved {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .badge-status.pending {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+    .badge-status.rejected {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+
+    .form-input-styled {
+      width: 100%;
+      background: rgba(3, 7, 18, 0.7);
       border: 1px solid var(--border-medium);
+      color: #ffffff;
+      padding: 9px 12px;
+      border-radius: 8px !important;
+      font-size: 0.85rem;
+      font-family: var(--font-sans);
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
     }
-    @media (max-width: 900px) {
+    .form-input-styled:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 194, 255, 0.2);
+    }
+
+    .btn-admin-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border-radius: 8px !important;
+      cursor: pointer;
+      border: none;
+      transition: all 0.18s ease;
+      text-decoration: none;
+    }
+    .btn-admin-pill.cyan {
+      background: var(--accent-cyan);
+      color: #030712;
+    }
+    .btn-admin-pill.cyan:hover {
+      background: #38d6ff;
+      transform: translateY(-1px);
+    }
+    .btn-admin-pill.amber {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+    .btn-admin-pill.amber:hover {
+      background: var(--accent-amber);
+      color: #000;
+    }
+    .btn-admin-pill.emerald {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+    .btn-admin-pill.emerald:hover {
+      background: var(--accent-emerald);
+      color: #000;
+    }
+    .btn-admin-pill.red {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+    .btn-admin-pill.red:hover {
+      background: var(--accent-red);
+      color: #fff;
+    }
+
+    /* Modal Styling */
+    .admin-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .admin-modal-box {
+      background: #070d1e;
+      border: 1px solid var(--border-medium);
+      border-radius: 16px !important;
+      width: 100%;
+      max-width: 550px;
+      padding: 2rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+      position: relative;
+    }
+
+    @media (max-width: 960px) {
       .admin-layout { grid-template-columns: 1fr; }
       .admin-sidebar { display: none; }
       .admin-content { padding: 1.25rem; }
@@ -117,16 +327,21 @@
     
     <!-- Sidebar -->
     <aside class="admin-sidebar">
-      <div style="margin-bottom: 2rem;">
-        <a href="/">
-          <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 34px; width: auto; filter: none;">
+      <div style="margin-bottom: 1.75rem; text-align: center;">
+        <a href="/" title="GamesBoy.net - Ir a la tienda">
+          <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 34px; width: auto; filter: none; margin-bottom: 6px;">
         </a>
-        <div class="badge-official" style="margin-top: 8px; font-size: 0.72rem; letter-spacing: 0.5px;">ADMINISTRADOR MASTER</div>
+        <div>
+          <span style="display: inline-block; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); color: #f59e0b; font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 12px;">👑 ADMIN MASTER PORTAL</span>
+        </div>
       </div>
 
-      <nav style="flex: 1;">
-        <button class="admin-menu-btn active" data-tab="tab-approvals">
-          <span>📥 Aprobación de Cuentas</span>
+      <nav style="flex: 1; overflow-y: auto;">
+        <button class="admin-menu-btn active" data-tab="tab-dashboard">
+          <span>📊 Métricas & Dashboard</span>
+        </button>
+        <button class="admin-menu-btn" data-tab="tab-approvals">
+          <span>📥 Aprobación Cuentas</span>
           <span class="badge-count" id="badge-pending-subs">0</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-products">
@@ -134,408 +349,489 @@
           <span class="badge-count" id="badge-products-count" style="background: var(--accent-purple); color: #fff;">0</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-banners">
-          <span>🎨 Portadas ENEBA Hero</span>
+          <span>🎨 Portadas Hero ENEBA</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-finances">
-          <span>📊 Finanzas & Recargas</span>
-          <span class="badge-count" id="badge-pending-finances" style="background: var(--accent-cyan); display: none;">0</span>
+          <span>💰 Finanzas & Recargas</span>
+          <span class="badge-count" id="badge-pending-finances" style="background: var(--accent-cyan); color: #000;">0</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-escrow">
-          <span>🛡️ Garantía Escrow (30 Días)</span>
+          <span>🛡️ Garantía Escrow</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-branches">
-          <span>🏢 Configuración de Pagos & Bancos</span>
+        <button class="admin-menu-btn" data-tab="tab-users">
+          <span>👥 Gestión de Usuarios</span>
+        </button>
+        <button class="admin-menu-btn" data-tab="tab-settings">
+          <span>🏢 Configuración & Pagos</span>
         </button>
       </nav>
 
-      <div style="margin-top: auto; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle);">
-        <div style="font-size: 0.8rem; color: var(--text-tertiary); margin-bottom: 8px;">Sesión: <strong>admin@gamesboy.net</strong></div>
-        <a href="/" style="display: block; font-size: 0.82rem; color: var(--accent-cyan); text-decoration: none; margin-bottom: 8px;">➔ Ver Tienda Pública</a>
-        <button onclick="localStorage.removeItem('gb_admin_session'); window.location.href='/admin/login';" style="background: none; border: none; color: var(--accent-red); font-size: 0.8rem; cursor: pointer;">Cerrar Sesión Admin</button>
+      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+        <div style="font-size: 0.78rem; color: var(--text-tertiary); margin-bottom: 6px;">
+          Sesión: <strong style="color: #fff;">admin@gamesboy.net</strong>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a href="/" class="btn-admin-pill cyan" style="flex: 1; justify-content: center;">Tienda ↗</a>
+          <button id="btn-admin-logout" class="btn-admin-pill red" style="padding: 6px 10px;">Salir</button>
+        </div>
       </div>
     </aside>
 
-    <!-- Main Content -->
+    <!-- Main Content Area -->
     <main class="admin-content">
       
-      <!-- Top Header Bar -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle);">
+      <!-- Top Title Bar -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 12px;">
         <div>
-          <h1 id="admin-view-heading" style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: #ffffff;">📥 Aprobación y Prueba de Cuentas de Vendedores</h1>
-          <p style="font-size: 0.84rem; color: var(--text-secondary);" id="admin-view-subtitle">Revisa, prueba las credenciales al 100% y aprueba las cuentas para publicarlas en la tienda.</p>
+          <h1 id="admin-view-heading" style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 900; color: #ffffff;">
+            📊 Métricas & Panel de Control General
+          </h1>
+          <p id="admin-view-subtitle" style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">
+            Auditoría en tiempo real, volumen transaccionado, saldos y operaciones en Paraguay.
+          </p>
         </div>
-        <div style="display: flex; gap: 10px;">
-          <button class="btn-action-sm" style="background: var(--bg-surface-elevated); color: #fff; padding: 8px 14px;" onclick="loadAdminData()">🔄 Actualizar Datos</button>
-          <a href="/" class="btn-action-sm" style="background: var(--accent-cyan); color: #040c1e; font-weight: 800; padding: 8px 14px; text-decoration: none;">Ver Tienda ↗</a>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); padding: 6px 12px; border-radius: 8px; font-size: 0.78rem; color: #34d399; font-weight: 700;">
+            🇵🇾 1 USD = <span id="header-rate-display">7.500 Gs.</span>
+          </div>
+          <button class="btn-admin-pill cyan" onclick="loadAdminData()">🔄 Actualizar</button>
         </div>
       </div>
 
-      <!-- Tab 1: Aprobación de Cuentas de Vendedores -->
-      <div id="view-tab-approvals" class="admin-tab-pane">
-        <div class="form-box" style="margin-bottom: 2rem;">
-          <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 0.5rem; color: #ffffff;">⚙️ Flujo Obligatorio de Verificación de Cuentas</h3>
-          <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
-            Ninguna cuenta subida por un vendedor se publica automáticamente en la tienda. El Administrador debe:
-            <br>1. Copiar las credenciales ingresadas por el vendedor y probar el acceso real en la plataforma (Netflix, Spotify, Max, etc.).
-            <br>2. Verificar que los perfiles y PINs estén configurados de forma correcta.
-            <br>3. Hacer clic en <strong>"Aprobar y Publicar en Tienda"</strong> para habilitar los cupos para venta inmediata al cliente.
-          </p>
+      <!-- ======================================================== -->
+      <!-- TAB 1: EXECUTIVE DASHBOARD & METRICS                     -->
+      <!-- ======================================================== -->
+      <div id="view-tab-dashboard" class="admin-tab-pane">
+        
+        <!-- Live KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card cyan">
+            <div class="kpi-header">
+              <span class="kpi-title">Volumen Total Marketplace</span>
+              <span class="kpi-icon">📈</span>
+            </div>
+            <div class="kpi-value-gs" id="kpi-total-volume-gs">0 Gs.</div>
+            <div class="kpi-sub-val" id="kpi-total-volume-usd">$0.00 USD</div>
+          </div>
+
+          <div class="kpi-card emerald">
+            <div class="kpi-header">
+              <span class="kpi-title">Comisiones Cobradas (15%)</span>
+              <span class="kpi-icon">💰</span>
+            </div>
+            <div class="kpi-value-gs" id="kpi-commissions-gs">0 Gs.</div>
+            <div class="kpi-sub-val" id="kpi-commissions-usd">Ganancia Neta Plataforma</div>
+          </div>
+
+          <div class="kpi-card amber">
+            <div class="kpi-header">
+              <span class="kpi-title">Garantía Escrow Retenida</span>
+              <span class="kpi-icon">🛡️</span>
+            </div>
+            <div class="kpi-value-gs" id="kpi-escrow-gs">0 Gs.</div>
+            <div class="kpi-sub-val" id="kpi-escrow-usd">Protección 30 Días Compradores</div>
+          </div>
+
+          <div class="kpi-card purple">
+            <div class="kpi-header">
+              <span class="kpi-title">Usuarios Registrados</span>
+              <span class="kpi-icon">👥</span>
+            </div>
+            <div class="kpi-value-gs" id="kpi-users-count">0</div>
+            <div class="kpi-sub-val" id="kpi-users-sub">Clientes y Vendedores Activos</div>
+          </div>
         </div>
 
-        <div class="table-wrapper">
-          <div class="section-header" style="padding: 12px 16px; margin-bottom: 0;">
-            <h3 class="section-title">📋 Cuentas Pendientes de Verificación Técnica</h3>
+        <!-- Quick Action Shortcuts -->
+        <div class="admin-card-box" style="margin-bottom: 1.5rem;">
+          <div class="admin-card-title">⚡ Accesos Rápidos de Administración</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 1rem;">
+            <button class="btn-admin-pill cyan" style="justify-content: center; padding: 12px;" onclick="switchTab('tab-approvals')">
+              📥 Revisar Cuentas Pendientes (<span id="quick-badge-subs">0</span>)
+            </button>
+            <button class="btn-admin-pill emerald" style="justify-content: center; padding: 12px;" onclick="switchTab('tab-finances')">
+              💰 Aprobar Recargas SIPAP (<span id="quick-badge-deposits">0</span>)
+            </button>
+            <button class="btn-admin-pill amber" style="justify-content: center; padding: 12px;" onclick="switchTab('tab-products')">
+              ➕ Añadir Nuevo Videojuego
+            </button>
+            <button class="btn-admin-pill purple" style="justify-content: center; padding: 12px;" onclick="switchTab('tab-users')">
+              👥 Ajustar Saldos de Usuarios
+            </button>
           </div>
-          <table class="data-table">
+        </div>
+
+        <!-- System Activity Log Table -->
+        <div class="admin-card-box">
+          <div class="admin-card-header">
+            <div class="admin-card-title">📋 Últimos Movimientos y Transacciones</div>
+            <button class="btn-admin-pill cyan" onclick="switchTab('tab-finances')">Ver Todas ➔</button>
+          </div>
+          <table class="admin-table">
             <thead>
               <tr>
-                <th>Vendedor</th>
-                <th>Servicio / Plataforma</th>
-                <th>Slots</th>
-                <th>Precio / Slot</th>
-                <th>Credenciales para Probar</th>
-                <th>Acción de Administración</th>
+                <th>Usuario</th>
+                <th>Tipo</th>
+                <th>Monto (Gs.)</th>
+                <th>Método</th>
+                <th>Estado</th>
+                <th>Fecha</th>
               </tr>
             </thead>
-            <tbody id="admin-pending-subs-table-body">
-              <tr>
-                <td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando cuentas pendientes...</td>
-              </tr>
+            <tbody id="dashboard-recent-txs-body">
+              <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 1.5rem;">Cargando transacciones...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Tab 2: Catálogo de Juegos Digitales & Tarjetas de Regalo (PRODUCT CRUD) -->
+      <!-- ======================================================== -->
+      <!-- TAB 2: APROBACIÓN TÉCNICA DE CUENTAS (SELLERS)           -->
+      <!-- ======================================================== -->
+      <div id="view-tab-approvals" class="admin-tab-pane" style="display: none;">
+        <div class="admin-card-box">
+          <div class="admin-card-title">⚙️ Protocolo de Verificación Obligatoria de Cuentas</div>
+          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 6px; line-height: 1.5;">
+            Ninguna cuenta subida por un vendedor se publica automáticamente en la tienda.
+            Prueba las credenciales en la plataforma correspondiente, confirma que los PINs y perfiles coinciden, y haz clic en <strong>"Aprobar y Publicar"</strong>.
+          </p>
+        </div>
+
+        <div class="admin-card-box">
+          <div class="admin-card-header">
+            <div class="admin-card-title">📋 Cuentas Pendientes de Aprobación</div>
+            <span class="badge-status pending" id="pending-subs-counter-badge">0 pendientes</span>
+          </div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Vendedor</th>
+                <th>Servicio / Plan</th>
+                <th>Cupos</th>
+                <th>Precio / Cupo</th>
+                <th>Credenciales a Probar</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-pending-subs-table-body">
+              <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay cuentas pendientes por verificar.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 3: CATÁLOGO DE JUEGOS DIGITALES & GIFT CARDS        -->
+      <!-- ======================================================== -->
       <div id="view-tab-products" class="admin-tab-pane" style="display: none;">
         
-        <!-- Form to Add New Product -->
-        <div class="form-box" style="margin-bottom: 2rem;">
-          <h2 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 0.5rem; color: #ffffff;">➕ Subir Nuevo Videojuego o Tarjeta de Regalo</h2>
-          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-            Publica códigos de videojuegos (PS4, PS5, Xbox, PC) o Gift Cards con entrega digital instantánea al cliente en Guaraníes.
+        <!-- Add Product Box -->
+        <div class="admin-card-box">
+          <div class="admin-card-title">➕ Publicar Nuevo Videojuego o Tarjeta de Regalo</div>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0 1.25rem 0;">
+            Añade productos digitales con stock de códigos seriales para entrega inmediata en Guaraníes.
           </p>
 
           <form id="form-admin-add-product">
-            <div class="form-grid-3" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
-              <div class="form-group">
-                <label class="form-label">Tipo de Producto:</label>
-                <select id="prod-category" class="form-select" required>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px;">
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Tipo de Producto</label>
+                <select id="prod-category" class="form-input-styled" required>
                   <option value="game_key">🎮 Videojuego Digital (Key / Código)</option>
                   <option value="gift_card">🎁 Tarjeta de Regalo (Gift Card)</option>
                 </select>
               </div>
-              <div class="form-group">
-                <label class="form-label">Plataforma / Consola:</label>
-                <select id="prod-platform" class="form-select" required>
-                  <option value="PS5">PlayStation 5 (PS5)</option>
-                  <option value="PS4">PlayStation 4 (PS4)</option>
-                  <option value="Xbox">Xbox Series X|S / One</option>
-                  <option value="Steam">PC (Steam)</option>
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Plataforma / Consola</label>
+                <select id="prod-platform" class="form-input-styled" required>
+                  <option value="PS5">PlayStation 5</option>
+                  <option value="PS4">PlayStation 4</option>
+                  <option value="Xbox">Xbox Series X|S</option>
+                  <option value="Steam">PC Steam</option>
                   <option value="Nintendo">Nintendo Switch</option>
                   <option value="Google Play">Google Play</option>
                   <option value="Apple">Apple App Store</option>
-                  <option value="Riot">Riot Games (Valorant / LoL)</option>
-                  <option value="Blizzard">Battle.net (Blizzard)</option>
+                  <option value="Battle.net">Battle.net (Blizzard)</option>
                 </select>
               </div>
-              <div class="form-group">
-                <label class="form-label">Insignia / Badge:</label>
-                <input type="text" id="prod-badge" class="form-input" placeholder="ej: TOP VENTAS, NUEVO, OFICIAL" value="TOP VENTAS">
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Precio en Guaraníes (Gs.)</label>
+                <input type="number" id="prod-price-pyg" class="form-input-styled" placeholder="ej: 350000" required>
               </div>
             </div>
 
-            <div class="form-grid-2">
-              <div class="form-group">
-                <label class="form-label">Título del Producto:</label>
-                <input type="text" id="prod-title" class="form-input" placeholder="ej: EA SPORTS FC 25 Edición Estándar PS5" required>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 12px;">
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Título del Producto</label>
+                <input type="text" id="prod-title" class="form-input-styled" placeholder="ej: EA SPORTS FC 25 PS5 Digital" required>
               </div>
-              <div class="form-group">
-                <label class="form-label">Precio de Venta en Guaraníes (Gs.):</label>
-                <input type="number" id="prod-price-pyg" class="form-input" placeholder="ej: 449925" min="1000" step="1000" required>
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Insignia / Badge</label>
+                <input type="text" id="prod-badge" class="form-input-styled" placeholder="ej: TOP VENTAS, OFICIAL" value="TOP VENTAS">
               </div>
             </div>
 
-            <div class="form-group">
-              <label class="form-label">URL de la Imagen de Portada:</label>
-              <input type="text" id="prod-cover-url" class="form-input" placeholder="https://images.unsplash.com/... o enlace de imagen" value="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80">
+            <div style="margin-bottom: 12px;">
+              <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">URL de Imagen de Portada (HD)</label>
+              <input type="url" id="prod-cover-url" class="form-input-styled" placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80">
             </div>
 
-            <div class="form-group">
-              <label class="form-label">Descripción del Producto:</label>
-              <input type="text" id="prod-desc" class="form-input" placeholder="ej: Código digital oficial para canjear en PlayStation Store. Entrega inmediata." value="Código digital oficial con entrega instantánea.">
+            <div style="margin-bottom: 16px;">
+              <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Códigos Digitales en Stock (Uno por línea)</label>
+              <textarea id="prod-codes" class="form-input-styled" rows="3" placeholder="KEY-1234-ABCD-5678&#10;KEY-9876-WXYZ-4321"></textarea>
             </div>
 
-            <div class="form-group">
-              <label class="form-label">Stock de Códigos / Claves (1 código por línea para entrega inmediata):</label>
-              <textarea id="prod-codes" class="form-textarea" rows="3" placeholder="FC25-PS5-9988-1122-3344&#10;FC25-PS5-7766-5544-2211" required></textarea>
-              <span style="font-size: 0.72rem; color: var(--text-tertiary); display: block; margin-top: 4px;">Cada vez que un cliente compre este producto, el sistema le entregará automáticamente uno de estos códigos.</span>
-            </div>
-
-            <button type="submit" class="btn-primary-block" style="padding: 12px; font-weight: 800; margin-top: 1rem;">
-              🚀 Publicar Producto en la Tienda
+            <button type="submit" class="btn-admin-pill cyan" style="padding: 10px 20px; font-size: 0.88rem;">
+              💾 Guardar y Publicar en Tienda
             </button>
           </form>
         </div>
 
-        <!-- Product List Table -->
-        <div class="table-wrapper">
-          <div class="section-header" style="padding: 12px 16px; margin-bottom: 0;">
-            <h3 class="section-title">📦 Catálogo de Productos Publicados</h3>
+        <!-- Inventory List -->
+        <div class="admin-card-box">
+          <div class="admin-card-header">
+            <div class="admin-card-title">📦 Inventario de Juegos & Gift Cards</div>
+            <span class="badge-status approved" id="inventory-count-badge">0 productos</span>
           </div>
-          <table class="data-table">
+          <table class="admin-table">
             <thead>
               <tr>
                 <th>Producto</th>
-                <th>Tipo</th>
+                <th>Categoría</th>
                 <th>Plataforma</th>
-                <th>Precio en Gs.</th>
-                <th>Stock Disponible</th>
-                <th>Acción</th>
+                <th>Precio (Gs.)</th>
+                <th>Stock</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody id="admin-products-table-body">
-              <tr>
-                <td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando catálogo de productos...</td>
-              </tr>
+              <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando catálogo...</td></tr>
             </tbody>
           </table>
         </div>
-
       </div>
 
-      <!-- Tab 3: Portadas ENEBA Hero (Horizontal + Vertical Banners) -->
+      <!-- ======================================================== -->
+      <!-- TAB 4: PORTADAS HERO ENEBA                               -->
+      <!-- ======================================================== -->
       <div id="view-tab-banners" class="admin-tab-pane" style="display: none;">
-        <div class="form-box">
-          <h2 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 0.5rem; color: #ffffff;">🎨 Personalizar Portadas del Acordeón Hero (ENEBA Style)</h2>
-          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-            Cada portada requiere una <strong>Imagen Horizontal (Desktop Expandida)</strong> y una <strong>Imagen Vertical (Móvil y Plegada)</strong>.
+        <div class="admin-card-box">
+          <div class="admin-card-title">🎨 Gestor de Portadas Acordeón Hero (ENEBA Style)</div>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
+            Personaliza los 4 banners principales que se expanden interactivamente al pasar el cursor en la tienda pública.
           </p>
-
-          <form id="form-admin-banners">
-            <div id="admin-banners-list-container">
-              <!-- Injected dynamically for the 4 hero banners -->
-            </div>
-            <button type="submit" class="btn-primary-block" style="padding: 14px; font-weight: 800; font-size: 0.95rem; margin-top: 1rem;">
-              💾 Guardar Todas las Portadas
-            </button>
-          </form>
         </div>
+
+        <form id="form-admin-hero-banners">
+          <div id="banners-editor-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
+            <!-- Rendered dynamically via JS -->
+          </div>
+
+          <button type="submit" class="btn-admin-pill cyan" style="padding: 12px 24px; font-size: 0.9rem;">
+            ✨ Guardar Portadas en Vivo
+          </button>
+        </form>
       </div>
 
-      <!-- Tab 4: Finanzas & Aprobación de Recargas y Retiros -->
+      <!-- ======================================================== -->
+      <!-- TAB 5: FINANZAS, RECARGAS & RETIROS                      -->
+      <!-- ======================================================== -->
       <div id="view-tab-finances" class="admin-tab-pane" style="display: none;">
-        <div class="portal-stats-grid">
-          <div class="portal-stat-card">
-            <div class="portal-stat-title">Recargas Pendientes</div>
-            <div class="portal-stat-val" id="stat-pending-deposits-count" style="color: var(--accent-amber);">0</div>
-            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Comprobantes SIPAP & Binance</div>
+        
+        <!-- Pending Deposits -->
+        <div class="admin-card-box">
+          <div class="admin-card-header">
+            <div class="admin-card-title">📥 Solicitudes de Recarga de Saldo Pendientes</div>
+            <span class="badge-status pending" id="finances-pending-count">0 pendientes</span>
           </div>
-          <div class="portal-stat-card">
-            <div class="portal-stat-title">Retiros Solicitados</div>
-            <div class="portal-stat-val" id="stat-pending-payouts-count" style="color: var(--accent-cyan);">0</div>
-            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Pendientes de transferencia</div>
-          </div>
-          <div class="portal-stat-card">
-            <div class="portal-stat-title">Tasa de Cambio Activa</div>
-            <div class="portal-stat-val" id="stat-exchange-rate-preview" style="color: var(--accent-emerald);">7.500 Gs.</div>
-            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Por 1 USDT / USD</div>
-          </div>
-          <div class="portal-stat-card">
-            <div class="portal-stat-title">Comisión de Plataforma</div>
-            <div class="portal-stat-val" id="stat-commission-preview" style="color: var(--accent-purple);">15%</div>
-            <div style="font-size: 0.75rem; color: var(--text-tertiary);">Margen GamesBoy</div>
-          </div>
-        </div>
-
-        <!-- Pending Deposits Table -->
-        <div class="table-wrapper" style="margin-bottom: 2rem;">
-          <div class="section-header" style="padding: 12px 16px; margin-bottom: 0; display: flex; justify-content: space-between; align-items: center;">
-            <h3 class="section-title">📥 Bandeja de Comprobantes de Recarga (SIPAP Paraguay / Binance USDT)</h3>
-            <span style="font-size: 0.75rem; color: var(--accent-cyan);">Al aprobar, el saldo se acredita inmediatamente al cliente en Guaraníes (Gs.)</span>
-          </div>
-          <table class="data-table">
+          <table class="admin-table">
             <thead>
               <tr>
                 <th>Usuario</th>
-                <th>Método de Pago</th>
-                <th>Monto Transferido</th>
-                <th>Monto a Acreditar (Gs.)</th>
-                <th>Referencia / TXID</th>
-                <th>Comprobante</th>
-                <th>Acción de Administración</th>
+                <th>Monto Recargado</th>
+                <th>Método</th>
+                <th>Comprobante / Referencia</th>
+                <th>Fecha</th>
+                <th>Acción</th>
               </tr>
             </thead>
-            <tbody id="admin-deposits-table-body">
-              <tr>
-                <td colspan="7" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando comprobantes de recarga...</td>
-              </tr>
+            <tbody id="admin-pending-deposits-body">
+              <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay recargas pendientes.</td></tr>
             </tbody>
           </table>
         </div>
 
-        <!-- Pending Payouts Table -->
-        <div class="table-wrapper">
-          <div class="section-header" style="padding: 12px 16px; margin-bottom: 0;">
-            <h3 class="section-title">💸 Solicitudes de Retiro de Saldo de Vendedores</h3>
+        <!-- Pending Payouts -->
+        <div class="admin-card-box">
+          <div class="admin-card-header">
+            <div class="admin-card-title">💸 Solicitudes de Retiro de Vendedores</div>
           </div>
-          <table class="data-table">
+          <table class="admin-table">
             <thead>
               <tr>
                 <th>Vendedor</th>
-                <th>Monto a Retirar (Gs.)</th>
-                <th>Equivalente USD / USDT</th>
-                <th>Método de Cobro</th>
-                <th>Datos de Destino (Banco / Binance)</th>
-                <th>Acción de Administración</th>
+                <th>Monto a Transferir</th>
+                <th>Método</th>
+                <th>Datos de Transferencia</th>
+                <th>Acción</th>
               </tr>
             </thead>
-            <tbody id="admin-payouts-table-body">
-              <tr>
-                <td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando solicitudes de retiro...</td>
-              </tr>
+            <tbody id="admin-pending-payouts-body">
+              <tr><td colspan="5" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay solicitudes de retiro pendientes.</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Tab 5: Garantía Escrow (30 Días) -->
+      <!-- ======================================================== -->
+      <!-- TAB 6: GARANTÍA ESCROW (30 DÍAS)                         -->
+      <!-- ======================================================== -->
       <div id="view-tab-escrow" class="admin-tab-pane" style="display: none;">
-        <div class="form-box">
-          <h2 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.5rem; color: #ffffff;">🛡️ Sistema de Garantía Escrow & Liquidación de Vendedores (GoSplit Model)</h2>
-          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-            GamesBoy actúa como custodio y garantía. Los pagos de los clientes quedan retenidos durante el mes. Al finalizar los 30 días, el administrador libera el pago al vendedor. Si hay fallas técnicas comprobadas, se puede reembolsar al cliente.
+        <div class="admin-card-box">
+          <div class="admin-card-title">🛡️ Sistema de Garantía y Protección Escrow de 30 Días</div>
+          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 6px; line-height: 1.5;">
+            Cuando un cliente compra un cupo de streaming o cuenta compartida, los fondos se protegen durante el periodo de garantía.
+            Si el servicio opera con total normalidad, puedes liberar el pago al vendedor; si se reporta una caída o falla, puedes reembolsar el 100% al comprador al instante.
           </p>
+        </div>
 
-          <table class="data-table">
+        <div class="admin-card-box">
+          <div class="admin-card-header">
+            <div class="admin-card-title">📋 Cuentas Activas bajo Garantía Escrow</div>
+          </div>
+          <table class="admin-table">
             <thead>
               <tr>
+                <th>Servicio</th>
                 <th>Vendedor</th>
-                <th>Servicio / Cuenta</th>
-                <th>Cliente Asignado</th>
-                <th>Progreso</th>
-                <th>Monto en Garantía</th>
-                <th>Estado</th>
-                <th>Acción Admin</th>
+                <th>Fondos Protegidos</th>
+                <th>Comisión Plataforma (15%)</th>
+                <th>Estado de Garantía</th>
+                <th>Resolución</th>
               </tr>
             </thead>
             <tbody id="admin-escrow-table-body">
-              <tr>
-                <td>Carlos_PY ⭐ (Verificado)</td>
-                <td>Netflix 4K - Perfil #2</td>
-                <td>Rodrigo Vera</td>
-                <td>Día 30 de 30 (Finalizado)</td>
-                <td><strong style="color: var(--accent-emerald);">22.000 Gs.</strong></td>
-                <td><span class="badge-official" style="background: rgba(16,185,129,0.15); color: #10b981;">Listo para liquidar</span></td>
-                <td><button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; padding: 4px 10px; font-weight: 800;" onclick="releaseEscrow('sub_netflix_official')">Liberar Pago</button></td>
-              </tr>
-              <tr>
-                <td>Marcos_Store</td>
-                <td>Spotify Familiar #4</td>
-                <td>Ana Benítez</td>
-                <td>Día 12 de 30</td>
-                <td><strong style="color: var(--accent-amber);">15.750 Gs.</strong></td>
-                <td><span style="color: var(--accent-amber); font-size: 0.8rem;">Retenido en Escrow</span></td>
-                <td><button class="btn-action-sm" style="background: rgba(239,68,68,0.2); color: #ef4444; padding: 4px 10px;" onclick="refundBuyer('slot_active_1')">Reembolsar</button></td>
-              </tr>
+              <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando cuentas bajo garantía...</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Tab 6: Configuración de Pagos & Bancos (SIPAP Paraguay + Binance USDT + Tasa) -->
-      <div id="view-tab-branches" class="admin-tab-pane" style="display: none;">
-        <div class="form-box">
-          <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; color: #ffffff;">🏢 Configuración de Datos de Cobro, Bancos & Binance</h2>
-          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-            Configura las cuentas donde los clientes enviarán sus transferencias y recargas. Estos datos se mostrarán directamente en el modal de recarga de saldo de los usuarios.
+      <!-- ======================================================== -->
+      <!-- TAB 7: GESTIÓN DE USUARIOS & BILLETERAS                  -->
+      <!-- ======================================================== -->
+      <div id="view-tab-users" class="admin-tab-pane" style="display: none;">
+        <div class="admin-card-box">
+          <div class="admin-card-header">
+            <div class="admin-card-title">👥 Directorio de Usuarios y Billeteras</div>
+            <input type="text" id="users-search-input" class="form-input-styled" style="max-width: 260px;" placeholder="🔍 Buscar por nombre o email...">
+          </div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Saldo Disponible (Gs.)</th>
+                <th>Saldo (USD)</th>
+                <th>Compras</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-table-body">
+              <tr><td colspan="7" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando usuarios...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- TAB 8: CONFIGURACIÓN GLOBAL DE PAGOS & BANCOS            -->
+      <!-- ======================================================== -->
+      <div id="view-tab-settings" class="admin-tab-pane" style="display: none;">
+        <div class="admin-card-box">
+          <div class="admin-card-title">🏢 Configuración Financiera y Datos Bancarios Oficiales</div>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0 1.5rem 0;">
+            Estos datos bancarios y direcciones de Binance se muestran a los clientes al momento de recargar saldo en la tienda.
           </p>
 
           <form id="form-admin-payment-settings">
-            
-            <!-- Section 1: SIPAP Paraguay -->
-            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-medium); padding: 1.25rem; margin-bottom: 1.5rem;">
-              <h3 style="font-size: 1rem; font-weight: 800; color: var(--accent-emerald); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
-                <span>🇵🇾</span> Datos de Transferencia Bancaria Paraguay (SIPAP)
-              </h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
               
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label">Nombre del Banco / Entidad:</label>
-                  <input type="text" id="setting-bank-name" class="form-input" placeholder="ej: Banco Familiar / Itaú Paraguay" required>
+              <!-- SIPAP Paraguay -->
+              <div style="background: rgba(3, 7, 18, 0.6); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-subtle);">
+                <div style="font-weight: 800; font-size: 0.95rem; color: var(--accent-cyan); margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;">
+                  <span>🇵🇾</span> Transferencia Bancaria Paraguay (SIPAP)
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Titular de la Cuenta:</label>
-                  <input type="text" id="setting-bank-holder" class="form-input" placeholder="ej: GamesBoy Paraguay S.A." required>
+
+                <div style="margin-bottom: 10px;">
+                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Banco Receptor:</label>
+                  <input type="text" id="setting-bank-name" class="form-input-styled" value="Banco Familiar / Itaú Paraguay" required>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Titular de la Cuenta:</label>
+                  <input type="text" id="setting-bank-holder" class="form-input-styled" value="GamesBoy Paraguay S.A." required>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">RUC o C.I.:</label>
+                  <input type="text" id="setting-bank-ruc" class="form-input-styled" value="80091234-5" required>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Número de Cuenta:</label>
+                  <input type="text" id="setting-bank-account" class="form-input-styled" value="01-445566-7" required>
+                </div>
+
+                <div>
+                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Alias SIPAP Oficial:</label>
+                  <input type="text" id="setting-bank-alias" class="form-input-styled" value="gamesboy.py" required>
                 </div>
               </div>
 
-              <div class="form-grid-3" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
-                <div class="form-group">
-                  <label class="form-label">RUC / Cédula de Identidad:</label>
-                  <input type="text" id="setting-bank-ruc" class="form-input" placeholder="ej: 80091234-5" required>
+              <!-- Binance Pay USDT -->
+              <div style="background: rgba(3, 7, 18, 0.6); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-subtle);">
+                <div style="font-weight: 800; font-size: 0.95rem; color: var(--accent-amber); margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;">
+                  <span>🌐</span> Criptomoneda USDT (Binance Pay)
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Número de Cuenta Bancaria:</label>
-                  <input type="text" id="setting-bank-account" class="form-input" placeholder="ej: 01-445566-7" required>
+
+                <div style="margin-bottom: 10px;">
+                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Binance Pay ID Oficial:</label>
+                  <input type="text" id="setting-binance-id" class="form-input-styled" value="849201934" required>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Alias SIPAP:</label>
-                  <input type="text" id="setting-bank-alias" class="form-input" placeholder="ej: gamesboy.py" required>
+
+                <div style="margin-bottom: 10px;">
+                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Red / Network:</label>
+                  <input type="text" id="setting-binance-network" class="form-input-styled" value="USDT (Binance Pay / BEP-20 / TRC-20)" required>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Dirección de Billetera USDT:</label>
+                  <input type="text" id="setting-binance-wallet" class="form-input-styled" value="0x71C9414B3b27bA134a6C3f07a757657A82e4b92F" required>
+                </div>
+
+                <div>
+                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">URL Imagen Código QR:</label>
+                  <input type="url" id="setting-binance-qr" class="form-input-styled" value="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F">
                 </div>
               </div>
             </div>
 
-            <!-- Section 2: Binance USDT -->
-            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-medium); padding: 1.25rem; margin-bottom: 1.5rem;">
-              <h3 style="font-size: 1rem; font-weight: 800; color: #f59e0b; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
-                <span>🌐</span> Datos de Cobro Cripto USDT (Binance Pay)
-              </h3>
-              
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label">Binance Pay ID:</label>
-                  <input type="text" id="setting-binance-id" class="form-input" placeholder="ej: 849201934" required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Red Cripto:</label>
-                  <input type="text" id="setting-binance-network" class="form-input" value="USDT (Binance Pay / BEP-20 / TRC-20)" required>
-                </div>
+            <!-- Rates & Commission -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Tasa de Cambio (1 USDT / USD en Guaraníes):</label>
+                <input type="number" id="setting-exchange-rate-pyg" class="form-input-styled" value="7500" step="10" required>
               </div>
-
-              <div class="form-group">
-                <label class="form-label">Dirección de Billetera USDT (BEP-20 / TRC-20):</label>
-                <input type="text" id="setting-binance-wallet" class="form-input" placeholder="ej: 0x71C9414B3b27bA134a6C3f07a757657A82e4b92F" required>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label">URL del Código QR de Binance (Generación Automática o Imagen):</label>
-                <input type="text" id="setting-binance-qr" class="form-input" placeholder="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=...">
+              <div>
+                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Comisión de la Plataforma (%):</label>
+                <input type="number" id="setting-commission-percent" class="form-input-styled" value="15" step="0.5" required>
               </div>
             </div>
 
-            <!-- Section 3: Exchange Rate & Commission -->
-            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-medium); padding: 1.25rem; margin-bottom: 1.5rem;">
-              <h3 style="font-size: 1rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
-                <span>💱</span> Tasa de Cambio & Comisión de la Plataforma
-              </h3>
-              
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label">Tasa de Cambio Oficial (1 USDT en Guaraníes):</label>
-                  <input type="number" id="setting-exchange-rate-pyg" class="form-input" value="7500" min="1" step="1" required>
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary); display: block; margin-top: 4px;">Utilizada para convertir recargas en USDT a saldo en Guaraníes (Gs.) y calcular retiros.</span>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Comisión de Plataforma para Vendedores (%):</label>
-                  <input type="number" id="setting-commission-percent" class="form-input" value="15" min="0" max="100" step="0.5" required>
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary); display: block; margin-top: 4px;">Porcentaje descontado a vendedores al liquidar suscripciones.</span>
-                </div>
-              </div>
-            </div>
-
-            <button type="submit" class="btn-primary-block" style="padding: 14px; font-size: 0.95rem; font-weight: 800;">
-              💾 Guardar Configuración de Cobros y Billetera
+            <button type="submit" class="btn-admin-pill cyan" style="padding: 11px 24px; font-size: 0.88rem;">
+              💾 Guardar Parámetros Financieros
             </button>
           </form>
         </div>
@@ -544,497 +840,565 @@
     </main>
   </div>
 
-  <!-- Receipt Viewer Modal -->
-  <div class="modal-overlay" id="modal-admin-receipt" style="display: none; z-index: 99999;">
-    <div class="modal-dialog-modern" style="max-width: 540px; background: #070d1e; border: 1px solid var(--border-medium); padding: 1.5rem;">
-      <div class="modal-header-modern" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-        <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff;" id="receipt-modal-title">📄 Comprobante de Recarga</h3>
-        <button class="modal-close-btn" onclick="document.getElementById('modal-admin-receipt').style.display='none'">✕</button>
+  <!-- MODAL: MANUAL BALANCE ADJUSTMENT -->
+  <div id="modal-adjust-balance" class="admin-modal-overlay" style="display: none;">
+    <div class="admin-modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800; color: #fff;">💵 Ajustar Saldo de Usuario</h3>
+        <button onclick="closeAdjustModal()" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">✕</button>
       </div>
-      <div id="receipt-modal-body" style="text-align: center;">
-        <img id="receipt-modal-img" src="" alt="Comprobante" style="max-width: 100%; max-height: 400px; border: 1px solid var(--border-medium); display: none; margin: 0 auto 1rem auto;">
-        <div id="receipt-modal-text" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent-cyan); background: rgba(0,0,0,0.4); padding: 12px; word-break: break-all;"></div>
+      <form id="form-adjust-user-balance">
+        <input type="hidden" id="adjust-user-id">
+        <div style="margin-bottom: 12px;">
+          <div style="font-size: 0.84rem; color: var(--text-secondary);">Usuario: <strong id="adjust-user-name" style="color: #fff;">-</strong></div>
+          <div style="font-size: 0.84rem; color: var(--text-secondary);">Saldo Actual: <strong id="adjust-user-current-bal" style="color: var(--accent-cyan); font-family: var(--font-mono);">-</strong></div>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Tipo de Ajuste:</label>
+          <select id="adjust-action-type" class="form-input-styled">
+            <option value="credit">➕ Acreditar / Sumar Saldo (Ingreso)</option>
+            <option value="debit">➖ Debitar / Restar Saldo (Deducción)</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Monto en Guaraníes (Gs.):</label>
+          <input type="number" id="adjust-amount-pyg" class="form-input-styled" placeholder="ej: 100000" step="1000" required>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Motivo / Nota del Administrador:</label>
+          <input type="text" id="adjust-reason-note" class="form-input-styled" placeholder="ej: Bonificación especial / Corrección manual" required>
+        </div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+          <button type="button" onclick="closeAdjustModal()" class="btn-admin-pill" style="background: rgba(255,255,255,0.08); color: #fff;">Cancelar</button>
+          <button type="submit" class="btn-admin-pill cyan">Confirmar Ajuste ➔</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: RECEIPT VIEWER -->
+  <div id="modal-receipt-view" class="admin-modal-overlay" style="display: none;">
+    <div class="admin-modal-box" style="max-width: 600px; text-align: center;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3 style="font-size: 1.1rem; font-weight: 800; color: #fff;">🧾 Comprobante de Transferencia</h3>
+        <button onclick="document.getElementById('modal-receipt-view').style.display = 'none'" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">✕</button>
       </div>
-      <div style="margin-top: 1rem; text-align: right;">
-        <button class="btn-action-sm" style="background: var(--bg-surface-elevated); color: #fff; padding: 8px 16px;" onclick="document.getElementById('modal-admin-receipt').style.display='none'">Cerrar</button>
+      <div id="receipt-modal-content" style="max-height: 450px; overflow-y: auto; background: #02050e; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-subtle); margin-bottom: 1rem;">
+        <!-- Injected dynamic receipt -->
       </div>
+      <button onclick="document.getElementById('modal-receipt-view').style.display = 'none'" class="btn-admin-pill cyan" style="width: 100%; justify-content: center;">Cerrar Vista</button>
     </div>
   </div>
 
   <script>
-    // Tab switching
-    const tabs = document.querySelectorAll('.admin-menu-btn');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const targetId = 'view-' + tab.dataset.tab;
-        document.querySelectorAll('.admin-tab-pane').forEach(p => p.style.display = 'none');
-        const targetPane = document.getElementById(targetId);
-        if (targetPane) targetPane.style.display = 'block';
-        document.getElementById('admin-view-heading').textContent = tab.querySelector('span')?.textContent || tab.textContent;
-      });
+    let adminState = {
+      activeTab: 'tab-dashboard',
+      stats: {},
+      pendingSubs: [],
+      pendingDeposits: [],
+      pendingPayouts: [],
+      products: [],
+      banners: [],
+      users: [],
+      settings: {}
+    };
+
+    // Tab Switching Logic
+    const tabHeadings = {
+      'tab-dashboard': { title: '📊 Métricas & Panel de Control General', sub: 'Auditoría en tiempo real, volumen transaccionado, saldos y operaciones en Paraguay.' },
+      'tab-approvals': { title: '📥 Aprobación y Prueba de Cuentas de Vendedores', sub: 'Revisa, prueba las credenciales al 100% y aprueba las cuentas para publicarlas en la tienda.' },
+      'tab-products': { title: '🎮 Catálogo de Videojuegos & Tarjetas de Regalo', sub: 'Administra inventario, precios en Guaraníes y stock de códigos digitales.' },
+      'tab-banners': { title: '🎨 Portadas Hero ENEBA en la Tienda', sub: 'Modifica las imágenes de portada y enlaces del carrusel interactivo.' },
+      'tab-finances': { title: '💰 Finanzas, Recargas SIPAP & Retiros', sub: 'Aprueba comprobantes bancarios de clientes y autoriza transferencias a vendedores.' },
+      'tab-escrow': { title: '🛡️ Garantía Escrow y Protección al Comprador', sub: 'Gestiona la protección de fondos durante los 30 días de suscripción compartida.' },
+      'tab-users': { title: '👥 Directorio de Usuarios y Billeteras', sub: 'Consulta clientes registrados y ajusta saldos en Guaraníes de forma directa.' },
+      'tab-settings': { title: '🏢 Configuración Financiera y Datos Bancarios', sub: 'Configura cotización del Guaraní, comisión de plataforma y cuentas bancarias oficiales.' }
+    };
+
+    function switchTab(tabId) {
+      adminState.activeTab = tabId;
+      document.querySelectorAll('.admin-tab-pane').forEach(p => p.style.display = 'none');
+      document.querySelectorAll('.admin-menu-btn').forEach(b => b.classList.remove('active'));
+
+      const targetPane = document.getElementById('view-' + tabId);
+      const targetBtn = document.querySelector(`.admin-menu-btn[data-tab="${tabId}"]`);
+      if (targetPane) targetPane.style.display = 'block';
+      if (targetBtn) targetBtn.classList.add('active');
+
+      const info = tabHeadings[tabId] || tabHeadings['tab-dashboard'];
+      document.getElementById('admin-view-heading').textContent = info.title;
+      document.getElementById('admin-view-subtitle').textContent = info.sub;
+    }
+
+    document.querySelectorAll('.admin-menu-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
 
-    let currentAdminOverview = null;
-    let currentBanners = [];
-
-    // Load Live Admin Data
+    // Load Admin Data from Server APIs
     async function loadAdminData() {
       try {
-        // 1. Fetch Overview (Finances, Deposits, Payouts, Settings)
-        const overviewRes = await fetch('/api/admin/overview');
-        const overviewData = await overviewRes.json();
-        currentAdminOverview = overviewData;
+        const [overviewRes, pendingSubsRes, productsRes, bannersRes, usersRes] = await Promise.all([
+          fetch('/api/admin/overview').then(r => r.json()).catch(() => ({})),
+          fetch('/api/admin/pending-subscriptions').then(r => r.json()).catch(() => ({ subscriptions: [] })),
+          fetch('/api/admin/products').then(r => r.json()).catch(() => ({ products: [] })),
+          fetch('/api/banners').then(r => r.json()).catch(() => ({ banners: [] })),
+          fetch('/api/admin/users').then(r => r.json()).catch(() => ({ users: [] }))
+        ]);
 
-        // Update stats
-        const statDeposits = document.getElementById('stat-pending-deposits-count');
-        const statPayouts = document.getElementById('stat-pending-payouts-count');
-        const badgeFinances = document.getElementById('badge-pending-finances');
-        const statRate = document.getElementById('stat-exchange-rate-preview');
-        const statComm = document.getElementById('stat-commission-preview');
+        const stats = overviewRes.stats || {};
+        const rate = overviewRes.settings?.exchangeRatePyg || 7500;
+        document.getElementById('header-rate-display').textContent = `${rate.toLocaleString('es-PY')} Gs.`;
 
-        const pendingDepCount = overviewData.stats?.pendingDepositsCount || (overviewData.pendingDeposits ? overviewData.pendingDeposits.length : 0);
-        const pendingPayCount = overviewData.stats?.pendingPayoutsCount || (overviewData.pendingPayouts ? overviewData.pendingPayouts.length : 0);
-        const totalFinancesPending = pendingDepCount + pendingPayCount;
+        // Update Dashboard KPIs
+        const totalVolUsd = stats.totalSalesVolumeUsd || 0;
+        const totalVolGs = Math.round(totalVolUsd * rate);
+        document.getElementById('kpi-total-volume-gs').textContent = `${totalVolGs.toLocaleString('es-PY')} Gs.`;
+        document.getElementById('kpi-total-volume-usd').textContent = `$${totalVolUsd.toFixed(2)} USD Transaccionados`;
 
-        if (statDeposits) statDeposits.textContent = pendingDepCount;
-        if (statPayouts) statPayouts.textContent = pendingPayCount;
-        if (badgeFinances) {
-          badgeFinances.textContent = totalFinancesPending;
-          badgeFinances.style.display = totalFinancesPending > 0 ? 'inline-block' : 'none';
-        }
+        const commUsd = parseFloat((totalVolUsd * 0.15).toFixed(2));
+        const commGs = Math.round(commUsd * rate);
+        document.getElementById('kpi-commissions-gs').textContent = `${commGs.toLocaleString('es-PY')} Gs.`;
+        document.getElementById('kpi-commissions-usd').textContent = `$${commUsd.toFixed(2)} USD Comisiones`;
 
-        const rate = overviewData.settings?.exchangeRatePyg || 7500;
-        const comm = overviewData.settings?.commissionPercent || 15;
-        if (statRate) statRate.textContent = `${rate.toLocaleString('es-PY')} Gs.`;
-        if (statComm) statComm.textContent = `${comm}%`;
+        const usersList = usersRes.users || [];
+        document.getElementById('kpi-users-count').textContent = usersList.length;
+        document.getElementById('kpi-users-sub').textContent = `${usersList.filter(u => u.role === 'seller').length} Vendedores • ${usersList.filter(u => u.role === 'client').length} Clientes`;
 
-        // Populate Settings Form Fields
-        if (overviewData.settings) {
-          const s = overviewData.settings;
-          const b = s.paraguayBankDetails || {};
-          const c = s.binanceDetails || {};
+        let totalEscrowUsd = 0;
+        usersList.forEach(u => { totalEscrowUsd += (u.pendingEscrowUsd || 0); });
+        const escrowGs = Math.round(totalEscrowUsd * rate);
+        document.getElementById('kpi-escrow-gs').textContent = `${escrowGs.toLocaleString('es-PY')} Gs.`;
+        document.getElementById('kpi-escrow-usd').textContent = `$${totalEscrowUsd.toFixed(2)} USD en Garantía`;
 
-          if (document.getElementById('setting-bank-name')) document.getElementById('setting-bank-name').value = b.bank || '';
-          if (document.getElementById('setting-bank-holder')) document.getElementById('setting-bank-holder').value = b.accountHolder || '';
-          if (document.getElementById('setting-bank-ruc')) document.getElementById('setting-bank-ruc').value = b.rucOrCi || '';
-          if (document.getElementById('setting-bank-account')) document.getElementById('setting-bank-account').value = b.accountNumber || '';
-          if (document.getElementById('setting-bank-alias')) document.getElementById('setting-bank-alias').value = b.aliasSipap || '';
+        // Update Notification Badges
+        const pendingSubs = pendingSubsRes.subscriptions || [];
+        const pendingDeposits = overviewRes.pendingDeposits || [];
+        const pendingPayouts = overviewRes.pendingPayouts || [];
+        const productsList = productsRes.products || [];
 
-          if (document.getElementById('setting-binance-id')) document.getElementById('setting-binance-id').value = c.payId || '';
-          if (document.getElementById('setting-binance-network')) document.getElementById('setting-binance-network').value = c.network || 'USDT (Binance Pay / BEP-20 / TRC-20)';
-          if (document.getElementById('setting-binance-wallet')) document.getElementById('setting-binance-wallet').value = c.walletAddress || '';
-          if (document.getElementById('setting-binance-qr')) document.getElementById('setting-binance-qr').value = c.qrUrl || '';
+        document.getElementById('badge-pending-subs').textContent = pendingSubs.length;
+        document.getElementById('badge-products-count').textContent = productsList.length;
+        document.getElementById('badge-pending-finances').textContent = pendingDeposits.length + pendingPayouts.length;
+        document.getElementById('quick-badge-subs').textContent = pendingSubs.length;
+        document.getElementById('quick-badge-deposits').textContent = pendingDeposits.length;
 
-          if (document.getElementById('setting-exchange-rate-pyg')) document.getElementById('setting-exchange-rate-pyg').value = s.exchangeRatePyg || 7500;
-          if (document.getElementById('setting-commission-percent')) document.getElementById('setting-commission-percent').value = s.commissionPercent || 15;
-        }
-
-        // Render Pending Deposits Table
-        renderPendingDepositsTable(overviewData.pendingDeposits || [], rate);
-
-        // Render Pending Payouts Table
-        renderPendingPayoutsTable(overviewData.pendingPayouts || [], rate);
-
-        // 2. Fetch Pending Subscriptions
-        const subsRes = await fetch('/api/admin/pending-subscriptions');
-        const subsData = await subsRes.json();
-        const tbodySubs = document.getElementById('admin-pending-subs-table-body');
-        const badgeSubs = document.getElementById('badge-pending-subs');
-
-        if (badgeSubs) badgeSubs.textContent = subsData.pendingCount || 0;
-
-        if (!subsData.subscriptions || subsData.subscriptions.length === 0) {
-          tbodySubs.innerHTML = `
-            <tr>
-              <td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">
-                ✅ No hay cuentas pendientes de revisión. Todas las cuentas activas están verificadas y publicadas en la tienda.
-              </td>
-            </tr>
-          `;
-        } else {
-          tbodySubs.innerHTML = subsData.subscriptions.map(s => `
-            <tr>
-              <td><strong>${s.sellerName || 'Vendedor'}</strong></td>
-              <td><span style="color: var(--accent-cyan); font-weight: 700;">${s.serviceName}</span></td>
-              <td>${s.totalSlots} slots</td>
-              <td><strong>${Math.round(s.pricePerSlotUsd * rate).toLocaleString('es-PY')} Gs.</strong> <span style="font-size: 0.72rem; color: var(--text-tertiary);">($${s.pricePerSlotUsd.toFixed(2)})</span></td>
-              <td>
-                <button class="btn-action-sm" style="background: rgba(255,255,255,0.08); padding: 4px 8px; font-size: 0.78rem;" onclick="alert('Credenciales para probar:\n\n${s.credentialsDecrypted || 'No provisto'}\n\nPINs: ${s.pinsDecrypted || 'N/A'}')">🔑 Ver Claves & Probar</button>
-              </td>
-              <td>
-                <button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; font-weight: 800; padding: 4px 10px; margin-right: 4px;" onclick="approveSub('${s.id}')">✅ Aprobar y Publicar</button>
-                <button class="btn-action-sm" style="background: var(--accent-red); color: #fff; padding: 4px 8px;" onclick="rejectSub('${s.id}')">❌ Rechazar</button>
-              </td>
-            </tr>
-          `).join('');
-        }
-
-        // 3. Fetch Admin Products
-        loadProducts();
-
-        // 4. Fetch Hero Banners
-        loadBanners();
+        // Render Tables
+        renderDashboardRecentTxs(overviewRes.pendingDeposits || []);
+        renderPendingSubsTable(pendingSubs, rate);
+        renderProductsTable(productsList, rate);
+        renderHeroBannersEditor(bannersRes.banners || []);
+        renderFinancesTables(pendingDeposits, pendingPayouts, rate);
+        renderUsersTable(usersList, rate);
+        populateSettingsForm(overviewRes.settings || {});
 
       } catch (err) {
-        console.error('Error loading admin overview:', err);
+        console.error('Error loading admin data:', err);
       }
     }
 
-    // --- PRODUCTS MANAGEMENT ---
-    async function loadProducts() {
-      try {
-        const res = await fetch('/api/admin/products');
-        const data = await res.json();
-        const tbody = document.getElementById('admin-products-table-body');
-        const badge = document.getElementById('badge-products-count');
+    function renderDashboardRecentTxs(deposits) {
+      const container = document.getElementById('dashboard-recent-txs-body');
+      if (!deposits || deposits.length === 0) {
+        container.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 1.5rem;">No hay transacciones recientes pendientes de revisión.</td></tr>`;
+        return;
+      }
+      container.innerHTML = deposits.slice(0, 5).map(tx => `
+        <tr>
+          <td><strong style="color: #fff;">${tx.userName}</strong></td>
+          <td><span class="badge-status pending">Recarga</span></td>
+          <td><strong style="color: var(--accent-emerald); font-family: var(--font-mono);">${(tx.localAmount || 0).toLocaleString('es-PY')} Gs.</strong></td>
+          <td>${tx.method === 'binance_usdt' ? '🌐 Binance USDT' : '🇵🇾 SIPAP Paraguay'}</td>
+          <td><span class="badge-status ${tx.status === 'approved' ? 'approved' : 'pending'}">${tx.status}</span></td>
+          <td>${new Date(tx.createdAt).toLocaleDateString('es-PY')}</td>
+        </tr>
+      `).join('');
+    }
 
-        if (badge) badge.textContent = data.count || 0;
-        if (!tbody) return;
+    function renderPendingSubsTable(subs, rate) {
+      const container = document.getElementById('admin-pending-subs-table-body');
+      const counterBadge = document.getElementById('pending-subs-counter-badge');
+      if (counterBadge) counterBadge.textContent = `${subs.length} pendientes`;
 
-        if (!data.products || data.products.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay productos registrados.</td></tr>`;
-          return;
-        }
+      if (!subs || subs.length === 0) {
+        container.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">✨ No hay cuentas de vendedores pendientes por auditar. Todas están al día.</td></tr>`;
+        return;
+      }
 
-        tbody.innerHTML = data.products.map(p => `
+      container.innerHTML = subs.map(s => {
+        const priceGs = Math.round(s.pricePerSlotUsd * rate).toLocaleString('es-PY');
+        return `
+          <tr>
+            <td><strong style="color: #fff;">${s.sellerName}</strong></td>
+            <td>
+              <div><strong style="color: var(--accent-cyan);">${s.serviceName}</strong></div>
+              <small style="color: var(--text-tertiary);">${s.planName}</small>
+            </td>
+            <td><strong>${s.totalSlots}</strong> cupos</td>
+            <td><strong style="color: #fff; font-family: var(--font-mono);">${priceGs} Gs.</strong></td>
+            <td>
+              <div style="background: rgba(0,0,0,0.5); padding: 6px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent-cyan);">
+                ${s.credentialsDecrypted || 'Credenciales protegidas'}
+              </div>
+            </td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-admin-pill emerald" onclick="approveSub('${s.id}')">✓ Aprobar</button>
+                <button class="btn-admin-pill red" onclick="rejectSub('${s.id}')">✕ Rechazar</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderProductsTable(products, rate) {
+      const container = document.getElementById('admin-products-table-body');
+      const countBadge = document.getElementById('inventory-count-badge');
+      if (countBadge) countBadge.textContent = `${products.length} productos`;
+
+      if (!products || products.length === 0) {
+        container.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay productos en el catálogo.</td></tr>`;
+        return;
+      }
+
+      container.innerHTML = products.map(p => {
+        const priceGs = (p.pricePyg || Math.round(p.priceUsd * rate)).toLocaleString('es-PY');
+        return `
           <tr>
             <td>
-              <div class="product-row-preview">
-                <img src="${p.coverUrl || '/assets/branding/icon.png'}" alt="${p.title}" class="product-thumb-sm">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="${p.coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=100&q=80'}" style="width: 36px; height: 36px; border-radius: 6px; object-fit: cover;">
                 <div>
-                  <strong style="color: #ffffff; font-size: 0.88rem;">${p.title}</strong>
-                  <span style="display: block; font-size: 0.72rem; color: var(--text-tertiary);">${p.badge || 'OFICIAL'}</span>
+                  <strong style="color: #fff;">${p.title}</strong>
+                  <div><span style="font-size: 0.7rem; color: var(--accent-cyan); font-weight: 700;">${p.badge || 'OFICIAL'}</span></div>
                 </div>
               </div>
             </td>
-            <td><span style="color: var(--accent-cyan); font-weight: 700;">${p.category === 'game_key' ? 'Videojuego' : 'Gift Card'}</span></td>
-            <td><strong>${p.platform || 'Digital'}</strong></td>
-            <td><strong style="color: var(--accent-emerald); font-size: 0.95rem;">${p.pricePyg.toLocaleString('es-PY')} Gs.</strong></td>
-            <td><code style="background: rgba(0,194,255,0.1); padding: 2px 6px; font-weight: 800; color: #fff;">${p.stockCount} códigos</code></td>
+            <td>${p.category === 'gift_card' ? '🎁 Gift Card' : '🎮 Videojuego'}</td>
+            <td><span class="badge-status approved">${p.platform}</span></td>
+            <td><strong style="color: #fff; font-family: var(--font-mono);">${priceGs} Gs.</strong></td>
+            <td><strong style="color: ${p.stockCount > 0 ? 'var(--accent-emerald)' : 'var(--accent-red)'};">${p.stockCount} códigos</strong></td>
             <td>
-              <button class="btn-action-sm" style="background: var(--accent-red); color: #fff; padding: 4px 8px;" onclick="deleteProduct('${p.id}')">🗑️ Eliminar</button>
+              <button class="btn-admin-pill red" onclick="deleteProduct('${p.id}')">🗑️ Eliminar</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderHeroBannersEditor(banners) {
+      const container = document.getElementById('banners-editor-container');
+      if (!banners || banners.length === 0) return;
+
+      container.innerHTML = banners.slice(0, 4).map((b, idx) => `
+        <div style="background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-medium); border-radius: 12px; padding: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <strong style="color: var(--accent-cyan); font-size: 0.9rem;">Slide #${idx + 1}</strong>
+            <span class="badge-status approved">${b.badge || 'DESTACADO'}</span>
+          </div>
+
+          <div style="margin-bottom: 8px;">
+            <label style="font-size: 0.72rem; color: var(--text-tertiary); display: block;">Título:</label>
+            <input type="text" class="form-input-styled banner-edit-title" value="${b.title || ''}" data-idx="${idx}" required>
+          </div>
+
+          <div style="margin-bottom: 8px;">
+            <label style="font-size: 0.72rem; color: var(--text-tertiary); display: block;">Subtítulo / Tagline:</label>
+            <input type="text" class="form-input-styled banner-edit-tagline" value="${b.tagline || ''}" data-idx="${idx}">
+          </div>
+
+          <div style="margin-bottom: 8px;">
+            <label style="font-size: 0.72rem; color: var(--text-tertiary); display: block;">URL Imagen Horizontal (1600x600):</label>
+            <input type="url" class="form-input-styled banner-edit-imgh" value="${b.imgHorizontal || ''}" data-idx="${idx}" required>
+          </div>
+
+          <div style="margin-bottom: 8px;">
+            <label style="font-size: 0.72rem; color: var(--text-tertiary); display: block;">URL Imagen Vertical (600x600):</label>
+            <input type="url" class="form-input-styled banner-edit-imgv" value="${b.imgVertical || ''}" data-idx="${idx}" required>
+          </div>
+
+          <div>
+            <label style="font-size: 0.72rem; color: var(--text-tertiary); display: block;">Enlace de Destino (CTA URL):</label>
+            <input type="text" class="form-input-styled banner-edit-cta-url" value="${b.ctaUrl || '#section-games'}" data-idx="${idx}">
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderFinancesTables(deposits, payouts, rate) {
+      const depBody = document.getElementById('admin-pending-deposits-body');
+      const payBody = document.getElementById('admin-pending-payouts-body');
+      const finCount = document.getElementById('finances-pending-count');
+      if (finCount) finCount.textContent = `${deposits.length} pendientes`;
+
+      if (!deposits || deposits.length === 0) {
+        depBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">✨ No hay comprobantes de recarga pendientes de auditar.</td></tr>`;
+      } else {
+        depBody.innerHTML = deposits.map(d => `
+          <tr>
+            <td><strong style="color: #fff;">${d.userName}</strong></td>
+            <td><strong style="color: var(--accent-emerald); font-family: var(--font-mono);">${(d.localAmount || 0).toLocaleString('es-PY')} Gs.</strong> <small style="color: var(--text-tertiary);">($${d.amountUsd} USD)</small></td>
+            <td><span class="badge-status approved">${d.method === 'binance_usdt' ? '🌐 Binance USDT' : '🇵🇾 SIPAP'}</span></td>
+            <td>
+              <div><strong>${d.reference || 'N/A'}</strong></div>
+              ${d.receiptData ? `<button class="btn-admin-pill cyan" style="margin-top: 4px; padding: 3px 8px; font-size: 0.72rem;" onclick="viewReceipt('${d.receiptData}')">👁️ Ver Comprobante</button>` : ''}
+            </td>
+            <td>${new Date(d.createdAt).toLocaleDateString('es-PY')}</td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-admin-pill emerald" onclick="approveDeposit('${d.id}')">✓ Acreditar Saldo</button>
+                <button class="btn-admin-pill red" onclick="rejectDeposit('${d.id}')">✕ Rechazar</button>
+              </div>
             </td>
           </tr>
         `).join('');
-      } catch (err) {
-        console.error('Error loading products:', err);
+      }
+
+      if (!payouts || payouts.length === 0) {
+        payBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay solicitudes de retiro pendientes de transferir.</td></tr>`;
+      } else {
+        payBody.innerHTML = payouts.map(p => `
+          <tr>
+            <td><strong style="color: #fff;">${p.sellerName}</strong></td>
+            <td><strong style="color: var(--accent-emerald); font-family: var(--font-mono);">${Math.round(p.amountUsd * rate).toLocaleString('es-PY')} Gs.</strong></td>
+            <td>${p.method}</td>
+            <td><pre style="font-size: 0.72rem; color: var(--text-secondary); margin: 0;">${JSON.stringify(p.accountDetails, null, 2)}</pre></td>
+            <td>
+              <button class="btn-admin-pill emerald" onclick="approvePayout('${p.id}')">✓ Marcar Transferido</button>
+            </td>
+          </tr>
+        `).join('');
       }
     }
 
-    // Add Product Form Handler
+    function renderUsersTable(users, rate) {
+      const container = document.getElementById('admin-users-table-body');
+      if (!users || users.length === 0) {
+        container.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No se encontraron usuarios.</td></tr>`;
+        return;
+      }
+
+      container.innerHTML = users.map(u => {
+        const balGs = (u.balancePyg || Math.round((u.balanceUsd || 0) * rate)).toLocaleString('es-PY');
+        const roleBadgeColor = u.role === 'admin' ? 'amber' : (u.role === 'seller' ? 'emerald' : 'cyan');
+        return `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.2rem;">${u.avatar || '🎮'}</span>
+                <strong style="color: #fff;">${u.name}</strong>
+              </div>
+            </td>
+            <td>${u.email}</td>
+            <td><span class="badge-status ${roleBadgeColor}">${u.role.toUpperCase()}</span></td>
+            <td><strong style="color: #34d399; font-family: var(--font-mono); font-size: 0.92rem;">${balGs} Gs.</strong></td>
+            <td><span style="font-family: var(--font-mono);">$${(u.balanceUsd || 0).toFixed(2)} USD</span></td>
+            <td>${u.ordersCount || 0} compras</td>
+            <td>
+              <button class="btn-admin-pill amber" onclick="openAdjustModal('${u.id}', '${u.name}', '${balGs}')">
+                💵 Ajustar Saldo
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function populateSettingsForm(s) {
+      if (!s) return;
+      if (document.getElementById('setting-exchange-rate-pyg')) document.getElementById('setting-exchange-rate-pyg').value = s.exchangeRatePyg || 7500;
+      if (document.getElementById('setting-commission-percent')) document.getElementById('setting-commission-percent').value = s.commissionPercent || 15;
+
+      const p = s.paraguayBankDetails;
+      if (p) {
+        if (document.getElementById('setting-bank-name')) document.getElementById('setting-bank-name').value = p.bank || '';
+        if (document.getElementById('setting-bank-holder')) document.getElementById('setting-bank-holder').value = p.accountHolder || '';
+        if (document.getElementById('setting-bank-ruc')) document.getElementById('setting-bank-ruc').value = p.rucOrCi || '';
+        if (document.getElementById('setting-bank-account')) document.getElementById('setting-bank-account').value = p.accountNumber || '';
+        if (document.getElementById('setting-bank-alias')) document.getElementById('setting-bank-alias').value = p.aliasSipap || '';
+      }
+
+      const b = s.binanceDetails;
+      if (b) {
+        if (document.getElementById('setting-binance-id')) document.getElementById('setting-binance-id').value = b.payId || '';
+        if (document.getElementById('setting-binance-network')) document.getElementById('setting-binance-network').value = b.network || '';
+        if (document.getElementById('setting-binance-wallet')) document.getElementById('setting-binance-wallet').value = b.walletAddress || '';
+        if (document.getElementById('setting-binance-qr')) document.getElementById('setting-binance-qr').value = b.qrUrl || '';
+      }
+    }
+
+    // Modal Operations
+    function openAdjustModal(userId, name, balGs) {
+      document.getElementById('adjust-user-id').value = userId;
+      document.getElementById('adjust-user-name').textContent = name;
+      document.getElementById('adjust-user-current-bal').textContent = `${balGs} Gs.`;
+      document.getElementById('modal-adjust-balance').style.display = 'flex';
+    }
+
+    function closeAdjustModal() {
+      document.getElementById('modal-adjust-balance').style.display = 'none';
+    }
+
+    function viewReceipt(data) {
+      const modal = document.getElementById('modal-receipt-view');
+      const container = document.getElementById('receipt-modal-content');
+      if (data.startsWith('data:image')) {
+        container.innerHTML = `<img src="${data}" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.8);">`;
+      } else {
+        container.innerHTML = `<p style="font-size: 0.9rem; color: #fff; word-break: break-all;">Referencia: <strong>${data}</strong></p>`;
+      }
+      modal.style.display = 'flex';
+    }
+
+    // Form Handlers
+    document.getElementById('form-adjust-user-balance').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const userId = document.getElementById('adjust-user-id').value;
+      const action = document.getElementById('adjust-action-type').value;
+      const amountPyg = parseFloat(document.getElementById('adjust-amount-pyg').value);
+      const reason = document.getElementById('adjust-reason-note').value.trim();
+
+      try {
+        const res = await fetch(`/api/admin/users/${userId}/adjust-balance`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ amountPyg, action, reason })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert(`🎉 ${data.message}`);
+          closeAdjustModal();
+          loadAdminData();
+        } else {
+          alert(`Aviso: ${data.error || 'No se pudo realizar el ajuste.'}`);
+        }
+      } catch (err) {
+        alert('Error al ajustar saldo.');
+      }
+    });
+
     document.getElementById('form-admin-add-product').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
-      const payload = {
-        title: document.getElementById('prod-title').value.trim(),
-        category: document.getElementById('prod-category').value,
-        platform: document.getElementById('prod-platform').value,
-        badge: document.getElementById('prod-badge').value.trim(),
-        pricePyg: parseFloat(document.getElementById('prod-price-pyg').value),
-        coverUrl: document.getElementById('prod-cover-url').value.trim(),
-        description: document.getElementById('prod-desc').value.trim(),
-        codes: document.getElementById('prod-codes').value.trim()
-      };
+      const title = document.getElementById('prod-title').value.trim();
+      const category = document.getElementById('prod-category').value;
+      const platform = document.getElementById('prod-platform').value;
+      const pricePyg = parseFloat(document.getElementById('prod-price-pyg').value);
+      const badge = document.getElementById('prod-badge').value.trim();
+      const coverUrl = document.getElementById('prod-cover-url').value.trim();
+      const codes = document.getElementById('prod-codes').value.split('\n').map(c => c.trim()).filter(Boolean);
 
       try {
         const res = await fetch('/api/admin/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, category, platform, pricePyg, badge, coverUrl, codes })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert(`🎉 ${data.message}`);
+          document.getElementById('form-admin-add-product').reset();
+          loadAdminData();
+        } else {
+          alert(`Aviso: ${data.error || 'Error al agregar producto.'}`);
+        }
+      } catch (err) {
+        alert('Error de conexión al agregar producto.');
+      }
+    });
+
+    document.getElementById('form-admin-hero-banners').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const titles = document.querySelectorAll('.banner-edit-title');
+      const taglines = document.querySelectorAll('.banner-edit-tagline');
+      const imghs = document.querySelectorAll('.banner-edit-imgh');
+      const imgvs = document.querySelectorAll('.banner-edit-imgv');
+      const ctaUrls = document.querySelectorAll('.banner-edit-cta-url');
+
+      const bannersPayload = [];
+      titles.forEach((t, i) => {
+        bannersPayload.push({
+          id: `banner_hero_${i + 1}`,
+          title: t.value.trim(),
+          tagline: taglines[i]?.value.trim() || '',
+          badge: i === 0 ? 'PS5 • XBOX • PC' : (i === 1 ? 'PS5 EXCLUSIVE' : 'DESTACADO'),
+          imgHorizontal: imghs[i]?.value.trim() || '',
+          imgVertical: imgvs[i]?.value.trim() || '',
+          ctaText: 'Comprar ahora',
+          ctaUrl: ctaUrls[i]?.value.trim() || '#section-games',
+          sortOrder: i,
+          isActive: true
+        });
+      });
+
+      try {
+        const res = await fetch('/api/banners/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ banners: bannersPayload })
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert('✨ ¡Portadas Hero actualizadas y sincronizadas en la tienda!');
+          loadAdminData();
+        } else {
+          alert('Error al guardar banners.');
+        }
+      } catch (err) {
+        alert('Error de conexión al guardar banners.');
+      }
+    });
+
+    document.getElementById('form-admin-payment-settings').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        exchangeRatePyg: parseFloat(document.getElementById('setting-exchange-rate-pyg').value) || 7500,
+        commissionPercent: parseFloat(document.getElementById('setting-commission-percent').value) || 15,
+        paraguayBankDetails: {
+          bank: document.getElementById('setting-bank-name').value,
+          accountHolder: document.getElementById('setting-bank-holder').value,
+          rucOrCi: document.getElementById('setting-bank-ruc').value,
+          accountNumber: document.getElementById('setting-bank-account').value,
+          aliasSipap: document.getElementById('setting-bank-alias').value
+        },
+        binanceDetails: {
+          payId: document.getElementById('setting-binance-id').value,
+          network: document.getElementById('setting-binance-network').value,
+          walletAddress: document.getElementById('setting-binance-wallet').value,
+          qrUrl: document.getElementById('setting-binance-qr').value
+        }
+      };
+
+      try {
+        const res = await fetch('/api/admin/settings', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         const data = await res.json();
         if (data.success) {
-          alert('🎉 ' + data.message);
-          document.getElementById('form-admin-add-product').reset();
-          loadProducts();
+          alert('✨ ¡Configuración financiera y de cobros guardada con éxito!');
+          loadAdminData();
         } else {
-          alert(data.error || 'Error al agregar producto.');
+          alert('Error al guardar configuración.');
         }
       } catch (err) {
-        alert('Error de conexión.');
+        alert('Error de conexión al guardar configuración.');
       }
     });
 
-    async function deleteProduct(id) {
-      if (!confirm('¿Deseas eliminar este producto del catálogo?')) return;
-      try {
-        const res = await fetch('/api/admin/products/' + id, { method: 'DELETE' });
-        const data = await res.json();
-        if (data.success) {
-          alert(data.message);
-          loadProducts();
-        }
-      } catch (e) {
-        alert('Error al eliminar producto.');
-      }
-    }
-
-    // --- HERO BANNERS MANAGEMENT ---
-    async function loadBanners() {
-      try {
-        const res = await fetch('/api/banners');
-        const data = await res.json();
-        currentBanners = data.banners || [];
-
-        const container = document.getElementById('admin-banners-list-container');
-        if (!container) return;
-
-        container.innerHTML = [0, 1, 2, 3].map(idx => {
-          const b = currentBanners[idx] || {
-            title: `Banner ${idx + 1}`,
-            tagline: '',
-            badge: 'DESTACADO',
-            imgHorizontal: '',
-            imgVertical: '',
-            ctaText: 'Comprar ahora',
-            ctaUrl: '#section-games'
-          };
-
-          return `
-            <div class="banner-slot-card">
-              <h3 style="font-size: 1rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 1rem;">
-                🖼️ Portada Acordeón #${idx + 1}
-              </h3>
-              
-              <div class="form-grid-3" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 10px;">
-                <div class="form-group">
-                  <label class="form-label">Título del Banner:</label>
-                  <input type="text" class="form-input banner-field-title" data-idx="${idx}" value="${b.title || ''}" required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Subtítulo / Tagline:</label>
-                  <input type="text" class="form-input banner-field-tagline" data-idx="${idx}" value="${b.tagline || ''}">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Insignia / Badge:</label>
-                  <input type="text" class="form-input banner-field-badge" data-idx="${idx}" value="${b.badge || 'DESTACADO'}">
-                </div>
-              </div>
-
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label">URL Imagen Horizontal (Desktop Expandida):</label>
-                  <input type="text" class="form-input banner-field-horizontal" data-idx="${idx}" value="${b.imgHorizontal || ''}" placeholder="https://..." required>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">URL Imagen Vertical (Móvil y Plegada):</label>
-                  <input type="text" class="form-input banner-field-vertical" data-idx="${idx}" value="${b.imgVertical || ''}" placeholder="https://..." required>
-                </div>
-              </div>
-
-              <div class="form-grid-2">
-                <div class="form-group">
-                  <label class="form-label">Texto del Botón:</label>
-                  <input type="text" class="form-input banner-field-cta-text" data-idx="${idx}" value="${b.ctaText || 'Comprar ahora'}">
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Enlace de Destino (URL):</label>
-                  <input type="text" class="form-input banner-field-cta-url" data-idx="${idx}" value="${b.ctaUrl || '#section-games'}">
-                </div>
-              </div>
-            </div>
-          `;
-        }).join('');
-      } catch (err) {
-        console.error('Error loading banners:', err);
-      }
-    }
-
-    // Save Hero Banners Form
-    document.getElementById('form-admin-banners').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const banners = [0, 1, 2, 3].map(idx => ({
-        id: currentBanners[idx]?.id || `banner_slot_${idx}`,
-        title: document.querySelector(`.banner-field-title[data-idx="${idx}"]`)?.value.trim() || '',
-        tagline: document.querySelector(`.banner-field-tagline[data-idx="${idx}"]`)?.value.trim() || '',
-        badge: document.querySelector(`.banner-field-badge[data-idx="${idx}"]`)?.value.trim() || 'DESTACADO',
-        imgHorizontal: document.querySelector(`.banner-field-horizontal[data-idx="${idx}"]`)?.value.trim() || '',
-        imgVertical: document.querySelector(`.banner-field-vertical[data-idx="${idx}"]`)?.value.trim() || '',
-        ctaText: document.querySelector(`.banner-field-cta-text[data-idx="${idx}"]`)?.value.trim() || 'Comprar ahora',
-        ctaUrl: document.querySelector(`.banner-field-cta-url[data-idx="${idx}"]`)?.value.trim() || '#section-games',
-        sortOrder: idx,
-        isActive: true
-      }));
-
-      try {
-        const res = await fetch('/api/banners/admin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ banners })
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert('✨ ¡Portadas del Acordeón Hero guardadas con éxito!');
-          loadBanners();
-        } else {
-          alert('Error al guardar portadas.');
-        }
-      } catch (err) {
-        alert('Error de conexión.');
-      }
-    });
-
-    // --- ESCROW GUARANTEE ACTIONS ---
-    async function releaseEscrow(id) {
-      if (!confirm('¿Deseas liberar el pago retenido en Escrow para transferirlo al vendedor?')) return;
-      try {
-        const res = await fetch('/api/admin/release-escrow/' + id, { method: 'POST' });
-        const data = await res.json();
-        alert(data.message || 'Pago liberado.');
-        loadAdminData();
-      } catch (e) {
-        alert('Error al liberar pago.');
-      }
-    }
-
-    async function refundBuyer(id) {
-      if (!confirm('¿Deseas procesar el reembolso completo a la billetera del cliente?')) return;
-      try {
-        const res = await fetch('/api/admin/refund-slot/' + id, { method: 'POST' });
-        const data = await res.json();
-        alert(data.message || 'Reembolso procesado.');
-        loadAdminData();
-      } catch (e) {
-        alert('Error al procesar reembolso.');
-      }
-    }
-
-    function renderPendingDepositsTable(deposits, rate) {
-      const tbody = document.getElementById('admin-deposits-table-body');
-      if (!tbody) return;
-
-      if (!deposits || deposits.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="7" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">
-              ✅ No hay comprobantes de recarga pendientes de verificación.
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      tbody.innerHTML = deposits.map(tx => {
-        const isBinance = tx.method === 'binance_usdt' || tx.currency === 'USDT';
-        const methodBadge = isBinance
-          ? `<span class="badge-method-binance">🌐 Binance Pay (USDT)</span>`
-          : `<span class="badge-method-sipap">🇵🇾 SIPAP Paraguay</span>`;
-        
-        const transferredText = isBinance
-          ? `<strong>${tx.amountUsd ? tx.amountUsd.toFixed(2) : '0.00'} USDT</strong>`
-          : `<strong>${Math.round(tx.localAmount || (tx.amountUsd * rate)).toLocaleString('es-PY')} Gs.</strong>`;
-
-        const creditAmountGs = Math.round((tx.localAmount || (tx.amountUsd * rate))).toLocaleString('es-PY');
-
-        const receiptEscaped = (tx.receiptData || tx.receiptUrl || '').replace(/'/g, "\\'");
-        const refEscaped = (tx.reference || 'Comprobante').replace(/'/g, "\\'");
-
-        return `
-          <tr>
-            <td>
-              <div style="font-weight: 700; color: #ffffff;">${tx.userName || tx.userId}</div>
-              <span style="font-size: 0.72rem; color: var(--text-tertiary); font-family: var(--font-mono);">${tx.userId}</span>
-            </td>
-            <td>${methodBadge}</td>
-            <td>${transferredText}</td>
-            <td><strong style="color: var(--accent-emerald); font-size: 0.95rem;">${creditAmountGs} Gs.</strong></td>
-            <td><code style="background: rgba(255,255,255,0.06); padding: 2px 6px; font-size: 0.78rem;">${tx.reference || 'N/A'}</code></td>
-            <td>
-              <button class="btn-receipt-view" onclick="openReceiptModal('${receiptEscaped}', '${refEscaped}')">👁️ Ver</button>
-            </td>
-            <td>
-              <button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; font-weight: 800; padding: 4px 10px; margin-right: 4px;" onclick="approveDeposit('${tx.id}')">✅ Aprobar y Acreditar</button>
-              <button class="btn-action-sm" style="background: var(--accent-red); color: #fff; padding: 4px 8px;" onclick="rejectDeposit('${tx.id}')">❌ Rechazar</button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function renderPendingPayoutsTable(payouts, rate) {
-      const tbody = document.getElementById('admin-payouts-table-body');
-      if (!tbody) return;
-
-      if (!payouts || payouts.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">
-              ✅ No hay solicitudes de retiro pendientes de procesar.
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      tbody.innerHTML = payouts.map(p => {
-        const isBinance = p.method === 'binance_usdt';
-        const methodBadge = isBinance
-          ? `<span class="badge-method-binance">🌐 Binance USDT</span>`
-          : `<span class="badge-method-sipap">🇵🇾 SIPAP Paraguay</span>`;
-
-        const amountGs = Math.round(p.amountPyg || (p.amountUsd * rate)).toLocaleString('es-PY');
-        const details = p.accountDetails ? JSON.stringify(p.accountDetails).replace(/"/g, ' ') : 'N/A';
-
-        return `
-          <tr>
-            <td><strong>${p.sellerName || p.sellerId}</strong></td>
-            <td><strong style="color: var(--accent-cyan); font-size: 0.92rem;">${amountGs} Gs.</strong></td>
-            <td>$ ${p.amountUsd ? p.amountUsd.toFixed(2) : '0.00'}</td>
-            <td>${methodBadge}</td>
-            <td><span style="font-size: 0.76rem; color: var(--text-secondary);">${details}</span></td>
-            <td>
-              <button class="btn-action-sm" style="background: var(--accent-emerald); color: #000; font-weight: 800; padding: 4px 10px;" onclick="approvePayout('${p.id}')">✅ Marcar Transferido</button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    // Modal Receipt Preview
-    function openReceiptModal(data, ref) {
-      const modal = document.getElementById('modal-admin-receipt');
-      const img = document.getElementById('receipt-modal-img');
-      const text = document.getElementById('receipt-modal-text');
-      const title = document.getElementById('receipt-modal-title');
-
-      if (title) title.textContent = `📄 Comprobante: ${ref}`;
-
-      if (data && (data.startsWith('data:image') || data.startsWith('http'))) {
-        img.src = data;
-        img.style.display = 'block';
-        text.textContent = `Referencia provista: ${ref}`;
-      } else {
-        img.style.display = 'none';
-        text.textContent = data ? `Datos del comprobante:\n${data}` : `Referencia: ${ref} (Sin imagen adjunta)`;
-      }
-
-      if (modal) modal.style.display = 'grid';
-    }
-
-    // Action Handlers
+    // Actions
     async function approveDeposit(id) {
-      if (!confirm('¿Confirmas que el pago ha sido recibido y deseas acreditar el saldo en Guaraníes al usuario?')) return;
+      if (!confirm('¿Confirmas que has verificado el ingreso de dinero en tu cuenta bancaria / Binance?')) return;
       try {
         const res = await fetch('/api/admin/approve-deposit/' + id, { method: 'POST' });
         const data = await res.json();
-        if (data.success) {
-          alert(`🎉 ${data.message}`);
-          loadAdminData();
-        } else {
-          alert(`Aviso: ${data.error || 'No se pudo aprobar la recarga.'}`);
-        }
-      } catch (e) {
-        alert('Error al aprobar recarga.');
-      }
+        if (data.success) { alert(`🎉 ${data.message}`); loadAdminData(); }
+      } catch (e) { alert('Error al aprobar.'); }
     }
 
     async function rejectDeposit(id) {
-      const reason = prompt('Indica el motivo del rechazo del comprobante:', 'Comprobante no válido o pago no recibido');
-      if (reason === null) return;
-
+      const reason = prompt('Motivo del rechazo del comprobante:', 'Comprobante no válido o pago no recibido');
+      if (!reason) return;
       try {
         const res = await fetch('/api/admin/reject-deposit/' + id, {
           method: 'POST',
@@ -1042,13 +1406,8 @@
           body: JSON.stringify({ reason })
         });
         const data = await res.json();
-        if (data.success) {
-          alert('Recarga rechazada.');
-          loadAdminData();
-        }
-      } catch (e) {
-        alert('Error al rechazar recarga.');
-      }
+        if (data.success) { alert('Recarga rechazada.'); loadAdminData(); }
+      } catch (e) { alert('Error al rechazar.'); }
     }
 
     async function approvePayout(id) {
@@ -1056,13 +1415,8 @@
       try {
         const res = await fetch('/api/admin/approve-payout/' + id, { method: 'POST' });
         const data = await res.json();
-        if (data.success) {
-          alert(`🎉 ${data.message}`);
-          loadAdminData();
-        }
-      } catch (e) {
-        alert('Error al aprobar retiro.');
-      }
+        if (data.success) { alert(`🎉 ${data.message}`); loadAdminData(); }
+      } catch (e) { alert('Error al aprobar retiro.'); }
     }
 
     async function approveSub(id) {
@@ -1072,9 +1426,7 @@
         const data = await res.json();
         alert(data.message || 'Cuenta aprobada');
         loadAdminData();
-      } catch (e) {
-        alert('Error al aprobar');
-      }
+      } catch (e) { alert('Error al aprobar.'); }
     }
 
     async function rejectSub(id) {
@@ -1084,64 +1436,22 @@
         const data = await res.json();
         alert(data.message || 'Cuenta rechazada');
         loadAdminData();
-      } catch (e) {
-        alert('Error al rechazar');
-      }
+      } catch (e) { alert('Error al rechazar.'); }
     }
 
-    // Save Payment & Binance Settings
-    const formSettings = document.getElementById('form-admin-payment-settings');
-    if (formSettings) {
-      formSettings.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const payload = {
-          exchangeRatePyg: parseFloat(document.getElementById('setting-exchange-rate-pyg').value) || 7500,
-          commissionPercent: parseFloat(document.getElementById('setting-commission-percent').value) || 15,
-          paraguayBankDetails: {
-            bank: document.getElementById('setting-bank-name').value,
-            accountHolder: document.getElementById('setting-bank-holder').value,
-            rucOrCi: document.getElementById('setting-bank-ruc').value,
-            accountNumber: document.getElementById('setting-bank-account').value,
-            aliasSipap: document.getElementById('setting-bank-alias').value
-          },
-          binanceDetails: {
-            payId: document.getElementById('setting-binance-id').value,
-            network: document.getElementById('setting-binance-network').value,
-            walletAddress: document.getElementById('setting-binance-wallet').value,
-            qrUrl: document.getElementById('setting-binance-qr').value
-          }
-        };
-
-        try {
-          const res = await fetch('/api/admin/settings', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          const data = await res.json();
-          if (data.success) {
-            alert('✨ ¡Configuraciones de cobro, bancos y Binance guardadas con éxito!');
-            loadAdminData();
-          } else {
-            alert(data.error || 'Error al guardar configuración.');
-          }
-        } catch (err) {
-          alert('Error de conexión al guardar configuración.');
-        }
-      });
+    async function deleteProduct(id) {
+      if (!confirm('¿Estás seguro de eliminar este producto del catálogo?')) return;
+      try {
+        const res = await fetch('/api/admin/products/' + id, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) { alert('Producto eliminado.'); loadAdminData(); }
+      } catch (e) { alert('Error al eliminar.'); }
     }
 
-    window.approveDeposit = approveDeposit;
-    window.rejectDeposit = rejectDeposit;
-    window.approvePayout = approvePayout;
-    window.approveSub = approveSub;
-    window.rejectSub = rejectSub;
-    window.releaseEscrow = releaseEscrow;
-    window.refundBuyer = refundBuyer;
-    window.deleteProduct = deleteProduct;
-    window.openReceiptModal = openReceiptModal;
-    window.loadAdminData = loadAdminData;
+    document.getElementById('btn-admin-logout').addEventListener('click', () => {
+      localStorage.removeItem('gb_admin_session');
+      window.location.href = '/admin/login';
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
       loadAdminData();

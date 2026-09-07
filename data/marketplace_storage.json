@@ -36,11 +36,25 @@
       "pendingEscrowUsd": 22
     },
     "usr_client1": {
-      "balanceUsd": 118.32,
+      "balanceUsd": 124.99,
       "pendingEscrowUsd": 0
     }
   },
   "wallet_transactions": [
+    {
+      "id": "tx_admin_adj_1788791102463",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "deposit",
+      "amountUsd": 6.666666666666667,
+      "currency": "PYG",
+      "localAmount": 50000,
+      "method": "admin_manual_adjustment",
+      "status": "approved",
+      "reference": "ADMIN-CREDIT",
+      "notes": "Bono de prueba",
+      "createdAt": "2026-09-07T14:25:02.463Z"
+    },
     {
       "id": "tx_1788774785766_iuuu",
       "userId": "usr_client1",
