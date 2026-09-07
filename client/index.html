@@ -36,13 +36,17 @@
         </a>
       </div>
 
-      <!-- Center: Expandable Omnibar Search -->
+      <!-- Center: Minimalist Expandable Search (Lupa Icon) -->
       <div class="header-search-wrapper" id="header-search-wrapper">
-        <div class="header-search-box">
-          <span class="header-search-icon">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <button type="button" class="btn-search-lupa-toggle" id="btn-search-toggle" title="Buscar videojuegos, tarjetas y streaming">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+        <div class="header-search-box-expandable" id="header-search-expandable">
+          <span class="header-search-icon-inside">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
           </span>
-          <input type="text" id="main-search-input" class="header-search-input" placeholder="Buscar videojuegos, tarjetas, streaming, software...">
+          <input type="text" id="main-search-input" class="header-search-input" placeholder="Buscar videojuegos, tarjetas, streaming...">
+          <button type="button" class="btn-search-close-sm" id="btn-search-close">✕</button>
         </div>
         <!-- Live Instant Search Dropdown -->
         <div class="search-dropdown-results" id="search-dropdown-results" style="display: none;"></div>
@@ -61,16 +65,15 @@
         <!-- Live Balance Display Pill & Profile Dropdown (Logged In Client) -->
         <div class="header-user-group" id="auth-logged-group" style="display: none;">
           <button class="btn-balance-display-pill" id="btn-open-deposit-modal" title="Saldo disponible en tu cuenta. Haz clic para recargar.">
-            <svg class="wallet-icon-svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+            <svg class="wallet-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
             <span id="nav-user-balance-amount">0 Gs.</span>
-            <span class="balance-add-badge">+ Recargar</span>
           </button>
 
           <!-- User Profile Dropdown Pill (Netflix / Disney Style) -->
           <div class="user-profile-wrapper" id="user-profile-wrapper">
             <button class="user-profile-btn" id="btn-user-profile-toggle" type="button" title="Mi Cuenta" aria-haspopup="true" aria-expanded="false">
               <div class="user-avatar-badge" id="nav-user-avatar-badge">
-                <span id="nav-user-avatar">🎮</span>
+                <img id="nav-user-avatar-img" src="/assets/branding/icon.png" alt="Avatar" class="header-avatar-img">
               </div>
               <span class="user-name-label" id="nav-user-name">Lucas González</span>
               <svg class="profile-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -79,7 +82,9 @@
             <!-- Profile Dropdown Menu -->
             <div class="user-profile-dropdown-menu" id="user-profile-dropdown-menu" style="display: none;">
               <div class="dropdown-user-header">
-                <div class="dropdown-user-avatar" id="dropdown-user-avatar-lg">🎮</div>
+                <div class="dropdown-user-avatar" id="dropdown-user-avatar-lg">
+                  <img id="dropdown-user-avatar-img" src="/assets/branding/icon.png" alt="Avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
                 <div class="dropdown-user-info">
                   <strong id="dropdown-user-name">Lucas González</strong>
                   <span id="dropdown-user-email">usuario@gamesboy.net</span>
@@ -91,9 +96,9 @@
               
               <ul class="dropdown-menu-list">
                 <li>
-                  <a href="#my-vault-section" class="dropdown-menu-item" id="menu-item-vault">
+                  <a href="/profile.html#tab-purchases" class="dropdown-menu-item" id="menu-item-vault">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    <span>Mi Bóveda & Suscripciones</span>
+                    <span>Mis Compras</span>
                   </a>
                 </li>
                 <li>
@@ -105,11 +110,11 @@
                 <li>
                   <a href="javascript:void(0)" class="dropdown-menu-item" id="menu-item-publish">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-                    <span>Vender / Compartir Cuenta</span>
+                    <span>Compartir Cuenta</span>
                   </a>
                 </li>
                 <li>
-                  <a href="javascript:void(0)" class="dropdown-menu-item" id="menu-item-edit-profile">
+                  <a href="/profile.html" class="dropdown-menu-item" id="menu-item-edit-profile">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     <span>Ajustes de mi Perfil</span>
                   </a>
@@ -118,8 +123,8 @@
 
               <div class="dropdown-divider"></div>
 
-              <div class="dropdown-footer">
-                <button class="dropdown-logout-btn" id="btn-logout-user">
+              <div style="padding: 6px 12px;">
+                <button type="button" class="btn-dropdown-logout" id="btn-logout-user">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                   <span>Cerrar sesión</span>
                 </button>
@@ -1181,11 +1186,11 @@
         </div>
 
         <div class="footer-currency-row">
-          <span style="font-size: 0.75rem; color: var(--text-tertiary);">Idioma / Moneda:</span>
+          <span style="font-size: 0.75rem; color: var(--text-tertiary);">País y Moneda:</span>
           <div class="footer-lang-pill">
-            <span>Español</span>
+            <span>🇵🇾 Paraguay</span>
             <span>•</span>
-            <strong id="footer-currency-indicator">USD ($)</strong>
+            <strong id="footer-currency-indicator">Guaraníes (Gs.)</strong>
           </div>
         </div>
       </div>
@@ -1199,44 +1204,16 @@
   </footer>
 
   <!-- ======================================================= -->
-  <!-- MODAL: PROFILE SETTINGS                                 -->
+  <!-- STICKY RIGHT FLOATING WIDGET: GENERAR INGRESOS          -->
   <!-- ======================================================= -->
-  <div class="modal-overlay" id="modal-profile-settings" style="display: none;">
-    <div class="modal-dialog-modern" style="max-width: 440px;">
-      <div class="modal-header-modern">
-        <div class="modal-header-title">
-          <span style="font-size: 1.25rem;">⚙️</span>
-          <h3>Ajustes de mi Perfil</h3>
-        </div>
-        <button class="modal-close-btn" id="btn-close-profile-modal">✕</button>
-      </div>
-      <form id="form-edit-user-profile" class="modal-body-content">
-        <div class="form-group-modern" style="margin-bottom: 1.15rem;">
-          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #ffffff; margin-bottom: 6px;">Nombre o Apodo Visible:</label>
-          <input type="text" id="edit-profile-name" class="modal-input-field" required placeholder="Tu nombre público">
-          <span style="font-size: 0.72rem; color: var(--text-tertiary); display: block; margin-top: 4px;">Este nombre aparecerá en los chats y grupos. Tu correo se mantiene privado.</span>
-        </div>
-
-        <div class="form-group-modern" style="margin-bottom: 1.25rem;">
-          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">Elige tu Avatar:</label>
-          <div class="avatar-selection-grid" id="avatar-selection-grid">
-            <button type="button" class="btn-avatar-choice selected" data-avatar="🎮">🎮</button>
-            <button type="button" class="btn-avatar-choice" data-avatar="👑">👑</button>
-            <button type="button" class="btn-avatar-choice" data-avatar="⚡">⚡</button>
-            <button type="button" class="btn-avatar-choice" data-avatar="🚀">🚀</button>
-            <button type="button" class="btn-avatar-choice" data-avatar="💎">💎</button>
-            <button type="button" class="btn-avatar-choice" data-avatar="🔥">🔥</button>
-            <button type="button" class="btn-avatar-choice" data-avatar="🎯">🎯</button>
-            <button type="button" class="btn-avatar-choice" data-avatar="👤">👤</button>
-          </div>
-        </div>
-
-        <div class="modal-footer-modern" style="padding-top: 0.5rem;">
-          <button type="submit" class="btn-primary-block">Guardar Cambios</button>
-        </div>
-      </form>
+  <button type="button" class="sticky-monetize-pill" id="sticky-monetize-pill" title="Gana dinero compartiendo los cupos libres de tus cuentas de streaming">
+    <div class="sticky-monetize-badge-icon">💰</div>
+    <div class="sticky-monetize-text-wrap">
+      <span class="sticky-monetize-main-label">Generar Ingresos</span>
+      <span class="sticky-monetize-sub-label">Comparte tus cuentas</span>
     </div>
-  </div>
+    <span class="sticky-monetize-glow"></span>
+  </button>
 
   <!-- App Client Scripts -->
   <script type="module" src="/js/app.js"></script>

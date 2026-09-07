@@ -16,10 +16,14 @@
     },
     {
       "id": "usr_client1",
-      "name": "Lucas_Py",
+      "name": "Lucas",
       "email": "lucas@cliente.com",
       "role": "client",
-      "avatar": "🎮"
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+      "surname": "González",
+      "birthday": "1998-05-14",
+      "hasPassword": true,
+      "passwordUpdated": "2026-09-07T00:43:19.740Z"
     }
   ],
   "wallets": {
@@ -28,15 +32,83 @@
       "pendingEscrowUsd": 0
     },
     "usr_seller1": {
-      "balanceUsd": 65.5,
+      "balanceUsd": 25.5,
       "pendingEscrowUsd": 22
     },
     "usr_client1": {
-      "balanceUsd": 48.33,
+      "balanceUsd": 94.99,
       "pendingEscrowUsd": 0
     }
   },
   "wallet_transactions": [
+    {
+      "id": "tx_1788741827325_3009",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "deposit",
+      "amountUsd": 13.33,
+      "currency": "PYG",
+      "localAmount": 100000,
+      "method": "sipap_paraguay",
+      "status": "approved",
+      "reference": "SIPAP-TRANSF-992184",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T00:43:47.325Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T00:43:47.352Z"
+    },
+    {
+      "id": "tx_1788741827275_yiyq",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "deposit",
+      "amountUsd": 10,
+      "currency": "USDT",
+      "localAmount": 75000,
+      "method": "binance_usdt",
+      "status": "approved",
+      "reference": "BINANCE-ORDER-8891024",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T00:43:47.275Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T00:43:47.343Z"
+    },
+    {
+      "id": "tx_1788741497864_e69i",
+      "userId": "usr_client1",
+      "userName": "Lucas_Py",
+      "type": "deposit",
+      "amountUsd": 13.33,
+      "currency": "PYG",
+      "localAmount": 100000,
+      "method": "sipap_paraguay",
+      "status": "approved",
+      "reference": "SIPAP-TRANSF-992184",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T00:38:17.864Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T00:38:17.886Z"
+    },
+    {
+      "id": "tx_1788741497854_4ib8",
+      "userId": "usr_client1",
+      "userName": "Lucas_Py",
+      "type": "deposit",
+      "amountUsd": 10,
+      "currency": "USDT",
+      "localAmount": 75000,
+      "method": "binance_usdt",
+      "status": "approved",
+      "reference": "BINANCE-ORDER-8891024",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T00:38:17.854Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T00:38:17.878Z"
+    },
     {
       "id": "tx_1788739685080_e1by",
       "userId": "usr_client1",
@@ -91,49 +163,13 @@
     {
       "id": "banner_fc25",
       "title": "EA SPORTS FC 25",
-      "tagline": "CLUBES, ULTIMATE TEAM & MODO CARRERA",
+      "tagline": "CLUBES & ULTIMATE TEAM",
       "badge": "PS5 • XBOX • PC",
-      "imgHorizontal": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1600&q=80",
-      "imgVertical": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80",
+      "imgHorizontal": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2",
+      "imgVertical": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2",
       "ctaText": "Ver Ediciones",
       "ctaUrl": "#section-games",
       "sortOrder": 0,
-      "isActive": true
-    },
-    {
-      "id": "banner_spiderman2",
-      "title": "Marvel Spider-Man 2",
-      "tagline": "BE GREATER. TOGETHER.",
-      "badge": "PS5 EXCLUSIVE",
-      "imgHorizontal": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1600&q=80",
-      "imgVertical": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
-      "ctaText": "Comprar ahora ➔",
-      "ctaUrl": "#section-games",
-      "sortOrder": 1,
-      "isActive": true
-    },
-    {
-      "id": "banner_cod_bo6",
-      "title": "Call of Duty: Black Ops 6",
-      "tagline": "LA VERDAD MIENTE. VUELVE EL REY DEL SHOOTER",
-      "badge": "CROSS-GEN BUNDLE",
-      "imgHorizontal": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80",
-      "imgVertical": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
-      "ctaText": "Comprar Código",
-      "ctaUrl": "#section-games",
-      "sortOrder": 2,
-      "isActive": true
-    },
-    {
-      "id": "banner_gta6",
-      "title": "Grand Theft Auto VI",
-      "tagline": "BIENVENIDO A LEONIDA & VICE CITY",
-      "badge": "NEXT-GEN PRE-ORDER",
-      "imgHorizontal": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1600&q=80",
-      "imgVertical": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
-      "ctaText": "Reservar Ahora",
-      "ctaUrl": "#section-games",
-      "sortOrder": 3,
       "isActive": true
     }
   ],
@@ -564,6 +600,34 @@
   ],
   "user_store_orders": [],
   "payout_requests": [
+    {
+      "id": "payout_1788741827380",
+      "sellerId": "usr_seller1",
+      "sellerName": "Carlos_Streams",
+      "amountUsd": 20,
+      "amountPyg": 150000,
+      "method": "binance_usdt",
+      "accountDetails": {
+        "binanceDestination": "PayID: 998811223"
+      },
+      "status": "completed",
+      "createdAt": "2026-09-07T00:43:47.380Z",
+      "processedAt": "2026-09-07T00:43:47.389Z"
+    },
+    {
+      "id": "payout_1788741497916",
+      "sellerId": "usr_seller1",
+      "sellerName": "Carlos_Streams",
+      "amountUsd": 20,
+      "amountPyg": 150000,
+      "method": "binance_usdt",
+      "accountDetails": {
+        "binanceDestination": "PayID: 998811223"
+      },
+      "status": "completed",
+      "createdAt": "2026-09-07T00:38:17.916Z",
+      "processedAt": "2026-09-07T00:38:17.925Z"
+    },
     {
       "id": "payout_1788739685129",
       "sellerId": "usr_seller1",

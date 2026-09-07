@@ -89,6 +89,8 @@ app.get('/login', (req, res) => res.sendFile(path.join(clientPath, 'login.html')
 app.get('/admin', (req, res) => res.sendFile(path.join(clientPath, 'admin.html')));
 app.get('/admin/login', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
 app.get('/admin-login', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
+app.get('/profile', (req, res) => res.sendFile(path.join(clientPath, 'profile.html')));
+app.get('/profile.html', (req, res) => res.sendFile(path.join(clientPath, 'profile.html')));
 
 // Fallback for SPA routing
 app.get('*', (req, res, next) => {

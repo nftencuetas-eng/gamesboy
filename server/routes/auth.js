@@ -247,4 +247,141 @@ router.post('/switch-role', (req, res) => {
   });
 });
 
+// 8. Get full User Profile
+router.get('/profile', (req, res) => {
+  const userId = req.headers['x-user-id'] || 'usr_client1';
+  const db = getDb();
+  let user = db.users.find(u => u.id === userId) || db.users[0];
+  const wallet = getWallet(user.id);
+  const rate = db.platform_settings?.exchangeRatePyg || 7500;
+
+  // Gather user purchases & subscriptions
+  const mySlots = (db.user_slots || []).filter(s => s.buyerId === user.id);
+  const myOrders = (db.user_store_orders || []).filter(o => o.buyerId === user.id);
+
+  res.json({
+    success: true,
+    user: {
+      id: user.id,
+      name: user.name || 'Usuario',
+      surname: user.surname || '',
+      email: user.email || 'usuario@gamesboy.net',
+      birthday: user.birthday || '',
+      avatar: user.avatar || '/assets/branding/icon.png',
+      role: user.role || 'client',
+      isGoogleLinked: !!user.isGoogleLinked,
+      hasPassword: user.hasPassword !== false,
+      createdAt: user.createdAt || new Date().toISOString()
+    },
+    wallet,
+    balancePyg: Math.round((wallet.balanceUsd || 0) * rate),
+    stats: {
+      activeSubscriptionsCount: mySlots.length,
+      purchasedGamesCount: myOrders.length
+    },
+    mySlots,
+    myOrders
+  });
+});
+
+// 9. Update User Profile (Name, Surname, Birthday, Avatar Photo)
+router.put('/profile', async (req, res) => {
+  try {
+    const userId = req.headers['x-user-id'] || 'usr_client1';
+    const db = getDb();
+    let user = db.users.find(u => u.id === userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    const { name, surname, birthday, avatar } = req.body;
+
+    if (name && name.trim()) user.name = name.trim();
+    if (surname !== undefined) user.surname = surname.trim();
+    if (birthday !== undefined) user.birthday = birthday;
+    if (avatar !== undefined && avatar.trim()) user.avatar = avatar;
+
+    saveStorage();
+
+    if (postgresAdapter.isPgConnected()) {
+      try {
+        const pool = postgresAdapter.getPool();
+        await pool.query(
+          'UPDATE gamesboy.gb_users SET name = $1, avatar = $2, updated_at = NOW() WHERE id = $3',
+          [user.name, user.avatar, user.id]
+        );
+      } catch (e) {
+        console.warn('Could not update user in Postgres:', e.message);
+      }
+    }
+
+    res.json({
+      success: true,
+      message: '¡Perfil actualizado con éxito!',
+      user
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 10. Set or Change User Password
+router.post('/set-password', (req, res) => {
+  try {
+    const userId = req.headers['x-user-id'] || 'usr_client1';
+    const db = getDb();
+    let user = db.users.find(u => u.id === userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    const { password, confirmPassword } = req.body;
+
+    if (!password || password.length < 6) {
+      return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres.' });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ error: 'Las contraseñas no coinciden.' });
+    }
+
+    user.hasPassword = true;
+    user.passwordUpdated = new Date().toISOString();
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: '¡Contraseña configurada con éxito!'
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 11. Link Google Account
+router.post('/link-google', (req, res) => {
+  try {
+    const userId = req.headers['x-user-id'] || 'usr_client1';
+    const db = getDb();
+    let user = db.users.find(u => u.id === userId);
+
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    user.isGoogleLinked = true;
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: '¡Cuenta de Google vinculada con éxito!',
+      user
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default router;

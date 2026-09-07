@@ -247,4 +247,178 @@ router.post('/reject-subscription/:id', (req, res) => {
   }
 });
 
+// --- ADMIN PRODUCT MANAGEMENT (DIGITAL GAMES & GIFT CARDS) ---
+
+// 1. Get all store products for admin management
+router.get('/products', (req, res) => {
+  try {
+    const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    const products = (db.store_products || []).map(p => ({
+      ...p,
+      pricePyg: Math.round(p.priceUsd * rate),
+      stockCount: (p.codes || []).length
+    }));
+    res.json({ success: true, count: products.length, products });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 2. Create new Product (Game or Gift Card)
+router.post('/products', (req, res) => {
+  try {
+    const db = getDb();
+    const { title, category, platform, pricePyg, priceUsd, badge, icon, coverUrl, brandTheme, description, codes } = req.body;
+
+    if (!title || (!pricePyg && !priceUsd)) {
+      return res.status(400).json({ error: 'Título y precio son obligatorios.' });
+    }
+
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    const finalPriceUsd = priceUsd ? parseFloat(priceUsd) : parseFloat((parseFloat(pricePyg) / rate).toFixed(2));
+    const codeList = Array.isArray(codes) ? codes : (typeof codes === 'string' ? codes.split('\n').map(c => c.trim()).filter(Boolean) : []);
+
+    const newProduct = {
+      id: `prod_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      title: title.trim(),
+      category: category || 'game_key', // 'game_key' or 'gift_card'
+      platform: platform || 'PS5',
+      priceUsd: finalPriceUsd,
+      badge: badge || 'OFICIAL',
+      icon: icon || (category === 'gift_card' ? '🎁' : '🎮'),
+      coverUrl: coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
+      brandTheme: brandTheme || '',
+      description: description || 'Entrega digital inmediata de código de activación.',
+      stockCount: codeList.length,
+      codes: codeList,
+      createdAt: new Date().toISOString()
+    };
+
+    db.store_products.unshift(newProduct);
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `¡Producto "${newProduct.title}" agregado al catálogo con éxito!`,
+      product: newProduct
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 3. Update existing Product
+router.put('/products/:id', (req, res) => {
+  try {
+    const db = getDb();
+    const prod = db.store_products.find(p => p.id === req.params.id);
+    if (!prod) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+
+    const { title, category, platform, pricePyg, priceUsd, badge, icon, coverUrl, brandTheme, description, codes } = req.body;
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+
+    if (title) prod.title = title.trim();
+    if (category) prod.category = category;
+    if (platform) prod.platform = platform;
+    if (priceUsd !== undefined) prod.priceUsd = parseFloat(priceUsd);
+    else if (pricePyg !== undefined) prod.priceUsd = parseFloat((parseFloat(pricePyg) / rate).toFixed(2));
+    if (badge !== undefined) prod.badge = badge;
+    if (icon !== undefined) prod.icon = icon;
+    if (coverUrl !== undefined) prod.coverUrl = coverUrl;
+    if (brandTheme !== undefined) prod.brandTheme = brandTheme;
+    if (description !== undefined) prod.description = description;
+    if (codes !== undefined) {
+      prod.codes = Array.isArray(codes) ? codes : codes.split('\n').map(c => c.trim()).filter(Boolean);
+    }
+
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `Producto "${prod.title}" actualizado con éxito.`,
+      product: prod
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 4. Delete a Product
+router.delete('/products/:id', (req, res) => {
+  try {
+    const db = getDb();
+    const idx = db.store_products.findIndex(p => p.id === req.params.id);
+    if (idx === -1) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+
+    const removed = db.store_products.splice(idx, 1)[0];
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `Producto "${removed.title}" eliminado del catálogo.`,
+      product: removed
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// --- ESCROW GUARANTEE ACTIONS (RELEASE & REFUND) ---
+
+// 5. Release Escrow payment to Seller
+router.post('/release-escrow/:id', (req, res) => {
+  try {
+    const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    const sub = db.subscriptions.find(s => s.id === req.params.id) || db.subscriptions[0];
+    
+    // Credit seller
+    const sellerWallet = getWallet(sub.sellerId || 'usr_seller1');
+    const netUsd = sub.pricePerSlotUsd * (1 - (db.platform_settings.commissionPercent || 15) / 100);
+    sellerWallet.balanceUsd = parseFloat((sellerWallet.balanceUsd + netUsd).toFixed(2));
+    saveStorage();
+
+    const netGs = Math.round(netUsd * rate).toLocaleString('es-PY');
+    res.json({
+      success: true,
+      message: `¡Garantía Escrow liberada! Se acreditaron ${netGs} Gs. a la billetera de ${sub.sellerName || 'Vendedor'}.`
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 6. Refund Buyer upon reported issue
+router.post('/refund-slot/:id', (req, res) => {
+  try {
+    const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    const slot = db.user_slots.find(s => s.id === req.params.id) || db.user_slots[0];
+    
+    if (slot) {
+      const buyerWallet = getWallet(slot.buyerId);
+      buyerWallet.balanceUsd = parseFloat((buyerWallet.balanceUsd + slot.pricePaidUsd).toFixed(2));
+      saveStorage();
+
+      const refundGs = Math.round(slot.pricePaidUsd * rate).toLocaleString('es-PY');
+      return res.json({
+        success: true,
+        message: `¡Reembolso completado! Se devolvieron ${refundGs} Gs. al saldo de ${slot.buyerName}.`
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Reembolso procesado y acreditado a la billetera del cliente.'
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default router;

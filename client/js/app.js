@@ -803,59 +803,75 @@ window.renewSubscriptionWithDiscount = async function(subId) {
 
 // --- 10. LIVE SEARCH & INSTANT AUTOCOMPLETE ---
 function initLiveSearch() {
+  const btnSearchToggle = document.getElementById('btn-search-toggle');
+  const searchExpandable = document.getElementById('header-search-expandable');
+  const btnSearchClose = document.getElementById('btn-search-close');
   const searchInput = document.getElementById('main-search-input');
   const dropdown = document.getElementById('search-dropdown-results');
-  const clearBtn = document.getElementById('btn-search-clear');
 
-  if (!searchInput || !dropdown) return;
+  if (btnSearchToggle && searchExpandable && searchInput) {
+    btnSearchToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isExpanded = searchExpandable.classList.toggle('expanded');
+      if (isExpanded) {
+        searchInput.focus();
+      } else {
+        searchInput.value = '';
+        if (dropdown) dropdown.style.display = 'none';
+      }
+    });
+  }
 
-  searchInput.addEventListener('input', (e) => {
-    const query = e.target.value.trim().toLowerCase();
-    if (!query) {
-      dropdown.style.display = 'none';
-      if (clearBtn) clearBtn.style.display = 'none';
-      return;
-    }
-
-    if (clearBtn) clearBtn.style.display = 'block';
-
-    const allItems = [
-      ...state.subscriptions.map(s => ({ name: s.serviceName, type: 'Suscripción', price: s.pricePerSlotUsd, id: s.id, category: 'sub' })),
-      ...state.storeProducts.map(p => ({ name: p.title, type: p.category === 'game_key' ? 'Juego Digital' : 'Tarjeta Regalo', price: p.priceUsd, id: p.id, category: 'prod' }))
-    ];
-
-    const results = allItems.filter(item => item.name.toLowerCase().includes(query));
-
-    if (results.length === 0) {
-      dropdown.innerHTML = `<div style="padding: 12px; color: var(--text-tertiary); font-size: 0.85rem;">No se encontraron resultados para "${query}"</div>`;
-      dropdown.style.display = 'block';
-      return;
-    }
-
-    dropdown.innerHTML = results.slice(0, 6).map(r => `
-      <div style="padding: 10px 14px; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="handleSearchResultClick('${r.category}', '${r.id}')">
-        <div>
-          <div style="font-size: 0.88rem; font-weight: 700; color: #ffffff;">${r.name}</div>
-          <span style="font-size: 0.72rem; color: var(--accent-cyan); text-transform: uppercase;">${r.type}</span>
-        </div>
-        <strong style="color: #ffffff; font-family: var(--font-mono); font-size: 0.88rem;">${formatPrice(r.price)}</strong>
-      </div>
-    `).join('');
-
-    dropdown.style.display = 'block';
-  });
-
-  if (clearBtn) {
-    clearBtn.onclick = () => {
+  if (btnSearchClose && searchExpandable && searchInput) {
+    btnSearchClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      searchExpandable.classList.remove('expanded');
       searchInput.value = '';
-      dropdown.style.display = 'none';
-      clearBtn.style.display = 'none';
-    };
+      if (dropdown) dropdown.style.display = 'none';
+    });
+  }
+
+  if (searchInput && dropdown) {
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.trim().toLowerCase();
+      if (!query) {
+        dropdown.style.display = 'none';
+        return;
+      }
+
+      const allItems = [
+        ...state.subscriptions.map(s => ({ name: s.serviceName, type: 'Suscripción', price: s.pricePerSlotUsd, id: s.id, category: 'sub' })),
+        ...state.storeProducts.map(p => ({ name: p.title, type: p.category === 'game_key' ? 'Juego Digital' : 'Tarjeta Regalo', price: p.priceUsd, id: p.id, category: 'prod' }))
+      ];
+
+      const results = allItems.filter(item => item.name.toLowerCase().includes(query));
+
+      if (results.length === 0) {
+        dropdown.innerHTML = `<div style="padding: 12px; color: var(--text-tertiary); font-size: 0.85rem;">No se encontraron resultados para "${query}"</div>`;
+        dropdown.style.display = 'block';
+        return;
+      }
+
+      dropdown.innerHTML = results.slice(0, 6).map(r => `
+        <div style="padding: 10px 14px; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="handleSearchResultClick('${r.category}', '${r.id}')">
+          <div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: #ffffff;">${r.name}</div>
+            <span style="font-size: 0.72rem; color: var(--accent-cyan); text-transform: uppercase;">${r.type}</span>
+          </div>
+          <strong style="color: #ffffff; font-family: var(--font-mono); font-size: 0.88rem;">${formatPrice(r.price)}</strong>
+        </div>
+      `).join('');
+
+      dropdown.style.display = 'block';
+    });
   }
 
   document.addEventListener('click', (e) => {
     if (!e.target.closest('#header-search-wrapper')) {
-      dropdown.style.display = 'none';
+      if (dropdown) dropdown.style.display = 'none';
+      if (searchExpandable && !searchInput?.value.trim()) {
+        searchExpandable.classList.remove('expanded');
+      }
     }
   });
 }
@@ -1164,19 +1180,42 @@ function initUserSession() {
   const unloggedGroup = document.getElementById('auth-unlogged-group');
   const loggedGroup = document.getElementById('auth-logged-group');
   const navUserName = document.getElementById('nav-user-name');
-  const navUserAvatar = document.getElementById('nav-user-avatar');
+  const navUserAvatarImg = document.getElementById('nav-user-avatar-img');
   const dropdownUserName = document.getElementById('dropdown-user-name');
   const dropdownUserEmail = document.getElementById('dropdown-user-email');
-  const dropdownUserAvatarLg = document.getElementById('dropdown-user-avatar-lg');
+  const dropdownUserAvatarImg = document.getElementById('dropdown-user-avatar-img');
+
+  const updateUserDisplay = (user) => {
+    if (!user) return;
+    if (navUserName) navUserName.textContent = user.name || 'Usuario';
+    if (dropdownUserName) dropdownUserName.textContent = user.name || 'Usuario';
+    if (dropdownUserEmail) dropdownUserEmail.textContent = user.email || 'usuario@gamesboy.net';
+
+    const avatarSrc = (user.avatar && (user.avatar.startsWith('http') || user.avatar.startsWith('data:') || user.avatar.startsWith('/assets'))) 
+      ? user.avatar 
+      : '/assets/branding/icon.png';
+
+    if (navUserAvatarImg) navUserAvatarImg.src = avatarSrc;
+    if (dropdownUserAvatarImg) dropdownUserAvatarImg.src = avatarSrc;
+  };
 
   if (state.currentUser && state.currentUser.name) {
     if (unloggedGroup) unloggedGroup.style.display = 'none';
     if (loggedGroup) loggedGroup.style.display = 'flex';
-    if (navUserName) navUserName.textContent = state.currentUser.name;
-    if (navUserAvatar) navUserAvatar.textContent = state.currentUser.avatar || '🎮';
-    if (dropdownUserName) dropdownUserName.textContent = state.currentUser.name;
-    if (dropdownUserEmail) dropdownUserEmail.textContent = state.currentUser.email || 'usuario@gamesboy.net';
-    if (dropdownUserAvatarLg) dropdownUserAvatarLg.textContent = state.currentUser.avatar || '🎮';
+    updateUserDisplay(state.currentUser);
+
+    // Sync latest profile from backend
+    fetch('/api/auth/profile', { headers: { 'x-user-id': state.currentUser.id } })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.user) {
+          state.currentUser = { ...state.currentUser, ...data.user, balanceUsd: data.balanceUsd };
+          localStorage.setItem('gb_user', JSON.stringify(state.currentUser));
+          updateUserDisplay(state.currentUser);
+          updateUserBalanceDisplay();
+        }
+      })
+      .catch(() => {});
   } else {
     if (unloggedGroup) unloggedGroup.style.display = 'flex';
     if (loggedGroup) loggedGroup.style.display = 'none';
@@ -1204,18 +1243,6 @@ function initUserSession() {
   }
 
   // Profile Dropdown Actions
-  const menuItemVault = document.getElementById('menu-item-vault');
-  if (menuItemVault) {
-    menuItemVault.onclick = () => {
-      if (dropdownMenu) dropdownMenu.style.display = 'none';
-      const vaultSec = document.getElementById('my-vault-section');
-      if (vaultSec) {
-        vaultSec.style.display = 'block';
-        vaultSec.scrollIntoView({ behavior: 'smooth' });
-      }
-    };
-  }
-
   const menuItemDeposit = document.getElementById('menu-item-deposit');
   if (menuItemDeposit) {
     menuItemDeposit.onclick = () => {
@@ -1237,65 +1264,20 @@ function initUserSession() {
     };
   }
 
+  // Sticky Right Monetize Pill ("Generar Ingresos")
+  const stickyMonetizePill = document.getElementById('sticky-monetize-pill');
+  if (stickyMonetizePill) {
+    stickyMonetizePill.onclick = () => {
+      const modal = document.getElementById('modal-publish-stream');
+      if (modal) modal.style.display = 'grid';
+    };
+  }
+
   const btnLogoutUser = document.getElementById('btn-logout-user');
   if (btnLogoutUser) {
     btnLogoutUser.onclick = () => {
       localStorage.removeItem('gb_user');
       window.location.reload();
-    };
-  }
-
-  // Profile Settings Modal Handlers
-  const modalProfile = document.getElementById('modal-profile-settings');
-  const menuItemEditProfile = document.getElementById('menu-item-edit-profile');
-  const btnCloseProfileModal = document.getElementById('btn-close-profile-modal');
-  const formEditProfile = document.getElementById('form-edit-user-profile');
-  const editProfileNameInput = document.getElementById('edit-profile-name');
-
-  if (menuItemEditProfile && modalProfile) {
-    menuItemEditProfile.onclick = () => {
-      if (dropdownMenu) dropdownMenu.style.display = 'none';
-      if (editProfileNameInput && state.currentUser) {
-        editProfileNameInput.value = state.currentUser.name || '';
-      }
-      modalProfile.style.display = 'grid';
-    };
-  }
-
-  if (btnCloseProfileModal && modalProfile) {
-    btnCloseProfileModal.onclick = () => modalProfile.style.display = 'none';
-  }
-
-  let selectedAvatar = state.currentUser?.avatar || '🎮';
-  const avatarButtons = document.querySelectorAll('.btn-avatar-choice');
-  avatarButtons.forEach(btn => {
-    btn.onclick = () => {
-      avatarButtons.forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      selectedAvatar = btn.dataset.avatar || '🎮';
-    };
-  });
-
-  if (formEditProfile) {
-    formEditProfile.onsubmit = (e) => {
-      e.preventDefault();
-      const newName = editProfileNameInput.value.trim();
-      if (!newName) return;
-
-      if (!state.currentUser) {
-        state.currentUser = { id: 'usr_client1', email: 'usuario@gamesboy.net', role: 'client' };
-      }
-      state.currentUser.name = newName;
-      state.currentUser.avatar = selectedAvatar;
-      localStorage.setItem('gb_user', JSON.stringify(state.currentUser));
-
-      if (navUserName) navUserName.textContent = newName;
-      if (navUserAvatar) navUserAvatar.textContent = selectedAvatar;
-      if (dropdownUserName) dropdownUserName.textContent = newName;
-      if (dropdownUserAvatarLg) dropdownUserAvatarLg.textContent = selectedAvatar;
-
-      if (modalProfile) modalProfile.style.display = 'none';
-      alert('✨ ¡Perfil actualizado con éxito!');
     };
   }
 
