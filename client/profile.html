@@ -671,12 +671,6 @@
         return;
       }
 
-      // If user is admin, redirect to admin dashboard
-      if (storedUser.role === 'admin' || storedUser.email === 'admin@gamesboy.net') {
-        window.location.replace('/admin');
-        return;
-      }
-
       const userId = storedUser.id || 'usr_client1';
 
       try {
@@ -709,7 +703,8 @@
         // Role Label
         const roleLabel = document.getElementById('profile-role-label');
         if (roleLabel) {
-          if (u.role === 'seller') roleLabel.textContent = 'Vendedor Verificado';
+          if (u.role === 'admin') roleLabel.textContent = 'Administrador Master';
+          else if (u.role === 'seller') roleLabel.textContent = 'Vendedor Verificado';
           else roleLabel.textContent = 'Cliente Verificado';
         }
 

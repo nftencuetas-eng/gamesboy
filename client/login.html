@@ -3,35 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Iniciar Sesión / Registro - GamesBoy.net</title>
-  <meta name="description" content="Accede a tu cuenta de GamesBoy.net para comprar videojuegos, suscripciones de streaming, compartir tus cupos y recargar saldo.">
+  <title>Acceso y Registro - GamesBoy.net</title>
+  <meta name="description" content="Accede a tu cuenta de GamesBoy.net para comprar videojuegos digitales, compartir suscripciones y gestionar tus fondos.">
   
   <link rel="icon" type="image/png" href="/assets/branding/icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/main.css?v=3.2">
+  
   <style>
     .auth-page-container {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem 1rem;
-      background-color: var(--bg-body);
+      padding: 2.5rem 1.25rem;
+      background-color: #080a10;
       background-image: 
-        radial-gradient(circle at 20% 20%, rgba(0, 194, 255, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(0, 112, 243, 0.06) 0%, transparent 50%);
+        radial-gradient(circle at 15% 15%, rgba(0, 194, 255, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.06) 0%, transparent 45%);
     }
     .auth-page-card {
       width: 100%;
-      max-width: 980px;
+      max-width: 960px;
       display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      background: var(--bg-surface);
-      border: 1px solid var(--border-medium);
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
-      border-radius: 16px !important;
+      grid-template-columns: 1.1fr 0.9fr;
+      background: linear-gradient(145deg, #10131d 0%, #151825 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85);
+      border-radius: 20px !important;
       overflow: hidden;
       position: relative;
     }
@@ -42,8 +43,8 @@
       justify-content: center;
     }
     .auth-right-col {
-      background: linear-gradient(135deg, #050e26, #091a45);
-      border-left: 1px solid var(--border-subtle);
+      background: linear-gradient(145deg, #070913 0%, #0d1222 100%);
+      border-left: 1px solid rgba(255, 255, 255, 0.06);
       padding: 3rem 2.5rem;
       display: flex;
       flex-direction: column;
@@ -56,30 +57,30 @@
       right: 18px;
       width: 36px;
       height: 36px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--border-subtle);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 50% !important;
-      color: #ffffff;
+      color: #94a3b8;
       display: grid;
       place-items: center;
-      font-size: 1rem;
       text-decoration: none;
       cursor: pointer;
       z-index: 10;
       transition: all 0.2s ease;
     }
     .auth-close-btn:hover {
-      background: var(--accent-red);
-      border-color: var(--accent-red);
-      transform: scale(1.08);
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #f87171;
+      transform: scale(1.05);
     }
     .auth-showcase-art-static {
       width: 100%;
-      max-height: 290px;
+      max-height: 270px;
       object-fit: contain;
       margin: 1.5rem auto;
       display: block;
-      filter: drop-shadow(0 12px 25px rgba(0, 194, 255, 0.25));
+      filter: drop-shadow(0 12px 25px rgba(0, 194, 255, 0.18));
     }
     .auth-value-props {
       display: flex;
@@ -90,18 +91,118 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 8px 14px;
-      border-radius: 10px !important;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 10px 14px;
+      border-radius: 12px !important;
       font-size: 0.82rem;
       color: var(--text-secondary);
     }
     .auth-prop-icon {
-      font-size: 1.1rem;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .form-group-auth {
+      margin-bottom: 1.15rem;
+      text-align: left;
+    }
+    .form-label-auth {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .form-input-auth {
+      width: 100%;
+      background: rgba(5, 7, 14, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      padding: 12px 14px;
+      border-radius: 10px !important;
+      font-size: 0.88rem;
+      font-family: var(--font-sans);
+      outline: none;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+    }
+    .form-input-auth:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 14px rgba(0, 194, 255, 0.2);
+      background: rgba(8, 11, 20, 0.95);
+    }
+    .btn-auth-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #00c2ff 0%, #0070f3 100%);
+      color: #ffffff;
+      border: none;
+      padding: 13px 20px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      border-radius: 10px !important;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 18px rgba(0, 194, 255, 0.35);
+    }
+    .btn-auth-submit:hover {
+      background: linear-gradient(135deg, #38d6ff 0%, #0080ff 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(0, 194, 255, 0.5);
+    }
+    .btn-google-auth {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #f1f5f9;
+      padding: 11px 16px;
+      border-radius: 10px !important;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-google-auth:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .auth-tabs {
+      display: flex;
+      background: rgba(5, 7, 14, 0.6);
+      padding: 4px;
+      border-radius: 10px !important;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 1.5rem;
+    }
+    .auth-tab-btn {
+      flex: 1;
+      padding: 8px 12px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-tertiary);
+      background: transparent;
+      border: none;
+      border-radius: 7px !important;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .auth-tab-btn.active {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
     @media (max-width: 840px) {
-      .auth-page-card { grid-template-columns: 1fr; border-radius: 12px !important; }
+      .auth-page-card { grid-template-columns: 1fr; border-radius: 16px !important; }
       .auth-right-col { display: none; }
       .auth-left-col { padding: 2.25rem 1.5rem; }
     }
@@ -113,9 +214,11 @@
     <div class="auth-page-card">
       
       <!-- Close (✕) Button Top Right -->
-      <a href="/" class="auth-close-btn" title="Volver a la tienda">✕</a>
+      <a href="/" class="auth-close-btn" title="Volver a la tienda">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </a>
 
-      <!-- Left Column: Unified Login Form -->
+      <!-- Left Column: Unified Login/Register Form -->
       <div class="auth-left-col">
         <div style="margin-bottom: 1.5rem;">
           <a href="/" title="GamesBoy.net">
@@ -123,18 +226,23 @@
           </a>
         </div>
 
-        <div style="margin-bottom: 1.5rem;">
-          <h1 id="auth-form-title" style="font-family: var(--font-heading); font-size: 1.65rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
-            ¡Bienvenido a GamesBoy!
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab-btn active" id="tab-login-btn">Iniciar Sesión</button>
+          <button type="button" class="auth-tab-btn" id="tab-register-btn">Crear Cuenta</button>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <h1 id="auth-form-title" style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
+            ¡Bienvenido de nuevo!
           </h1>
-          <p id="auth-form-subtitle" style="font-size: 0.86rem; color: var(--text-secondary);">
-            Compra juegos, comparte tus cuentas de streaming y gestiona tu saldo en un solo lugar.
+          <p id="auth-form-subtitle" style="font-size: 0.84rem; color: var(--text-secondary);">
+            Ingresa a tu cuenta para gestionar tus suscripciones, juegos y saldo.
           </p>
         </div>
 
         <!-- Google OAuth Button -->
-        <button type="button" class="btn-google-auth" id="btn-google-login" style="margin-bottom: 1.25rem; width: 100%; border-radius: 10px !important;">
-          <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
+        <button type="button" class="btn-google-auth" id="btn-google-login" style="margin-bottom: 1.25rem;">
+          <svg class="google-icon" viewBox="0 0 24 24" width="18" height="18">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
             <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
@@ -143,93 +251,48 @@
           <span>Continuar con Google</span>
         </button>
 
-        <div class="auth-divider" style="margin-bottom: 1.25rem;">
-          <span>o con tu correo electrónico</span>
+        <div class="auth-divider" style="display: flex; align-items: center; text-align: center; color: var(--text-tertiary); font-size: 0.78rem; margin-bottom: 1.25rem;">
+          <span style="flex: 1; height: 1px; background: rgba(255,255,255,0.08);"></span>
+          <span style="padding: 0 10px;">o con correo electrónico</span>
+          <span style="flex: 1; height: 1px; background: rgba(255,255,255,0.08);"></span>
         </div>
 
         <form id="form-auth-page">
-          <div class="form-group" id="field-name" style="display: none;">
-            <label class="form-label">Nombre completo</label>
-            <input type="text" id="auth-input-name" class="form-input" placeholder="ej: Lucas González" style="border-radius: 8px !important;">
+          <div class="form-group-auth" id="field-name" style="display: none;">
+            <label class="form-label-auth">Nombre Completo</label>
+            <input type="text" id="auth-input-name" class="form-input-auth" placeholder="Tu nombre">
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Correo electrónico</label>
-            <input type="email" id="auth-input-email" class="form-input" placeholder="tu-correo@ejemplo.com" required style="border-radius: 8px !important;">
+          <div class="form-group-auth">
+            <label class="form-label-auth">Correo Electrónico</label>
+            <input type="email" id="auth-input-email" class="form-input-auth" placeholder="tu-correo@ejemplo.com" required autocomplete="email">
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Contraseña</label>
-            <input type="password" id="auth-input-password" class="form-input" placeholder="••••••••" required style="border-radius: 8px !important;">
+          <div class="form-group-auth">
+            <label class="form-label-auth">Contraseña</label>
+            <input type="password" id="auth-input-password" class="form-input-auth" placeholder="••••••••••••" required autocomplete="current-password">
           </div>
 
-          <div class="auth-options-row" id="row-auth-options" style="margin-bottom: 1.25rem;">
-            <label class="auth-remember-label">
-              <input type="checkbox" id="auth-check-remember" checked>
-              <span>Recordarme</span>
-            </label>
-            <a href="#" class="auth-forgot-link" id="btn-forgot-password">¿Olvidaste tu contraseña?</a>
-          </div>
-
-          <button type="submit" class="btn-primary-block" id="btn-auth-submit" style="padding: 12px; border-radius: 10px !important; font-weight: 800;">
-            <span id="label-auth-submit">Iniciar Sesión</span> ➔
+          <button type="submit" class="btn-auth-submit" id="btn-auth-submit">
+            <span id="label-auth-submit">Iniciar Sesión</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </button>
         </form>
 
-        <div class="auth-switch-footer" style="margin-top: 1.25rem; text-align: center;">
-          <span id="text-switch-prompt" style="color: var(--text-secondary); font-size: 0.84rem;">¿No tienes una cuenta?</span>
-          <button type="button" id="btn-toggle-auth-mode" style="background: none; border: none; color: var(--accent-cyan); font-weight: 700; cursor: pointer; margin-left: 6px;">Regístrate gratis</button>
-        </div>
-
-        <!-- Quick Demo Access Bar (Test Accounts Grid) -->
-        <div style="margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border-subtle);">
-          <div style="font-size: 0.72rem; color: var(--text-tertiary); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; text-align: center;">
-            ⚡ Cuentas y Accesos de Prueba Rápidos (1-Clic)
-          </div>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-            <button type="button" id="btn-demo-admin" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.4); color: #f59e0b; padding: 8px 10px; font-size: 0.78rem; font-weight: 800; cursor: pointer; border-radius: 8px !important; display: flex; align-items: center; gap: 6px; text-align: left;">
-              <span style="font-size: 1.1rem;">👑</span>
-              <div>
-                <div>Admin Master</div>
-                <small style="font-size: 0.68rem; color: #cbd5e1; font-weight: normal;">admin@gamesboy.net</small>
-              </div>
-            </button>
-            <button type="button" id="btn-demo-client-lucas" style="background: rgba(0, 194, 255, 0.1); border: 1px solid rgba(0, 194, 255, 0.35); color: #38d6ff; padding: 8px 10px; font-size: 0.78rem; font-weight: 800; cursor: pointer; border-radius: 8px !important; display: flex; align-items: center; gap: 6px; text-align: left;">
-              <span style="font-size: 1.1rem;">🎮</span>
-              <div>
-                <div>Lucas (Cliente)</div>
-                <small style="font-size: 0.68rem; color: #cbd5e1; font-weight: normal;">187.500 Gs. Saldo</small>
-              </div>
-            </button>
-            <button type="button" id="btn-demo-client-maria" style="background: rgba(236, 72, 153, 0.1); border: 1px solid rgba(236, 72, 153, 0.35); color: #f472b6; padding: 8px 10px; font-size: 0.78rem; font-weight: 800; cursor: pointer; border-radius: 8px !important; display: flex; align-items: center; gap: 6px; text-align: left;">
-              <span style="font-size: 1.1rem;">🌸</span>
-              <div>
-                <div>María (Cliente)</div>
-                <small style="font-size: 0.68rem; color: #cbd5e1; font-weight: normal;">375.000 Gs. Saldo</small>
-              </div>
-            </button>
-            <button type="button" id="btn-demo-seller" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399; padding: 8px 10px; font-size: 0.78rem; font-weight: 800; cursor: pointer; border-radius: 8px !important; display: flex; align-items: center; gap: 6px; text-align: left;">
-              <span style="font-size: 1.1rem;">💼</span>
-              <div>
-                <div>Carlos (Vendedor)</div>
-                <small style="font-size: 0.68rem; color: #cbd5e1; font-weight: normal;">641.250 Gs. Saldo</small>
-              </div>
-            </button>
-          </div>
-          <div style="margin-top: 12px; text-align: center;">
-            <a href="/admin/login" style="font-size: 0.78rem; color: var(--accent-amber); text-decoration: none; font-weight: 700;">
-              ⚙️ Portal Directo de Administrador Master (/admin/login) ➔
-            </a>
-          </div>
+        <div style="margin-top: 1.5rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1rem;">
+          <a href="/" style="font-size: 0.8rem; color: var(--text-tertiary); text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            <span>Volver a la tienda principal</span>
+          </a>
         </div>
 
       </div>
 
-      <!-- Right Column: Minimalist Value Props & Static Showcase Art -->
+      <!-- Right Column: Minimalist Value Props & Showcase -->
       <div class="auth-right-col">
         <div>
-          <span style="font-size: 0.72rem; color: var(--accent-cyan); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;">MERCADO DIGITAL OFICIAL</span>
-          <h2 style="font-family: var(--font-heading); font-size: 1.7rem; font-weight: 900; color: #ffffff; line-height: 1.2; margin-top: 6px;">
+          <span style="font-size: 0.72rem; color: var(--accent-cyan); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;">MERCADO DIGITAL PARAGUAY</span>
+          <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 900; color: #ffffff; line-height: 1.25; margin-top: 8px;">
             TODO TU ENTRETENIMIENTO <span style="color: var(--accent-cyan);">EN UN SOLO LUGAR</span>
           </h2>
         </div>
@@ -238,20 +301,22 @@
 
         <div class="auth-value-props">
           <div class="auth-prop-item">
-            <span class="auth-prop-icon">🎮</span>
+            <span class="auth-prop-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            </span>
             <span>Videojuegos digitales con entrega de claves y cuentas</span>
           </div>
           <div class="auth-prop-item">
-            <span class="auth-prop-icon">📺</span>
-            <span>Streaming compartido con grupos privados y chat</span>
+            <span class="auth-prop-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+            </span>
+            <span>Streaming compartido con chat privado y cupos seguros</span>
           </div>
           <div class="auth-prop-item">
-            <span class="auth-prop-icon">💼</span>
-            <span>Monetiza y vende cupos de tus propias cuentas</span>
-          </div>
-          <div class="auth-prop-item">
-            <span class="auth-prop-icon">🇵🇾</span>
-            <span>Pagos locales por SIPAP Bancos y Binance USDT</span>
+            <span class="auth-prop-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </span>
+            <span>Monetiza tus cupos y retira en Guaraníes o Binance USDT</span>
           </div>
         </div>
       </div>
@@ -264,138 +329,89 @@
     const titleEl = document.getElementById('auth-form-title');
     const subTitleEl = document.getElementById('auth-form-subtitle');
     const fieldName = document.getElementById('field-name');
-    const optionsRow = document.getElementById('row-auth-options');
     const submitLabel = document.getElementById('label-auth-submit');
-    const toggleBtn = document.getElementById('btn-toggle-auth-mode');
-    const promptText = document.getElementById('text-switch-prompt');
+    const tabLoginBtn = document.getElementById('tab-login-btn');
+    const tabRegisterBtn = document.getElementById('tab-register-btn');
 
-    toggleBtn.addEventListener('click', () => {
-      isRegisterMode = !isRegisterMode;
+    function setAuthMode(register) {
+      isRegisterMode = register;
       if (isRegisterMode) {
+        tabRegisterBtn.classList.add('active');
+        tabLoginBtn.classList.remove('active');
         titleEl.textContent = 'Crear Cuenta en GamesBoy';
-        subTitleEl.textContent = 'Regístrate para comprar videojuegos, compartir streaming y saldo.';
+        subTitleEl.textContent = 'Regístrate para comprar videojuegos, compartir streaming y gestionar saldo.';
         fieldName.style.display = 'block';
-        optionsRow.style.display = 'none';
         submitLabel.textContent = 'Crear Cuenta';
-        promptText.textContent = '¿Ya tienes una cuenta?';
-        toggleBtn.textContent = 'Inicia sesión aquí';
       } else {
-        titleEl.textContent = '¡Bienvenido a GamesBoy!';
-        subTitleEl.textContent = 'Compra juegos, comparte tus cuentas de streaming y gestiona tu saldo en un solo lugar.';
+        tabLoginBtn.classList.add('active');
+        tabRegisterBtn.classList.remove('active');
+        titleEl.textContent = '¡Bienvenido de nuevo!';
+        subTitleEl.textContent = 'Ingresa a tu cuenta para gestionar tus suscripciones, juegos y saldo.';
         fieldName.style.display = 'none';
-        optionsRow.style.display = 'flex';
         submitLabel.textContent = 'Iniciar Sesión';
-        promptText.textContent = '¿No tienes una cuenta?';
-        toggleBtn.textContent = 'Regístrate gratis';
       }
-    });
+    }
 
-    async function handleLogin(email, password, directObj = null) {
-      if (directObj) {
-        localStorage.setItem('gb_user', JSON.stringify(directObj));
-        if (directObj.role === 'admin') {
-          localStorage.setItem('gb_admin_session', JSON.stringify(directObj));
-          window.location.href = '/admin';
-        } else {
-          window.location.href = '/';
-        }
-        return;
-      }
+    tabLoginBtn.addEventListener('click', () => setAuthMode(false));
+    tabRegisterBtn.addEventListener('click', () => setAuthMode(true));
+
+    document.getElementById('form-auth-page').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('auth-input-email').value.trim();
+      const password = document.getElementById('auth-input-password').value;
+      const name = document.getElementById('auth-input-name').value.trim();
+
+      const endpoint = isRegisterMode ? '/api/auth/register' : '/api/auth/login';
+      const bodyPayload = isRegisterMode ? { name, email, password } : { email, password };
 
       try {
-        const res = await fetch('/api/auth/login', {
+        const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
+          body: JSON.stringify(bodyPayload)
         });
         const data = await res.json();
         if (data.success && data.user) {
           localStorage.setItem('gb_user', JSON.stringify(data.user));
-          if (data.user.role === 'admin' || email.toLowerCase().includes('admin')) {
+          if (data.token) localStorage.setItem('gb_token', data.token);
+
+          if (data.user.role === 'admin' || data.user.email === 'admin@gamesboy.net') {
             localStorage.setItem('gb_admin_session', JSON.stringify(data.user));
             window.location.href = '/admin';
           } else {
             window.location.href = '/';
           }
         } else {
-          alert(data.error || 'Credenciales inválidas');
+          alert(data.error || 'No se pudo completar la autenticación.');
         }
       } catch (err) {
-        // Fallback local
-        if (email.toLowerCase().includes('admin')) {
-          const adminObj = { id: 'usr_admin', name: 'Admin GamesBoy', email: email, role: 'admin', avatar: '/assets/branding/icon.png', balanceUsd: 1250 };
-          localStorage.setItem('gb_user', JSON.stringify(adminObj));
-          localStorage.setItem('gb_admin_session', JSON.stringify(adminObj));
-          window.location.href = '/admin';
-        } else {
-          const userObj = { id: 'usr_' + Date.now(), name: email.split('@')[0], email: email, role: 'client', avatar: '/assets/branding/icon.png', balanceUsd: 25.00 };
-          localStorage.setItem('gb_user', JSON.stringify(userObj));
-          window.location.href = '/';
-        }
+        alert('Error al conectar con el servidor.');
       }
-    }
-
-    document.getElementById('form-auth-page').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('auth-input-email').value.trim();
-      const password = document.getElementById('auth-input-password').value;
-      handleLogin(email, password);
     });
 
-    // 1-Click Demo Buttons
-    document.getElementById('btn-demo-admin')?.addEventListener('click', () => {
-      handleLogin('admin@gamesboy.net', 'GamesBoy2026Master!', {
-        id: 'usr_admin',
-        name: 'Admin GamesBoy',
-        email: 'admin@gamesboy.net',
-        role: 'admin',
-        avatar: '/assets/branding/icon.png',
-        balanceUsd: 1250.00
-      });
-    });
-
-    document.getElementById('btn-demo-client-lucas')?.addEventListener('click', () => {
-      handleLogin('lucas@cliente.com', 'Cliente123!', {
-        id: 'usr_client1',
-        name: 'Lucas González',
-        email: 'lucas@cliente.com',
-        role: 'client',
-        avatar: '/assets/branding/icon.png',
-        balanceUsd: 25.00
-      });
-    });
-
-    document.getElementById('btn-demo-client-maria')?.addEventListener('click', () => {
-      handleLogin('maria@cliente.com', 'Cliente123!', {
-        id: 'usr_client2',
-        name: 'María López',
-        email: 'maria@cliente.com',
-        role: 'client',
-        avatar: '/assets/branding/icon.png',
-        balanceUsd: 50.00
-      });
-    });
-
-    document.getElementById('btn-demo-seller')?.addEventListener('click', () => {
-      handleLogin('carlos@vendedor.com', 'Seller1234!', {
-        id: 'usr_seller1',
-        name: 'Carlos Streams',
-        email: 'carlos@vendedor.com',
-        role: 'seller',
-        avatar: '/assets/branding/icon.png',
-        balanceUsd: 85.50
-      });
-    });
-
-    document.getElementById('btn-google-login')?.addEventListener('click', () => {
-      handleLogin('lucas.google@gmail.com', 'google-oauth', {
-        id: 'usr_google_' + Date.now(),
-        name: 'Lucas González (Google)',
-        email: 'lucas.google@gmail.com',
-        role: 'client',
-        avatar: '/assets/branding/icon.png',
-        balanceUsd: 25.00
-      });
+    document.getElementById('btn-google-login')?.addEventListener('click', async () => {
+      try {
+        const res = await fetch('/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            googleUser: {
+              email: 'usuario.google@gmail.com',
+              name: 'Usuario Google'
+            }
+          })
+        });
+        const data = await res.json();
+        if (data.success && data.user) {
+          localStorage.setItem('gb_user', JSON.stringify(data.user));
+          if (data.token) localStorage.setItem('gb_token', data.token);
+          window.location.href = '/';
+        } else {
+          alert('Error con Google Sign-In.');
+        }
+      } catch (err) {
+        alert('Error de conexión con el proveedor.');
+      }
     });
   </script>
 </body>

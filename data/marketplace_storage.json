@@ -23,7 +23,7 @@
       "surname": "González",
       "birthday": "1998-05-14",
       "hasPassword": true,
-      "passwordUpdated": "2026-09-07T14:55:11.399Z"
+      "passwordUpdated": "2026-09-07T17:26:29.375Z"
     }
   ],
   "wallets": {
@@ -36,11 +36,45 @@
       "pendingEscrowUsd": 22
     },
     "usr_client1": {
-      "balanceUsd": 124.99,
+      "balanceUsd": 148.32,
       "pendingEscrowUsd": 0
     }
   },
   "wallet_transactions": [
+    {
+      "id": "tx_1788801996378_dgol",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "deposit",
+      "amountUsd": 13.33,
+      "currency": "PYG",
+      "localAmount": 100000,
+      "method": "sipap_paraguay",
+      "status": "approved",
+      "reference": "SIPAP-TRANSF-992184",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T17:26:36.378Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T17:26:36.428Z"
+    },
+    {
+      "id": "tx_1788801996313_eyzh",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "deposit",
+      "amountUsd": 10,
+      "currency": "USDT",
+      "localAmount": 75000,
+      "method": "binance_usdt",
+      "status": "approved",
+      "reference": "BINANCE-ORDER-8891024",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T17:26:36.313Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T17:26:36.408Z"
+    },
     {
       "id": "tx_admin_adj_1788791102463",
       "userId": "usr_client1",

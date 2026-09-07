@@ -1550,6 +1550,8 @@
 
     document.getElementById('btn-admin-logout').addEventListener('click', () => {
       localStorage.removeItem('gb_admin_session');
+      localStorage.removeItem('gb_user');
+      localStorage.removeItem('gb_token');
       window.location.href = '/admin/login';
     });
 

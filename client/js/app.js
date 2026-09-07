@@ -1318,6 +1318,7 @@ function initUserSession() {
   const handleLogout = () => {
     localStorage.removeItem('gb_user');
     localStorage.removeItem('gb_admin_session');
+    localStorage.removeItem('gb_token');
     window.location.href = '/';
   };
 
