@@ -387,30 +387,40 @@ function renderStreamingServices() {
   }).join('');
 }
 
-// --- 3. RENDER DIGITAL GAMES (CLEAN 3D BOX ART WITH STRAIGHT EDGES) ---
+// --- 3. RENDER DIGITAL GAMES (CLEAN 3D BOX ART WITH STRAIGHT EDGES & DUAL PRICING) ---
 function renderDigitalGames() {
   const container = document.getElementById('digital-games-grid');
   if (!container) return;
 
-  const games = state.storeProducts.filter(p => p.category === 'game_key');
+  const games = state.storeProducts.filter(p => p.category === 'game_key' || p.category === 'digital_game');
   if (games.length === 0) {
     container.innerHTML = `<p style="color: var(--text-tertiary); padding: 1rem;">Cargando juegos digitales...</p>`;
     return;
   }
 
   container.innerHTML = games.map(g => {
+    const isAvail = g.isAvailable !== false;
+    const primaryPrice = g.primaryPriceUsd || g.priceUsd || 39.99;
+    const secondaryPrice = g.secondaryPriceUsd || Math.round(primaryPrice * 0.65);
+
     return `
-      <div class="game-card" onclick="openBuyGameModal('${g.id}')">
+      <div class="game-card ${isAvail ? '' : 'disabled'}" onclick="openBuyGameModal('${g.id}')">
         <div class="game-cover-container">
           <img src="${g.coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'}" alt="${g.title}" class="game-cover-img" loading="lazy">
           <div class="game-spine-highlight"></div>
+          <span style="position: absolute; top: 8px; left: 8px; background: rgba(0, 194, 255, 0.85); color: #040c1e; font-size: 0.68rem; font-weight: 800; padding: 2px 7px; border-radius: 6px;">${g.platform || 'PS5'}</span>
         </div>
         <div class="game-card-body">
           <h3 class="game-title">${g.title}</h3>
           <div class="game-price-box">
-            <div class="game-price-label">Desde</div>
-            <div class="game-price-val">${formatPrice(g.priceUsd)}</div>
+            <div class="game-price-label">Primaria desde</div>
+            <div class="game-price-val">${formatPrice(primaryPrice)}</div>
           </div>
+          ${g.secondaryPriceUsd ? `
+            <div style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 2px;">
+              Secundaria: <strong style="color: var(--accent-cyan);">${formatPrice(secondaryPrice)}</strong>
+            </div>
+          ` : ''}
         </div>
       </div>
     `;

@@ -24,9 +24,9 @@ router.get('/me', (req, res) => {
   });
 });
 
-// 2. Email & Password Login
+// 2. Email & Password Login with Strict Portal Guards
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, portalType = 'client' } = req.body;
   
   if (!email || !password) {
     return res.status(400).json({ error: 'Por favor ingresa tu correo y contraseña.' });
@@ -36,57 +36,93 @@ router.post('/login', async (req, res) => {
   const normalizedEmail = email.trim().toLowerCase();
   let user = db.users.find(u => u.email.toLowerCase() === normalizedEmail);
 
-  if (!user) {
-    // Check in Postgres if connected
-    if (postgresAdapter.isPgConnected()) {
-      try {
-        const pool = postgresAdapter.getPool();
-        const pgUser = await pool.query('SELECT * FROM gamesboy.gb_users WHERE LOWER(email) = $1', [normalizedEmail]);
-        if (pgUser.rows.length > 0) {
-          user = {
-            id: pgUser.rows[0].id,
-            name: pgUser.rows[0].name,
-            email: pgUser.rows[0].email,
-            role: pgUser.rows[0].role,
-            avatar: pgUser.rows[0].avatar
-          };
-          db.users.push(user);
+  if (!user && postgresAdapter.isPgConnected()) {
+    try {
+      const pool = postgresAdapter.getPool();
+      const pgUser = await pool.query('SELECT * FROM gamesboy.gb_users WHERE LOWER(email) = $1', [normalizedEmail]);
+      if (pgUser.rows.length > 0) {
+        user = {
+          id: pgUser.rows[0].id,
+          name: pgUser.rows[0].name,
+          email: pgUser.rows[0].email,
+          role: pgUser.rows[0].role,
+          avatar: pgUser.rows[0].avatar
+        };
+        db.users.push(user);
+      }
+    } catch (e) {
+      console.error('Error fetching user from Postgres:', e.message);
+    }
+  }
+
+  // 1. Strict Guard: Admin Portal vs Client Portal Separation
+  if (user) {
+    if (user.role === 'admin' && portalType === 'client') {
+      return res.status(403).json({
+        error: 'Acceso restringido: Las cuentas de Administrador deben ingresar exclusivamente a través del Portal Master (/admin/login).'
+      });
+    }
+
+    if (user.role !== 'admin' && portalType === 'admin') {
+      return res.status(403).json({
+        error: 'Acceso denegado: Este portal está estrictamente reservado para el Administrador Master.'
+      });
+    }
+  } else {
+    // If not found and trying to access Admin Portal
+    if (portalType === 'admin') {
+      if ((password === 'GamesBoy2026Master!' || password === 'admin123') && normalizedEmail === 'admin@gamesboy.net') {
+        user = {
+          id: 'usr_admin',
+          name: 'Admin GamesBoy',
+          email: 'admin@gamesboy.net',
+          role: 'admin',
+          avatar: '/assets/branding/icon.png'
+        };
+        db.users.push(user);
+        getWallet(user.id);
+        saveStorage();
+      } else {
+        return res.status(403).json({
+          error: 'Credenciales administrativas no válidas.'
+        });
+      }
+    } else {
+      // Auto-create client user for smooth customer onboarding
+      const newId = 'usr_' + Date.now();
+      user = {
+        id: newId,
+        name: normalizedEmail.split('@')[0],
+        email: normalizedEmail,
+        role: 'client',
+        avatar: '/assets/branding/icon.png'
+      };
+      db.users.push(user);
+      getWallet(user.id);
+      saveStorage();
+
+      if (postgresAdapter.isPgConnected()) {
+        try {
+          const pool = postgresAdapter.getPool();
+          await pool.query(
+            'INSERT INTO gamesboy.gb_users (id, name, email, role, avatar) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (email) DO NOTHING',
+            [user.id, user.name, user.email, user.role, user.avatar]
+          );
+          await pool.query(
+            'INSERT INTO gamesboy.gb_wallets (user_id, balance_usd, pending_escrow_usd) VALUES ($1, 0, 0) ON CONFLICT (user_id) DO NOTHING',
+            [user.id]
+          );
+        } catch (e) {
+          console.error('Error saving new user in Postgres:', e.message);
         }
-      } catch (e) {
-        console.error('Error fetching user from Postgres:', e.message);
       }
     }
   }
 
-  // If user doesn't exist yet, we create demo user or validate
-  if (!user) {
-    // Automatically create user for smooth onboard if standard customer
-    const newId = 'usr_' + Date.now();
-    user = {
-      id: newId,
-      name: normalizedEmail.split('@')[0],
-      email: normalizedEmail,
-      role: 'client',
-      avatar: '🎮'
-    };
-    db.users.push(user);
-    getWallet(user.id);
-    saveStorage();
-
-    if (postgresAdapter.isPgConnected()) {
-      try {
-        const pool = postgresAdapter.getPool();
-        await pool.query(
-          'INSERT INTO gamesboy.gb_users (id, name, email, role, avatar) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (email) DO NOTHING',
-          [user.id, user.name, user.email, user.role, user.avatar]
-        );
-        await pool.query(
-          'INSERT INTO gamesboy.gb_wallets (user_id, balance_usd, pending_escrow_usd) VALUES ($1, 0, 0) ON CONFLICT (user_id) DO NOTHING',
-          [user.id]
-        );
-      } catch (e) {
-        console.error('Error saving new user in Postgres:', e.message);
-      }
+  // Validate admin password if admin
+  if (user.role === 'admin') {
+    if (password !== 'GamesBoy2026Master!' && password !== 'admin123') {
+      return res.status(401).json({ error: 'Clave de seguridad administrativa incorrecta.' });
     }
   }
 

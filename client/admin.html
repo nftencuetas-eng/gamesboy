@@ -9,21 +9,23 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/main.css?v=3.3">
+  
   <style>
-    /* Enterprise Admin Layout & Typography */
     .admin-layout {
       display: grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 280px 1fr;
       min-height: 100vh;
-      background: #030712;
+      background: #080a10;
       background-image: 
-        radial-gradient(circle at 10% 10%, rgba(0, 194, 255, 0.04) 0%, transparent 40%),
-        radial-gradient(circle at 90% 20%, rgba(245, 158, 11, 0.03) 0%, transparent 45%);
+        radial-gradient(circle at 10% 10%, rgba(0, 194, 255, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 20%, rgba(245, 158, 11, 0.04) 0%, transparent 45%);
     }
     .admin-sidebar {
-      background: #060c1c;
-      border-right: 1px solid var(--border-subtle);
+      background: rgba(10, 13, 22, 0.88);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
       padding: 1.5rem 1.25rem;
       display: flex;
       flex-direction: column;
@@ -42,40 +44,37 @@
       text-align: left;
     }
     
-    /* Clean Sidebar Nav Button */
     .admin-menu-btn {
       display: flex;
       align-items: center;
       gap: 12px;
       width: 100%;
-      padding: 10px 12px;
+      padding: 11px 14px;
       background: transparent;
       border: 1px solid transparent;
-      color: var(--text-secondary);
-      font-size: 0.84rem;
-      font-weight: 600;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      font-weight: 700;
       cursor: pointer;
       text-align: left;
       margin-bottom: 4px;
-      border-radius: 8px !important;
-      transition: all 0.18s ease;
+      border-radius: 12px !important;
+      transition: all 0.2s ease;
     }
     .admin-menu-btn:hover {
-      background: rgba(13, 23, 51, 0.9);
-      border-color: rgba(0, 194, 255, 0.2);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.08);
       color: #ffffff;
-      transform: translateX(3px);
+      transform: translateX(2px);
     }
     .admin-menu-btn.active {
-      background: linear-gradient(135deg, rgba(0, 194, 255, 0.16), rgba(0, 112, 243, 0.16));
-      border-color: var(--accent-cyan);
+      background: linear-gradient(135deg, rgba(0, 194, 255, 0.16) 0%, rgba(0, 112, 243, 0.08) 100%);
+      border-color: rgba(0, 194, 255, 0.35);
       color: #ffffff;
-      font-weight: 700;
-      box-shadow: 0 4px 12px rgba(0, 194, 255, 0.12);
+      box-shadow: 0 4px 18px rgba(0, 194, 255, 0.15);
     }
-    .admin-menu-btn svg {
+    .admin-menu-btn.active svg {
       color: var(--accent-cyan);
-      flex-shrink: 0;
     }
     .badge-count {
       margin-left: auto;
@@ -87,29 +86,28 @@
       border-radius: 20px !important;
     }
 
-    /* Executive KPI Grid */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
       gap: 1.25rem;
       margin-bottom: 2rem;
-      text-align: left;
     }
     .kpi-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-medium);
+      background: rgba(16, 20, 32, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       padding: 1.35rem 1.4rem;
-      border-radius: 12px !important;
+      border-radius: 16px !important;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+      box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.1), 0 12px 30px rgba(0, 0, 0, 0.5);
       transition: all 0.2s ease;
-      text-align: left;
     }
     .kpi-card:hover {
       transform: translateY(-2px);
       border-color: var(--accent-cyan);
-      box-shadow: 0 12px 30px rgba(0, 194, 255, 0.15);
+      box-shadow: 0 14px 35px rgba(0, 194, 255, 0.15);
     }
     .kpi-card::after {
       content: '';
@@ -128,224 +126,155 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .kpi-title {
-      font-size: 0.76rem;
+      font-size: 0.75rem;
       color: var(--text-tertiary);
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.06em;
     }
-    .kpi-icon-box {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      display: grid;
-      place-items: center;
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--accent-cyan);
-    }
     .kpi-value-gs {
       font-family: var(--font-mono);
-      font-size: 1.55rem;
-      font-weight: 900;
-      color: #ffffff;
-      margin-bottom: 3px;
-      letter-spacing: -0.02em;
-    }
-    .kpi-sub-val {
-      font-size: 0.76rem;
-      color: var(--text-secondary);
-      font-weight: 600;
-    }
-
-    /* Modern Card Boxes */
-    .admin-card-box {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-medium);
-      border-radius: 12px !important;
-      padding: 1.5rem 1.6rem;
-      margin-bottom: 1.75rem;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-      text-align: left;
-    }
-    .admin-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.85rem;
-      border-bottom: 1px solid var(--border-subtle);
-    }
-    .admin-card-title {
-      font-family: var(--font-heading);
-      font-size: 1.15rem;
+      font-size: 1.45rem;
       font-weight: 800;
       color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-align: left;
+      line-height: 1.2;
     }
-    .admin-card-title svg {
+    .kpi-value-usd {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
       color: var(--accent-cyan);
+      margin-top: 4px;
     }
 
-    /* Clean Tables */
+    .admin-section-pane {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+    .admin-section-pane.active {
+      display: block;
+    }
+
+    .admin-card {
+      background: rgba(16, 20, 32, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px !important;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.08), 0 20px 50px rgba(0, 0, 0, 0.6);
+    }
+
     .admin-table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
       font-size: 0.84rem;
-      text-align: left;
     }
     .admin-table th {
-      background: rgba(3, 7, 18, 0.8);
+      background: rgba(255, 255, 255, 0.02);
       color: var(--text-tertiary);
-      font-weight: 700;
-      text-align: left;
-      padding: 11px 14px;
-      border-bottom: 1px solid var(--border-medium);
-      text-transform: uppercase;
+      font-weight: 800;
       font-size: 0.72rem;
-      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      text-align: left;
     }
     .admin-table td {
-      padding: 12px 14px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      color: var(--text-secondary);
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #e2e8f0;
       vertical-align: middle;
-      text-align: left;
     }
     .admin-table tr:hover td {
       background: rgba(255, 255, 255, 0.02);
-      color: #ffffff;
     }
 
-    .badge-status {
+    .btn-admin-action {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 3px 8px;
-      font-size: 0.72rem;
-      font-weight: 800;
-      border-radius: 6px !important;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
+      gap: 6px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border-radius: 8px !important;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.18s ease;
     }
-    .badge-status.approved {
+    .btn-admin-action.cyan {
+      background: rgba(0, 194, 255, 0.15);
+      border-color: rgba(0, 194, 255, 0.35);
+      color: var(--accent-cyan);
+    }
+    .btn-admin-action.cyan:hover {
+      background: rgba(0, 194, 255, 0.25);
+      box-shadow: 0 0 12px rgba(0, 194, 255, 0.3);
+    }
+    .btn-admin-action.emerald {
       background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-color: rgba(16, 185, 129, 0.35);
+      color: var(--accent-emerald);
     }
-    .badge-status.pending {
-      background: rgba(245, 158, 11, 0.15);
-      color: #fbbf24;
-      border: 1px solid rgba(245, 158, 11, 0.35);
+    .btn-admin-action.emerald:hover {
+      background: rgba(16, 185, 129, 0.25);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
     }
-    .badge-status.rejected {
+    .btn-admin-action.red {
       background: rgba(239, 68, 68, 0.15);
-      color: #f87171;
-      border: 1px solid rgba(239, 68, 68, 0.35);
+      border-color: rgba(239, 68, 68, 0.35);
+      color: var(--accent-red);
+    }
+    .btn-admin-action.red:hover {
+      background: rgba(239, 68, 68, 0.25);
+    }
+    .btn-admin-action.amber {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.35);
+      color: #f59e0b;
     }
 
-    .form-input-styled {
+    /* Modal Form Inputs */
+    .admin-form-group {
+      margin-bottom: 1.15rem;
+    }
+    .admin-form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .admin-form-input, .admin-form-select, .admin-form-textarea {
       width: 100%;
-      background: rgba(3, 7, 18, 0.75);
-      border: 1px solid var(--border-medium);
+      background: rgba(5, 7, 14, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: #ffffff;
-      padding: 9px 12px;
+      padding: 10px 12px;
       border-radius: 8px !important;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-family: var(--font-sans);
       outline: none;
       box-sizing: border-box;
       transition: all 0.2s ease;
-      text-align: left;
     }
-    .form-input-styled:focus {
+    .admin-form-input:focus, .admin-form-select:focus, .admin-form-textarea:focus {
       border-color: var(--accent-cyan);
-      box-shadow: 0 0 10px rgba(0, 194, 255, 0.2);
+      box-shadow: 0 0 12px rgba(0, 194, 255, 0.2);
     }
 
-    .btn-admin-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 14px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      border-radius: 8px !important;
-      cursor: pointer;
-      border: none;
-      transition: all 0.18s ease;
-      text-decoration: none;
-    }
-    .btn-admin-pill.cyan {
-      background: var(--accent-cyan);
-      color: #030712;
-    }
-    .btn-admin-pill.cyan:hover {
-      background: #38d6ff;
-      transform: translateY(-1px);
-    }
-    .btn-admin-pill.amber {
-      background: rgba(245, 158, 11, 0.15);
-      color: #f59e0b;
-      border: 1px solid rgba(245, 158, 11, 0.4);
-    }
-    .btn-admin-pill.amber:hover {
-      background: var(--accent-amber);
-      color: #000;
-    }
-    .btn-admin-pill.emerald {
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.4);
-    }
-    .btn-admin-pill.emerald:hover {
-      background: var(--accent-emerald);
-      color: #000;
-    }
-    .btn-admin-pill.red {
-      background: rgba(239, 68, 68, 0.15);
-      color: #f87171;
-      border: 1px solid rgba(239, 68, 68, 0.4);
-    }
-    .btn-admin-pill.red:hover {
-      background: var(--accent-red);
-      color: #fff;
-    }
-
-    /* Modal Styling */
-    .admin-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      z-index: 999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .admin-modal-box {
-      background: #070d1e;
-      border: 1px solid var(--border-medium);
-      border-radius: 14px !important;
-      width: 100%;
-      max-width: 540px;
-      padding: 2rem;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
-      position: relative;
-      text-align: left;
-    }
-
-    @media (max-width: 960px) {
+    @media (max-width: 992px) {
       .admin-layout { grid-template-columns: 1fr; }
-      .admin-sidebar { display: none; }
-      .admin-content { padding: 1.25rem; }
+      .admin-sidebar { height: auto; position: static; }
+      .admin-content { padding: 1.5rem 1rem; }
     }
   </style>
 </head>
@@ -353,1200 +282,1160 @@
 
   <div class="admin-layout">
     
-    <!-- Sidebar -->
+    <!-- LEFT EXECUTIVE SIDEBAR -->
     <aside class="admin-sidebar">
-      <div style="margin-bottom: 1.75rem; text-align: left;">
-        <a href="/" title="GamesBoy.net - Ir a la tienda" style="display: block; margin-bottom: 8px;">
-          <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 34px; width: auto; filter: none;">
+      <div style="margin-bottom: 2rem;">
+        <a href="/" title="GamesBoy.net">
+          <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 34px; width: auto;">
         </a>
-        <span style="display: inline-flex; align-items: center; gap: 5px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); color: #f59e0b; font-size: 0.68rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-          ADMIN MASTER
-        </span>
+        <div style="display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); padding: 2px 8px; border-radius: 12px !important;">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: #f59e0b;"></span>
+          <span style="font-size: 0.68rem; font-weight: 800; color: #f59e0b; text-transform: uppercase;">ADMIN MASTER</span>
+        </div>
       </div>
 
-      <nav style="flex: 1; overflow-y: auto;">
-        <button class="admin-menu-btn active" data-tab="tab-dashboard">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          <span>Métricas & Dashboard</span>
+      <nav style="display: flex; flex-direction: column; gap: 2px;">
+        <button class="admin-menu-btn active" data-tab="tab-overview">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          <span>1. Métricas & Balance</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-approvals">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-          <span>Aprobación de Cuentas</span>
-          <span class="badge-count" id="badge-pending-subs">0</span>
+        <button class="admin-menu-btn" data-tab="tab-games-management">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          <span>2. Videojuegos Digitales</span>
+          <span class="badge-count" id="badge-games-count">0</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-products">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-          <span>Juegos & Gift Cards</span>
-          <span class="badge-count" id="badge-products-count" style="background: var(--accent-purple); color: #fff;">0</span>
+        <button class="admin-menu-btn" data-tab="tab-giftcards-management">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="12" rx="2"></rect><path d="M12 8v12"></path><path d="M12 8h4.5a2.5 2.5 0 0 0 0-5C13 3 12 8 12 8z"></path><path d="M12 8H7.5a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8z"></path></svg>
+          <span>3. Gift Cards & Bóveda</span>
+          <span class="badge-count" id="badge-gc-count" style="background: var(--accent-cyan); color: #040c1e;">0</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-banners">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-          <span>Portadas Hero ENEBA</span>
+        <button class="admin-menu-btn" data-tab="tab-streaming-moderation">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+          <span>4. Streaming & Moderación</span>
+          <span class="badge-count" id="badge-pending-subs" style="display: none; background: #ef4444; color: #fff;">0</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-finances">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-          <span>Finanzas & Recargas</span>
-          <span class="badge-count" id="badge-pending-finances" style="background: var(--accent-cyan); color: #040c1e;">0</span>
-        </button>
-        <button class="admin-menu-btn" data-tab="tab-escrow">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-          <span>Garantía Escrow</span>
+        <button class="admin-menu-btn" data-tab="tab-smm-api">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span>5. Impulso Digital (API SMM)</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-users">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-          <span>Gestión de Usuarios</span>
+          <span>6. Usuarios & Billeteras</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-settings">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-          <span>Configuración & Pagos</span>
+        <button class="admin-menu-btn" data-tab="tab-finance">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          <span>7. Finanzas & Recargas</span>
+          <span class="badge-count" id="badge-pending-deposits" style="display: none; background: #ef4444; color: #fff;">0</span>
         </button>
       </nav>
 
-      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
-        <div style="font-size: 0.76rem; color: var(--text-tertiary); margin-bottom: 6px;">
-          Sesión activa: <strong style="color: #fff;">admin@gamesboy.net</strong>
+      <div style="margin-top: auto; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.08);">
+        <div style="font-size: 0.74rem; color: var(--text-tertiary); margin-bottom: 8px;">
+          Sesión: <strong style="color: #ffffff;">admin@gamesboy.net</strong>
         </div>
         <div style="display: flex; gap: 8px;">
-          <a href="/" class="btn-admin-pill cyan" style="flex: 1; justify-content: center;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          <a href="/" class="btn-admin-action cyan" style="flex: 1; justify-content: center; padding: 8px 10px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
             <span>Ver Tienda</span>
           </a>
-          <button id="btn-admin-logout" class="btn-admin-pill red" style="padding: 6px 10px;" title="Cerrar sesión de administrador">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          <button id="btn-admin-logout" class="btn-admin-action red" style="padding: 8px 10px;" title="Cerrar sesión">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
           </button>
         </div>
       </div>
     </aside>
 
-    <!-- Main Content Area -->
+    <!-- MAIN EXECUTIVE CONTENT -->
     <main class="admin-content">
       
       <!-- Top Title Bar -->
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.08); flex-wrap: wrap; gap: 14px;">
         <div>
-          <h1 id="admin-view-heading" style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 900; color: #ffffff; letter-spacing: -0.01em;">
+          <h1 id="admin-view-heading" style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 900; color: #ffffff;">
             Métricas & Panel de Control General
           </h1>
-          <p id="admin-view-subtitle" style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
+          <p id="admin-view-subtitle" style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 4px;">
             Auditoría en tiempo real, volumen transaccionado, saldos y operaciones en Paraguay.
           </p>
         </div>
         <div style="display: flex; gap: 8px; align-items: center;">
-          <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); padding: 6px 12px; border-radius: 8px; font-size: 0.78rem; color: #34d399; font-weight: 700;">
-            1 USD = <span id="header-rate-display">7.500 Gs.</span>
-          </div>
-          <button class="btn-admin-pill cyan" onclick="loadAdminData()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          <span style="font-size: 0.78rem; color: var(--text-tertiary); background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 6px 12px; border-radius: 8px !important;">
+            Tasa: <strong id="header-rate-display" style="color: var(--accent-emerald);">1 USDT = 7.500 Gs.</strong>
+          </span>
+          <button id="btn-refresh-admin" class="btn-admin-action cyan" style="padding: 7px 14px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
             <span>Actualizar</span>
           </button>
         </div>
       </div>
 
-      <!-- ======================================================== -->
-      <!-- TAB 1: EXECUTIVE DASHBOARD & REAL DATABASE METRICS       -->
-      <!-- ======================================================== -->
-      <div id="view-tab-dashboard" class="admin-tab-pane">
-        
-        <!-- Live KPI Cards -->
+      <!-- ======================================================= -->
+      <!-- TAB 1: OVERVIEW & GENERAL BALANCE                       -->
+      <!-- ======================================================= -->
+      <section id="tab-overview" class="admin-section-pane active">
         <div class="kpi-grid">
-          <div class="kpi-card cyan">
-            <div class="kpi-header">
-              <span class="kpi-title">Volumen Total Transaccionado</span>
-              <div class="kpi-icon-box">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-              </div>
-            </div>
-            <div class="kpi-value-gs" id="kpi-total-volume-gs">0 Gs.</div>
-            <div class="kpi-sub-val" id="kpi-total-volume-usd">$0.00 USD en operaciones reales</div>
-          </div>
-
           <div class="kpi-card emerald">
             <div class="kpi-header">
-              <span class="kpi-title">Comisiones Cobradas (15%)</span>
-              <div class="kpi-icon-box" style="color: var(--accent-emerald);">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-              </div>
+              <span class="kpi-title">Billetera Master (Admin)</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
             </div>
-            <div class="kpi-value-gs" id="kpi-commissions-gs">0 Gs.</div>
-            <div class="kpi-sub-val" id="kpi-commissions-usd">Ganancia neta calculada de ventas</div>
+            <div class="kpi-value-gs" id="kpi-admin-balance-gs">0 Gs.</div>
+            <div class="kpi-value-usd" id="kpi-admin-balance-usd">$0.00 USDT</div>
           </div>
-
-          <div class="kpi-card amber">
+          <div class="kpi-card cyan">
             <div class="kpi-header">
-              <span class="kpi-title">Garantía Escrow en Custodia</span>
-              <div class="kpi-icon-box" style="color: var(--accent-amber);">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-              </div>
+              <span class="kpi-title">Volumen Total Operado</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
             </div>
-            <div class="kpi-value-gs" id="kpi-escrow-gs">0 Gs.</div>
-            <div class="kpi-sub-val" id="kpi-escrow-usd">Protección 30 días para compradores</div>
+            <div class="kpi-value-gs" id="kpi-volume-gs">0 Gs.</div>
+            <div class="kpi-value-usd" id="kpi-volume-usd">$0.00 USDT</div>
           </div>
-
           <div class="kpi-card purple">
             <div class="kpi-header">
-              <span class="kpi-title">Usuarios Registrados en BD</span>
-              <div class="kpi-icon-box" style="color: var(--accent-purple);">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-              </div>
+              <span class="kpi-title">Saldos en Garantía (Escrow)</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
             </div>
-            <div class="kpi-value-gs" id="kpi-users-count">0</div>
-            <div class="kpi-sub-val" id="kpi-users-sub">Clientes y vendedores en PostgreSQL</div>
+            <div class="kpi-value-gs" id="kpi-escrow-gs">0 Gs.</div>
+            <div class="kpi-value-usd" id="kpi-escrow-usd">$0.00 USDT</div>
           </div>
-        </div>
-
-        <!-- Clean Left-Aligned Action Bar -->
-        <div class="admin-card-box">
-          <div class="admin-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-            <span>Accesos Rápidos de Administración</span>
-          </div>
-          <div style="display: flex; gap: 10px; margin-top: 1rem; flex-wrap: wrap;">
-            <button class="btn-admin-pill cyan" onclick="switchTab('tab-approvals')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-              <span>Revisar Cuentas Pendientes (<span id="quick-badge-subs">0</span>)</span>
-            </button>
-            <button class="btn-admin-pill emerald" onclick="switchTab('tab-finances')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-              <span>Aprobar Recargas SIPAP (<span id="quick-badge-deposits">0</span>)</span>
-            </button>
-            <button class="btn-admin-pill amber" onclick="switchTab('tab-products')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              <span>Añadir Videojuego o Gift Card</span>
-            </button>
-            <button class="btn-admin-pill" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4);" onclick="switchTab('tab-users')">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-              <span>Ajustar Saldos de Usuarios</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Recent Transactions Table -->
-        <div class="admin-card-box">
-          <div class="admin-card-header">
-            <div class="admin-card-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-              <span>Últimos Movimientos y Transacciones</span>
+          <div class="kpi-card amber">
+            <div class="kpi-header">
+              <span class="kpi-title">Comisiones Generadas (15%)</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
             </div>
-            <button class="btn-admin-pill cyan" onclick="switchTab('tab-finances')">
-              <span>Ver Todas</span>
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <div class="kpi-value-gs" id="kpi-commissions-gs">0 Gs.</div>
+            <div class="kpi-value-usd" id="kpi-commissions-usd">$0.00 USDT</div>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <span>Últimos Movimientos Financieros en la Plataforma</span>
+          </h3>
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID / Fecha</th>
+                  <th>Usuario</th>
+                  <th>Tipo</th>
+                  <th>Monto (Gs.)</th>
+                  <th>Monto (USDT)</th>
+                  <th>Método</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody id="table-recent-transactions">
+                <tr><td colspan="7" style="text-align: center; color: var(--text-tertiary);">Cargando movimientos...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- TAB 2: DIGITAL GAMES MANAGEMENT (SEPARATED & COMPLETE) -->
+      <!-- ======================================================= -->
+      <section id="tab-games-management" class="admin-section-pane">
+        <div class="admin-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff;">Catálogo de Videojuegos Digitales</h3>
+              <p style="font-size: 0.8rem; color: var(--text-tertiary);">Gestiona títulos, consolas, precios de cuenta primaria/secundaria y capturas de juego.</p>
+            </div>
+            <button id="btn-open-modal-add-game" class="btn-admin-action cyan" style="padding: 9px 16px; font-size: 0.84rem;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Agregar Nuevo Videojuego</span>
             </button>
           </div>
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Usuario</th>
-                <th>Tipo</th>
-                <th>Monto (Gs.)</th>
-                <th>Método</th>
-                <th>Estado</th>
-                <th>Fecha</th>
-              </tr>
-            </thead>
-            <tbody id="dashboard-recent-txs-body">
-              <tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 1.5rem;">Cargando transacciones reales...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
 
-      <!-- ======================================================== -->
-      <!-- TAB 2: APROBACIÓN TÉCNICA DE CUENTAS (SELLERS)           -->
-      <!-- ======================================================== -->
-      <div id="view-tab-approvals" class="admin-tab-pane" style="display: none;">
-        <div class="admin-card-box">
-          <div class="admin-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            <span>Protocolo de Verificación Obligatoria de Cuentas</span>
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Portada & Título</th>
+                  <th>Plataforma</th>
+                  <th>Cuenta Primaria</th>
+                  <th>Cuenta Secundaria</th>
+                  <th>Código / Key</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="table-games-list">
+                <tr><td colspan="7" style="text-align: center; color: var(--text-tertiary);">Cargando videojuegos...</td></tr>
+              </tbody>
+            </table>
           </div>
-          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 6px; line-height: 1.5;">
-            Ninguna cuenta subida por un vendedor se publica automáticamente. Prueba las credenciales en la plataforma correspondiente, confirma que los PINs y perfiles coinciden, y autoriza la publicación en la tienda.
-          </p>
         </div>
+      </section>
 
-        <div class="admin-card-box">
-          <div class="admin-card-header">
-            <div class="admin-card-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-              <span>Cuentas Pendientes de Aprobación</span>
+      <!-- ======================================================= -->
+      <!-- TAB 3: GIFT CARDS & ACTIVATION CODES VAULT              -->
+      <!-- ======================================================= -->
+      <section id="tab-giftcards-management" class="admin-section-pane">
+        <div class="admin-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff;">Tarjetas de Regalo & Bóveda de Códigos</h3>
+              <p style="font-size: 0.8rem; color: var(--text-tertiary);">Recarga códigos de activación digital en lote para PlayStation, Steam, Xbox, Apple y más.</p>
             </div>
-            <span class="badge-status pending" id="pending-subs-counter-badge">0 pendientes</span>
+            <button id="btn-open-modal-add-gc" class="btn-admin-action cyan" style="padding: 9px 16px; font-size: 0.84rem;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Crear Nueva Gift Card</span>
+            </button>
           </div>
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Vendedor</th>
-                <th>Servicio / Plan</th>
-                <th>Cupos</th>
-                <th>Precio / Cupo</th>
-                <th>Credenciales a Probar</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="admin-pending-subs-table-body">
-              <tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay cuentas pendientes por verificar.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
 
-      <!-- ======================================================== -->
-      <!-- TAB 3: CATÁLOGO DE JUEGOS DIGITALES & GIFT CARDS        -->
-      <!-- ======================================================== -->
-      <div id="view-tab-products" class="admin-tab-pane" style="display: none;">
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Tarjeta / Marca</th>
+                  <th>Denominación</th>
+                  <th>Precio (Gs.)</th>
+                  <th>Precio (USDT)</th>
+                  <th>Bóveda (Stock Códigos)</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="table-giftcards-list">
+                <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">Cargando gift cards...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- TAB 4: STREAMING: SERVICIOS OFICIALES & MODERACIÓN      -->
+      <!-- ======================================================= -->
+      <section id="tab-streaming-moderation" class="admin-section-pane">
         
-        <!-- Add Product Box -->
-        <div class="admin-card-box">
-          <div class="admin-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            <span>Publicar Nuevo Videojuego o Tarjeta de Regalo</span>
+        <!-- Solicitudes Pendientes de Vendedores -->
+        <div class="admin-card" style="border-color: rgba(245, 158, 11, 0.3);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+            <div>
+              <h3 style="font-size: 1.1rem; font-weight: 800; color: #f59e0b; display: flex; align-items: center; gap: 8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span>Solicitudes de Vendedores para Moderación & Aprobación</span>
+              </h3>
+              <p style="font-size: 0.8rem; color: var(--text-tertiary);">Revisa credenciales de streaming subidas por usuarios antes de publicarlas en la tienda.</p>
+            </div>
           </div>
-          <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0 1.25rem 0;">
-            Añade productos con stock de códigos seriales para entrega inmediata en Guaraníes.
-          </p>
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Vendedor</th>
+                  <th>Servicio / Plan</th>
+                  <th>Cupos</th>
+                  <th>Precio Sugerido</th>
+                  <th>Credenciales (Descifradas para prueba)</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="table-streaming-pending">
+                <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">No hay solicitudes pendientes de aprobación.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-          <form id="form-admin-add-product">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 12px;">
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Tipo de Producto</label>
-                <select id="prod-category" class="form-input-styled" required>
-                  <option value="game_key">Videojuego Digital (Key / Código)</option>
-                  <option value="gift_card">Tarjeta de Regalo (Gift Card)</option>
-                </select>
+        <!-- Cuentas & Grupos Oficiales Activos -->
+        <div class="admin-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">Grupos de Suscripción Activos en Vivo</h3>
+              <p style="font-size: 0.8rem; color: var(--text-tertiary);">Cuentas oficiales y de vendedores verificados transmitiendo en la plataforma.</p>
+            </div>
+            <button id="btn-open-modal-add-service" class="btn-admin-action cyan" style="padding: 8px 14px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Configurar Servicio Oficial</span>
+            </button>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Servicio</th>
+                  <th>Administrador / Vendedor</th>
+                  <th>Cupos Ocupados</th>
+                  <th>Precio / Mes</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="table-streaming-active">
+                <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">Cargando suscripciones...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- TAB 5: SMM / SOCIAL GROWTH API CONFIGURATION            -->
+      <!-- ======================================================= -->
+      <section id="tab-smm-api" class="admin-section-pane">
+        <div class="admin-card">
+          <div style="margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <span>Panel de Conexión & Integración API de Impulso Digital</span>
+            </h3>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
+              Conecta tu proveedor de servicios de crecimiento en redes sociales (seguidores, likes, vistas de Instagram, TikTok, YouTube, etc.).
+            </p>
+          </div>
+
+          <form id="form-smm-config">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="admin-form-group">
+                <label class="admin-form-label">URL del Endpoint del Proveedor API (v2)</label>
+                <input type="url" id="smm-provider-url" class="admin-form-input" placeholder="https://api.tu-proveedor-smm.com/v2" required>
               </div>
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Plataforma / Consola</label>
-                <select id="prod-platform" class="form-input-styled" required>
-                  <option value="PS5">PlayStation 5</option>
-                  <option value="PS4">PlayStation 4</option>
-                  <option value="Xbox">Xbox Series X|S</option>
-                  <option value="Steam">PC Steam</option>
-                  <option value="Nintendo">Nintendo Switch</option>
-                  <option value="Google Play">Google Play</option>
-                  <option value="Apple">Apple App Store</option>
-                  <option value="Battle.net">Battle.net (Blizzard)</option>
-                </select>
-              </div>
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Precio en Guaraníes (Gs.)</label>
-                <input type="number" id="prod-price-pyg" class="form-input-styled" placeholder="ej: 350000" required>
+              <div class="admin-form-group">
+                <label class="admin-form-label">API Key del Proveedor (Token Secreto)</label>
+                <input type="password" id="smm-api-key" class="admin-form-input" placeholder="••••••••••••••••••••••••" required>
               </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 12px;">
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Título del Producto</label>
-                <input type="text" id="prod-title" class="form-input-styled" placeholder="ej: EA SPORTS FC 25 PS5 Digital" required>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="admin-form-group">
+                <label class="admin-form-label">Margen de Ganancia Plataforma (%)</label>
+                <input type="number" id="smm-markup-percent" class="admin-form-input" value="30" min="5" max="200" required>
+                <small style="font-size: 0.72rem; color: var(--text-tertiary);">Porcentaje añadido sobre el costo mayorista del proveedor.</small>
               </div>
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Insignia / Badge</label>
-                <input type="text" id="prod-badge" class="form-input-styled" placeholder="ej: TOP VENTAS, OFICIAL" value="TOP VENTAS">
+              <div class="admin-form-group">
+                <label class="admin-form-label">Saldo Disponible en el Proveedor</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="smm-provider-balance" class="admin-form-input" value="$184.20 USDT" readonly style="font-family: var(--font-mono); color: var(--accent-emerald);">
+                  <button type="button" id="btn-smm-test-ping" class="btn-admin-action emerald" style="padding: 0 14px;">
+                    <span>Verificar Ping</span>
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div style="margin-bottom: 12px;">
-              <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">URL de Imagen de Portada (HD)</label>
-              <input type="url" id="prod-cover-url" class="form-input-styled" placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80">
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.25rem;">
+              <button type="submit" class="btn-admin-action cyan" style="padding: 10px 20px; font-size: 0.88rem;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                <span>Guardar Configuración API</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- TAB 6: GESTIÓN DE USUARIOS & BILLETERAS                 -->
+      <!-- ======================================================= -->
+      <section id="tab-users" class="admin-section-pane">
+        <div class="admin-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff;">Directorio de Usuarios & Billeteras</h3>
+              <p style="font-size: 0.8rem; color: var(--text-tertiary);">Consulta saldos en tiempo real, pedidos realizados y ajuste de saldos manual.</p>
+            </div>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Usuario / Email</th>
+                  <th>Rol</th>
+                  <th>Saldo (Gs.)</th>
+                  <th>Saldo (USDT)</th>
+                  <th>Compras</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="table-users-list">
+                <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">Cargando usuarios...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- TAB 7: FINANZAS & RECARGAS (SIPAP / BINANCE USDT)       -->
+      <!-- ======================================================= -->
+      <section id="tab-finance" class="admin-section-pane">
+        
+        <!-- Recargas Pendientes de Aprobación -->
+        <div class="admin-card" style="border-color: rgba(0, 194, 255, 0.3);">
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            <span>Bandeja de Recargas Pendientes de Aprobación</span>
+          </h3>
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Usuario</th>
+                  <th>Método</th>
+                  <th>Monto (Gs.)</th>
+                  <th>Monto (USDT)</th>
+                  <th>Referencia</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="table-pending-deposits">
+                <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">No hay recargas pendientes.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Ajustes de Moneda y Configuración Bancaria -->
+        <div class="admin-card">
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 1.25rem;">
+            Configuración de Tasa de Cambio & Cuentas Receptoras
+          </h3>
+          <form id="form-platform-settings">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="admin-form-group">
+                <label class="admin-form-label">Tasa de Cambio Oficial (Gs. por 1 USDT)</label>
+                <input type="number" id="settings-rate-pyg" class="admin-form-input" value="7500" required>
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Comisión de la Plataforma (%)</label>
+                <input type="number" id="settings-commission" class="admin-form-input" value="15" min="0" max="50" required>
+              </div>
             </div>
 
-            <div style="margin-bottom: 16px;">
-              <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Códigos Digitales en Stock (Uno por línea)</label>
-              <textarea id="prod-codes" class="form-input-styled" rows="3" placeholder="KEY-1234-ABCD-5678&#10;KEY-9876-WXYZ-4321"></textarea>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+              <div class="admin-form-group">
+                <label class="admin-form-label">Banco Paraguay (SIPAP)</label>
+                <input type="text" id="settings-bank-name" class="admin-form-input" value="Banco Familiar / Itaú" required>
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Titular & RUC</label>
+                <input type="text" id="settings-bank-holder" class="admin-form-input" value="GamesBoy Paraguay S.A." required>
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Número de Cuenta & Alias</label>
+                <input type="text" id="settings-bank-acc" class="admin-form-input" value="01-445566-7 (gamesboy.py)" required>
+              </div>
             </div>
 
-            <button type="submit" class="btn-admin-pill cyan" style="padding: 10px 20px; font-size: 0.88rem;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-              <span>Guardar y Publicar en Tienda</span>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="admin-form-group">
+                <label class="admin-form-label">Binance Pay ID</label>
+                <input type="text" id="settings-binance-id" class="admin-form-input" value="849201934" required>
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Dirección USDT (BEP20 / TRC20)</label>
+                <input type="text" id="settings-binance-wallet" class="admin-form-input" value="0x71C9414B3b27bA134a6C3f07a757657A82e4b92F" required>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-admin-action cyan" style="padding: 10px 20px; font-size: 0.88rem; margin-top: 0.5rem;">
+              <span>Guardar Configuración Financiera</span>
             </button>
           </form>
         </div>
 
-        <!-- Inventory List -->
-        <div class="admin-card-box">
-          <div class="admin-card-header">
-            <div class="admin-card-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-              <span>Inventario de Juegos & Gift Cards</span>
-            </div>
-            <span class="badge-status approved" id="inventory-count-badge">0 productos</span>
-          </div>
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Categoría</th>
-                <th>Plataforma</th>
-                <th>Precio (Gs.)</th>
-                <th>Stock</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="admin-products-table-body">
-              <tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">Cargando catálogo real...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ======================================================== -->
-      <!-- TAB 4: PORTADAS HERO ENEBA                               -->
-      <!-- ======================================================== -->
-      <div id="view-tab-banners" class="admin-tab-pane" style="display: none;">
-        <div class="admin-card-box">
-          <div class="admin-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-            <span>Gestor de Portadas Acordeón Hero (ENEBA Style)</span>
-          </div>
-          <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
-            Personaliza los 4 banners principales que se expanden interactivamente al pasar el cursor en la tienda pública.
-          </p>
-        </div>
-
-        <form id="form-admin-hero-banners">
-          <div id="banners-editor-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem;">
-            <!-- Rendered dynamically via JS -->
-          </div>
-
-          <button type="submit" class="btn-admin-pill cyan" style="padding: 12px 24px; font-size: 0.9rem;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-            <span>Guardar Portadas en Vivo</span>
-          </button>
-        </form>
-      </div>
-
-      <!-- ======================================================== -->
-      <!-- TAB 5: FINANZAS, RECARGAS & RETIROS                      -->
-      <!-- ======================================================== -->
-      <div id="view-tab-finances" class="admin-tab-pane" style="display: none;">
-        
-        <!-- Pending Deposits -->
-        <div class="admin-card-box">
-          <div class="admin-card-header">
-            <div class="admin-card-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-              <span>Solicitudes de Recarga de Saldo Pendientes</span>
-            </div>
-            <span class="badge-status pending" id="finances-pending-count">0 pendientes</span>
-          </div>
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Usuario</th>
-                <th>Monto Recargado</th>
-                <th>Método</th>
-                <th>Comprobante / Referencia</th>
-                <th>Fecha</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody id="admin-pending-deposits-body">
-              <tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay recargas pendientes.</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Pending Payouts -->
-        <div class="admin-card-box">
-          <div class="admin-card-header">
-            <div class="admin-card-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
-              <span>Solicitudes de Retiro de Vendedores</span>
-            </div>
-          </div>
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Vendedor</th>
-                <th>Monto a Transferir</th>
-                <th>Método</th>
-                <th>Datos de Transferencia</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody id="admin-pending-payouts-body">
-              <tr><td colspan="5" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay solicitudes de retiro pendientes.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ======================================================== -->
-      <!-- TAB 6: GARANTÍA ESCROW (30 DÍAS)                         -->
-      <!-- ======================================================== -->
-      <div id="view-tab-escrow" class="admin-tab-pane" style="display: none;">
-        <div class="admin-card-box">
-          <div class="admin-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <span>Sistema de Garantía y Protección Escrow de 30 Días</span>
-          </div>
-          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 6px; line-height: 1.5;">
-            Cuando un cliente compra un cupo de streaming o cuenta compartida, los fondos se protegen durante el periodo de garantía.
-            Si el servicio opera con total normalidad, puedes liberar el pago al vendedor; si se reporta una falla técnica, puedes reembolsar el 100% al comprador al instante.
-          </p>
-        </div>
-
-        <div class="admin-card-box">
-          <div class="admin-card-header">
-            <div class="admin-card-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-              <span>Cuentas Activas bajo Garantía Escrow</span>
-            </div>
-          </div>
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Servicio</th>
-                <th>Vendedor</th>
-                <th>Fondos Protegidos</th>
-                <th>Comisión Plataforma (15%)</th>
-                <th>Estado de Garantía</th>
-                <th>Resolución</th>
-              </tr>
-            </thead>
-            <tbody id="admin-escrow-table-body">
-              <tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">Cargando cuentas bajo garantía...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ======================================================== -->
-      <!-- TAB 7: GESTIÓN DE USUARIOS & BILLETERAS                  -->
-      <!-- ======================================================== -->
-      <div id="view-tab-users" class="admin-tab-pane" style="display: none;">
-        <div class="admin-card-box">
-          <div class="admin-card-header">
-            <div class="admin-card-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-              <span>Directorio de Usuarios y Billeteras</span>
-            </div>
-            <input type="text" id="users-search-input" class="form-input-styled" style="max-width: 260px;" placeholder="Buscar por nombre o email...">
-          </div>
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Usuario</th>
-                <th>Email</th>
-                <th>Rol</th>
-                <th>Saldo Disponible (Gs.)</th>
-                <th>Saldo (USD)</th>
-                <th>Compras</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="admin-users-table-body">
-              <tr><td colspan="7" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">Cargando usuarios reales desde la base de datos...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ======================================================== -->
-      <!-- TAB 8: CONFIGURACIÓN GLOBAL DE PAGOS & BANCOS            -->
-      <!-- ======================================================== -->
-      <div id="view-tab-settings" class="admin-tab-pane" style="display: none;">
-        <div class="admin-card-box">
-          <div class="admin-card-title">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            <span>Configuración Financiera y Datos Bancarios Oficiales</span>
-          </div>
-          <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0 1.5rem 0;">
-            Estos datos bancarios y direcciones de Binance se muestran a los clientes al momento de recargar saldo en la tienda.
-          </p>
-
-          <form id="form-admin-payment-settings">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-              
-              <!-- SIPAP Paraguay -->
-              <div style="background: rgba(3, 7, 18, 0.6); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-subtle); text-align: left;">
-                <div style="font-weight: 800; font-size: 0.92rem; color: var(--accent-cyan); margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                  <span>Transferencia Bancaria Paraguay (SIPAP)</span>
-                </div>
-
-                <div style="margin-bottom: 10px;">
-                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Banco Receptor:</label>
-                  <input type="text" id="setting-bank-name" class="form-input-styled" value="Banco Familiar / Itaú Paraguay" required>
-                </div>
-
-                <div style="margin-bottom: 10px;">
-                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Titular de la Cuenta:</label>
-                  <input type="text" id="setting-bank-holder" class="form-input-styled" value="GamesBoy Paraguay S.A." required>
-                </div>
-
-                <div style="margin-bottom: 10px;">
-                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">RUC o C.I.:</label>
-                  <input type="text" id="setting-bank-ruc" class="form-input-styled" value="80091234-5" required>
-                </div>
-
-                <div style="margin-bottom: 10px;">
-                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Número de Cuenta:</label>
-                  <input type="text" id="setting-bank-account" class="form-input-styled" value="01-445566-7" required>
-                </div>
-
-                <div>
-                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Alias SIPAP Oficial:</label>
-                  <input type="text" id="setting-bank-alias" class="form-input-styled" value="gamesboy.py" required>
-                </div>
-              </div>
-
-              <!-- Binance Pay USDT -->
-              <div style="background: rgba(3, 7, 18, 0.6); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-subtle); text-align: left;">
-                <div style="font-weight: 800; font-size: 0.92rem; color: var(--accent-amber); margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                  <span>Criptomoneda USDT (Binance Pay)</span>
-                </div>
-
-                <div style="margin-bottom: 10px;">
-                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Binance Pay ID Oficial:</label>
-                  <input type="text" id="setting-binance-id" class="form-input-styled" value="849201934" required>
-                </div>
-
-                <div style="margin-bottom: 10px;">
-                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Red / Network:</label>
-                  <input type="text" id="setting-binance-network" class="form-input-styled" value="USDT (Binance Pay / BEP-20 / TRC-20)" required>
-                </div>
-
-                <div style="margin-bottom: 10px;">
-                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">Dirección de Billetera USDT:</label>
-                  <input type="text" id="setting-binance-wallet" class="form-input-styled" value="0x71C9414B3b27bA134a6C3f07a757657A82e4b92F" required>
-                </div>
-
-                <div>
-                  <label style="font-size: 0.76rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 3px;">URL Imagen Código QR:</label>
-                  <input type="url" id="setting-binance-qr" class="form-input-styled" value="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F">
-                </div>
-              </div>
-            </div>
-
-            <!-- Rates & Commission -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem;">
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Tasa de Cambio (1 USDT / USD en Guaraníes):</label>
-                <input type="number" id="setting-exchange-rate-pyg" class="form-input-styled" value="7500" step="10" required>
-              </div>
-              <div>
-                <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Comisión de la Plataforma (%):</label>
-                <input type="number" id="setting-commission-percent" class="form-input-styled" value="15" step="0.5" required>
-              </div>
-            </div>
-
-            <button type="submit" class="btn-admin-pill cyan" style="padding: 11px 24px; font-size: 0.88rem;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-              <span>Guardar Parámetros Financieros</span>
-            </button>
-          </form>
-        </div>
-      </div>
+      </section>
 
     </main>
   </div>
 
-  <!-- MODAL: MANUAL BALANCE ADJUSTMENT -->
-  <div id="modal-adjust-balance" class="admin-modal-overlay" style="display: none;">
-    <div class="admin-modal-box">
+  <!-- ======================================================= -->
+  <!-- MODALS                                                  -->
+  <!-- ======================================================= -->
+
+  <!-- MODAL: AGREGAR/EDITAR VIDEOJUEGO DIGITAL -->
+  <div class="modal-overlay" id="modal-game-editor" style="display: none;">
+    <div class="glass-modal" style="width: 100%; max-width: 620px; padding: 2rem; box-sizing: border-box; margin: auto;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-        <h3 style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800; color: #fff;">Ajustar Saldo de Usuario</h3>
-        <button onclick="closeAdjustModal()" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">✕</button>
+        <h3 id="modal-game-editor-title" style="font-size: 1.2rem; font-weight: 800; color: #ffffff;">Nuevo Videojuego Digital</h3>
+        <button type="button" class="btn-modal-close" onclick="document.getElementById('modal-game-editor').style.display='none';">✕</button>
       </div>
-      <form id="form-adjust-user-balance">
-        <input type="hidden" id="adjust-user-id">
-        <div style="margin-bottom: 12px;">
-          <div style="font-size: 0.84rem; color: var(--text-secondary);">Usuario: <strong id="adjust-user-name" style="color: #fff;">-</strong></div>
-          <div style="font-size: 0.84rem; color: var(--text-secondary);">Saldo Actual: <strong id="adjust-user-current-bal" style="color: var(--accent-cyan); font-family: var(--font-mono);">-</strong></div>
+      <form id="form-game-editor">
+        <input type="hidden" id="game-edit-id" value="">
+        <div class="admin-form-group">
+          <label class="admin-form-label">Título del Videojuego</label>
+          <input type="text" id="game-edit-title" class="admin-form-input" placeholder="ej: Grand Theft Auto VI" required>
         </div>
-        <div style="margin-bottom: 12px;">
-          <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Tipo de Ajuste:</label>
-          <select id="adjust-action-type" class="form-input-styled">
-            <option value="credit">Acreditar / Sumar Saldo (Ingreso)</option>
-            <option value="debit">Debitar / Restar Saldo (Deducción)</option>
-          </select>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Plataforma / Consola</label>
+            <select id="game-edit-platform" class="admin-form-select">
+              <option value="PS5">PlayStation 5 (PS5)</option>
+              <option value="PS4">PlayStation 4 (PS4)</option>
+              <option value="Xbox Series X/S">Xbox Series X/S</option>
+              <option value="Xbox One">Xbox One</option>
+              <option value="Steam">Steam (PC)</option>
+              <option value="Nintendo Switch">Nintendo Switch</option>
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">Género</label>
+            <input type="text" id="game-edit-genre" class="admin-form-input" placeholder="ej: Acción / Aventura" value="Acción">
+          </div>
         </div>
-        <div style="margin-bottom: 12px;">
-          <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Monto en Guaraníes (Gs.):</label>
-          <input type="number" id="adjust-amount-pyg" class="form-input-styled" placeholder="ej: 100000" step="1000" required>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Cuenta Primaria ($)</label>
+            <input type="number" step="0.01" id="game-edit-price-primary" class="admin-form-input" placeholder="ej: 39.99" required>
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">Cuenta Secundaria ($)</label>
+            <input type="number" step="0.01" id="game-edit-price-secondary" class="admin-form-input" placeholder="ej: 24.99">
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">Código Digital ($)</label>
+            <input type="number" step="0.01" id="game-edit-price-key" class="admin-form-input" placeholder="ej: 59.99">
+          </div>
         </div>
-        <div style="margin-bottom: 16px;">
-          <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Motivo / Nota de Auditoría:</label>
-          <input type="text" id="adjust-reason-note" class="form-input-styled" placeholder="ej: Corrección manual de recarga" required>
+        <div class="admin-form-group">
+          <label class="admin-form-label">URL Portada Oficial (Cover Art)</label>
+          <input type="url" id="game-edit-cover" class="admin-form-input" placeholder="https://..." required>
         </div>
-        <div style="display: flex; gap: 8px; justify-content: flex-end;">
-          <button type="button" onclick="closeAdjustModal()" class="btn-admin-pill" style="background: rgba(255,255,255,0.08); color: #fff;">Cancelar</button>
-          <button type="submit" class="btn-admin-pill cyan">Confirmar Ajuste</button>
+        <div class="admin-form-group">
+          <label class="admin-form-label">Capturas de Pantalla / Gameplay (Una URL por línea)</label>
+          <textarea id="game-edit-screenshots" class="admin-form-textarea" rows="2" placeholder="https://...&#10;https://..."></textarea>
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-form-label">Descripción / Sinopsis</label>
+          <textarea id="game-edit-desc" class="admin-form-textarea" rows="2" placeholder="Detalles y contenido del juego..."></textarea>
+        </div>
+        <div class="admin-form-group" style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="game-edit-available" checked style="width: 18px; height: 18px; cursor: pointer;">
+          <label for="game-edit-available" style="font-size: 0.85rem; color: #ffffff; cursor: pointer; font-weight: 700;">Marcar como Disponible (En Stock)</label>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.25rem;">
+          <button type="button" class="btn-admin-action red" onclick="document.getElementById('modal-game-editor').style.display='none';">Cancelar</button>
+          <button type="submit" class="btn-admin-action cyan" style="padding: 10px 20px;">Guardar Videojuego</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: RECEIPT VIEWER -->
-  <div id="modal-receipt-view" class="admin-modal-overlay" style="display: none;">
-    <div class="admin-modal-box" style="max-width: 600px; text-align: center;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-        <h3 style="font-size: 1.1rem; font-weight: 800; color: #fff;">Comprobante de Transferencia</h3>
-        <button onclick="document.getElementById('modal-receipt-view').style.display = 'none'" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">✕</button>
+  <!-- MODAL: AGREGAR GIFT CARD / CÓDIGOS -->
+  <div class="modal-overlay" id="modal-gc-editor" style="display: none;">
+    <div class="glass-modal" style="width: 100%; max-width: 540px; padding: 2rem; box-sizing: border-box; margin: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 id="modal-gc-editor-title" style="font-size: 1.2rem; font-weight: 800; color: #ffffff;">Nueva Gift Card Digital</h3>
+        <button type="button" class="btn-modal-close" onclick="document.getElementById('modal-gc-editor').style.display='none';">✕</button>
       </div>
-      <div id="receipt-modal-content" style="max-height: 450px; overflow-y: auto; background: #02050e; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-subtle); margin-bottom: 1rem;">
-        <!-- Injected dynamic receipt -->
-      </div>
-      <button onclick="document.getElementById('modal-receipt-view').style.display = 'none'" class="btn-admin-pill cyan" style="width: 100%; justify-content: center;">Cerrar Vista</button>
+      <form id="form-gc-editor">
+        <div class="admin-form-group">
+          <label class="admin-form-label">Nombre / Denominación</label>
+          <input type="text" id="gc-edit-title" class="admin-form-input" placeholder="ej: PlayStation Store $50 USD" required>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Marca</label>
+            <select id="gc-edit-brand" class="admin-form-select">
+              <option value="PlayStation">PlayStation Network</option>
+              <option value="Steam">Steam Wallet</option>
+              <option value="Xbox">Xbox & Game Pass</option>
+              <option value="Apple">Apple Store & iTunes</option>
+              <option value="Google Play">Google Play Store</option>
+              <option value="Razer Gold">Razer Gold</option>
+              <option value="Nintendo">Nintendo eShop</option>
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">Precio en USD ($)</label>
+            <input type="number" step="0.01" id="gc-edit-price" class="admin-form-input" placeholder="ej: 50.00" required>
+          </div>
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-form-label">Códigos de Activación (Uno por línea)</label>
+          <textarea id="gc-edit-codes" class="admin-form-textarea" rows="4" placeholder="PSN-8921-4455-1122&#10;PSN-7733-2211-9988"></textarea>
+          <small style="font-size: 0.72rem; color: var(--text-tertiary);">Se dispensarán de forma segura 1 a 1 a compras con saldo verificado.</small>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.25rem;">
+          <button type="button" class="btn-admin-action red" onclick="document.getElementById('modal-gc-editor').style.display='none';">Cancelar</button>
+          <button type="submit" class="btn-admin-action cyan" style="padding: 10px 20px;">Crear Gift Card</button>
+        </div>
+      </form>
     </div>
   </div>
 
+  <!-- MODAL: AJUSTE MANUAL DE SALDO DE USUARIO -->
+  <div class="modal-overlay" id="modal-user-adjust" style="display: none;">
+    <div class="glass-modal" style="width: 100%; max-width: 460px; padding: 2rem; box-sizing: border-box; margin: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff;">Ajuste de Saldo de Usuario</h3>
+        <button type="button" class="btn-modal-close" onclick="document.getElementById('modal-user-adjust').style.display='none';">✕</button>
+      </div>
+      <form id="form-user-adjust">
+        <input type="hidden" id="adjust-user-id" value="">
+        <div class="admin-form-group">
+          <label class="admin-form-label">Usuario Seleccionado</label>
+          <input type="text" id="adjust-user-name" class="admin-form-input" readonly>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Acción</label>
+            <select id="adjust-action-type" class="admin-form-select">
+              <option value="deposit">Acreditar Saldo (+)</option>
+              <option value="deduct">Debitar / Penalizar (-)</option>
+            </select>
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">Monto (USD)</label>
+            <input type="number" step="0.01" id="adjust-amount-usd" class="admin-form-input" placeholder="ej: 10.00" required>
+          </div>
+        </div>
+        <div class="admin-form-group">
+          <label class="admin-form-label">Motivo / Nota de Auditoría</label>
+          <input type="text" id="adjust-notes" class="admin-form-input" placeholder="ej: Bono promocional / Reembolso" value="Ajuste manual de administración">
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.25rem;">
+          <button type="button" class="btn-admin-action red" onclick="document.getElementById('modal-user-adjust').style.display='none';">Cancelar</button>
+          <button type="submit" class="btn-admin-action emerald" style="padding: 10px 20px;">Aplicar Ajuste</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SCRIPT ENGINE -->
   <script>
-    let adminState = {
-      activeTab: 'tab-dashboard',
-      stats: {},
-      pendingSubs: [],
-      pendingDeposits: [],
-      pendingPayouts: [],
-      products: [],
-      banners: [],
-      users: [],
-      settings: {}
+    // Tab Navigation Switcher
+    const menuButtons = document.querySelectorAll('.admin-menu-btn');
+    const sectionPanes = document.querySelectorAll('.admin-section-pane');
+    const headingEl = document.getElementById('admin-view-heading');
+    const subtitleEl = document.getElementById('admin-view-subtitle');
+
+    const tabDescriptions = {
+      'tab-overview': { title: 'Métricas & Panel de Control General', subtitle: 'Auditoría en tiempo real, volumen transaccionado, saldos y operaciones en Paraguay.' },
+      'tab-games-management': { title: 'Gestión de Videojuegos Digitales', subtitle: 'Catálogo de consolas (PS5/Xbox/Steam), precios duales (Primario/Secundario) y capturas.' },
+      'tab-giftcards-management': { title: 'Tarjetas de Regalo & Bóveda de Códigos', subtitle: 'Recarga y control de códigos de activación digital para entrega instantánea.' },
+      'tab-streaming-moderation': { title: 'Streaming: Moderación & Servicios Oficiales', subtitle: 'Revisión y aprobación de cuentas subidas por vendedores y monitoreo de grupos en vivo.' },
+      'tab-smm-api': { title: 'Integración API: Impulso Digital & Redes Sociales', subtitle: 'Conexión con el proveedor mayorista de servicios SMM, testing de saldo y márgenes.' },
+      'tab-users': { title: 'Directorio de Usuarios & Billeteras', subtitle: 'Administración de clientes, vendedores, saldos reales en Gs. y ajustes manuales.' },
+      'tab-finance': { title: 'Finanzas, Recargas SIPAP & Cripto USDT', subtitle: 'Aprobación de comprobantes bancarios, retiros de saldo y configuración de plataforma.' }
     };
 
-    const tabHeadings = {
-      'tab-dashboard': { title: 'Métricas & Panel de Control General', sub: 'Auditoría en tiempo real, volumen transaccionado, saldos y operaciones en Paraguay.' },
-      'tab-approvals': { title: 'Aprobación y Prueba de Cuentas de Vendedores', sub: 'Revisa, prueba las credenciales al 100% y aprueba las cuentas para publicarlas en la tienda.' },
-      'tab-products': { title: 'Catálogo de Videojuegos & Tarjetas de Regalo', sub: 'Administra inventario, precios en Guaraníes y stock de códigos digitales.' },
-      'tab-banners': { title: 'Portadas Hero ENEBA en la Tienda', sub: 'Modifica las imágenes de portada y enlaces del carrusel interactivo.' },
-      'tab-finances': { title: 'Finanzas, Recargas SIPAP & Retiros', sub: 'Aprueba comprobantes bancarios de clientes y autoriza transferencias a vendedores.' },
-      'tab-escrow': { title: 'Garantía Escrow y Protección al Comprador', sub: 'Gestiona la protección de fondos durante los 30 días de suscripción compartida.' },
-      'tab-users': { title: 'Directorio de Usuarios y Billeteras', sub: 'Consulta clientes registrados y ajusta saldos en Guaraníes de forma directa.' },
-      'tab-settings': { title: 'Configuración Financiera y Datos Bancarios', sub: 'Configura cotización del Guaraní, comisión de plataforma y cuentas bancarias oficiales.' }
-    };
+    menuButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabId = btn.getAttribute('data-tab');
+        menuButtons.forEach(b => b.classList.remove('active'));
+        sectionPanes.forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const targetPane = document.getElementById(tabId);
+        if (targetPane) targetPane.classList.add('active');
 
-    function switchTab(tabId) {
-      adminState.activeTab = tabId;
-      document.querySelectorAll('.admin-tab-pane').forEach(p => p.style.display = 'none');
-      document.querySelectorAll('.admin-menu-btn').forEach(b => b.classList.remove('active'));
-
-      const targetPane = document.getElementById('view-' + tabId);
-      const targetBtn = document.querySelector(`.admin-menu-btn[data-tab="${tabId}"]`);
-      if (targetPane) targetPane.style.display = 'block';
-      if (targetBtn) targetBtn.classList.add('active');
-
-      const info = tabHeadings[tabId] || tabHeadings['tab-dashboard'];
-      document.getElementById('admin-view-heading').textContent = info.title;
-      document.getElementById('admin-view-subtitle').textContent = info.sub;
-    }
-
-    document.querySelectorAll('.admin-menu-btn').forEach(btn => {
-      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        if (tabDescriptions[tabId]) {
+          headingEl.textContent = tabDescriptions[tabId].title;
+          subtitleEl.textContent = tabDescriptions[tabId].subtitle;
+        }
+      });
     });
 
-    // Load Admin Data from Server APIs
+    // Master Data Loaders
     async function loadAdminData() {
       try {
-        const [overviewRes, pendingSubsRes, productsRes, bannersRes, usersRes] = await Promise.all([
-          fetch('/api/admin/overview').then(r => r.json()).catch(() => ({})),
-          fetch('/api/admin/pending-subscriptions').then(r => r.json()).catch(() => ({ subscriptions: [] })),
-          fetch('/api/admin/products').then(r => r.json()).catch(() => ({ products: [] })),
-          fetch('/api/banners').then(r => r.json()).catch(() => ({ banners: [] })),
-          fetch('/api/admin/users').then(r => r.json()).catch(() => ({ users: [] }))
-        ]);
+        // 1. Overview & Finances
+        const resOverview = await fetch('/api/admin/overview');
+        const dataOverview = await resOverview.json();
+        if (dataOverview.stats) {
+          const s = dataOverview.stats;
+          document.getElementById('kpi-admin-balance-gs').textContent = (s.totalDepositsVolumePyg || 0).toLocaleString('es-PY') + ' Gs.';
+          document.getElementById('kpi-admin-balance-usd').textContent = '$' + (dataOverview.adminWallet?.balanceUsd || 1250).toFixed(2) + ' USDT';
+          document.getElementById('kpi-volume-gs').textContent = (s.totalVolumePyg || 0).toLocaleString('es-PY') + ' Gs.';
+          document.getElementById('kpi-volume-usd').textContent = '$' + (s.totalVolumeUsd || 0).toFixed(2) + ' USDT';
+          document.getElementById('kpi-escrow-gs').textContent = (s.totalEscrowPyg || 0).toLocaleString('es-PY') + ' Gs.';
+          document.getElementById('kpi-escrow-usd').textContent = '$' + (s.totalEscrowUsd || 0).toFixed(2) + ' USDT';
+          document.getElementById('kpi-commissions-gs').textContent = (s.totalCommissionsPyg || 0).toLocaleString('es-PY') + ' Gs.';
+          document.getElementById('kpi-commissions-usd').textContent = '$' + (s.totalCommissionsUsd || 0).toFixed(2) + ' USDT';
 
-        const stats = overviewRes.stats || {};
-        const rate = overviewRes.settings?.exchangeRatePyg || 7500;
-        document.getElementById('header-rate-display').textContent = `${rate.toLocaleString('es-PY')} Gs.`;
+          document.getElementById('badge-games-count').textContent = s.totalGames || 0;
+          document.getElementById('badge-gc-count').textContent = s.totalGiftCards || 0;
 
-        // Update Dashboard KPIs with Real DB Calculations
-        const totalVolGs = (stats.totalVolumePyg || 0).toLocaleString('es-PY');
-        const totalVolUsd = (stats.totalVolumeUsd || 0).toFixed(2);
-        document.getElementById('kpi-total-volume-gs').textContent = `${totalVolGs} Gs.`;
-        document.getElementById('kpi-total-volume-usd').textContent = `$${totalVolUsd} USD en operaciones reales`;
+          if (s.pendingDepositsCount > 0) {
+            const b = document.getElementById('badge-pending-deposits');
+            b.textContent = s.pendingDepositsCount;
+            b.style.display = 'inline-block';
+          } else {
+            document.getElementById('badge-pending-deposits').style.display = 'none';
+          }
+        }
 
-        const commGs = (stats.totalCommissionsPyg || 0).toLocaleString('es-PY');
-        const commUsd = (stats.totalCommissionsUsd || 0).toFixed(2);
-        document.getElementById('kpi-commissions-gs').textContent = `${commGs} Gs.`;
-        document.getElementById('kpi-commissions-usd').textContent = `$${commUsd} USD comisiones ganadas`;
+        renderRecentTransactions(dataOverview.recentTransactions || []);
+        renderPendingDeposits(dataOverview.pendingDeposits || []);
 
-        const usersList = usersRes.users || [];
-        document.getElementById('kpi-users-count').textContent = usersList.length;
-        document.getElementById('kpi-users-sub').textContent = `${usersList.filter(u => u.role === 'seller').length} Vendedores • ${usersList.filter(u => u.role === 'client').length} Clientes`;
+        // 2. Games Catalog
+        loadGames();
 
-        const escrowGs = (stats.totalEscrowPyg || 0).toLocaleString('es-PY');
-        const escrowUsd = (stats.totalEscrowUsd || 0).toFixed(2);
-        document.getElementById('kpi-escrow-gs').textContent = `${escrowGs} Gs.`;
-        document.getElementById('kpi-escrow-usd').textContent = `$${escrowUsd} USD en Garantía Escrow`;
+        // 3. Gift Cards Catalog
+        loadGiftCards();
 
-        // Update Notification Badges
-        const pendingSubs = pendingSubsRes.subscriptions || [];
-        const pendingDeposits = overviewRes.pendingDeposits || [];
-        const pendingPayouts = overviewRes.pendingPayouts || [];
-        const productsList = productsRes.products || [];
+        // 4. Streaming Submissions & Groups
+        loadStreamingData();
 
-        document.getElementById('badge-pending-subs').textContent = pendingSubs.length;
-        document.getElementById('badge-products-count').textContent = productsList.length;
-        document.getElementById('badge-pending-finances').textContent = pendingDeposits.length + pendingPayouts.length;
-        document.getElementById('quick-badge-subs').textContent = pendingSubs.length;
-        document.getElementById('quick-badge-deposits').textContent = pendingDeposits.length;
+        // 5. Users List
+        loadUsers();
 
-        // Render Tables
-        renderDashboardRecentTxs(overviewRes.recentTransactions || overviewRes.pendingDeposits || []);
-        renderPendingSubsTable(pendingSubs, rate);
-        renderProductsTable(productsList, rate);
-        renderHeroBannersEditor(bannersRes.banners || []);
-        renderFinancesTables(pendingDeposits, pendingPayouts, rate);
-        renderUsersTable(usersList, rate);
-        populateSettingsForm(overviewRes.settings || {});
+        // 6. SMM Config
+        loadSmmConfig();
 
       } catch (err) {
-        console.error('Error loading admin data:', err);
+        console.error('Error fetching admin data:', err);
       }
     }
 
-    function renderDashboardRecentTxs(txs) {
-      const container = document.getElementById('dashboard-recent-txs-body');
-      if (!txs || txs.length === 0) {
-        container.innerHTML = `<tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 1.5rem;">No hay transacciones registradas en el historial.</td></tr>`;
+    // Render Recent Transactions
+    function renderRecentTransactions(list) {
+      const tbody = document.getElementById('table-recent-transactions');
+      if (!tbody) return;
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-tertiary);">No hay movimientos registrados.</td></tr>';
         return;
       }
-      container.innerHTML = txs.slice(0, 8).map(tx => `
+      tbody.innerHTML = list.map(tx => `
         <tr>
-          <td><strong style="color: #fff;">${tx.userName || 'Usuario'}</strong></td>
-          <td><span class="badge-status ${tx.type === 'deposit' ? 'pending' : 'approved'}">${tx.type}</span></td>
-          <td><strong style="color: var(--accent-emerald); font-family: var(--font-mono);">${(tx.localAmount || Math.round(tx.amountUsd * 7500)).toLocaleString('es-PY')} Gs.</strong></td>
-          <td>${tx.method === 'binance_usdt' ? 'Binance USDT' : (tx.method === 'sipap_paraguay' ? 'SIPAP Paraguay' : tx.method)}</td>
-          <td><span class="badge-status ${tx.status === 'approved' ? 'approved' : (tx.status === 'rejected' ? 'rejected' : 'pending')}">${tx.status}</span></td>
-          <td>${new Date(tx.createdAt).toLocaleDateString('es-PY')}</td>
+          <td><strong style="font-family: var(--font-mono); color: #fff;">${tx.id}</strong><div style="font-size: 0.72rem; color: var(--text-tertiary);">${new Date(tx.createdAt).toLocaleDateString()}</div></td>
+          <td><strong style="color: var(--accent-cyan);">${tx.userName || tx.userId}</strong></td>
+          <td><span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase;">${tx.type}</span></td>
+          <td style="font-family: var(--font-mono); font-weight: 700;">${(tx.localAmount || 0).toLocaleString('es-PY')} Gs.</td>
+          <td style="font-family: var(--font-mono); color: var(--accent-cyan);">$${(tx.amountUsd || 0).toFixed(2)}</td>
+          <td><span style="font-size: 0.76rem; color: var(--text-secondary);">${tx.method}</span></td>
+          <td><span class="btn-admin-action ${tx.status === 'approved' ? 'emerald' : 'amber'}" style="padding: 2px 8px; font-size: 0.7rem;">${tx.status}</span></td>
         </tr>
       `).join('');
     }
 
-    function renderPendingSubsTable(subs, rate) {
-      const container = document.getElementById('admin-pending-subs-table-body');
-      const counterBadge = document.getElementById('pending-subs-counter-badge');
-      if (counterBadge) counterBadge.textContent = `${subs.length} pendientes`;
-
-      if (!subs || subs.length === 0) {
-        container.innerHTML = `<tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay cuentas de vendedores pendientes por auditar. Todas están al día.</td></tr>`;
+    // Render Pending Deposits
+    function renderPendingDeposits(list) {
+      const tbody = document.getElementById('table-pending-deposits');
+      if (!tbody) return;
+      if (list.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">No hay recargas pendientes de aprobación.</td></tr>';
         return;
       }
-
-      container.innerHTML = subs.map(s => {
-        const priceGs = Math.round(s.pricePerSlotUsd * rate).toLocaleString('es-PY');
-        return `
-          <tr>
-            <td><strong style="color: #fff;">${s.sellerName}</strong></td>
-            <td>
-              <div><strong style="color: var(--accent-cyan);">${s.serviceName}</strong></div>
-              <small style="color: var(--text-tertiary);">${s.planName}</small>
-            </td>
-            <td><strong>${s.totalSlots}</strong> cupos</td>
-            <td><strong style="color: #fff; font-family: var(--font-mono);">${priceGs} Gs.</strong></td>
-            <td>
-              <div style="background: rgba(0,0,0,0.6); padding: 6px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent-cyan);">
-                ${s.credentialsDecrypted || 'Credenciales protegidas'}
-              </div>
-            </td>
-            <td>
-              <div style="display: flex; gap: 6px;">
-                <button class="btn-admin-pill emerald" onclick="approveSub('${s.id}')">Aprobar</button>
-                <button class="btn-admin-pill red" onclick="rejectSub('${s.id}')">Rechazar</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function renderProductsTable(products, rate) {
-      const container = document.getElementById('admin-products-table-body');
-      const countBadge = document.getElementById('inventory-count-badge');
-      if (countBadge) countBadge.textContent = `${products.length} productos`;
-
-      if (!products || products.length === 0) {
-        container.innerHTML = `<tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay productos en el catálogo.</td></tr>`;
-        return;
-      }
-
-      container.innerHTML = products.map(p => {
-        const priceGs = (p.pricePyg || Math.round(p.priceUsd * rate)).toLocaleString('es-PY');
-        return `
-          <tr>
-            <td>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="${p.coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=100&q=80'}" style="width: 36px; height: 36px; border-radius: 6px; object-fit: cover;">
-                <div>
-                  <strong style="color: #fff;">${p.title}</strong>
-                  <div><span style="font-size: 0.7rem; color: var(--accent-cyan); font-weight: 700;">${p.badge || 'OFICIAL'}</span></div>
-                </div>
-              </div>
-            </td>
-            <td>${p.category === 'gift_card' ? 'Gift Card' : 'Videojuego'}</td>
-            <td><span class="badge-status approved">${p.platform}</span></td>
-            <td><strong style="color: #fff; font-family: var(--font-mono);">${priceGs} Gs.</strong></td>
-            <td><strong style="color: ${p.stockCount > 0 ? 'var(--accent-emerald)' : 'var(--accent-red)'};">${p.stockCount} códigos</strong></td>
-            <td>
-              <button class="btn-admin-pill red" onclick="deleteProduct('${p.id}')">Eliminar</button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function renderHeroBannersEditor(banners) {
-      const container = document.getElementById('banners-editor-container');
-      if (!banners || banners.length === 0) return;
-
-      container.innerHTML = banners.slice(0, 4).map((b, idx) => `
-        <div style="background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-medium); border-radius: 12px; padding: 1.25rem; text-align: left;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <strong style="color: var(--accent-cyan); font-size: 0.88rem;">Slide #${idx + 1}</strong>
-            <span class="badge-status approved">${b.badge || 'DESTACADO'}</span>
-          </div>
-
-          <div style="margin-bottom: 8px;">
-            <label style="font-size: 0.72rem; color: var(--text-tertiary); display: block;">Título:</label>
-            <input type="text" class="form-input-styled banner-edit-title" value="${b.title || ''}" data-idx="${idx}" required>
-          </div>
-
-          <div style="margin-bottom: 8px;">
-            <label style="font-size: 0.72rem; color: var(--text-tertiary); display: block;">Subtítulo / Tagline:</label>
-            <input type="text" class="form-input-styled banner-edit-tagline" value="${b.tagline || ''}" data-idx="${idx}">
-          </div>
-
-          <div style="margin-bottom: 8px;">
-            <label style="font-size: 0.72rem; color: var(--text-tertiary); display: block;">URL Imagen Horizontal (1600x600):</label>
-            <input type="url" class="form-input-styled banner-edit-imgh" value="${b.imgHorizontal || ''}" data-idx="${idx}" required>
-          </div>
-
-          <div style="margin-bottom: 8px;">
-            <label style="font-size: 0.72rem; color: var(--text-tertiary); display: block;">URL Imagen Vertical (600x600):</label>
-            <input type="url" class="form-input-styled banner-edit-imgv" value="${b.imgVertical || ''}" data-idx="${idx}" required>
-          </div>
-
-          <div>
-            <label style="font-size: 0.72rem; color: var(--text-tertiary); display: block;">Enlace de Destino (CTA URL):</label>
-            <input type="text" class="form-input-styled banner-edit-cta-url" value="${b.ctaUrl || '#section-games'}" data-idx="${idx}">
-          </div>
-        </div>
+      tbody.innerHTML = list.map(tx => `
+        <tr>
+          <td><strong style="color: #ffffff;">${tx.userName || tx.userId}</strong></td>
+          <td><strong style="color: var(--accent-cyan);">${tx.method === 'sipap_paraguay' ? 'SIPAP (Bancos PY)' : 'Binance USDT'}</strong></td>
+          <td style="font-family: var(--font-mono); font-weight: 800;">${(tx.localAmount || 0).toLocaleString('es-PY')} Gs.</td>
+          <td style="font-family: var(--font-mono); color: var(--accent-cyan);">$${(tx.amountUsd || 0).toFixed(2)}</td>
+          <td><span style="font-family: var(--font-mono); font-size: 0.74rem;">${tx.reference || 'N/A'}</span></td>
+          <td>
+            <div style="display: flex; gap: 6px;">
+              <button class="btn-admin-action emerald" onclick="approveDeposit('${tx.id}')">Aprobar</button>
+              <button class="btn-admin-action red" onclick="rejectDeposit('${tx.id}')">Rechazar</button>
+            </div>
+          </td>
+        </tr>
       `).join('');
     }
 
-    function renderFinancesTables(deposits, payouts, rate) {
-      const depBody = document.getElementById('admin-pending-deposits-body');
-      const payBody = document.getElementById('admin-pending-payouts-body');
-      const finCount = document.getElementById('finances-pending-count');
-      if (finCount) finCount.textContent = `${deposits.length} pendientes`;
-
-      if (!deposits || deposits.length === 0) {
-        depBody.innerHTML = `<tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay comprobantes de recarga pendientes de auditar.</td></tr>`;
-      } else {
-        depBody.innerHTML = deposits.map(d => `
-          <tr>
-            <td><strong style="color: #fff;">${d.userName}</strong></td>
-            <td><strong style="color: var(--accent-emerald); font-family: var(--font-mono);">${(d.localAmount || 0).toLocaleString('es-PY')} Gs.</strong> <small style="color: var(--text-tertiary);">($${d.amountUsd} USD)</small></td>
-            <td><span class="badge-status approved">${d.method === 'binance_usdt' ? 'Binance USDT' : 'SIPAP'}</span></td>
-            <td>
-              <div><strong>${d.reference || 'N/A'}</strong></div>
-              ${d.receiptData ? `<button class="btn-admin-pill cyan" style="margin-top: 4px; padding: 3px 8px; font-size: 0.72rem;" onclick="viewReceipt('${d.receiptData}')">Ver Comprobante</button>` : ''}
-            </td>
-            <td>${new Date(d.createdAt).toLocaleDateString('es-PY')}</td>
-            <td>
-              <div style="display: flex; gap: 6px;">
-                <button class="btn-admin-pill emerald" onclick="approveDeposit('${d.id}')">Acreditar Saldo</button>
-                <button class="btn-admin-pill red" onclick="rejectDeposit('${d.id}')">Rechazar</button>
-              </div>
-            </td>
-          </tr>
-        `).join('');
-      }
-
-      if (!payouts || payouts.length === 0) {
-        payBody.innerHTML = `<tr><td colspan="5" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay solicitudes de retiro pendientes de transferir.</td></tr>`;
-      } else {
-        payBody.innerHTML = payouts.map(p => `
-          <tr>
-            <td><strong style="color: #fff;">${p.sellerName}</strong></td>
-            <td><strong style="color: var(--accent-emerald); font-family: var(--font-mono);">${Math.round(p.amountUsd * rate).toLocaleString('es-PY')} Gs.</strong></td>
-            <td>${p.method}</td>
-            <td><pre style="font-size: 0.72rem; color: var(--text-secondary); margin: 0;">${JSON.stringify(p.accountDetails, null, 2)}</pre></td>
-            <td>
-              <button class="btn-admin-pill emerald" onclick="approvePayout('${p.id}')">Marcar Transferido</button>
-            </td>
-          </tr>
-        `).join('');
-      }
-    }
-
-    function renderUsersTable(users, rate) {
-      const container = document.getElementById('admin-users-table-body');
-      if (!users || users.length === 0) {
-        container.innerHTML = `<tr><td colspan="7" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No se encontraron usuarios en la base de datos.</td></tr>`;
-        return;
-      }
-
-      container.innerHTML = users.map(u => {
-        const balGs = (u.balancePyg || Math.round((u.balanceUsd || 0) * rate)).toLocaleString('es-PY');
-        const roleBadgeColor = u.role === 'admin' ? 'amber' : (u.role === 'seller' ? 'emerald' : 'cyan');
-        return `
-          <tr>
-            <td>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <strong style="color: #fff;">${u.name}</strong>
-              </div>
-            </td>
-            <td>${u.email}</td>
-            <td><span class="badge-status ${roleBadgeColor}">${u.role.toUpperCase()}</span></td>
-            <td><strong style="color: #34d399; font-family: var(--font-mono); font-size: 0.92rem;">${balGs} Gs.</strong></td>
-            <td><span style="font-family: var(--font-mono);">$${(u.balanceUsd || 0).toFixed(2)} USD</span></td>
-            <td>${u.ordersCount || 0} compras</td>
-            <td>
-              <button class="btn-admin-pill amber" onclick="openAdjustModal('${u.id}', '${u.name}', '${balGs}')">
-                Ajustar Saldo
-              </button>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function populateSettingsForm(s) {
-      if (!s) return;
-      if (document.getElementById('setting-exchange-rate-pyg')) document.getElementById('setting-exchange-rate-pyg').value = s.exchangeRatePyg || 7500;
-      if (document.getElementById('setting-commission-percent')) document.getElementById('setting-commission-percent').value = s.commissionPercent || 15;
-
-      const p = s.paraguayBankDetails;
-      if (p) {
-        if (document.getElementById('setting-bank-name')) document.getElementById('setting-bank-name').value = p.bank || '';
-        if (document.getElementById('setting-bank-holder')) document.getElementById('setting-bank-holder').value = p.accountHolder || '';
-        if (document.getElementById('setting-bank-ruc')) document.getElementById('setting-bank-ruc').value = p.rucOrCi || '';
-        if (document.getElementById('setting-bank-account')) document.getElementById('setting-bank-account').value = p.accountNumber || '';
-        if (document.getElementById('setting-bank-alias')) document.getElementById('setting-bank-alias').value = p.aliasSipap || '';
-      }
-
-      const b = s.binanceDetails;
-      if (b) {
-        if (document.getElementById('setting-binance-id')) document.getElementById('setting-binance-id').value = b.payId || '';
-        if (document.getElementById('setting-binance-network')) document.getElementById('setting-binance-network').value = b.network || '';
-        if (document.getElementById('setting-binance-wallet')) document.getElementById('setting-binance-wallet').value = b.walletAddress || '';
-        if (document.getElementById('setting-binance-qr')) document.getElementById('setting-binance-qr').value = b.qrUrl || '';
-      }
-    }
-
-    // Modal Operations
-    function openAdjustModal(userId, name, balGs) {
-      document.getElementById('adjust-user-id').value = userId;
-      document.getElementById('adjust-user-name').textContent = name;
-      document.getElementById('adjust-user-current-bal').textContent = `${balGs} Gs.`;
-      document.getElementById('modal-adjust-balance').style.display = 'flex';
-    }
-
-    function closeAdjustModal() {
-      document.getElementById('modal-adjust-balance').style.display = 'none';
-    }
-
-    function viewReceipt(data) {
-      const modal = document.getElementById('modal-receipt-view');
-      const container = document.getElementById('receipt-modal-content');
-      if (data.startsWith('data:image')) {
-        container.innerHTML = `<img src="${data}" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.8);">`;
-      } else {
-        container.innerHTML = `<p style="font-size: 0.9rem; color: #fff; word-break: break-all;">Referencia: <strong>${data}</strong></p>`;
-      }
-      modal.style.display = 'flex';
-    }
-
-    // Form Handlers
-    document.getElementById('form-adjust-user-balance').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const userId = document.getElementById('adjust-user-id').value;
-      const action = document.getElementById('adjust-action-type').value;
-      const amountPyg = parseFloat(document.getElementById('adjust-amount-pyg').value);
-      const reason = document.getElementById('adjust-reason-note').value.trim();
-
-      try {
-        const res = await fetch(`/api/admin/users/${userId}/adjust-balance`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ amountPyg, action, reason })
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert(data.message);
-          closeAdjustModal();
-          loadAdminData();
-        } else {
-          alert(`Aviso: ${data.error || 'No se pudo realizar el ajuste.'}`);
-        }
-      } catch (err) {
-        alert('Error al ajustar saldo.');
-      }
-    });
-
-    document.getElementById('form-admin-add-product').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const title = document.getElementById('prod-title').value.trim();
-      const category = document.getElementById('prod-category').value;
-      const platform = document.getElementById('prod-platform').value;
-      const pricePyg = parseFloat(document.getElementById('prod-price-pyg').value);
-      const badge = document.getElementById('prod-badge').value.trim();
-      const coverUrl = document.getElementById('prod-cover-url').value.trim();
-      const codes = document.getElementById('prod-codes').value.split('\n').map(c => c.trim()).filter(Boolean);
-
-      try {
-        const res = await fetch('/api/admin/products', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title, category, platform, pricePyg, badge, coverUrl, codes })
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert(data.message);
-          document.getElementById('form-admin-add-product').reset();
-          loadAdminData();
-        } else {
-          alert(`Aviso: ${data.error || 'Error al agregar producto.'}`);
-        }
-      } catch (err) {
-        alert('Error de conexión al agregar producto.');
-      }
-    });
-
-    document.getElementById('form-admin-hero-banners').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const titles = document.querySelectorAll('.banner-edit-title');
-      const taglines = document.querySelectorAll('.banner-edit-tagline');
-      const imghs = document.querySelectorAll('.banner-edit-imgh');
-      const imgvs = document.querySelectorAll('.banner-edit-imgv');
-      const ctaUrls = document.querySelectorAll('.banner-edit-cta-url');
-
-      const bannersPayload = [];
-      titles.forEach((t, i) => {
-        bannersPayload.push({
-          id: `banner_hero_${i + 1}`,
-          title: t.value.trim(),
-          tagline: taglines[i]?.value.trim() || '',
-          badge: i === 0 ? 'PS5 • XBOX • PC' : (i === 1 ? 'PS5 EXCLUSIVE' : 'DESTACADO'),
-          imgHorizontal: imghs[i]?.value.trim() || '',
-          imgVertical: imgvs[i]?.value.trim() || '',
-          ctaText: 'Comprar ahora',
-          ctaUrl: ctaUrls[i]?.value.trim() || '#section-games',
-          sortOrder: i,
-          isActive: true
-        });
-      });
-
-      try {
-        const res = await fetch('/api/banners/sync', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ banners: bannersPayload })
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert('Portadas Hero actualizadas y sincronizadas en la tienda.');
-          loadAdminData();
-        } else {
-          alert('Error al guardar banners.');
-        }
-      } catch (err) {
-        alert('Error de conexión al guardar banners.');
-      }
-    });
-
-    document.getElementById('form-admin-payment-settings').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const payload = {
-        exchangeRatePyg: parseFloat(document.getElementById('setting-exchange-rate-pyg').value) || 7500,
-        commissionPercent: parseFloat(document.getElementById('setting-commission-percent').value) || 15,
-        paraguayBankDetails: {
-          bank: document.getElementById('setting-bank-name').value,
-          accountHolder: document.getElementById('setting-bank-holder').value,
-          rucOrCi: document.getElementById('setting-bank-ruc').value,
-          accountNumber: document.getElementById('setting-bank-account').value,
-          aliasSipap: document.getElementById('setting-bank-alias').value
-        },
-        binanceDetails: {
-          payId: document.getElementById('setting-binance-id').value,
-          network: document.getElementById('setting-binance-network').value,
-          walletAddress: document.getElementById('setting-binance-wallet').value,
-          qrUrl: document.getElementById('setting-binance-qr').value
-        }
-      };
-
-      try {
-        const res = await fetch('/api/admin/settings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert('Configuración financiera y de cobros guardada con éxito.');
-          loadAdminData();
-        } else {
-          alert('Error al guardar configuración.');
-        }
-      } catch (err) {
-        alert('Error de conexión al guardar configuración.');
-      }
-    });
-
-    // Actions
     async function approveDeposit(id) {
-      if (!confirm('¿Confirmas que has verificado el ingreso de dinero en tu cuenta bancaria / Binance?')) return;
+      if (!confirm('¿Deseas aprobar esta recarga y acreditar los fondos al usuario?')) return;
       try {
-        const res = await fetch('/api/admin/approve-deposit/' + id, { method: 'POST' });
+        const res = await fetch(`/api/admin/approve-deposit/${id}`, { method: 'POST' });
         const data = await res.json();
-        if (data.success) { alert(data.message); loadAdminData(); }
+        alert(data.message || 'Recarga aprobada');
+        loadAdminData();
       } catch (e) { alert('Error al aprobar.'); }
     }
 
     async function rejectDeposit(id) {
-      const reason = prompt('Motivo del rechazo del comprobante:', 'Comprobante no válido o pago no recibido');
+      const reason = prompt('Motivo del rechazo:', 'Comprobante no válido o pago no recibido');
       if (!reason) return;
       try {
-        const res = await fetch('/api/admin/reject-deposit/' + id, {
+        const res = await fetch(`/api/admin/reject-deposit/${id}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ reason })
         });
         const data = await res.json();
-        if (data.success) { alert('Recarga rechazada.'); loadAdminData(); }
-      } catch (e) { alert('Error al rechazar.'); }
-    }
-
-    async function approvePayout(id) {
-      if (!confirm('¿Confirmas que ya has realizado la transferencia del dinero al vendedor?')) return;
-      try {
-        const res = await fetch('/api/admin/approve-payout/' + id, { method: 'POST' });
-        const data = await res.json();
-        if (data.success) { alert(data.message); loadAdminData(); }
-      } catch (e) { alert('Error al aprobar retiro.'); }
-    }
-
-    async function approveSub(id) {
-      if (!confirm('¿Has probado las credenciales y confirmas que la cuenta funciona al 100% para publicarla en la tienda?')) return;
-      try {
-        const res = await fetch('/api/admin/approve-subscription/' + id, { method: 'POST' });
-        const data = await res.json();
-        alert(data.message || 'Cuenta aprobada');
-        loadAdminData();
-      } catch (e) { alert('Error al aprobar.'); }
-    }
-
-    async function rejectSub(id) {
-      if (!confirm('¿Deseas rechazar y descartar esta publicación?')) return;
-      try {
-        const res = await fetch('/api/admin/reject-subscription/' + id, { method: 'POST' });
-        const data = await res.json();
-        alert(data.message || 'Cuenta rechazada');
+        alert(data.message || 'Recarga rechazada');
         loadAdminData();
       } catch (e) { alert('Error al rechazar.'); }
     }
 
-    async function deleteProduct(id) {
-      if (!confirm('¿Estás seguro de eliminar este producto del catálogo?')) return;
+    // Load Games
+    async function loadGames() {
       try {
-        const res = await fetch('/api/admin/products/' + id, { method: 'DELETE' });
+        const res = await fetch('/api/admin/games');
         const data = await res.json();
-        if (data.success) { alert('Producto eliminado.'); loadAdminData(); }
-      } catch (e) { alert('Error al eliminar.'); }
+        const tbody = document.getElementById('table-games-list');
+        if (!tbody) return;
+        if (!data.games || data.games.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-tertiary);">No hay videojuegos cargados en el catálogo.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = data.games.map(g => `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="${g.coverUrl}" style="width: 38px; height: 50px; object-fit: cover; border-radius: 6px;">
+                <div>
+                  <strong style="color: #ffffff; display: block;">${g.title}</strong>
+                  <span style="font-size: 0.72rem; color: var(--text-tertiary);">${g.genre || 'Acción'}</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.72rem;">${g.platform}</span></td>
+            <td style="font-family: var(--font-mono); font-weight: 700;">$${(g.primaryPriceUsd || 0).toFixed(2)}<div style="font-size: 0.7rem; color: var(--text-tertiary);">${(g.primaryPricePyg || 0).toLocaleString('es-PY')} Gs.</div></td>
+            <td style="font-family: var(--font-mono); font-weight: 700;">$${(g.secondaryPriceUsd || 0).toFixed(2)}<div style="font-size: 0.7rem; color: var(--text-tertiary);">${(g.secondaryPricePyg || 0).toLocaleString('es-PY')} Gs.</div></td>
+            <td style="font-family: var(--font-mono); font-weight: 700;">$${(g.digitalKeyPriceUsd || 0).toFixed(2)}</td>
+            <td>
+              <span class="btn-admin-action ${g.isAvailable ? 'emerald' : 'red'}" style="padding: 2px 8px; font-size: 0.7rem;">
+                ${g.isAvailable ? 'Disponible' : 'Agotado'}
+              </span>
+            </td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-admin-action cyan" onclick="editGame('${g.id}')">Editar</button>
+                <button class="btn-admin-action red" onclick="deleteGame('${g.id}')">✕</button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) { console.error('Error loading games:', e); }
     }
+
+    // Load Gift Cards
+    async function loadGiftCards() {
+      try {
+        const res = await fetch('/api/admin/giftcards');
+        const data = await res.json();
+        const tbody = document.getElementById('table-giftcards-list');
+        if (!tbody) return;
+        if (!data.giftCards || data.giftCards.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">No hay gift cards cargadas.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = data.giftCards.map(gc => `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="${gc.coverUrl}" style="width: 44px; height: 32px; object-fit: cover; border-radius: 6px;">
+                <div>
+                  <strong style="color: #ffffff; display: block;">${gc.title}</strong>
+                  <span style="font-size: 0.72rem; color: var(--text-tertiary);">${gc.brand}</span>
+                </div>
+              </div>
+            </td>
+            <td><strong style="color: var(--accent-cyan);">${gc.brand}</strong></td>
+            <td style="font-family: var(--font-mono); font-weight: 700;">${(gc.pricePyg || 0).toLocaleString('es-PY')} Gs.</td>
+            <td style="font-family: var(--font-mono); color: var(--accent-cyan);">$${(gc.priceUsd || 0).toFixed(2)}</td>
+            <td>
+              <span class="btn-admin-action ${gc.codesCount > 0 ? 'emerald' : 'red'}" style="padding: 2px 8px; font-size: 0.72rem;">
+                ${gc.codesCount} códigos disponibles
+              </span>
+            </td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-admin-action cyan" onclick="addCodesToGc('${gc.id}')">+ Códigos</button>
+                <button class="btn-admin-action red" onclick="deleteGiftCard('${gc.id}')">✕</button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) { console.error('Error loading gift cards:', e); }
+    }
+
+    // Load Streaming Data
+    async function loadStreamingData() {
+      try {
+        const resPending = await fetch('/api/admin/streaming/pending');
+        const dataPending = await resPending.json();
+        const tbodyPending = document.getElementById('table-streaming-pending');
+        if (tbodyPending) {
+          if (!dataPending.submissions || dataPending.submissions.length === 0) {
+            tbodyPending.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">No hay solicitudes pendientes de moderación.</td></tr>';
+          } else {
+            tbodyPending.innerHTML = dataPending.submissions.map(s => `
+              <tr>
+                <td><strong style="color: #ffffff;">${s.sellerName || s.sellerId}</strong></td>
+                <td><strong style="color: var(--accent-cyan);">${s.serviceName}</strong><div style="font-size: 0.72rem; color: var(--text-tertiary);">${s.planName}</div></td>
+                <td>${s.totalSlots} perfiles</td>
+                <td style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald);">$${s.pricePerSlotUsd}/mes</td>
+                <td><code style="background: rgba(0,0,0,0.4); padding: 4px 6px; border-radius: 4px; font-size: 0.74rem;">${s.credentialsDecrypted || 'Oculto'}</code></td>
+                <td>
+                  <div style="display: flex; gap: 6px;">
+                    <button class="btn-admin-action emerald" onclick="approveStreaming('${s.id}')">Aprobar</button>
+                    <button class="btn-admin-action red" onclick="rejectStreaming('${s.id}')">Rechazar</button>
+                  </div>
+                </td>
+              </tr>
+            `).join('');
+          }
+        }
+
+        const resActive = await fetch('/api/admin/streaming/active-groups');
+        const dataActive = await resActive.json();
+        const tbodyActive = document.getElementById('table-streaming-active');
+        if (tbodyActive) {
+          if (!dataActive.groups || dataActive.groups.length === 0) {
+            tbodyActive.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">No hay grupos de streaming activos.</td></tr>';
+          } else {
+            tbodyActive.innerHTML = dataActive.groups.map(g => `
+              <tr>
+                <td><strong style="color: #ffffff;">${g.serviceName}</strong><div style="font-size: 0.72rem; color: var(--text-tertiary);">${g.planName}</div></td>
+                <td><strong style="color: var(--accent-cyan);">${g.sellerName || 'Oficial'}</strong></td>
+                <td><span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.72rem;">${g.slotsSold || 0} de ${g.totalSlots} cupos</span></td>
+                <td style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald);">$${g.pricePerSlotUsd} / ${(g.pricePyg || 0).toLocaleString('es-PY')} Gs.</td>
+                <td><span class="btn-admin-action emerald" style="padding: 2px 8px; font-size: 0.7rem;">Activo</span></td>
+                <td>
+                  <button class="btn-admin-action red" onclick="rejectStreaming('${g.id}')">Desactivar</button>
+                </td>
+              </tr>
+            `).join('');
+          }
+        }
+      } catch (e) { console.error('Error loading streaming data:', e); }
+    }
+
+    async function approveStreaming(id) {
+      if (!confirm('¿Deseas aprobar esta cuenta y publicarla en la tienda oficial?')) return;
+      try {
+        const res = await fetch(`/api/admin/streaming/approve/${id}`, { method: 'POST' });
+        const data = await res.json();
+        alert(data.message || 'Aprobada');
+        loadStreamingData();
+      } catch (e) { alert('Error al aprobar'); }
+    }
+
+    async function rejectStreaming(id) {
+      if (!confirm('¿Deseas rechazar o desactivar este grupo de streaming?')) return;
+      try {
+        const res = await fetch(`/api/admin/streaming/reject/${id}`, { method: 'POST' });
+        const data = await res.json();
+        alert(data.message || 'Rechazada');
+        loadStreamingData();
+      } catch (e) { alert('Error al procesar'); }
+    }
+
+    // Load Users
+    async function loadUsers() {
+      try {
+        const res = await fetch('/api/admin/users');
+        const data = await res.json();
+        const tbody = document.getElementById('table-users-list');
+        if (!tbody) return;
+        tbody.innerHTML = (data.users || []).map(u => `
+          <tr>
+            <td>
+              <strong style="color: #ffffff; display: block;">${u.name}</strong>
+              <span style="font-size: 0.74rem; color: var(--text-tertiary);">${u.email}</span>
+            </td>
+            <td><span class="btn-admin-action ${u.role === 'admin' ? 'amber' : (u.role === 'seller' ? 'emerald' : 'cyan')}" style="padding: 2px 8px; font-size: 0.72rem;">${u.role}</span></td>
+            <td style="font-family: var(--font-mono); font-weight: 700;">${(u.balancePyg || 0).toLocaleString('es-PY')} Gs.</td>
+            <td style="font-family: var(--font-mono); color: var(--accent-cyan);">$${(u.balanceUsd || 0).toFixed(2)}</td>
+            <td>${u.ordersCount || 0} pedidos</td>
+            <td>
+              <button class="btn-admin-action cyan" onclick="openAdjustUserBalance('${u.id}', '${u.name}', ${u.balanceUsd || 0})">Ajustar Saldo</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) { console.error('Error loading users:', e); }
+    }
+
+    function openAdjustUserBalance(id, name, balance) {
+      document.getElementById('adjust-user-id').value = id;
+      document.getElementById('adjust-user-name').value = `${name} (Saldo actual: $${balance.toFixed(2)})`;
+      document.getElementById('modal-user-adjust').style.display = 'grid';
+    }
+
+    document.getElementById('form-user-adjust').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const userId = document.getElementById('adjust-user-id').value;
+      const type = document.getElementById('adjust-action-type').value;
+      const amountUsd = document.getElementById('adjust-amount-usd').value;
+      const notes = document.getElementById('adjust-notes').value;
+
+      try {
+        const res = await fetch(`/api/admin/users/${userId}/adjust-balance`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type, amountUsd, notes })
+        });
+        const data = await res.json();
+        alert(data.message || 'Saldo actualizado');
+        document.getElementById('modal-user-adjust').style.display = 'none';
+        loadUsers();
+      } catch (e) { alert('Error al actualizar saldo'); }
+    });
+
+    // Load SMM Config
+    async function loadSmmConfig() {
+      try {
+        const res = await fetch('/api/admin/smm/config');
+        const data = await res.json();
+        if (data.config) {
+          const c = data.config;
+          document.getElementById('smm-provider-url').value = c.providerUrl || '';
+          document.getElementById('smm-markup-percent').value = c.markupPercent || 30;
+          document.getElementById('smm-provider-balance').value = `$${(c.lastBalanceUsd || 184.20).toFixed(2)} USDT`;
+        }
+      } catch (e) { console.error('Error loading SMM config:', e); }
+    }
+
+    document.getElementById('btn-smm-test-ping').addEventListener('click', async () => {
+      try {
+        const res = await fetch('/api/admin/smm/test-connection', { method: 'POST' });
+        const data = await res.json();
+        alert(data.message);
+        if (data.providerBalanceUsd) {
+          document.getElementById('smm-provider-balance').value = `$${data.providerBalanceUsd.toFixed(2)} USDT`;
+        }
+      } catch (e) { alert('Error al verificar conexión con el proveedor.'); }
+    });
+
+    document.getElementById('form-smm-config').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const providerUrl = document.getElementById('smm-provider-url').value;
+      const apiKey = document.getElementById('smm-api-key').value;
+      const markupPercent = document.getElementById('smm-markup-percent').value;
+
+      try {
+        const res = await fetch('/api/admin/smm/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ providerUrl, apiKey, markupPercent })
+        });
+        const data = await res.json();
+        alert(data.message || 'Configuración guardada');
+      } catch (e) { alert('Error al guardar configuración SMM.'); }
+    });
+
+    // Platform Financial Settings Submit
+    document.getElementById('form-platform-settings').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const exchangeRatePyg = document.getElementById('settings-rate-pyg').value;
+      const commissionPercent = document.getElementById('settings-commission').value;
+      const bankName = document.getElementById('settings-bank-name').value;
+      const bankHolder = document.getElementById('settings-bank-holder').value;
+      const bankAccount = document.getElementById('settings-bank-acc').value;
+      const binanceId = document.getElementById('settings-binance-id').value;
+      const binanceWallet = document.getElementById('settings-binance-wallet').value;
+
+      try {
+        const res = await fetch('/api/admin/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            exchangeRatePyg,
+            commissionPercent,
+            paraguayBankDetails: { bankName, holderName: bankHolder, accountNumber: bankAccount },
+            binanceDetails: { binancePayId: binanceId, walletAddress: binanceWallet }
+          })
+        });
+        const data = await res.json();
+        alert(data.message || 'Configuración guardada');
+        document.getElementById('header-rate-display').textContent = `1 USDT = ${parseInt(exchangeRatePyg).toLocaleString('es-PY')} Gs.`;
+      } catch (e) { alert('Error al guardar configuración.'); }
+    });
+
+    // Game Editor Modals
+    document.getElementById('btn-open-modal-add-game').addEventListener('click', () => {
+      document.getElementById('modal-game-editor-title').textContent = 'Nuevo Videojuego Digital';
+      document.getElementById('game-edit-id').value = '';
+      document.getElementById('form-game-editor').reset();
+      document.getElementById('modal-game-editor').style.display = 'grid';
+    });
+
+    document.getElementById('form-game-editor').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('game-edit-id').value;
+      const title = document.getElementById('game-edit-title').value;
+      const platform = document.getElementById('game-edit-platform').value;
+      const genre = document.getElementById('game-edit-genre').value;
+      const primaryPriceUsd = document.getElementById('game-edit-price-primary').value;
+      const secondaryPriceUsd = document.getElementById('game-edit-price-secondary').value;
+      const digitalKeyPriceUsd = document.getElementById('game-edit-price-key').value;
+      const coverUrl = document.getElementById('game-edit-cover').value;
+      const screenshots = document.getElementById('game-edit-screenshots').value;
+      const description = document.getElementById('game-edit-desc').value;
+      const isAvailable = document.getElementById('game-edit-available').checked;
+
+      const endpoint = id ? `/api/admin/games/${id}` : '/api/admin/games';
+      const method = id ? 'PUT' : 'POST';
+
+      try {
+        const res = await fetch(endpoint, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            title, platform, genre, primaryPriceUsd, secondaryPriceUsd, digitalKeyPriceUsd,
+            coverUrl, screenshots, description, isAvailable
+          })
+        });
+        const data = await res.json();
+        alert(data.message || 'Guardado con éxito');
+        document.getElementById('modal-game-editor').style.display = 'none';
+        loadGames();
+      } catch (e) { alert('Error al guardar juego'); }
+    });
+
+    async function deleteGame(id) {
+      if (!confirm('¿Eliminar este videojuego del catálogo?')) return;
+      try {
+        const res = await fetch(`/api/admin/games/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        alert(data.message || 'Eliminado');
+        loadGames();
+      } catch (e) { alert('Error al eliminar'); }
+    }
+
+    // Gift Cards Editor
+    document.getElementById('btn-open-modal-add-gc').addEventListener('click', () => {
+      document.getElementById('form-gc-editor').reset();
+      document.getElementById('modal-gc-editor').style.display = 'grid';
+    });
+
+    document.getElementById('form-gc-editor').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('gc-edit-title').value;
+      const brand = document.getElementById('gc-edit-brand').value;
+      const priceUsd = document.getElementById('gc-edit-price').value;
+      const codes = document.getElementById('gc-edit-codes').value;
+
+      try {
+        const res = await fetch('/api/admin/giftcards', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, brand, priceUsd, codes })
+        });
+        const data = await res.json();
+        alert(data.message || 'Gift card creada');
+        document.getElementById('modal-gc-editor').style.display = 'none';
+        loadGiftCards();
+      } catch (e) { alert('Error al crear gift card'); }
+    });
+
+    async function addCodesToGc(id) {
+      const inputCodes = prompt('Ingresa los nuevos códigos de activación (separados por coma o renglón):');
+      if (!inputCodes) return;
+      try {
+        const res = await fetch(`/api/admin/giftcards/${id}/add-codes`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ codes: inputCodes })
+        });
+        const data = await res.json();
+        alert(data.message || 'Códigos agregados');
+        loadGiftCards();
+      } catch (e) { alert('Error al agregar códigos'); }
+    }
+
+    async function deleteGiftCard(id) {
+      if (!confirm('¿Eliminar esta tarjeta de regalo?')) return;
+      try {
+        const res = await fetch(`/api/admin/giftcards/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        alert(data.message || 'Eliminada');
+        loadGiftCards();
+      } catch (e) { alert('Error al eliminar'); }
+    }
+
+    // Refresh & Logout
+    document.getElementById('btn-refresh-admin').addEventListener('click', () => {
+      loadAdminData();
+    });
 
     document.getElementById('btn-admin-logout').addEventListener('click', () => {
       localStorage.removeItem('gb_admin_session');
@@ -1555,7 +1444,13 @@
       window.location.href = '/admin/login';
     });
 
+    // Guard on Page Load
     document.addEventListener('DOMContentLoaded', () => {
+      const adminSession = localStorage.getItem('gb_admin_session');
+      if (!adminSession) {
+        window.location.href = '/admin/login';
+        return;
+      }
       loadAdminData();
     });
   </script>

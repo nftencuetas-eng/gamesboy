@@ -362,7 +362,7 @@
       const name = document.getElementById('auth-input-name').value.trim();
 
       const endpoint = isRegisterMode ? '/api/auth/register' : '/api/auth/login';
-      const bodyPayload = isRegisterMode ? { name, email, password } : { email, password };
+      const bodyPayload = isRegisterMode ? { name, email, password } : { email, password, portalType: 'client' };
 
       try {
         const res = await fetch(endpoint, {
@@ -374,13 +374,7 @@
         if (data.success && data.user) {
           localStorage.setItem('gb_user', JSON.stringify(data.user));
           if (data.token) localStorage.setItem('gb_token', data.token);
-
-          if (data.user.role === 'admin' || data.user.email === 'admin@gamesboy.net') {
-            localStorage.setItem('gb_admin_session', JSON.stringify(data.user));
-            window.location.href = '/admin';
-          } else {
-            window.location.href = '/';
-          }
+          window.location.href = '/';
         } else {
           alert(data.error || 'No se pudo completar la autenticación.');
         }

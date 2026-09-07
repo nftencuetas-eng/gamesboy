@@ -172,37 +172,19 @@
         const res = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
+          body: JSON.stringify({ email, password, portalType: 'admin' })
         });
         const data = await res.json();
-        if (data.success && data.user) {
-          if (data.user.role === 'admin' || data.user.email === 'admin@gamesboy.net') {
-            localStorage.setItem('gb_admin_session', JSON.stringify(data.user));
-            localStorage.setItem('gb_user', JSON.stringify(data.user));
-            window.location.href = '/admin';
-          } else {
-            alert('Aviso: Esta cuenta no cuenta con permisos administrativos.');
-          }
+        if (res.ok && data.success && data.user && (data.user.role === 'admin' || data.user.email === 'admin@gamesboy.net')) {
+          localStorage.setItem('gb_admin_session', JSON.stringify(data.user));
+          localStorage.setItem('gb_user', JSON.stringify(data.user));
+          if (data.token) localStorage.setItem('gb_token', data.token);
+          window.location.href = '/admin';
         } else {
-          // Check master password
-          if (password === 'GamesBoy2026Master!' || password === 'admin123') {
-            const adminSession = {
-              id: 'usr_admin',
-              name: 'Admin GamesBoy',
-              email: email,
-              role: 'admin',
-              avatar: '/assets/branding/icon.png',
-              balanceUsd: 1250.00
-            };
-            localStorage.setItem('gb_admin_session', JSON.stringify(adminSession));
-            localStorage.setItem('gb_user', JSON.stringify(adminSession));
-            window.location.href = '/admin';
-          } else {
-            alert(data.error || 'Credenciales administrativas incorrectas.');
-          }
+          alert(data.error || 'Credenciales administrativas incorrectas.');
         }
       } catch (err) {
-        alert('Error al conectar con el servidor.');
+        alert('Error al conectar con el servidor de autenticación.');
       }
     });
   </script>

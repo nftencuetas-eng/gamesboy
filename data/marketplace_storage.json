@@ -36,11 +36,45 @@
       "pendingEscrowUsd": 22
     },
     "usr_client1": {
-      "balanceUsd": 148.32,
+      "balanceUsd": 171.65,
       "pendingEscrowUsd": 0
     }
   },
   "wallet_transactions": [
+    {
+      "id": "tx_1788803337451_57s8",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "deposit",
+      "amountUsd": 13.33,
+      "currency": "PYG",
+      "localAmount": 100000,
+      "method": "sipap_paraguay",
+      "status": "approved",
+      "reference": "SIPAP-TRANSF-992184",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T17:48:57.451Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T17:48:57.484Z"
+    },
+    {
+      "id": "tx_1788803337409_6v6l",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "deposit",
+      "amountUsd": 10,
+      "currency": "USDT",
+      "localAmount": 75000,
+      "method": "binance_usdt",
+      "status": "approved",
+      "reference": "BINANCE-ORDER-8891024",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T17:48:57.409Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T17:48:57.472Z"
+    },
     {
       "id": "tx_1788801996378_dgol",
       "userId": "usr_client1",
@@ -841,5 +875,93 @@
         "timestamp": "2026-09-07T09:53:23.496Z"
       }
     ]
-  }
+  },
+  "smm_config": {
+    "lastBalanceUsd": 245.8,
+    "status": "connected",
+    "lastSyncAt": "2026-09-07T17:50:22.938Z"
+  },
+  "official_streaming_services": [
+    {
+      "id": "netflix",
+      "name": "Netflix Premium 4K",
+      "category": "streaming",
+      "maxSlots": 4,
+      "suggestedPriceUsd": 4.99,
+      "icon": "netflix",
+      "badge": "Ultra HD"
+    },
+    {
+      "id": "spotify",
+      "name": "Spotify Premium Familiar",
+      "category": "music",
+      "maxSlots": 5,
+      "suggestedPriceUsd": 3.99,
+      "icon": "spotify",
+      "badge": "Familiar"
+    },
+    {
+      "id": "disney",
+      "name": "Disney+ Premium & Star+",
+      "category": "streaming",
+      "maxSlots": 4,
+      "suggestedPriceUsd": 4.99,
+      "icon": "disney",
+      "badge": "4K HDR"
+    },
+    {
+      "id": "max",
+      "name": "Max (HBO Max) Platino 4K",
+      "category": "streaming",
+      "maxSlots": 3,
+      "suggestedPriceUsd": 4.99,
+      "icon": "max",
+      "badge": "4K Atmos"
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube Premium & Music",
+      "category": "streaming",
+      "maxSlots": 5,
+      "suggestedPriceUsd": 3.49,
+      "icon": "youtube",
+      "badge": "Sin Anuncios"
+    },
+    {
+      "id": "crunchyroll",
+      "name": "Crunchyroll Mega Fan",
+      "category": "anime",
+      "maxSlots": 4,
+      "suggestedPriceUsd": 2.99,
+      "icon": "crunchyroll",
+      "badge": "Simulcast"
+    },
+    {
+      "id": "appletv",
+      "name": "Apple TV+ 4K",
+      "category": "streaming",
+      "maxSlots": 3,
+      "suggestedPriceUsd": 4.99,
+      "icon": "appletv",
+      "badge": "Apple Originals"
+    },
+    {
+      "id": "paramount",
+      "name": "Paramount+ Premium",
+      "category": "streaming",
+      "maxSlots": 3,
+      "suggestedPriceUsd": 3.99,
+      "icon": "paramount",
+      "badge": "Deportes & Cine"
+    },
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT Plus & AI",
+      "category": "tools",
+      "maxSlots": 2,
+      "suggestedPriceUsd": 9.99,
+      "icon": "ai",
+      "badge": "GPT-4o & Canvas"
+    }
+  ]
 }
