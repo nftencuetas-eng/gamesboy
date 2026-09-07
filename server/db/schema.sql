@@ -149,13 +149,12 @@ CREATE TABLE IF NOT EXISTS gamesboy.gb_hero_banners (
 -- 1. Insertar Usuarios
 INSERT INTO gamesboy.gb_users (id, name, email, role, avatar)
 VALUES
-    ('usr_admin', 'Admin GamesBoy', 'admin@gamesboy.net', 'admin', '👑'),
-    ('usr_seller1', 'Carlos Streams', 'carlos@vendedor.com', 'seller', '💼'),
-    ('usr_client1', 'Lucas González', 'lucas@cliente.com', 'client', '🎮'),
-    ('usr_client2', 'María López', 'maria@cliente.com', 'client', '🌸')
-ON CONFLICT (id) DO UPDATE SET
+    ('usr_admin', 'Admin GamesBoy', 'admin@gamesboy.net', 'admin', '/assets/branding/icon.png'),
+    ('usr_seller1', 'Carlos Streams', 'carlos@vendedor.com', 'seller', '/assets/branding/icon.png'),
+    ('usr_client1', 'Lucas González', 'lucas@cliente.com', 'client', '/assets/branding/icon.png'),
+    ('usr_client2', 'María López', 'maria@cliente.com', 'client', '/assets/branding/icon.png')
+ON CONFLICT (email) DO UPDATE SET
     name = EXCLUDED.name,
-    email = EXCLUDED.email,
     role = EXCLUDED.role,
     avatar = EXCLUDED.avatar;
 

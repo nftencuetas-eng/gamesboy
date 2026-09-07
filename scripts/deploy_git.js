@@ -39,7 +39,7 @@ async function deploy() {
     }
 
     // 3. Commit
-    const commitMsg = 'feat: Streaming groups with internal chat, multi-country universal currency (USDT/Local), and live balance pill';
+    const commitMsg = 'feat: 100% SVG icons, left-aligned executive admin dashboard, real database ledger calculations, and emoji elimination';
     const sha = await git.commit({
       fs,
       dir,
@@ -57,6 +57,7 @@ async function deploy() {
   console.log('🌐 Configured Remotes:', remotes);
 
   // 5. Try push if token/remote is configured
+  const token = process.env.GITHUB_TOKEN || process.argv[2];
   try {
     const currentBranch = await git.currentBranch({ fs, dir, fullname: false });
     console.log(`🌿 Current Branch: ${currentBranch}`);
@@ -66,13 +67,13 @@ async function deploy() {
       http,
       dir,
       remote: 'origin',
-      ref: currentBranch || 'main'
+      ref: currentBranch || 'main',
+      onAuth: () => ({ username: token })
     });
     console.log('🚀 Push Result:', pushResult);
-    console.log('🎉 Successfully pushed changes to remote repository!');
+    console.log('🎉 Successfully pushed changes to remote repository! Railway deployment triggered.');
   } catch (pushErr) {
     console.warn(`⚠️ Push notice: ${pushErr.message}`);
-    console.log('💡 Note: If GitHub requires a Personal Access Token (PAT) for remote authentication, all commits are ready and staged in local git history.');
   }
 }
 

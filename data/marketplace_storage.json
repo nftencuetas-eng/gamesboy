@@ -5,14 +5,14 @@
       "name": "Admin GamesBoy",
       "email": "admin@gamesboy.net",
       "role": "admin",
-      "avatar": "👑"
+      "avatar": "/assets/branding/icon.png"
     },
     {
       "id": "usr_seller1",
       "name": "Carlos_Streams",
       "email": "carlos@vendedor.com",
       "role": "seller",
-      "avatar": "💼"
+      "avatar": "/assets/branding/icon.png"
     },
     {
       "id": "usr_client1",
@@ -23,7 +23,7 @@
       "surname": "González",
       "birthday": "1998-05-14",
       "hasPassword": true,
-      "passwordUpdated": "2026-09-07T09:47:30.272Z"
+      "passwordUpdated": "2026-09-07T14:55:11.399Z"
     }
   ],
   "wallets": {

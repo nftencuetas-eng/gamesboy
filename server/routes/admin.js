@@ -6,31 +6,64 @@ import cryptoService from '../services/cryptoService.js';
 
 const router = Router();
 
-// Get Admin Overview & Pending Items
+// Get Admin Overview & Real Database Metrics
 router.get('/overview', (req, res) => {
   const db = getDb();
   const adminWallet = getWallet('usr_admin');
+  const rate = db.platform_settings?.exchangeRatePyg || 7500;
+  const commissionPercent = db.platform_settings?.commissionPercent || 15;
 
-  const pendingDeposits = db.wallet_transactions.filter(t => t.type === 'deposit' && t.status === 'pending');
-  const pendingPayouts = db.payout_requests.filter(p => p.status === 'pending');
+  const pendingDeposits = (db.wallet_transactions || []).filter(t => t.type === 'deposit' && t.status === 'pending');
+  const approvedDeposits = (db.wallet_transactions || []).filter(t => t.type === 'deposit' && t.status === 'approved');
+  const pendingPayouts = (db.payout_requests || []).filter(p => p.status === 'pending');
 
-  let totalSalesVolume = 0;
-  db.user_slots.forEach(s => { totalSalesVolume += s.pricePaidUsd; });
-  db.user_store_orders.forEach(o => { totalSalesVolume += o.pricePaidUsd; });
+  let totalDepositsVolumeUsd = 0;
+  approvedDeposits.forEach(t => { totalDepositsVolumeUsd += (t.amountUsd || 0); });
+
+  let totalSlotsSalesUsd = 0;
+  (db.user_slots || []).forEach(s => { totalSlotsSalesUsd += (s.pricePaidUsd || 0); });
+
+  let totalStoreOrdersUsd = 0;
+  (db.user_store_orders || []).forEach(o => { totalStoreOrdersUsd += (o.pricePaidUsd || 0); });
+
+  const totalSalesVolumeUsd = parseFloat((totalSlotsSalesUsd + totalStoreOrdersUsd).toFixed(2));
+  const totalVolumeUsd = parseFloat((totalDepositsVolumeUsd + totalSalesVolumeUsd).toFixed(2));
+  const totalCommissionsUsd = parseFloat((totalSalesVolumeUsd * (commissionPercent / 100)).toFixed(2));
+
+  let totalEscrowUsd = 0;
+  Object.values(db.wallets || {}).forEach(w => {
+    totalEscrowUsd += (w.pendingEscrowUsd || 0);
+  });
+
+  const sellersCount = (db.users || []).filter(u => u.role === 'seller').length;
+  const clientsCount = (db.users || []).filter(u => u.role === 'client').length;
 
   res.json({
     adminWallet,
     stats: {
-      totalUsers: db.users.length,
-      activeSubscriptionsCount: db.subscriptions.length,
-      totalSlotsSold: db.user_slots.length,
-      totalStoreOrders: db.user_store_orders.length,
-      totalSalesVolumeUsd: parseFloat(totalSalesVolume.toFixed(2)),
+      totalUsers: (db.users || []).length,
+      sellersCount,
+      clientsCount,
+      activeSubscriptionsCount: (db.subscriptions || []).length,
+      totalSlotsSold: (db.user_slots || []).length,
+      totalStoreProducts: (db.store_products || []).length,
+      totalStoreOrders: (db.user_store_orders || []).length,
+      totalVolumeUsd,
+      totalVolumePyg: Math.round(totalVolumeUsd * rate),
+      totalSalesVolumeUsd,
+      totalSalesVolumePyg: Math.round(totalSalesVolumeUsd * rate),
+      totalDepositsVolumeUsd: parseFloat(totalDepositsVolumeUsd.toFixed(2)),
+      totalDepositsVolumePyg: Math.round(totalDepositsVolumeUsd * rate),
+      totalCommissionsUsd,
+      totalCommissionsPyg: Math.round(totalCommissionsUsd * rate),
+      totalEscrowUsd: parseFloat(totalEscrowUsd.toFixed(2)),
+      totalEscrowPyg: Math.round(totalEscrowUsd * rate),
       pendingDepositsCount: pendingDeposits.length,
       pendingPayoutsCount: pendingPayouts.length
     },
     pendingDeposits,
     pendingPayouts,
+    recentTransactions: (db.wallet_transactions || []).slice(0, 10),
     settings: db.platform_settings
   });
 });

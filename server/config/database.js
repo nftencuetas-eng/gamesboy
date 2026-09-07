@@ -11,10 +11,10 @@ const DATA_FILE = path.resolve(__dirname, '../../data/marketplace_storage.json')
 // Default initial database state with seed data
 let db = {
   users: [
-    { id: 'usr_admin', name: 'Admin GamesBoy', email: 'admin@gamesboy.net', role: 'admin', avatar: '👑' },
-    { id: 'usr_seller1', name: 'Carlos_Streams', email: 'carlos@vendedor.com', role: 'seller', avatar: '💼' },
-    { id: 'usr_client1', name: 'Lucas_Py', email: 'lucas@cliente.com', role: 'client', avatar: '🎮' },
-    { id: 'usr_client2', name: 'María López', email: 'maria@cliente.com', role: 'client', avatar: '🌸' }
+    { id: 'usr_admin', name: 'Admin GamesBoy', email: 'admin@gamesboy.net', role: 'admin', avatar: '/assets/branding/icon.png' },
+    { id: 'usr_seller1', name: 'Carlos_Streams', email: 'carlos@vendedor.com', role: 'seller', avatar: '/assets/branding/icon.png' },
+    { id: 'usr_client1', name: 'Lucas_Py', email: 'lucas@cliente.com', role: 'client', avatar: '/assets/branding/icon.png' },
+    { id: 'usr_client2', name: 'María López', email: 'maria@cliente.com', role: 'client', avatar: '/assets/branding/icon.png' }
   ],
   wallets: {
     'usr_admin': { balanceUsd: 1250.00, pendingEscrowUsd: 0 },

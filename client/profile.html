@@ -11,7 +11,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css">
   <style>
-    * { border-radius: 0px !important; }
     body {
       background: var(--bg-body);
       color: var(--text-primary);
@@ -43,6 +42,7 @@
     .profile-card {
       background: #070e22;
       border: 1px solid var(--border-medium);
+      border-radius: 12px;
       padding: 2rem;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
@@ -53,6 +53,7 @@
       position: relative;
       background: #030712;
       border: 2px solid var(--accent-cyan);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -61,6 +62,7 @@
     .profile-avatar-img {
       width: 100%;
       height: 100%;
+      border-radius: 50%;
       object-fit: cover;
     }
     .btn-upload-photo {
@@ -70,6 +72,7 @@
       font-size: 0.76rem;
       font-weight: 700;
       padding: 6px 12px;
+      border-radius: 6px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -90,6 +93,7 @@
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 600;
+      border-radius: 6px;
       border-left: 2px solid transparent;
       transition: all 0.15s ease;
       cursor: pointer;
@@ -106,6 +110,7 @@
       font-size: 0.78rem;
       font-weight: 700;
       padding: 6px 12px;
+      border-radius: 6px;
     }
     .badge-google-linked {
       background: rgba(16, 185, 129, 0.15);
@@ -132,11 +137,11 @@
       <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 32px; width: auto;">
     </a>
     <div style="display: flex; align-items: center; gap: 14px;">
-      <div style="display: flex; align-items: center; gap: 6px; background: rgba(0, 194, 255, 0.08); border: 1px solid var(--border-medium); padding: 6px 14px; font-size: 0.85rem; font-weight: 700;">
+      <div style="display: flex; align-items: center; gap: 6px; background: rgba(0, 194, 255, 0.08); border: 1px solid var(--border-medium); padding: 6px 14px; font-size: 0.85rem; font-weight: 700; border-radius: 8px;">
         <span style="color: var(--text-tertiary);">Saldo:</span>
         <strong id="header-profile-balance" style="color: var(--accent-emerald);">0 Gs.</strong>
       </div>
-      <a href="/" class="btn-action-sm" style="background: var(--bg-surface-elevated); color: #fff; text-decoration: none; padding: 7px 14px; font-weight: 700;">← Ir a la Tienda</a>
+      <a href="/" class="btn-action-sm" style="background: var(--bg-surface-elevated); color: #fff; text-decoration: none; padding: 7px 14px; font-weight: 700; border-radius: 8px;">← Ir a la Tienda</a>
     </div>
   </header>
 
@@ -144,8 +149,11 @@
   <main class="profile-container">
     
     <div style="margin-bottom: 2rem;">
-      <h1 style="font-family: var(--font-heading); font-size: 1.7rem; font-weight: 800; color: #ffffff;">⚙️ Mi Cuenta & Perfil</h1>
-      <p style="font-size: 0.85rem; color: var(--text-secondary);">Administra tus datos personales, seguridad de acceso y revisa tus compras digitales.</p>
+      <h1 style="font-family: var(--font-heading); font-size: 1.7rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 10px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        <span>Mi Cuenta & Perfil</span>
+      </h1>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">Administra tus datos personales, seguridad de acceso y revisa tus compras digitales.</p>
     </div>
 
     <div class="profile-grid-layout">
@@ -161,22 +169,36 @@
         <span id="profile-card-email" style="font-size: 0.8rem; color: var(--text-tertiary); display: block; margin-bottom: 1rem; word-break: break-all;">usuario@gamesboy.net</span>
 
         <label class="btn-upload-photo">
-          <span>📷 Cambiar Foto de Perfil</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+          <span>Cambiar Foto de Perfil</span>
           <input type="file" id="input-avatar-file" accept="image/*" style="display: none;">
         </label>
 
         <div style="margin-top: 2rem; border-top: 1px solid var(--border-subtle); padding-top: 1.25rem; text-align: left;">
           <nav style="display: flex; flex-direction: column; gap: 4px;">
-            <a class="profile-nav-link active" data-tab="tab-personal">👤 Datos Personales</a>
-            <a class="profile-nav-link" data-tab="tab-security">🔒 Seguridad & Contraseña</a>
-            <a class="profile-nav-link" data-tab="tab-purchases">🛍️ Mis Compras Digitales</a>
-            <a class="profile-nav-link" href="/#section-streaming" style="color: var(--accent-cyan);">🚀 Compartir Cuenta</a>
+            <a class="profile-nav-link active" data-tab="tab-personal">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span>Datos Personales</span>
+            </a>
+            <a class="profile-nav-link" data-tab="tab-security">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <span>Seguridad & Contraseña</span>
+            </a>
+            <a class="profile-nav-link" data-tab="tab-purchases">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span>Mis Compras Digitales</span>
+            </a>
+            <a class="profile-nav-link" href="/#section-streaming" style="color: var(--accent-cyan);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              <span>Compartir Cuenta</span>
+            </a>
           </nav>
         </div>
 
         <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
-          <button onclick="localStorage.removeItem('gb_user'); window.location.href='/';" style="background: none; border: none; color: var(--accent-red); font-size: 0.82rem; font-weight: 700; cursor: pointer;">
-            🚪 Cerrar Sesión
+          <button onclick="localStorage.removeItem('gb_user'); window.location.href='/';" style="background: none; border: none; color: var(--accent-red); font-size: 0.82rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            <span>Cerrar Sesión</span>
           </button>
         </div>
       </div>
@@ -186,7 +208,10 @@
         
         <!-- Tab 1: Datos Personales -->
         <div id="pane-tab-personal" class="profile-card">
-          <h2 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.5rem; color: #ffffff;">👤 Información Personal</h2>
+          <h2 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.5rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Información Personal</span>
+          </h2>
           
           <form id="form-update-profile">
             <div class="form-grid-2">
@@ -213,7 +238,7 @@
             </div>
 
             <!-- Google Link Section -->
-            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-medium); padding: 1.25rem; margin: 1.5rem 0;">
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-medium); border-radius: 10px; padding: 1.25rem; margin: 1.5rem 0;">
               <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                 <div>
                   <div style="font-weight: 700; font-size: 0.9rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
@@ -223,21 +248,24 @@
                   <p style="font-size: 0.78rem; color: var(--text-tertiary); margin-top: 4px;">Inicia sesión con 1 solo clic de forma segura utilizando tu cuenta de Google.</p>
                 </div>
                 <div id="google-link-status-box">
-                  <span class="badge-google-status badge-google-linked" id="badge-google-linked" style="display: none;">🟢 Cuenta Vinculada</span>
-                  <button type="button" class="btn-action-sm" id="btn-link-google" style="background: rgba(255,255,255,0.08); color: #fff; padding: 6px 12px; font-weight: 700;">🔗 Vincular Google</button>
+                  <span class="badge-google-status badge-google-linked" id="badge-google-linked" style="display: none;">Cuenta Vinculada</span>
+                  <button type="button" class="btn-action-sm" id="btn-link-google" style="background: rgba(255,255,255,0.08); color: #fff; padding: 6px 12px; font-weight: 700; border-radius: 6px;">Vincular Google</button>
                 </div>
               </div>
             </div>
 
-            <button type="submit" class="btn-primary-block" style="padding: 12px; font-weight: 800; margin-top: 1rem;">
-              💾 Guardar Cambios del Perfil
+            <button type="submit" class="btn-primary-block" style="padding: 12px; font-weight: 800; margin-top: 1rem; border-radius: 8px;">
+              Guardar Cambios del Perfil
             </button>
           </form>
         </div>
 
         <!-- Tab 2: Seguridad & Contraseña -->
         <div id="pane-tab-security" class="profile-card" style="display: none;">
-          <h2 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.5rem; color: #ffffff;">🔒 Seguridad de la Cuenta</h2>
+          <h2 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.5rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <span>Seguridad de la Cuenta</span>
+          </h2>
           
           <form id="form-set-password">
             <div class="form-group">
@@ -249,25 +277,28 @@
               <input type="password" id="input-confirm-password" class="form-input" placeholder="Repite la contraseña" required>
             </div>
 
-            <button type="submit" class="btn-primary-block" style="padding: 12px; font-weight: 800; margin-top: 1rem;">
-              🔑 Actualizar Contraseña
+            <button type="submit" class="btn-primary-block" style="padding: 12px; font-weight: 800; margin-top: 1rem; border-radius: 8px;">
+              Actualizar Contraseña
             </button>
           </form>
 
-          <div style="margin-top: 2rem; padding: 1.25rem; background: rgba(0, 194, 255, 0.05); border: 1px solid var(--border-medium);">
-            <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 6px;">💡 ¿Olvidaste tu contraseña anterior?</h4>
+          <div style="margin-top: 2rem; padding: 1.25rem; background: rgba(0, 194, 255, 0.05); border: 1px solid var(--border-medium); border-radius: 10px;">
+            <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 6px;">¿Olvidaste tu contraseña anterior?</h4>
             <p style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.45;">
               Puedes solicitar un restablecimiento instantáneo a tu correo registrado. Te enviaremos un código de seguridad para verificar tu identidad.
             </p>
-            <button type="button" class="btn-action-sm" onclick="sendPasswordResetEmail()" style="margin-top: 10px; background: rgba(255,255,255,0.08); color: #ffffff; padding: 6px 12px; font-weight: 700;">
-              📧 Enviar Enlace de Restablecimiento a mi Correo
+            <button type="button" class="btn-action-sm" onclick="sendPasswordResetEmail()" style="margin-top: 10px; background: rgba(255,255,255,0.08); color: #ffffff; padding: 6px 12px; font-weight: 700; border-radius: 6px;">
+              Enviar Enlace de Restablecimiento a mi Correo
             </button>
           </div>
         </div>
 
         <!-- Tab 3: Mis Compras Digitales -->
         <div id="pane-tab-purchases" class="profile-card" style="display: none;">
-          <h2 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.5rem; color: #ffffff;">🛍️ Mis Compras & Suscripciones Activas</h2>
+          <h2 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 1.5rem; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            <span>Mis Compras & Suscripciones Activas</span>
+          </h2>
           
           <div id="user-purchases-container">
             <p style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando tus compras...</p>
@@ -347,9 +378,11 @@
       if (slots.length === 0 && orders.length === 0) {
         container.innerHTML = `
           <div style="text-align: center; padding: 2.5rem 1rem; color: var(--text-tertiary);">
-            <div style="font-size: 2.5rem; margin-bottom: 8px;">🎮</div>
+            <div style="margin-bottom: 8px;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="1.8"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+            </div>
             <p style="font-size: 0.95rem; color: #ffffff; font-weight: 700;">Aún no tienes suscripciones o juegos adquiridos.</p>
-            <a href="/" class="btn-action-sm" style="display: inline-block; margin-top: 12px; background: var(--accent-cyan); color: #040c1e; font-weight: 800; text-decoration: none; padding: 8px 16px;">Explorar Catálogo ➔</a>
+            <a href="/" class="btn-action-sm" style="display: inline-block; margin-top: 12px; background: var(--accent-cyan); color: #040c1e; font-weight: 800; text-decoration: none; padding: 8px 16px; border-radius: 8px;">Explorar Catálogo</a>
           </div>
         `;
         return;
@@ -357,17 +390,17 @@
 
       let html = '';
       if (slots.length > 0) {
-        html += `<h4 style="font-size: 0.95rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 10px;">📺 Cuentas de Streaming Compartidas</h4>`;
+        html += `<h4 style="font-size: 0.95rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg><span>Cuentas de Streaming Compartidas</span></h4>`;
         slots.forEach(s => {
           html += `
-            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-medium); padding: 12px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-medium); border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
               <div>
                 <strong style="color: #ffffff; font-size: 0.95rem;">${s.serviceName}</strong>
                 <div style="font-size: 0.78rem; color: var(--text-tertiary); margin-top: 2px;">Perfil #${s.slotNumber} • PIN: <code style="color: var(--accent-cyan);">${s.assignedPin || 'N/A'}</code></div>
               </div>
               <div>
                 <span class="badge-official" style="background: rgba(16,185,129,0.15); color: #10b981;">Activo</span>
-                <a href="/#section-streaming" class="btn-action-sm" style="background: rgba(0,194,255,0.15); color: var(--accent-cyan); text-decoration: none; padding: 4px 10px; font-weight: 700; margin-left: 6px;">Abrir Chat Grupo</a>
+                <a href="/#section-streaming" class="btn-action-sm" style="background: rgba(0,194,255,0.15); color: var(--accent-cyan); text-decoration: none; padding: 4px 10px; font-weight: 700; margin-left: 6px; border-radius: 6px;">Abrir Chat Grupo</a>
               </div>
             </div>
           `;
@@ -375,16 +408,16 @@
       }
 
       if (orders.length > 0) {
-        html += `<h4 style="font-size: 0.95rem; font-weight: 800; color: var(--accent-purple); margin-top: 1.5rem; margin-bottom: 10px;">🔑 Juegos Digitales & Tarjetas de Regalo</h4>`;
+        html += `<h4 style="font-size: 0.95rem; font-weight: 800; color: var(--accent-purple); margin-top: 1.5rem; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg><span>Juegos Digitales & Tarjetas de Regalo</span></h4>`;
         orders.forEach(o => {
           html += `
-            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-medium); padding: 12px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-medium); border-radius: 8px; padding: 12px 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
               <div>
                 <strong style="color: #ffffff; font-size: 0.95rem;">${o.productTitle}</strong>
                 <div style="font-size: 0.78rem; color: var(--text-tertiary); margin-top: 2px;">Plataforma: ${o.platform || 'Digital'}</div>
               </div>
               <div style="text-align: right;">
-                <code style="background: rgba(0,194,255,0.1); border: 1px solid var(--accent-cyan); color: #ffffff; padding: 4px 8px; font-size: 0.84rem; font-weight: 800;">${o.code}</code>
+                <code style="background: rgba(0,194,255,0.1); border: 1px solid var(--accent-cyan); color: #ffffff; padding: 4px 8px; font-size: 0.84rem; font-weight: 800; border-radius: 6px;">${o.code}</code>
               </div>
             </div>
           `;
@@ -424,7 +457,7 @@
                 storedUser.avatar = base64Photo;
                 localStorage.setItem('gb_user', JSON.stringify(storedUser));
               }
-              alert('✨ ¡Foto de perfil actualizada con éxito!');
+              alert('Foto de perfil actualizada con éxito.');
             }
           } catch (err) {
             alert('Error al guardar la foto.');

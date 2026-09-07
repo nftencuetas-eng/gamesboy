@@ -11,15 +11,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css">
   <style>
-    /* Modern Rounded Admin Styling (Subtle 10-14px border radius) */
+    /* Enterprise Admin Layout & Typography */
     .admin-layout {
       display: grid;
-      grid-template-columns: 270px 1fr;
+      grid-template-columns: 260px 1fr;
       min-height: 100vh;
       background: #030712;
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(0, 194, 255, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 85% 25%, rgba(245, 158, 11, 0.04) 0%, transparent 45%);
+        radial-gradient(circle at 10% 10%, rgba(0, 194, 255, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 90% 20%, rgba(245, 158, 11, 0.03) 0%, transparent 45%);
     }
     .admin-sidebar {
       background: #060c1c;
@@ -32,49 +32,57 @@
       height: 100vh;
       box-sizing: border-box;
       z-index: 50;
+      text-align: left;
     }
     .admin-content {
-      padding: 2rem 2.5rem;
+      padding: 2.25rem 2.5rem;
       overflow-y: auto;
       max-height: 100vh;
       box-sizing: border-box;
+      text-align: left;
     }
+    
+    /* Clean Sidebar Nav Button */
     .admin-menu-btn {
       display: flex;
       align-items: center;
       gap: 12px;
       width: 100%;
-      padding: 11px 14px;
+      padding: 10px 12px;
       background: transparent;
       border: 1px solid transparent;
       color: var(--text-secondary);
-      font-size: 0.86rem;
+      font-size: 0.84rem;
       font-weight: 600;
       cursor: pointer;
       text-align: left;
-      margin-bottom: 5px;
-      border-radius: 10px !important;
+      margin-bottom: 4px;
+      border-radius: 8px !important;
       transition: all 0.18s ease;
     }
     .admin-menu-btn:hover {
-      background: rgba(13, 23, 51, 0.8);
+      background: rgba(13, 23, 51, 0.9);
       border-color: rgba(0, 194, 255, 0.2);
       color: #ffffff;
-      transform: translateX(2px);
+      transform: translateX(3px);
     }
     .admin-menu-btn.active {
-      background: linear-gradient(135deg, rgba(0, 194, 255, 0.15), rgba(0, 112, 243, 0.15));
+      background: linear-gradient(135deg, rgba(0, 194, 255, 0.16), rgba(0, 112, 243, 0.16));
       border-color: var(--accent-cyan);
       color: #ffffff;
       font-weight: 700;
-      box-shadow: 0 4px 14px rgba(0, 194, 255, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 194, 255, 0.12);
+    }
+    .admin-menu-btn svg {
+      color: var(--accent-cyan);
+      flex-shrink: 0;
     }
     .badge-count {
       margin-left: auto;
       background: var(--accent-amber);
-      color: #000;
-      font-size: 0.72rem;
-      font-weight: 900;
+      color: #040c1e;
+      font-size: 0.7rem;
+      font-weight: 800;
       padding: 2px 7px;
       border-radius: 20px !important;
     }
@@ -82,19 +90,21 @@
     /* Executive KPI Grid */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
       margin-bottom: 2rem;
+      text-align: left;
     }
     .kpi-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-medium);
-      padding: 1.25rem 1.4rem;
-      border-radius: 14px !important;
+      padding: 1.35rem 1.4rem;
+      border-radius: 12px !important;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
       transition: all 0.2s ease;
+      text-align: left;
     }
     .kpi-card:hover {
       transform: translateY(-2px);
@@ -118,24 +128,31 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     .kpi-title {
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       color: var(--text-tertiary);
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
-    .kpi-icon {
-      font-size: 1.2rem;
+    .kpi-icon-box {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--accent-cyan);
     }
     .kpi-value-gs {
       font-family: var(--font-mono);
-      font-size: 1.45rem;
+      font-size: 1.55rem;
       font-weight: 900;
       color: #ffffff;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
+      letter-spacing: -0.02em;
     }
     .kpi-sub-val {
       font-size: 0.76rem;
@@ -143,14 +160,15 @@
       font-weight: 600;
     }
 
-    /* Modern Table & Box Styling */
+    /* Modern Card Boxes */
     .admin-card-box {
       background: var(--bg-surface);
       border: 1px solid var(--border-medium);
-      border-radius: 14px !important;
-      padding: 1.5rem;
+      border-radius: 12px !important;
+      padding: 1.5rem 1.6rem;
       margin-bottom: 1.75rem;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      text-align: left;
     }
     .admin-card-header {
       display: flex;
@@ -167,31 +185,38 @@
       color: #ffffff;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      text-align: left;
+    }
+    .admin-card-title svg {
+      color: var(--accent-cyan);
     }
 
+    /* Clean Tables */
     .admin-table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 0;
       font-size: 0.84rem;
+      text-align: left;
     }
     .admin-table th {
-      background: rgba(3, 7, 18, 0.7);
+      background: rgba(3, 7, 18, 0.8);
       color: var(--text-tertiary);
       font-weight: 700;
       text-align: left;
-      padding: 10px 14px;
+      padding: 11px 14px;
       border-bottom: 1px solid var(--border-medium);
       text-transform: uppercase;
       font-size: 0.72rem;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
     }
     .admin-table td {
       padding: 12px 14px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
       color: var(--text-secondary);
       vertical-align: middle;
+      text-align: left;
     }
     .admin-table tr:hover td {
       background: rgba(255, 255, 255, 0.02);
@@ -201,12 +226,13 @@
     .badge-status {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       padding: 3px 8px;
       font-size: 0.72rem;
       font-weight: 800;
       border-radius: 6px !important;
       text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
     .badge-status.approved {
       background: rgba(16, 185, 129, 0.15);
@@ -226,7 +252,7 @@
 
     .form-input-styled {
       width: 100%;
-      background: rgba(3, 7, 18, 0.7);
+      background: rgba(3, 7, 18, 0.75);
       border: 1px solid var(--border-medium);
       color: #ffffff;
       padding: 9px 12px;
@@ -235,7 +261,8 @@
       font-family: var(--font-sans);
       outline: none;
       box-sizing: border-box;
-      transition: border-color 0.2s;
+      transition: all 0.2s ease;
+      text-align: left;
     }
     .form-input-styled:focus {
       border-color: var(--accent-cyan);
@@ -246,8 +273,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 12px;
-      font-size: 0.78rem;
+      padding: 7px 14px;
+      font-size: 0.8rem;
       font-weight: 700;
       border-radius: 8px !important;
       cursor: pointer;
@@ -264,7 +291,7 @@
       transform: translateY(-1px);
     }
     .btn-admin-pill.amber {
-      background: rgba(245, 158, 11, 0.2);
+      background: rgba(245, 158, 11, 0.15);
       color: #f59e0b;
       border: 1px solid rgba(245, 158, 11, 0.4);
     }
@@ -273,7 +300,7 @@
       color: #000;
     }
     .btn-admin-pill.emerald {
-      background: rgba(16, 185, 129, 0.2);
+      background: rgba(16, 185, 129, 0.15);
       color: #34d399;
       border: 1px solid rgba(16, 185, 129, 0.4);
     }
@@ -282,7 +309,7 @@
       color: #000;
     }
     .btn-admin-pill.red {
-      background: rgba(239, 68, 68, 0.2);
+      background: rgba(239, 68, 68, 0.15);
       color: #f87171;
       border: 1px solid rgba(239, 68, 68, 0.4);
     }
@@ -306,12 +333,13 @@
     .admin-modal-box {
       background: #070d1e;
       border: 1px solid var(--border-medium);
-      border-radius: 16px !important;
+      border-radius: 14px !important;
       width: 100%;
-      max-width: 550px;
+      max-width: 540px;
       padding: 2rem;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
       position: relative;
+      text-align: left;
     }
 
     @media (max-width: 960px) {
@@ -327,52 +355,66 @@
     
     <!-- Sidebar -->
     <aside class="admin-sidebar">
-      <div style="margin-bottom: 1.75rem; text-align: center;">
-        <a href="/" title="GamesBoy.net - Ir a la tienda">
-          <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 34px; width: auto; filter: none; margin-bottom: 6px;">
+      <div style="margin-bottom: 1.75rem; text-align: left;">
+        <a href="/" title="GamesBoy.net - Ir a la tienda" style="display: block; margin-bottom: 8px;">
+          <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 34px; width: auto; filter: none;">
         </a>
-        <div>
-          <span style="display: inline-block; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); color: #f59e0b; font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 12px;">👑 ADMIN MASTER PORTAL</span>
-        </div>
+        <span style="display: inline-flex; align-items: center; gap: 5px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); color: #f59e0b; font-size: 0.68rem; font-weight: 800; padding: 3px 8px; border-radius: 6px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+          ADMIN MASTER
+        </span>
       </div>
 
       <nav style="flex: 1; overflow-y: auto;">
         <button class="admin-menu-btn active" data-tab="tab-dashboard">
-          <span>📊 Métricas & Dashboard</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Métricas & Dashboard</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-approvals">
-          <span>📥 Aprobación Cuentas</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          <span>Aprobación de Cuentas</span>
           <span class="badge-count" id="badge-pending-subs">0</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-products">
-          <span>🎮 Juegos & Gift Cards</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          <span>Juegos & Gift Cards</span>
           <span class="badge-count" id="badge-products-count" style="background: var(--accent-purple); color: #fff;">0</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-banners">
-          <span>🎨 Portadas Hero ENEBA</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          <span>Portadas Hero ENEBA</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-finances">
-          <span>💰 Finanzas & Recargas</span>
-          <span class="badge-count" id="badge-pending-finances" style="background: var(--accent-cyan); color: #000;">0</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          <span>Finanzas & Recargas</span>
+          <span class="badge-count" id="badge-pending-finances" style="background: var(--accent-cyan); color: #040c1e;">0</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-escrow">
-          <span>🛡️ Garantía Escrow</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span>Garantía Escrow</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-users">
-          <span>👥 Gestión de Usuarios</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span>Gestión de Usuarios</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-settings">
-          <span>🏢 Configuración & Pagos</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          <span>Configuración & Pagos</span>
         </button>
       </nav>
 
       <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
-        <div style="font-size: 0.78rem; color: var(--text-tertiary); margin-bottom: 6px;">
-          Sesión: <strong style="color: #fff;">admin@gamesboy.net</strong>
+        <div style="font-size: 0.76rem; color: var(--text-tertiary); margin-bottom: 6px;">
+          Sesión activa: <strong style="color: #fff;">admin@gamesboy.net</strong>
         </div>
         <div style="display: flex; gap: 8px;">
-          <a href="/" class="btn-admin-pill cyan" style="flex: 1; justify-content: center;">Tienda ↗</a>
-          <button id="btn-admin-logout" class="btn-admin-pill red" style="padding: 6px 10px;">Salir</button>
+          <a href="/" class="btn-admin-pill cyan" style="flex: 1; justify-content: center;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            <span>Ver Tienda</span>
+          </a>
+          <button id="btn-admin-logout" class="btn-admin-pill red" style="padding: 6px 10px;" title="Cerrar sesión de administrador">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
         </div>
       </div>
     </aside>
@@ -381,25 +423,28 @@
     <main class="admin-content">
       
       <!-- Top Title Bar -->
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 14px;">
         <div>
-          <h1 id="admin-view-heading" style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 900; color: #ffffff;">
-            📊 Métricas & Panel de Control General
+          <h1 id="admin-view-heading" style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 900; color: #ffffff; letter-spacing: -0.01em;">
+            Métricas & Panel de Control General
           </h1>
-          <p id="admin-view-subtitle" style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px;">
+          <p id="admin-view-subtitle" style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
             Auditoría en tiempo real, volumen transaccionado, saldos y operaciones en Paraguay.
           </p>
         </div>
         <div style="display: flex; gap: 8px; align-items: center;">
           <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); padding: 6px 12px; border-radius: 8px; font-size: 0.78rem; color: #34d399; font-weight: 700;">
-            🇵🇾 1 USD = <span id="header-rate-display">7.500 Gs.</span>
+            1 USD = <span id="header-rate-display">7.500 Gs.</span>
           </div>
-          <button class="btn-admin-pill cyan" onclick="loadAdminData()">🔄 Actualizar</button>
+          <button class="btn-admin-pill cyan" onclick="loadAdminData()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            <span>Actualizar</span>
+          </button>
         </div>
       </div>
 
       <!-- ======================================================== -->
-      <!-- TAB 1: EXECUTIVE DASHBOARD & METRICS                     -->
+      <!-- TAB 1: EXECUTIVE DASHBOARD & REAL DATABASE METRICS       -->
       <!-- ======================================================== -->
       <div id="view-tab-dashboard" class="admin-tab-pane">
         
@@ -407,65 +452,86 @@
         <div class="kpi-grid">
           <div class="kpi-card cyan">
             <div class="kpi-header">
-              <span class="kpi-title">Volumen Total Marketplace</span>
-              <span class="kpi-icon">📈</span>
+              <span class="kpi-title">Volumen Total Transaccionado</span>
+              <div class="kpi-icon-box">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+              </div>
             </div>
             <div class="kpi-value-gs" id="kpi-total-volume-gs">0 Gs.</div>
-            <div class="kpi-sub-val" id="kpi-total-volume-usd">$0.00 USD</div>
+            <div class="kpi-sub-val" id="kpi-total-volume-usd">$0.00 USD en operaciones reales</div>
           </div>
 
           <div class="kpi-card emerald">
             <div class="kpi-header">
               <span class="kpi-title">Comisiones Cobradas (15%)</span>
-              <span class="kpi-icon">💰</span>
+              <div class="kpi-icon-box" style="color: var(--accent-emerald);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
             </div>
             <div class="kpi-value-gs" id="kpi-commissions-gs">0 Gs.</div>
-            <div class="kpi-sub-val" id="kpi-commissions-usd">Ganancia Neta Plataforma</div>
+            <div class="kpi-sub-val" id="kpi-commissions-usd">Ganancia neta calculada de ventas</div>
           </div>
 
           <div class="kpi-card amber">
             <div class="kpi-header">
-              <span class="kpi-title">Garantía Escrow Retenida</span>
-              <span class="kpi-icon">🛡️</span>
+              <span class="kpi-title">Garantía Escrow en Custodia</span>
+              <div class="kpi-icon-box" style="color: var(--accent-amber);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              </div>
             </div>
             <div class="kpi-value-gs" id="kpi-escrow-gs">0 Gs.</div>
-            <div class="kpi-sub-val" id="kpi-escrow-usd">Protección 30 Días Compradores</div>
+            <div class="kpi-sub-val" id="kpi-escrow-usd">Protección 30 días para compradores</div>
           </div>
 
           <div class="kpi-card purple">
             <div class="kpi-header">
-              <span class="kpi-title">Usuarios Registrados</span>
-              <span class="kpi-icon">👥</span>
+              <span class="kpi-title">Usuarios Registrados en BD</span>
+              <div class="kpi-icon-box" style="color: var(--accent-purple);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+              </div>
             </div>
             <div class="kpi-value-gs" id="kpi-users-count">0</div>
-            <div class="kpi-sub-val" id="kpi-users-sub">Clientes y Vendedores Activos</div>
+            <div class="kpi-sub-val" id="kpi-users-sub">Clientes y vendedores en PostgreSQL</div>
           </div>
         </div>
 
-        <!-- Quick Action Shortcuts -->
-        <div class="admin-card-box" style="margin-bottom: 1.5rem;">
-          <div class="admin-card-title">⚡ Accesos Rápidos de Administración</div>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 1rem;">
-            <button class="btn-admin-pill cyan" style="justify-content: center; padding: 12px;" onclick="switchTab('tab-approvals')">
-              📥 Revisar Cuentas Pendientes (<span id="quick-badge-subs">0</span>)
+        <!-- Clean Left-Aligned Action Bar -->
+        <div class="admin-card-box">
+          <div class="admin-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            <span>Accesos Rápidos de Administración</span>
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 1rem; flex-wrap: wrap;">
+            <button class="btn-admin-pill cyan" onclick="switchTab('tab-approvals')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>Revisar Cuentas Pendientes (<span id="quick-badge-subs">0</span>)</span>
             </button>
-            <button class="btn-admin-pill emerald" style="justify-content: center; padding: 12px;" onclick="switchTab('tab-finances')">
-              💰 Aprobar Recargas SIPAP (<span id="quick-badge-deposits">0</span>)
+            <button class="btn-admin-pill emerald" onclick="switchTab('tab-finances')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              <span>Aprobar Recargas SIPAP (<span id="quick-badge-deposits">0</span>)</span>
             </button>
-            <button class="btn-admin-pill amber" style="justify-content: center; padding: 12px;" onclick="switchTab('tab-products')">
-              ➕ Añadir Nuevo Videojuego
+            <button class="btn-admin-pill amber" onclick="switchTab('tab-products')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Añadir Videojuego o Gift Card</span>
             </button>
-            <button class="btn-admin-pill purple" style="justify-content: center; padding: 12px;" onclick="switchTab('tab-users')">
-              👥 Ajustar Saldos de Usuarios
+            <button class="btn-admin-pill" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4);" onclick="switchTab('tab-users')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+              <span>Ajustar Saldos de Usuarios</span>
             </button>
           </div>
         </div>
 
-        <!-- System Activity Log Table -->
+        <!-- Recent Transactions Table -->
         <div class="admin-card-box">
           <div class="admin-card-header">
-            <div class="admin-card-title">📋 Últimos Movimientos y Transacciones</div>
-            <button class="btn-admin-pill cyan" onclick="switchTab('tab-finances')">Ver Todas ➔</button>
+            <div class="admin-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span>Últimos Movimientos y Transacciones</span>
+            </div>
+            <button class="btn-admin-pill cyan" onclick="switchTab('tab-finances')">
+              <span>Ver Todas</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
           </div>
           <table class="admin-table">
             <thead>
@@ -479,7 +545,7 @@
               </tr>
             </thead>
             <tbody id="dashboard-recent-txs-body">
-              <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 1.5rem;">Cargando transacciones...</td></tr>
+              <tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 1.5rem;">Cargando transacciones reales...</td></tr>
             </tbody>
           </table>
         </div>
@@ -490,16 +556,21 @@
       <!-- ======================================================== -->
       <div id="view-tab-approvals" class="admin-tab-pane" style="display: none;">
         <div class="admin-card-box">
-          <div class="admin-card-title">⚙️ Protocolo de Verificación Obligatoria de Cuentas</div>
+          <div class="admin-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>Protocolo de Verificación Obligatoria de Cuentas</span>
+          </div>
           <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 6px; line-height: 1.5;">
-            Ninguna cuenta subida por un vendedor se publica automáticamente en la tienda.
-            Prueba las credenciales en la plataforma correspondiente, confirma que los PINs y perfiles coinciden, y haz clic en <strong>"Aprobar y Publicar"</strong>.
+            Ninguna cuenta subida por un vendedor se publica automáticamente. Prueba las credenciales en la plataforma correspondiente, confirma que los PINs y perfiles coinciden, y autoriza la publicación en la tienda.
           </p>
         </div>
 
         <div class="admin-card-box">
           <div class="admin-card-header">
-            <div class="admin-card-title">📋 Cuentas Pendientes de Aprobación</div>
+            <div class="admin-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              <span>Cuentas Pendientes de Aprobación</span>
+            </div>
             <span class="badge-status pending" id="pending-subs-counter-badge">0 pendientes</span>
           </div>
           <table class="admin-table">
@@ -514,7 +585,7 @@
               </tr>
             </thead>
             <tbody id="admin-pending-subs-table-body">
-              <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay cuentas pendientes por verificar.</td></tr>
+              <tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay cuentas pendientes por verificar.</td></tr>
             </tbody>
           </table>
         </div>
@@ -527,9 +598,12 @@
         
         <!-- Add Product Box -->
         <div class="admin-card-box">
-          <div class="admin-card-title">➕ Publicar Nuevo Videojuego o Tarjeta de Regalo</div>
+          <div class="admin-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Publicar Nuevo Videojuego o Tarjeta de Regalo</span>
+          </div>
           <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0 1.25rem 0;">
-            Añade productos digitales con stock de códigos seriales para entrega inmediata en Guaraníes.
+            Añade productos con stock de códigos seriales para entrega inmediata en Guaraníes.
           </p>
 
           <form id="form-admin-add-product">
@@ -537,8 +611,8 @@
               <div>
                 <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Tipo de Producto</label>
                 <select id="prod-category" class="form-input-styled" required>
-                  <option value="game_key">🎮 Videojuego Digital (Key / Código)</option>
-                  <option value="gift_card">🎁 Tarjeta de Regalo (Gift Card)</option>
+                  <option value="game_key">Videojuego Digital (Key / Código)</option>
+                  <option value="gift_card">Tarjeta de Regalo (Gift Card)</option>
                 </select>
               </div>
               <div>
@@ -582,7 +656,8 @@
             </div>
 
             <button type="submit" class="btn-admin-pill cyan" style="padding: 10px 20px; font-size: 0.88rem;">
-              💾 Guardar y Publicar en Tienda
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+              <span>Guardar y Publicar en Tienda</span>
             </button>
           </form>
         </div>
@@ -590,7 +665,10 @@
         <!-- Inventory List -->
         <div class="admin-card-box">
           <div class="admin-card-header">
-            <div class="admin-card-title">📦 Inventario de Juegos & Gift Cards</div>
+            <div class="admin-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              <span>Inventario de Juegos & Gift Cards</span>
+            </div>
             <span class="badge-status approved" id="inventory-count-badge">0 productos</span>
           </div>
           <table class="admin-table">
@@ -605,7 +683,7 @@
               </tr>
             </thead>
             <tbody id="admin-products-table-body">
-              <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando catálogo...</td></tr>
+              <tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">Cargando catálogo real...</td></tr>
             </tbody>
           </table>
         </div>
@@ -616,7 +694,10 @@
       <!-- ======================================================== -->
       <div id="view-tab-banners" class="admin-tab-pane" style="display: none;">
         <div class="admin-card-box">
-          <div class="admin-card-title">🎨 Gestor de Portadas Acordeón Hero (ENEBA Style)</div>
+          <div class="admin-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            <span>Gestor de Portadas Acordeón Hero (ENEBA Style)</span>
+          </div>
           <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
             Personaliza los 4 banners principales que se expanden interactivamente al pasar el cursor en la tienda pública.
           </p>
@@ -628,7 +709,8 @@
           </div>
 
           <button type="submit" class="btn-admin-pill cyan" style="padding: 12px 24px; font-size: 0.9rem;">
-            ✨ Guardar Portadas en Vivo
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            <span>Guardar Portadas en Vivo</span>
           </button>
         </form>
       </div>
@@ -641,7 +723,10 @@
         <!-- Pending Deposits -->
         <div class="admin-card-box">
           <div class="admin-card-header">
-            <div class="admin-card-title">📥 Solicitudes de Recarga de Saldo Pendientes</div>
+            <div class="admin-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              <span>Solicitudes de Recarga de Saldo Pendientes</span>
+            </div>
             <span class="badge-status pending" id="finances-pending-count">0 pendientes</span>
           </div>
           <table class="admin-table">
@@ -656,7 +741,7 @@
               </tr>
             </thead>
             <tbody id="admin-pending-deposits-body">
-              <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay recargas pendientes.</td></tr>
+              <tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay recargas pendientes.</td></tr>
             </tbody>
           </table>
         </div>
@@ -664,7 +749,10 @@
         <!-- Pending Payouts -->
         <div class="admin-card-box">
           <div class="admin-card-header">
-            <div class="admin-card-title">💸 Solicitudes de Retiro de Vendedores</div>
+            <div class="admin-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+              <span>Solicitudes de Retiro de Vendedores</span>
+            </div>
           </div>
           <table class="admin-table">
             <thead>
@@ -677,7 +765,7 @@
               </tr>
             </thead>
             <tbody id="admin-pending-payouts-body">
-              <tr><td colspan="5" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay solicitudes de retiro pendientes.</td></tr>
+              <tr><td colspan="5" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay solicitudes de retiro pendientes.</td></tr>
             </tbody>
           </table>
         </div>
@@ -688,16 +776,22 @@
       <!-- ======================================================== -->
       <div id="view-tab-escrow" class="admin-tab-pane" style="display: none;">
         <div class="admin-card-box">
-          <div class="admin-card-title">🛡️ Sistema de Garantía y Protección Escrow de 30 Días</div>
+          <div class="admin-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            <span>Sistema de Garantía y Protección Escrow de 30 Días</span>
+          </div>
           <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 6px; line-height: 1.5;">
             Cuando un cliente compra un cupo de streaming o cuenta compartida, los fondos se protegen durante el periodo de garantía.
-            Si el servicio opera con total normalidad, puedes liberar el pago al vendedor; si se reporta una caída o falla, puedes reembolsar el 100% al comprador al instante.
+            Si el servicio opera con total normalidad, puedes liberar el pago al vendedor; si se reporta una falla técnica, puedes reembolsar el 100% al comprador al instante.
           </p>
         </div>
 
         <div class="admin-card-box">
           <div class="admin-card-header">
-            <div class="admin-card-title">📋 Cuentas Activas bajo Garantía Escrow</div>
+            <div class="admin-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              <span>Cuentas Activas bajo Garantía Escrow</span>
+            </div>
           </div>
           <table class="admin-table">
             <thead>
@@ -711,7 +805,7 @@
               </tr>
             </thead>
             <tbody id="admin-escrow-table-body">
-              <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando cuentas bajo garantía...</td></tr>
+              <tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">Cargando cuentas bajo garantía...</td></tr>
             </tbody>
           </table>
         </div>
@@ -723,8 +817,11 @@
       <div id="view-tab-users" class="admin-tab-pane" style="display: none;">
         <div class="admin-card-box">
           <div class="admin-card-header">
-            <div class="admin-card-title">👥 Directorio de Usuarios y Billeteras</div>
-            <input type="text" id="users-search-input" class="form-input-styled" style="max-width: 260px;" placeholder="🔍 Buscar por nombre o email...">
+            <div class="admin-card-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+              <span>Directorio de Usuarios y Billeteras</span>
+            </div>
+            <input type="text" id="users-search-input" class="form-input-styled" style="max-width: 260px;" placeholder="Buscar por nombre o email...">
           </div>
           <table class="admin-table">
             <thead>
@@ -739,7 +836,7 @@
               </tr>
             </thead>
             <tbody id="admin-users-table-body">
-              <tr><td colspan="7" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando usuarios...</td></tr>
+              <tr><td colspan="7" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">Cargando usuarios reales desde la base de datos...</td></tr>
             </tbody>
           </table>
         </div>
@@ -750,7 +847,10 @@
       <!-- ======================================================== -->
       <div id="view-tab-settings" class="admin-tab-pane" style="display: none;">
         <div class="admin-card-box">
-          <div class="admin-card-title">🏢 Configuración Financiera y Datos Bancarios Oficiales</div>
+          <div class="admin-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <span>Configuración Financiera y Datos Bancarios Oficiales</span>
+          </div>
           <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0 1.5rem 0;">
             Estos datos bancarios y direcciones de Binance se muestran a los clientes al momento de recargar saldo en la tienda.
           </p>
@@ -759,9 +859,10 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
               
               <!-- SIPAP Paraguay -->
-              <div style="background: rgba(3, 7, 18, 0.6); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-subtle);">
-                <div style="font-weight: 800; font-size: 0.95rem; color: var(--accent-cyan); margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;">
-                  <span>🇵🇾</span> Transferencia Bancaria Paraguay (SIPAP)
+              <div style="background: rgba(3, 7, 18, 0.6); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-subtle); text-align: left;">
+                <div style="font-weight: 800; font-size: 0.92rem; color: var(--accent-cyan); margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                  <span>Transferencia Bancaria Paraguay (SIPAP)</span>
                 </div>
 
                 <div style="margin-bottom: 10px;">
@@ -791,9 +892,10 @@
               </div>
 
               <!-- Binance Pay USDT -->
-              <div style="background: rgba(3, 7, 18, 0.6); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-subtle);">
-                <div style="font-weight: 800; font-size: 0.95rem; color: var(--accent-amber); margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;">
-                  <span>🌐</span> Criptomoneda USDT (Binance Pay)
+              <div style="background: rgba(3, 7, 18, 0.6); padding: 1.25rem; border-radius: 10px; border: 1px solid var(--border-subtle); text-align: left;">
+                <div style="font-weight: 800; font-size: 0.92rem; color: var(--accent-amber); margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                  <span>Criptomoneda USDT (Binance Pay)</span>
                 </div>
 
                 <div style="margin-bottom: 10px;">
@@ -831,7 +933,8 @@
             </div>
 
             <button type="submit" class="btn-admin-pill cyan" style="padding: 11px 24px; font-size: 0.88rem;">
-              💾 Guardar Parámetros Financieros
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+              <span>Guardar Parámetros Financieros</span>
             </button>
           </form>
         </div>
@@ -844,7 +947,7 @@
   <div id="modal-adjust-balance" class="admin-modal-overlay" style="display: none;">
     <div class="admin-modal-box">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-        <h3 style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800; color: #fff;">💵 Ajustar Saldo de Usuario</h3>
+        <h3 style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800; color: #fff;">Ajustar Saldo de Usuario</h3>
         <button onclick="closeAdjustModal()" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">✕</button>
       </div>
       <form id="form-adjust-user-balance">
@@ -856,8 +959,8 @@
         <div style="margin-bottom: 12px;">
           <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Tipo de Ajuste:</label>
           <select id="adjust-action-type" class="form-input-styled">
-            <option value="credit">➕ Acreditar / Sumar Saldo (Ingreso)</option>
-            <option value="debit">➖ Debitar / Restar Saldo (Deducción)</option>
+            <option value="credit">Acreditar / Sumar Saldo (Ingreso)</option>
+            <option value="debit">Debitar / Restar Saldo (Deducción)</option>
           </select>
         </div>
         <div style="margin-bottom: 12px;">
@@ -865,12 +968,12 @@
           <input type="number" id="adjust-amount-pyg" class="form-input-styled" placeholder="ej: 100000" step="1000" required>
         </div>
         <div style="margin-bottom: 16px;">
-          <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Motivo / Nota del Administrador:</label>
-          <input type="text" id="adjust-reason-note" class="form-input-styled" placeholder="ej: Bonificación especial / Corrección manual" required>
+          <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); display: block; margin-bottom: 4px;">Motivo / Nota de Auditoría:</label>
+          <input type="text" id="adjust-reason-note" class="form-input-styled" placeholder="ej: Corrección manual de recarga" required>
         </div>
         <div style="display: flex; gap: 8px; justify-content: flex-end;">
           <button type="button" onclick="closeAdjustModal()" class="btn-admin-pill" style="background: rgba(255,255,255,0.08); color: #fff;">Cancelar</button>
-          <button type="submit" class="btn-admin-pill cyan">Confirmar Ajuste ➔</button>
+          <button type="submit" class="btn-admin-pill cyan">Confirmar Ajuste</button>
         </div>
       </form>
     </div>
@@ -880,7 +983,7 @@
   <div id="modal-receipt-view" class="admin-modal-overlay" style="display: none;">
     <div class="admin-modal-box" style="max-width: 600px; text-align: center;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-        <h3 style="font-size: 1.1rem; font-weight: 800; color: #fff;">🧾 Comprobante de Transferencia</h3>
+        <h3 style="font-size: 1.1rem; font-weight: 800; color: #fff;">Comprobante de Transferencia</h3>
         <button onclick="document.getElementById('modal-receipt-view').style.display = 'none'" style="background:none; border:none; color:#fff; font-size:1.2rem; cursor:pointer;">✕</button>
       </div>
       <div id="receipt-modal-content" style="max-height: 450px; overflow-y: auto; background: #02050e; padding: 1rem; border-radius: 8px; border: 1px solid var(--border-subtle); margin-bottom: 1rem;">
@@ -903,16 +1006,15 @@
       settings: {}
     };
 
-    // Tab Switching Logic
     const tabHeadings = {
-      'tab-dashboard': { title: '📊 Métricas & Panel de Control General', sub: 'Auditoría en tiempo real, volumen transaccionado, saldos y operaciones en Paraguay.' },
-      'tab-approvals': { title: '📥 Aprobación y Prueba de Cuentas de Vendedores', sub: 'Revisa, prueba las credenciales al 100% y aprueba las cuentas para publicarlas en la tienda.' },
-      'tab-products': { title: '🎮 Catálogo de Videojuegos & Tarjetas de Regalo', sub: 'Administra inventario, precios en Guaraníes y stock de códigos digitales.' },
-      'tab-banners': { title: '🎨 Portadas Hero ENEBA en la Tienda', sub: 'Modifica las imágenes de portada y enlaces del carrusel interactivo.' },
-      'tab-finances': { title: '💰 Finanzas, Recargas SIPAP & Retiros', sub: 'Aprueba comprobantes bancarios de clientes y autoriza transferencias a vendedores.' },
-      'tab-escrow': { title: '🛡️ Garantía Escrow y Protección al Comprador', sub: 'Gestiona la protección de fondos durante los 30 días de suscripción compartida.' },
-      'tab-users': { title: '👥 Directorio de Usuarios y Billeteras', sub: 'Consulta clientes registrados y ajusta saldos en Guaraníes de forma directa.' },
-      'tab-settings': { title: '🏢 Configuración Financiera y Datos Bancarios', sub: 'Configura cotización del Guaraní, comisión de plataforma y cuentas bancarias oficiales.' }
+      'tab-dashboard': { title: 'Métricas & Panel de Control General', sub: 'Auditoría en tiempo real, volumen transaccionado, saldos y operaciones en Paraguay.' },
+      'tab-approvals': { title: 'Aprobación y Prueba de Cuentas de Vendedores', sub: 'Revisa, prueba las credenciales al 100% y aprueba las cuentas para publicarlas en la tienda.' },
+      'tab-products': { title: 'Catálogo de Videojuegos & Tarjetas de Regalo', sub: 'Administra inventario, precios en Guaraníes y stock de códigos digitales.' },
+      'tab-banners': { title: 'Portadas Hero ENEBA en la Tienda', sub: 'Modifica las imágenes de portada y enlaces del carrusel interactivo.' },
+      'tab-finances': { title: 'Finanzas, Recargas SIPAP & Retiros', sub: 'Aprueba comprobantes bancarios de clientes y autoriza transferencias a vendedores.' },
+      'tab-escrow': { title: 'Garantía Escrow y Protección al Comprador', sub: 'Gestiona la protección de fondos durante los 30 días de suscripción compartida.' },
+      'tab-users': { title: 'Directorio de Usuarios y Billeteras', sub: 'Consulta clientes registrados y ajusta saldos en Guaraníes de forma directa.' },
+      'tab-settings': { title: 'Configuración Financiera y Datos Bancarios', sub: 'Configura cotización del Guaraní, comisión de plataforma y cuentas bancarias oficiales.' }
     };
 
     function switchTab(tabId) {
@@ -949,26 +1051,25 @@
         const rate = overviewRes.settings?.exchangeRatePyg || 7500;
         document.getElementById('header-rate-display').textContent = `${rate.toLocaleString('es-PY')} Gs.`;
 
-        // Update Dashboard KPIs
-        const totalVolUsd = stats.totalSalesVolumeUsd || 0;
-        const totalVolGs = Math.round(totalVolUsd * rate);
-        document.getElementById('kpi-total-volume-gs').textContent = `${totalVolGs.toLocaleString('es-PY')} Gs.`;
-        document.getElementById('kpi-total-volume-usd').textContent = `$${totalVolUsd.toFixed(2)} USD Transaccionados`;
+        // Update Dashboard KPIs with Real DB Calculations
+        const totalVolGs = (stats.totalVolumePyg || 0).toLocaleString('es-PY');
+        const totalVolUsd = (stats.totalVolumeUsd || 0).toFixed(2);
+        document.getElementById('kpi-total-volume-gs').textContent = `${totalVolGs} Gs.`;
+        document.getElementById('kpi-total-volume-usd').textContent = `$${totalVolUsd} USD en operaciones reales`;
 
-        const commUsd = parseFloat((totalVolUsd * 0.15).toFixed(2));
-        const commGs = Math.round(commUsd * rate);
-        document.getElementById('kpi-commissions-gs').textContent = `${commGs.toLocaleString('es-PY')} Gs.`;
-        document.getElementById('kpi-commissions-usd').textContent = `$${commUsd.toFixed(2)} USD Comisiones`;
+        const commGs = (stats.totalCommissionsPyg || 0).toLocaleString('es-PY');
+        const commUsd = (stats.totalCommissionsUsd || 0).toFixed(2);
+        document.getElementById('kpi-commissions-gs').textContent = `${commGs} Gs.`;
+        document.getElementById('kpi-commissions-usd').textContent = `$${commUsd} USD comisiones ganadas`;
 
         const usersList = usersRes.users || [];
         document.getElementById('kpi-users-count').textContent = usersList.length;
         document.getElementById('kpi-users-sub').textContent = `${usersList.filter(u => u.role === 'seller').length} Vendedores • ${usersList.filter(u => u.role === 'client').length} Clientes`;
 
-        let totalEscrowUsd = 0;
-        usersList.forEach(u => { totalEscrowUsd += (u.pendingEscrowUsd || 0); });
-        const escrowGs = Math.round(totalEscrowUsd * rate);
-        document.getElementById('kpi-escrow-gs').textContent = `${escrowGs.toLocaleString('es-PY')} Gs.`;
-        document.getElementById('kpi-escrow-usd').textContent = `$${totalEscrowUsd.toFixed(2)} USD en Garantía`;
+        const escrowGs = (stats.totalEscrowPyg || 0).toLocaleString('es-PY');
+        const escrowUsd = (stats.totalEscrowUsd || 0).toFixed(2);
+        document.getElementById('kpi-escrow-gs').textContent = `${escrowGs} Gs.`;
+        document.getElementById('kpi-escrow-usd').textContent = `$${escrowUsd} USD en Garantía Escrow`;
 
         // Update Notification Badges
         const pendingSubs = pendingSubsRes.subscriptions || [];
@@ -983,7 +1084,7 @@
         document.getElementById('quick-badge-deposits').textContent = pendingDeposits.length;
 
         // Render Tables
-        renderDashboardRecentTxs(overviewRes.pendingDeposits || []);
+        renderDashboardRecentTxs(overviewRes.recentTransactions || overviewRes.pendingDeposits || []);
         renderPendingSubsTable(pendingSubs, rate);
         renderProductsTable(productsList, rate);
         renderHeroBannersEditor(bannersRes.banners || []);
@@ -996,19 +1097,19 @@
       }
     }
 
-    function renderDashboardRecentTxs(deposits) {
+    function renderDashboardRecentTxs(txs) {
       const container = document.getElementById('dashboard-recent-txs-body');
-      if (!deposits || deposits.length === 0) {
-        container.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 1.5rem;">No hay transacciones recientes pendientes de revisión.</td></tr>`;
+      if (!txs || txs.length === 0) {
+        container.innerHTML = `<tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 1.5rem;">No hay transacciones registradas en el historial.</td></tr>`;
         return;
       }
-      container.innerHTML = deposits.slice(0, 5).map(tx => `
+      container.innerHTML = txs.slice(0, 8).map(tx => `
         <tr>
-          <td><strong style="color: #fff;">${tx.userName}</strong></td>
-          <td><span class="badge-status pending">Recarga</span></td>
-          <td><strong style="color: var(--accent-emerald); font-family: var(--font-mono);">${(tx.localAmount || 0).toLocaleString('es-PY')} Gs.</strong></td>
-          <td>${tx.method === 'binance_usdt' ? '🌐 Binance USDT' : '🇵🇾 SIPAP Paraguay'}</td>
-          <td><span class="badge-status ${tx.status === 'approved' ? 'approved' : 'pending'}">${tx.status}</span></td>
+          <td><strong style="color: #fff;">${tx.userName || 'Usuario'}</strong></td>
+          <td><span class="badge-status ${tx.type === 'deposit' ? 'pending' : 'approved'}">${tx.type}</span></td>
+          <td><strong style="color: var(--accent-emerald); font-family: var(--font-mono);">${(tx.localAmount || Math.round(tx.amountUsd * 7500)).toLocaleString('es-PY')} Gs.</strong></td>
+          <td>${tx.method === 'binance_usdt' ? 'Binance USDT' : (tx.method === 'sipap_paraguay' ? 'SIPAP Paraguay' : tx.method)}</td>
+          <td><span class="badge-status ${tx.status === 'approved' ? 'approved' : (tx.status === 'rejected' ? 'rejected' : 'pending')}">${tx.status}</span></td>
           <td>${new Date(tx.createdAt).toLocaleDateString('es-PY')}</td>
         </tr>
       `).join('');
@@ -1020,7 +1121,7 @@
       if (counterBadge) counterBadge.textContent = `${subs.length} pendientes`;
 
       if (!subs || subs.length === 0) {
-        container.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">✨ No hay cuentas de vendedores pendientes por auditar. Todas están al día.</td></tr>`;
+        container.innerHTML = `<tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay cuentas de vendedores pendientes por auditar. Todas están al día.</td></tr>`;
         return;
       }
 
@@ -1036,14 +1137,14 @@
             <td><strong>${s.totalSlots}</strong> cupos</td>
             <td><strong style="color: #fff; font-family: var(--font-mono);">${priceGs} Gs.</strong></td>
             <td>
-              <div style="background: rgba(0,0,0,0.5); padding: 6px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent-cyan);">
+              <div style="background: rgba(0,0,0,0.6); padding: 6px 10px; border-radius: 6px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent-cyan);">
                 ${s.credentialsDecrypted || 'Credenciales protegidas'}
               </div>
             </td>
             <td>
               <div style="display: flex; gap: 6px;">
-                <button class="btn-admin-pill emerald" onclick="approveSub('${s.id}')">✓ Aprobar</button>
-                <button class="btn-admin-pill red" onclick="rejectSub('${s.id}')">✕ Rechazar</button>
+                <button class="btn-admin-pill emerald" onclick="approveSub('${s.id}')">Aprobar</button>
+                <button class="btn-admin-pill red" onclick="rejectSub('${s.id}')">Rechazar</button>
               </div>
             </td>
           </tr>
@@ -1057,7 +1158,7 @@
       if (countBadge) countBadge.textContent = `${products.length} productos`;
 
       if (!products || products.length === 0) {
-        container.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay productos en el catálogo.</td></tr>`;
+        container.innerHTML = `<tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay productos en el catálogo.</td></tr>`;
         return;
       }
 
@@ -1074,12 +1175,12 @@
                 </div>
               </div>
             </td>
-            <td>${p.category === 'gift_card' ? '🎁 Gift Card' : '🎮 Videojuego'}</td>
+            <td>${p.category === 'gift_card' ? 'Gift Card' : 'Videojuego'}</td>
             <td><span class="badge-status approved">${p.platform}</span></td>
             <td><strong style="color: #fff; font-family: var(--font-mono);">${priceGs} Gs.</strong></td>
             <td><strong style="color: ${p.stockCount > 0 ? 'var(--accent-emerald)' : 'var(--accent-red)'};">${p.stockCount} códigos</strong></td>
             <td>
-              <button class="btn-admin-pill red" onclick="deleteProduct('${p.id}')">🗑️ Eliminar</button>
+              <button class="btn-admin-pill red" onclick="deleteProduct('${p.id}')">Eliminar</button>
             </td>
           </tr>
         `;
@@ -1091,9 +1192,9 @@
       if (!banners || banners.length === 0) return;
 
       container.innerHTML = banners.slice(0, 4).map((b, idx) => `
-        <div style="background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-medium); border-radius: 12px; padding: 1.25rem;">
+        <div style="background: rgba(3, 7, 18, 0.7); border: 1px solid var(--border-medium); border-radius: 12px; padding: 1.25rem; text-align: left;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <strong style="color: var(--accent-cyan); font-size: 0.9rem;">Slide #${idx + 1}</strong>
+            <strong style="color: var(--accent-cyan); font-size: 0.88rem;">Slide #${idx + 1}</strong>
             <span class="badge-status approved">${b.badge || 'DESTACADO'}</span>
           </div>
 
@@ -1132,22 +1233,22 @@
       if (finCount) finCount.textContent = `${deposits.length} pendientes`;
 
       if (!deposits || deposits.length === 0) {
-        depBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">✨ No hay comprobantes de recarga pendientes de auditar.</td></tr>`;
+        depBody.innerHTML = `<tr><td colspan="6" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay comprobantes de recarga pendientes de auditar.</td></tr>`;
       } else {
         depBody.innerHTML = deposits.map(d => `
           <tr>
             <td><strong style="color: #fff;">${d.userName}</strong></td>
             <td><strong style="color: var(--accent-emerald); font-family: var(--font-mono);">${(d.localAmount || 0).toLocaleString('es-PY')} Gs.</strong> <small style="color: var(--text-tertiary);">($${d.amountUsd} USD)</small></td>
-            <td><span class="badge-status approved">${d.method === 'binance_usdt' ? '🌐 Binance USDT' : '🇵🇾 SIPAP'}</span></td>
+            <td><span class="badge-status approved">${d.method === 'binance_usdt' ? 'Binance USDT' : 'SIPAP'}</span></td>
             <td>
               <div><strong>${d.reference || 'N/A'}</strong></div>
-              ${d.receiptData ? `<button class="btn-admin-pill cyan" style="margin-top: 4px; padding: 3px 8px; font-size: 0.72rem;" onclick="viewReceipt('${d.receiptData}')">👁️ Ver Comprobante</button>` : ''}
+              ${d.receiptData ? `<button class="btn-admin-pill cyan" style="margin-top: 4px; padding: 3px 8px; font-size: 0.72rem;" onclick="viewReceipt('${d.receiptData}')">Ver Comprobante</button>` : ''}
             </td>
             <td>${new Date(d.createdAt).toLocaleDateString('es-PY')}</td>
             <td>
               <div style="display: flex; gap: 6px;">
-                <button class="btn-admin-pill emerald" onclick="approveDeposit('${d.id}')">✓ Acreditar Saldo</button>
-                <button class="btn-admin-pill red" onclick="rejectDeposit('${d.id}')">✕ Rechazar</button>
+                <button class="btn-admin-pill emerald" onclick="approveDeposit('${d.id}')">Acreditar Saldo</button>
+                <button class="btn-admin-pill red" onclick="rejectDeposit('${d.id}')">Rechazar</button>
               </div>
             </td>
           </tr>
@@ -1155,7 +1256,7 @@
       }
 
       if (!payouts || payouts.length === 0) {
-        payBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay solicitudes de retiro pendientes de transferir.</td></tr>`;
+        payBody.innerHTML = `<tr><td colspan="5" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No hay solicitudes de retiro pendientes de transferir.</td></tr>`;
       } else {
         payBody.innerHTML = payouts.map(p => `
           <tr>
@@ -1164,7 +1265,7 @@
             <td>${p.method}</td>
             <td><pre style="font-size: 0.72rem; color: var(--text-secondary); margin: 0;">${JSON.stringify(p.accountDetails, null, 2)}</pre></td>
             <td>
-              <button class="btn-admin-pill emerald" onclick="approvePayout('${p.id}')">✓ Marcar Transferido</button>
+              <button class="btn-admin-pill emerald" onclick="approvePayout('${p.id}')">Marcar Transferido</button>
             </td>
           </tr>
         `).join('');
@@ -1174,7 +1275,7 @@
     function renderUsersTable(users, rate) {
       const container = document.getElementById('admin-users-table-body');
       if (!users || users.length === 0) {
-        container.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No se encontraron usuarios.</td></tr>`;
+        container.innerHTML = `<tr><td colspan="7" style="text-align: left; color: var(--text-tertiary); padding: 2rem;">No se encontraron usuarios en la base de datos.</td></tr>`;
         return;
       }
 
@@ -1185,7 +1286,6 @@
           <tr>
             <td>
               <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 1.2rem;">${u.avatar || '🎮'}</span>
                 <strong style="color: #fff;">${u.name}</strong>
               </div>
             </td>
@@ -1196,7 +1296,7 @@
             <td>${u.ordersCount || 0} compras</td>
             <td>
               <button class="btn-admin-pill amber" onclick="openAdjustModal('${u.id}', '${u.name}', '${balGs}')">
-                💵 Ajustar Saldo
+                Ajustar Saldo
               </button>
             </td>
           </tr>
@@ -1266,7 +1366,7 @@
         });
         const data = await res.json();
         if (data.success) {
-          alert(`🎉 ${data.message}`);
+          alert(data.message);
           closeAdjustModal();
           loadAdminData();
         } else {
@@ -1295,7 +1395,7 @@
         });
         const data = await res.json();
         if (data.success) {
-          alert(`🎉 ${data.message}`);
+          alert(data.message);
           document.getElementById('form-admin-add-product').reset();
           loadAdminData();
         } else {
@@ -1338,7 +1438,7 @@
         });
         const data = await res.json();
         if (data.success) {
-          alert('✨ ¡Portadas Hero actualizadas y sincronizadas en la tienda!');
+          alert('Portadas Hero actualizadas y sincronizadas en la tienda.');
           loadAdminData();
         } else {
           alert('Error al guardar banners.');
@@ -1376,7 +1476,7 @@
         });
         const data = await res.json();
         if (data.success) {
-          alert('✨ ¡Configuración financiera y de cobros guardada con éxito!');
+          alert('Configuración financiera y de cobros guardada con éxito.');
           loadAdminData();
         } else {
           alert('Error al guardar configuración.');
@@ -1392,7 +1492,7 @@
       try {
         const res = await fetch('/api/admin/approve-deposit/' + id, { method: 'POST' });
         const data = await res.json();
-        if (data.success) { alert(`🎉 ${data.message}`); loadAdminData(); }
+        if (data.success) { alert(data.message); loadAdminData(); }
       } catch (e) { alert('Error al aprobar.'); }
     }
 
@@ -1415,7 +1515,7 @@
       try {
         const res = await fetch('/api/admin/approve-payout/' + id, { method: 'POST' });
         const data = await res.json();
-        if (data.success) { alert(`🎉 ${data.message}`); loadAdminData(); }
+        if (data.success) { alert(data.message); loadAdminData(); }
       } catch (e) { alert('Error al aprobar retiro.'); }
     }
 

@@ -144,7 +144,10 @@
           <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 38px; width: auto; filter: none; margin-bottom: 0.85rem;">
         </a>
         <div>
-          <span class="badge-master-tag">👑 Portal de Administrador Master</span>
+          <span class="badge-master-tag">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            Portal de Administrador Master
+          </span>
         </div>
         <h1 style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
           Control & Gestión Global
@@ -167,13 +170,14 @@
 
         <button type="submit" class="btn-admin-submit" id="btn-admin-submit">
           <span>Entrar al Panel de Control</span>
-          <span>➔</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </button>
       </form>
 
       <div class="quick-creds-box">
         <button type="button" class="btn-quick-fill" id="btn-fill-creds" title="Autocompletar credenciales oficiales">
-          <span>⚡ Autocompletar Credenciales Master</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          <span>Autocompletar Credenciales Master</span>
         </button>
         <div style="margin-top: 12px;">
           <a href="/" style="font-size: 0.8rem; color: var(--text-tertiary); text-decoration: none;">← Volver al Marketplace Público</a>
@@ -217,7 +221,7 @@
             name: 'Admin GamesBoy',
             email: email,
             role: 'admin',
-            avatar: '👑',
+            avatar: '/assets/branding/icon.png',
             balanceUsd: 1250.00
           };
           localStorage.setItem('gb_admin_session', JSON.stringify(adminSession));
@@ -230,7 +234,7 @@
           name: 'Admin GamesBoy',
           email: email,
           role: 'admin',
-          avatar: '👑',
+          avatar: '/assets/branding/icon.png',
           balanceUsd: 1250.00
         };
         localStorage.setItem('gb_admin_session', JSON.stringify(adminSession));
