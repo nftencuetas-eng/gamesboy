@@ -142,6 +142,14 @@ CREATE TABLE IF NOT EXISTS gamesboy.gb_hero_banners (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Migraciones dinámicas para tablas existentes
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS brand_theme VARCHAR(64) DEFAULT 'psn';
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS badge VARCHAR(64);
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS icon VARCHAR(32);
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS codes JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE gamesboy.gb_hero_banners ADD COLUMN IF NOT EXISTS sort_order INT DEFAULT 0;
+ALTER TABLE gamesboy.gb_hero_banners ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
+
 -- ============================================================================
 -- SEED DATA OFICIAL: USUARIOS, SALDOS REALES Y CONFIGURACIÓN INICIAL
 -- ============================================================================
@@ -160,11 +168,14 @@ ON CONFLICT (email) DO UPDATE SET
 
 -- 2. Insertar Billeteras con Saldos Reales en USD (Convertibles a Guaraníes)
 INSERT INTO gamesboy.gb_wallets (user_id, balance_usd, pending_escrow_usd)
-VALUES
-    ('usr_admin', 1250.00, 0.00),     -- 9.375.000 Gs.
-    ('usr_seller1', 85.50, 22.00),    -- 641.250 Gs. (+ 165.000 Gs. en Escrow)
-    ('usr_client1', 25.00, 0.00),     -- 187.500 Gs.
-    ('usr_client2', 50.00, 0.00)      -- 375.000 Gs.
+SELECT u.id, v.bal, v.esc
+FROM (VALUES 
+    ('admin@gamesboy.net', 1250.00, 0.00),     -- 9.375.000 Gs.
+    ('carlos@vendedor.com', 85.50, 22.00),    -- 641.250 Gs. (+ 165.000 Gs. en Escrow)
+    ('lucas@cliente.com', 25.00, 0.00),     -- 187.500 Gs.
+    ('maria@cliente.com', 50.00, 0.00)      -- 375.000 Gs.
+) AS v(email, bal, esc)
+JOIN gamesboy.gb_users u ON u.email = v.email
 ON CONFLICT (user_id) DO UPDATE SET
     balance_usd = EXCLUDED.balance_usd,
     pending_escrow_usd = EXCLUDED.pending_escrow_usd;
@@ -202,11 +213,14 @@ ON CONFLICT (id) DO UPDATE SET
 
 -- 5. Insertar Cuentas de Streaming Oficiales y de Vendedor
 INSERT INTO gamesboy.gb_subscriptions (id, seller_id, seller_name, is_official, service_name, category, plan_name, total_slots, available_slots, price_per_slot_usd, credentials_encrypted, pins_encrypted, instructions, status)
-VALUES
-    ('sub_netflix_official', 'usr_admin', 'GamesBoy Oficial', true, 'Netflix Premium 4K', 'streaming', 'Ultra HD 4 Pantallas', 4, 3, 4.99, 'netflix.vip@gamesboy.net:::StreamPass2026!', '{"1": "1244", "2": "5821", "3": "9032", "4": "7110"}', 'Ingresa con el correo y contraseña provistos. Usa exclusivamente tu Perfil y PIN asignado.', 'active'),
-    ('sub_spotify_official', 'usr_admin', 'GamesBoy Oficial', true, 'Spotify Premium Familiar', 'streaming', 'Plan Familiar 6 Cuentas', 5, 4, 3.99, 'https://spotify.com/family/join/invite/xyz987token:::Invitar a tu cuenta propia', '{}', 'Recibirás un enlace de invitación oficial para activar Spotify Premium en tu propia cuenta personal.', 'active'),
-    ('sub_disney_official', 'usr_admin', 'GamesBoy Oficial', true, 'Disney+ Premium & Star+', 'streaming', 'Plan Premium 4K HDR', 4, 2, 4.99, 'disney.master@gamesboy.net:::MagicKingdom2026!', '{"1": "4091", "2": "8832", "3": "1944", "4": "6211"}', 'Acceso al catálogo completo de Disney, Marvel, Star Wars y deportes de ESPN.', 'active'),
-    ('sub_max_official', 'usr_admin', 'GamesBoy Oficial', true, 'Max (HBO Max) 4K', 'streaming', 'Platino 4K Dolby Atmos', 3, 2, 4.99, 'max.vip@gamesboy.net:::HboMaxMaster2026!', '{"1": "3311", "2": "4422", "3": "5533"}', 'Disfruta de películas de Warner Bros, HBO Originales y Champions League.', 'active')
+SELECT v.id, u.id, v.seller_name, v.is_official, v.service_name, v.category, v.plan_name, v.total_slots, v.available_slots, v.price_per_slot_usd, v.credentials_encrypted, v.pins_encrypted, v.instructions, v.status
+FROM (VALUES
+    ('sub_netflix_official', 'admin@gamesboy.net', 'GamesBoy Oficial', true, 'Netflix Premium 4K', 'streaming', 'Ultra HD 4 Pantallas', 4, 3, 4.99, 'netflix.vip@gamesboy.net:::StreamPass2026!', '{"1": "1244", "2": "5821", "3": "9032", "4": "7110"}', 'Ingresa con el correo y contraseña provistos. Usa exclusivamente tu Perfil y PIN asignado.', 'active'),
+    ('sub_spotify_official', 'admin@gamesboy.net', 'GamesBoy Oficial', true, 'Spotify Premium Familiar', 'streaming', 'Plan Familiar 6 Cuentas', 5, 4, 3.99, 'https://spotify.com/family/join/invite/xyz987token:::Invitar a tu cuenta propia', '{}', 'Recibirás un enlace de invitación oficial para activar Spotify Premium en tu propia cuenta personal.', 'active'),
+    ('sub_disney_official', 'admin@gamesboy.net', 'GamesBoy Oficial', true, 'Disney+ Premium & Star+', 'streaming', 'Plan Premium 4K HDR', 4, 2, 4.99, 'disney.master@gamesboy.net:::MagicKingdom2026!', '{"1": "4091", "2": "8832", "3": "1944", "4": "6211"}', 'Acceso al catálogo completo de Disney, Marvel, Star Wars y deportes de ESPN.', 'active'),
+    ('sub_max_official', 'admin@gamesboy.net', 'GamesBoy Oficial', true, 'Max (HBO Max) 4K', 'streaming', 'Platino 4K Dolby Atmos', 3, 2, 4.99, 'max.vip@gamesboy.net:::HboMaxMaster2026!', '{"1": "3311", "2": "4422", "3": "5533"}', 'Disfruta de películas de Warner Bros, HBO Originales y Champions League.', 'active')
+) AS v(id, seller_email, seller_name, is_official, service_name, category, plan_name, total_slots, available_slots, price_per_slot_usd, credentials_encrypted, pins_encrypted, instructions, status)
+JOIN gamesboy.gb_users u ON u.email = v.seller_email
 ON CONFLICT (id) DO UPDATE SET
     service_name = EXCLUDED.service_name,
     available_slots = EXCLUDED.available_slots,

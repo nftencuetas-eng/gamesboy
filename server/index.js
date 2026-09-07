@@ -22,6 +22,13 @@ import { notFoundHandler, globalErrorHandler } from './middleware/errorHandler.j
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+process.on('uncaughtException', (err) => {
+  console.warn('⚠️ [Process] Handled uncaughtException:', err.message);
+});
+process.on('unhandledRejection', (reason) => {
+  console.warn('⚠️ [Process] Handled unhandledRejection:', reason);
+});
+
 const app = express();
 const server = http.createServer(app);
 

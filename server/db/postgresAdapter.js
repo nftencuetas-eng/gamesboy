@@ -23,8 +23,15 @@ export async function initPostgres() {
       ssl: process.env.DB_SSL === 'false' ? false : { rejectUnauthorized: false }
     });
 
+    pool.on('error', (err) => {
+      console.warn('⚠️ [PostgreSQL Pool] Idle client connection drop caught (auto-handled):', err.message);
+    });
+
     // Test connection
     const client = await pool.connect();
+    client.on('error', (err) => {
+      console.warn('⚠️ [PostgreSQL Client] Handled client connection reset:', err.message);
+    });
     console.log('🔌 [PostgreSQL / Supabase] Connected successfully to isolated GamesBoy cluster.');
 
     // Execute schema migration

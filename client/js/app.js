@@ -890,7 +890,13 @@ async function updateUserBalanceDisplay() {
   const payoutBalEl = document.getElementById('payout-available-balance-gs');
   if (!balanceEl && !payoutBalEl) return;
 
-  const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
+  if (!state.currentUser) {
+    if (balanceEl) balanceEl.textContent = '0 Gs.';
+    if (payoutBalEl) payoutBalEl.textContent = '0 Gs.';
+    return;
+  }
+
+  const userId = state.currentUser.id;
 
   try {
     const res = await fetch('/api/wallet/balance', {
@@ -1177,6 +1183,12 @@ function initPayoutModal() {
 }
 
 function initUserSession() {
+  // If logged in as admin on the client store, automatically isolate and redirect to /admin
+  if (state.currentUser && (state.currentUser.role === 'admin' || state.currentUser.email === 'admin@gamesboy.net')) {
+    window.location.replace('/admin');
+    return;
+  }
+
   const unloggedGroup = document.getElementById('auth-unlogged-group');
   const loggedGroup = document.getElementById('auth-logged-group');
   const navUserName = document.getElementById('nav-user-name');
@@ -1196,19 +1208,19 @@ function initUserSession() {
 
     if (user.role === 'admin') {
       if (roleBadge) {
-        roleBadge.textContent = '👑 Administrador Master';
+        roleBadge.textContent = 'Administrador Master';
         roleBadge.style.color = '#f59e0b';
       }
       if (adminMenuContainer) adminMenuContainer.style.display = 'block';
     } else if (user.role === 'seller') {
       if (roleBadge) {
-        roleBadge.textContent = '💼 Vendedor Verificado';
+        roleBadge.textContent = 'Vendedor Verificado';
         roleBadge.style.color = '#34d399';
       }
       if (adminMenuContainer) adminMenuContainer.style.display = 'none';
     } else {
       if (roleBadge) {
-        roleBadge.textContent = '🎮 Cliente Verificado';
+        roleBadge.textContent = 'Cliente Verificado';
         roleBadge.style.color = '#00c2ff';
       }
       if (adminMenuContainer) adminMenuContainer.style.display = 'none';
@@ -1222,10 +1234,17 @@ function initUserSession() {
     if (dropdownUserAvatarImg) dropdownUserAvatarImg.src = avatarSrc;
   };
 
-  if (state.currentUser && state.currentUser.name) {
-    if (unloggedGroup) unloggedGroup.style.display = 'none';
-    if (loggedGroup) loggedGroup.style.display = 'flex';
+  if (state.currentUser && state.currentUser.name && state.currentUser.role !== 'admin') {
+    if (unloggedGroup) {
+      unloggedGroup.classList.add('is-hidden');
+      unloggedGroup.style.display = 'none';
+    }
+    if (loggedGroup) {
+      loggedGroup.classList.remove('is-hidden');
+      loggedGroup.style.display = 'inline-flex';
+    }
     updateUserDisplay(state.currentUser);
+    updateUserBalanceDisplay();
 
     // Sync latest profile from backend
     fetch('/api/auth/profile', { headers: { 'x-user-id': state.currentUser.id } })
@@ -1240,8 +1259,14 @@ function initUserSession() {
       })
       .catch(() => {});
   } else {
-    if (unloggedGroup) unloggedGroup.style.display = 'flex';
-    if (loggedGroup) loggedGroup.style.display = 'none';
+    if (unloggedGroup) {
+      unloggedGroup.classList.remove('is-hidden');
+      unloggedGroup.style.display = 'inline-flex';
+    }
+    if (loggedGroup) {
+      loggedGroup.classList.add('is-hidden');
+      loggedGroup.style.display = 'none';
+    }
   }
 
   // Profile Dropdown Toggle
@@ -1296,19 +1321,21 @@ function initUserSession() {
     };
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem('gb_user');
+    localStorage.removeItem('gb_admin_session');
+    window.location.href = '/';
+  };
+
+  const btnHeaderLogout = document.getElementById('btn-header-logout');
+  if (btnHeaderLogout) btnHeaderLogout.onclick = handleLogout;
+
   const btnLogoutUser = document.getElementById('btn-logout-user');
-  if (btnLogoutUser) {
-    btnLogoutUser.onclick = () => {
-      localStorage.removeItem('gb_user');
-      localStorage.removeItem('gb_admin_session');
-      window.location.reload();
-    };
-  }
+  if (btnLogoutUser) btnLogoutUser.onclick = handleLogout;
 
   // Init Modals
   initDepositModal();
   initPayoutModal();
-  updateUserBalanceDisplay();
 
   // Group Chat Modal Handlers
   const modalGroupChat = document.getElementById('modal-group-chat');

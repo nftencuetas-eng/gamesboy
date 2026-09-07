@@ -323,12 +323,12 @@
       } catch (err) {
         // Fallback local
         if (email.toLowerCase().includes('admin')) {
-          const adminObj = { id: 'usr_admin', name: 'Admin GamesBoy', email: email, role: 'admin', avatar: '👑', balanceUsd: 1250 };
+          const adminObj = { id: 'usr_admin', name: 'Admin GamesBoy', email: email, role: 'admin', avatar: '/assets/branding/icon.png', balanceUsd: 1250 };
           localStorage.setItem('gb_user', JSON.stringify(adminObj));
           localStorage.setItem('gb_admin_session', JSON.stringify(adminObj));
           window.location.href = '/admin';
         } else {
-          const userObj = { id: 'usr_' + Date.now(), name: email.split('@')[0], email: email, role: 'client', avatar: '🎮', balanceUsd: 25.00 };
+          const userObj = { id: 'usr_' + Date.now(), name: email.split('@')[0], email: email, role: 'client', avatar: '/assets/branding/icon.png', balanceUsd: 25.00 };
           localStorage.setItem('gb_user', JSON.stringify(userObj));
           window.location.href = '/';
         }
@@ -349,7 +349,7 @@
         name: 'Admin GamesBoy',
         email: 'admin@gamesboy.net',
         role: 'admin',
-        avatar: '👑',
+        avatar: '/assets/branding/icon.png',
         balanceUsd: 1250.00
       });
     });
@@ -360,7 +360,7 @@
         name: 'Lucas González',
         email: 'lucas@cliente.com',
         role: 'client',
-        avatar: '🎮',
+        avatar: '/assets/branding/icon.png',
         balanceUsd: 25.00
       });
     });
@@ -371,7 +371,7 @@
         name: 'María López',
         email: 'maria@cliente.com',
         role: 'client',
-        avatar: '🌸',
+        avatar: '/assets/branding/icon.png',
         balanceUsd: 50.00
       });
     });
@@ -382,18 +382,18 @@
         name: 'Carlos Streams',
         email: 'carlos@vendedor.com',
         role: 'seller',
-        avatar: '💼',
+        avatar: '/assets/branding/icon.png',
         balanceUsd: 85.50
       });
     });
 
-    document.getElementById('btn-google-login').addEventListener('click', () => {
+    document.getElementById('btn-google-login')?.addEventListener('click', () => {
       handleLogin('lucas.google@gmail.com', 'google-oauth', {
         id: 'usr_google_' + Date.now(),
         name: 'Lucas González (Google)',
         email: 'lucas.google@gmail.com',
         role: 'client',
-        avatar: '🎮',
+        avatar: '/assets/branding/icon.png',
         balanceUsd: 25.00
       });
     });
