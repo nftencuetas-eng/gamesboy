@@ -739,19 +739,17 @@ window.openBuyGameModal = function(id) {
     <img src="${url}" style="height: 85px; width: 140px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1);">
   `).join('');
 
-  // Options Grid
+  // Options Grid (Only Primary & Secondary Accounts as per platform business model)
   const rate = state.exchangeRatePyg || 7500;
-  const primaryPrice = game.primaryPriceUsd || game.priceUsd || 39.99;
-  const secondaryPrice = game.secondaryPriceUsd || Math.round(primaryPrice * 0.65);
-  const keyPrice = game.digitalKeyPriceUsd || game.priceUsd || 59.99;
+  const primaryPrice = game.primaryPriceUsd || game.priceUsd || (game.primaryPricePyg ? parseFloat((game.primaryPricePyg / rate).toFixed(2)) : 39.99);
+  const secondaryPrice = game.secondaryPriceUsd || (game.secondaryPricePyg ? parseFloat((game.secondaryPricePyg / rate).toFixed(2)) : Math.round(primaryPrice * 0.65));
 
   let selectedPrice = primaryPrice;
   let selectedOptionTitle = 'Cuenta Primaria';
 
   const options = [
-    { key: 'primary', label: 'Cuenta Primaria', price: primaryPrice, desc: 'Juega con tu perfil propio' },
-    { key: 'secondary', label: 'Cuenta Secundaria', price: secondaryPrice, desc: 'Juega conectado al perfil del juego' },
-    { key: 'key', label: 'Código Digital Key', price: keyPrice, desc: 'Canje directo en tu consola' }
+    { key: 'primary', label: 'Cuenta Primaria', price: primaryPrice, pyg: game.primaryPricePyg || Math.round(primaryPrice * rate), desc: 'Juega con tu propio perfil personal y logros' },
+    { key: 'secondary', label: 'Cuenta Secundaria', price: secondaryPrice, pyg: game.secondaryPricePyg || Math.round(secondaryPrice * rate), desc: 'Juega conectado al perfil del juego con activación' }
   ];
 
   const optionsContainer = document.getElementById('modal-buy-options-grid');

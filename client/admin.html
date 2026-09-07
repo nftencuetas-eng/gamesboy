@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/main.css?v=3.3">
+  <link rel="stylesheet" href="/css/main.css?v=3.5">
   
   <style>
     .admin-layout {
@@ -22,7 +22,7 @@
         radial-gradient(circle at 90% 20%, rgba(245, 158, 11, 0.04) 0%, transparent 45%);
     }
     .admin-sidebar {
-      background: rgba(10, 13, 22, 0.88);
+      background: rgba(10, 13, 22, 0.92);
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
       border-right: 1px solid rgba(255, 255, 255, 0.08);
@@ -53,7 +53,7 @@
       background: transparent;
       border: 1px solid transparent;
       color: #94a3b8;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       font-weight: 700;
       cursor: pointer;
       text-align: left;
@@ -84,6 +84,14 @@
       font-weight: 800;
       padding: 2px 7px;
       border-radius: 20px !important;
+    }
+    .badge-count.red {
+      background: #ef4444;
+      color: #ffffff;
+    }
+    .badge-count.cyan {
+      background: var(--accent-cyan);
+      color: #040c1e;
     }
 
     .kpi-grid {
@@ -240,13 +248,70 @@
       color: #f59e0b;
     }
 
+    /* Filters Bar Controls */
+    .filter-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      background: rgba(5, 7, 14, 0.6);
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .filter-input-search {
+      flex: 1;
+      min-width: 220px;
+      background: rgba(16, 20, 32, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      outline: none;
+    }
+    .filter-input-search:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 10px rgba(0, 194, 255, 0.2);
+    }
+
+    /* Sub Tabs */
+    .sub-tabs-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 8px;
+    }
+    .sub-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-tertiary);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .sub-tab-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .sub-tab-btn.active {
+      background: rgba(0, 194, 255, 0.12);
+      border-color: rgba(0, 194, 255, 0.3);
+      color: var(--accent-cyan);
+    }
+
     /* Modal Form Inputs */
     .admin-form-group {
       margin-bottom: 1.15rem;
     }
     .admin-form-label {
       display: block;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
       color: var(--text-secondary);
       margin-bottom: 6px;
@@ -269,6 +334,108 @@
     .admin-form-input:focus, .admin-form-select:focus, .admin-form-textarea:focus {
       border-color: var(--accent-cyan);
       box-shadow: 0 0 12px rgba(0, 194, 255, 0.2);
+    }
+
+    /* Image Drop & Preview Zone */
+    .file-upload-zone {
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      background: rgba(5, 7, 14, 0.5);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .file-upload-zone:hover {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 194, 255, 0.03);
+    }
+    .file-upload-zone input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .screenshots-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .screenshot-thumb-item {
+      position: relative;
+      height: 65px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .screenshot-thumb-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .screenshot-thumb-item .btn-remove-shot {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      background: rgba(239, 68, 68, 0.85);
+      color: white;
+      border: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Pagination Bar */
+    .pagination-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .pagination-buttons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .btn-page {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-page:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+    }
+    .btn-page.active {
+      background: var(--accent-cyan);
+      color: #040c1e;
+      border-color: var(--accent-cyan);
+      font-weight: 800;
+    }
+    .btn-page:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
     }
 
     @media (max-width: 992px) {
@@ -306,26 +473,31 @@
         </button>
         <button class="admin-menu-btn" data-tab="tab-giftcards-management">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="12" rx="2"></rect><path d="M12 8v12"></path><path d="M12 8h4.5a2.5 2.5 0 0 0 0-5C13 3 12 8 12 8z"></path><path d="M12 8H7.5a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8z"></path></svg>
-          <span>3. Gift Cards & Bóveda</span>
-          <span class="badge-count" id="badge-gc-count" style="background: var(--accent-cyan); color: #040c1e;">0</span>
+          <span>3. Gift Cards / Tarjetas de Regalo</span>
+          <span class="badge-count cyan" id="badge-gc-count">0</span>
+        </button>
+        <button class="admin-menu-btn" data-tab="tab-orders-delivery">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span>4. Entregas Pendientes (Órdenes)</span>
+          <span class="badge-count red" id="badge-pending-orders" style="display: none;">0</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-streaming-moderation">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
-          <span>4. Streaming & Moderación</span>
-          <span class="badge-count" id="badge-pending-subs" style="display: none; background: #ef4444; color: #fff;">0</span>
+          <span>5. Streaming & Moderación</span>
+          <span class="badge-count red" id="badge-pending-subs" style="display: none;">0</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-smm-api">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-          <span>5. Impulso Digital (API SMM)</span>
+          <span>6. Impulso Digital (API SMM)</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-users">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-          <span>6. Usuarios & Billeteras</span>
+          <span>7. Usuarios & Billeteras</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-finance">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-          <span>7. Finanzas & Recargas</span>
-          <span class="badge-count" id="badge-pending-deposits" style="display: none; background: #ef4444; color: #fff;">0</span>
+          <span>8. Finanzas & Recargas</span>
+          <span class="badge-count red" id="badge-pending-deposits" style="display: none;">0</span>
         </button>
       </nav>
 
@@ -435,14 +607,14 @@
       </section>
 
       <!-- ======================================================= -->
-      <!-- TAB 2: DIGITAL GAMES MANAGEMENT (SEPARATED & COMPLETE) -->
+      <!-- TAB 2: DIGITAL GAMES MANAGEMENT (WITH FULL PAGINATION)  -->
       <!-- ======================================================= -->
       <section id="tab-games-management" class="admin-section-pane">
         <div class="admin-card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 12px;">
             <div>
               <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff;">Catálogo de Videojuegos Digitales</h3>
-              <p style="font-size: 0.8rem; color: var(--text-tertiary);">Gestiona títulos, consolas, precios de cuenta primaria/secundaria y capturas de juego.</p>
+              <p style="font-size: 0.8rem; color: var(--text-tertiary);">Gestiona títulos, consolas, precios en Guaraníes para Cuenta Primaria/Secundaria y subida directa de capturas.</p>
             </div>
             <button id="btn-open-modal-add-game" class="btn-admin-action cyan" style="padding: 9px 16px; font-size: 0.84rem;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
@@ -450,15 +622,49 @@
             </button>
           </div>
 
+          <!-- SMART SEARCH & FILTER TOOLBAR -->
+          <div class="filter-toolbar">
+            <div style="position: relative; flex: 1; min-width: 240px;">
+              <input type="text" id="games-search-input" class="filter-input-search" placeholder="🔍 Buscar videojuego por nombre o género...">
+            </div>
+            
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <label style="font-size: 0.76rem; font-weight: 800; color: var(--text-tertiary); text-transform: uppercase;">Consola:</label>
+              <select id="games-filter-platform" class="admin-form-select" style="width: auto; padding: 7px 12px; font-size: 0.82rem;">
+                <option value="all">Todas las Consolas</option>
+                <option value="PS5">PlayStation 5 (PS5)</option>
+                <option value="PS4">PlayStation 4 (PS4)</option>
+                <option value="Xbox Series X/S">Xbox Series X|S</option>
+                <option value="Xbox One">Xbox One</option>
+                <option value="Steam">PC (Steam / Epic)</option>
+                <option value="Nintendo Switch">Nintendo Switch</option>
+              </select>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <label style="font-size: 0.76rem; font-weight: 800; color: var(--text-tertiary); text-transform: uppercase;">Mostrar:</label>
+              <select id="games-page-size" class="admin-form-select" style="width: auto; padding: 7px 12px; font-size: 0.82rem;">
+                <option value="10" selected>10 en 10</option>
+                <option value="25">25 en 25</option>
+                <option value="50">50 en 50</option>
+                <option value="100">100 en 100</option>
+                <option value="250">250 en 250</option>
+                <option value="500">500 en 500</option>
+                <option value="1000">1000 en 1000</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- TABLE -->
           <div style="overflow-x: auto;">
             <table class="admin-table">
               <thead>
                 <tr>
                   <th>Portada & Título</th>
                   <th>Plataforma</th>
-                  <th>Cuenta Primaria</th>
-                  <th>Cuenta Secundaria</th>
-                  <th>Código / Key</th>
+                  <th>Cuenta Primaria (Gs.)</th>
+                  <th>Cuenta Secundaria (Gs.)</th>
+                  <th>Capturas</th>
                   <th>Estado</th>
                   <th>Acciones</th>
                 </tr>
@@ -468,47 +674,157 @@
               </tbody>
             </table>
           </div>
+
+          <!-- PAGINATION CONTROLS -->
+          <div class="pagination-bar">
+            <div style="font-size: 0.78rem; color: var(--text-tertiary);" id="games-pagination-info">
+              Mostrando 0 de 0 videojuegos
+            </div>
+            <div class="pagination-buttons" id="games-pagination-controls">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
         </div>
       </section>
 
       <!-- ======================================================= -->
-      <!-- TAB 3: GIFT CARDS & ACTIVATION CODES VAULT              -->
+      <!-- TAB 3: GIFT CARDS / TARJETAS DE REGALO (OVERHAUL)       -->
       <!-- ======================================================= -->
       <section id="tab-giftcards-management" class="admin-section-pane">
         <div class="admin-card">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 12px;">
             <div>
-              <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff;">Tarjetas de Regalo & Bóveda de Códigos</h3>
-              <p style="font-size: 0.8rem; color: var(--text-tertiary);">Recarga códigos de activación digital en lote para PlayStation, Steam, Xbox, Apple y más.</p>
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff;">Gift Cards / Tarjetas de Regalo</h3>
+              <p style="font-size: 0.8rem; color: var(--text-tertiary);">Crea marcas oficiales (Netflix, Spotify, Deezer, Steam, PlayStation, etc.) y configura sus variaciones de saldo con entrega segura.</p>
             </div>
-            <button id="btn-open-modal-add-gc" class="btn-admin-action cyan" style="padding: 9px 16px; font-size: 0.84rem;">
+            <button id="btn-open-modal-add-brand" class="btn-admin-action cyan" style="padding: 9px 16px; font-size: 0.84rem;">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              <span>Crear Nueva Gift Card</span>
+              <span>+ Crear Nueva Marca / Producto</span>
             </button>
+          </div>
+
+          <!-- Sub Tabs: Marcas vs Todas las Variaciones -->
+          <div class="sub-tabs-nav">
+            <button class="sub-tab-btn active" data-subtab="subtab-gc-brands" onclick="switchGcSubtab('subtab-gc-brands')">Marcas Oficiales (<span id="gc-brands-count-tab">0</span>)</button>
+            <button class="sub-tab-btn" data-subtab="subtab-gc-variations" onclick="switchGcSubtab('subtab-gc-variations')">Todas las Variaciones de Saldo (<span id="gc-variations-count-tab">0</span>)</button>
+          </div>
+
+          <!-- SUBTAB 1: MARCAS LIST -->
+          <div id="subtab-gc-brands">
+            <div style="overflow-x: auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Logo & Marca</th>
+                    <th>Categoría</th>
+                    <th>Variaciones Disponibles</th>
+                    <th>Rango de Precios (Gs.)</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="table-giftcards-brands-list">
+                  <tr><td colspan="5" style="text-align: center; color: var(--text-tertiary);">Cargando marcas...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SUBTAB 2: VARIATIONS LIST -->
+          <div id="subtab-gc-variations" style="display: none;">
+            <div style="overflow-x: auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Marca</th>
+                    <th>Variación / Denominación</th>
+                    <th>Precio en Guaraníes</th>
+                    <th>Precio Referencial USD</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="table-giftcards-variations-list">
+                  <tr><td colspan="5" style="text-align: center; color: var(--text-tertiary);">Cargando variaciones...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ======================================================= -->
+      <!-- TAB 4: ENTREGAS PENDIENTES (ÓRDENES DE CLIENTES)        -->
+      <!-- ======================================================= -->
+      <section id="tab-orders-delivery" class="admin-section-pane">
+        
+        <!-- ÓRDENES PENDIENTES DE DESPACHO -->
+        <div class="admin-card" style="border-color: rgba(245, 158, 11, 0.35);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: #f59e0b; display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span>Bandeja de Entregas Pendientes (Videojuegos & Gift Cards)</span>
+              </h3>
+              <p style="font-size: 0.8rem; color: var(--text-tertiary);">Cuando un cliente compra, pega aquí las credenciales de cuenta o código de activación para enviárselo de inmediato.</p>
+            </div>
+            
+            <div style="display: flex; gap: 8px;">
+              <select id="filter-orders-type" class="admin-form-select" style="width: auto; padding: 7px 12px; font-size: 0.82rem;" onchange="loadPendingOrders()">
+                <option value="all">Todas las compras pendientes</option>
+                <option value="game">Solo Videojuegos (Cuentas)</option>
+                <option value="giftcard">Solo Gift Cards (Códigos)</option>
+              </select>
+            </div>
           </div>
 
           <div style="overflow-x: auto;">
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th>Tarjeta / Marca</th>
-                  <th>Denominación</th>
-                  <th>Precio (Gs.)</th>
-                  <th>Precio (USDT)</th>
-                  <th>Bóveda (Stock Códigos)</th>
-                  <th>Acciones</th>
+                  <th>ID Orden / Fecha</th>
+                  <th>Cliente</th>
+                  <th>Producto & Modalidad</th>
+                  <th>Total Pagado</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
                 </tr>
               </thead>
-              <tbody id="table-giftcards-list">
-                <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">Cargando gift cards...</td></tr>
+              <tbody id="table-pending-orders">
+                <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">Cargando órdenes pendientes...</td></tr>
               </tbody>
             </table>
           </div>
         </div>
+
+        <!-- HISTORIAL RECIENTE DE ENTREGAS COMPLETADAS -->
+        <div class="admin-card">
+          <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Últimas Entregas Despachadas con Éxito</span>
+          </h3>
+          <div style="overflow-x: auto;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>ID Orden</th>
+                  <th>Cliente</th>
+                  <th>Producto</th>
+                  <th>Fecha de Entrega</th>
+                  <th>Datos Entregados</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody id="table-delivered-orders">
+                <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">No hay entregas registradas aún.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </section>
 
       <!-- ======================================================= -->
-      <!-- TAB 4: STREAMING: SERVICIOS OFICIALES & MODERACIÓN      -->
+      <!-- TAB 5: STREAMING: SERVICIOS OFICIALES & MODERACIÓN      -->
       <!-- ======================================================= -->
       <section id="tab-streaming-moderation" class="admin-section-pane">
         
@@ -549,10 +865,6 @@
               <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">Grupos de Suscripción Activos en Vivo</h3>
               <p style="font-size: 0.8rem; color: var(--text-tertiary);">Cuentas oficiales y de vendedores verificados transmitiendo en la plataforma.</p>
             </div>
-            <button id="btn-open-modal-add-service" class="btn-admin-action cyan" style="padding: 8px 14px;">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              <span>Configurar Servicio Oficial</span>
-            </button>
           </div>
           <div style="overflow-x: auto;">
             <table class="admin-table">
@@ -575,7 +887,7 @@
       </section>
 
       <!-- ======================================================= -->
-      <!-- TAB 5: SMM / SOCIAL GROWTH API CONFIGURATION            -->
+      <!-- TAB 6: SMM / SOCIAL GROWTH API CONFIGURATION            -->
       <!-- ======================================================= -->
       <section id="tab-smm-api" class="admin-section-pane">
         <div class="admin-card">
@@ -629,7 +941,7 @@
       </section>
 
       <!-- ======================================================= -->
-      <!-- TAB 6: GESTIÓN DE USUARIOS & BILLETERAS                 -->
+      <!-- TAB 7: GESTIÓN DE USUARIOS & BILLETERAS                 -->
       <!-- ======================================================= -->
       <section id="tab-users" class="admin-section-pane">
         <div class="admin-card">
@@ -660,7 +972,7 @@
       </section>
 
       <!-- ======================================================= -->
-      <!-- TAB 7: FINANZAS & RECARGAS (SIPAP / BINANCE USDT)       -->
+      <!-- TAB 8: FINANZAS & RECARGAS (SIPAP / BINANCE USDT)       -->
       <!-- ======================================================= -->
       <section id="tab-finance" class="admin-section-pane">
         
@@ -747,112 +1059,260 @@
   <!-- MODALS                                                  -->
   <!-- ======================================================= -->
 
-  <!-- MODAL: AGREGAR/EDITAR VIDEOJUEGO DIGITAL -->
+  <!-- MODAL: AGREGAR/EDITAR VIDEOJUEGO DIGITAL (COMPRESSION & GUARANÍES) -->
   <div class="modal-overlay" id="modal-game-editor" style="display: none;">
-    <div class="glass-modal" style="width: 100%; max-width: 620px; padding: 2rem; box-sizing: border-box; margin: auto;">
+    <div class="glass-modal" style="width: 100%; max-width: 680px; max-height: 90vh; overflow-y: auto; padding: 2rem; box-sizing: border-box; margin: auto;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
         <h3 id="modal-game-editor-title" style="font-size: 1.2rem; font-weight: 800; color: #ffffff;">Nuevo Videojuego Digital</h3>
-        <button type="button" class="btn-modal-close" onclick="document.getElementById('modal-game-editor').style.display='none';">✕</button>
+        <button type="button" class="btn-modal-close" onclick="closeGameEditorModal()">✕</button>
       </div>
+      
       <form id="form-game-editor">
         <input type="hidden" id="game-edit-id" value="">
+        <input type="hidden" id="game-edit-cover-base64" value="">
+        
         <div class="admin-form-group">
-          <label class="admin-form-label">Título del Videojuego</label>
-          <input type="text" id="game-edit-title" class="admin-form-input" placeholder="ej: Grand Theft Auto VI" required>
+          <label class="admin-form-label">Título del Videojuego *</label>
+          <input type="text" id="game-edit-title" class="admin-form-input" placeholder="ej: EA Sports FC 25, GTA VI, Black Myth: Wukong" required>
         </div>
+
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div class="admin-form-group">
-            <label class="admin-form-label">Plataforma / Consola</label>
+            <label class="admin-form-label">Plataforma / Consola *</label>
             <select id="game-edit-platform" class="admin-form-select">
               <option value="PS5">PlayStation 5 (PS5)</option>
               <option value="PS4">PlayStation 4 (PS4)</option>
-              <option value="Xbox Series X/S">Xbox Series X/S</option>
+              <option value="Xbox Series X/S">Xbox Series X|S</option>
               <option value="Xbox One">Xbox One</option>
               <option value="Steam">Steam (PC)</option>
               <option value="Nintendo Switch">Nintendo Switch</option>
             </select>
           </div>
           <div class="admin-form-group">
-            <label class="admin-form-label">Género</label>
-            <input type="text" id="game-edit-genre" class="admin-form-input" placeholder="ej: Acción / Aventura" value="Acción">
+            <label class="admin-form-label">Género *</label>
+            <input type="text" id="game-edit-genre" class="admin-form-input" placeholder="ej: Acción / Aventura / Deportes" value="Acción">
           </div>
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
-          <div class="admin-form-group">
-            <label class="admin-form-label">Cuenta Primaria ($)</label>
-            <input type="number" step="0.01" id="game-edit-price-primary" class="admin-form-input" placeholder="ej: 39.99" required>
+
+        <!-- PRECIOS EN GUARANÍES (Gs.) CON CONVERSIÓN REF -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: rgba(0, 194, 255, 0.04); padding: 12px; border-radius: 10px; border: 1px solid rgba(0, 194, 255, 0.15); margin-bottom: 1.2rem;">
+          <div class="admin-form-group" style="margin-bottom: 0;">
+            <label class="admin-form-label" style="color: var(--accent-cyan);">Precio Cuenta Primaria (Gs.) *</label>
+            <input type="number" id="game-edit-price-primary-pyg" class="admin-form-input" placeholder="ej: 295000" required>
+            <div style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 4px;" id="game-primary-usd-calc">≈ $0.00 USDT</div>
           </div>
-          <div class="admin-form-group">
-            <label class="admin-form-label">Cuenta Secundaria ($)</label>
-            <input type="number" step="0.01" id="game-edit-price-secondary" class="admin-form-input" placeholder="ej: 24.99">
-          </div>
-          <div class="admin-form-group">
-            <label class="admin-form-label">Código Digital ($)</label>
-            <input type="number" step="0.01" id="game-edit-price-key" class="admin-form-input" placeholder="ej: 59.99">
+          <div class="admin-form-group" style="margin-bottom: 0;">
+            <label class="admin-form-label" style="color: var(--accent-emerald);">Precio Cuenta Secundaria (Gs.) *</label>
+            <input type="number" id="game-edit-price-secondary-pyg" class="admin-form-input" placeholder="ej: 185000" required>
+            <div style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 4px;" id="game-secondary-usd-calc">≈ $0.00 USDT</div>
           </div>
         </div>
+
+        <!-- SUBIDA DE PORTADA DIRECTA (FILE UPLOAD CON COMPRESIÓN) -->
         <div class="admin-form-group">
-          <label class="admin-form-label">URL Portada Oficial (Cover Art)</label>
-          <input type="url" id="game-edit-cover" class="admin-form-input" placeholder="https://..." required>
+          <label class="admin-form-label">Portada Oficial del Videojuego (1 Imagen Directa)</label>
+          <div class="file-upload-zone" id="zone-cover-upload">
+            <input type="file" id="game-edit-cover-file" accept="image/*">
+            <div id="cover-upload-placeholder">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2" style="margin-bottom: 6px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              <div style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">Haz clic o arrastra la imagen de portada aquí</div>
+              <div style="font-size: 0.72rem; color: var(--text-tertiary);">Se comprimirá automáticamente a WebP/JPEG optimizado para carga ultra-rápida.</div>
+            </div>
+            <div id="cover-upload-preview" style="display: none; align-items: center; justify-content: center; gap: 14px;">
+              <img id="img-cover-preview" src="" style="width: 80px; height: 110px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
+              <div style="text-align: left;">
+                <div style="font-size: 0.82rem; font-weight: 800; color: var(--accent-emerald);">✓ Portada cargada y optimizada</div>
+                <div style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 4px;">Haz clic en el cuadro para cambiarla</div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- SUBIDA DE CAPTURAS DE GAMEPLAY (HASTA 10 IMÁGENES) -->
         <div class="admin-form-group">
-          <label class="admin-form-label">Capturas de Pantalla / Gameplay (Una URL por línea)</label>
-          <textarea id="game-edit-screenshots" class="admin-form-textarea" rows="2" placeholder="https://...&#10;https://..."></textarea>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="admin-form-label" style="margin-bottom: 0;">Capturas de Gameplay (Hasta 10 imágenes)</label>
+            <span style="font-size: 0.72rem; color: var(--text-tertiary);" id="screenshots-counter">0 / 10 capturas</span>
+          </div>
+          <div class="file-upload-zone" id="zone-screenshots-upload">
+            <input type="file" id="game-edit-screenshots-file" accept="image/*" multiple>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2" style="margin-bottom: 6px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <div style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">Seleccionar capturas de gameplay (múltiple)</div>
+            <div style="font-size: 0.72rem; color: var(--text-tertiary);">Las capturas se comprimen en tu navegador para una visualización fluida.</div>
+          </div>
+          
+          <div class="screenshots-preview-grid" id="screenshots-preview-container">
+            <!-- Rendered thumbnails -->
+          </div>
         </div>
+
         <div class="admin-form-group">
-          <label class="admin-form-label">Descripción / Sinopsis</label>
-          <textarea id="game-edit-desc" class="admin-form-textarea" rows="2" placeholder="Detalles y contenido del juego..."></textarea>
+          <label class="admin-form-label">Descripción / Sinopsis del Videojuego</label>
+          <textarea id="game-edit-desc" class="admin-form-textarea" rows="2" placeholder="Detalles de jugabilidad, modos online, idiomas y activación..."></textarea>
         </div>
+
         <div class="admin-form-group" style="display: flex; align-items: center; gap: 8px;">
           <input type="checkbox" id="game-edit-available" checked style="width: 18px; height: 18px; cursor: pointer;">
-          <label for="game-edit-available" style="font-size: 0.85rem; color: #ffffff; cursor: pointer; font-weight: 700;">Marcar como Disponible (En Stock)</label>
+          <label for="game-edit-available" style="font-size: 0.85rem; color: #ffffff; cursor: pointer; font-weight: 700;">Marcar como Disponible en Tienda (En Stock)</label>
         </div>
-        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.25rem;">
-          <button type="button" class="btn-admin-action red" onclick="document.getElementById('modal-game-editor').style.display='none';">Cancelar</button>
-          <button type="submit" class="btn-admin-action cyan" style="padding: 10px 20px;">Guardar Videojuego</button>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.2rem;">
+          <button type="button" class="btn-admin-action red" onclick="closeGameEditorModal()">Cancelar</button>
+          <button type="submit" id="btn-save-game-submit" class="btn-admin-action cyan" style="padding: 10px 22px; font-size: 0.88rem;">Guardar Videojuego</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: AGREGAR GIFT CARD / CÓDIGOS -->
-  <div class="modal-overlay" id="modal-gc-editor" style="display: none;">
-    <div class="glass-modal" style="width: 100%; max-width: 540px; padding: 2rem; box-sizing: border-box; margin: auto;">
+  <!-- MODAL: CREAR / EDITAR MARCA DE GIFT CARD -->
+  <div class="modal-overlay" id="modal-brand-editor" style="display: none;">
+    <div class="glass-modal" style="width: 100%; max-width: 520px; padding: 2rem; box-sizing: border-box; margin: auto;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-        <h3 id="modal-gc-editor-title" style="font-size: 1.2rem; font-weight: 800; color: #ffffff;">Nueva Gift Card Digital</h3>
-        <button type="button" class="btn-modal-close" onclick="document.getElementById('modal-gc-editor').style.display='none';">✕</button>
+        <h3 id="modal-brand-editor-title" style="font-size: 1.2rem; font-weight: 800; color: #ffffff;">Nueva Marca / Producto de Gift Card</h3>
+        <button type="button" class="btn-modal-close" onclick="document.getElementById('modal-brand-editor').style.display='none';">✕</button>
       </div>
-      <form id="form-gc-editor">
+      <form id="form-brand-editor">
+        <input type="hidden" id="brand-edit-id" value="">
+        <input type="hidden" id="brand-edit-logo-base64" value="">
+
         <div class="admin-form-group">
-          <label class="admin-form-label">Nombre / Denominación</label>
-          <input type="text" id="gc-edit-title" class="admin-form-input" placeholder="ej: PlayStation Store $50 USD" required>
+          <label class="admin-form-label">Nombre de la Marca *</label>
+          <input type="text" id="brand-edit-name" class="admin-form-input" placeholder="ej: Netflix, Spotify, Steam, PlayStation, Xbox, Deezer" required>
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-          <div class="admin-form-group">
-            <label class="admin-form-label">Marca</label>
-            <select id="gc-edit-brand" class="admin-form-select">
-              <option value="PlayStation">PlayStation Network</option>
-              <option value="Steam">Steam Wallet</option>
-              <option value="Xbox">Xbox & Game Pass</option>
-              <option value="Apple">Apple Store & iTunes</option>
-              <option value="Google Play">Google Play Store</option>
-              <option value="Razer Gold">Razer Gold</option>
-              <option value="Nintendo">Nintendo eShop</option>
-            </select>
-          </div>
-          <div class="admin-form-group">
-            <label class="admin-form-label">Precio en USD ($)</label>
-            <input type="number" step="0.01" id="gc-edit-price" class="admin-form-input" placeholder="ej: 50.00" required>
-          </div>
-        </div>
+
         <div class="admin-form-group">
-          <label class="admin-form-label">Códigos de Activación (Uno por línea)</label>
-          <textarea id="gc-edit-codes" class="admin-form-textarea" rows="4" placeholder="PSN-8921-4455-1122&#10;PSN-7733-2211-9988"></textarea>
-          <small style="font-size: 0.72rem; color: var(--text-tertiary);">Se dispensarán de forma segura 1 a 1 a compras con saldo verificado.</small>
+          <label class="admin-form-label">Categoría *</label>
+          <select id="brand-edit-category" class="admin-form-select">
+            <option value="Gaming">Gaming / Videojuegos</option>
+            <option value="Streaming">Streaming / Cine & Series</option>
+            <option value="Música">Música & Audio Hi-Fi</option>
+            <option value="Móvil">Móvil & Tiendas de Apps</option>
+            <option value="Apple">Apple & iTunes</option>
+            <option value="Compras">Compras & Retail</option>
+          </select>
         </div>
+
+        <!-- LOGO UPLOAD FILE -->
+        <div class="admin-form-group">
+          <label class="admin-form-label">Logo Oficial de la Marca (Subir archivo directo)</label>
+          <div class="file-upload-zone" id="zone-brand-logo-upload">
+            <input type="file" id="brand-edit-logo-file" accept="image/*">
+            <div id="brand-logo-preview-box" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+              <img id="img-brand-logo-preview" src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=120&q=80" style="width: 50px; height: 50px; object-fit: contain; border-radius: 8px; background: rgba(0,0,0,0.5); padding: 4px;">
+              <div style="text-align: left;">
+                <div style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">Seleccionar imagen de logo</div>
+                <div style="font-size: 0.72rem; color: var(--text-tertiary);">Formatos PNG, JPG, WebP</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">Descripción Informativa</label>
+          <input type="text" id="brand-edit-desc" class="admin-form-input" placeholder="ej: Tarjetas de saldo oficial para canjear en la plataforma">
+        </div>
+
         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.25rem;">
-          <button type="button" class="btn-admin-action red" onclick="document.getElementById('modal-gc-editor').style.display='none';">Cancelar</button>
-          <button type="submit" class="btn-admin-action cyan" style="padding: 10px 20px;">Crear Gift Card</button>
+          <button type="button" class="btn-admin-action red" onclick="document.getElementById('modal-brand-editor').style.display='none';">Cancelar</button>
+          <button type="submit" class="btn-admin-action cyan" style="padding: 10px 20px;">Guardar Marca</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: AGREGAR VARIACIÓN DE GIFT CARD -->
+  <div class="modal-overlay" id="modal-variation-editor" style="display: none;">
+    <div class="glass-modal" style="width: 100%; max-width: 500px; padding: 2rem; box-sizing: border-box; margin: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 id="modal-variation-title" style="font-size: 1.15rem; font-weight: 800; color: #ffffff;">Nueva Variación de Saldo</h3>
+        <button type="button" class="btn-modal-close" onclick="document.getElementById('modal-variation-editor').style.display='none';">✕</button>
+      </div>
+      <form id="form-variation-editor">
+        <input type="hidden" id="var-edit-brand-id" value="">
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">Marca Seleccionada</label>
+          <input type="text" id="var-edit-brand-name" class="admin-form-input" readonly style="color: var(--accent-cyan); font-weight: 800;">
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">Nombre de la Variación *</label>
+          <input type="text" id="var-edit-name" class="admin-form-input" placeholder="ej: $10 USD, $25 USD, 1 Mes, 3 Meses, 800 Robux" required>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">Precio en Guaraníes (Gs.) *</label>
+          <input type="number" id="var-edit-price-pyg" class="admin-form-input" placeholder="ej: 85000" required>
+          <div style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 4px;" id="var-usd-calc">≈ $0.00 USDT</div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.25rem;">
+          <button type="button" class="btn-admin-action red" onclick="document.getElementById('modal-variation-editor').style.display='none';">Cancelar</button>
+          <button type="submit" class="btn-admin-action cyan" style="padding: 10px 20px;">Agregar Variación</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DESPACHO Y ENTREGA SEGURA DE ORDEN (VIDEOJUEGOS O GIFT CARDS) -->
+  <div class="modal-overlay" id="modal-order-deliver" style="display: none;">
+    <div class="glass-modal" style="width: 100%; max-width: 580px; padding: 2rem; box-sizing: border-box; margin: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--accent-cyan); display: flex; align-items: center; gap: 8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Entrega de Compra al Cliente</span>
+        </h3>
+        <button type="button" class="btn-modal-close" onclick="document.getElementById('modal-order-deliver').style.display='none';">✕</button>
+      </div>
+
+      <div style="background: rgba(0, 194, 255, 0.06); border: 1px solid rgba(0, 194, 255, 0.2); padding: 12px; border-radius: 10px; margin-bottom: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <span style="font-size: 0.78rem; color: var(--text-tertiary);">Producto Comprado:</span>
+          <strong id="deliver-modal-product-title" style="color: #ffffff; font-size: 0.88rem;">EA Sports FC 25</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+          <span style="font-size: 0.78rem; color: var(--text-tertiary);">Modalidad / Cuenta:</span>
+          <span id="deliver-modal-option" class="btn-admin-action cyan" style="padding: 1px 6px; font-size: 0.7rem;">Cuenta Primaria</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="font-size: 0.78rem; color: var(--text-tertiary);">Cliente Comprador:</span>
+          <strong id="deliver-modal-buyer-info" style="color: var(--accent-emerald); font-size: 0.8rem;">Carlos Gómez (carlos@gmail.com)</strong>
+        </div>
+      </div>
+
+      <form id="form-order-deliver">
+        <input type="hidden" id="deliver-order-id" value="">
+
+        <!-- CAMPOS PARA VIDEOJUEGOS (CUENTA PRIMARIA/SECUNDARIA) -->
+        <div id="deliver-fields-game-account">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="admin-form-group">
+              <label class="admin-form-label">Email / ID de la Cuenta</label>
+              <input type="text" id="deliver-account-email" class="admin-form-input" placeholder="ej: userpsn@gamesboy.net">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Contraseña de la Cuenta</label>
+              <input type="text" id="deliver-account-password" class="admin-form-input" placeholder="ej: Activa2026!">
+            </div>
+          </div>
+        </div>
+
+        <!-- CAMPO PARA GIFT CARD O CÓDIGO DIGITAL -->
+        <div class="admin-form-group" id="deliver-fields-code">
+          <label class="admin-form-label">Código Digital / Key de Activación (Si aplica)</label>
+          <input type="text" id="deliver-code-input" class="admin-form-input" placeholder="ej: PSN-9842-4411-8899 o STEAM-KEY-1100">
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">Instrucciones de Activación para el Cliente</label>
+          <textarea id="deliver-instructions" class="admin-form-textarea" rows="2" placeholder="1. Agrega el usuario nuevo como cuenta principal en tu consola. 2. Descarga el juego y vuelve a tu perfil personal."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.25rem;">
+          <button type="button" class="btn-admin-action red" onclick="document.getElementById('modal-order-deliver').style.display='none';">Cancelar</button>
+          <button type="submit" class="btn-admin-action emerald" style="padding: 10px 22px; font-size: 0.88rem;">
+            <span>✓ Entregar al Cliente</span>
+          </button>
         </div>
       </form>
     </div>
@@ -898,7 +1358,55 @@
 
   <!-- SCRIPT ENGINE -->
   <script>
-    // Tab Navigation Switcher
+    // Global State
+    let adminExchangeRate = 7500;
+    let allGamesList = [];
+    let currentFilteredGames = [];
+    let gamesCurrentPage = 1;
+    let gamesPageSize = 10;
+    let currentUploadedScreenshots = [];
+    let allGiftCardBrands = [];
+
+    // --- CANVAS COMPRESSION HELPER ---
+    function compressImage(file, maxDimension = 900, quality = 0.82) {
+      return new Promise((resolve, reject) => {
+        if (!file || !file.type.startsWith('image/')) {
+          return reject(new Error('El archivo no es una imagen válida.'));
+        }
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          const img = new Image();
+          img.src = e.target.result;
+          img.onload = () => {
+            let width = img.width;
+            let height = img.height;
+            if (width > height) {
+              if (width > maxDimension) {
+                height = Math.round((height * maxDimension) / width);
+                width = maxDimension;
+              }
+            } else {
+              if (height > maxDimension) {
+                width = Math.round((width * maxDimension) / height);
+                height = maxDimension;
+              }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+            resolve(compressedDataUrl);
+          };
+          img.onerror = () => reject(new Error('Error al cargar la imagen.'));
+        };
+        reader.onerror = () => reject(new Error('Error al leer el archivo.'));
+      });
+    }
+
+    // --- TAB SWITCHER ---
     const menuButtons = document.querySelectorAll('.admin-menu-btn');
     const sectionPanes = document.querySelectorAll('.admin-section-pane');
     const headingEl = document.getElementById('admin-view-heading');
@@ -906,8 +1414,9 @@
 
     const tabDescriptions = {
       'tab-overview': { title: 'Métricas & Panel de Control General', subtitle: 'Auditoría en tiempo real, volumen transaccionado, saldos y operaciones en Paraguay.' },
-      'tab-games-management': { title: 'Gestión de Videojuegos Digitales', subtitle: 'Catálogo de consolas (PS5/Xbox/Steam), precios duales (Primario/Secundario) y capturas.' },
-      'tab-giftcards-management': { title: 'Tarjetas de Regalo & Bóveda de Códigos', subtitle: 'Recarga y control de códigos de activación digital para entrega instantánea.' },
+      'tab-games-management': { title: 'Gestión de Videojuegos Digitales', subtitle: 'Catálogo por consolas, precios en Guaraníes, paginación inteligente y subida de capturas.' },
+      'tab-giftcards-management': { title: 'Gift Cards / Tarjetas de Regalo', subtitle: 'Crea marcas (Netflix, Spotify, Deezer, Steam, etc.) y administra sus variaciones de saldo.' },
+      'tab-orders-delivery': { title: 'Bandeja de Entregas Pendientes', subtitle: 'Despacho manual y seguro de credenciales de videojuegos y códigos de gift cards.' },
       'tab-streaming-moderation': { title: 'Streaming: Moderación & Servicios Oficiales', subtitle: 'Revisión y aprobación de cuentas subidas por vendedores y monitoreo de grupos en vivo.' },
       'tab-smm-api': { title: 'Integración API: Impulso Digital & Redes Sociales', subtitle: 'Conexión con el proveedor mayorista de servicios SMM, testing de saldo y márgenes.' },
       'tab-users': { title: 'Directorio de Usuarios & Billeteras', subtitle: 'Administración de clientes, vendedores, saldos reales en Gs. y ajustes manuales.' },
@@ -928,15 +1437,22 @@
           headingEl.textContent = tabDescriptions[tabId].title;
           subtitleEl.textContent = tabDescriptions[tabId].subtitle;
         }
+
+        if (tabId === 'tab-orders-delivery') loadPendingOrders();
       });
     });
 
-    // Master Data Loaders
+    // --- MASTER DATA LOADERS ---
     async function loadAdminData() {
       try {
-        // 1. Overview & Finances
         const resOverview = await fetch('/api/admin/overview');
         const dataOverview = await resOverview.json();
+        
+        if (dataOverview.settings && dataOverview.settings.exchangeRatePyg) {
+          adminExchangeRate = dataOverview.settings.exchangeRatePyg;
+          document.getElementById('header-rate-display').textContent = `1 USDT = ${adminExchangeRate.toLocaleString('es-PY')} Gs.`;
+        }
+
         if (dataOverview.stats) {
           const s = dataOverview.stats;
           document.getElementById('kpi-admin-balance-gs').textContent = (s.totalDepositsVolumePyg || 0).toLocaleString('es-PY') + ' Gs.';
@@ -949,7 +1465,6 @@
           document.getElementById('kpi-commissions-usd').textContent = '$' + (s.totalCommissionsUsd || 0).toFixed(2) + ' USDT';
 
           document.getElementById('badge-games-count').textContent = s.totalGames || 0;
-          document.getElementById('badge-gc-count').textContent = s.totalGiftCards || 0;
 
           if (s.pendingDepositsCount > 0) {
             const b = document.getElementById('badge-pending-deposits');
@@ -963,19 +1478,12 @@
         renderRecentTransactions(dataOverview.recentTransactions || []);
         renderPendingDeposits(dataOverview.pendingDeposits || []);
 
-        // 2. Games Catalog
+        // Load modules
         loadGames();
-
-        // 3. Gift Cards Catalog
-        loadGiftCards();
-
-        // 4. Streaming Submissions & Groups
+        loadGiftCardBrands();
+        loadPendingOrders();
         loadStreamingData();
-
-        // 5. Users List
         loadUsers();
-
-        // 6. SMM Config
         loadSmmConfig();
 
       } catch (err) {
@@ -983,7 +1491,737 @@
       }
     }
 
-    // Render Recent Transactions
+    // =======================================================
+    // VIDEOJUEGOS ENGINE: PAGINATION, SEARCH, FILTER, CRUD
+    // =======================================================
+    async function loadGames() {
+      try {
+        const res = await fetch('/api/admin/games');
+        const data = await res.json();
+        allGamesList = data.games || [];
+        document.getElementById('badge-games-count').textContent = allGamesList.length;
+        applyGamesFilterAndPaginate();
+      } catch (e) {
+        console.error('Error loading games:', e);
+      }
+    }
+
+    function applyGamesFilterAndPaginate() {
+      const searchTerm = (document.getElementById('games-search-input')?.value || '').toLowerCase().trim();
+      const platformFilter = document.getElementById('games-filter-platform')?.value || 'all';
+      gamesPageSize = parseInt(document.getElementById('games-page-size')?.value || '10', 10);
+
+      currentFilteredGames = allGamesList.filter(g => {
+        const matchSearch = !searchTerm || 
+          g.title.toLowerCase().includes(searchTerm) || 
+          (g.genre && g.genre.toLowerCase().includes(searchTerm));
+        
+        let matchPlatform = true;
+        if (platformFilter !== 'all') {
+          matchPlatform = (g.platform || '').toLowerCase().includes(platformFilter.toLowerCase());
+        }
+
+        return matchSearch && matchPlatform;
+      });
+
+      const totalItems = currentFilteredGames.length;
+      const totalPages = Math.max(1, Math.ceil(totalItems / gamesPageSize));
+
+      if (gamesCurrentPage > totalPages) gamesCurrentPage = totalPages;
+      if (gamesCurrentPage < 1) gamesCurrentPage = 1;
+
+      const startIndex = (gamesCurrentPage - 1) * gamesPageSize;
+      const endIndex = Math.min(startIndex + gamesPageSize, totalItems);
+      const pageGames = currentFilteredGames.slice(startIndex, endIndex);
+
+      renderGamesTable(pageGames);
+      renderGamesPagination(totalItems, totalPages, startIndex, endIndex);
+    }
+
+    function renderGamesTable(games) {
+      const tbody = document.getElementById('table-games-list');
+      if (!tbody) return;
+
+      if (games.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No se encontraron videojuegos coincidentes.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = games.map(g => {
+        const primaryPyg = g.primaryPricePyg || Math.round((g.primaryPriceUsd || 39.99) * adminExchangeRate);
+        const secondaryPyg = g.secondaryPricePyg || Math.round((g.secondaryPriceUsd || (g.primaryPriceUsd * 0.65)) * adminExchangeRate);
+        const shotsCount = Array.isArray(g.screenshots) ? g.screenshots.length : 0;
+
+        return `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="${g.coverUrl || g.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=120&q=80'}" style="width: 42px; height: 56px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);">
+                <div>
+                  <strong style="color: #ffffff; display: block; font-size: 0.88rem;">${g.title}</strong>
+                  <span style="font-size: 0.72rem; color: var(--text-tertiary);">${g.genre || 'Acción / Aventura'}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.72rem; font-weight: 800;">
+                ${g.platform || 'PS5'}
+              </span>
+            </td>
+            <td>
+              <div style="font-family: var(--font-mono); font-weight: 800; color: #ffffff;">${primaryPyg.toLocaleString('es-PY')} Gs.</div>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-cyan);">$${(g.primaryPriceUsd || (primaryPyg / adminExchangeRate)).toFixed(2)} USDT</div>
+            </td>
+            <td>
+              <div style="font-family: var(--font-mono); font-weight: 800; color: #ffffff;">${secondaryPyg.toLocaleString('es-PY')} Gs.</div>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-emerald);">$${(g.secondaryPriceUsd || (secondaryPyg / adminExchangeRate)).toFixed(2)} USDT</div>
+            </td>
+            <td>
+              <span style="font-size: 0.75rem; color: var(--text-secondary); background: rgba(255,255,255,0.04); padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08);">
+                📸 ${shotsCount} capturas
+              </span>
+            </td>
+            <td>
+              <span class="btn-admin-action ${g.isAvailable ? 'emerald' : 'red'}" style="padding: 2px 8px; font-size: 0.7rem;">
+                ${g.isAvailable ? 'Disponible' : 'Agotado'}
+              </span>
+            </td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-admin-action cyan" onclick="editGame('${g.id}')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                  <span>Editar</span>
+                </button>
+                <button class="btn-admin-action red" onclick="deleteGame('${g.id}')" title="Eliminar">✕</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderGamesPagination(totalItems, totalPages, start, end) {
+      const infoEl = document.getElementById('games-pagination-info');
+      if (infoEl) {
+        infoEl.textContent = totalItems === 0 
+          ? 'Mostrando 0 de 0 videojuegos' 
+          : `Mostrando ${start + 1} - ${end} de ${totalItems} videojuegos`;
+      }
+
+      const controlsEl = document.getElementById('games-pagination-controls');
+      if (!controlsEl) return;
+
+      if (totalPages <= 1) {
+        controlsEl.innerHTML = '';
+        return;
+      }
+
+      let btnsHtml = `
+        <button class="btn-page" onclick="goToGamesPage(1)" ${gamesCurrentPage === 1 ? 'disabled' : ''}>«</button>
+        <button class="btn-page" onclick="goToGamesPage(${gamesCurrentPage - 1})" ${gamesCurrentPage === 1 ? 'disabled' : ''}>‹</button>
+      `;
+
+      let startPage = Math.max(1, gamesCurrentPage - 2);
+      let endPage = Math.min(totalPages, gamesCurrentPage + 2);
+
+      for (let p = startPage; p <= endPage; p++) {
+        btnsHtml += `
+          <button class="btn-page ${p === gamesCurrentPage ? 'active' : ''}" onclick="goToGamesPage(${p})">${p}</button>
+        `;
+      }
+
+      btnsHtml += `
+        <button class="btn-page" onclick="goToGamesPage(${gamesCurrentPage + 1})" ${gamesCurrentPage === totalPages ? 'disabled' : ''}>›</button>
+        <button class="btn-page" onclick="goToGamesPage(${totalPages})" ${gamesCurrentPage === totalPages ? 'disabled' : ''}>»</button>
+      `;
+
+      controlsEl.innerHTML = btnsHtml;
+    }
+
+    function goToGamesPage(p) {
+      gamesCurrentPage = p;
+      applyGamesFilterAndPaginate();
+    }
+
+    // Attach Search & Filter Listeners
+    document.getElementById('games-search-input')?.addEventListener('input', () => {
+      gamesCurrentPage = 1;
+      applyGamesFilterAndPaginate();
+    });
+    document.getElementById('games-filter-platform')?.addEventListener('change', () => {
+      gamesCurrentPage = 1;
+      applyGamesFilterAndPaginate();
+    });
+    document.getElementById('games-page-size')?.addEventListener('change', () => {
+      gamesCurrentPage = 1;
+      applyGamesFilterAndPaginate();
+    });
+
+    // --- GAME EDITOR MODAL LOGIC & IMAGE COMPRESSION ---
+    function closeGameEditorModal() {
+      document.getElementById('modal-game-editor').style.display = 'none';
+      currentUploadedScreenshots = [];
+      document.getElementById('form-game-editor').reset();
+    }
+
+    document.getElementById('btn-open-modal-add-game')?.addEventListener('click', () => {
+      document.getElementById('modal-game-editor-title').textContent = 'Nuevo Videojuego Digital';
+      document.getElementById('game-edit-id').value = '';
+      document.getElementById('form-game-editor').reset();
+      document.getElementById('game-edit-cover-base64').value = '';
+      document.getElementById('cover-upload-placeholder').style.display = 'block';
+      document.getElementById('cover-upload-preview').style.display = 'none';
+      currentUploadedScreenshots = [];
+      renderScreenshotThumbnails();
+      document.getElementById('game-primary-usd-calc').textContent = '≈ $0.00 USDT';
+      document.getElementById('game-secondary-usd-calc').textContent = '≈ $0.00 USDT';
+      document.getElementById('modal-game-editor').style.display = 'grid';
+    });
+
+    // Price live calc in Guaraníes
+    document.getElementById('game-edit-price-primary-pyg')?.addEventListener('input', (e) => {
+      const pyg = parseInt(e.target.value, 10) || 0;
+      const usd = parseFloat((pyg / adminExchangeRate).toFixed(2));
+      document.getElementById('game-primary-usd-calc').textContent = `≈ $${usd.toFixed(2)} USDT`;
+    });
+    document.getElementById('game-edit-price-secondary-pyg')?.addEventListener('input', (e) => {
+      const pyg = parseInt(e.target.value, 10) || 0;
+      const usd = parseFloat((pyg / adminExchangeRate).toFixed(2));
+      document.getElementById('game-secondary-usd-calc').textContent = `≈ $${usd.toFixed(2)} USDT`;
+    });
+
+    // Cover File Compression & Preview
+    document.getElementById('game-edit-cover-file')?.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        const compressedBase64 = await compressImage(file, 900, 0.82);
+        document.getElementById('game-edit-cover-base64').value = compressedBase64;
+        document.getElementById('img-cover-preview').src = compressedBase64;
+        document.getElementById('cover-upload-placeholder').style.display = 'none';
+        document.getElementById('cover-upload-preview').style.display = 'flex';
+      } catch (err) {
+        alert('Error al procesar la imagen de portada: ' + err.message);
+      }
+    });
+
+    // Multiple Screenshots File Compression (Up to 10)
+    document.getElementById('game-edit-screenshots-file')?.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files || []);
+      if (files.length === 0) return;
+
+      const remainingSlots = 10 - currentUploadedScreenshots.length;
+      if (remainingSlots <= 0) {
+        alert('Ya has alcanzado el límite de 10 capturas.');
+        return;
+      }
+
+      const filesToProcess = files.slice(0, remainingSlots);
+
+      for (const file of filesToProcess) {
+        try {
+          const compressed = await compressImage(file, 1000, 0.80);
+          currentUploadedScreenshots.push(compressed);
+        } catch (err) {
+          console.error('Error compressing shot:', err);
+        }
+      }
+
+      renderScreenshotThumbnails();
+    });
+
+    function renderScreenshotThumbnails() {
+      const container = document.getElementById('screenshots-preview-container');
+      const counter = document.getElementById('screenshots-counter');
+      if (counter) counter.textContent = `${currentUploadedScreenshots.length} / 10 capturas`;
+
+      if (!container) return;
+      container.innerHTML = currentUploadedScreenshots.map((url, idx) => `
+        <div class="screenshot-thumb-item">
+          <img src="${url}">
+          <button type="button" class="btn-remove-shot" onclick="removeScreenshot(${idx})" title="Eliminar captura">✕</button>
+        </div>
+      `).join('');
+    }
+
+    window.removeScreenshot = function(idx) {
+      currentUploadedScreenshots.splice(idx, 1);
+      renderScreenshotThumbnails();
+    };
+
+    // EDIT GAME (PRELOADS ALL DATA)
+    window.editGame = function(id) {
+      const game = allGamesList.find(g => g.id === id);
+      if (!game) return;
+
+      document.getElementById('modal-game-editor-title').textContent = `Editar Videojuego: ${game.title}`;
+      document.getElementById('game-edit-id').value = game.id;
+      document.getElementById('game-edit-title').value = game.title || '';
+      document.getElementById('game-edit-platform').value = game.platform || 'PS5';
+      document.getElementById('game-edit-genre').value = game.genre || 'Acción';
+      
+      const primaryPyg = game.primaryPricePyg || Math.round((game.primaryPriceUsd || 39.99) * adminExchangeRate);
+      const secondaryPyg = game.secondaryPricePyg || Math.round((game.secondaryPriceUsd || (game.primaryPriceUsd * 0.65)) * adminExchangeRate);
+
+      document.getElementById('game-edit-price-primary-pyg').value = primaryPyg;
+      document.getElementById('game-edit-price-secondary-pyg').value = secondaryPyg;
+      document.getElementById('game-primary-usd-calc').textContent = `≈ $${(primaryPyg / adminExchangeRate).toFixed(2)} USDT`;
+      document.getElementById('game-secondary-usd-calc').textContent = `≈ $${(secondaryPyg / adminExchangeRate).toFixed(2)} USDT`;
+
+      // Cover
+      const existingCover = game.coverUrl || game.coverImage;
+      if (existingCover) {
+        document.getElementById('game-edit-cover-base64').value = existingCover;
+        document.getElementById('img-cover-preview').src = existingCover;
+        document.getElementById('cover-upload-placeholder').style.display = 'none';
+        document.getElementById('cover-upload-preview').style.display = 'flex';
+      }
+
+      // Screenshots
+      currentUploadedScreenshots = Array.isArray(game.screenshots) ? [...game.screenshots] : [];
+      renderScreenshotThumbnails();
+
+      document.getElementById('game-edit-desc').value = game.description || '';
+      document.getElementById('game-edit-available').checked = game.isAvailable !== false;
+
+      document.getElementById('modal-game-editor').style.display = 'grid';
+    };
+
+    // SUBMIT GAME (CREATE OR PUT UPDATE)
+    document.getElementById('form-game-editor')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('game-edit-id').value;
+      const title = document.getElementById('game-edit-title').value.trim();
+      const platform = document.getElementById('game-edit-platform').value;
+      const genre = document.getElementById('game-edit-genre').value.trim();
+      const primaryPricePyg = parseInt(document.getElementById('game-edit-price-primary-pyg').value, 10);
+      const secondaryPricePyg = parseInt(document.getElementById('game-edit-price-secondary-pyg').value, 10);
+      const coverImage = document.getElementById('game-edit-cover-base64').value;
+      const description = document.getElementById('game-edit-desc').value.trim();
+      const isAvailable = document.getElementById('game-edit-available').checked;
+
+      if (!primaryPricePyg || isNaN(primaryPricePyg)) {
+        alert('Por favor ingresa un precio válido en Guaraníes para Cuenta Primaria.');
+        return;
+      }
+
+      const payload = {
+        title,
+        platform,
+        genre,
+        primaryPricePyg,
+        secondaryPricePyg: secondaryPricePyg || Math.round(primaryPricePyg * 0.65),
+        coverImage,
+        screenshots: currentUploadedScreenshots,
+        description,
+        isAvailable
+      };
+
+      const endpoint = id ? `/api/admin/games/${id}` : '/api/admin/games';
+      const method = id ? 'PUT' : 'POST';
+
+      try {
+        const btn = document.getElementById('btn-save-game-submit');
+        btn.textContent = 'Guardando...';
+        btn.disabled = true;
+
+        const res = await fetch(endpoint, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        btn.textContent = 'Guardar Videojuego';
+        btn.disabled = false;
+
+        if (!res.ok) throw new Error(data.error || 'Error al guardar');
+
+        alert(data.message || '¡Videojuego guardado con éxito!');
+        closeGameEditorModal();
+        loadGames();
+      } catch (err) {
+        alert('Error: ' + err.message);
+        document.getElementById('btn-save-game-submit').disabled = false;
+        document.getElementById('btn-save-game-submit').textContent = 'Guardar Videojuego';
+      }
+    });
+
+    window.deleteGame = async function(id) {
+      if (!confirm('¿Deseas eliminar permanentemente este videojuego del catálogo?')) return;
+      try {
+        const res = await fetch(`/api/admin/games/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        alert(data.message || 'Eliminado');
+        loadGames();
+      } catch (e) { alert('Error al eliminar'); }
+    };
+
+    // =======================================================
+    // GIFT CARDS & MARCAS ENGINE
+    // =======================================================
+    window.switchGcSubtab = function(subtabId) {
+      document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.querySelector(`[data-subtab="${subtabId}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      document.getElementById('subtab-gc-brands').style.display = subtabId === 'subtab-gc-brands' ? 'block' : 'none';
+      document.getElementById('subtab-gc-variations').style.display = subtabId === 'subtab-gc-variations' ? 'block' : 'none';
+    };
+
+    async function loadGiftCardBrands() {
+      try {
+        const res = await fetch('/api/admin/giftcards/brands');
+        const data = await res.json();
+        allGiftCardBrands = data.brands || [];
+
+        document.getElementById('badge-gc-count').textContent = allGiftCardBrands.length;
+        document.getElementById('gc-brands-count-tab').textContent = allGiftCardBrands.length;
+
+        let totalVars = 0;
+        allGiftCardBrands.forEach(b => { totalVars += (b.variations || []).length; });
+        document.getElementById('gc-variations-count-tab').textContent = totalVars;
+
+        renderBrandsTable();
+        renderAllVariationsTable();
+      } catch (e) { console.error('Error loading giftcards:', e); }
+    }
+
+    function renderBrandsTable() {
+      const tbody = document.getElementById('table-giftcards-brands-list');
+      if (!tbody) return;
+
+      if (allGiftCardBrands.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-tertiary);">No hay marcas registradas. Crea una nueva marca con el botón superior.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = allGiftCardBrands.map(b => {
+        const varsCount = (b.variations || []).length;
+        let priceRange = 'Sin variaciones';
+        if (varsCount > 0) {
+          const prices = b.variations.map(v => v.pricePyg || Math.round(v.priceUsd * adminExchangeRate));
+          const min = Math.min(...prices);
+          const max = Math.max(...prices);
+          priceRange = min === max ? `${min.toLocaleString('es-PY')} Gs.` : `${min.toLocaleString('es-PY')} - ${max.toLocaleString('es-PY')} Gs.`;
+        }
+
+        return `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="${b.logoUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=120&q=80'}" style="width: 46px; height: 36px; object-fit: contain; border-radius: 6px; background: rgba(0,0,0,0.5); padding: 3px; border: 1px solid rgba(255,255,255,0.1);">
+                <div>
+                  <strong style="color: #ffffff; display: block; font-size: 0.88rem;">${b.name}</strong>
+                  <span style="font-size: 0.72rem; color: var(--text-tertiary);">${b.description || 'Oficial'}</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.72rem;">${b.category || 'Gaming'}</span></td>
+            <td>
+              <span style="font-weight: 800; color: var(--accent-emerald);">${varsCount} variaciones activas</span>
+            </td>
+            <td style="font-family: var(--font-mono); font-size: 0.84rem; color: #ffffff;">
+              ${priceRange}
+            </td>
+            <td>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-admin-action emerald" onclick="openAddVariationModal('${b.id}', '${b.name}')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <span>+ Variación</span>
+                </button>
+                <button class="btn-admin-action red" onclick="deleteBrand('${b.id}')" title="Eliminar Marca">✕</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderAllVariationsTable() {
+      const tbody = document.getElementById('table-giftcards-variations-list');
+      if (!tbody) return;
+
+      const allVars = [];
+      allGiftCardBrands.forEach(b => {
+        (b.variations || []).forEach(v => {
+          allVars.push({ ...v, brandId: b.id, brandName: b.name, brandLogo: b.logoUrl });
+        });
+      });
+
+      if (allVars.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-tertiary);">No hay variaciones creadas.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = allVars.map(v => {
+        const pyg = v.pricePyg || Math.round(v.priceUsd * adminExchangeRate);
+        const usd = v.priceUsd || parseFloat((pyg / adminExchangeRate).toFixed(2));
+
+        return `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <img src="${v.brandLogo || ''}" style="width: 24px; height: 24px; object-fit: contain; border-radius: 4px;">
+                <strong style="color: var(--accent-cyan); font-size: 0.84rem;">${v.brandName}</strong>
+              </div>
+            </td>
+            <td>
+              <strong style="color: #ffffff;">${v.name}</strong>
+            </td>
+            <td style="font-family: var(--font-mono); font-weight: 800; color: #ffffff;">
+              ${pyg.toLocaleString('es-PY')} Gs.
+            </td>
+            <td style="font-family: var(--font-mono); color: var(--accent-cyan);">
+              $${usd.toFixed(2)} USDT
+            </td>
+            <td>
+              <button class="btn-admin-action red" onclick="deleteVariation('${v.brandId}', '${v.id}')" title="Eliminar Variación">✕</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // Modal Create Brand
+    document.getElementById('btn-open-modal-add-brand')?.addEventListener('click', () => {
+      document.getElementById('modal-brand-editor-title').textContent = 'Nueva Marca / Producto de Gift Card';
+      document.getElementById('brand-edit-id').value = '';
+      document.getElementById('form-brand-editor').reset();
+      document.getElementById('brand-edit-logo-base64').value = '';
+      document.getElementById('img-brand-logo-preview').src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=120&q=80';
+      document.getElementById('modal-brand-editor').style.display = 'grid';
+    });
+
+    // Logo Upload File Compression
+    document.getElementById('brand-edit-logo-file')?.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        const base64 = await compressImage(file, 400, 0.85);
+        document.getElementById('brand-edit-logo-base64').value = base64;
+        document.getElementById('img-brand-logo-preview').src = base64;
+      } catch (err) { alert('Error: ' + err.message); }
+    });
+
+    document.getElementById('form-brand-editor')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('brand-edit-id').value;
+      const name = document.getElementById('brand-edit-name').value.trim();
+      const category = document.getElementById('brand-edit-category').value;
+      const logoImage = document.getElementById('brand-edit-logo-base64').value;
+      const description = document.getElementById('brand-edit-desc').value.trim();
+
+      const endpoint = id ? `/api/admin/giftcards/brands/${id}` : '/api/admin/giftcards/brands';
+      const method = id ? 'PUT' : 'POST';
+
+      try {
+        const res = await fetch(endpoint, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, category, logoImage, description })
+        });
+        const data = await res.json();
+        alert(data.message || 'Marca guardada');
+        document.getElementById('modal-brand-editor').style.display = 'none';
+        loadGiftCardBrands();
+      } catch (err) { alert('Error al guardar marca'); }
+    });
+
+    window.deleteBrand = async function(brandId) {
+      if (!confirm('¿Eliminar esta marca y todas sus variaciones?')) return;
+      try {
+        const res = await fetch(`/api/admin/giftcards/brands/${brandId}`, { method: 'DELETE' });
+        const data = await res.json();
+        alert(data.message || 'Marca eliminada');
+        loadGiftCardBrands();
+      } catch (e) { alert('Error al eliminar'); }
+    };
+
+    // Variation Modal
+    window.openAddVariationModal = function(brandId, brandName) {
+      document.getElementById('var-edit-brand-id').value = brandId;
+      document.getElementById('var-edit-brand-name').value = brandName;
+      document.getElementById('form-variation-editor').reset();
+      document.getElementById('var-usd-calc').textContent = '≈ $0.00 USDT';
+      document.getElementById('modal-variation-editor').style.display = 'grid';
+    };
+
+    document.getElementById('var-edit-price-pyg')?.addEventListener('input', (e) => {
+      const pyg = parseInt(e.target.value, 10) || 0;
+      const usd = parseFloat((pyg / adminExchangeRate).toFixed(2));
+      document.getElementById('var-usd-calc').textContent = `≈ $${usd.toFixed(2)} USDT`;
+    });
+
+    document.getElementById('form-variation-editor')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const brandId = document.getElementById('var-edit-brand-id').value;
+      const name = document.getElementById('var-edit-name').value.trim();
+      const pricePyg = parseInt(document.getElementById('var-edit-price-pyg').value, 10);
+
+      try {
+        const res = await fetch(`/api/admin/giftcards/brands/${brandId}/variations`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, denomination: name, pricePyg })
+        });
+        const data = await res.json();
+        alert(data.message || 'Variación agregada');
+        document.getElementById('modal-variation-editor').style.display = 'none';
+        loadGiftCardBrands();
+      } catch (e) { alert('Error al agregar variación'); }
+    });
+
+    window.deleteVariation = async function(brandId, varId) {
+      if (!confirm('¿Eliminar esta variación?')) return;
+      try {
+        const res = await fetch(`/api/admin/giftcards/brands/${brandId}/variations/${varId}`, { method: 'DELETE' });
+        const data = await res.json();
+        alert(data.message || 'Variación eliminada');
+        loadGiftCardBrands();
+      } catch (e) { alert('Error al eliminar variación'); }
+    };
+
+    // =======================================================
+    // TAB 4: PENDING ORDERS & DELIVERY DISPATCH ENGINE
+    // =======================================================
+    async function loadPendingOrders() {
+      try {
+        const type = document.getElementById('filter-orders-type')?.value || 'all';
+        const res = await fetch(`/api/admin/orders/pending?type=${type}`);
+        const data = await res.json();
+
+        const badge = document.getElementById('badge-pending-orders');
+        if (badge) {
+          if (data.pendingCount > 0) {
+            badge.textContent = data.pendingCount;
+            badge.style.display = 'inline-block';
+          } else {
+            badge.style.display = 'none';
+          }
+        }
+
+        renderPendingOrdersTable(data.pendingOrders || []);
+        renderDeliveredOrdersTable(data.deliveredOrders || []);
+      } catch (e) { console.error('Error loading pending orders:', e); }
+    }
+
+    function renderPendingOrdersTable(orders) {
+      const tbody = document.getElementById('table-pending-orders');
+      if (!tbody) return;
+
+      if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">🎉 ¡Excelente! No hay entregas pendientes en este momento.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = orders.map(o => `
+        <tr>
+          <td>
+            <strong style="font-family: var(--font-mono); color: #ffffff;">${o.id}</strong>
+            <div style="font-size: 0.72rem; color: var(--text-tertiary);">${new Date(o.createdAt).toLocaleString()}</div>
+          </td>
+          <td>
+            <strong style="color: #ffffff; display: block;">${o.buyerName || 'Cliente'}</strong>
+            <span style="font-size: 0.74rem; color: var(--text-tertiary);">${o.buyerEmail || o.buyerId}</span>
+          </td>
+          <td>
+            <strong style="color: var(--accent-cyan); display: block;">${o.productTitle || o.title}</strong>
+            <span class="btn-admin-action cyan" style="padding: 1px 6px; font-size: 0.7rem; margin-top: 3px;">${o.option || o.platform || 'Entrega Digital'}</span>
+          </td>
+          <td>
+            <div style="font-family: var(--font-mono); font-weight: 800; color: #ffffff;">${(o.pricePaidPyg || (o.pricePaidUsd * adminExchangeRate) || 0).toLocaleString('es-PY')} Gs.</div>
+            <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-emerald);">$${(o.pricePaidUsd || 0).toFixed(2)} USDT</div>
+          </td>
+          <td>
+            <span class="btn-admin-action amber" style="padding: 2px 8px; font-size: 0.72rem; font-weight: 800;">
+              ⏳ En Preparación
+            </span>
+          </td>
+          <td>
+            <button class="btn-admin-action emerald" onclick="openDeliverModal('${o.id}')" style="padding: 7px 14px; font-size: 0.8rem; font-weight: 800;">
+              <span>✓ Entregar al Cliente</span>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderDeliveredOrdersTable(orders) {
+      const tbody = document.getElementById('table-delivered-orders');
+      if (!tbody) return;
+
+      if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">No hay entregas completadas registradas.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = orders.map(o => `
+        <tr>
+          <td><span style="font-family: var(--font-mono); font-size: 0.76rem; color: #94a3b8;">${o.id}</span></td>
+          <td><strong style="color: #ffffff;">${o.buyerName || o.buyerEmail}</strong></td>
+          <td><strong style="color: var(--accent-cyan);">${o.productTitle} (${o.option || o.platform || ''})</strong></td>
+          <td style="font-size: 0.74rem; color: var(--text-tertiary);">${new Date(o.deliveredAt || o.createdAt).toLocaleString()}</td>
+          <td><code style="background: rgba(0,0,0,0.5); padding: 2px 6px; border-radius: 4px; font-size: 0.74rem; color: var(--accent-emerald);">${o.code || o.credentials || 'ENTREGADO'}</code></td>
+          <td><span class="btn-admin-action emerald" style="padding: 2px 8px; font-size: 0.7rem;">Entregado</span></td>
+        </tr>
+      `).join('');
+    }
+
+    window.openDeliverModal = async function(orderId) {
+      try {
+        const res = await fetch('/api/admin/orders/pending');
+        const data = await res.json();
+        const order = (data.pendingOrders || []).find(o => o.id === orderId);
+        if (!order) return alert('Orden no encontrada');
+
+        document.getElementById('deliver-order-id').value = order.id;
+        document.getElementById('deliver-modal-product-title').textContent = order.productTitle;
+        document.getElementById('deliver-modal-option').textContent = order.option || order.platform || 'Entrega Digital';
+        document.getElementById('deliver-modal-buyer-info').textContent = `${order.buyerName || 'Cliente'} (${order.buyerEmail || order.buyerId})`;
+        document.getElementById('form-order-deliver').reset();
+
+        document.getElementById('modal-order-deliver').style.display = 'grid';
+      } catch (err) { alert('Error al cargar datos de la orden'); }
+    };
+
+    document.getElementById('form-order-deliver')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const orderId = document.getElementById('deliver-order-id').value;
+      const deliveredEmail = document.getElementById('deliver-account-email').value.trim();
+      const deliveredPassword = document.getElementById('deliver-account-password').value.trim();
+      const deliveredCode = document.getElementById('deliver-code-input').value.trim();
+      const deliveredInstructions = document.getElementById('deliver-instructions').value.trim();
+
+      if (!deliveredCode && !deliveredEmail && !deliveredPassword && !deliveredInstructions) {
+        alert('Debes ingresar al menos el código digital o las credenciales de la cuenta para entregar.');
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/admin/orders/${orderId}/deliver`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            deliveredEmail,
+            deliveredPassword,
+            deliveredCode,
+            deliveredInstructions
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error al procesar');
+
+        alert(data.message || '¡Entrega realizada con éxito!');
+        document.getElementById('modal-order-deliver').style.display = 'none';
+        loadPendingOrders();
+      } catch (err) { alert('Error: ' + err.message); }
+    });
+
+    // =======================================================
+    // FINANZAS, RECIENTES, STREAMING, USUARIOS, SMM
+    // =======================================================
     function renderRecentTransactions(list) {
       const tbody = document.getElementById('table-recent-transactions');
       if (!tbody) return;
@@ -1004,7 +2242,6 @@
       `).join('');
     }
 
-    // Render Pending Deposits
     function renderPendingDeposits(list) {
       const tbody = document.getElementById('table-pending-deposits');
       if (!tbody) return;
@@ -1054,90 +2291,6 @@
       } catch (e) { alert('Error al rechazar.'); }
     }
 
-    // Load Games
-    async function loadGames() {
-      try {
-        const res = await fetch('/api/admin/games');
-        const data = await res.json();
-        const tbody = document.getElementById('table-games-list');
-        if (!tbody) return;
-        if (!data.games || data.games.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-tertiary);">No hay videojuegos cargados en el catálogo.</td></tr>';
-          return;
-        }
-        tbody.innerHTML = data.games.map(g => `
-          <tr>
-            <td>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="${g.coverUrl}" style="width: 38px; height: 50px; object-fit: cover; border-radius: 6px;">
-                <div>
-                  <strong style="color: #ffffff; display: block;">${g.title}</strong>
-                  <span style="font-size: 0.72rem; color: var(--text-tertiary);">${g.genre || 'Acción'}</span>
-                </div>
-              </div>
-            </td>
-            <td><span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.72rem;">${g.platform}</span></td>
-            <td style="font-family: var(--font-mono); font-weight: 700;">$${(g.primaryPriceUsd || 0).toFixed(2)}<div style="font-size: 0.7rem; color: var(--text-tertiary);">${(g.primaryPricePyg || 0).toLocaleString('es-PY')} Gs.</div></td>
-            <td style="font-family: var(--font-mono); font-weight: 700;">$${(g.secondaryPriceUsd || 0).toFixed(2)}<div style="font-size: 0.7rem; color: var(--text-tertiary);">${(g.secondaryPricePyg || 0).toLocaleString('es-PY')} Gs.</div></td>
-            <td style="font-family: var(--font-mono); font-weight: 700;">$${(g.digitalKeyPriceUsd || 0).toFixed(2)}</td>
-            <td>
-              <span class="btn-admin-action ${g.isAvailable ? 'emerald' : 'red'}" style="padding: 2px 8px; font-size: 0.7rem;">
-                ${g.isAvailable ? 'Disponible' : 'Agotado'}
-              </span>
-            </td>
-            <td>
-              <div style="display: flex; gap: 6px;">
-                <button class="btn-admin-action cyan" onclick="editGame('${g.id}')">Editar</button>
-                <button class="btn-admin-action red" onclick="deleteGame('${g.id}')">✕</button>
-              </div>
-            </td>
-          </tr>
-        `).join('');
-      } catch (e) { console.error('Error loading games:', e); }
-    }
-
-    // Load Gift Cards
-    async function loadGiftCards() {
-      try {
-        const res = await fetch('/api/admin/giftcards');
-        const data = await res.json();
-        const tbody = document.getElementById('table-giftcards-list');
-        if (!tbody) return;
-        if (!data.giftCards || data.giftCards.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">No hay gift cards cargadas.</td></tr>';
-          return;
-        }
-        tbody.innerHTML = data.giftCards.map(gc => `
-          <tr>
-            <td>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="${gc.coverUrl}" style="width: 44px; height: 32px; object-fit: cover; border-radius: 6px;">
-                <div>
-                  <strong style="color: #ffffff; display: block;">${gc.title}</strong>
-                  <span style="font-size: 0.72rem; color: var(--text-tertiary);">${gc.brand}</span>
-                </div>
-              </div>
-            </td>
-            <td><strong style="color: var(--accent-cyan);">${gc.brand}</strong></td>
-            <td style="font-family: var(--font-mono); font-weight: 700;">${(gc.pricePyg || 0).toLocaleString('es-PY')} Gs.</td>
-            <td style="font-family: var(--font-mono); color: var(--accent-cyan);">$${(gc.priceUsd || 0).toFixed(2)}</td>
-            <td>
-              <span class="btn-admin-action ${gc.codesCount > 0 ? 'emerald' : 'red'}" style="padding: 2px 8px; font-size: 0.72rem;">
-                ${gc.codesCount} códigos disponibles
-              </span>
-            </td>
-            <td>
-              <div style="display: flex; gap: 6px;">
-                <button class="btn-admin-action cyan" onclick="addCodesToGc('${gc.id}')">+ Códigos</button>
-                <button class="btn-admin-action red" onclick="deleteGiftCard('${gc.id}')">✕</button>
-              </div>
-            </td>
-          </tr>
-        `).join('');
-      } catch (e) { console.error('Error loading gift cards:', e); }
-    }
-
-    // Load Streaming Data
     async function loadStreamingData() {
       try {
         const resPending = await fetch('/api/admin/streaming/pending');
@@ -1209,7 +2362,6 @@
       } catch (e) { alert('Error al procesar'); }
     }
 
-    // Load Users
     async function loadUsers() {
       try {
         const res = await fetch('/api/admin/users');
@@ -1240,7 +2392,7 @@
       document.getElementById('modal-user-adjust').style.display = 'grid';
     }
 
-    document.getElementById('form-user-adjust').addEventListener('submit', async (e) => {
+    document.getElementById('form-user-adjust')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const userId = document.getElementById('adjust-user-id').value;
       const type = document.getElementById('adjust-action-type').value;
@@ -1260,7 +2412,6 @@
       } catch (e) { alert('Error al actualizar saldo'); }
     });
 
-    // Load SMM Config
     async function loadSmmConfig() {
       try {
         const res = await fetch('/api/admin/smm/config');
@@ -1274,7 +2425,7 @@
       } catch (e) { console.error('Error loading SMM config:', e); }
     }
 
-    document.getElementById('btn-smm-test-ping').addEventListener('click', async () => {
+    document.getElementById('btn-smm-test-ping')?.addEventListener('click', async () => {
       try {
         const res = await fetch('/api/admin/smm/test-connection', { method: 'POST' });
         const data = await res.json();
@@ -1285,7 +2436,7 @@
       } catch (e) { alert('Error al verificar conexión con el proveedor.'); }
     });
 
-    document.getElementById('form-smm-config').addEventListener('submit', async (e) => {
+    document.getElementById('form-smm-config')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const providerUrl = document.getElementById('smm-provider-url').value;
       const apiKey = document.getElementById('smm-api-key').value;
@@ -1302,8 +2453,7 @@
       } catch (e) { alert('Error al guardar configuración SMM.'); }
     });
 
-    // Platform Financial Settings Submit
-    document.getElementById('form-platform-settings').addEventListener('submit', async (e) => {
+    document.getElementById('form-platform-settings')?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const exchangeRatePyg = document.getElementById('settings-rate-pyg').value;
       const commissionPercent = document.getElementById('settings-commission').value;
@@ -1326,125 +2476,24 @@
         });
         const data = await res.json();
         alert(data.message || 'Configuración guardada');
-        document.getElementById('header-rate-display').textContent = `1 USDT = ${parseInt(exchangeRatePyg).toLocaleString('es-PY')} Gs.`;
+        adminExchangeRate = parseInt(exchangeRatePyg, 10);
+        document.getElementById('header-rate-display').textContent = `1 USDT = ${adminExchangeRate.toLocaleString('es-PY')} Gs.`;
       } catch (e) { alert('Error al guardar configuración.'); }
     });
 
-    // Game Editor Modals
-    document.getElementById('btn-open-modal-add-game').addEventListener('click', () => {
-      document.getElementById('modal-game-editor-title').textContent = 'Nuevo Videojuego Digital';
-      document.getElementById('game-edit-id').value = '';
-      document.getElementById('form-game-editor').reset();
-      document.getElementById('modal-game-editor').style.display = 'grid';
-    });
-
-    document.getElementById('form-game-editor').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const id = document.getElementById('game-edit-id').value;
-      const title = document.getElementById('game-edit-title').value;
-      const platform = document.getElementById('game-edit-platform').value;
-      const genre = document.getElementById('game-edit-genre').value;
-      const primaryPriceUsd = document.getElementById('game-edit-price-primary').value;
-      const secondaryPriceUsd = document.getElementById('game-edit-price-secondary').value;
-      const digitalKeyPriceUsd = document.getElementById('game-edit-price-key').value;
-      const coverUrl = document.getElementById('game-edit-cover').value;
-      const screenshots = document.getElementById('game-edit-screenshots').value;
-      const description = document.getElementById('game-edit-desc').value;
-      const isAvailable = document.getElementById('game-edit-available').checked;
-
-      const endpoint = id ? `/api/admin/games/${id}` : '/api/admin/games';
-      const method = id ? 'PUT' : 'POST';
-
-      try {
-        const res = await fetch(endpoint, {
-          method,
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            title, platform, genre, primaryPriceUsd, secondaryPriceUsd, digitalKeyPriceUsd,
-            coverUrl, screenshots, description, isAvailable
-          })
-        });
-        const data = await res.json();
-        alert(data.message || 'Guardado con éxito');
-        document.getElementById('modal-game-editor').style.display = 'none';
-        loadGames();
-      } catch (e) { alert('Error al guardar juego'); }
-    });
-
-    async function deleteGame(id) {
-      if (!confirm('¿Eliminar este videojuego del catálogo?')) return;
-      try {
-        const res = await fetch(`/api/admin/games/${id}`, { method: 'DELETE' });
-        const data = await res.json();
-        alert(data.message || 'Eliminado');
-        loadGames();
-      } catch (e) { alert('Error al eliminar'); }
-    }
-
-    // Gift Cards Editor
-    document.getElementById('btn-open-modal-add-gc').addEventListener('click', () => {
-      document.getElementById('form-gc-editor').reset();
-      document.getElementById('modal-gc-editor').style.display = 'grid';
-    });
-
-    document.getElementById('form-gc-editor').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const title = document.getElementById('gc-edit-title').value;
-      const brand = document.getElementById('gc-edit-brand').value;
-      const priceUsd = document.getElementById('gc-edit-price').value;
-      const codes = document.getElementById('gc-edit-codes').value;
-
-      try {
-        const res = await fetch('/api/admin/giftcards', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title, brand, priceUsd, codes })
-        });
-        const data = await res.json();
-        alert(data.message || 'Gift card creada');
-        document.getElementById('modal-gc-editor').style.display = 'none';
-        loadGiftCards();
-      } catch (e) { alert('Error al crear gift card'); }
-    });
-
-    async function addCodesToGc(id) {
-      const inputCodes = prompt('Ingresa los nuevos códigos de activación (separados por coma o renglón):');
-      if (!inputCodes) return;
-      try {
-        const res = await fetch(`/api/admin/giftcards/${id}/add-codes`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ codes: inputCodes })
-        });
-        const data = await res.json();
-        alert(data.message || 'Códigos agregados');
-        loadGiftCards();
-      } catch (e) { alert('Error al agregar códigos'); }
-    }
-
-    async function deleteGiftCard(id) {
-      if (!confirm('¿Eliminar esta tarjeta de regalo?')) return;
-      try {
-        const res = await fetch(`/api/admin/giftcards/${id}`, { method: 'DELETE' });
-        const data = await res.json();
-        alert(data.message || 'Eliminada');
-        loadGiftCards();
-      } catch (e) { alert('Error al eliminar'); }
-    }
-
     // Refresh & Logout
-    document.getElementById('btn-refresh-admin').addEventListener('click', () => {
+    document.getElementById('btn-refresh-admin')?.addEventListener('click', () => {
       loadAdminData();
     });
 
-    document.getElementById('btn-admin-logout').addEventListener('click', () => {
+    document.getElementById('btn-admin-logout')?.addEventListener('click', () => {
       localStorage.removeItem('gb_admin_session');
       localStorage.removeItem('gb_user');
       localStorage.removeItem('gb_token');
       window.location.href = '/admin/login';
     });
 
-    // Guard on Page Load
+    // Guard & WebSocket Real-time listener
     document.addEventListener('DOMContentLoaded', () => {
       const adminSession = localStorage.getItem('gb_admin_session');
       if (!adminSession) {
@@ -1452,6 +2501,21 @@
         return;
       }
       loadAdminData();
+
+      // Connect WebSocket for real-time order alerts
+      try {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//${window.location.host}`;
+        const socket = new WebSocket(wsUrl);
+        socket.onmessage = (event) => {
+          try {
+            const msg = JSON.parse(event.data);
+            if (msg.type === 'NEW_ORDER_PENDING') {
+              loadPendingOrders();
+            }
+          } catch (err) {}
+        };
+      } catch (wsErr) {}
     });
   </script>
 </body>

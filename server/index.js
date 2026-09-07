@@ -74,8 +74,8 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json({ limit: '15mb' })); // Support base64 receipt uploads
-app.use(express.urlencoded({ extended: true, limit: '15mb' }));
+app.use(express.json({ limit: '35mb' })); // Support direct image file uploads and base64 screenshots
+app.use(express.urlencoded({ extended: true, limit: '35mb' }));
 app.use(morgan(config.nodeEnv === 'production' ? 'combined' : 'dev'));
 
 // Static Client Files

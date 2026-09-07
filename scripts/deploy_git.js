@@ -39,7 +39,7 @@ async function deploy() {
     }
 
     // 3. Commit
-    const commitMsg = 'feat: Toast notification engine, interactive SMM ordering flow, printable voucher receipts, and real-time WebSocket sync';
+    const commitMsg = 'feat: Complete Video Games pagination & Guaraníes pricing overhaul, direct Canvas image compression uploads, Gift Cards brands/variations management, and manual order delivery system';
     const sha = await git.commit({
       fs,
       dir,

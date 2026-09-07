@@ -36,11 +36,67 @@
       "pendingEscrowUsd": 22
     },
     "usr_client1": {
-      "balanceUsd": 189.13,
+      "balanceUsd": 2.45,
       "pendingEscrowUsd": 0
     }
   },
   "wallet_transactions": [
+    {
+      "id": "tx_buy_1788808779240",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "purchase",
+      "amountUsd": 46.67,
+      "currency": "USDT",
+      "localAmount": 46.67,
+      "method": "wallet_balance",
+      "status": "approved",
+      "reference": "COMPRA",
+      "notes": "Compra de EA Sports FC 25 Ultimate Edition (Updated) (Cuenta Primaria)",
+      "createdAt": "2026-09-07T19:19:39.240Z"
+    },
+    {
+      "id": "tx_buy_1788808647025",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "purchase",
+      "amountUsd": 46.67,
+      "currency": "USDT",
+      "localAmount": 46.67,
+      "method": "wallet_balance",
+      "status": "approved",
+      "reference": "COMPRA",
+      "notes": "Compra de EA Sports FC 25 Ultimate Edition (Updated) (Cuenta Primaria)",
+      "createdAt": "2026-09-07T19:17:27.025Z"
+    },
+    {
+      "id": "tx_buy_1788808512344",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "purchase",
+      "amountUsd": 46.67,
+      "currency": "USDT",
+      "localAmount": 46.67,
+      "method": "wallet_balance",
+      "status": "approved",
+      "reference": "COMPRA",
+      "notes": "Compra de EA Sports FC 25 Ultimate Edition (Updated) (Cuenta Primaria)",
+      "createdAt": "2026-09-07T19:15:12.344Z"
+    },
+    {
+      "id": "tx_buy_1788808312767",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "purchase",
+      "amountUsd": 46.67,
+      "currency": "USDT",
+      "localAmount": 46.67,
+      "method": "wallet_balance",
+      "status": "approved",
+      "reference": "COMPRA",
+      "notes": "Compra de EA Sports FC 25 Ultimate Edition (Updated) (Cuenta Primaria)",
+      "createdAt": "2026-09-07T19:11:52.767Z"
+    },
     {
       "id": "tx_1788806685844_x22h",
       "userId": "usr_client1",
@@ -779,7 +835,80 @@
       ]
     }
   ],
-  "user_store_orders": [],
+  "user_store_orders": [
+    {
+      "id": "order_1788808779242_kapi",
+      "buyerId": "usr_client1",
+      "productId": "game_1788808779214_8pe4",
+      "productTitle": "EA Sports FC 25 Ultimate Edition (Updated)",
+      "type": "game",
+      "option": "Cuenta Primaria",
+      "platform": "PS5",
+      "pricePaidUsd": 46.67,
+      "pricePaidPyg": 350025,
+      "status": "delivered",
+      "code": "En preparación (Entrega en minutos)",
+      "credentials": "playstation_user_psn@gamesboy.net:::PasswordSeguro2026!",
+      "instructions": "1. Inicia sesión en tu PS5 con este perfil. 2. Activa como consola principal y descarga el juego.",
+      "createdAt": "2026-09-07T19:19:39.242Z",
+      "deliveredAt": "2026-09-07T19:19:39.281Z",
+      "adminNotes": ""
+    },
+    {
+      "id": "order_1788808647028_925l",
+      "buyerId": "usr_client1",
+      "productId": "game_1788808646999_aq8x",
+      "productTitle": "EA Sports FC 25 Ultimate Edition (Updated)",
+      "type": "game",
+      "option": "Cuenta Primaria",
+      "platform": "PS5",
+      "pricePaidUsd": 46.67,
+      "pricePaidPyg": 350025,
+      "status": "delivered",
+      "code": "En preparación (Entrega en minutos)",
+      "credentials": "playstation_user_psn@gamesboy.net:::PasswordSeguro2026!",
+      "instructions": "1. Inicia sesión en tu PS5 con este perfil. 2. Activa como consola principal y descarga el juego.",
+      "createdAt": "2026-09-07T19:17:27.028Z",
+      "deliveredAt": "2026-09-07T19:17:27.064Z",
+      "adminNotes": ""
+    },
+    {
+      "id": "order_1788808512346_swp8",
+      "buyerId": "usr_client1",
+      "productId": "game_1788808512322_6ryi",
+      "productTitle": "EA Sports FC 25 Ultimate Edition (Updated)",
+      "type": "game",
+      "option": "Cuenta Primaria",
+      "platform": "PS5",
+      "pricePaidUsd": 46.67,
+      "pricePaidPyg": 350025,
+      "status": "delivered",
+      "code": "En preparación (Entrega en minutos)",
+      "credentials": "playstation_user_psn@gamesboy.net:::PasswordSeguro2026!",
+      "instructions": "1. Inicia sesión en tu PS5 con este perfil. 2. Activa como consola principal y descarga el juego.",
+      "createdAt": "2026-09-07T19:15:12.346Z",
+      "deliveredAt": "2026-09-07T19:15:12.367Z",
+      "adminNotes": ""
+    },
+    {
+      "id": "order_1788808312768_hcvm",
+      "buyerId": "usr_client1",
+      "productId": "game_1788808312748_o5pu",
+      "productTitle": "EA Sports FC 25 Ultimate Edition (Updated)",
+      "type": "game",
+      "option": "Cuenta Primaria",
+      "platform": "PS5",
+      "pricePaidUsd": 46.67,
+      "pricePaidPyg": 350025,
+      "status": "delivered",
+      "code": "En preparación (Entrega en minutos)",
+      "credentials": "playstation_user_psn@gamesboy.net:::PasswordSeguro2026!",
+      "instructions": "1. Inicia sesión en tu PS5 con este perfil. 2. Activa como consola principal y descarga el juego.",
+      "createdAt": "2026-09-07T19:11:52.768Z",
+      "deliveredAt": "2026-09-07T19:11:52.782Z",
+      "adminNotes": ""
+    }
+  ],
   "payout_requests": [
     {
       "id": "payout_1788774785832",
@@ -1025,6 +1154,336 @@
       "pricePaidPyg": 43875,
       "status": "in_progress",
       "createdAt": "2026-09-07T18:44:22.181Z"
+    }
+  ],
+  "giftcard_brands": [
+    {
+      "id": "brand_playstation",
+      "name": "PlayStation Network",
+      "category": "Gaming",
+      "logoUrl": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80",
+      "description": "Tarjetas oficiales de saldo y membresías PlayStation Plus.",
+      "variations": [
+        {
+          "id": "var_psn_10",
+          "name": "PSN $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 85000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_psn_25",
+          "name": "PSN $25 USD",
+          "denomination": "$25 USD",
+          "pricePyg": 210000,
+          "priceUsd": 25
+        },
+        {
+          "id": "var_psn_50",
+          "name": "PSN $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 410000,
+          "priceUsd": 50
+        },
+        {
+          "id": "var_psn_100",
+          "name": "PSN $100 USD",
+          "denomination": "$100 USD",
+          "pricePyg": 810000,
+          "priceUsd": 100
+        },
+        {
+          "id": "var_psn_plus_1m",
+          "name": "PS Plus Essential 1 Mes",
+          "denomination": "1 Mes",
+          "pricePyg": 90000,
+          "priceUsd": 11.99
+        },
+        {
+          "id": "var_psn_plus_12m",
+          "name": "PS Plus Essential 12 Meses",
+          "denomination": "12 Meses",
+          "pricePyg": 620000,
+          "priceUsd": 79.99
+        }
+      ]
+    },
+    {
+      "id": "brand_steam",
+      "name": "Steam Wallet",
+      "category": "PC Gaming",
+      "logoUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80",
+      "description": "Saldo para la tienda de Steam en PC y Steam Deck.",
+      "variations": [
+        {
+          "id": "var_steam_5",
+          "name": "Steam $5 USD",
+          "denomination": "$5 USD",
+          "pricePyg": 42000,
+          "priceUsd": 5
+        },
+        {
+          "id": "var_steam_10",
+          "name": "Steam $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 85000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_steam_20",
+          "name": "Steam $20 USD",
+          "denomination": "$20 USD",
+          "pricePyg": 168000,
+          "priceUsd": 20
+        },
+        {
+          "id": "var_steam_50",
+          "name": "Steam $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 415000,
+          "priceUsd": 50
+        }
+      ]
+    },
+    {
+      "id": "brand_xbox",
+      "name": "Xbox & Game Pass",
+      "category": "Gaming",
+      "logoUrl": "https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?auto=format&fit=crop&w=400&q=80",
+      "description": "Tarjetas de regalo Xbox y suscripciones Game Pass Ultimate.",
+      "variations": [
+        {
+          "id": "var_xbox_10",
+          "name": "Xbox $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 85000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_xbox_25",
+          "name": "Xbox $25 USD",
+          "denomination": "$25 USD",
+          "pricePyg": 210000,
+          "priceUsd": 25
+        },
+        {
+          "id": "var_xbox_gpu_1m",
+          "name": "Game Pass Ultimate 1 Mes",
+          "denomination": "1 Mes",
+          "pricePyg": 125000,
+          "priceUsd": 16.99
+        },
+        {
+          "id": "var_xbox_gpu_3m",
+          "name": "Game Pass Ultimate 3 Meses",
+          "denomination": "3 Meses",
+          "pricePyg": 350000,
+          "priceUsd": 49.99
+        }
+      ]
+    },
+    {
+      "id": "brand_nintendo",
+      "name": "Nintendo eShop",
+      "category": "Gaming",
+      "logoUrl": "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80",
+      "description": "Saldo para comprar juegos en Nintendo Switch.",
+      "variations": [
+        {
+          "id": "var_nin_10",
+          "name": "Nintendo $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 85000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_nin_20",
+          "name": "Nintendo $20 USD",
+          "denomination": "$20 USD",
+          "pricePyg": 170000,
+          "priceUsd": 20
+        },
+        {
+          "id": "var_nin_35",
+          "name": "Nintendo $35 USD",
+          "denomination": "$35 USD",
+          "pricePyg": 295000,
+          "priceUsd": 35
+        },
+        {
+          "id": "var_nin_50",
+          "name": "Nintendo $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 420000,
+          "priceUsd": 50
+        }
+      ]
+    },
+    {
+      "id": "brand_spotify",
+      "name": "Spotify Premium",
+      "category": "Música",
+      "logoUrl": "https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=400&q=80",
+      "description": "Música sin anuncios y descargas offline en Spotify.",
+      "variations": [
+        {
+          "id": "var_spot_1m",
+          "name": "Spotify 1 Mes Individual",
+          "denomination": "1 Mes",
+          "pricePyg": 45000,
+          "priceUsd": 5.99
+        },
+        {
+          "id": "var_spot_3m",
+          "name": "Spotify 3 Meses",
+          "denomination": "3 Meses",
+          "pricePyg": 125000,
+          "priceUsd": 16.5
+        },
+        {
+          "id": "var_spot_6m",
+          "name": "Spotify 6 Meses",
+          "denomination": "6 Meses",
+          "pricePyg": 240000,
+          "priceUsd": 32
+        }
+      ]
+    },
+    {
+      "id": "brand_netflix",
+      "name": "Netflix Gift Card",
+      "category": "Streaming",
+      "logoUrl": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80",
+      "description": "Saldo oficial de regalo para canjear en cuentas Netflix.",
+      "variations": [
+        {
+          "id": "var_net_15",
+          "name": "Netflix $15 USD",
+          "denomination": "$15 USD",
+          "pricePyg": 125000,
+          "priceUsd": 15
+        },
+        {
+          "id": "var_net_25",
+          "name": "Netflix $25 USD",
+          "denomination": "$25 USD",
+          "pricePyg": 205000,
+          "priceUsd": 25
+        },
+        {
+          "id": "var_net_50",
+          "name": "Netflix $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 405000,
+          "priceUsd": 50
+        }
+      ]
+    },
+    {
+      "id": "brand_deezer",
+      "name": "Deezer Premium",
+      "category": "Música",
+      "logoUrl": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80",
+      "description": "Música en calidad Hi-Fi y sonido de alta fidelidad.",
+      "variations": [
+        {
+          "id": "var_deezer_1m",
+          "name": "Deezer 1 Mes",
+          "denomination": "1 Mes",
+          "pricePyg": 40000,
+          "priceUsd": 5
+        },
+        {
+          "id": "var_deezer_3m",
+          "name": "Deezer 3 Meses",
+          "denomination": "3 Meses",
+          "pricePyg": 110000,
+          "priceUsd": 14.5
+        }
+      ]
+    },
+    {
+      "id": "brand_googleplay",
+      "name": "Google Play Store",
+      "category": "Móvil",
+      "logoUrl": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=400&q=80",
+      "description": "Saldo para apps, juegos y diamantes en Android.",
+      "variations": [
+        {
+          "id": "var_gp_10",
+          "name": "Google Play $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 85000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_gp_25",
+          "name": "Google Play $25 USD",
+          "denomination": "$25 USD",
+          "pricePyg": 210000,
+          "priceUsd": 25
+        },
+        {
+          "id": "var_gp_50",
+          "name": "Google Play $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 415000,
+          "priceUsd": 50
+        }
+      ]
+    },
+    {
+      "id": "brand_apple",
+      "name": "Apple Gift Card & iTunes",
+      "category": "Apple",
+      "logoUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80",
+      "description": "Saldo para compras en App Store, Apple Arcade y suscripciones.",
+      "variations": [
+        {
+          "id": "var_apple_10",
+          "name": "Apple $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 85000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_apple_25",
+          "name": "Apple $25 USD",
+          "denomination": "$25 USD",
+          "pricePyg": 210000,
+          "priceUsd": 25
+        },
+        {
+          "id": "var_apple_50",
+          "name": "Apple $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 415000,
+          "priceUsd": 50
+        }
+      ]
+    },
+    {
+      "id": "brand_roblox",
+      "name": "Roblox Robux Card",
+      "category": "Gaming",
+      "logoUrl": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=400&q=80",
+      "description": "Robux y objetos virtuales para tu avatar en Roblox.",
+      "variations": [
+        {
+          "id": "var_rob_10",
+          "name": "Roblox $10 (800 Robux)",
+          "denomination": "$10 USD",
+          "pricePyg": 85000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_rob_25",
+          "name": "Roblox $25 (2000 Robux)",
+          "denomination": "$25 USD",
+          "pricePyg": 210000,
+          "priceUsd": 25
+        }
+      ]
     }
   ]
 }

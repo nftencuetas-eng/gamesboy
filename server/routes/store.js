@@ -8,65 +8,123 @@ const router = Router();
 // Get digital store products
 router.get('/products', (req, res) => {
   const db = getDb();
-  const products = (db.store_products || []).map(p => ({
-    id: p.id,
-    title: p.title,
-    category: p.category,
-    platform: p.platform,
-    priceUsd: p.priceUsd,
-    pricePyg: convertFromUsd(p.priceUsd, 'PYG'),
-    badge: p.badge,
-    icon: p.icon,
-    coverUrl: p.coverUrl,
-    brandTheme: p.brandTheme,
-    description: p.description,
-    stockCount: (p.codes || []).length
-  }));
+  const rate = db.platform_settings?.exchangeRatePyg || 7500;
+  const products = (db.store_products || []).map(p => {
+    const primaryPyg = p.primaryPricePyg || (p.priceUsd ? Math.round(p.priceUsd * rate) : 295000);
+    const primaryUsd = p.primaryPriceUsd || (p.priceUsd ? parseFloat(p.priceUsd) : parseFloat((primaryPyg / rate).toFixed(2)));
+    const secondaryPyg = p.secondaryPricePyg || Math.round(primaryPyg * 0.65);
+    const secondaryUsd = p.secondaryPriceUsd || parseFloat((secondaryPyg / rate).toFixed(2));
+
+    return {
+      id: p.id,
+      title: p.title,
+      category: p.category || 'digital_game',
+      platform: p.platform || 'PS5',
+      genre: p.genre || 'Acción',
+      priceUsd: primaryUsd,
+      pricePyg: primaryPyg,
+      primaryPriceUsd: primaryUsd,
+      primaryPricePyg: primaryPyg,
+      secondaryPriceUsd: secondaryUsd,
+      secondaryPricePyg: secondaryPyg,
+      badge: p.badge || 'DISPONIBLE',
+      icon: p.icon,
+      coverUrl: p.coverUrl || p.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
+      coverImage: p.coverImage || p.coverUrl,
+      screenshots: Array.isArray(p.screenshots) && p.screenshots.length > 0 ? p.screenshots : [
+        'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
+      ],
+      brand: p.brand,
+      brandTheme: p.brandTheme,
+      description: p.description,
+      isAvailable: p.isAvailable !== false,
+      stockCount: (p.codes || []).length
+    };
+  });
 
   res.json(products);
 });
 
-// Buy a digital gift card / key
+// Buy a digital game or gift card
 router.post('/products/:id/buy', (req, res) => {
   try {
     const userId = req.headers['x-user-id'] || 'usr_client1';
     const prodId = req.params.id;
+    const { option = 'Cuenta Primaria', priceUsd: reqPriceUsd } = req.body;
     const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
 
-    const product = db.store_products.find(p => p.id === prodId);
+    const product = (db.store_products || []).find(p => p.id === prodId);
     if (!product) {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }
 
-    if (!product.codes || product.codes.length === 0) {
-      return res.status(400).json({ error: 'Sin stock disponible por el momento' });
+    // Determine price
+    let finalPriceUsd = parseFloat(reqPriceUsd) || product.priceUsd || 39.99;
+    if (option === 'Cuenta Secundaria' && (product.secondaryPriceUsd || product.secondaryPricePyg)) {
+      finalPriceUsd = product.secondaryPriceUsd || parseFloat((product.secondaryPricePyg / rate).toFixed(2));
+    } else if (option === 'Cuenta Primaria' && (product.primaryPriceUsd || product.primaryPricePyg)) {
+      finalPriceUsd = product.primaryPriceUsd || parseFloat((product.primaryPricePyg / rate).toFixed(2));
     }
 
-    // 1. Deduct balance from buyer
-    deductBalance(userId, product.priceUsd, `Compra de ${product.title}`);
+    const finalPricePyg = Math.round(finalPriceUsd * rate);
 
-    // 2. Pop code from product stock
-    const deliveredCode = product.codes.shift();
+    // 1. Deduct balance from buyer
+    deductBalance(userId, finalPriceUsd, `Compra de ${product.title} (${option})`);
+
+    // 2. Check if instant code exists or if manual delivery is needed
+    let deliveredCode = '';
+    let status = 'pending_delivery';
+
+    if (product.codes && product.codes.length > 0) {
+      deliveredCode = product.codes.shift();
+      status = 'delivered';
+    }
 
     // 3. Save order in user orders
     const order = {
-      id: `order_${Date.now()}`,
+      id: `order_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       buyerId: userId,
       productId: product.id,
       productTitle: product.title,
-      platform: product.platform,
-      pricePaidUsd: product.priceUsd,
-      pricePaidPyg: convertFromUsd(product.priceUsd, 'PYG'),
-      code: deliveredCode,
-      createdAt: new Date().toISOString()
+      type: product.category === 'gift_card' ? 'giftcard' : 'game',
+      option: option || 'Cuenta Primaria',
+      platform: product.platform || 'Digital',
+      pricePaidUsd: finalPriceUsd,
+      pricePaidPyg: finalPricePyg,
+      status, // 'pending_delivery' or 'delivered'
+      code: deliveredCode || 'En preparación (Entrega en minutos)',
+      credentials: '',
+      instructions: '',
+      createdAt: new Date().toISOString(),
+      deliveredAt: status === 'delivered' ? new Date().toISOString() : null
     };
 
+    if (!db.user_store_orders) db.user_store_orders = [];
     db.user_store_orders.unshift(order);
     saveStorage();
 
+    // Broadcast WebSocket notification to admin
+    const wss = req.app.get('wss');
+    if (wss) {
+      wss.clients.forEach(client => {
+        if (client.readyState === 1) {
+          client.send(JSON.stringify({
+            type: 'NEW_ORDER_PENDING',
+            payload: order
+          }));
+        }
+      });
+    }
+
+    const msg = status === 'delivered'
+      ? `¡Compra exitosa! Tu código de ${product.title} ha sido entregado.`
+      : `¡Compra confirmada! Tu orden de "${product.title} (${option})" está en preparación y será entregada en minutos.`;
+
     res.json({
       success: true,
-      message: `¡Compra exitosa! Tu código de ${product.title} ha sido entregado.`,
+      message: msg,
       order
     });
   } catch (err) {
@@ -78,7 +136,7 @@ router.post('/products/:id/buy', (req, res) => {
 router.get('/my-orders', (req, res) => {
   const userId = req.headers['x-user-id'] || 'usr_client1';
   const db = getDb();
-  const orders = db.user_store_orders.filter(o => o.buyerId === userId);
+  const orders = (db.user_store_orders || []).filter(o => o.buyerId === userId);
   res.json(orders);
 });
 

@@ -74,7 +74,7 @@ router.get('/overview', (req, res) => {
 });
 
 // =======================================================
-// 2. VIDEOJUEGOS DIGITALES (GAMES CRUD & DUAL PRICING)
+// 2. VIDEOJUEGOS DIGITALES (GAMES CRUD & PRECIOS EN Gs.)
 // =======================================================
 router.get('/games', (req, res) => {
   try {
@@ -83,34 +83,42 @@ router.get('/games', (req, res) => {
     
     // Filter digital games
     const games = (db.store_products || [])
-      .filter(p => p.category === 'game_key' || p.category === 'digital_game')
-      .map(g => ({
-        id: g.id,
-        title: g.title,
-        platform: g.platform || 'PS5',
-        genre: g.genre || 'Acción / Aventura',
-        primaryPriceUsd: g.primaryPriceUsd || g.priceUsd || 39.99,
-        primaryPricePyg: Math.round((g.primaryPriceUsd || g.priceUsd || 39.99) * rate),
-        secondaryPriceUsd: g.secondaryPriceUsd || Math.round((g.priceUsd || 39.99) * 0.65),
-        secondaryPricePyg: Math.round((g.secondaryPriceUsd || Math.round((g.priceUsd || 39.99) * 0.65)) * rate),
-        digitalKeyPriceUsd: g.digitalKeyPriceUsd || g.priceUsd || 59.99,
-        digitalKeyPricePyg: Math.round((g.digitalKeyPriceUsd || g.priceUsd || 59.99) * rate),
-        priceUsd: g.primaryPriceUsd || g.priceUsd || 39.99,
-        pricePyg: Math.round((g.primaryPriceUsd || g.priceUsd || 39.99) * rate),
-        coverUrl: g.coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
-        screenshots: g.screenshots && Array.isArray(g.screenshots) ? g.screenshots : [
-          'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
-          'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
-        ],
-        description: g.description || 'Juego digital completo para tu consola o PC.',
-        isAvailable: g.isAvailable !== false,
-        badge: g.badge || 'DISPONIBLE',
-        codesCount: (g.codes || []).length,
-        createdAt: g.createdAt || new Date().toISOString()
-      }));
+      .filter(p => p && (p.category === 'game_key' || p.category === 'digital_game' || !p.category || (p.category && p.category.includes('game'))))
+      .map(g => {
+        const rawPrimary = g.primaryPriceUsd || g.priceUsd || (g.primaryPricePyg ? (g.primaryPricePyg / rate) : 39.99);
+        const primaryUsd = typeof rawPrimary === 'number' ? parseFloat(rawPrimary.toFixed(2)) : (parseFloat(rawPrimary) || 39.99);
+        const rawSecondary = g.secondaryPriceUsd || (g.secondaryPricePyg ? (g.secondaryPricePyg / rate) : (primaryUsd * 0.65));
+        const secondaryUsd = typeof rawSecondary === 'number' ? parseFloat(rawSecondary.toFixed(2)) : (parseFloat(rawSecondary) || 24.99);
+        const primaryPyg = g.primaryPricePyg || Math.round(primaryUsd * rate);
+        const secondaryPyg = g.secondaryPricePyg || Math.round(secondaryUsd * rate);
+
+        return {
+          id: g.id || `game_${Date.now()}`,
+          title: g.title || 'Videojuego Digital',
+          platform: g.platform || 'PS5',
+          genre: g.genre || 'Acción / Aventura',
+          primaryPricePyg: primaryPyg,
+          secondaryPricePyg: secondaryPyg,
+          primaryPriceUsd: primaryUsd,
+          secondaryPriceUsd: secondaryUsd,
+          pricePyg: primaryPyg,
+          priceUsd: primaryUsd,
+          coverUrl: g.coverUrl || g.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
+          coverImage: g.coverImage || g.coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
+          screenshots: Array.isArray(g.screenshots) && g.screenshots.length > 0 ? g.screenshots : [
+            'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
+          ],
+          description: g.description || 'Juego digital completo para tu consola o PC.',
+          isAvailable: g.isAvailable !== false,
+          badge: g.badge || 'DISPONIBLE',
+          createdAt: g.createdAt || new Date().toISOString()
+        };
+      });
 
     res.json({ success: true, count: games.length, games });
   } catch (err) {
+    console.error('Error in GET /api/admin/games:', err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -119,32 +127,43 @@ router.get('/games', (req, res) => {
 router.post('/games', (req, res) => {
   try {
     const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
     const {
       title,
       platform = 'PS5',
       genre = 'Acción',
+      primaryPricePyg,
+      secondaryPricePyg,
       primaryPriceUsd,
       secondaryPriceUsd,
-      digitalKeyPriceUsd,
+      coverImage,
       coverUrl,
       screenshots,
       description,
       badge = 'OFICIAL',
-      isAvailable = true,
-      codes
+      isAvailable = true
     } = req.body;
 
-    if (!title || (!primaryPriceUsd && !digitalKeyPriceUsd)) {
-      return res.status(400).json({ error: 'Título y precio son obligatorios.' });
+    if (!title || (!primaryPricePyg && !primaryPriceUsd)) {
+      return res.status(400).json({ error: 'Título y precio de Cuenta Primaria son obligatorios.' });
     }
 
-    const screenshotsList = Array.isArray(screenshots) 
-      ? screenshots 
-      : (typeof screenshots === 'string' ? screenshots.split('\n').map(s => s.trim()).filter(Boolean) : []);
+    const finalPrimaryPyg = primaryPricePyg ? parseInt(primaryPricePyg, 10) : Math.round(parseFloat(primaryPriceUsd) * rate);
+    const finalSecondaryPyg = secondaryPricePyg ? parseInt(secondaryPricePyg, 10) : (secondaryPriceUsd ? Math.round(parseFloat(secondaryPriceUsd) * rate) : Math.round(finalPrimaryPyg * 0.65));
+    const finalPrimaryUsd = parseFloat((finalPrimaryPyg / rate).toFixed(2));
+    const finalSecondaryUsd = parseFloat((finalSecondaryPyg / rate).toFixed(2));
 
-    const codeList = Array.isArray(codes)
-      ? codes
-      : (typeof codes === 'string' ? codes.split('\n').map(c => c.trim()).filter(Boolean) : []);
+    let screenshotsList = [];
+    if (Array.isArray(screenshots)) {
+      screenshotsList = screenshots.slice(0, 10);
+    } else if (typeof screenshots === 'string' && screenshots.trim()) {
+      screenshotsList = screenshots.split('\n').map(s => s.trim()).filter(Boolean).slice(0, 10);
+    }
+
+    const finalCover = coverImage || coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80';
+    if (screenshotsList.length === 0) {
+      screenshotsList = [finalCover];
+    }
 
     const newGame = {
       id: `game_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
@@ -152,20 +171,21 @@ router.post('/games', (req, res) => {
       category: 'digital_game',
       platform,
       genre,
-      primaryPriceUsd: parseFloat(primaryPriceUsd || 0),
-      secondaryPriceUsd: parseFloat(secondaryPriceUsd || 0),
-      digitalKeyPriceUsd: parseFloat(digitalKeyPriceUsd || primaryPriceUsd || 0),
-      priceUsd: parseFloat(primaryPriceUsd || digitalKeyPriceUsd || 39.99),
-      coverUrl: coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
-      screenshots: screenshotsList.length > 0 ? screenshotsList : [coverUrl],
-      description: description || 'Entrega digital inmediata con soporte garantizado.',
+      primaryPricePyg: finalPrimaryPyg,
+      secondaryPricePyg: finalSecondaryPyg,
+      primaryPriceUsd: finalPrimaryUsd,
+      secondaryPriceUsd: finalSecondaryUsd,
+      priceUsd: finalPrimaryUsd,
+      coverUrl: finalCover,
+      coverImage: finalCover,
+      screenshots: screenshotsList,
+      description: description || 'Entrega digital con activación y soporte garantizado.',
       badge,
       isAvailable: isAvailable === true || isAvailable === 'true',
-      codes: codeList,
-      stockCount: codeList.length,
       createdAt: new Date().toISOString()
     };
 
+    if (!db.store_products) db.store_products = [];
     db.store_products.unshift(newGame);
     saveStorage();
 
@@ -183,7 +203,8 @@ router.post('/games', (req, res) => {
 router.put('/games/:id', (req, res) => {
   try {
     const db = getDb();
-    const game = db.store_products.find(p => p.id === req.params.id);
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    const game = (db.store_products || []).find(p => p.id === req.params.id);
     if (!game) {
       return res.status(404).json({ error: 'Videojuego no encontrado' });
     }
@@ -192,35 +213,56 @@ router.put('/games/:id', (req, res) => {
       title,
       platform,
       genre,
+      primaryPricePyg,
+      secondaryPricePyg,
       primaryPriceUsd,
       secondaryPriceUsd,
-      digitalKeyPriceUsd,
+      coverImage,
       coverUrl,
       screenshots,
       description,
       badge,
-      isAvailable,
-      codes
+      isAvailable
     } = req.body;
 
     if (title) game.title = title.trim();
     if (platform) game.platform = platform;
     if (genre) game.genre = genre;
-    if (primaryPriceUsd !== undefined) game.primaryPriceUsd = parseFloat(primaryPriceUsd);
-    if (secondaryPriceUsd !== undefined) game.secondaryPriceUsd = parseFloat(secondaryPriceUsd);
-    if (digitalKeyPriceUsd !== undefined) game.digitalKeyPriceUsd = parseFloat(digitalKeyPriceUsd);
-    if (game.primaryPriceUsd) game.priceUsd = game.primaryPriceUsd;
-    if (coverUrl !== undefined) game.coverUrl = coverUrl;
-    if (screenshots !== undefined) {
-      game.screenshots = Array.isArray(screenshots) ? screenshots : screenshots.split('\n').map(s => s.trim()).filter(Boolean);
+    
+    if (primaryPricePyg !== undefined && primaryPricePyg !== '') {
+      game.primaryPricePyg = parseInt(primaryPricePyg, 10);
+      game.primaryPriceUsd = parseFloat((game.primaryPricePyg / rate).toFixed(2));
+      game.priceUsd = game.primaryPriceUsd;
+    } else if (primaryPriceUsd !== undefined && primaryPriceUsd !== '') {
+      game.primaryPriceUsd = parseFloat(primaryPriceUsd);
+      game.primaryPricePyg = Math.round(game.primaryPriceUsd * rate);
+      game.priceUsd = game.primaryPriceUsd;
     }
+
+    if (secondaryPricePyg !== undefined && secondaryPricePyg !== '') {
+      game.secondaryPricePyg = parseInt(secondaryPricePyg, 10);
+      game.secondaryPriceUsd = parseFloat((game.secondaryPricePyg / rate).toFixed(2));
+    } else if (secondaryPriceUsd !== undefined && secondaryPriceUsd !== '') {
+      game.secondaryPriceUsd = parseFloat(secondaryPriceUsd);
+      game.secondaryPricePyg = Math.round(game.secondaryPriceUsd * rate);
+    }
+
+    if (coverImage || coverUrl) {
+      game.coverUrl = coverImage || coverUrl;
+      game.coverImage = coverImage || coverUrl;
+    }
+
+    if (screenshots !== undefined) {
+      if (Array.isArray(screenshots)) {
+        game.screenshots = screenshots.slice(0, 10);
+      } else if (typeof screenshots === 'string') {
+        game.screenshots = screenshots.split('\n').map(s => s.trim()).filter(Boolean).slice(0, 10);
+      }
+    }
+
     if (description !== undefined) game.description = description;
     if (badge !== undefined) game.badge = badge;
     if (isAvailable !== undefined) game.isAvailable = isAvailable === true || isAvailable === 'true';
-    if (codes !== undefined) {
-      game.codes = Array.isArray(codes) ? codes : codes.split('\n').map(c => c.trim()).filter(Boolean);
-      game.stockCount = game.codes.length;
-    }
 
     saveStorage();
 
@@ -238,7 +280,7 @@ router.put('/games/:id', (req, res) => {
 router.delete('/games/:id', (req, res) => {
   try {
     const db = getDb();
-    const idx = db.store_products.findIndex(p => p.id === req.params.id);
+    const idx = (db.store_products || []).findIndex(p => p.id === req.params.id);
     if (idx === -1) {
       return res.status(404).json({ error: 'Videojuego no encontrado' });
     }
@@ -257,123 +299,396 @@ router.delete('/games/:id', (req, res) => {
 });
 
 // =======================================================
-// 3. GIFT CARDS & BÓVEDA DE CÓDIGOS (ACTIVATION CODES VAULT)
+// 3. GIFT CARDS / TARJETAS DE REGALO (MARCAS & VARIACIONES)
 // =======================================================
+
+const DEFAULT_GIFT_CARD_BRANDS = [
+  {
+    id: 'brand_playstation',
+    name: 'PlayStation Network',
+    category: 'Gaming',
+    logoUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80',
+    description: 'Tarjetas oficiales de saldo y membresías PlayStation Plus.',
+    variations: [
+      { id: 'var_psn_10', name: 'PSN $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
+      { id: 'var_psn_25', name: 'PSN $25 USD', denomination: '$25 USD', pricePyg: 210000, priceUsd: 25.00 },
+      { id: 'var_psn_50', name: 'PSN $50 USD', denomination: '$50 USD', pricePyg: 410000, priceUsd: 50.00 },
+      { id: 'var_psn_100', name: 'PSN $100 USD', denomination: '$100 USD', pricePyg: 810000, priceUsd: 100.00 },
+      { id: 'var_psn_plus_1m', name: 'PS Plus Essential 1 Mes', denomination: '1 Mes', pricePyg: 90000, priceUsd: 11.99 },
+      { id: 'var_psn_plus_12m', name: 'PS Plus Essential 12 Meses', denomination: '12 Meses', pricePyg: 620000, priceUsd: 79.99 }
+    ]
+  },
+  {
+    id: 'brand_steam',
+    name: 'Steam Wallet',
+    category: 'PC Gaming',
+    logoUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80',
+    description: 'Saldo para la tienda de Steam en PC y Steam Deck.',
+    variations: [
+      { id: 'var_steam_5', name: 'Steam $5 USD', denomination: '$5 USD', pricePyg: 42000, priceUsd: 5.00 },
+      { id: 'var_steam_10', name: 'Steam $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
+      { id: 'var_steam_20', name: 'Steam $20 USD', denomination: '$20 USD', pricePyg: 168000, priceUsd: 20.00 },
+      { id: 'var_steam_50', name: 'Steam $50 USD', denomination: '$50 USD', pricePyg: 415000, priceUsd: 50.00 }
+    ]
+  },
+  {
+    id: 'brand_xbox',
+    name: 'Xbox & Game Pass',
+    category: 'Gaming',
+    logoUrl: 'https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?auto=format&fit=crop&w=400&q=80',
+    description: 'Tarjetas de regalo Xbox y suscripciones Game Pass Ultimate.',
+    variations: [
+      { id: 'var_xbox_10', name: 'Xbox $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
+      { id: 'var_xbox_25', name: 'Xbox $25 USD', denomination: '$25 USD', pricePyg: 210000, priceUsd: 25.00 },
+      { id: 'var_xbox_gpu_1m', name: 'Game Pass Ultimate 1 Mes', denomination: '1 Mes', pricePyg: 125000, priceUsd: 16.99 },
+      { id: 'var_xbox_gpu_3m', name: 'Game Pass Ultimate 3 Meses', denomination: '3 Meses', pricePyg: 350000, priceUsd: 49.99 }
+    ]
+  },
+  {
+    id: 'brand_nintendo',
+    name: 'Nintendo eShop',
+    category: 'Gaming',
+    logoUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80',
+    description: 'Saldo para comprar juegos en Nintendo Switch.',
+    variations: [
+      { id: 'var_nin_10', name: 'Nintendo $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
+      { id: 'var_nin_20', name: 'Nintendo $20 USD', denomination: '$20 USD', pricePyg: 170000, priceUsd: 20.00 },
+      { id: 'var_nin_35', name: 'Nintendo $35 USD', denomination: '$35 USD', pricePyg: 295000, priceUsd: 35.00 },
+      { id: 'var_nin_50', name: 'Nintendo $50 USD', denomination: '$50 USD', pricePyg: 420000, priceUsd: 50.00 }
+    ]
+  },
+  {
+    id: 'brand_spotify',
+    name: 'Spotify Premium',
+    category: 'Música',
+    logoUrl: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=400&q=80',
+    description: 'Música sin anuncios y descargas offline en Spotify.',
+    variations: [
+      { id: 'var_spot_1m', name: 'Spotify 1 Mes Individual', denomination: '1 Mes', pricePyg: 45000, priceUsd: 5.99 },
+      { id: 'var_spot_3m', name: 'Spotify 3 Meses', denomination: '3 Meses', pricePyg: 125000, priceUsd: 16.50 },
+      { id: 'var_spot_6m', name: 'Spotify 6 Meses', denomination: '6 Meses', pricePyg: 240000, priceUsd: 32.00 }
+    ]
+  },
+  {
+    id: 'brand_netflix',
+    name: 'Netflix Gift Card',
+    category: 'Streaming',
+    logoUrl: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80',
+    description: 'Saldo oficial de regalo para canjear en cuentas Netflix.',
+    variations: [
+      { id: 'var_net_15', name: 'Netflix $15 USD', denomination: '$15 USD', pricePyg: 125000, priceUsd: 15.00 },
+      { id: 'var_net_25', name: 'Netflix $25 USD', denomination: '$25 USD', pricePyg: 205000, priceUsd: 25.00 },
+      { id: 'var_net_50', name: 'Netflix $50 USD', denomination: '$50 USD', pricePyg: 405000, priceUsd: 50.00 }
+    ]
+  },
+  {
+    id: 'brand_deezer',
+    name: 'Deezer Premium',
+    category: 'Música',
+    logoUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80',
+    description: 'Música en calidad Hi-Fi y sonido de alta fidelidad.',
+    variations: [
+      { id: 'var_deezer_1m', name: 'Deezer 1 Mes', denomination: '1 Mes', pricePyg: 40000, priceUsd: 5.00 },
+      { id: 'var_deezer_3m', name: 'Deezer 3 Meses', denomination: '3 Meses', pricePyg: 110000, priceUsd: 14.50 }
+    ]
+  },
+  {
+    id: 'brand_googleplay',
+    name: 'Google Play Store',
+    category: 'Móvil',
+    logoUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=400&q=80',
+    description: 'Saldo para apps, juegos y diamantes en Android.',
+    variations: [
+      { id: 'var_gp_10', name: 'Google Play $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
+      { id: 'var_gp_25', name: 'Google Play $25 USD', denomination: '$25 USD', pricePyg: 210000, priceUsd: 25.00 },
+      { id: 'var_gp_50', name: 'Google Play $50 USD', denomination: '$50 USD', pricePyg: 415000, priceUsd: 50.00 }
+    ]
+  },
+  {
+    id: 'brand_apple',
+    name: 'Apple Gift Card & iTunes',
+    category: 'Apple',
+    logoUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80',
+    description: 'Saldo para compras en App Store, Apple Arcade y suscripciones.',
+    variations: [
+      { id: 'var_apple_10', name: 'Apple $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
+      { id: 'var_apple_25', name: 'Apple $25 USD', denomination: '$25 USD', pricePyg: 210000, priceUsd: 25.00 },
+      { id: 'var_apple_50', name: 'Apple $50 USD', denomination: '$50 USD', pricePyg: 415000, priceUsd: 50.00 }
+    ]
+  },
+  {
+    id: 'brand_roblox',
+    name: 'Roblox Robux Card',
+    category: 'Gaming',
+    logoUrl: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=400&q=80',
+    description: 'Robux y objetos virtuales para tu avatar en Roblox.',
+    variations: [
+      { id: 'var_rob_10', name: 'Roblox $10 (800 Robux)', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
+      { id: 'var_rob_25', name: 'Roblox $25 (2000 Robux)', denomination: '$25 USD', pricePyg: 210000, priceUsd: 25.00 }
+    ]
+  }
+];
+
+// Get Gift Card Brands & Variations
+router.get('/giftcards/brands', (req, res) => {
+  try {
+    const db = getDb();
+    if (!db.giftcard_brands || db.giftcard_brands.length === 0) {
+      db.giftcard_brands = DEFAULT_GIFT_CARD_BRANDS;
+      saveStorage();
+    }
+    res.json({ success: true, count: db.giftcard_brands.length, brands: db.giftcard_brands });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Legacy Giftcards list alias (for backwards compatibility)
 router.get('/giftcards', (req, res) => {
   try {
     const db = getDb();
-    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    if (!db.giftcard_brands || db.giftcard_brands.length === 0) {
+      db.giftcard_brands = DEFAULT_GIFT_CARD_BRANDS;
+      saveStorage();
+    }
+    
+    // Flat map variations
+    const flatCards = [];
+    db.giftcard_brands.forEach(b => {
+      (b.variations || []).forEach(v => {
+        flatCards.push({
+          id: v.id,
+          brandId: b.id,
+          title: `${b.name} - ${v.name}`,
+          brand: b.name,
+          denomination: v.denomination || v.name,
+          pricePyg: v.pricePyg,
+          priceUsd: v.priceUsd,
+          coverUrl: b.logoUrl,
+          description: v.description || b.description,
+          badge: 'OFICIAL'
+        });
+      });
+    });
 
-    const cards = (db.store_products || [])
-      .filter(p => p.category === 'gift_card')
-      .map(gc => ({
-        id: gc.id,
-        title: gc.title,
-        brand: gc.brand || gc.platform || 'Digital',
-        priceUsd: gc.priceUsd,
-        pricePyg: Math.round(gc.priceUsd * rate),
-        badge: gc.badge || 'ENTREGA INMEDIATA',
-        coverUrl: gc.coverUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80',
-        description: gc.description || 'Código digital de activación inmediata.',
-        codesCount: (gc.codes || []).length,
-        codes: gc.codes || [],
-        isAvailable: (gc.codes || []).length > 0
-      }));
-
-    res.json({ success: true, count: cards.length, giftCards: cards });
+    res.json({ success: true, count: flatCards.length, giftCards: flatCards, brands: db.giftcard_brands });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Create new Gift Card
-router.post('/giftcards', (req, res) => {
+// Create Brand
+router.post('/giftcards/brands', (req, res) => {
   try {
     const db = getDb();
-    const { title, brand = 'PlayStation', priceUsd, pricePyg, badge = 'OFICIAL', coverUrl, description, codes } = req.body;
+    const { name, category = 'Gaming', logoImage, logoUrl, description } = req.body;
 
-    if (!title || (!priceUsd && !pricePyg)) {
-      return res.status(400).json({ error: 'Título y precio son obligatorios.' });
-    }
+    if (!name) return res.status(400).json({ error: 'Nombre de la marca requerido' });
 
-    const rate = db.platform_settings?.exchangeRatePyg || 7500;
-    const finalPriceUsd = priceUsd ? parseFloat(priceUsd) : parseFloat((parseFloat(pricePyg) / rate).toFixed(2));
-    const codeList = Array.isArray(codes) ? codes : (typeof codes === 'string' ? codes.split('\n').map(c => c.trim()).filter(Boolean) : []);
+    const finalLogo = logoImage || logoUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80';
 
-    const newGiftCard = {
-      id: `gc_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-      title: title.trim(),
-      category: 'gift_card',
-      brand,
-      platform: brand,
-      priceUsd: finalPriceUsd,
-      badge,
-      coverUrl: coverUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80',
-      description: description || 'Código oficial de activación directa.',
-      codes: codeList,
-      stockCount: codeList.length,
+    const newBrand = {
+      id: `brand_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      name: name.trim(),
+      category: category.trim(),
+      logoUrl: finalLogo,
+      description: description || 'Tarjeta de regalo oficial.',
+      variations: [],
       createdAt: new Date().toISOString()
     };
 
-    db.store_products.unshift(newGiftCard);
+    if (!db.giftcard_brands) db.giftcard_brands = [];
+    db.giftcard_brands.unshift(newBrand);
     saveStorage();
+
+    res.json({ success: true, message: `Marca "${newBrand.name}" creada con éxito.`, brand: newBrand });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Update Brand
+router.put('/giftcards/brands/:id', (req, res) => {
+  try {
+    const db = getDb();
+    const brand = (db.giftcard_brands || []).find(b => b.id === req.params.id);
+    if (!brand) return res.status(404).json({ error: 'Marca no encontrada' });
+
+    const { name, category, logoImage, logoUrl, description } = req.body;
+    if (name) brand.name = name.trim();
+    if (category) brand.category = category.trim();
+    if (logoImage || logoUrl) brand.logoUrl = logoImage || logoUrl;
+    if (description !== undefined) brand.description = description;
+
+    saveStorage();
+    res.json({ success: true, message: `Marca "${brand.name}" actualizada con éxito.`, brand });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete Brand
+router.delete('/giftcards/brands/:id', (req, res) => {
+  try {
+    const db = getDb();
+    const idx = (db.giftcard_brands || []).findIndex(b => b.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Marca no encontrada' });
+
+    const removed = db.giftcard_brands.splice(idx, 1)[0];
+    saveStorage();
+    res.json({ success: true, message: `Marca "${removed.name}" eliminada.`, brand: removed });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Add Variation to Brand
+router.post('/giftcards/brands/:brandId/variations', (req, res) => {
+  try {
+    const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    const brand = (db.giftcard_brands || []).find(b => b.id === req.params.brandId);
+    if (!brand) return res.status(404).json({ error: 'Marca no encontrada' });
+
+    const { name, denomination, pricePyg, priceUsd, description } = req.body;
+    if (!name || (!pricePyg && !priceUsd)) {
+      return res.status(400).json({ error: 'Nombre de la variación y precio son obligatorios.' });
+    }
+
+    const finalPyg = pricePyg ? parseInt(pricePyg, 10) : Math.round(parseFloat(priceUsd) * rate);
+    const finalUsd = parseFloat((finalPyg / rate).toFixed(2));
+
+    const newVar = {
+      id: `var_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      name: name.trim(),
+      denomination: denomination || name,
+      pricePyg: finalPyg,
+      priceUsd: finalUsd,
+      description: description || ''
+    };
+
+    if (!brand.variations) brand.variations = [];
+    brand.variations.push(newVar);
+    saveStorage();
+
+    res.json({ success: true, message: `Variación "${newVar.name}" agregada a ${brand.name}.`, variation: newVar, brand });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete Variation
+router.delete('/giftcards/brands/:brandId/variations/:varId', (req, res) => {
+  try {
+    const db = getDb();
+    const brand = (db.giftcard_brands || []).find(b => b.id === req.params.brandId);
+    if (!brand) return res.status(404).json({ error: 'Marca no encontrada' });
+
+    const idx = (brand.variations || []).findIndex(v => v.id === req.params.varId);
+    if (idx === -1) return res.status(404).json({ error: 'Variación no encontrada' });
+
+    const removed = brand.variations.splice(idx, 1)[0];
+    saveStorage();
+    res.json({ success: true, message: `Variación "${removed.name}" eliminada.`, variation: removed });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// =======================================================
+// 4. ÓRDENES PENDIENTES & ENTREGA MANUAL POR EL ADMIN
+// =======================================================
+router.get('/orders/pending', (req, res) => {
+  try {
+    const db = getDb();
+    const type = req.query.type; // 'game', 'giftcard', or undefined for all
+
+    const pendingOrders = (db.user_store_orders || [])
+      .filter(o => o.status === 'pending_delivery' || o.status === 'pending' || !o.status)
+      .filter(o => {
+        if (!type || type === 'all') return true;
+        if (type === 'game') return o.type === 'game' || o.option || (o.platform && o.platform.includes('PS'));
+        if (type === 'giftcard') return o.type === 'giftcard' || (!o.option && (!o.platform || !o.platform.includes('PS')));
+        return true;
+      })
+      .map(o => {
+        const buyer = (db.users || []).find(u => u.id === o.buyerId) || { name: 'Cliente', email: 'cliente@gamesboy.net' };
+        return {
+          ...o,
+          buyerName: buyer.name,
+          buyerEmail: buyer.email
+        };
+      });
+
+    const deliveredOrders = (db.user_store_orders || [])
+      .filter(o => o.status === 'delivered')
+      .slice(0, 15)
+      .map(o => {
+        const buyer = (db.users || []).find(u => u.id === o.buyerId) || { name: 'Cliente', email: 'cliente@gamesboy.net' };
+        return {
+          ...o,
+          buyerName: buyer.name,
+          buyerEmail: buyer.email
+        };
+      });
 
     res.json({
       success: true,
-      message: `¡Gift Card "${newGiftCard.title}" creada con éxito! Stock: ${codeList.length} códigos.`,
-      giftCard: newGiftCard
+      pendingCount: pendingOrders.length,
+      pendingOrders,
+      deliveredOrders
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Add batch codes to Gift Card vault
-router.post('/giftcards/:id/add-codes', (req, res) => {
+// Execute Manual Delivery (Admin pastes code/credentials and sends to buyer)
+router.post('/orders/:id/deliver', (req, res) => {
   try {
     const db = getDb();
-    const card = db.store_products.find(p => p.id === req.params.id);
-    if (!card) {
-      return res.status(404).json({ error: 'Gift Card no encontrada' });
+    const order = (db.user_store_orders || []).find(o => o.id === req.params.id);
+    if (!order) {
+      return res.status(404).json({ error: 'Orden no encontrada' });
     }
 
-    const { codes } = req.body;
-    const newCodes = Array.isArray(codes) ? codes : (typeof codes === 'string' ? codes.split('\n').map(c => c.trim()).filter(Boolean) : []);
+    const { deliveredCode, deliveredEmail, deliveredPassword, deliveredInstructions, notes } = req.body;
 
-    if (newCodes.length === 0) {
-      return res.status(400).json({ error: 'Por favor ingresa al menos un código válido.' });
+    if (!deliveredCode && !deliveredEmail && !deliveredPassword && !deliveredInstructions) {
+      return res.status(400).json({ error: 'Debes ingresar al menos el código digital o las credenciales de acceso.' });
     }
 
-    card.codes = (card.codes || []).concat(newCodes);
-    card.stockCount = card.codes.length;
+    order.status = 'delivered';
+    order.deliveredAt = new Date().toISOString();
+    order.code = deliveredCode ? deliveredCode.trim() : (order.code || 'ENTREGADO');
+    order.credentials = deliveredEmail && deliveredPassword ? `${deliveredEmail}:::${deliveredPassword}` : (deliveredEmail || deliveredPassword || '');
+    order.instructions = deliveredInstructions || order.instructions || '';
+    order.adminNotes = notes || '';
+
     saveStorage();
+
+    // Broadcast WebSocket notification to all clients
+    const wss = req.app.get('wss');
+    if (wss) {
+      wss.clients.forEach(client => {
+        if (client.readyState === 1) {
+          client.send(JSON.stringify({
+            type: 'ORDER_DELIVERED',
+            payload: {
+              orderId: order.id,
+              userId: order.buyerId,
+              productTitle: order.productTitle || order.title,
+              deliveredAt: order.deliveredAt
+            }
+          }));
+        }
+      });
+    }
 
     res.json({
       success: true,
-      message: `¡Se agregaron ${newCodes.length} códigos a la bóveda! Stock total: ${card.codes.length}`,
-      totalCodes: card.codes.length
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Update or Delete Gift Card
-router.delete('/giftcards/:id', (req, res) => {
-  try {
-    const db = getDb();
-    const idx = db.store_products.findIndex(p => p.id === req.params.id);
-    if (idx === -1) {
-      return res.status(404).json({ error: 'Gift Card no encontrada' });
-    }
-
-    const removed = db.store_products.splice(idx, 1)[0];
-    saveStorage();
-
-    res.json({
-      success: true,
-      message: `Gift Card "${removed.title}" eliminada.`,
-      giftCard: removed
+      message: `¡Entrega realizada con éxito! La orden "${order.productTitle || order.title}" ha sido entregada y notificada al cliente.`,
+      order
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
