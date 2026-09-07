@@ -476,27 +476,46 @@ function renderRetailGiftCards() {
   }).join('');
 }
 
+// Platform SVG Vector Icons (100% SVG, Zero Emojis)
+const platformSvgIcons = {
+  'Instagram': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`,
+  'TikTok': `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>`,
+  'YouTube': `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
+  'Telegram': `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>`,
+  'X (Twitter)': `<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`
+};
+
 // --- 5. RENDER SMM SERVICES (HORIZONTAL BANNERS & ROUNDED CORNERS) ---
 function renderSmmServices() {
   const container = document.getElementById('smm-services-grid');
   if (!container) return;
 
-  container.innerHTML = smmServices.map(smm => `
-    <div class="smm-banner-card">
-      <div class="smm-banner-header">
-        <span class="smm-platform-badge">${smm.platform}</span>
-        <span class="smm-icon-large">${smm.icon}</span>
-      </div>
-      <div class="smm-banner-body">
-        <h3 class="smm-banner-title">${smm.name}</h3>
-        <p class="smm-banner-desc">${smm.desc}</p>
-        <div class="smm-banner-footer">
-          <span class="smm-banner-price">${formatPrice(smm.priceUsd)}</span>
-          <button class="btn-smm-buy" onclick="alert('Servicio SMM vinculado a la API del proveedor.')">Adquirir ➔</button>
+  const services = (state.smmServices && state.smmServices.length > 0) ? state.smmServices : smmServices;
+
+  container.innerHTML = services.map(smm => {
+    const iconSvg = platformSvgIcons[smm.platform] || platformSvgIcons['Instagram'];
+    const priceDisplay = smm.pricePer1kUsd ? formatPrice(smm.pricePer1kUsd) : formatPrice(smm.priceUsd || 4.50);
+
+    return `
+      <div class="smm-banner-card">
+        <div class="smm-banner-header">
+          <span class="smm-platform-badge">${smm.platform}</span>
+          <div class="smm-icon-large" style="display: grid; place-items: center; width: 36px; height: 36px; color: var(--accent-cyan); background: rgba(0, 194, 255, 0.1); border-radius: 10px;">${iconSvg}</div>
+        </div>
+        <div class="smm-banner-body">
+          <h3 class="smm-banner-title">${smm.name}</h3>
+          <p class="smm-banner-desc">${smm.desc || 'Crecimiento orgánico y seguro para tus redes.'}</p>
+          <div class="smm-banner-footer">
+            <div>
+              <span style="font-size: 0.65rem; color: var(--text-tertiary); display: block; text-transform: uppercase;">Por cada 1.000</span>
+              <span class="smm-banner-price">${priceDisplay}</span>
+            </div>
+            <button class="btn-smm-buy" onclick="openBuySmmModal('${smm.id}')">Adquirir ➔</button>
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 // --- 6. RENDER USER VAULT (CREDENTIALS & GROUP CHAT ACCESS) ---
@@ -533,7 +552,7 @@ async function renderMyVault() {
       <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: 12px; padding: 1.25rem; margin-bottom: 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
         <div>
           <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-            <span>⚡</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00c2ff" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             <strong style="color: #ffffff; font-size: 1.05rem;">${v.serviceName}</strong>
             <span class="badge-official">ACTIVO</span>
             ${discountBadge}
@@ -562,10 +581,11 @@ async function renderMyVault() {
 // --- 7. FETCH INITIAL DATA FROM API ---
 async function fetchStoreData() {
   try {
-    const [subRes, storeRes, bannersRes] = await Promise.all([
+    const [subRes, storeRes, bannersRes, smmRes] = await Promise.all([
       fetch('/api/subscriptions').then(r => r.json()).catch(() => []),
       fetch('/api/store/products').then(r => r.json()).catch(() => []),
-      fetch('/api/banners').then(r => r.json()).catch(() => ({ banners: defaultBanners }))
+      fetch('/api/banners').then(r => r.json()).catch(() => ({ banners: defaultBanners })),
+      fetch('/api/smm/services').then(r => r.json()).catch(() => ({ services: smmServices }))
     ]);
 
     if (Array.isArray(subRes)) state.subscriptions = subRes;
@@ -576,6 +596,10 @@ async function fetchStoreData() {
 
     if (bannersRes && bannersRes.banners && bannersRes.banners.length >= 4) state.heroBanners = bannersRes.banners;
     else state.heroBanners = defaultBanners;
+
+    if (smmRes && smmRes.services && Array.isArray(smmRes.services)) {
+      state.smmServices = smmRes.services;
+    }
 
     initHeroAccordion();
     renderStreamingServices();
@@ -589,6 +613,97 @@ async function fetchStoreData() {
     renderSmmServices();
   }
 }
+
+// --- TOAST NOTIFICATION ENGINE (DARK LUXE FINTECH TOASTS) ---
+window.showToast = function(type = 'info', title = '', message = '', duration = 4000) {
+  let container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    container.className = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = `toast-item ${type}`;
+
+  const icons = {
+    success: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
+    error: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`,
+    warning: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`,
+    info: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`
+  };
+
+  toast.innerHTML = `
+    <div class="toast-icon">${icons[type] || icons.info}</div>
+    <div style="flex: 1; min-width: 0;">
+      ${title ? `<div class="toast-title">${title}</div>` : ''}
+      <div class="toast-msg">${message}</div>
+    </div>
+    <button type="button" class="toast-close" aria-label="Cerrar">✕</button>
+  `;
+
+  const closeBtn = toast.querySelector('.toast-close');
+  const removeToast = () => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(10px) scale(0.95)';
+    setTimeout(() => {
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 250);
+  };
+
+  closeBtn.onclick = removeToast;
+  container.appendChild(toast);
+
+  if (duration > 0) {
+    setTimeout(removeToast, duration);
+  }
+};
+
+// --- SMM ORDER MODAL ENGINE ---
+window.openBuySmmModal = function(serviceId) {
+  const services = (state.smmServices && state.smmServices.length > 0) ? state.smmServices : smmServices;
+  const service = services.find(s => s.id === serviceId) || services[0];
+  if (!service) return;
+
+  const modal = document.getElementById('modal-smm-buy');
+  if (!modal) return;
+
+  document.getElementById('smm-order-service-id').value = service.id;
+  document.getElementById('smm-buy-title').textContent = service.name;
+  document.getElementById('smm-buy-platform').textContent = (service.platform || 'SMM').toUpperCase();
+  document.getElementById('smm-buy-desc').textContent = service.desc || 'Entrega gradual y automática hacia el enlace indicado.';
+
+  const minQty = service.minQuantity || 100;
+  const maxQty = service.maxQuantity || 25000;
+  const limitsNote = document.getElementById('smm-order-limits-note');
+  if (limitsNote) limitsNote.textContent = `Mín: ${minQty.toLocaleString()} - Máx: ${maxQty.toLocaleString()}`;
+
+  const qtyInput = document.getElementById('smm-order-quantity');
+  qtyInput.min = minQty;
+  qtyInput.max = maxQty;
+  qtyInput.value = minQty >= 1000 ? 1000 : minQty;
+
+  const rate = state.exchangeRatePyg || 7500;
+  const base1kPrice = service.pricePer1kUsd || service.priceUsd || 4.50;
+
+  const recalculate = () => {
+    const qty = parseInt(qtyInput.value) || 0;
+    const totalUsd = parseFloat(((base1kPrice * qty) / 1000).toFixed(2));
+    const totalPyg = Math.round(totalUsd * rate);
+
+    document.getElementById('smm-order-total-gs').textContent = `${totalPyg.toLocaleString('es-PY')} Gs.`;
+    document.getElementById('smm-order-total-usd').textContent = `$${totalUsd.toFixed(2)} USDT`;
+  };
+
+  qtyInput.oninput = recalculate;
+  recalculate();
+
+  const closeBtn = document.getElementById('btn-close-smm-modal');
+  if (closeBtn) closeBtn.onclick = () => modal.style.display = 'none';
+
+  modal.style.display = 'grid';
+};
 
 // --- 8. PURCHASE FLOW MODALS & INSTANT DELIVERY ---
 window.openBuySubscriptionModal = function(id) {
@@ -735,23 +850,28 @@ async function executePurchase(url, body, productName, subId = null) {
     });
     const data = await res.json();
     if (data.success) {
-      alert(`🎉 ¡Compra exitosa de "${productName}"! Se ha añadido de forma inmediata a tus Productos / Bóveda.`);
+      window.showToast('success', '¡Compra Exitosa!', `Has adquirido "${productName}". Entrega y activación en tu Bóveda / Perfil.`);
       await fetchStoreData();
+      updateUserBalanceDisplay();
       if (subId) {
         openGroupChatModal(subId);
       }
     } else {
       if (data.error && data.error.includes('Saldo insuficiente')) {
-        if (confirm('Saldo insuficiente en tu billetera. ¿Deseas recargar saldo ahora con SIPAP Paraguay o USDT Binance?')) {
+        window.showToast('warning', 'Saldo Insuficiente', 'Tu billetera no cuenta con los fondos necesarios. Redirigiendo a recarga...');
+        setTimeout(() => {
           const modal = document.getElementById('modal-deposit');
-          if (modal) modal.style.display = 'grid';
-        }
+          if (modal) {
+            updateUserBalanceDisplay();
+            modal.style.display = 'grid';
+          }
+        }, 1200);
       } else {
-        alert(`Aviso: ${data.error || 'No se pudo completar la compra.'}`);
+        window.showToast('error', 'Error en la Compra', data.error || 'No se pudo completar la transacción.');
       }
     }
   } catch (e) {
-    alert('Error de conexión al procesar la compra.');
+    window.showToast('error', 'Error de Conexión', 'No se pudo conectar con el servidor.');
   }
 }
 
@@ -1538,6 +1658,137 @@ function initUserSession() {
       }
     });
   }
+  // SMM Order Form Submission
+  const formSmmOrder = document.getElementById('form-smm-order');
+  if (formSmmOrder) {
+    formSmmOrder.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
+      const serviceId = document.getElementById('smm-order-service-id').value;
+      const link = document.getElementById('smm-order-link').value.trim();
+      const quantity = parseInt(document.getElementById('smm-order-quantity').value, 10);
+
+      if (!serviceId || !link || !quantity || quantity <= 0) {
+        window.showToast('warning', 'Campos Incompletos', 'Por favor ingresa un enlace válido y la cantidad deseada.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/smm/order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-user-id': userId
+          },
+          body: JSON.stringify({ serviceId, link, quantity })
+        });
+        const data = await res.json();
+        if (data.success) {
+          const modalSmm = document.getElementById('modal-smm-buy');
+          if (modalSmm) modalSmm.style.display = 'none';
+          formSmmOrder.reset();
+          window.showToast('success', '¡Orden SMM Enviada!', data.message || `Tu orden de ${quantity.toLocaleString()} unidades ha sido procesada hacia la API del proveedor.`);
+          updateUserBalanceDisplay();
+        } else {
+          if (data.error && data.error.includes('Saldo insuficiente')) {
+            window.showToast('warning', 'Saldo Insuficiente', 'Tu saldo no cubre esta orden. Abriendo recargas SIPAP / USDT...');
+            const modalSmm = document.getElementById('modal-smm-buy');
+            if (modalSmm) modalSmm.style.display = 'none';
+            setTimeout(() => {
+              const modalDeposit = document.getElementById('modal-deposit');
+              if (modalDeposit) {
+                updateUserBalanceDisplay();
+                modalDeposit.style.display = 'grid';
+              }
+            }, 1000);
+          } else {
+            window.showToast('error', 'Error en Orden SMM', data.error || 'No se pudo procesar la orden.');
+          }
+        }
+      } catch (err) {
+        window.showToast('error', 'Error de Red', 'Error al conectar con la API de Impulso Digital.');
+      }
+    });
+  }
+}
+
+// --- REAL-TIME WEBSOCKET ENGINE ---
+function initWebSocketClient() {
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = `${protocol}//${window.location.host}/ws`;
+
+  let ws = null;
+  const connect = () => {
+    try {
+      ws = new WebSocket(wsUrl);
+
+      ws.onopen = () => {
+        console.log('⚡ Connected to GamesBoy Realtime WebSocket Engine');
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          handleRealtimeEvent(data);
+        } catch (e) {
+          console.error('Error parsing WS message:', e);
+        }
+      };
+
+      ws.onclose = () => {
+        setTimeout(connect, 4000);
+      };
+
+      ws.onerror = () => {
+        ws.close();
+      };
+    } catch (e) {
+      setTimeout(connect, 5000);
+    }
+  };
+
+  connect();
+}
+
+function handleRealtimeEvent(data) {
+  if (!data || !data.type) return;
+
+  const currentUserId = state.currentUser ? state.currentUser.id : null;
+
+  switch (data.type) {
+    case 'DEPOSIT_APPROVED': {
+      const { deposit, userWallet } = data.payload || {};
+      if (deposit && deposit.userId === currentUserId) {
+        if (userWallet) {
+          state.wallet = userWallet;
+        }
+        updateUserBalanceDisplay();
+        window.showToast('success', '¡Recarga Acreditada!', `Tu comprobante de ${deposit.localAmount ? deposit.localAmount.toLocaleString('es-PY') + ' Gs.' : '$' + deposit.amountUsd} ha sido aprobado exitosamente.`);
+      }
+      break;
+    }
+    case 'SMM_ORDER_CREATED': {
+      const { order, userWallet } = data.payload || {};
+      if (order && order.userId === currentUserId) {
+        if (userWallet) {
+          state.wallet = userWallet;
+        }
+        updateUserBalanceDisplay();
+      }
+      break;
+    }
+    case 'NEW_CHAT_MESSAGE': {
+      const { subscriptionId } = data.payload || {};
+      if (state.activeGroupSubId === subscriptionId) {
+        refreshGroupChatView(subscriptionId);
+      }
+      break;
+    }
+    case 'PRICE_UPDATE': {
+      fetchStoreData();
+      break;
+    }
+  }
 }
 
 // Initialize on DOM Loaded
@@ -1545,6 +1796,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initUserSession();
   initLiveSearch();
   fetchStoreData();
+  initWebSocketClient();
 });
 
 

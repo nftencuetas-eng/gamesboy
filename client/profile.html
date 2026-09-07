@@ -627,6 +627,98 @@
 
   </main>
 
+  <!-- ======================================================= -->
+  <!-- MODAL: COMPROBANTE DE PAGO & VOUCHER IMPRIMIBLE         -->
+  <!-- ======================================================= -->
+  <div class="modal-overlay" id="modal-receipt-view" style="display: none;">
+    <div class="modal-content" style="max-width: 580px; padding: 0; background: transparent; border: none;">
+      <div class="receipt-paper" style="background: #ffffff; color: #0f172a; padding: 2.25rem; border-radius: 16px; box-shadow: 0 25px 60px rgba(0,0,0,0.85); position: relative; font-family: var(--font-sans);">
+        <button type="button" class="btn-modal-close" id="btn-close-receipt-modal" style="position: absolute; top: 16px; right: 16px; color: #64748b; background: #f1f5f9; border-radius: 50%; width: 32px; height: 32px; display: grid; place-items: center; border: none; cursor: pointer; font-weight: bold;">✕</button>
+
+        <!-- Receipt Header -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #e2e8f0; padding-bottom: 1.25rem; margin-bottom: 1.25rem;">
+          <div>
+            <div style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 900; color: #0f172a; letter-spacing: -0.02em;">GAMESBOY<span style="color: #0284c7;">.NET</span></div>
+            <div style="font-size: 0.75rem; color: #64748b; margin-top: 2px;">GamesBoy Paraguay S.A. • RUC: 80091234-5</div>
+            <div style="font-size: 0.72rem; color: #94a3b8;">Asunción, Paraguay • Soporte 24/7</div>
+          </div>
+          <div style="text-align: right;">
+            <span style="display: inline-block; background: #ecfdf5; color: #059669; font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 9999px; border: 1px solid #a7f3d0; text-transform: uppercase;" id="receipt-badge-status">COMPROBANTE VÁLIDO</span>
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 800; color: #0f172a; margin-top: 4px;" id="receipt-invoice-num">#GB-2026-0000</div>
+          </div>
+        </div>
+
+        <!-- Customer & Date Meta -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 0.82rem; margin-bottom: 1.5rem; background: #f8fafc; padding: 12px 14px; border-radius: 10px; border: 1px solid #f1f5f9;">
+          <div>
+            <span style="color: #64748b; display: block; font-size: 0.72rem; text-transform: uppercase;">Cliente / Titular:</span>
+            <strong style="color: #0f172a;" id="receipt-client-name">Lucas González</strong>
+            <div style="color: #64748b; font-size: 0.74rem;" id="receipt-client-email">usuario@gamesboy.net</div>
+          </div>
+          <div>
+            <span style="color: #64748b; display: block; font-size: 0.72rem; text-transform: uppercase;">Fecha y Hora:</span>
+            <strong style="color: #0f172a;" id="receipt-date-time">07/09/2026, 14:30</strong>
+            <div style="color: #64748b; font-size: 0.74rem;" id="receipt-payment-method">Método: Billetera Digital</div>
+          </div>
+        </div>
+
+        <!-- Itemized Table -->
+        <div style="border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; margin-bottom: 1.5rem;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+            <thead>
+              <tr style="background: #f1f5f9; color: #475569; text-align: left; font-size: 0.74rem; text-transform: uppercase;">
+                <th style="padding: 10px 12px;">Descripción / Concepto</th>
+                <th style="padding: 10px 12px; text-align: center;">Tipo / Ref</th>
+                <th style="padding: 10px 12px; text-align: right;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 12px; border-top: 1px solid #e2e8f0;">
+                  <strong style="color: #0f172a; display: block;" id="receipt-item-title">EA Sports FC 25</strong>
+                  <span style="color: #64748b; font-size: 0.74rem;" id="receipt-item-desc">Licencia digital para PS5</span>
+                </td>
+                <td style="padding: 12px; border-top: 1px solid #e2e8f0; text-align: center; color: #475569; font-family: var(--font-mono); font-size: 0.78rem;" id="receipt-item-code">
+                  GB-781923
+                </td>
+                <td style="padding: 12px; border-top: 1px solid #e2e8f0; text-align: right;">
+                  <strong style="color: #0f172a; font-family: var(--font-mono); font-size: 0.95rem;" id="receipt-item-price-gs">299.000 Gs.</strong>
+                  <div style="color: #0284c7; font-family: var(--font-mono); font-size: 0.75rem;" id="receipt-item-price-usd">$39.99 USDT</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Security QR & Guarantee Seal -->
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #cbd5e1; padding-top: 1.25rem; margin-bottom: 1.5rem;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <img id="receipt-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=GAMESBOY-VALID-VOUCHER" alt="QR de Verificación" style="width: 70px; height: 70px; border-radius: 6px; border: 1px solid #e2e8f0; padding: 2px;">
+            <div>
+              <div style="font-weight: 800; font-size: 0.78rem; color: #0f172a;">Garantía GamesBoy Oficial</div>
+              <div style="font-size: 0.7rem; color: #64748b; max-width: 250px; line-height: 1.35;">Escanea el código QR para validar la autenticidad y estado de esta transacción en nuestros servidores.</div>
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.7rem; color: #64748b;">Total Facturado:</div>
+            <strong style="font-size: 1.25rem; font-family: var(--font-mono); color: #0f172a;" id="receipt-total-final">299.000 Gs.</strong>
+          </div>
+        </div>
+
+        <!-- Print Actions Footer -->
+        <div style="display: flex; gap: 10px; justify-content: flex-end;" class="no-print">
+          <button type="button" class="btn-action-sm" onclick="window.print()" style="background: #0284c7; color: #ffffff; padding: 10px 20px; font-weight: 800; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+            <span>Imprimir / PDF</span>
+          </button>
+          <button type="button" class="btn-action-sm" id="btn-close-receipt-bottom" style="background: #f1f5f9; color: #475569; padding: 10px 16px; font-weight: 700; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer;">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     // Tab Navigation Switcher
     const tabLinks = document.querySelectorAll('.profile-tab-item[data-tab]');
@@ -662,6 +754,44 @@
         window.location.href = '/';
       });
     }
+
+    // Receipt Modal Engine
+    window.openReceiptModal = function(receiptData) {
+      const modal = document.getElementById('modal-receipt-view');
+      if (!modal) return;
+
+      const storedUser = JSON.parse(localStorage.getItem('gb_user') || 'null') || {};
+      const fullName = (storedUser.name || 'Cliente') + (storedUser.surname ? ' ' + storedUser.surname : '');
+      const email = storedUser.email || 'usuario@gamesboy.net';
+
+      document.getElementById('receipt-client-name').textContent = fullName;
+      document.getElementById('receipt-client-email').textContent = email;
+      document.getElementById('receipt-invoice-num').textContent = receiptData.invoiceNum || `#GB-${Date.now().toString().slice(-6)}`;
+      document.getElementById('receipt-date-time').textContent = receiptData.dateTime || new Date().toLocaleString('es-PY');
+      document.getElementById('receipt-payment-method').textContent = `Método: ${receiptData.paymentMethod || 'Saldo Billetera GamesBoy'}`;
+
+      document.getElementById('receipt-item-title').textContent = receiptData.title || 'Producto Digital';
+      document.getElementById('receipt-item-desc').textContent = receiptData.description || 'Entrega y activación garantizada';
+      document.getElementById('receipt-item-code').textContent = receiptData.code || 'ACTIVADO';
+
+      const priceGs = receiptData.amountGs ? `${receiptData.amountGs.toLocaleString('es-PY')} Gs.` : (receiptData.amountUsd ? `${Math.round(receiptData.amountUsd * 7500).toLocaleString('es-PY')} Gs.` : '0 Gs.');
+      const priceUsd = receiptData.amountUsd ? `$${parseFloat(receiptData.amountUsd).toFixed(2)} USDT` : '';
+
+      document.getElementById('receipt-item-price-gs').textContent = priceGs;
+      document.getElementById('receipt-item-price-usd').textContent = priceUsd;
+      document.getElementById('receipt-total-final').textContent = priceGs;
+
+      const qrData = encodeURIComponent(`GAMESBOY-VOUCHER|${receiptData.invoiceNum || 'GB'}|${fullName}|${priceGs}`);
+      document.getElementById('receipt-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${qrData}`;
+
+      modal.style.display = 'grid';
+    };
+
+    const btnCloseReceipt = document.getElementById('btn-close-receipt-modal');
+    if (btnCloseReceipt) btnCloseReceipt.onclick = () => document.getElementById('modal-receipt-view').style.display = 'none';
+
+    const btnCloseReceiptBottom = document.getElementById('btn-close-receipt-bottom');
+    if (btnCloseReceiptBottom) btnCloseReceiptBottom.onclick = () => document.getElementById('modal-receipt-view').style.display = 'none';
 
     // Load Profile Data
     async function loadProfileData() {
@@ -753,6 +883,17 @@
         
         slots.forEach(s => {
           const isUrgent = s.daysRemaining <= 3;
+          const voucherPayload = JSON.stringify({
+            invoiceNum: `#GB-STR-${(s.id || s.subscriptionId || 'STR').slice(-6)}`,
+            title: s.serviceName,
+            description: `Cupo Oficial Streaming Perfil #${s.slotNumber}`,
+            code: `PIN: ${s.assignedPin || '1234'}`,
+            amountGs: Math.round((s.pricePerSlotUsd || 3.50) * 7500),
+            amountUsd: s.pricePerSlotUsd || 3.50,
+            paymentMethod: 'Saldo Billetera GamesBoy',
+            dateTime: new Date(s.createdAt || Date.now()).toLocaleString('es-PY')
+          }).replace(/"/g, '&quot;');
+
           html += `
             <div class="purchase-item-card">
               <div class="purchase-card-top">
@@ -777,11 +918,15 @@
                 <button type="button" class="btn-copy-sm" onclick="navigator.clipboard.writeText('${s.credentials || 'netflix.vip@gamesboy.net:::StreamPass2026!'}'); alert('Credenciales copiadas');">Copiar</button>
               </div>
 
-              <div class="purchase-actions-row">
+              <div class="purchase-actions-row" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
                 <a href="/#section-streaming" class="btn-open-group-chat">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                   <span>Abrir Chat del Grupo</span>
                 </a>
+                <button type="button" class="btn-action-sm" onclick="openReceiptModal(${voucherPayload})" style="background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.12); padding: 7px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  <span>Ver Comprobante</span>
+                </button>
               </div>
             </div>
           `;
@@ -792,6 +937,17 @@
         html += `<h4 style="font-size: 0.95rem; font-weight: 800; color: var(--accent-purple); margin-top: 2rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="2"></rect></svg><span>Juegos Digitales & Tarjetas de Regalo</span></h4>`;
         
         orders.forEach(o => {
+          const voucherPayload = JSON.stringify({
+            invoiceNum: `#GB-ORD-${(o.id || o._id || 'ORD').slice(-6)}`,
+            title: o.title || o.productTitle || 'Juego / Gift Card Digital',
+            description: o.option || 'Código Digital Oficial',
+            code: o.code || 'ACTIVADO',
+            amountGs: o.pricePaidPyg || (o.pricePaidUsd ? Math.round(o.pricePaidUsd * 7500) : 150000),
+            amountUsd: o.pricePaidUsd || 20.00,
+            paymentMethod: 'Saldo Billetera GamesBoy',
+            dateTime: new Date(o.createdAt || Date.now()).toLocaleString('es-PY')
+          }).replace(/"/g, '&quot;');
+
           html += `
             <div class="purchase-item-card">
               <div class="purchase-card-top">
@@ -804,6 +960,12 @@
                   <strong style="color: var(--accent-cyan); font-family: var(--font-mono);">${o.code}</strong>
                 </div>
                 <button type="button" class="btn-copy-sm" onclick="navigator.clipboard.writeText('${o.code}'); alert('Código copiado');">Copiar Clave</button>
+              </div>
+              <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
+                <button type="button" class="btn-action-sm" onclick="openReceiptModal(${voucherPayload})" style="background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.12); padding: 6px 12px; border-radius: 8px; font-size: 0.76rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  <span>Ver Comprobante</span>
+                </button>
               </div>
             </div>
           `;
@@ -823,18 +985,37 @@
         return;
       }
 
-      container.innerHTML = txs.map(t => `
-        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 12px 16px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-          <div>
-            <strong style="color: #ffffff; font-size: 0.9rem;">${t.type === 'deposit' ? 'Recarga de Saldo' : t.type}</strong>
-            <div style="font-size: 0.75rem; color: var(--text-tertiary);">${new Date(t.createdAt).toLocaleString('es-PY')} • Ref: ${t.reference || '-'}</div>
+      container.innerHTML = txs.map(t => {
+        const voucherPayload = JSON.stringify({
+          invoiceNum: `#GB-TX-${(t.id || t.reference || 'TX').slice(-6)}`,
+          title: t.type === 'deposit' ? 'Recarga de Saldo Billetera' : 'Movimiento de Cuenta',
+          description: `Método: ${t.method === 'binance_usdt' ? 'Binance Pay / USDT' : 'Transferencia Bancaria SIPAP'}`,
+          code: t.reference || 'SIPAP-REF',
+          amountGs: t.localAmount || Math.round((t.amountUsd || 0) * 7500),
+          amountUsd: t.amountUsd || 0,
+          paymentMethod: t.method === 'binance_usdt' ? 'Binance Pay / USDT' : 'SIPAP Paraguay',
+          dateTime: new Date(t.createdAt).toLocaleString('es-PY')
+        }).replace(/"/g, '&quot;');
+
+        return `
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; padding: 12px 16px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <strong style="color: #ffffff; font-size: 0.9rem;">${t.type === 'deposit' ? 'Recarga de Saldo' : t.type}</strong>
+              <div style="font-size: 0.75rem; color: var(--text-tertiary);">${new Date(t.createdAt).toLocaleString('es-PY')} • Ref: ${t.reference || '-'}</div>
+            </div>
+            <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+              <div style="font-family: var(--font-mono); font-weight: 800; color: #34d399;">${t.localAmount ? `${t.localAmount.toLocaleString('es-PY')} Gs.` : `$${t.amountUsd} USD`}</div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.7rem; font-weight: 800; color: ${t.status === 'approved' ? '#34d399' : '#f59e0b'}; text-transform: uppercase;">${t.status === 'approved' ? 'Aprobado' : 'Pendiente'}</span>
+                <button type="button" class="btn-action-sm" onclick="openReceiptModal(${voucherPayload})" style="background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.12); padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; display: inline-flex; align-items: center; gap: 3px; cursor: pointer;">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  <span>Comprobante</span>
+                </button>
+              </div>
+            </div>
           </div>
-          <div style="text-align: right;">
-            <div style="font-family: var(--font-mono); font-weight: 800; color: #34d399;">${t.localAmount ? `${t.localAmount.toLocaleString('es-PY')} Gs.` : `$${t.amountUsd} USD`}</div>
-            <span style="font-size: 0.7rem; font-weight: 800; color: ${t.status === 'approved' ? '#34d399' : '#f59e0b'}; text-transform: uppercase;">${t.status === 'approved' ? 'Aprobado' : 'Pendiente'}</span>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     // Avatar Upload Listener

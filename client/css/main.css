@@ -3422,3 +3422,135 @@ a.sub-nav-link,
 .admin-table tr:hover td {
   background: rgba(255, 255, 255, 0.02);
 }
+
+/* ======================================================== */
+/* TOAST NOTIFICATIONS ENGINE (FLOATING DARK GLASS)        */
+/* ======================================================== */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+  max-width: 380px;
+  width: 100%;
+}
+
+.toast-item {
+  pointer-events: auto;
+  background: rgba(14, 18, 28, 0.94);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 15px rgba(0, 194, 255, 0.15);
+  border-radius: 14px !important;
+  padding: 12px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  animation: slideToastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.toast-item.success { border-color: rgba(16, 185, 129, 0.4); }
+.toast-item.info { border-color: rgba(0, 194, 255, 0.4); }
+.toast-item.warning { border-color: rgba(245, 158, 11, 0.4); }
+.toast-item.error { border-color: rgba(239, 68, 68, 0.4); }
+
+.toast-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.toast-item.success .toast-icon { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.toast-item.info .toast-icon { background: rgba(0, 194, 255, 0.15); color: #00c2ff; }
+.toast-item.warning .toast-icon { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+.toast-item.error .toast-icon { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+.toast-title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.toast-msg {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.toast-close {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 2px;
+  margin-left: auto;
+  line-height: 1;
+}
+.toast-close:hover { color: #ffffff; }
+
+@keyframes slideToastIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ======================================================== */
+/* FLOATING SUPPORT WIDGET (WHATSAPP & LIVE HELP)          */
+/* ======================================================== */
+.floating-support-btn {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 1000;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  border: 1px solid rgba(16, 185, 129, 0.5);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4), 0 0 15px rgba(16, 185, 129, 0.3);
+  padding: 10px 18px;
+  border-radius: 9999px !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+.floating-support-btn:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 35px rgba(16, 185, 129, 0.6);
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+}
+
+/* ======================================================== */
+/* PRINTABLE RECEIPT / VOUCHER VIEW                        */
+/* ======================================================== */
+.receipt-paper {
+  background: #ffffff;
+  color: #0f172a;
+  padding: 2rem;
+  border-radius: 12px !important;
+  max-width: 480px;
+  margin: 0 auto;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+  text-align: left;
+}
+.receipt-paper * { color: #0f172a; }
+
+@media print {
+  body * { visibility: hidden; }
+  .receipt-paper, .receipt-paper * { visibility: visible; }
+  .receipt-paper { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; }
+}

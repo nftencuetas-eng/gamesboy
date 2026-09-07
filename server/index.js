@@ -17,6 +17,7 @@ import storeRouter from './routes/store.js';
 import sellerRouter from './routes/seller.js';
 import adminRouter from './routes/admin.js';
 import bannersRouter from './routes/banners.js';
+import smmRouter from './routes/smm.js';
 import { notFoundHandler, globalErrorHandler } from './middleware/errorHandler.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -90,6 +91,7 @@ app.use('/api/store', storeRouter);
 app.use('/api/seller', sellerRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/banners', bannersRouter);
+app.use('/api/smm', smmRouter);
 
 // Clean Routes & Admin aliases
 app.get('/login', (req, res) => res.sendFile(path.join(clientPath, 'login.html')));

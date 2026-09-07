@@ -39,7 +39,7 @@ async function deploy() {
     }
 
     // 3. Commit
-    const commitMsg = 'feat: 100% SVG icons, left-aligned executive admin dashboard, real database ledger calculations, and emoji elimination';
+    const commitMsg = 'feat: Toast notification engine, interactive SMM ordering flow, printable voucher receipts, and real-time WebSocket sync';
     const sha = await git.commit({
       fs,
       dir,

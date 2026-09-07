@@ -727,6 +727,10 @@
             Confirmar Solicitud de Retiro
           </button>
         </form>
+      </div>
+    </div>
+  </div>
+
   <!-- ======================================================= -->
   <!-- MODAL: COMPRA DE VIDEOJUEGO DIGITAL & DETALLES          -->
   <!-- ======================================================= -->
@@ -1008,6 +1012,70 @@
   </footer>
 
   <!-- ======================================================= -->
+  <!-- MODAL: COMPRA DE SERVICIOS SMM (IMPULSO DIGITAL)        -->
+  <!-- ======================================================= -->
+  <div class="modal-overlay" id="modal-smm-buy" style="display: none;">
+    <div class="modal-content glass-modal" style="max-width: 580px; padding: 2rem; border-radius: 20px !important;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(0,194,255,0.15); display: grid; place-items: center; color: var(--accent-cyan);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          </div>
+          <div>
+            <h3 id="smm-buy-title" style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800; color: #ffffff;">Impulso Digital</h3>
+            <span id="smm-buy-platform" class="badge-official">INSTAGRAM</span>
+          </div>
+        </div>
+        <button class="btn-modal-close" id="btn-close-smm-modal">✕</button>
+      </div>
+
+      <p id="smm-buy-desc" style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+        Crecimiento garantizado y entrega automática hacia tu enlace o perfil.
+      </p>
+
+      <form id="form-smm-order">
+        <input type="hidden" id="smm-order-service-id" value="">
+        <div class="form-group">
+          <label class="form-label">Enlace de tu Perfil / Publicación / Video:</label>
+          <input type="url" id="smm-order-link" class="form-input" placeholder="https://instagram.com/tu_usuario o enlace del post" required style="border-radius: 8px !important;">
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="form-label" style="margin-bottom: 0;">Cantidad Deseada:</label>
+            <span id="smm-order-limits-note" style="font-size: 0.72rem; color: var(--text-tertiary);">Mín: 100 - Máx: 25.000</span>
+          </div>
+          <input type="number" id="smm-order-quantity" class="form-input" placeholder="1000" min="50" step="50" required style="border-radius: 8px !important; font-size: 1.05rem; font-weight: 800;">
+        </div>
+
+        <!-- Calculated Summary Box -->
+        <div style="background: rgba(0, 194, 255, 0.08); border: 1px solid rgba(0, 194, 255, 0.25); border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span style="font-size: 0.8rem; color: var(--text-secondary);">Total a debitar:</span>
+            <div style="text-align: right;">
+              <strong id="smm-order-total-gs" style="font-family: var(--font-mono); font-size: 1.25rem; color: #ffffff;">0 Gs.</strong>
+              <div id="smm-order-total-usd" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan);">$0.00 USDT</div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary-block" style="border-radius: 10px !important; padding: 13px; font-weight: 800;">
+          Confirmar Orden de Impulso ➔
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FLOATING WHATSAPP SUPPORT BUTTON -->
+  <a href="https://wa.me/595981000000?text=Hola%20GamesBoy,%20necesito%20asistencia%20con%20una%20compra" target="_blank" rel="noopener" class="floating-support-btn" title="Atención al Cliente WhatsApp Oficial 24/7">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+    <span>Soporte WhatsApp</span>
+  </a>
+
+  <!-- TOAST NOTIFICATIONS CONTAINER -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ======================================================= -->
   <!-- STICKY RIGHT FLOATING WIDGET: GENERAR INGRESOS          -->
   <!-- ======================================================= -->
   <button type="button" class="sticky-monetize-pill" id="sticky-monetize-pill" title="Gana dinero compartiendo los cupos libres de tus cuentas de streaming">
@@ -1022,6 +1090,6 @@
   </button>
 
   <!-- App Client Scripts -->
-  <script type="module" src="/js/app.js?v=3.2"></script>
+  <script type="module" src="/js/app.js?v=3.4"></script>
 </body>
 </html>

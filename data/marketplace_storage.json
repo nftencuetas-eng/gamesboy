@@ -36,11 +36,59 @@
       "pendingEscrowUsd": 22
     },
     "usr_client1": {
-      "balanceUsd": 171.65,
+      "balanceUsd": 189.13,
       "pendingEscrowUsd": 0
     }
   },
   "wallet_transactions": [
+    {
+      "id": "tx_1788806685844_x22h",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "deposit",
+      "amountUsd": 13.33,
+      "currency": "PYG",
+      "localAmount": 100000,
+      "method": "sipap_paraguay",
+      "status": "approved",
+      "reference": "SIPAP-TRANSF-992184",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T18:44:45.844Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T18:44:45.881Z"
+    },
+    {
+      "id": "tx_1788806685823_na32",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "deposit",
+      "amountUsd": 10,
+      "currency": "USDT",
+      "localAmount": 75000,
+      "method": "binance_usdt",
+      "status": "approved",
+      "reference": "BINANCE-ORDER-8891024",
+      "receiptData": "",
+      "notes": "Recarga aprobada y saldo acreditado con éxito",
+      "createdAt": "2026-09-07T18:44:45.823Z",
+      "approvedBy": "usr_admin",
+      "approvedAt": "2026-09-07T18:44:45.867Z"
+    },
+    {
+      "id": "tx_buy_1788806662177",
+      "userId": "usr_client1",
+      "userName": "Lucas",
+      "type": "purchase",
+      "amountUsd": 5.85,
+      "currency": "USDT",
+      "localAmount": 5.85,
+      "method": "wallet_balance",
+      "status": "approved",
+      "reference": "COMPRA",
+      "notes": "Impulso Digital: Seguidores HQ Reales (Garantizados 30 Días) (1,000 unidades)",
+      "createdAt": "2026-09-07T18:44:22.177Z"
+    },
     {
       "id": "tx_1788803337451_57s8",
       "userId": "usr_client1",
@@ -879,7 +927,7 @@
   "smm_config": {
     "lastBalanceUsd": 245.8,
     "status": "connected",
-    "lastSyncAt": "2026-09-07T18:20:05.478Z"
+    "lastSyncAt": "2026-09-07T18:44:28.454Z"
   },
   "official_streaming_services": [
     {
@@ -962,6 +1010,21 @@
       "suggestedPriceUsd": 9.99,
       "icon": "ai",
       "badge": "GPT-4o & Canvas"
+    }
+  ],
+  "smm_orders": [
+    {
+      "id": "smm_ord_1788806662181_zyfe",
+      "userId": "usr_client1",
+      "serviceId": "smm_ig_followers_hq",
+      "serviceName": "Seguidores HQ Reales (Garantizados 30 Días)",
+      "platform": "Instagram",
+      "link": "https://instagram.com/gamesboy_test_profile",
+      "quantity": 1000,
+      "pricePaidUsd": 5.85,
+      "pricePaidPyg": 43875,
+      "status": "in_progress",
+      "createdAt": "2026-09-07T18:44:22.181Z"
     }
   ]
 }
