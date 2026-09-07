@@ -537,6 +537,14 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       loadProfile();
+
+      if (window.location.hash) {
+        const targetHash = window.location.hash.replace('#', '');
+        const targetLink = document.querySelector(`.profile-nav-link[data-tab="${targetHash}"]`);
+        if (targetLink) {
+          targetLink.click();
+        }
+      }
     });
   </script>
 </body>
