@@ -1028,7 +1028,14 @@ a.sub-nav-link,
   padding: 4px 2px 12px 2px;
   scroll-behavior: smooth;
   flex-wrap: nowrap;
+  min-height: 155px;
+  transition: opacity 0.2s ease;
 }
+
+#streaming-services-grid { min-height: 155px; }
+#digital-games-grid { min-height: 275px; }
+#retail-giftcards-grid { min-height: 260px; }
+#smm-services-grid { min-height: 140px; }
 
 .catalog-scroll-row::-webkit-scrollbar {
   display: none;

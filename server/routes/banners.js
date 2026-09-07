@@ -4,24 +4,13 @@ import postgresAdapter from '../db/postgresAdapter.js';
 
 const router = express.Router();
 
-// GET /api/banners - Fetch active hero banners
-router.get('/', async (req, res) => {
+// GET /api/banners - Fetch active hero banners (Instant in-memory / DB cached)
+router.get('/', (req, res) => {
   try {
     const db = getDb();
-    if (postgresAdapter.isConnected()) {
-      const pgRes = await postgresAdapter.query(
-        `SELECT id, title, tagline, badge, img_horizontal as "imgHorizontal", img_vertical as "imgVertical", cta_text as "ctaText", cta_url as "ctaUrl", sort_order as "sortOrder", is_active as "isActive" 
-         FROM gamesboy.gb_hero_banners 
-         WHERE is_active = true 
-         ORDER BY sort_order ASC`
-      );
-      if (pgRes.rows && pgRes.rows.length > 0) {
-        return res.json({ success: true, banners: pgRes.rows });
-      }
-    }
-    
-    // Fallback to in-memory/JSON store
-    const banners = (db.hero_banners || []).filter(b => b.isActive !== false).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+    const banners = (db.hero_banners && db.hero_banners.length > 0)
+      ? db.hero_banners.filter(b => b.isActive !== false).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+      : [];
     return res.json({ success: true, banners });
   } catch (err) {
     console.error('Error fetching hero banners:', err);

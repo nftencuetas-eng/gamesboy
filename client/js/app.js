@@ -104,32 +104,6 @@ function autoDetectUserCountry() {
   return 'PY';
 }
 
-const state = {
-  country: autoDetectUserCountry(),
-  currency: 'PYG',
-  currentUser: JSON.parse(localStorage.getItem('gb_user') || 'null'),
-  wallet: { balanceUsd: 25.0, pendingEscrowUsd: 0.0 },
-  exchangeRates: { PYG: 7500, ARS: 1250, BRL: 5.60, USD: 1.0, USDT: 1.0 },
-  heroBanners: [],
-  activeSlideIndex: 1, // Default Spider-Man 2
-  heroInterval: null,
-  subscriptions: [],
-  storeProducts: [],
-  myVault: [],
-  cart: [],
-  depositMethod: 'local'
-};
-
-state.currency = countryConfig[state.country]?.currency || 'PYG';
-
-// SMM Social Media Packages (Base API Ready)
-const smmServices = [
-  { id: 'smm_ig_followers', platform: 'Instagram', name: 'Seguidores Reales Latinos', priceUsd: 4.50, icon: '📸', desc: '1,000 Seguidores de alta calidad con entrega gradual y reposición.' },
-  { id: 'smm_tiktok_views', platform: 'TikTok', name: 'Visualizaciones Virales', priceUsd: 2.00, icon: '🎵', desc: '10,000 Views para impulsar tus videos en el algoritmo Para Ti.' },
-  { id: 'smm_yt_subscribers', platform: 'YouTube', name: 'Suscriptores para Monetización', priceUsd: 8.00, icon: '▶️', desc: '500 Suscriptores orgánicos compatibles con el programa de socios.' },
-  { id: 'smm_x_retweets', platform: 'X (Twitter)', name: 'Likes & Retweets', priceUsd: 3.00, icon: '✖️', desc: '500 Interacciones rápidas para posicionar tus publicaciones.' }
-];
-
 // Fallback Default Hero Banners (ENEBA Style)
 const defaultBanners = [
   {
@@ -177,6 +151,318 @@ const defaultBanners = [
     sortOrder: 3
   }
 ];
+
+// Fallback Default Streaming Subscriptions
+const defaultSubscriptions = [
+  {
+    id: 'sub_netflix_4k',
+    serviceName: 'Netflix Premium 4K HDR',
+    category: 'streaming',
+    planName: 'Ultra HD 4 Pantallas',
+    totalSlots: 4,
+    availableSlots: 2,
+    pricePerSlotUsd: 3.99,
+    pricePyg: 30000,
+    renewDiscountPercent: 5
+  },
+  {
+    id: 'sub_spotify_prem',
+    serviceName: 'Spotify Premium',
+    category: 'streaming',
+    planName: 'Individual / Familiar',
+    totalSlots: 6,
+    availableSlots: 4,
+    pricePerSlotUsd: 2.50,
+    pricePyg: 19000,
+    renewDiscountPercent: 5
+  },
+  {
+    id: 'sub_disney_prem',
+    serviceName: 'Disney+ & Star+ Premium',
+    category: 'streaming',
+    planName: 'Plan Estándar sin Anuncios',
+    totalSlots: 4,
+    availableSlots: 1,
+    pricePerSlotUsd: 3.20,
+    pricePyg: 24000,
+    renewDiscountPercent: 5
+  },
+  {
+    id: 'sub_max_hbo',
+    serviceName: 'Max (HBO Max Oficial)',
+    category: 'streaming',
+    planName: 'Platino 4K + Dolby Atmos',
+    totalSlots: 4,
+    availableSlots: 3,
+    pricePerSlotUsd: 2.80,
+    pricePyg: 21000,
+    renewDiscountPercent: 5
+  },
+  {
+    id: 'sub_yt_premium',
+    serviceName: 'YouTube Premium & Music',
+    category: 'streaming',
+    planName: 'Familiar Sin Anuncios',
+    totalSlots: 5,
+    availableSlots: 2,
+    pricePerSlotUsd: 2.99,
+    pricePyg: 22500,
+    renewDiscountPercent: 5
+  },
+  {
+    id: 'sub_chatgpt_plus',
+    serviceName: 'ChatGPT Plus & Team GPT-4o',
+    category: 'streaming',
+    planName: 'Acceso Directo GPT-4o',
+    totalSlots: 3,
+    availableSlots: 1,
+    pricePerSlotUsd: 6.50,
+    pricePyg: 49000,
+    renewDiscountPercent: 5
+  },
+  {
+    id: 'sub_crunchyroll',
+    serviceName: 'Crunchyroll Mega Fan',
+    category: 'streaming',
+    planName: 'Mega Fan 4 Pantallas',
+    totalSlots: 4,
+    availableSlots: 3,
+    pricePerSlotUsd: 2.20,
+    pricePyg: 16500,
+    renewDiscountPercent: 5
+  },
+  {
+    id: 'sub_paramount',
+    serviceName: 'Paramount+ Premium',
+    category: 'streaming',
+    planName: 'Plan Completo HD',
+    totalSlots: 3,
+    availableSlots: 2,
+    pricePerSlotUsd: 2.30,
+    pricePyg: 17500,
+    renewDiscountPercent: 5
+  }
+];
+
+// Fallback Default Store Products (Games & Gift Cards)
+const defaultStoreProducts = [
+  // JUEGOS DIGITALES
+  {
+    id: 'game_fc25_digital',
+    title: 'EA SPORTS FC 25',
+    category: 'digital_game',
+    platform: 'PS5',
+    genre: 'Deportes / Fútbol',
+    primaryPricePyg: 320000,
+    secondaryPricePyg: 210000,
+    primaryPriceUsd: 42.67,
+    secondaryPriceUsd: 28.00,
+    priceUsd: 42.67,
+    coverUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80',
+    description: 'Edición oficial PlayStation 5 con licencias completas y Modo Carrera.',
+    isAvailable: true
+  },
+  {
+    id: 'game_spiderman2_game',
+    title: 'Marvel Spider-Man 2',
+    category: 'digital_game',
+    platform: 'PS5',
+    genre: 'Acción / Aventura',
+    primaryPricePyg: 295000,
+    secondaryPricePyg: 185000,
+    primaryPriceUsd: 39.33,
+    secondaryPriceUsd: 24.67,
+    priceUsd: 39.33,
+    coverUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80',
+    description: 'Juega como Peter Parker y Miles Morales enfrentando a Venom en Nueva York.',
+    isAvailable: true
+  },
+  {
+    id: 'game_gtav_premium',
+    title: 'Grand Theft Auto V Premium',
+    category: 'digital_game',
+    platform: 'PS5',
+    genre: 'Mundo Abierto',
+    primaryPricePyg: 160000,
+    secondaryPricePyg: 105000,
+    primaryPriceUsd: 21.33,
+    secondaryPriceUsd: 14.00,
+    priceUsd: 21.33,
+    coverUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80',
+    description: 'Incluye Modo Historia completo, GTA Online y Criminal Enterprise Starter Pack.',
+    isAvailable: true
+  },
+  {
+    id: 'game_lastofus_1',
+    title: 'The Last of Us Part I',
+    category: 'digital_game',
+    platform: 'PS5',
+    genre: 'Acción / Drama',
+    primaryPricePyg: 280000,
+    secondaryPricePyg: 175000,
+    primaryPriceUsd: 37.33,
+    secondaryPriceUsd: 23.33,
+    priceUsd: 37.33,
+    coverUrl: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=600&q=80',
+    description: 'Reconstruido desde cero para PS5 con gráficos de última generación.',
+    isAvailable: true
+  },
+  {
+    id: 'game_wukong',
+    title: 'Black Myth: Wukong',
+    category: 'digital_game',
+    platform: 'PS5',
+    genre: 'Action RPG',
+    primaryPricePyg: 340000,
+    secondaryPricePyg: 220000,
+    primaryPriceUsd: 45.33,
+    secondaryPriceUsd: 29.33,
+    priceUsd: 45.33,
+    coverUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
+    description: 'Encarna al Predestinado en una aventura mística por la mitología china.',
+    isAvailable: true
+  },
+  {
+    id: 'game_cod_bo6_digital',
+    title: 'Call of Duty: Black Ops 6',
+    category: 'digital_game',
+    platform: 'PS5',
+    genre: 'FPS / Shooter',
+    primaryPricePyg: 395000,
+    secondaryPricePyg: 255000,
+    primaryPriceUsd: 52.67,
+    secondaryPriceUsd: 34.00,
+    priceUsd: 52.67,
+    coverUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80',
+    description: 'Campaña de espionaje cinematográfica, multijugador y regreso de Zombies por rondas.',
+    isAvailable: true
+  },
+
+  // RETAIL GIFT CARDS
+  {
+    id: 'gc_psn_10',
+    title: 'PlayStation Store $10 USD',
+    category: 'gift_card',
+    platform: 'PlayStation',
+    brand: 'PlayStation',
+    brandTheme: 'psn',
+    pricePyg: 85000,
+    priceUsd: 10.00,
+    coverUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80',
+    description: 'Tarjeta oficial de PlayStation Network para canjear en la PS Store.'
+  },
+  {
+    id: 'gc_steam_10',
+    title: 'Steam Wallet $10 USD',
+    category: 'gift_card',
+    platform: 'Steam',
+    brand: 'Steam',
+    brandTheme: 'steam',
+    pricePyg: 85000,
+    priceUsd: 10.00,
+    coverUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80',
+    description: 'Saldo para recargar tu billetera Steam y comprar juegos o ítems en PC.'
+  },
+  {
+    id: 'gc_xbox_10',
+    title: 'Xbox Gift Card $10 USD',
+    category: 'gift_card',
+    platform: 'Xbox',
+    brand: 'Xbox',
+    brandTheme: 'xbox',
+    pricePyg: 85000,
+    priceUsd: 10.00,
+    coverUrl: 'https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?auto=format&fit=crop&w=400&q=80',
+    description: 'Saldo oficial para comprar juegos, DLCs y suscripciones en Xbox y Windows.'
+  },
+  {
+    id: 'gc_netflix_15',
+    title: 'Netflix Gift Card $15 USD',
+    category: 'gift_card',
+    platform: 'Netflix',
+    brand: 'Netflix',
+    brandTheme: 'netflix',
+    pricePyg: 125000,
+    priceUsd: 15.00,
+    coverUrl: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80',
+    description: 'Saldo oficial de regalo para canjear en cuentas de Netflix.'
+  },
+  {
+    id: 'gc_spotify_1m',
+    title: 'Spotify Premium 1 Mes',
+    category: 'gift_card',
+    platform: 'Spotify',
+    brand: 'Spotify',
+    brandTheme: 'spotify',
+    pricePyg: 45000,
+    priceUsd: 5.99,
+    coverUrl: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=400&q=80',
+    description: 'Música sin anuncios y descargas offline en Spotify.'
+  },
+  {
+    id: 'gc_googleplay_10',
+    title: 'Google Play $10 USD',
+    category: 'gift_card',
+    platform: 'Google Play',
+    brand: 'Google Play',
+    brandTheme: 'googleplay',
+    pricePyg: 85000,
+    priceUsd: 10.00,
+    coverUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=400&q=80',
+    description: 'Saldo para juegos, apps, películas y diamantes en Android.'
+  },
+  {
+    id: 'gc_apple_10',
+    title: 'Apple Store & iTunes $10',
+    category: 'gift_card',
+    platform: 'Apple',
+    brand: 'Apple',
+    brandTheme: 'apple',
+    pricePyg: 85000,
+    priceUsd: 10.00,
+    coverUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80',
+    description: 'Saldo para App Store, iCloud, Apple Music y compras en iOS.'
+  },
+  {
+    id: 'gc_roblox_10',
+    title: 'Roblox $10 (800 Robux)',
+    category: 'gift_card',
+    platform: 'Roblox',
+    brand: 'Roblox',
+    brandTheme: 'roblox',
+    pricePyg: 85000,
+    priceUsd: 10.00,
+    coverUrl: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=400&q=80',
+    description: 'Canjea 800 Robux para personalizar tu avatar y comprar pases en Roblox.'
+  }
+];
+
+// SMM Social Media Packages (Base API Ready)
+const smmServices = [
+  { id: 'smm_ig_followers', platform: 'Instagram', name: 'Seguidores Reales Latinos', priceUsd: 4.50, icon: '📸', desc: '1,000 Seguidores de alta calidad con entrega gradual y reposición.' },
+  { id: 'smm_tiktok_views', platform: 'TikTok', name: 'Visualizaciones Virales', priceUsd: 2.00, icon: '🎵', desc: '10,000 Views para impulsar tus videos en el algoritmo Para Ti.' },
+  { id: 'smm_yt_subscribers', platform: 'YouTube', name: 'Suscriptores para Monetización', priceUsd: 8.00, icon: '▶️', desc: '500 Suscriptores orgánicos compatibles con el programa de socios.' },
+  { id: 'smm_x_retweets', platform: 'X (Twitter)', name: 'Likes & Retweets', priceUsd: 3.00, icon: '✖️', desc: '500 Interacciones rápidas para posicionar tus publicaciones.' }
+];
+
+const state = {
+  country: autoDetectUserCountry(),
+  currency: 'PYG',
+  currentUser: JSON.parse(localStorage.getItem('gb_user') || 'null'),
+  wallet: { balanceUsd: 25.0, pendingEscrowUsd: 0.0 },
+  exchangeRates: { PYG: 7500, ARS: 1250, BRL: 5.60, USD: 1.0, USDT: 1.0 },
+  heroBanners: defaultBanners,
+  activeSlideIndex: 1, // Default Spider-Man 2
+  heroInterval: null,
+  subscriptions: defaultSubscriptions,
+  storeProducts: defaultStoreProducts,
+  smmServices: smmServices,
+  myVault: [],
+  cart: [],
+  depositMethod: 'local'
+};
+
+state.currency = countryConfig[state.country]?.currency || 'PYG';
 
 // --- UNIVERSAL FORMAT CURRENCY HELPER (NATIVE GUARANÍES Gs.) ---
 function formatPrice(amountUsd) {
@@ -578,29 +864,37 @@ async function renderMyVault() {
   }).join('');
 }
 
-// --- 7. FETCH INITIAL DATA FROM API ---
+// --- 7. FETCH INITIAL DATA FROM API (SILENT RECONCILIATION) ---
 async function fetchStoreData() {
   try {
     const [subRes, storeRes, bannersRes, smmRes] = await Promise.all([
-      fetch('/api/subscriptions').then(r => r.json()).catch(() => []),
-      fetch('/api/store/products').then(r => r.json()).catch(() => []),
-      fetch('/api/banners').then(r => r.json()).catch(() => ({ banners: defaultBanners })),
-      fetch('/api/smm/services').then(r => r.json()).catch(() => ({ services: smmServices }))
+      fetch('/api/subscriptions').then(r => r.json()).catch(() => null),
+      fetch('/api/store/products').then(r => r.json()).catch(() => null),
+      fetch('/api/banners').then(r => r.json()).catch(() => null),
+      fetch('/api/smm/services').then(r => r.json()).catch(() => null)
     ]);
 
-    if (Array.isArray(subRes)) state.subscriptions = subRes;
-    else if (subRes.subscriptions) state.subscriptions = subRes.subscriptions;
+    if (Array.isArray(subRes) && subRes.length > 0) {
+      state.subscriptions = subRes;
+    } else if (subRes && subRes.subscriptions && subRes.subscriptions.length > 0) {
+      state.subscriptions = subRes.subscriptions;
+    }
 
-    if (Array.isArray(storeRes)) state.storeProducts = storeRes;
-    else if (storeRes.products) state.storeProducts = storeRes.products;
+    if (Array.isArray(storeRes) && storeRes.length > 0) {
+      state.storeProducts = storeRes;
+    } else if (storeRes && storeRes.products && storeRes.products.length > 0) {
+      state.storeProducts = storeRes.products;
+    }
 
-    if (bannersRes && bannersRes.banners && bannersRes.banners.length >= 4) state.heroBanners = bannersRes.banners;
-    else state.heroBanners = defaultBanners;
+    if (bannersRes && bannersRes.banners && bannersRes.banners.length >= 4) {
+      state.heroBanners = bannersRes.banners;
+    }
 
-    if (smmRes && smmRes.services && Array.isArray(smmRes.services)) {
+    if (smmRes && smmRes.services && Array.isArray(smmRes.services) && smmRes.services.length > 0) {
       state.smmServices = smmRes.services;
     }
 
+    // Re-render only to update dynamic prices or active seller stock
     initHeroAccordion();
     renderStreamingServices();
     renderDigitalGames();
@@ -609,8 +903,6 @@ async function fetchStoreData() {
     renderMyVault();
   } catch (err) {
     console.error('Error loading marketplace data:', err);
-    initHeroAccordion();
-    renderSmmServices();
   }
 }
 
@@ -1789,12 +2081,32 @@ function handleRealtimeEvent(data) {
   }
 }
 
-// Initialize on DOM Loaded
-document.addEventListener('DOMContentLoaded', () => {
+// --- 0ms SYNCHRONOUS HYDRATION ENGINE (ZERO FLICKER) ---
+function instantRenderCatalog() {
+  try {
+    initHeroAccordion();
+    renderStreamingServices();
+    renderDigitalGames();
+    renderRetailGiftCards();
+    renderSmmServices();
+  } catch (err) {
+    console.warn('Instant hydration warning:', err);
+  }
+}
+
+function initializeMarketplace() {
   initUserSession();
   initLiveSearch();
-  fetchStoreData();
+  instantRenderCatalog(); // Immediate 0ms paint - eliminates all reload flicker
+  fetchStoreData();        // Silent background update & seller sync
   initWebSocketClient();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeMarketplace);
+} else {
+  initializeMarketplace();
+}
+
 
 

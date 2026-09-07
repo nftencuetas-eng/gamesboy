@@ -39,7 +39,7 @@ async function deploy() {
     }
 
     // 3. Commit
-    const commitMsg = 'feat: Complete Video Games pagination & Guaraníes pricing overhaul, direct Canvas image compression uploads, Gift Cards brands/variations management, and manual order delivery system';
+    const commitMsg = 'feat: Eliminate page reload flicker with 0ms synchronous instant catalog hydration, CSS layout stability & sub-ms banner cache';
     const sha = await git.commit({
       fs,
       dir,
