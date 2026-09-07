@@ -105,13 +105,13 @@ router.post('/admin', async (req, res) => {
     const db = getDb();
     db.hero_banners = banners.map((b, idx) => ({
       id: b.id || `banner_${Date.now()}_${idx}`,
-      title: b.title || 'GamesBoy Promo',
-      tagline: b.tagline || '',
-      badge: b.badge || 'DESTACADO',
+      title: (b.title !== undefined && b.title !== null) ? b.title.trim() : '',
+      tagline: (b.tagline !== undefined && b.tagline !== null) ? b.tagline.trim() : '',
+      badge: (b.badge !== undefined && b.badge !== null) ? b.badge.trim() : '',
       imgHorizontal: b.imgHorizontal || '',
       imgVertical: b.imgVertical || '',
-      ctaText: b.ctaText || 'Comprar ahora',
-      ctaUrl: b.ctaUrl || '#',
+      ctaText: (b.ctaText !== undefined && b.ctaText !== null) ? b.ctaText.trim() : '',
+      ctaUrl: (b.ctaUrl !== undefined && b.ctaUrl !== null) ? b.ctaUrl.trim() : '',
       sortOrder: idx,
       isActive: b.isActive !== false
     }));

@@ -39,7 +39,7 @@ async function deploy() {
     }
 
     // 3. Commit
-    const commitMsg = 'feat: Master Admin overhaul - Hero Accordion Banners Editor, strict auditor role separation, professional categorized sidebar, 10-per-page paginated Users directory with accounting KPIs';
+    const commitMsg = 'feat: 100% optional fields for hero banners editor, hidden image URLs with clean visual preview dropzones';
     const sha = await git.commit({
       fs,
       dir,

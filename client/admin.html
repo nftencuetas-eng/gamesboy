@@ -2694,7 +2694,7 @@
     }
 
     // ========================================================
-    // 🎨 HERO ACCORDION BANNERS ENGINE (ADMIN)
+    // 🎨 HERO ACCORDION BANNERS ENGINE (ADMIN - 100% OPCIONAL)
     // ========================================================
     async function loadHeroBannersAdmin() {
       try {
@@ -2705,12 +2705,12 @@
           while (allHeroBannersList.length < 4) {
             allHeroBannersList.push({
               id: `banner_${Date.now()}_${allHeroBannersList.length}`,
-              title: `Banner Destacado ${allHeroBannersList.length + 1}`,
-              tagline: 'Juega más. Paga menos.',
-              badge: 'DESTACADO',
-              imgHorizontal: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80',
-              imgVertical: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
-              ctaText: 'Ver Oferta',
+              title: '',
+              tagline: '',
+              badge: '',
+              imgHorizontal: '',
+              imgVertical: '',
+              ctaText: '',
               ctaUrl: '#section-games',
               sortOrder: allHeroBannersList.length,
               isActive: true
@@ -2727,77 +2727,119 @@
       const container = document.getElementById('hero-banners-editor-container');
       if (!container) return;
 
-      container.innerHTML = allHeroBannersList.slice(0, 4).map((b, idx) => `
+      container.innerHTML = allHeroBannersList.slice(0, 4).map((b, idx) => {
+        const hasH = Boolean(b.imgHorizontal);
+        const hasV = Boolean(b.imgVertical);
+
+        return `
         <div class="hero-banner-admin-card" data-banner-idx="${idx}">
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px;">
-            <strong style="color: var(--accent-cyan); font-size: 0.95rem;">🎮 Banner #${idx + 1}: ${b.title || 'Título'}</strong>
-            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.76rem; color: #ffffff; cursor: pointer;">
-              <input type="checkbox" id="hero-banner-active-${idx}" ${b.isActive !== false ? 'checked' : ''} style="width: 16px; height: 16px;">
-              <span>Activo</span>
+          <!-- CARD HEADER -->
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 10px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span style="background: rgba(0, 194, 255, 0.15); color: var(--accent-cyan); font-weight: 800; font-size: 0.74rem; padding: 3px 8px; border-radius: 6px;">PORTADA #${idx + 1}</span>
+              <strong style="color: #ffffff; font-size: 0.92rem;">${b.title || 'Portada ' + (idx + 1)}</strong>
+            </div>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.76rem; color: #ffffff; cursor: pointer; background: rgba(255,255,255,0.04); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+              <input type="checkbox" id="hero-banner-active-${idx}" ${b.isActive !== false ? 'checked' : ''} style="width: 15px; height: 15px; cursor: pointer;">
+              <span>Activo en Portada</span>
             </label>
           </div>
 
-          <div class="admin-form-group">
-            <label class="admin-form-label">Título Principal *</label>
-            <input type="text" id="hero-banner-title-${idx}" class="admin-form-input" value="${b.title || ''}" placeholder="ej: EA SPORTS FC 25" required>
-          </div>
+          <!-- SUBIDA DE IMÁGENES: HORIZONTAL Y VERTICAL -->
+          <div style="display: flex; flex-direction: column; gap: 14px;">
+            
+            <!-- DROPZONE HORIZONTAL -->
+            <div class="admin-form-group" style="margin-bottom: 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <label class="admin-form-label" style="margin-bottom: 0; font-size: 0.76rem;">🖼️ Imagen Horizontal Panorámica (1600x600 px)</label>
+                <span style="font-size: 0.7rem; color: var(--accent-cyan); font-weight: 700;">Pantalla Completa</span>
+              </div>
+              
+              <input type="hidden" id="hero-input-h-${idx}" value="${b.imgHorizontal || ''}">
+              <div class="file-upload-zone" style="padding: 12px; position: relative; border-radius: 12px; min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(5,7,14,0.7);">
+                <input type="file" accept="image/*" onchange="handleHeroBannerUpload(event, ${idx}, 'horizontal')" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 2;">
+                
+                <div id="hero-preview-container-h-${idx}" style="width: 100%; ${hasH ? 'display: flex;' : 'display: none;'} flex-direction: column; align-items: center;">
+                  <img id="hero-thumb-h-${idx}" class="hero-preview-thumb-h" src="${b.imgHorizontal || ''}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); margin-bottom: 6px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                    <span style="font-size: 0.74rem; color: var(--accent-emerald); font-weight: 800;">✓ Imagen horizontal cargada</span>
+                    <span style="font-size: 0.72rem; color: var(--text-tertiary);">Clic para cambiar</span>
+                  </div>
+                </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div class="admin-form-group">
-              <label class="admin-form-label">Badge Superior</label>
-              <input type="text" id="hero-banner-badge-${idx}" class="admin-form-input" value="${b.badge || 'DESTACADO'}" placeholder="ej: PS5 • XBOX • PC">
-            </div>
-            <div class="admin-form-group">
-              <label class="admin-form-label">Texto del Botón CTA</label>
-              <input type="text" id="hero-banner-cta-${idx}" class="admin-form-input" value="${b.ctaText || 'Comprar ahora'}" placeholder="ej: Comprar ahora">
-            </div>
-          </div>
-
-          <div class="admin-form-group">
-            <label class="admin-form-label">Lema / Subtítulo</label>
-            <input type="text" id="hero-banner-tagline-${idx}" class="admin-form-input" value="${b.tagline || ''}" placeholder="ej: CLUBES, ULTIMATE TEAM & MODO CARRERA">
-          </div>
-
-          <div class="admin-form-group">
-            <label class="admin-form-label">Enlace de Destino (URL o Ancla)</label>
-            <input type="text" id="hero-banner-url-${idx}" class="admin-form-input" value="${b.ctaUrl || '#section-games'}" placeholder="ej: #section-games o /catalog.html">
-          </div>
-
-          <!-- IMAGEN HORIZONTAL -->
-          <div class="admin-form-group">
-            <label class="admin-form-label">Imagen Horizontal Panorámica (1600x600 px)</label>
-            <div class="file-upload-zone" style="padding: 10px;">
-              <input type="file" accept="image/*" onchange="handleHeroBannerUpload(event, ${idx}, 'horizontal')">
-              <img id="hero-thumb-h-${idx}" class="hero-preview-thumb-h" src="${b.imgHorizontal || ''}" style="${b.imgHorizontal ? '' : 'display: none;'}">
-              <div style="font-size: 0.74rem; color: #ffffff; margin-top: 4px;">Arrastra o selecciona imagen horizontal</div>
-            </div>
-            <input type="text" id="hero-input-h-${idx}" class="admin-form-input" style="margin-top: 6px; font-size: 0.76rem;" placeholder="https://... URL imagen horizontal" value="${b.imgHorizontal || ''}" onchange="updateHeroThumb(${idx}, 'horizontal', this.value)">
-          </div>
-
-          <!-- IMAGEN VERTICAL -->
-          <div class="admin-form-group">
-            <label class="admin-form-label">Imagen Vertical Artwork (600x900 px)</label>
-            <div class="file-upload-zone" style="padding: 10px;">
-              <input type="file" accept="image/*" onchange="handleHeroBannerUpload(event, ${idx}, 'vertical')">
-              <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-                <img id="hero-thumb-v-${idx}" class="hero-preview-thumb-v" src="${b.imgVertical || ''}" style="${b.imgVertical ? '' : 'display: none;'}">
-                <div style="font-size: 0.74rem; color: #ffffff;">Arrastra o selecciona imagen vertical</div>
+                <div id="hero-placeholder-h-${idx}" style="${hasH ? 'display: none;' : 'display: flex;'} flex-direction: column; align-items: center; text-align: center;">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2" style="margin-bottom: 6px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                  <div style="font-size: 0.8rem; font-weight: 700; color: #ffffff;">Haz clic o arrastra la imagen horizontal aquí</div>
+                  <div style="font-size: 0.7rem; color: var(--text-tertiary);">Formato recomendado: 1600x600 px</div>
+                </div>
               </div>
             </div>
-            <input type="text" id="hero-input-v-${idx}" class="admin-form-input" style="margin-top: 6px; font-size: 0.76rem;" placeholder="https://... URL imagen vertical" value="${b.imgVertical || ''}" onchange="updateHeroThumb(${idx}, 'vertical', this.value)">
+
+            <!-- DROPZONE VERTICAL -->
+            <div class="admin-form-group" style="margin-bottom: 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <label class="admin-form-label" style="margin-bottom: 0; font-size: 0.76rem;">📱 Imagen Vertical / Artwork (600x900 px)</label>
+                <span style="font-size: 0.7rem; color: var(--accent-purple); font-weight: 700;">Modo Móvil / Acordeón</span>
+              </div>
+              
+              <input type="hidden" id="hero-input-v-${idx}" value="${b.imgVertical || ''}">
+              <div class="file-upload-zone" style="padding: 12px; position: relative; border-radius: 12px; min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(5,7,14,0.7);">
+                <input type="file" accept="image/*" onchange="handleHeroBannerUpload(event, ${idx}, 'vertical')" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 2;">
+                
+                <div id="hero-preview-container-v-${idx}" style="${hasV ? 'display: flex;' : 'display: none;'} align-items: center; gap: 14px; width: 100%;">
+                  <img id="hero-thumb-v-${idx}" class="hero-preview-thumb-v" src="${b.imgVertical || ''}" style="width: 75px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15);">
+                  <div style="text-align: left;">
+                    <div style="font-size: 0.76rem; color: var(--accent-emerald); font-weight: 800;">✓ Imagen vertical cargada</div>
+                    <div style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 4px;">Clic en el cuadro para cambiarla</div>
+                  </div>
+                </div>
+
+                <div id="hero-placeholder-v-${idx}" style="${hasV ? 'display: none;' : 'display: flex;'} flex-direction: column; align-items: center; text-align: center;">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2" style="margin-bottom: 6px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                  <div style="font-size: 0.8rem; font-weight: 700; color: #ffffff;">Haz clic o arrastra la imagen vertical aquí</div>
+                  <div style="font-size: 0.7rem; color: var(--text-tertiary);">Formato recomendado: 600x900 px</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- CAMPOS 100% OPCIONALES -->
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 14px; margin-top: 6px;">
+            <div style="font-size: 0.72rem; font-weight: 800; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+              <span>📝 Información y Enlace (100% Opcional)</span>
+            </div>
+
+            <div class="admin-form-group" style="margin-bottom: 10px;">
+              <label class="admin-form-label" style="font-size: 0.72rem; color: var(--text-secondary);">Título (Opcional)</label>
+              <input type="text" id="hero-banner-title-${idx}" class="admin-form-input" value="${b.title || ''}" placeholder="ej: EA SPORTS FC 25 (o dejar en blanco)" style="padding: 8px 12px; font-size: 0.84rem;">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+              <div class="admin-form-group" style="margin-bottom: 0;">
+                <label class="admin-form-label" style="font-size: 0.72rem; color: var(--text-secondary);">Badge Superior (Opcional)</label>
+                <input type="text" id="hero-banner-badge-${idx}" class="admin-form-input" value="${b.badge || ''}" placeholder="ej: PS5 • XBOX • PC" style="padding: 8px 12px; font-size: 0.84rem;">
+              </div>
+              <div class="admin-form-group" style="margin-bottom: 0;">
+                <label class="admin-form-label" style="font-size: 0.72rem; color: var(--text-secondary);">Texto Botón CTA (Opcional)</label>
+                <input type="text" id="hero-banner-cta-${idx}" class="admin-form-input" value="${b.ctaText || ''}" placeholder="ej: Ver Ediciones" style="padding: 8px 12px; font-size: 0.84rem;">
+              </div>
+            </div>
+
+            <div class="admin-form-group" style="margin-bottom: 10px;">
+              <label class="admin-form-label" style="font-size: 0.72rem; color: var(--text-secondary);">Lema / Subtítulo (Opcional)</label>
+              <input type="text" id="hero-banner-tagline-${idx}" class="admin-form-input" value="${b.tagline || ''}" placeholder="ej: Clubes, Ultimate Team y Modo Carrera..." style="padding: 8px 12px; font-size: 0.84rem;">
+            </div>
+
+            <div class="admin-form-group" style="margin-bottom: 0;">
+              <label class="admin-form-label" style="font-size: 0.72rem; color: var(--text-secondary);">Enlace de Destino (Opcional)</label>
+              <input type="text" id="hero-banner-url-${idx}" class="admin-form-input" value="${b.ctaUrl || ''}" placeholder="ej: #section-games o /service.html?platform=netflix" style="padding: 8px 12px; font-size: 0.84rem;">
+            </div>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
     }
-
-    window.updateHeroThumb = function(idx, orientation, url) {
-      const imgId = orientation === 'horizontal' ? `hero-thumb-h-${idx}` : `hero-thumb-v-${idx}`;
-      const img = document.getElementById(imgId);
-      if (img) {
-        img.src = url;
-        img.style.display = url ? (orientation === 'horizontal' ? 'block' : 'inline-block') : 'none';
-      }
-    };
 
     window.handleHeroBannerUpload = async function(event, idx, orientation) {
       const file = event.target.files[0];
@@ -2805,28 +2847,60 @@
       try {
         const maxDim = orientation === 'horizontal' ? 1600 : 900;
         const compressed = await compressImage(file, maxDim, 0.85);
+        
+        // Save base64 internally in hidden input and memory
         const inputId = orientation === 'horizontal' ? `hero-input-h-${idx}` : `hero-input-v-${idx}`;
         const input = document.getElementById(inputId);
         if (input) input.value = compressed;
-        updateHeroThumb(idx, orientation, compressed);
+        
+        if (allHeroBannersList[idx]) {
+          if (orientation === 'horizontal') allHeroBannersList[idx].imgHorizontal = compressed;
+          else allHeroBannersList[idx].imgVertical = compressed;
+        }
+
+        // Update preview UI cleanly
+        if (orientation === 'horizontal') {
+          const thumb = document.getElementById(`hero-thumb-h-${idx}`);
+          const previewBox = document.getElementById(`hero-preview-container-h-${idx}`);
+          const placeholder = document.getElementById(`hero-placeholder-h-${idx}`);
+          if (thumb) thumb.src = compressed;
+          if (previewBox) previewBox.style.display = 'flex';
+          if (placeholder) placeholder.style.display = 'none';
+        } else {
+          const thumb = document.getElementById(`hero-thumb-v-${idx}`);
+          const previewBox = document.getElementById(`hero-preview-container-v-${idx}`);
+          const placeholder = document.getElementById(`hero-placeholder-v-${idx}`);
+          if (thumb) thumb.src = compressed;
+          if (previewBox) previewBox.style.display = 'flex';
+          if (placeholder) placeholder.style.display = 'none';
+        }
       } catch (err) {
-        alert('Error al procesar la imagen del banner: ' + err.message);
+        alert('Error al procesar la imagen: ' + err.message);
       }
     };
 
     async function saveHeroBannersAdmin() {
+      const saveBtn = document.getElementById('btn-save-all-hero-banners');
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<span>⏳ Guardando...</span>';
+      }
+
       const bannersToSave = [];
       for (let i = 0; i < 4; i++) {
         const existing = allHeroBannersList[i] || {};
+        const inputH = document.getElementById(`hero-input-h-${i}`);
+        const inputV = document.getElementById(`hero-input-v-${i}`);
+
         bannersToSave.push({
           id: existing.id || `banner_${Date.now()}_${i}`,
-          title: document.getElementById(`hero-banner-title-${i}`)?.value || `Banner ${i + 1}`,
-          tagline: document.getElementById(`hero-banner-tagline-${i}`)?.value || '',
-          badge: document.getElementById(`hero-banner-badge-${i}`)?.value || 'DESTACADO',
-          ctaText: document.getElementById(`hero-banner-cta-${i}`)?.value || 'Comprar ahora',
-          ctaUrl: document.getElementById(`hero-banner-url-${i}`)?.value || '#section-games',
-          imgHorizontal: document.getElementById(`hero-input-h-${i}`)?.value || existing.imgHorizontal || '',
-          imgVertical: document.getElementById(`hero-input-v-${i}`)?.value || existing.imgVertical || '',
+          title: document.getElementById(`hero-banner-title-${i}`)?.value?.trim() || '',
+          tagline: document.getElementById(`hero-banner-tagline-${i}`)?.value?.trim() || '',
+          badge: document.getElementById(`hero-banner-badge-${i}`)?.value?.trim() || '',
+          ctaText: document.getElementById(`hero-banner-cta-${i}`)?.value?.trim() || '',
+          ctaUrl: document.getElementById(`hero-banner-url-${i}`)?.value?.trim() || '#section-games',
+          imgHorizontal: inputH?.value || existing.imgHorizontal || '',
+          imgVertical: inputV?.value || existing.imgVertical || '',
           isActive: document.getElementById(`hero-banner-active-${i}`)?.checked !== false,
           sortOrder: i
         });
@@ -2840,7 +2914,7 @@
         });
         const data = await res.json();
         if (data.success) {
-          alert('🎉 ¡Los 4 Banners de Portada han sido actualizados con éxito!');
+          alert('🎉 ¡Las imágenes y portadas han sido guardadas con éxito!');
           allHeroBannersList = data.banners;
           renderHeroBannersEditor();
         } else {
@@ -2848,6 +2922,14 @@
         }
       } catch (err) {
         alert('Error de conexión al guardar los banners.');
+      } finally {
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = `
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            <span>Guardar Banners</span>
+          `;
+        }
       }
     }
 
