@@ -351,6 +351,7 @@ a.sub-nav-link,
 .lateral-tag-text {
   writing-mode: vertical-rl !important;
   text-orientation: mixed !important;
+  transform: rotate(180deg) !important;
   font-family: var(--font-heading) !important;
   font-size: 0.76rem !important;
   font-weight: 800 !important;
@@ -378,6 +379,7 @@ a.sub-nav-link,
   }
 }
 
+@media (max-width: 768px) {
   /* Compact WhatsApp Floating button on Mobile */
   .floating-support-btn {
     bottom: 18px !important;
@@ -6336,6 +6338,7 @@ a.sub-nav-link,
   .calc-highlight-amount {
     font-size: 1.5rem;
   }
+}
 /* ======================================================== */
 /* 2-COLUMN GROUP DETAIL POP-UP MODAL (1/4 RULES + 3/4 MAIN)*/
 /* ======================================================== */
