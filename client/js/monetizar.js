@@ -1,6 +1,6 @@
 // GamesBoy.net - Monetization Page Interactive Engine
 
-const servicesConfig = {
+let servicesConfig = {
   'netflix': { name: 'Netflix Premium 4K', planName: 'Ultra HD 4K (4 Pantallas)', maxSlots: 5, pricePerSlotPyg: 25000, commissionPercent: 10, netPayoutPyg: 22500 },
   'spotify': { name: 'Spotify Premium Familiar', planName: 'Plan Familiar (6 Cuentas)', maxSlots: 5, pricePerSlotPyg: 18000, commissionPercent: 10, netPayoutPyg: 16200 },
   'disney': { name: 'Disney+ Premium & Star+', planName: 'Plan Premium 4K', maxSlots: 4, pricePerSlotPyg: 25000, commissionPercent: 10, netPayoutPyg: 22500 },
@@ -14,6 +14,59 @@ const servicesConfig = {
 let selectedServiceKey = 'netflix';
 let selectedSlotsCount = 3;
 let exchangeRatePyg = 7500;
+
+async function loadDynamicServices() {
+  try {
+    const res = await fetch('/api/streaming-hubs');
+    const data = await res.json();
+    if (data.success && Array.isArray(data.services) && data.services.length > 0) {
+      const newConfig = {};
+      const selectCalc = document.getElementById('calc-service-select');
+      const selectPub = document.getElementById('user-pub-service');
+
+      if (selectCalc) selectCalc.innerHTML = '';
+      if (selectPub) selectPub.innerHTML = '';
+
+      data.services.forEach(s => {
+        const price = s.pricePerSlotPyg || 25000;
+        const comm = s.commissionPercent !== undefined ? s.commissionPercent : 10;
+        const net = Math.round(price * (1 - comm / 100));
+
+        newConfig[s.id] = {
+          name: s.name,
+          planName: s.planName || `Plan ${s.maxSlots || 5} Pantallas`,
+          maxSlots: s.maxSlots || 5,
+          pricePerSlotPyg: price,
+          commissionPercent: comm,
+          netPayoutPyg: net
+        };
+
+        if (selectCalc) {
+          const opt = document.createElement('option');
+          opt.value = s.id;
+          opt.textContent = `${s.name} (${price.toLocaleString('es-PY')} Gs./cupo)`;
+          selectCalc.appendChild(opt);
+        }
+
+        if (selectPub) {
+          const opt = document.createElement('option');
+          opt.value = s.id;
+          opt.textContent = `${s.name} (${price.toLocaleString('es-PY')} Gs.)`;
+          selectPub.appendChild(opt);
+        }
+      });
+
+      servicesConfig = newConfig;
+      const firstKey = Object.keys(servicesConfig)[0] || 'netflix';
+      selectedServiceKey = firstKey;
+      if (selectCalc) selectCalc.value = firstKey;
+      if (selectPub) selectPub.value = firstKey;
+      initCalculator();
+    }
+  } catch (err) {
+    console.warn('Could not load dynamic services, using defaults:', err);
+  }
+}
 
 // --- CALCULATOR CONTROLLER ---
 function initCalculator() {
@@ -259,6 +312,7 @@ function initSession() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initSession();
+  loadDynamicServices();
   initCalculator();
   initFaqAccordion();
   initPublishModal();
