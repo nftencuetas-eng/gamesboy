@@ -149,7 +149,10 @@ export function holdSellerEscrow(sellerId, amountUsd, commissionPercent = 10) {
   return { sellerNet, commission };
 }
 
+export const creditSellerEscrow = holdSellerEscrow;
+
 export function releaseSellerPayout(slotId, adminId) {
+
   const db = getDb();
   const slot = (db.user_slots || []).find(s => s.id === slotId);
   if (!slot) {
