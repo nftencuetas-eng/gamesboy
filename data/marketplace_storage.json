@@ -1064,6 +1064,42 @@
         "isOwnerAdmin": false,
         "text": "¡Hola a todos! Este es un mensaje de prueba en el grupo.",
         "timestamp": "2026-09-07T09:53:23.480Z"
+      },
+      {
+        "id": "msg_1788825537597_qlfq",
+        "senderId": "usr_client1",
+        "senderName": "Lucas",
+        "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+        "isOwnerAdmin": false,
+        "text": "Hola a todos en el grupo, todo funcionando excelente.",
+        "timestamp": "2026-09-07T23:58:57.597Z"
+      },
+      {
+        "id": "msg_1788825680973_uzw5",
+        "senderId": "usr_client1",
+        "senderName": "Lucas",
+        "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+        "isOwnerAdmin": false,
+        "text": "Hola a todos en el grupo, todo funcionando excelente.",
+        "timestamp": "2026-09-08T00:01:20.973Z"
+      },
+      {
+        "id": "msg_1788825729550_4gsv",
+        "senderId": "usr_client1",
+        "senderName": "Lucas",
+        "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+        "isOwnerAdmin": false,
+        "text": "Hola a todos en el grupo, todo funcionando excelente.",
+        "timestamp": "2026-09-08T00:02:09.550Z"
+      },
+      {
+        "id": "msg_1788825777845_ily2",
+        "senderId": "usr_client1",
+        "senderName": "Lucas",
+        "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+        "isOwnerAdmin": false,
+        "text": "Hola a todos en el grupo, todo funcionando excelente.",
+        "timestamp": "2026-09-08T00:02:57.845Z"
       }
     ],
     "sub_1788700823091_yysk": [
@@ -1520,6 +1556,78 @@
           "priceUsd": 25
         }
       ]
+    }
+  ],
+  "seller_reviews": [
+    {
+      "id": "rev_1788825777816_3sdx",
+      "sellerId": "usr_admin",
+      "buyerId": "usr_client1",
+      "buyerName": "Lucas",
+      "buyerAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+      "rating": 5,
+      "comment": "¡Excelente atención y entrega inmediata de mi perfil 4K!",
+      "createdAt": "2026-09-08T00:02:57.816Z"
+    },
+    {
+      "id": "rev_1788825729514_scia",
+      "sellerId": "usr_admin",
+      "buyerId": "usr_client1",
+      "buyerName": "Lucas",
+      "buyerAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+      "rating": 5,
+      "comment": "¡Excelente atención y entrega inmediata de mi perfil 4K!",
+      "createdAt": "2026-09-08T00:02:09.514Z"
+    },
+    {
+      "id": "rev_1788825680945_0wrn",
+      "sellerId": "usr_admin",
+      "buyerId": "usr_client1",
+      "buyerName": "Lucas",
+      "buyerAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+      "rating": 5,
+      "comment": "¡Excelente atención y entrega inmediata de mi perfil 4K!",
+      "createdAt": "2026-09-08T00:01:20.945Z"
+    },
+    {
+      "id": "rev_1788825537563_0qwi",
+      "sellerId": "usr_admin",
+      "buyerId": "usr_client1",
+      "buyerName": "Lucas",
+      "buyerAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+      "rating": 5,
+      "comment": "¡Excelente atención y entrega inmediata de mi perfil 4K!",
+      "createdAt": "2026-09-07T23:58:57.563Z"
+    },
+    {
+      "id": "rev_1",
+      "sellerId": "usr_seller1",
+      "buyerId": "usr_client1",
+      "buyerName": "Lucas González",
+      "buyerAvatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80",
+      "rating": 5,
+      "comment": "Excelente servicio con Netflix 4K. Mi perfil tiene su propio PIN y funciona perfecto en mi Smart TV sin caídas. Recomendado al 100% 🔥",
+      "createdAt": "2026-09-05T23:58:57.509Z"
+    },
+    {
+      "id": "rev_2",
+      "sellerId": "usr_seller1",
+      "buyerId": "usr_client2",
+      "buyerName": "María López",
+      "buyerAvatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80",
+      "rating": 5,
+      "comment": "Activación inmediata y muy buena atención en el chat del grupo. Renuevo mes a mes sin problemas.",
+      "createdAt": "2026-09-06T23:58:57.509Z"
+    },
+    {
+      "id": "rev_3",
+      "sellerId": "usr_admin",
+      "buyerId": "usr_client1",
+      "buyerName": "Lucas González",
+      "buyerAvatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80",
+      "rating": 5,
+      "comment": "Cuentas oficiales de GamesBoy con garantía total de 30 días. La mejor plataforma de Paraguay.",
+      "createdAt": "2026-09-07T11:58:57.509Z"
     }
   ]
 }

@@ -57,7 +57,7 @@ function renderHubView() {
   if (!hub) return;
 
   // Set Page Title
-  document.title = `${hub.name} - GamesBoy.net | Cuentas Compartidas con Garantía Escrow`;
+  document.title = `${hub.name} - GamesBoy.net | Cuentas Compartidas con Garantía de Reembolso`;
 
   // Breadcrumb
   const breadcrumbPlatform = document.getElementById('hub-breadcrumb-platform');
@@ -80,7 +80,7 @@ function renderHubView() {
   const heroDesc = document.getElementById('hub-hero-desc');
   if (heroDesc) heroDesc.textContent = hub.description || '';
 
-  // 2. Metrics Bar
+  // 2. Metrics Bar (Minimalist & Sleek)
   const metrics = hub.metrics || {};
   const elAcc = document.getElementById('hub-metric-accounts');
   const elUsr = document.getElementById('hub-metric-users');
@@ -92,28 +92,16 @@ function renderHubView() {
   if (elSav) elSav.textContent = `Hasta -${metrics.avgSavingsPercent || 75}% OFF`;
   if (elRat) elRat.textContent = `${metrics.rating || '4.95 / 5.0'} ★`;
 
-  // 3. Estrenos & Novedades Grid (IA / Realtime)
-  renderReleasesGrid();
-
-  // 4. Desktop Vertical Sidebar Banner
-  const vBannerWrap = document.getElementById('hub-vertical-banner-wrap');
-  const vBannerBg = document.getElementById('hub-vertical-banner-bg');
-  const vBannerTitle = document.getElementById('hub-v-title');
-  const vBannerDesc = document.getElementById('hub-v-desc');
-
-  if (vBannerBg && hub.bannerVertical) {
-    vBannerBg.style.backgroundImage = `url('${hub.bannerVertical}')`;
-  }
-  if (vBannerTitle) vBannerTitle.textContent = `Estrenos en ${hub.name}`;
-  if (vBannerDesc) vBannerDesc.textContent = `Accede a estrenos exclusivos, descargas y perfiles privados con entrega inmediata.`;
-
-  // 5. Host Groups List (with Privacy Protection)
+  // 3. Render Groups List in Main Section
   renderGroupsList();
+
+  // 4. Render Sidebar Releases & Top Rankings
+  renderSidebarReleases();
 }
 
-// --- 3. RENDER RELEASES & NOVEDADES (IA / REALTIME) ---
-function renderReleasesGrid() {
-  const container = document.getElementById('hub-releases-grid');
+// --- 3. RENDER RELEASES & NOVEDADES (IN NARROW RIGHT SIDEBAR) ---
+function renderSidebarReleases() {
+  const container = document.getElementById('hub-sidebar-releases-list');
   if (!container) return;
 
   const releases = (state.hub && state.hub.releases && state.hub.releases.length > 0) 
@@ -121,40 +109,36 @@ function renderReleasesGrid() {
     : [];
 
   if (releases.length === 0) {
-    container.innerHTML = `<p style="color: var(--text-tertiary); padding: 1rem;">No hay estrenos destacados disponibles actualmente.</p>`;
+    container.innerHTML = `<p style="color: var(--text-tertiary); font-size: 0.78rem; padding: 0.5rem 0;">No hay estrenos registrados en este momento.</p>`;
     return;
   }
 
   container.innerHTML = releases.map(rel => `
-    <div class="hub-release-card">
-      <div class="hub-release-poster-wrap">
-        <img src="${rel.posterUrl || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80'}" alt="${rel.title}" class="hub-release-poster" loading="lazy">
-        <span class="hub-release-type-badge">${rel.type || 'Estreno'}</span>
+    <div class="hub-sidebar-release-item">
+      <div class="hub-sidebar-rel-thumb">
+        <img src="${rel.posterUrl || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=150&q=80'}" alt="${rel.title}" loading="lazy">
       </div>
-      <div class="hub-release-info">
-        <h4 class="hub-release-title">${rel.title}</h4>
-        <div class="hub-release-meta">
-          <span>${rel.year || '2025'}</span>
-          <span>•</span>
-          <span>${rel.genre || 'Streaming'}</span>
-        </div>
-        <p class="hub-release-synopsis">${rel.synopsis || ''}</p>
+      <div class="hub-sidebar-rel-info">
+        <span class="hub-sidebar-rel-badge">${rel.type || 'Oficial'}</span>
+        <h4 class="hub-sidebar-rel-title">${rel.title}</h4>
+        <div class="hub-sidebar-rel-date">${rel.releaseDate || 'Estreno 2025'}</div>
+        <p class="hub-sidebar-rel-synopsis">${rel.synopsis || ''}</p>
       </div>
     </div>
   `).join('');
 }
 
-// --- 4. RENDER HOST GROUPS LIST WITH PRIVACY PROTECTION ---
+// --- 4. RENDER HOST GROUPS LIST WITH INVERTED SLOT SILHOUETTES & RULES BUTTON ---
 function renderGroupsList() {
   const container = document.getElementById('hub-groups-list');
   if (!container) return;
 
   if (state.groups.length === 0) {
     container.innerHTML = `
-      <div style="background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: 12px; padding: 2rem; text-align: center;">
-        <p style="color: var(--text-secondary); margin-bottom: 1rem;">No hay grupos de anfitriones abiertos en este momento para esta plataforma.</p>
-        <button class="btn-primary-block" style="width: auto; margin: 0 auto; padding: 10px 20px;" onclick="window.location.href='/?publish=true'">
-          ¿Tienes una cuenta? Sé el primer anfitrión ➔
+      <div style="background: rgba(16, 20, 32, 0.7); border: 1px solid var(--border-medium); border-radius: 14px; padding: 2.5rem 1.5rem; text-align: center;">
+        <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">No hay grupos de anfitriones abiertos en este momento para esta plataforma.</p>
+        <button class="btn-primary-block" style="width: auto; margin: 0 auto; padding: 10px 22px;" onclick="window.location.href='/?publish=true'">
+          ¿Tienes una cuenta familiar? Sé el primer anfitrión ➔
         </button>
       </div>
     `;
@@ -164,30 +148,37 @@ function renderGroupsList() {
   container.innerHTML = state.groups.map(g => {
     const isAvail = g.availableSlots > 0;
     const occupiedSlots = g.totalSlots - g.availableSlots;
-    const host = g.host || { name: 'Anfitrión Verificado', avatar: '/assets/branding/icon.png', rating: '4.9 ★', badge: '⭐ Anfitrión Verificado' };
+    const host = g.host || { id: 'usr_admin', name: 'Anfitrión Verificado', avatar: '/assets/branding/icon.png', rating: '4.9 ★', badge: '⭐ Anfitrión Verificado' };
+    const hostId = host.id || g.sellerId || 'usr_seller1';
 
-    // Visual silhouettes
+    // INVERTED SLOTS SILHOUETTES:
+    // ENCENDIDO / BRILLANTE / GLOW = OCUPADO
+    // APAGADO / TENUE / GRIS = DISPONIBLE
     let slotsSvg = '';
     for (let i = 0; i < g.totalSlots; i++) {
       const isOccupied = i < occupiedSlots;
       slotsSvg += `
-        <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-        </svg>
+        <div class="slot-sil-wrap" title="${isOccupied ? 'Perfil Ocupado' : 'Perfil Disponible para unirse'}">
+          <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
       `;
     }
 
     return `
       <div class="hub-group-card ${isAvail ? '' : 'disabled'}">
-        <!-- Host Profile Info (Strictly Privacy Safe: NO phone, NO email) -->
+        <!-- Host Profile Info (Linked to Public Seller Profile) -->
         <div class="hub-group-host-column">
           <div class="hub-group-host-avatar-wrap">
             <img src="${host.avatar || '/assets/branding/icon.png'}" alt="${host.name}" class="hub-group-host-avatar">
           </div>
           <div class="hub-group-host-details">
-            <strong class="hub-group-host-name">${host.name}</strong>
-            <span class="hub-group-host-badge">${host.badge}</span>
-            <span class="hub-group-host-rating">Calificación: <strong style="color: #fbbf24;">${host.rating}</strong></span>
+            <a href="/seller.html?id=${hostId}" class="hub-group-host-name-link" title="Ver perfil público del vendedor y reseñas">
+              ${host.name} ➔
+            </a>
+            <span class="hub-group-host-badge">${host.badge || '⭐ Anfitrión Verificado'}</span>
+            <span class="hub-group-host-rating">Valoración: <strong style="color: #fbbf24;">${host.rating}</strong></span>
           </div>
         </div>
 
@@ -201,10 +192,21 @@ function renderGroupsList() {
             <span>•</span>
             <span>⚡ Entrega Inmediata</span>
           </div>
+          
+          <!-- Inverted Slots Bar with Visual Guide -->
           <div class="hub-group-slots-bar">
             <div class="hub-group-slots-icons">${slotsSvg}</div>
-            <span class="hub-group-slots-text"><strong>${g.availableSlots} de ${g.totalSlots}</strong> cupos disponibles</span>
+            <span class="hub-group-slots-text">
+              <strong style="color: var(--accent-emerald);">${g.availableSlots} libres</strong> de ${g.totalSlots} cupos
+              <span class="slots-legend">(${occupiedSlots} ocupados)</span>
+            </span>
           </div>
+
+          <!-- Rules & Info Button -->
+          <button type="button" class="btn-group-rules-link" onclick="openRulesModal('${g.id}')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <span>Ver Reglas del Grupo & Normas</span>
+          </button>
         </div>
 
         <!-- Pricing & Action -->
@@ -223,7 +225,29 @@ function renderGroupsList() {
   }).join('');
 }
 
-// --- 5. ESCROW GUARANTEE MODAL CONTROLLER ---
+// --- 5. GROUP RULES MODAL CONTROLLER ---
+window.openRulesModal = function(groupId) {
+  const group = state.groups.find(g => g.id === groupId);
+  if (!group) return;
+
+  const modal = document.getElementById('modal-group-rules');
+  const title = document.getElementById('rules-group-title');
+  const subtitle = document.getElementById('rules-group-subtitle');
+  const instructions = document.getElementById('rules-host-instructions');
+
+  if (title) title.textContent = `Reglas del Grupo: ${group.serviceName}`;
+  if (subtitle) subtitle.textContent = `Plan: ${group.planName} • Anfitrión: ${group.host?.name || 'Verificado'}`;
+  if (instructions) instructions.textContent = group.instructions || 'Perfil privado exclusivo con PIN personal. Uso estricto de 1 pantalla a la vez. No compartir credenciales con terceros.';
+
+  if (modal) modal.style.display = 'grid';
+};
+
+window.closeRulesModal = function() {
+  const modal = document.getElementById('modal-group-rules');
+  if (modal) modal.style.display = 'none';
+};
+
+// --- 6. REFUND GUARANTEE MODAL CONTROLLER ---
 window.openEscrowModal = function(groupId) {
   const group = state.groups.find(g => g.id === groupId);
   if (!group) return;
@@ -256,7 +280,7 @@ function closeEscrowModal() {
   state.selectedGroup = null;
 }
 
-// --- 6. EXECUTE ESCROW PROTECTED SUBSCRIPTION PURCHASE ---
+// --- 7. EXECUTE REFUND GUARANTEED SUBSCRIPTION PURCHASE ---
 async function handleConfirmEscrowBuy() {
   const group = state.selectedGroup;
   if (!group) return;
@@ -269,11 +293,17 @@ async function handleConfirmEscrowBuy() {
     return;
   }
 
+  // Strict Admin Isolation: Admin is an auditor, cannot purchase client slots
+  if (state.currentUser.role === 'admin') {
+    showToast('warning', 'Rol Administrador', 'Las cuentas de administración actúan como auditores. Utiliza una cuenta de cliente para realizar compras.');
+    return;
+  }
+
   const userId = state.currentUser.id;
   const btn = document.getElementById('btn-confirm-escrow-buy');
   if (btn) {
     btn.disabled = true;
-    btn.textContent = 'Verificando con Escrow...';
+    btn.textContent = 'Procesando Activación Segura...';
   }
 
   try {
@@ -289,14 +319,14 @@ async function handleConfirmEscrowBuy() {
 
     if (data.success) {
       closeEscrowModal();
-      showToast('success', '¡Membresía Activada!', data.message || `Tu perfil ha sido asignado con éxito bajo la Garantía Escrow de GamesBoy.`);
+      showToast('success', '¡Membresía Activada!', data.message || `Tu perfil ha sido asignado con éxito bajo la Garantía de Reembolso GamesBoy.`);
       
       // Update local balance
       updateUserBalance();
 
-      // Redirect to profile vault after 1.5s
+      // Redirect directly to dedicated purchases page after 1.5s
       setTimeout(() => {
-        window.location.href = '/profile.html#tab-purchases';
+        window.location.href = '/purchases.html';
       }, 1500);
     } else {
       if (data.error && data.error.includes('Saldo insuficiente')) {
@@ -318,7 +348,7 @@ async function handleConfirmEscrowBuy() {
   }
 }
 
-// --- 7. USER SESSION & WALLET SYNC ---
+// --- 8. USER SESSION & WALLET SYNC ---
 function initUserSession() {
   const unloggedGroup = document.getElementById('auth-unlogged-group');
   const loggedGroup = document.getElementById('auth-logged-group');
@@ -409,7 +439,7 @@ async function updateUserBalance() {
   if (balanceEl) balanceEl.textContent = `${balPyg.toLocaleString('es-PY')} Gs.`;
 }
 
-// --- 8. EVENT LISTENERS SETUP ---
+// --- 9. EVENT LISTENERS SETUP ---
 function setupEventListeners() {
   const btnCloseEscrow = document.getElementById('btn-close-escrow-modal');
   const btnCancelEscrow = document.getElementById('btn-cancel-escrow');
@@ -418,6 +448,11 @@ function setupEventListeners() {
   if (btnCloseEscrow) btnCloseEscrow.onclick = closeEscrowModal;
   if (btnCancelEscrow) btnCancelEscrow.onclick = closeEscrowModal;
   if (btnConfirmEscrow) btnConfirmEscrow.onclick = handleConfirmEscrowBuy;
+
+  const btnCloseRules = document.getElementById('btn-close-rules-modal');
+  const btnRulesOk = document.getElementById('btn-rules-ok');
+  if (btnCloseRules) btnCloseRules.onclick = window.closeRulesModal;
+  if (btnRulesOk) btnRulesOk.onclick = window.closeRulesModal;
 
   const btnOpenDeposit = document.getElementById('btn-open-deposit-modal');
   const modalDeposit = document.getElementById('modal-deposit');
@@ -451,7 +486,7 @@ function setupEventListeners() {
   }
 }
 
-// --- 9. TOAST NOTIFICATIONS ---
+// --- 10. TOAST NOTIFICATIONS ---
 function showToast(type = 'info', title = '', message = '', duration = 4000) {
   let container = document.getElementById('toast-container');
   if (!container) {

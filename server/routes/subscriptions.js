@@ -55,8 +55,14 @@ router.post('/:id/buy', (req, res) => {
       return res.status(400).json({ error: 'No quedan perfiles/slots disponibles en esta suscripción' });
     }
 
-    // 1. Deduct balance from buyer
-    const user = db.users.find(u => u.id === userId) || { name: 'Cliente' };
+    // 1. Check user & enforce strict Admin role isolation
+    const user = db.users.find(u => u.id === userId) || { name: 'Cliente', role: 'client' };
+    if (user.role === 'admin') {
+      return res.status(403).json({
+        error: 'El rol de Administrador es estrictamente de auditoría y gestión. Utiliza una cuenta de cliente para adquirir servicios.'
+      });
+    }
+
     deductBalance(userId, sub.pricePerSlotUsd, `Suscripción a ${sub.serviceName}`);
 
     // 2. Assign slot number & PIN

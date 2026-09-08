@@ -90,6 +90,7 @@ app.use('/api/wallet', walletRouter);
 app.use('/api/subscriptions', subscriptionsRouter);
 app.use('/api/store', storeRouter);
 app.use('/api/seller', sellerRouter);
+app.use('/api/sellers', sellerRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/banners', bannersRouter);
 app.use('/api/smm', smmRouter);
@@ -109,6 +110,11 @@ app.get('/profile', (req, res) => res.sendFile(path.join(clientPath, 'profile.ht
 app.get('/profile.html', (req, res) => res.sendFile(path.join(clientPath, 'profile.html')));
 app.get('/service', (req, res) => res.sendFile(path.join(clientPath, 'service.html')));
 app.get('/service.html', (req, res) => res.sendFile(path.join(clientPath, 'service.html')));
+app.get('/seller', (req, res) => res.sendFile(path.join(clientPath, 'seller.html')));
+app.get('/seller.html', (req, res) => res.sendFile(path.join(clientPath, 'seller.html')));
+app.get('/purchases', (req, res) => res.sendFile(path.join(clientPath, 'purchases.html')));
+app.get('/purchases.html', (req, res) => res.sendFile(path.join(clientPath, 'purchases.html')));
+
 
 
 // Fallback for SPA routing

@@ -39,7 +39,7 @@ async function deploy() {
     }
 
     // 3. Commit
-    const commitMsg = 'feat: 100% optional fields for hero banners editor, hidden image URLs with clean visual preview dropzones';
+    const commitMsg = process.argv[3] || 'feat: complete audio overhaul - panoramic streaming hubs, inverted slot states, verified seller reviews, dedicated purchases page, real group chat & strict admin security';
     const sha = await git.commit({
       fs,
       dir,

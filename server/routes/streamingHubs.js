@@ -4,7 +4,7 @@ import { convertFromUsd } from '../services/currencyService.js';
 
 const router = Router();
 
-// Default Hub Platforms Configuration with rich Horizontal & Vertical Banners, Live Releases (Estrenos) & Metrics
+// Default Hub Platforms Configuration with rich Horizontal & Vertical Banners, Live Releases (Estrenos / Top Rankings) & Metrics
 const defaultHubs = {
   'netflix': {
     id: 'netflix',
@@ -16,7 +16,7 @@ const defaultHubs = {
     bannerHorizontal: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=1600&q=80',
     bannerVertical: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
     badgeText: 'ULTRA HD 4K • DOLBY ATMOS',
-    description: 'Disfruta de Netflix con tu propio perfil privado y PIN personal. Comparte el costo de la cuenta de forma 100% legal y segura con la Garantía Escrow de GamesBoy.',
+    description: 'Disfruta de Netflix con tu propio perfil privado y PIN personal. Comparte el costo de la cuenta de forma 100% legal y segura con la Garantía de Reembolso de GamesBoy.',
     metrics: {
       activeAccounts: 48,
       activeUsersMonth: 184,
@@ -26,45 +26,45 @@ const defaultHubs = {
     releases: [
       {
         id: 'rel_stranger_things_5',
-        title: 'Stranger Things 5',
-        type: 'Serie Original',
-        year: '2025 / 2026',
-        genre: 'Ciencia Ficción / Aventura',
-        posterUrl: 'https://images.unsplash.com/photo-1618336753974-aae8e04506aa?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'La épica conclusión de la batalla por Hawkins y el Upside Down.'
+        title: 'Stranger Things (Temporada 5)',
+        type: 'Top #1 Global IMDb 8.7',
+        releaseDate: 'Estreno: 2025 / 2026',
+        genre: 'Ciencia Ficción / Misterio',
+        posterUrl: 'https://images.unsplash.com/photo-1618336753974-aae8e04506aa?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'La batalla decisiva por Hawkins y el Upside Down.'
       },
       {
         id: 'rel_squid_game_2',
-        title: 'El Juego del Calamar (Temporada 2)',
-        type: 'Serie Exclusiva',
-        year: '2025',
-        genre: 'Suspense / Drama',
-        posterUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'Gi-hun regresa con un nuevo propósito para desmantelar el juego mortal desde adentro.'
+        title: 'El Juego del Calamar 2',
+        type: 'Tendencia Mundial IMDb 8.0',
+        releaseDate: 'Disponible Ahora',
+        genre: 'Thriller / Drama',
+        posterUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'Gi-hun busca desmantelar la organización desde adentro.'
       },
       {
         id: 'rel_arcane_2',
         title: 'Arcane: League of Legends',
-        type: 'Serie de Animación',
-        year: '2025',
-        genre: 'Acción / Fantasía',
-        posterUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'El conflicto definitivo entre Piltover y Zaun con animación revolucionaria.'
+        type: 'Aclamada por la Crítica 9.0',
+        releaseDate: 'Temporada Completa 4K',
+        genre: 'Animación / Fantasía',
+        posterUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'El choque final entre las ciudades de Piltover y Zaun.'
       },
       {
         id: 'rel_one_piece_2',
         title: 'One Piece Live Action T2',
-        type: 'Aventura / Manga',
-        year: '2025',
+        type: 'Próximo Estreno',
+        releaseDate: 'Estreno: Finales 2025',
         genre: 'Aventura / Acción',
-        posterUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'Los Sombreros de Paja se adentran en la Gran Línea en busca del legendario tesoro.'
+        posterUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'Rumbo a la Gran Línea y Arabasta.'
       }
     ]
   },
   'spotify': {
     id: 'spotify',
-    name: 'Spotify Premium',
+    name: 'Spotify Premium Individual & Familiar',
     tagline: 'Música y podcasts sin anuncios, descargas ilimitadas y calidad Hi-Fi',
     category: 'streaming',
     brandColor: '#1DB954',
@@ -72,7 +72,7 @@ const defaultHubs = {
     bannerHorizontal: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=1600&q=80',
     bannerVertical: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80',
     badgeText: 'HI-FI AUDIO • MÚSICA SIN LÍMITES',
-    description: 'Acceso a millones de canciones con tu propia cuenta individual conectada a nuestro plan familiar protegido.',
+    description: 'Acceso a millones de canciones con tu propia cuenta individual conectada a un plan familiar protegido con Garantía de Reembolso.',
     metrics: {
       activeAccounts: 35,
       activeUsersMonth: 142,
@@ -82,21 +82,21 @@ const defaultHubs = {
     releases: [
       {
         id: 'rel_sp_latam_hits',
-        title: 'Top Hits Latinos 2025',
-        type: 'Playlist Oficial',
-        year: '2025',
-        genre: 'Urbano / Reggaetón',
-        posterUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'Los éxitos más escuchados de la música latina en sonido de alta fidelidad.'
+        title: 'Top 50 Global & Latinos',
+        type: 'Billboard Hot 100 #1',
+        releaseDate: 'Actualizado Semanalmente',
+        genre: 'Pop / Urbano / Reggaetón',
+        posterUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'Los hits más escuchados del planeta en audio 320kbps sin cortes.'
       },
       {
-        id: 'rel_sp_global_top',
-        title: 'Global Top 50',
-        type: 'Tendencia Mundial',
-        year: '2025',
-        genre: 'Pop / Electrónica',
-        posterUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'Las pistas más virales y reproducidas del planeta actualizadas a diario.'
+        id: 'rel_sp_rock_classics',
+        title: 'Rock Classics & Hi-Res Audio',
+        type: 'Top Álbumes Históricos',
+        releaseDate: 'Disponible 24/7',
+        genre: 'Rock / Clásicos',
+        posterUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'Discografías completas remasterizadas en alta definición.'
       }
     ]
   },
@@ -121,20 +121,20 @@ const defaultHubs = {
       {
         id: 'rel_dis_daredevil',
         title: 'Daredevil: Born Again',
-        type: 'Marvel Studios Original',
-        year: '2025',
+        type: 'Marvel Studios • IMDb 8.9',
+        releaseDate: 'Estreno: Marzo 2025',
         genre: 'Acción / Superhéroes',
-        posterUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'Matt Murdock regresa a las calles de Hell’s Kitchen para enfrentar a Wilson Fisk.'
+        posterUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'Matt Murdock y Kingpin se enfrentan en Hell’s Kitchen.'
       },
       {
         id: 'rel_dis_andor_2',
         title: 'Andor (Temporada 2)',
-        type: 'Star Wars Original',
-        year: '2025',
-        genre: 'Ciencia Ficción / Espionaje',
-        posterUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'Los últimos cuatro años antes de los eventos de Rogue One y el alzamiento de la Rebelión.'
+        type: 'Lucasfilm • IMDb 8.4',
+        releaseDate: 'Estreno: Abril 2025',
+        genre: 'Star Wars / Espionaje',
+        posterUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'El camino hacia Rogue One y el levantamiento de la Alianza Rebelde.'
       }
     ]
   },
@@ -159,20 +159,20 @@ const defaultHubs = {
       {
         id: 'rel_max_tlou_2',
         title: 'The Last of Us (Temporada 2)',
-        type: 'HBO Original Series',
-        year: '2025',
+        type: 'HBO Original • IMDb 8.8',
+        releaseDate: 'Estreno: 2025',
         genre: 'Drama / Postapocalíptico',
-        posterUrl: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'Cinco años después, Joel y Ellie enfrentan las consecuencias devastadoras de sus decisiones.'
+        posterUrl: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'Cinco años después, Ellie emprende una implacable búsqueda de justicia.'
       },
       {
         id: 'rel_max_house_dragon',
-        title: 'House of the Dragon',
-        type: 'HBO Original',
-        year: '2025',
-        genre: 'Fantasía Épica',
-        posterUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'La danza de dragones que definió la historia de la casa Targaryen.'
+        title: 'House of the Dragon T3',
+        type: 'HBO Mega Event • IMDb 8.4',
+        releaseDate: 'En Producción 2025/2026',
+        genre: 'Fantasía / Drama Épico',
+        posterUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'La guerra civil de la dinastía Targaryen alcanza su clímax.'
       }
     ]
   },
@@ -196,11 +196,11 @@ const defaultHubs = {
     releases: [
       {
         id: 'rel_yt_features',
-        title: 'Audio 256kbps & Descargas Offline Smart',
-        type: 'Novedad Premium',
-        year: '2025',
-        genre: 'Tecnología / Audio',
-        posterUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80',
+        title: 'YouTube Music Premium & Hi-Bitrate',
+        type: 'Servicio Oficial Google',
+        releaseDate: 'Acceso Inmediato 24/7',
+        genre: 'Música / Podcasts / Videos',
+        posterUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80',
         synopsis: 'Descarga listas inteligentes automáticas para escuchar sin conexión.'
       }
     ]
@@ -226,11 +226,11 @@ const defaultHubs = {
       {
         id: 'rel_gpt_voice',
         title: 'Advanced Voice Mode & Canvas',
-        type: 'IA Generativa',
-        year: '2025',
-        genre: 'Productividad / Desarrollo',
-        posterUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'Conversaciones de voz fluidas en tiempo real y edición de código y texto en lienzo colaborativo.'
+        type: 'OpenAI GPT-4o Oficial',
+        releaseDate: 'Actualizado en Vivo',
+        genre: 'IA Generativa / Programación',
+        posterUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'Conversaciones de voz ultra-fluidas y edición visual de proyectos.'
       }
     ]
   },
@@ -255,20 +255,20 @@ const defaultHubs = {
       {
         id: 'rel_cr_demon_slayer',
         title: 'Demon Slayer: Castillo Infinito',
-        type: 'Anime Movie Event',
-        year: '2025',
+        type: 'Trilogía Cinematográfica',
+        releaseDate: 'Estreno en Cines & Simulcast',
         genre: 'Shonen / Acción',
-        posterUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'El arco final que enfrenta al Cuerpo de Exterminio con Muzan Kibutsuji.'
+        posterUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'La batalla final contra Muzan Kibutsuji y las Lunas Superiores.'
       },
       {
         id: 'rel_cr_chainsaw_man',
         title: 'Chainsaw Man: Reze Arc',
-        type: 'Anime Estreno',
-        year: '2025',
+        type: 'Película Oficial MAPPA',
+        releaseDate: 'Estreno: 2025',
         genre: 'Acción Sobrenatural',
-        posterUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'Denji conoce a la misteriosa Reze mientras nuevas amenazas acechan Tokio.'
+        posterUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'Denji y la chica bomba en una historia explosiva.'
       }
     ]
   },
@@ -293,11 +293,11 @@ const defaultHubs = {
       {
         id: 'rel_par_yellowstone',
         title: 'Yellowstone: Temporada Final',
-        type: 'Drama / Western',
-        year: '2025',
-        genre: 'Drama / Crimen',
-        posterUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80',
-        synopsis: 'El desenlace por el control del rancho más grande de los Estados Unidos.'
+        type: 'Paramount Original • IMDb 8.7',
+        releaseDate: 'Episodios Finales en 4K',
+        genre: 'Drama / Western',
+        posterUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'El desenlace por el control del rancho más grande de Norteamérica.'
       }
     ]
   }
