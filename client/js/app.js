@@ -337,6 +337,96 @@ const defaultStoreProducts = [
     description: 'Campaña de espionaje cinematográfica, multijugador y regreso de Zombies por rondas.',
     isAvailable: true
   },
+  {
+    id: 'game_gow_ragnarok',
+    title: 'God of War Ragnarök',
+    category: 'digital_game',
+    platform: 'PS5',
+    genre: 'Acción / Mitología',
+    primaryPricePyg: 285000,
+    secondaryPricePyg: 180000,
+    primaryPriceUsd: 38.00,
+    secondaryPriceUsd: 24.00,
+    priceUsd: 38.00,
+    coverUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
+    description: 'Kratos y Atreus deben viajar a cada uno de los Nueve Reinos buscando respuestas.',
+    isAvailable: true
+  },
+  {
+    id: 'game_cyberpunk2077',
+    title: 'Cyberpunk 2077 Ultimate',
+    category: 'digital_game',
+    platform: 'PS5',
+    genre: 'RPG / Mundo Abierto',
+    primaryPricePyg: 240000,
+    secondaryPricePyg: 155000,
+    primaryPriceUsd: 32.00,
+    secondaryPriceUsd: 20.67,
+    priceUsd: 32.00,
+    coverUrl: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=600&q=80',
+    description: 'Incluye el juego base con Night City y la expansión de espionaje Phantom Liberty.',
+    isAvailable: true
+  },
+  {
+    id: 'game_eldenring',
+    title: 'Elden Ring: Shadow of Erdtree',
+    category: 'digital_game',
+    platform: 'PS5',
+    genre: 'Action RPG / Souls',
+    primaryPricePyg: 310000,
+    secondaryPricePyg: 195000,
+    primaryPriceUsd: 41.33,
+    secondaryPriceUsd: 26.00,
+    priceUsd: 41.33,
+    coverUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80',
+    description: 'El aclamado juego del año con su masiva expansión de la Tierra de las Sombras.',
+    isAvailable: true
+  },
+  {
+    id: 'game_rdr2',
+    title: 'Red Dead Redemption 2',
+    category: 'digital_game',
+    platform: 'PS5',
+    genre: 'Mundo Abierto / Western',
+    primaryPricePyg: 175000,
+    secondaryPricePyg: 110000,
+    primaryPriceUsd: 23.33,
+    secondaryPriceUsd: 14.67,
+    priceUsd: 23.33,
+    coverUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
+    description: 'La épica historia de Arthur Morgan y la banda de Van der Linde en el salvaje oeste.',
+    isAvailable: true
+  },
+  {
+    id: 'game_hogwarts',
+    title: 'Hogwarts Legacy',
+    category: 'digital_game',
+    platform: 'PS5',
+    genre: 'Aventura Mágica',
+    primaryPricePyg: 260000,
+    secondaryPricePyg: 165000,
+    primaryPriceUsd: 34.67,
+    secondaryPriceUsd: 22.00,
+    priceUsd: 34.67,
+    coverUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80',
+    description: 'Vive una aventura mágica en el Colegio Hogwarts en el siglo XIX.',
+    isAvailable: true
+  },
+  {
+    id: 'game_re4_remake',
+    title: 'Resident Evil 4 Remake',
+    category: 'digital_game',
+    platform: 'PS5',
+    genre: 'Survival Horror',
+    primaryPricePyg: 270000,
+    secondaryPricePyg: 170000,
+    primaryPriceUsd: 36.00,
+    secondaryPriceUsd: 22.67,
+    priceUsd: 36.00,
+    coverUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80',
+    description: 'Leon S. Kennedy viaja a una recóndita aldea europea para rescatar a la hija del presidente.',
+    isAvailable: true
+  },
 
   // RETAIL GIFT CARDS
   {
@@ -1174,9 +1264,7 @@ function stopHeroAutoplay() {
   }
 }
 
-// --- 2. RENDER STREAMING SERVICES (CLEAN SQUARE THUMBNAILS - NO TEXT, NO PRICES, AUTOMATIC STOCK BADGE) ---
-let streamingAutoScrollTimer = null;
-
+// --- 2. RENDER STREAMING SERVICES (CLEAN SQUARE THUMBNAILS - MANUAL SCROLL ONLY, NO AUTO-SCROLL) ---
 function renderStreamingServices() {
   const container = document.getElementById('streaming-services-grid');
   if (!container) return;
@@ -1227,53 +1315,22 @@ function renderStreamingServices() {
       </div>
     `;
   }).join('');
-
-  // Initialize smooth auto-scrolling engine for memberships
-  initStreamingAutoScrollEngine();
 }
 
-// --- AUTO-SLIDING ENGINE: SLOWLY SLIDES 1 COLUMN EVERY 3.5 SECONDS ---
-function initStreamingAutoScrollEngine() {
-  const container = document.getElementById('streaming-services-grid');
-  if (!container) return;
+// --- 3. RENDER DIGITAL GAMES & STADIUM WAVE DROP/REBOUND ENGINE ---
+let gamesWaveTimer = null;
+let gamesPoolIndex = 0;
 
-  if (streamingAutoScrollTimer) {
-    clearInterval(streamingAutoScrollTimer);
-    streamingAutoScrollTimer = null;
-  }
-
-  streamingAutoScrollTimer = setInterval(() => {
-    if (container.dataset.isPaused === 'true') return;
-
-    const isMobile = window.innerWidth <= 768;
-    const colStep = isMobile ? (container.clientWidth / 3) + 3.33 : 128; // 1 column width + gap
-
-    const maxScroll = container.scrollWidth - container.clientWidth;
-    if (container.scrollLeft >= maxScroll - 12) {
-      container.scrollTo({ left: 0, behavior: 'smooth' });
-    } else {
-      container.scrollBy({ left: colStep, behavior: 'smooth' });
-    }
-  }, 3500);
-
-  // Interaction handlers to avoid interrupting user manual swipes
-  container.onmouseenter = () => { container.dataset.isPaused = 'true'; };
-  container.onmouseleave = () => { container.dataset.isPaused = 'false'; };
-  container.ontouchstart = () => { container.dataset.isPaused = 'true'; };
-  container.ontouchend = () => {
-    setTimeout(() => { container.dataset.isPaused = 'false'; }, 2500);
-  };
-}
-
-// --- 3. RENDER DIGITAL GAMES (CLEAN 3D BOX ART WITH STRAIGHT EDGES & SINGLE-LINE DUAL PRICING) ---
 function renderDigitalGames() {
   const container = document.getElementById('digital-games-grid');
   if (!container) return;
 
-  const rawProducts = Array.isArray(state.storeProducts) ? state.storeProducts : [];
+  const rawProducts = (Array.isArray(state.storeProducts) && state.storeProducts.length > 0)
+    ? state.storeProducts
+    : defaultStoreProducts;
 
   // Anti-Flicker: Skeletons while loading
-  if (rawProducts.length === 0) {
+  if (!rawProducts || rawProducts.length === 0) {
     container.innerHTML = `
       <div class="game-skeleton-card"></div>
       <div class="game-skeleton-card"></div>
@@ -1296,13 +1353,16 @@ function renderDigitalGames() {
     return;
   }
 
-  container.innerHTML = games.map(g => {
+  // Display initial 8 games
+  const initialGames = games.slice(0, 8);
+
+  container.innerHTML = initialGames.map((g, slotIdx) => {
     const isAvail = g.isAvailable !== false;
     const primaryPrice = g.primaryPriceUsd || g.priceUsd || 39.99;
     const secondaryPrice = g.secondaryPriceUsd || (g.secondaryPricePyg ? (g.secondaryPricePyg / (state.exchangeRatePyg || 7500)) : Math.round(primaryPrice * 0.65));
 
     return `
-      <div class="game-card ${isAvail ? '' : 'disabled'}" onclick="openBuyGameModal('${g.id}')">
+      <div class="game-card ${isAvail ? '' : 'disabled'}" data-slot-index="${slotIdx}" onclick="openBuyGameModal('${g.id}')">
         <div class="game-cover-container">
           <img src="${g.coverUrl || g.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'}" alt="${g.title || 'Videojuego'}" class="game-cover-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80';">
         </div>
@@ -1324,6 +1384,115 @@ function renderDigitalGames() {
       </div>
     `;
   }).join('');
+
+  // Start the wave animation cycle every 6s
+  initGamesWaveEngine(games);
+}
+
+// --- DIGITAL GAMES STADIUM WAVE ENGINE (LEFT-TO-RIGHT WAVE DROP & GROUND REBOUND) ---
+function initGamesWaveEngine(allGamesList) {
+  const container = document.getElementById('digital-games-grid');
+  if (!container) return;
+
+  if (gamesWaveTimer) {
+    clearInterval(gamesWaveTimer);
+    gamesWaveTimer = null;
+  }
+
+  const allGames = (Array.isArray(allGamesList) && allGamesList.length > 0)
+    ? allGamesList
+    : defaultStoreProducts.filter(p => p.category === 'digital_game');
+
+  if (allGames.length <= 4) return;
+
+  const resetWaveTimer = () => {
+    if (gamesWaveTimer) {
+      clearInterval(gamesWaveTimer);
+      gamesWaveTimer = null;
+    }
+    gamesWaveTimer = setInterval(runWaveCycle, 6000);
+  };
+
+  // Reset timer on user manual interaction
+  container.onscroll = () => resetWaveTimer();
+  container.ontouchstart = () => { if (gamesWaveTimer) clearInterval(gamesWaveTimer); };
+  container.ontouchend = () => resetWaveTimer();
+  container.onmousedown = () => { if (gamesWaveTimer) clearInterval(gamesWaveTimer); };
+  container.onmouseup = () => resetWaveTimer();
+  container.onmouseleave = () => resetWaveTimer();
+
+  const runWaveCycle = () => {
+    if (container.dataset.isPaused === 'true' || container.classList.contains('is-dragging')) return;
+
+    const cards = Array.from(container.querySelectorAll('.game-card:not(.disabled)'));
+    if (cards.length === 0) return;
+
+    // Advance pool index
+    gamesPoolIndex = (gamesPoolIndex + cards.length) % allGames.length;
+
+    // Execute sequential wave from left to right (stadium wave)
+    cards.forEach((cardEl, i) => {
+      const staggerDelay = i * 130; // 130ms between columns
+
+      setTimeout(() => {
+        if (container.classList.contains('is-dragging')) return;
+
+        // Phase 1: Card slides down and fades out
+        cardEl.classList.remove('wave-ready-top', 'wave-dropping-in');
+        cardEl.classList.add('wave-falling-out');
+
+        setTimeout(() => {
+          // Phase 2: Pick next game and update content
+          const nextGame = allGames[(gamesPoolIndex + i) % allGames.length];
+          if (!nextGame) return;
+
+          const primaryPrice = nextGame.primaryPriceUsd || nextGame.priceUsd || 39.99;
+          const secondaryPrice = nextGame.secondaryPriceUsd || (nextGame.secondaryPricePyg ? (nextGame.secondaryPricePyg / (state.exchangeRatePyg || 7500)) : Math.round(primaryPrice * 0.65));
+
+          cardEl.setAttribute('onclick', `openBuyGameModal('${nextGame.id}')`);
+          cardEl.innerHTML = `
+            <div class="game-cover-container">
+              <img src="${nextGame.coverUrl || nextGame.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'}" alt="${nextGame.title || 'Videojuego'}" class="game-cover-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80';">
+            </div>
+            <div class="game-card-body">
+              <h3 class="game-title" title="${nextGame.title || ''}">${nextGame.title || 'Juego Digital'}</h3>
+              <div class="game-prices-inline-list">
+                <div class="game-price-inline-row primary-row">
+                  <span class="game-price-inline-label">Primaria:</span>
+                  <span class="game-price-inline-val primary-val">${formatPrice(primaryPrice)}</span>
+                </div>
+                ${nextGame.secondaryPriceUsd || nextGame.secondaryPricePyg ? `
+                  <div class="game-price-inline-row secondary-row">
+                    <span class="game-price-inline-label">Secundaria:</span>
+                    <span class="game-price-inline-val secondary-val">${formatPrice(secondaryPrice)}</span>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `;
+
+          // Position card at top
+          cardEl.classList.remove('wave-falling-out');
+          cardEl.classList.add('wave-ready-top');
+
+          // Force reflow
+          void cardEl.offsetWidth;
+
+          // Phase 3: Drop down with ground rebound bounce
+          cardEl.classList.remove('wave-ready-top');
+          cardEl.classList.add('wave-dropping-in');
+
+          setTimeout(() => {
+            cardEl.classList.remove('wave-dropping-in');
+          }, 600);
+
+        }, 260); // 260ms exit duration
+
+      }, staggerDelay);
+    });
+  };
+
+  gamesWaveTimer = setInterval(runWaveCycle, 6000);
 }
 
 
@@ -1373,34 +1542,28 @@ const platformSvgIcons = {
   'X (Twitter)': `<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`
 };
 
-// --- 5. RENDER SMM SERVICES (PLATFORM CARDS WITH TOP BANNER & 2-COLUMN MODAL) ---
+// --- 5. RENDER SMM SERVICES (COMPACT HORIZONTAL TOP BANNER CARDS - SLIM 42px HEADER) ---
 function renderSmmServices() {
   const container = document.getElementById('smm-services-grid');
   if (!container) return;
 
   const platforms = Object.values(smmPlatformsData);
-  const platformBanners = {
-    'instagram': 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=600&q=80',
-    'tiktok': 'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?auto=format&fit=crop&w=600&q=80',
-    'youtube': 'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&w=600&q=80',
-    'facebook': 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80',
-    'telegram': 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
-    'x': 'https://images.unsplash.com/photo-1611605698335-8b1569810432?auto=format&fit=crop&w=600&q=80'
-  };
 
   container.innerHTML = platforms.map(p => {
-    const bannerImg = platformBanners[p.id] || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=600&q=80';
     const iconSvg = platformSvgIcons[p.platform] || platformSvgIcons['Instagram'];
-    const servicesChips = (p.servicesListText || 'Seguidores • Likes • Vistas')
+    const chips = (p.servicesListText || 'Seguidores • Likes • Vistas')
       .split('•')
       .map(s => `<span class="smm-service-chip">${s.trim()}</span>`)
       .join('');
 
+    const startingPriceFormatted = p.startingPricePyg 
+      ? `${p.startingPricePyg.toLocaleString('es-PY')} Gs.` 
+      : formatPrice(p.startingPriceUsd || 1.20);
+
     return `
-      <div class="smm-platform-card" onclick="openSmmPlatformModal('${p.id}')">
-        <div class="smm-platform-banner-wrap">
-          <img src="${bannerImg}" alt="${p.title}" class="smm-platform-banner-img" draggable="false">
-          <div class="smm-platform-banner-gradient"></div>
+      <div class="smm-platform-card" onclick="openSmmPlatformModal('${p.id}')" title="Ver servicios de ${p.platform}">
+        <div class="smm-platform-banner-wrap" style="background: ${p.bannerGradient || 'linear-gradient(90deg, #1e293b, #0ea5e9)'};">
+          <div class="smm-platform-banner-pattern"></div>
           <span class="smm-platform-badge-float">${p.platform}</span>
         </div>
         <div class="smm-platform-card-body">
@@ -1408,15 +1571,18 @@ function renderSmmServices() {
             <div class="smm-platform-icon-bubble" style="background: ${p.bannerGradient || 'rgba(0, 194, 255, 0.2)'};">
               ${iconSvg}
             </div>
-            <div class="smm-platform-name">${p.title}</div>
+            <div class="smm-platform-title-wrap">
+              <span class="smm-platform-sub-name">${p.platform}</span>
+              <h3 class="smm-platform-name">${p.title}</h3>
+            </div>
           </div>
           <div class="smm-platform-services-list">
-            ${servicesChips}
+            ${chips}
           </div>
           <div class="smm-platform-footer-row">
             <div>
               <span class="smm-platform-price-lbl">Desde</span>
-              <div class="smm-platform-price-val">${p.startingPricePyg ? p.startingPricePyg.toLocaleString('es-PY') + ' Gs.' : formatPrice(p.startingPriceUsd)}</div>
+              <div class="smm-platform-price-val">${startingPriceFormatted}</div>
             </div>
             <span class="btn-smm-explore">Explorar ➔</span>
           </div>
