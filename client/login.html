@@ -386,14 +386,16 @@
 
     // --- GOOGLE OAUTH 2.0 / GOOGLE IDENTITY SERVICES INTEGRATION ---
     let googleTokenClient = null;
-    let googleClientIdConfigured = '';
+    let googleClientIdConfigured = '1056486263995-t692uq5j62i7esq32v3tmut0t151n9kd.apps.googleusercontent.com';
 
     async function initGoogleAuth() {
       try {
         const res = await fetch('/api/auth/config');
         if (res.ok) {
           const cfg = await res.json();
-          googleClientIdConfigured = cfg.googleClientId || '';
+          if (cfg.googleClientId) {
+            googleClientIdConfigured = cfg.googleClientId;
+          }
         }
       } catch (e) {
         console.warn('⚠️ No se pudo consultar /api/auth/config:', e);

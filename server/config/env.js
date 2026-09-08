@@ -29,7 +29,7 @@ export const config = {
   },
   
   jwtSecret: process.env.JWT_SECRET || 'gamesboy_default_secret_key',
-  googleClientId: process.env.GOOGLE_CLIENT_ID || ''
+  googleClientId: process.env.GOOGLE_CLIENT_ID || '1056486263995-t692uq5j62i7esq32v3tmut0t151n9kd.apps.googleusercontent.com'
 };
 
 export default config;

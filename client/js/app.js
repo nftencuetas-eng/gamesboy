@@ -3111,7 +3111,7 @@ function initInteractiveDotGrid() {
 
 // --- GOOGLE OAUTH MODAL INTEGRATION ---
 let modalGoogleTokenClient = null;
-let modalGoogleClientId = '';
+let modalGoogleClientId = '1056486263995-t692uq5j62i7esq32v3tmut0t151n9kd.apps.googleusercontent.com';
 
 async function initModalGoogleAuth() {
   const googleBtn = document.getElementById('btn-google-signin');
@@ -3121,7 +3121,9 @@ async function initModalGoogleAuth() {
     const res = await fetch('/api/auth/config');
     if (res.ok) {
       const cfg = await res.json();
-      modalGoogleClientId = cfg.googleClientId || '';
+      if (cfg.googleClientId) {
+        modalGoogleClientId = cfg.googleClientId;
+      }
     }
   } catch (e) {}
 
