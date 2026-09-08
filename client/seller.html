@@ -26,16 +26,33 @@
     <div class="header-top-bar">
       <div class="header-left">
         <a href="/" class="brand" id="brand-logo" title="GamesBoy.net - Inicio">
-          <img src="/assets/branding/logo-white.png?v=6.0" alt="GamesBoy.net" class="brand-logo-img">
+          <img src="/assets/branding/logo-white.png?v=7.0" alt="GamesBoy.net" class="brand-logo-img">
         </a>
       </div>
 
       <div class="header-right">
+        <!-- Minimalist Expandable Search (Lupa Icon beside login) -->
+        <div class="header-search-wrapper" id="header-search-wrapper">
+          <button type="button" class="btn-search-lupa-toggle" id="btn-search-toggle" title="Buscar videojuegos, tarjetas y streaming">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </button>
+          <div class="header-search-box-expandable" id="header-search-expandable">
+            <span class="header-search-icon-inside">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </span>
+            <input type="text" id="main-search-input" class="header-search-input" placeholder="Buscar videojuegos, tarjetas, streaming...">
+            <button type="button" class="btn-search-close-sm" id="btn-search-close">✕</button>
+          </div>
+          <!-- Live Instant Search Dropdown -->
+          <div class="search-dropdown-results" id="search-dropdown-results" style="display: none;"></div>
+        </div>
+
         <!-- Auth Actions (Client Login / Register) -->
         <div class="header-auth-buttons" id="auth-unlogged-group">
           <a href="/login" class="btn-header-login-modern" id="btn-open-login-page">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            <span>Iniciar sesión</span>
+            <span class="header-login-txt-full">Iniciar sesión</span>
+            <span class="header-login-txt-short">Iniciar</span>
           </a>
         </div>
 
@@ -48,9 +65,9 @@
 
           <!-- User Profile Dropdown Pill -->
           <div class="user-profile-wrapper" id="user-profile-wrapper">
-            <button class="user-profile-btn" id="btn-user-profile-toggle" type="button" title="Mi Cuenta">
-              <div class="user-avatar-badge" id="nav-user-avatar-badge">
-                <img id="nav-user-avatar-img" src="/assets/branding/icon.png" alt="Avatar" class="header-avatar-img">
+            <button class="user-profile-btn" id="btn-user-profile-toggle" type="button" title="Mi Cuenta" aria-haspopup="true" aria-expanded="false">
+              <div class="user-avatar-badge" id="nav-user-avatar-badge" style="width: 26px; height: 26px; min-width: 26px; min-height: 26px; max-width: 26px; max-height: 26px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img id="nav-user-avatar-img" src="/assets/branding/icon.png" alt="Avatar" class="header-avatar-img" width="26" height="26" style="width: 26px !important; height: 26px !important; max-width: 26px !important; max-height: 26px !important; border-radius: 50% !important; object-fit: cover !important; display: block !important;">
               </div>
               <span class="user-name-label" id="nav-user-name">Usuario</span>
               <svg class="profile-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -58,8 +75,8 @@
 
             <div class="user-profile-dropdown-menu" id="user-profile-dropdown-menu" style="display: none;">
               <div class="dropdown-user-header">
-                <div class="dropdown-user-avatar">
-                  <img id="dropdown-user-avatar-img" src="/assets/branding/icon.png" alt="Avatar">
+                <div class="dropdown-user-avatar" style="width: 40px; height: 40px; min-width: 40px; min-height: 40px; max-width: 40px; max-height: 40px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <img id="dropdown-user-avatar-img" src="/assets/branding/icon.png" alt="Avatar" width="40" height="40" style="width: 40px !important; height: 40px !important; max-width: 40px !important; max-height: 40px !important; border-radius: 50% !important; object-fit: cover !important; display: block !important;">
                 </div>
                 <div class="dropdown-user-info">
                   <strong id="dropdown-user-name">Usuario</strong>
@@ -70,21 +87,21 @@
               <div class="dropdown-divider"></div>
               <ul class="dropdown-menu-list">
                 <li id="menu-item-admin-container" style="display: none;">
-                  <a href="/admin" class="dropdown-menu-item" style="color: #f59e0b !important; font-weight: 700;">
+                  <a href="/admin" class="dropdown-menu-item" style="color: #f59e0b !important; font-weight: 700; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25);">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                     <span>Panel Administrador</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/profile.html" class="dropdown-menu-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Mi Cuenta & Perfil</span>
                   </a>
                 </li>
                 <li>
                   <a href="/purchases.html" class="dropdown-menu-item" style="font-weight: 700; color: var(--accent-cyan);">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                     <span>Mis Compras & Bóveda</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="/profile.html" class="dropdown-menu-item">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    <span>Mi Cuenta & Billetera</span>
                   </a>
                 </li>
                 <li style="border-top: 1px solid var(--border-subtle); margin-top: 4px; padding-top: 4px;">
@@ -231,7 +248,7 @@
       <!-- Col 1: Brand & Socials -->
       <div class="footer-brand-col">
         <a href="/" class="brand" style="margin-bottom: 0.75rem;">
-          <img src="/assets/branding/logo-white.png?v=6.0" alt="GamesBoy.net" class="brand-logo-img">
+          <img src="/assets/branding/logo-white.png?v=7.0" alt="GamesBoy.net" class="brand-logo-img">
         </a>
         <p class="footer-tagline">Tu mundo digital, en un solo lugar.</p>
         

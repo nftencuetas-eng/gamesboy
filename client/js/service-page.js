@@ -28,6 +28,7 @@ function getPlatformFromUrl() {
 async function initHubPage() {
   state.platformKey = getPlatformFromUrl();
   initUserSession();
+  initLiveSearch();
   setupEventListeners();
   await loadHubData();
 }
@@ -80,7 +81,7 @@ function renderHubView() {
   const heroDesc = document.getElementById('hub-hero-desc');
   if (heroDesc) heroDesc.textContent = hub.description || '';
 
-  // 2. Metrics Bar (Minimalist & Sleek)
+  // 2. Metrics Bar (Minimalist & Sleek 1-Line)
   const metrics = hub.metrics || {};
   const elAcc = document.getElementById('hub-metric-accounts');
   const elUsr = document.getElementById('hub-metric-users');
@@ -104,14 +105,18 @@ function renderSidebarReleases() {
   const container = document.getElementById('hub-sidebar-releases-list');
   if (!container) return;
 
+  const sidebarCard = container.closest('.hub-sidebar-card');
   const releases = (state.hub && state.hub.releases && state.hub.releases.length > 0) 
     ? state.hub.releases 
     : [];
 
+  // Hide the cartelera card completely for non-entertainment services (e.g. Canva, ChatGPT)
   if (releases.length === 0) {
-    container.innerHTML = `<p style="color: var(--text-tertiary); font-size: 0.78rem; padding: 0.5rem 0;">No hay estrenos registrados en este momento.</p>`;
+    if (sidebarCard) sidebarCard.style.display = 'none';
     return;
   }
+
+  if (sidebarCard) sidebarCard.style.display = 'block';
 
   container.innerHTML = releases.map(rel => `
     <div class="hub-sidebar-release-item">
@@ -736,6 +741,103 @@ function showToast(type = 'info', title = '', message = '', duration = 4000) {
     setTimeout(removeToast, duration);
   }
 }
+
+// --- 11. LIVE SEARCH & INSTANT AUTOCOMPLETE ---
+function initLiveSearch() {
+  const btnSearchToggle = document.getElementById('btn-search-toggle');
+  const searchExpandable = document.getElementById('header-search-expandable');
+  const btnSearchClose = document.getElementById('btn-search-close');
+  const searchInput = document.getElementById('main-search-input');
+  const dropdown = document.getElementById('search-dropdown-results');
+
+  if (btnSearchToggle && searchExpandable && searchInput) {
+    btnSearchToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isExpanded = searchExpandable.classList.toggle('expanded');
+      if (isExpanded) {
+        searchInput.focus();
+      } else {
+        searchInput.value = '';
+        if (dropdown) dropdown.style.display = 'none';
+      }
+    });
+  }
+
+  if (btnSearchClose && searchExpandable && searchInput) {
+    btnSearchClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      searchExpandable.classList.remove('expanded');
+      searchInput.value = '';
+      if (dropdown) dropdown.style.display = 'none';
+    });
+  }
+
+  // Pre-load searchable items if needed
+  let searchableItems = [];
+  fetch('/api/store/products')
+    .then(r => r.json())
+    .then(data => {
+      if (data.products) {
+        searchableItems = data.products.map(p => ({
+          name: p.title || p.name,
+          type: p.category === 'streaming' ? 'Suscripción' : (p.category === 'game_key' ? 'Juego Digital' : 'Tarjeta'),
+          price: p.priceUsd,
+          id: p.id,
+          category: p.category
+        }));
+      }
+    })
+    .catch(() => {});
+
+  if (searchInput && dropdown) {
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.trim().toLowerCase();
+      if (!query) {
+        dropdown.style.display = 'none';
+        return;
+      }
+
+      const results = searchableItems.filter(item => item.name && item.name.toLowerCase().includes(query));
+
+      if (results.length === 0) {
+        dropdown.innerHTML = `<div style="padding: 12px; color: var(--text-tertiary); font-size: 0.85rem;">No se encontraron resultados para "${query}"</div>`;
+        dropdown.style.display = 'block';
+        return;
+      }
+
+      dropdown.innerHTML = results.slice(0, 6).map(r => `
+        <div style="padding: 10px 14px; border-bottom: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="handleServiceSearchResultClick('${r.category}', '${r.id}')">
+          <div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: #ffffff;">${r.name}</div>
+            <span style="font-size: 0.72rem; color: var(--accent-cyan); text-transform: uppercase;">${r.type}</span>
+          </div>
+          <strong style="color: #ffffff; font-family: var(--font-mono); font-size: 0.88rem;">${formatPriceGs(r.price)}</strong>
+        </div>
+      `).join('');
+
+      dropdown.style.display = 'block';
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#header-search-wrapper')) {
+      if (dropdown) dropdown.style.display = 'none';
+      if (searchExpandable && !searchInput?.value.trim()) {
+        searchExpandable.classList.remove('expanded');
+      }
+    }
+  });
+}
+
+window.handleServiceSearchResultClick = function(category, id) {
+  const dropdown = document.getElementById('search-dropdown-results');
+  if (dropdown) dropdown.style.display = 'none';
+  if (category === 'streaming') {
+    window.location.href = `/service.html?platform=${id}`;
+  } else {
+    window.location.href = `/?buyProd=${id}`;
+  }
+};
 
 // Initialize on DOM load
 document.addEventListener('DOMContentLoaded', initHubPage);
