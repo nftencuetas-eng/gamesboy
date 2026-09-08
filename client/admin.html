@@ -638,6 +638,10 @@
       .admin-sidebar { height: auto; position: static; }
       .admin-content { padding: 1.5rem 1rem; }
     }
+
+    @keyframes spinPublish { to { transform: rotate(360deg); } }
+    @keyframes popScale { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    @keyframes fadeInScale { 0% { transform: scale(0.92); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
   </style>
 </head>
 <body>
@@ -1991,6 +1995,20 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ======================================================= -->
+  <!-- POPUP DE ESTADO / FEEDBACK (PUBLICANDO / VERIFICADO)    -->
+  <!-- ======================================================= -->
+  <div id="popup-status-streaming" style="display: none; position: fixed; inset: 0; z-index: 100000; background: rgba(5, 7, 12, 0.82); backdrop-filter: blur(8px); align-items: center; justify-content: center;">
+    <div style="background: #11141c; border: 1px solid rgba(0, 194, 255, 0.35); border-radius: 20px; padding: 2.2rem 2.2rem; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.9); max-width: 420px; width: 90%; animation: fadeInScale 0.25s cubic-bezier(0.16, 1, 0.3, 1);">
+      <div id="popup-status-icon-wrap" style="margin-bottom: 1.25rem;"></div>
+      <h3 id="popup-status-title" style="color: #ffffff; font-size: 1.25rem; font-weight: 800; margin: 0 0 0.5rem 0;">Publicando...</h3>
+      <p id="popup-status-desc" style="color: var(--text-secondary); font-size: 0.88rem; margin: 0; line-height: 1.4;">Guardando y sincronizando con el catálogo</p>
+      <div id="popup-status-action" style="display: none; margin-top: 1.25rem;">
+        <button type="button" class="btn-admin-action" onclick="closePublishStatusPopup()" style="padding: 8px 24px;">Entendido</button>
+      </div>
     </div>
   </div>
 
@@ -4087,18 +4105,111 @@
       }).join('');
     }
 
+    // --- RESET COMPLETO DE FORMULARIO E IMÁGENES DE SERVICIO ---
+    window.resetCreateServiceForm = function() {
+      const form = document.getElementById('form-create-streaming-service');
+      if (form) form.reset();
+
+      // Limpiar campos de texto explícitamente para evitar valores residuales
+      ['create-srv-name', 'create-srv-id', 'create-srv-plan', 'create-srv-badge', 'create-srv-tagline', 'create-srv-desc'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+
+      // Limpiar 100% las imágenes (inputs, URLs y vistas previas)
+      const iconUrl = document.getElementById('create-srv-icon-url');
+      if (iconUrl) iconUrl.value = '';
+      const iconFile = document.getElementById('file-create-srv-icon');
+      if (iconFile) iconFile.value = '';
+      const previewIcon = document.getElementById('preview-create-srv-icon');
+      if (previewIcon) {
+        previewIcon.style.display = 'none';
+        const img = previewIcon.querySelector('img');
+        if (img) img.src = '';
+      }
+
+      const bannerUrl = document.getElementById('create-srv-banner-url');
+      if (bannerUrl) bannerUrl.value = '';
+      const bannerFile = document.getElementById('file-create-srv-banner');
+      if (bannerFile) bannerFile.value = '';
+      const previewBanner = document.getElementById('preview-create-srv-banner');
+      if (previewBanner) {
+        previewBanner.style.display = 'none';
+        const img = previewBanner.querySelector('img');
+        if (img) img.src = '';
+      }
+
+      // Restablecer valores numéricos por defecto
+      const priceEl = document.getElementById('create-srv-price');
+      if (priceEl) priceEl.value = '25000';
+      const slotsEl = document.getElementById('create-srv-slots');
+      if (slotsEl) slotsEl.value = '5';
+      const commEl = document.getElementById('create-srv-comm');
+      if (commEl) commEl.value = '10';
+
+      updateCreateModalCalc();
+    };
+
+    // --- POPUP DE ESTADO / FEEDBACK PARA SERVICIOS ---
+    window.showStreamingPopupStatus = function(state, title, desc, autoCloseMs = 0, onAutoClose = null) {
+      const popup = document.getElementById('popup-status-streaming');
+      if (!popup) return;
+
+      const iconWrap = document.getElementById('popup-status-icon-wrap');
+      const titleEl = document.getElementById('popup-status-title');
+      const descEl = document.getElementById('popup-status-desc');
+      const actionEl = document.getElementById('popup-status-action');
+
+      if (titleEl) titleEl.textContent = title;
+      if (descEl) descEl.textContent = desc;
+      if (actionEl) actionEl.style.display = (state === 'error') ? 'block' : 'none';
+
+      if (iconWrap) {
+        if (state === 'loading') {
+          iconWrap.innerHTML = `
+            <div style="width: 52px; height: 52px; border: 3px solid rgba(0, 194, 255, 0.2); border-top-color: var(--accent-cyan); border-radius: 50%; animation: spinPublish 0.8s linear infinite; margin: 0 auto;"></div>
+          `;
+        } else if (state === 'success') {
+          iconWrap.innerHTML = `
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(16, 185, 129, 0.15); border: 2px solid rgba(16, 185, 129, 0.5); display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 1.9rem; color: #10b981; animation: popScale 0.3s ease-out;">
+              ✓
+            </div>
+          `;
+        } else if (state === 'error') {
+          iconWrap.innerHTML = `
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); border: 2px solid rgba(239, 68, 68, 0.5); display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 1.9rem; color: #ef4444; animation: popScale 0.3s ease-out;">
+              ✕
+            </div>
+          `;
+        }
+      }
+
+      popup.style.display = 'flex';
+
+      if (autoCloseMs > 0) {
+        setTimeout(() => {
+          popup.style.display = 'none';
+          if (typeof onAutoClose === 'function') onAutoClose();
+        }, autoCloseMs);
+      }
+    };
+
+    window.closePublishStatusPopup = function() {
+      const popup = document.getElementById('popup-status-streaming');
+      if (popup) popup.style.display = 'none';
+    };
+
     // --- MODAL: CREAR SERVICIO ---
     window.openCreateServiceModal = function() {
       const modal = document.getElementById('modal-create-streaming-service');
-      const form = document.getElementById('form-create-streaming-service');
-      if (form) form.reset();
-      updateCreateModalCalc();
+      resetCreateServiceForm();
       if (modal) modal.style.display = 'grid';
     };
 
     window.closeCreateServiceModal = function() {
       const modal = document.getElementById('modal-create-streaming-service');
       if (modal) modal.style.display = 'none';
+      resetCreateServiceForm();
     };
 
     window.updateCreateModalCalc = function() {
@@ -4170,6 +4281,9 @@
         isActive: true
       };
 
+      // 1. Mostrar popup "Publicando servicio..." con loader animado
+      showStreamingPopupStatus('loading', 'Publicando servicio...', `Guardando "${srvName}" y publicando en el catálogo...`);
+
       try {
         const res = await fetch('/api/admin/streaming-services', {
           method: 'POST',
@@ -4178,14 +4292,28 @@
         });
         const data = await res.json();
         if (data.success) {
-          alert(`🎉 ${data.message}`);
-          closeCreateServiceModal();
+          // 2. Resetear inmediatamente todo el formulario y TODAS las imágenes para que quede completamente limpio
+          resetCreateServiceForm();
           loadServicesConfig();
+
+          // 3. Mostrar estado Verificado que se cierra solo en 1.5s y mantiene la pantalla lista para subir el siguiente servicio
+          showStreamingPopupStatus(
+            'success',
+            '¡Servicio Verificado & Publicado!',
+            data.message || `El servicio "${srvName}" ya está activo en el catálogo.`,
+            1500,
+            () => {
+              // Mantener el modal abierto con todo reseteado para subir más servicios inmediatamente
+              const modal = document.getElementById('modal-create-streaming-service');
+              if (modal) modal.style.display = 'grid';
+              document.getElementById('create-srv-name')?.focus();
+            }
+          );
         } else {
-          alert(data.error || 'No se pudo crear el servicio.');
+          showStreamingPopupStatus('error', 'No se pudo publicar', data.error || 'Error al crear el servicio.');
         }
       } catch (err) {
-        alert('Error al conectar con el servidor.');
+        showStreamingPopupStatus('error', 'Error de conexión', 'No se pudo conectar con el servidor.');
       }
     });
 
@@ -4286,6 +4414,8 @@
         waitingCount: parseInt(document.getElementById('edit-srv-waiting').value, 10) || 0
       };
 
+      showStreamingPopupStatus('loading', 'Guardando cambios...', `Actualizando configuración de ${payload.name}...`);
+
       try {
         const res = await fetch(`/api/admin/streaming-services/${serviceId}`, {
           method: 'PUT',
@@ -4294,14 +4424,14 @@
         });
         const data = await res.json();
         if (data.success) {
-          alert(`🎉 ${data.message}`);
           closeEditServiceModal();
           loadServicesConfig();
+          showStreamingPopupStatus('success', '¡Cambios Guardados!', data.message || 'Servicio actualizado con éxito.', 1400);
         } else {
-          alert(data.error || 'No se pudo actualizar el servicio.');
+          showStreamingPopupStatus('error', 'Error al actualizar', data.error || 'No se pudo actualizar el servicio.');
         }
       } catch (err) {
-        alert('Error al conectar con el servidor.');
+        showStreamingPopupStatus('error', 'Error de conexión', 'No se pudo conectar con el servidor.');
       }
     });
 
