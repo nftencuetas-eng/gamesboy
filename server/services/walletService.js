@@ -133,20 +133,73 @@ export function deductBalance(userId, amountUsd, description = '') {
   return { wallet, tx };
 }
 
-export function creditSellerEscrow(sellerId, amountUsd, commissionPercent = 15) {
+export function holdSellerEscrow(sellerId, amountUsd, commissionPercent = 10) {
   const db = getDb();
   const commission = parseFloat((amountUsd * (commissionPercent / 100)).toFixed(2));
   const sellerNet = parseFloat((amountUsd - commission).toFixed(2));
 
   const sellerWallet = getWallet(sellerId);
-  // Credit seller wallet balance directly or into escrow
-  sellerWallet.balanceUsd = parseFloat((sellerWallet.balanceUsd + sellerNet).toFixed(2));
+  // Place seller net earnings into pending escrow / custody until 30 days complete and admin releases
+  sellerWallet.pendingEscrowUsd = parseFloat(((sellerWallet.pendingEscrowUsd || 0) + sellerNet).toFixed(2));
 
   const adminWallet = getWallet('usr_admin');
-  adminWallet.balanceUsd = parseFloat((adminWallet.balanceUsd + commission).toFixed(2));
+  adminWallet.balanceUsd = parseFloat(((adminWallet.balanceUsd || 0) + commission).toFixed(2));
 
   saveStorage();
   return { sellerNet, commission };
+}
+
+export function releaseSellerPayout(slotId, adminId) {
+  const db = getDb();
+  const slot = (db.user_slots || []).find(s => s.id === slotId);
+  if (!slot) {
+    throw new Error('Cupo / Venta no encontrada en la base de datos.');
+  }
+
+  if (slot.payoutStatus === 'paid') {
+    throw new Error('El pago de esta suscripción ya ha sido liberado anteriormente.');
+  }
+
+  const sub = (db.subscriptions || []).find(s => s.id === slot.subscriptionId);
+  const sellerId = sub ? sub.sellerId : (slot.sellerId || 'usr_seller1');
+  const seller = (db.users || []).find(u => u.id === sellerId);
+  const rate = db.platform_settings?.exchangeRatePyg || 7500;
+
+  const commissionPercent = slot.commissionPercent !== undefined ? slot.commissionPercent : (db.platform_settings?.commissionPercent || 10);
+  const pricePaidUsd = slot.pricePaidUsd || (sub ? sub.pricePerSlotUsd : 3.50);
+  const commissionUsd = parseFloat((pricePaidUsd * (commissionPercent / 100)).toFixed(2));
+  const netPayoutUsd = slot.netPayoutUsd !== undefined ? slot.netPayoutUsd : parseFloat((pricePaidUsd - commissionUsd).toFixed(2));
+  const netPayoutPyg = slot.netPayoutPyg || Math.round(netPayoutUsd * rate);
+
+  const sellerWallet = getWallet(sellerId);
+  sellerWallet.pendingEscrowUsd = Math.max(0, parseFloat(((sellerWallet.pendingEscrowUsd || 0) - netPayoutUsd).toFixed(2)));
+  sellerWallet.balanceUsd = parseFloat(((sellerWallet.balanceUsd || 0) + netPayoutUsd).toFixed(2));
+
+  slot.payoutStatus = 'paid';
+  slot.payoutReleasedAt = new Date().toISOString();
+  slot.payoutReleasedBy = adminId;
+  slot.netPayoutUsd = netPayoutUsd;
+  slot.netPayoutPyg = netPayoutPyg;
+
+  const tx = {
+    id: `tx_payout_rel_${Date.now()}`,
+    userId: sellerId,
+    userName: seller ? seller.name : 'Anfitrión',
+    type: 'payout',
+    amountUsd: netPayoutUsd,
+    currency: 'PYG',
+    localAmount: netPayoutPyg,
+    method: 'escrow_release',
+    status: 'approved',
+    reference: `LIQUIDACIÓN-${slot.id}`,
+    notes: `Liquidación mensual de perfil ${slot.slotNumber || 1} de ${slot.serviceName}`,
+    createdAt: new Date().toISOString()
+  };
+
+  db.wallet_transactions.unshift(tx);
+  saveStorage();
+
+  return { slot, tx, sellerWallet, netPayoutPyg, netPayoutUsd };
 }
 
 export default {
@@ -155,5 +208,7 @@ export default {
   approveDeposit,
   rejectDeposit,
   deductBalance,
-  creditSellerEscrow
+  creditSellerEscrow: holdSellerEscrow,
+  holdSellerEscrow,
+  releaseSellerPayout
 };

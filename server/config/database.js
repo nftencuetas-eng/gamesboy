@@ -490,6 +490,16 @@ let db = {
       network: 'USDT (Binance Pay / BEP-20 / TRC-20)',
       qrUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F'
     }
+  },
+  streaming_services_config: {
+    'netflix': { key: 'netflix', name: 'Netflix Premium 4K', planName: 'Ultra HD 4K (4 Pantallas)', maxSlots: 5, pricePerSlotPyg: 25000, pricePerSlotUsd: 3.33, commissionPercent: 10, netPayoutPyg: 22500, netPayoutUsd: 3.00 },
+    'spotify': { key: 'spotify', name: 'Spotify Premium Familiar', planName: 'Plan Familiar (6 Cuentas)', maxSlots: 5, pricePerSlotPyg: 18000, pricePerSlotUsd: 2.40, commissionPercent: 10, netPayoutPyg: 16200, netPayoutUsd: 2.16 },
+    'disney': { key: 'disney', name: 'Disney+ Premium & Star+', planName: 'Plan Premium 4K', maxSlots: 4, pricePerSlotPyg: 25000, pricePerSlotUsd: 3.33, commissionPercent: 10, netPayoutPyg: 22500, netPayoutUsd: 3.00 },
+    'max': { key: 'max', name: 'Max (HBO Max) 4K', planName: 'Platino 4K Dolby Atmos', maxSlots: 3, pricePerSlotPyg: 22000, pricePerSlotUsd: 2.93, commissionPercent: 10, netPayoutPyg: 19800, netPayoutUsd: 2.64 },
+    'youtube': { key: 'youtube', name: 'YouTube Premium & Music', planName: 'Familiar Sin Anuncios', maxSlots: 5, pricePerSlotPyg: 20000, pricePerSlotUsd: 2.67, commissionPercent: 10, netPayoutPyg: 18000, netPayoutUsd: 2.40 },
+    'chatgpt': { key: 'chatgpt', name: 'ChatGPT Plus & AI', planName: 'Plus GPT-4o & Canvas', maxSlots: 2, pricePerSlotPyg: 35000, pricePerSlotUsd: 4.67, commissionPercent: 10, netPayoutPyg: 31500, netPayoutUsd: 4.20 },
+    'crunchyroll': { key: 'crunchyroll', name: 'Crunchyroll Mega Fan', planName: 'Mega Fan 4 Pantallas', maxSlots: 4, pricePerSlotPyg: 18000, pricePerSlotUsd: 2.40, commissionPercent: 10, netPayoutPyg: 16200, netPayoutUsd: 2.16 },
+    'paramount': { key: 'paramount', name: 'Paramount+ Premium', planName: 'Plan Estándar 3 Pantallas', maxSlots: 3, pricePerSlotPyg: 18000, pricePerSlotUsd: 2.40, commissionPercent: 10, netPayoutPyg: 16200, netPayoutUsd: 2.16 }
   }
 };
 
@@ -503,6 +513,19 @@ function initStorage() {
     try {
       const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
       db = { ...db, ...data };
+      if (!db.streaming_services_config || Object.keys(db.streaming_services_config).length === 0) {
+        db.streaming_services_config = {
+          'netflix': { key: 'netflix', name: 'Netflix Premium 4K', planName: 'Ultra HD 4K (4 Pantallas)', maxSlots: 5, pricePerSlotPyg: 25000, pricePerSlotUsd: 3.33, commissionPercent: 10, netPayoutPyg: 22500, netPayoutUsd: 3.00 },
+          'spotify': { key: 'spotify', name: 'Spotify Premium Familiar', planName: 'Plan Familiar (6 Cuentas)', maxSlots: 5, pricePerSlotPyg: 18000, pricePerSlotUsd: 2.40, commissionPercent: 10, netPayoutPyg: 16200, netPayoutUsd: 2.16 },
+          'disney': { key: 'disney', name: 'Disney+ Premium & Star+', planName: 'Plan Premium 4K', maxSlots: 4, pricePerSlotPyg: 25000, pricePerSlotUsd: 3.33, commissionPercent: 10, netPayoutPyg: 22500, netPayoutUsd: 3.00 },
+          'max': { key: 'max', name: 'Max (HBO Max) 4K', planName: 'Platino 4K Dolby Atmos', maxSlots: 3, pricePerSlotPyg: 22000, pricePerSlotUsd: 2.93, commissionPercent: 10, netPayoutPyg: 19800, netPayoutUsd: 2.64 },
+          'youtube': { key: 'youtube', name: 'YouTube Premium & Music', planName: 'Familiar Sin Anuncios', maxSlots: 5, pricePerSlotPyg: 20000, pricePerSlotUsd: 2.67, commissionPercent: 10, netPayoutPyg: 18000, netPayoutUsd: 2.40 },
+          'chatgpt': { key: 'chatgpt', name: 'ChatGPT Plus & AI', planName: 'Plus GPT-4o & Canvas', maxSlots: 2, pricePerSlotPyg: 35000, pricePerSlotUsd: 4.67, commissionPercent: 10, netPayoutPyg: 31500, netPayoutUsd: 4.20 },
+          'crunchyroll': { key: 'crunchyroll', name: 'Crunchyroll Mega Fan', planName: 'Mega Fan 4 Pantallas', maxSlots: 4, pricePerSlotPyg: 18000, pricePerSlotUsd: 2.40, commissionPercent: 10, netPayoutPyg: 16200, netPayoutUsd: 2.16 },
+          'paramount': { key: 'paramount', name: 'Paramount+ Premium', planName: 'Plan Estándar 3 Pantallas', maxSlots: 3, pricePerSlotPyg: 18000, pricePerSlotUsd: 2.40, commissionPercent: 10, netPayoutPyg: 16200, netPayoutUsd: 2.16 }
+        };
+        saveStorage();
+      }
     } catch (e) {
       console.warn('⚠️ Could not parse existing marketplace storage, writing defaults.');
       saveStorage();

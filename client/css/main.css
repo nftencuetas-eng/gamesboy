@@ -1288,83 +1288,157 @@ a.sub-nav-link,
   text-overflow: ellipsis;
 }
 
-.game-price-box {
+/* Digital Games Dual Price Inline Rows (Audio 1) */
+.game-prices-inline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
   margin-top: auto;
 }
 
-.game-price-label {
-  font-size: 0.62rem;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
+.game-price-inline-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  white-space: nowrap !important;
+  line-height: 1.25;
 }
 
-.game-price-val {
+.game-price-inline-label {
+  font-size: 0.68rem;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap !important;
+}
+
+.game-price-inline-val.primary-val {
   font-family: var(--font-mono);
-  font-size: 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap !important;
+}
+
+.game-price-inline-val.secondary-val {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--accent-cyan);
+  white-space: nowrap !important;
+}
+
+/* ======================================================== */
+/* 6. CLEAN TRANSPARENT PNG GIFT CARDS (AUDIO 3)            */
+/* ======================================================== */
+.giftcard-clean-png-card {
+  flex: 0 0 160px;
+  width: 160px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0 !important;
+  padding: 8px 4px;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.28s ease;
+  position: relative;
+  user-select: none;
+}
+
+.giftcard-clean-png-card:hover {
+  transform: translateY(-8px) scale(1.15);
+  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 16px rgba(0, 194, 255, 0.3));
+  z-index: 20;
+}
+
+.giftcard-clean-png-img {
+  width: 100%;
+  max-height: 220px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 0 !important;
+  background: transparent !important;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
+  transition: transform 0.28s ease;
+}
+
+/* Modal Gift Card Variations */
+.gc-variation-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.gc-variation-card:hover {
+  background: rgba(0, 194, 255, 0.06);
+  border-color: rgba(0, 194, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.gc-variation-card.selected {
+  background: rgba(0, 194, 255, 0.12);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 14px rgba(0, 194, 255, 0.25);
+}
+
+.gc-var-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.gc-var-denom {
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
   font-weight: 800;
   color: #ffffff;
 }
 
-/* ======================================================== */
-/* 6. HORIZONTAL GIFT CARDS (ROUNDED CORNERS)              */
-/* ======================================================== */
-/* ======================================================== */
-/* 6. VERTICAL RETAIL GIFT CARDS (AUTHENTIC HANGING STYLE)  */
-/* ======================================================== */
-.giftcard-vertical-card {
-  flex: 0 0 160px;
-  width: 160px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px !important;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease, border-color 0.28s ease;
-  cursor: pointer;
-  flex-shrink: 0 !important;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
-  transform-origin: center center;
-  z-index: 1;
-  position: relative;
+.gc-var-badge {
+  font-size: 0.64rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
-.giftcard-vertical-card:hover {
-  transform: translateY(-8px) scale(1.18);
-  border-color: rgba(239, 68, 68, 0.6);
-  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.9), 0 0 28px rgba(239, 68, 68, 0.35);
-  z-index: 30;
+.gc-var-badge.balance {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent-emerald);
 }
 
-.giftcard-v-face {
-  height: 155px;
-  padding: 0.75rem 0.65rem;
+.gc-var-badge.membership {
+  background: rgba(0, 194, 255, 0.15);
+  color: var(--accent-cyan);
+}
+
+.gc-var-pricing {
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px 12px 0 0 !important;
+  align-items: baseline;
 }
 
-.giftcard-v-face.theme-psn { background: linear-gradient(180deg, #00439c 0%, #001e4d 100%); }
-.giftcard-v-face.theme-xbox { background: linear-gradient(180deg, #107c10 0%, #063806 100%); }
-.giftcard-v-face.theme-nintendo { background: linear-gradient(180deg, #e60012 0%, #7a000a 100%); }
-.giftcard-v-face.theme-steam { background: linear-gradient(180deg, #1b2838 0%, #0f1620 100%); }
-.giftcard-v-face.theme-googleplay { background: linear-gradient(180deg, #01875f 0%, #003827 100%); }
-.giftcard-v-face.theme-apple { background: linear-gradient(180deg, #2c2c2e 0%, #111113 100%); }
-.giftcard-v-face.theme-netflix { background: linear-gradient(180deg, #e50914 0%, #680005 100%); }
-.giftcard-v-face.theme-spotify { background: linear-gradient(180deg, #1db954 0%, #0b4f22 100%); }
-.giftcard-v-face.theme-roblox { background: linear-gradient(180deg, #222222 0%, #0a0a0a 100%); }
+.gc-var-price-gs {
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #ffffff;
+}
 
-.giftcard-peg-hole {
-  width: 26px;
-  height: 6px;
-  background: rgba(3, 7, 18, 0.75);
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  margin-bottom: 6px;
+.gc-var-price-usd {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--accent-cyan);
 }
 
 .giftcard-v-logo-brand {

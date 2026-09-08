@@ -647,27 +647,26 @@
       </div>
       <div class="modal-body">
         <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
-          Como usuario de GamesBoy, puedes compartir los cupos libres de tus cuentas oficiales de streaming. Administrarás tu propio grupo privado con chat y recibirás el saldo en tu billetera.
+          Como usuario de GamesBoy, puedes compartir los cupos libres de tus cuentas oficiales bajo el modelo GoSplit con precios fijados por la plataforma y liquidación garantizada.
         </p>
         <form id="form-user-publish-stream">
           <div class="form-grid-2">
             <div class="form-group">
-              <label class="form-label">Plataforma / Servicio</label>
+              <label class="form-label">Plataforma / Servicio Oficial</label>
               <select id="user-pub-service" class="form-select" required style="border-radius: 8px !important;">
-                <option value="Netflix Premium 4K">Netflix Premium 4K</option>
-                <option value="Spotify Premium Familiar">Spotify Premium Familiar</option>
-                <option value="Disney+ Premium & Star+">Disney+ Premium & Star+</option>
-                <option value="Max (HBO Max) 4K">Max (HBO Max) 4K</option>
-                <option value="YouTube Premium & Music">YouTube Premium & Music</option>
-                <option value="Crunchyroll Mega Fan">Crunchyroll Mega Fan</option>
-                <option value="Apple TV+ 4K">Apple TV+ 4K</option>
-                <option value="Paramount+ Premium">Paramount+ Premium</option>
-                <option value="ChatGPT Plus & AI">ChatGPT Plus & AI</option>
+                <option value="netflix">Netflix Premium 4K</option>
+                <option value="spotify">Spotify Premium Familiar</option>
+                <option value="disney">Disney+ Premium & Star+</option>
+                <option value="max">Max (HBO Max) 4K</option>
+                <option value="youtube">YouTube Premium & Music</option>
+                <option value="chatgpt">ChatGPT Plus & AI</option>
+                <option value="crunchyroll">Crunchyroll Mega Fan</option>
+                <option value="paramount">Paramount+ Premium</option>
               </select>
             </div>
             <div class="form-group">
               <label class="form-label">Nombre del Plan</label>
-              <input type="text" id="user-pub-plan" class="form-input" placeholder="ej: Ultra HD 4K / Familiar" value="Plan Premium 4K" required style="border-radius: 8px !important;">
+              <input type="text" id="user-pub-plan" class="form-input" placeholder="ej: Ultra HD 4K" value="Ultra HD 4K (4 Pantallas)" required style="border-radius: 8px !important;">
             </div>
           </div>
 
@@ -677,8 +676,26 @@
               <input type="number" id="user-pub-slots" class="form-input" min="1" max="5" value="3" required style="border-radius: 8px !important;">
             </div>
             <div class="form-group">
-              <label class="form-label">Precio por Cupo / Mes (USD)</label>
-              <input type="number" id="user-pub-price" class="form-input" step="0.10" min="0.5" value="3.50" required style="border-radius: 8px !important;">
+              <label class="form-label">Precio Fijado por Cupo (GoSplit)</label>
+              <div style="background: rgba(0, 194, 255, 0.08); border: 1px solid rgba(0, 194, 255, 0.25); border-radius: 8px; padding: 9px 12px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.78rem; color: var(--text-tertiary);">Precio Público:</span>
+                <strong id="user-pub-fixed-price-preview" style="font-family: var(--font-mono); font-size: 0.92rem; color: #ffffff;">25.000 Gs.</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- GoSplit Real-Time Net Earnings Calculator -->
+          <div style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 10px; padding: 12px 14px; margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 0.78rem; color: var(--accent-emerald); font-weight: 700;">💰 Tu Ganancia Neta por Perfil (Comisión <span id="user-pub-commission-preview">10%</span>):</span>
+              <strong id="user-pub-net-per-slot" style="font-family: var(--font-mono); font-size: 0.95rem; color: var(--accent-emerald);">22.500 Gs.</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #ffffff;">
+              <span>Total mensual estimado al ocupar cupos:</span>
+              <strong id="user-pub-net-total" style="font-family: var(--font-mono); font-size: 1.05rem; color: var(--accent-cyan);">67.500 Gs.</strong>
+            </div>
+            <div style="font-size: 0.68rem; color: var(--text-tertiary); margin-top: 6px;">
+              * El pago se mantiene en custodia durante el mes de servicio y se liquida al completar el ciclo de 30 días.
             </div>
           </div>
 
@@ -702,6 +719,51 @@
             Publicar Cuenta de Streaming
           </button>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================= -->
+  <!-- MODAL: DETALLES & VARIACIONES DE TARJETA DE REGALO      -->
+  <!-- ======================================================= -->
+  <div class="modal-overlay" id="modal-giftcard-variations" style="display: none;">
+    <div class="modal-content glass-modal" style="max-width: 680px; padding: 2rem; border-radius: 20px !important;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
+        <div style="display: flex; gap: 16px; align-items: center;">
+          <img id="modal-gc-cover" src="" style="width: 75px; height: 105px; object-fit: contain; background: transparent; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6));">
+          <div>
+            <span class="badge-official" id="modal-gc-category">GIFT CARD</span>
+            <h3 id="modal-gc-title" style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 800; color: #ffffff; margin-top: 4px;">PlayStation Network</h3>
+            <p id="modal-gc-description" style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; line-height: 1.4;">
+              Tarjetas oficiales de saldo y membresías.
+            </p>
+          </div>
+        </div>
+        <button class="btn-modal-close" id="btn-close-gc-modal">✕</button>
+      </div>
+
+      <!-- Denominations & Variations Grid -->
+      <div style="margin-bottom: 1.5rem;">
+        <label class="form-label" style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-tertiary); font-weight: 800; letter-spacing: 0.05em; margin-bottom: 10px; display: block;">
+          Selecciona la Denominación o Membresía:
+        </label>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px;" id="modal-gc-variations-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Price Summary & Buy Button -->
+      <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.35); padding: 1rem 1.25rem; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);">
+        <div>
+          <span style="font-size: 0.74rem; color: var(--text-tertiary); display: block;">Total a pagar:</span>
+          <div style="display: flex; align-items: baseline; gap: 8px;">
+            <strong id="modal-gc-total-gs" style="font-family: var(--font-mono); font-size: 1.3rem; color: #ffffff;">0 Gs.</strong>
+            <span id="modal-gc-total-usd" style="font-family: var(--font-mono); font-size: 0.86rem; color: var(--accent-cyan);">$0.00 USDT</span>
+          </div>
+        </div>
+        <button id="btn-confirm-gc-buy" class="btn-primary-block" style="width: auto; padding: 12px 28px; border-radius: 10px !important; font-weight: 800; font-size: 0.92rem;">
+          Comprar con Saldo ➔
+        </button>
       </div>
     </div>
   </div>

@@ -16,352 +16,51 @@
     },
     {
       "id": "usr_client1",
-      "name": "Lucas",
+      "name": "Lucas_Py",
       "email": "lucas@cliente.com",
       "role": "client",
-      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-      "surname": "González",
-      "birthday": "1998-05-14",
-      "hasPassword": true,
-      "passwordUpdated": "2026-09-07T17:26:29.375Z"
+      "avatar": "/assets/branding/icon.png"
+    },
+    {
+      "id": "usr_client2",
+      "name": "María López",
+      "email": "maria@cliente.com",
+      "role": "client",
+      "avatar": "/assets/branding/icon.png"
     }
   ],
   "wallets": {
     "usr_admin": {
-      "balanceUsd": 1250,
+      "balanceUsd": 1253.33,
       "pendingEscrowUsd": 0
     },
     "usr_seller1": {
-      "balanceUsd": 5.5,
-      "pendingEscrowUsd": 22
+      "balanceUsd": 85.5,
+      "pendingEscrowUsd": 25
     },
     "usr_client1": {
-      "balanceUsd": 2.45,
+      "balanceUsd": 25,
+      "pendingEscrowUsd": 0
+    },
+    "usr_client2": {
+      "balanceUsd": 50,
       "pendingEscrowUsd": 0
     }
   },
   "wallet_transactions": [
     {
-      "id": "tx_buy_1788808779240",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "purchase",
-      "amountUsd": 46.67,
-      "currency": "USDT",
-      "localAmount": 46.67,
-      "method": "wallet_balance",
-      "status": "approved",
-      "reference": "COMPRA",
-      "notes": "Compra de EA Sports FC 25 Ultimate Edition (Updated) (Cuenta Primaria)",
-      "createdAt": "2026-09-07T19:19:39.240Z"
-    },
-    {
-      "id": "tx_buy_1788808647025",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "purchase",
-      "amountUsd": 46.67,
-      "currency": "USDT",
-      "localAmount": 46.67,
-      "method": "wallet_balance",
-      "status": "approved",
-      "reference": "COMPRA",
-      "notes": "Compra de EA Sports FC 25 Ultimate Edition (Updated) (Cuenta Primaria)",
-      "createdAt": "2026-09-07T19:17:27.025Z"
-    },
-    {
-      "id": "tx_buy_1788808512344",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "purchase",
-      "amountUsd": 46.67,
-      "currency": "USDT",
-      "localAmount": 46.67,
-      "method": "wallet_balance",
-      "status": "approved",
-      "reference": "COMPRA",
-      "notes": "Compra de EA Sports FC 25 Ultimate Edition (Updated) (Cuenta Primaria)",
-      "createdAt": "2026-09-07T19:15:12.344Z"
-    },
-    {
-      "id": "tx_buy_1788808312767",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "purchase",
-      "amountUsd": 46.67,
-      "currency": "USDT",
-      "localAmount": 46.67,
-      "method": "wallet_balance",
-      "status": "approved",
-      "reference": "COMPRA",
-      "notes": "Compra de EA Sports FC 25 Ultimate Edition (Updated) (Cuenta Primaria)",
-      "createdAt": "2026-09-07T19:11:52.767Z"
-    },
-    {
-      "id": "tx_1788806685844_x22h",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "deposit",
-      "amountUsd": 13.33,
+      "id": "tx_payout_rel_1788855744434",
+      "userId": "usr_admin",
+      "userName": "Admin GamesBoy",
+      "type": "payout",
+      "amountUsd": 3,
       "currency": "PYG",
-      "localAmount": 100000,
-      "method": "sipap_paraguay",
+      "localAmount": 22500,
+      "method": "escrow_release",
       "status": "approved",
-      "reference": "SIPAP-TRANSF-992184",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T18:44:45.844Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T18:44:45.881Z"
-    },
-    {
-      "id": "tx_1788806685823_na32",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "deposit",
-      "amountUsd": 10,
-      "currency": "USDT",
-      "localAmount": 75000,
-      "method": "binance_usdt",
-      "status": "approved",
-      "reference": "BINANCE-ORDER-8891024",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T18:44:45.823Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T18:44:45.867Z"
-    },
-    {
-      "id": "tx_buy_1788806662177",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "purchase",
-      "amountUsd": 5.85,
-      "currency": "USDT",
-      "localAmount": 5.85,
-      "method": "wallet_balance",
-      "status": "approved",
-      "reference": "COMPRA",
-      "notes": "Impulso Digital: Seguidores HQ Reales (Garantizados 30 Días) (1,000 unidades)",
-      "createdAt": "2026-09-07T18:44:22.177Z"
-    },
-    {
-      "id": "tx_1788803337451_57s8",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "deposit",
-      "amountUsd": 13.33,
-      "currency": "PYG",
-      "localAmount": 100000,
-      "method": "sipap_paraguay",
-      "status": "approved",
-      "reference": "SIPAP-TRANSF-992184",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T17:48:57.451Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T17:48:57.484Z"
-    },
-    {
-      "id": "tx_1788803337409_6v6l",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "deposit",
-      "amountUsd": 10,
-      "currency": "USDT",
-      "localAmount": 75000,
-      "method": "binance_usdt",
-      "status": "approved",
-      "reference": "BINANCE-ORDER-8891024",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T17:48:57.409Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T17:48:57.472Z"
-    },
-    {
-      "id": "tx_1788801996378_dgol",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "deposit",
-      "amountUsd": 13.33,
-      "currency": "PYG",
-      "localAmount": 100000,
-      "method": "sipap_paraguay",
-      "status": "approved",
-      "reference": "SIPAP-TRANSF-992184",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T17:26:36.378Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T17:26:36.428Z"
-    },
-    {
-      "id": "tx_1788801996313_eyzh",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "deposit",
-      "amountUsd": 10,
-      "currency": "USDT",
-      "localAmount": 75000,
-      "method": "binance_usdt",
-      "status": "approved",
-      "reference": "BINANCE-ORDER-8891024",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T17:26:36.313Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T17:26:36.408Z"
-    },
-    {
-      "id": "tx_admin_adj_1788791102463",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "deposit",
-      "amountUsd": 6.666666666666667,
-      "currency": "PYG",
-      "localAmount": 50000,
-      "method": "admin_manual_adjustment",
-      "status": "approved",
-      "reference": "ADMIN-CREDIT",
-      "notes": "Bono de prueba",
-      "createdAt": "2026-09-07T14:25:02.463Z"
-    },
-    {
-      "id": "tx_1788774785766_iuuu",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "deposit",
-      "amountUsd": 13.33,
-      "currency": "PYG",
-      "localAmount": 100000,
-      "method": "sipap_paraguay",
-      "status": "approved",
-      "reference": "SIPAP-TRANSF-992184",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T09:53:05.767Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T09:53:05.798Z"
-    },
-    {
-      "id": "tx_1788774785700_2uxk",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "deposit",
-      "amountUsd": 10,
-      "currency": "USDT",
-      "localAmount": 75000,
-      "method": "binance_usdt",
-      "status": "approved",
-      "reference": "BINANCE-ORDER-8891024",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T09:53:05.701Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T09:53:05.788Z"
-    },
-    {
-      "id": "tx_1788741827325_3009",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "deposit",
-      "amountUsd": 13.33,
-      "currency": "PYG",
-      "localAmount": 100000,
-      "method": "sipap_paraguay",
-      "status": "approved",
-      "reference": "SIPAP-TRANSF-992184",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T00:43:47.325Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T00:43:47.352Z"
-    },
-    {
-      "id": "tx_1788741827275_yiyq",
-      "userId": "usr_client1",
-      "userName": "Lucas",
-      "type": "deposit",
-      "amountUsd": 10,
-      "currency": "USDT",
-      "localAmount": 75000,
-      "method": "binance_usdt",
-      "status": "approved",
-      "reference": "BINANCE-ORDER-8891024",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T00:43:47.275Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T00:43:47.343Z"
-    },
-    {
-      "id": "tx_1788741497864_e69i",
-      "userId": "usr_client1",
-      "userName": "Lucas_Py",
-      "type": "deposit",
-      "amountUsd": 13.33,
-      "currency": "PYG",
-      "localAmount": 100000,
-      "method": "sipap_paraguay",
-      "status": "approved",
-      "reference": "SIPAP-TRANSF-992184",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T00:38:17.864Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T00:38:17.886Z"
-    },
-    {
-      "id": "tx_1788741497854_4ib8",
-      "userId": "usr_client1",
-      "userName": "Lucas_Py",
-      "type": "deposit",
-      "amountUsd": 10,
-      "currency": "USDT",
-      "localAmount": 75000,
-      "method": "binance_usdt",
-      "status": "approved",
-      "reference": "BINANCE-ORDER-8891024",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T00:38:17.854Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T00:38:17.878Z"
-    },
-    {
-      "id": "tx_1788739685080_e1by",
-      "userId": "usr_client1",
-      "userName": "Lucas_Py",
-      "type": "deposit",
-      "amountUsd": 13.33,
-      "currency": "PYG",
-      "localAmount": 100000,
-      "method": "sipap_paraguay",
-      "status": "approved",
-      "reference": "SIPAP-TRANSF-992184",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T00:08:05.080Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T00:08:05.104Z"
-    },
-    {
-      "id": "tx_1788739685029_0r0g",
-      "userId": "usr_client1",
-      "userName": "Lucas_Py",
-      "type": "deposit",
-      "amountUsd": 10,
-      "currency": "USDT",
-      "localAmount": 75000,
-      "method": "binance_usdt",
-      "status": "approved",
-      "reference": "BINANCE-ORDER-8891024",
-      "receiptData": "",
-      "notes": "Recarga aprobada y saldo acreditado con éxito",
-      "createdAt": "2026-09-07T00:08:05.029Z",
-      "approvedBy": "usr_admin",
-      "approvedAt": "2026-09-07T00:08:05.096Z"
+      "reference": "LIQUIDACIÓN-test_slot_1788855744433",
+      "notes": "Liquidación mensual de perfil 2 de Netflix Premium 4K",
+      "createdAt": "2026-09-08T08:22:24.434Z"
     },
     {
       "id": "tx_init_1",
@@ -376,13 +75,13 @@
       "reference": "SIPAP-REF-892144",
       "receiptUrl": "",
       "notes": "Recarga aprobada por administración",
-      "createdAt": "2026-09-05T10:37:13.045Z"
+      "createdAt": "2026-09-07T08:22:24.420Z"
     }
   ],
   "hero_banners": [
     {
       "id": "banner_fc25",
-      "title": "EA SPORTS FC 25 (Edición Campeones)",
+      "title": "EA SPORTS FC 25",
       "tagline": "CLUBES, ULTIMATE TEAM & MODO CARRERA",
       "badge": "PS5 • XBOX • PC",
       "imgHorizontal": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1600&q=80",
@@ -393,77 +92,43 @@
       "isActive": true
     },
     {
-      "id": "b2",
-      "title": "",
-      "tagline": "",
-      "badge": "",
-      "imgHorizontal": "https://images.unsplash.com/photo-3",
-      "imgVertical": "https://images.unsplash.com/photo-4",
-      "ctaText": "",
-      "ctaUrl": "",
+      "id": "banner_spiderman2",
+      "title": "Marvel Spider-Man 2",
+      "tagline": "BE GREATER. TOGETHER.",
+      "badge": "PS5 EXCLUSIVE",
+      "imgHorizontal": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1600&q=80",
+      "imgVertical": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
+      "ctaText": "Comprar ahora ➔",
+      "ctaUrl": "#section-games",
       "sortOrder": 1,
       "isActive": true
     },
     {
-      "id": "b3",
-      "title": "",
-      "tagline": "",
-      "badge": "",
-      "imgHorizontal": "https://images.unsplash.com/photo-5",
-      "imgVertical": "https://images.unsplash.com/photo-6",
-      "ctaText": "",
-      "ctaUrl": "",
+      "id": "banner_cod_bo6",
+      "title": "Call of Duty: Black Ops 6",
+      "tagline": "LA VERDAD MIENTE. VUELVE EL REY DEL SHOOTER",
+      "badge": "CROSS-GEN BUNDLE",
+      "imgHorizontal": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80",
+      "imgVertical": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+      "ctaText": "Comprar Código",
+      "ctaUrl": "#section-games",
       "sortOrder": 2,
       "isActive": true
     },
     {
-      "id": "b4",
-      "title": "",
-      "tagline": "",
-      "badge": "",
-      "imgHorizontal": "https://images.unsplash.com/photo-7",
-      "imgVertical": "https://images.unsplash.com/photo-8",
-      "ctaText": "",
-      "ctaUrl": "",
+      "id": "banner_gta6",
+      "title": "Grand Theft Auto VI",
+      "tagline": "BIENVENIDO A LEONIDA & VICE CITY",
+      "badge": "NEXT-GEN PRE-ORDER",
+      "imgHorizontal": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1600&q=80",
+      "imgVertical": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
+      "ctaText": "Reservar Ahora",
+      "ctaUrl": "#section-games",
       "sortOrder": 3,
       "isActive": true
     }
   ],
   "subscriptions": [
-    {
-      "id": "sub_1788774803495_mv03",
-      "sellerId": "usr_client1",
-      "sellerName": "Lucas",
-      "isOfficial": false,
-      "serviceName": "Disney+ Premium & Star+",
-      "category": "streaming",
-      "planName": "Plan 4K 4 Pantallas Compartidas",
-      "totalSlots": 4,
-      "availableSlots": 4,
-      "pricePerSlotUsd": 4.5,
-      "credentialsEncrypted": "e9c7bfc48a7c684056217e86c9068146:b6ab3dfcc38da82d72dca5268282cb6b855e494f40e0b60bf3e04169e121da7062dc6618ea25dcd5e3e255a87833be8a",
-      "pinsEncrypted": "6d706c89e7ec481466ccbf6ea46a8339:26012f32778c1e7108bb6dcfdc4188607fac0127c1e4d1d2edeb4eb69d2934ea94d94d588d23a1743e3d97115c7ffb3d",
-      "instructions": "Usa exclusivamente tu perfil asignado y no cambies contraseña.",
-      "status": "active",
-      "createdAt": "2026-09-07T09:53:23.496Z"
-    },
-    {
-      "id": "sub_1788700823091_yysk",
-      "sellerId": "usr_client1",
-      "sellerName": "Lucas_Py",
-      "isOfficial": false,
-      "serviceName": "Disney+ Premium & Star+",
-      "category": "streaming",
-      "planName": "Plan 4K 4 Pantallas Compartidas",
-      "totalSlots": 4,
-      "availableSlots": 4,
-      "pricePerSlotUsd": 4.5,
-      "credentialsEncrypted": "d4a0707c49ae7c6774d7dcb9bc640d64:ddba33df080d01d043d6df5c4d17961e101d2bb36a17355a839bc5ef03f7792bf3002401ecd858bdabd034c952d937e6",
-      "pinsEncrypted": "e3d27f3b249509c32c51ac605052757e:7f2b7a5647d0c96d368961d84728b9c1c0edc1dd725fab67c71838b81ca41928db57cfc24fd129de12756ac8105ed91e",
-      "instructions": "Usa exclusivamente tu perfil asignado y no cambies contraseña.",
-      "status": "active",
-      "createdAt": "2026-09-06T13:20:23.092Z"
-    },
     {
       "id": "sub_netflix_official",
       "sellerId": "usr_admin",
@@ -475,11 +140,11 @@
       "totalSlots": 4,
       "availableSlots": 3,
       "pricePerSlotUsd": 4.99,
-      "credentialsEncrypted": "94fcccbf08ac56e1f1dbbf89d2b6d5be:b43184a103e7921a7adf3b7e259f686c47f57e1c6b413874cefa25a97399192451a194dc43c1e10c165cd000329fe42c",
-      "pinsEncrypted": "fe5fbcad4ce159a1747bfa704a0868a7:9691087790b91b967e536a9168c21baa93093516043476c36bcd0544d2c7cd1b9244b8e14d5d668be02a097b752ea346",
+      "credentialsEncrypted": "c770e96818184720dfd724dbcce236d2:c34f1e947bea3872335ac1546e930081b3f06499dbc5be3b9f073356c68d60297a1ef060f10ba903da0bbf48708d4362",
+      "pinsEncrypted": "91849e3986ed6af8c1d226ee948f5d93:19c6973e133eb2184bd3af78eb025ed8f879f638b3272d6ff3063a5a9abdcf8fdfcd555cbd464e3f77aab71fd049e676",
       "instructions": "Ingresa con el correo y contraseña provistos. Usa exclusivamente tu Perfil y PIN asignado. Prohibido cambiar credenciales.",
       "status": "active",
-      "createdAt": "2026-09-04T10:37:13.048Z"
+      "createdAt": "2026-09-06T08:22:24.424Z"
     },
     {
       "id": "sub_spotify_official",
@@ -492,11 +157,11 @@
       "totalSlots": 5,
       "availableSlots": 4,
       "pricePerSlotUsd": 3.99,
-      "credentialsEncrypted": "c24e350987e12fb3c5ee7a523fa4e704:6219bc027c41770477cd252e72cc9d239909217c3b3e25faae6fb37a58445a868e9e48a3e2eb5d8a746db98b37623fcbf861b876ba96097176bbde3b0a6640c60c339c84501a5355f221ae728f5c80ba",
-      "pinsEncrypted": "56cbbfa86b94ca14ccc5b1222543b4a4:9576af9e8578b2ab5e8adf99f36fe46f",
+      "credentialsEncrypted": "f11499776cc3f2da24c03cdb7e9c5e25:355228b80ec9538688886d163c96d3ec9bbd4b8b98c6e2623661a69fda7bf8199e93c29c601f3b75f3d60b28ecb758824e2b43cf2625ea3b72e4a0fc55bb8a6c80eb76f5e27669b89621c775006aeb08",
+      "pinsEncrypted": "252f685f6694d24103bd8a33cc3d78aa:47b8bb4fe29d20128d68a4c72aad4c36",
       "instructions": "Recibirás un enlace de invitación oficial para activar Spotify Premium en tu propia cuenta personal.",
       "status": "active",
-      "createdAt": "2026-09-05T10:37:13.048Z"
+      "createdAt": "2026-09-07T08:22:24.424Z"
     },
     {
       "id": "sub_disney_official",
@@ -509,11 +174,11 @@
       "totalSlots": 4,
       "availableSlots": 2,
       "pricePerSlotUsd": 4.99,
-      "credentialsEncrypted": "7691e9c01e3dcbdf903f184f39515c0d:327e49341b65eba0c2f4a4296137ecba4f21797bf1c40b713400605beb830d8f5ab6c006836dbca78a4cc0d372dfb963",
-      "pinsEncrypted": "183c33186005f72a1cea8127b506d609:f59a78393a23a96d7ecc30a311d4584a2a69a19b1c3ae056393826c075ded13f43d97d04f6d4afc9f0ecd34c22056b18",
+      "credentialsEncrypted": "1afb5f75ea354a79872247cb45c2f79f:82c94f02258d4682bda2bbf8563c84be2b6085208ae88ee2dbf2703e97e73e36659b7c893db4a78dc6358f017194948d",
+      "pinsEncrypted": "1a95e11aaf0689d5f6b9ad20e40f41e8:5b00219df6d5b58033d319ebcb0d937df1928e062e9b35659f00d4afd7600051e3fbf00e2c9150edfdbecb61158aa8fa",
       "instructions": "Acceso al catálogo completo de Disney, Marvel, Star Wars y deportes de ESPN.",
       "status": "active",
-      "createdAt": "2026-09-05T22:37:13.048Z"
+      "createdAt": "2026-09-07T20:22:24.425Z"
     },
     {
       "id": "sub_max_official",
@@ -526,11 +191,11 @@
       "totalSlots": 3,
       "availableSlots": 2,
       "pricePerSlotUsd": 4.99,
-      "credentialsEncrypted": "ca2914f21d1cbcab56b220d196562670:31e113fdc521fdbb0271cdb91ce6d265a0959b0bdfc589f3bc1e29fc33b9bd0bfc2e4d4aa0d90eaebca59b92c86b1435",
-      "pinsEncrypted": "6131243346adfc9e44b9ea4f589a3cbc:3ecca7524aa5abac89c92f33b05f6df523fbcdadc14d10caab0913960fe3ce5b78eedb23752ad47fbb6fe217865b3777",
+      "credentialsEncrypted": "0e2a6b259f3b76fb6b99b54a3248b46c:7ee58ad5f9e7fba1c8821b9bb2d141b6a7c13b8ae55867e648d3e697868b0f72c5bf96983c4000511c43ea6dcc1b6eb8",
+      "pinsEncrypted": "c2b8072b0681f3e198173d851af889d0:522e2c4a3ad8b5e8ddd9c729d128c8d53d01ae6d8644b325ffa392e0e153ba8c7dfa5f60ccba9b74784b0c532dffd01e",
       "instructions": "Disfruta de películas de Warner Bros, HBO Originales y Champions League.",
       "status": "active",
-      "createdAt": "2026-09-06T00:37:13.048Z"
+      "createdAt": "2026-09-07T22:22:24.425Z"
     },
     {
       "id": "sub_youtube_official",
@@ -543,11 +208,11 @@
       "totalSlots": 5,
       "availableSlots": 3,
       "pricePerSlotUsd": 3.99,
-      "credentialsEncrypted": "92cf21344309a663bf602b5c0b6ede8e:33fb08c1724149fc234518ec90709744250e57e1df0f56db662643e7dde8fe316227b5ac1cb19e26f6cef61de8b2a588fbd0fb0a96f99b9ba3633d2a97e1273da4b6d65fbe429f545c2a87e28aca1bc2",
-      "pinsEncrypted": "7386984fe24a6af26601751fde08e94f:42094fed2a7933c22e371f17cf614b1e",
+      "credentialsEncrypted": "f23973d6ee51acc084e2a83120486fde:55024d64c4d09aba6902300744267e7377014252d3b440b19456569dc446841e86afa1a4d7aca1ffc4ddab1e20b7e928be6ae915f97a36d1309e9c703de0d1f1becbb18479983296eea58be48bd2461c",
+      "pinsEncrypted": "ae6f54db17744049a8b11e66dd820d83:ab1aeeb4b76183b3d851cbcc61097edd",
       "instructions": "YouTube sin anuncios, descargas offline y YouTube Music en tu propia cuenta de Google.",
       "status": "active",
-      "createdAt": "2026-09-06T04:37:13.048Z"
+      "createdAt": "2026-09-08T02:22:24.425Z"
     },
     {
       "id": "sub_crunchyroll_official",
@@ -560,11 +225,11 @@
       "totalSlots": 4,
       "availableSlots": 3,
       "pricePerSlotUsd": 3.99,
-      "credentialsEncrypted": "157cb284ef027dd9a20e7d1702d0cd53:afadc50365f5031ba3d7f706bc56746d4bc79ed94c509e7f384a0bcd0aa55d665a9637ec8c4b0485745b669085f16768",
-      "pinsEncrypted": "b2e7c2a163b8037540671d332f3491df:bf6d074aa58092d3067681a7839b408eb46084925b8d57cce2fa119ab4f8a9d108a4ad150de368221f628a022a3d4027",
+      "credentialsEncrypted": "362fb60805a39f7c83821477ceaf9c45:99524d3f21e398490eef1b0947a10b04c736446de4f7cd7688283ae4ef0f00319c1a024389f1b20ddf7c2cb0499d310f",
+      "pinsEncrypted": "447c5d7bc5b0371408906138b251bfa3:6c5ddb5fb636110cf7f4673e3fd9a9f66b574e9a52002c0b0ef5c9220b8f7e912bd6711159f6caaa67897da0c2d86a86",
       "instructions": "Anime en simulcast desde Japón sin anuncios en calidad 1080p/4K.",
       "status": "active",
-      "createdAt": "2026-09-06T05:37:13.049Z"
+      "createdAt": "2026-09-08T03:22:24.425Z"
     },
     {
       "id": "sub_appletv_official",
@@ -577,11 +242,11 @@
       "totalSlots": 3,
       "availableSlots": 1,
       "pricePerSlotUsd": 4.99,
-      "credentialsEncrypted": "e56dd7122876d192fdde059a3d06a621:d7d747f04ff9aa9875c5da47c025a9935a46d54699dbbc537126fb328019fc15ede0137e291bcb72ec9861cc98c45c53",
-      "pinsEncrypted": "c347e33467ce05d67a6643ca9af24c0b:ce7246a421f526090a0b1a20db21bdeba45936b5bf7c2e4fab4b45e59cbad8fc5b285dc30b1597f1925ef2f2a9f890ca",
+      "credentialsEncrypted": "b6c808dd48ac2367954e4a621e687f34:ce6d63becfcfbf92809993d81b39d63f36b90ac72d88364ee1c44c41fb7b2d146d12c6e83b98f35c111c56117d0b4a4f",
+      "pinsEncrypted": "f2492ea17dc9ffeb38c84e6faf78acb4:718e7d1d20a495fa1d2c1c4472abdede5fec39a3e98694d397c41d1b6caadb5d6e11b54604df5b76cdce550d2c1272a1",
       "instructions": "Acceso a series galardonadas de Apple Original en todos tus dispositivos.",
       "status": "active",
-      "createdAt": "2026-09-06T06:43:53.049Z"
+      "createdAt": "2026-09-08T04:29:04.425Z"
     },
     {
       "id": "sub_paramount_official",
@@ -594,14 +259,32 @@
       "totalSlots": 3,
       "availableSlots": 2,
       "pricePerSlotUsd": 3.99,
-      "credentialsEncrypted": "9732e8036584878d5c0a2850d3103433:8210601676574255db2eabbc3936d033fb9078eb82e2e257aa1a183efd914cd808e9ba9b75cf1ff97bc1ff3c15ca616a21234036fd977e357e4fd16121c8b131",
-      "pinsEncrypted": "242e1d5cdbd3f287e6695b0c7ec57422:c061609c6681d017861e57df838e1aa44ba21ec398f9f98b086eb73fbf5a46c127bf5f0b96a34492b132cc27f6984aa2",
+      "credentialsEncrypted": "fa12cd9ddfa02ef7a1872aacfc402e45:5efb261773fea8248bf979a1bf88edcb508213c83c2dc26cd66d451a1ecaac13baa24c936a8af3b0b5a76722f6acf98e0916260feb90d6216dae940513b7cac9",
+      "pinsEncrypted": "78f706dd796643f6694cd26849cfef86:d185ac6827048057afc8aaf149180db5845d7588c9d335a5335a8a304cdaeb128e6cc4b2b6a9de6c8eb6106a41ec5a8b",
       "instructions": "Películas de estreno, deportes en vivo y series exclusivas de Paramount.",
       "status": "active",
-      "createdAt": "2026-09-06T07:50:33.049Z"
+      "createdAt": "2026-09-08T05:35:44.425Z"
     }
   ],
   "user_slots": [
+    {
+      "id": "test_slot_1788855744433",
+      "subscriptionId": "sub_netflix_official",
+      "serviceName": "Netflix Premium 4K",
+      "sellerId": "usr_seller1",
+      "buyerId": "usr_client1",
+      "slotNumber": 2,
+      "pricePaidUsd": 3.33,
+      "pricePaidPyg": 25000,
+      "commissionPercent": 10,
+      "netPayoutUsd": 3,
+      "netPayoutPyg": 22500,
+      "expiresAt": "2026-09-08T08:22:23.433Z",
+      "payoutStatus": "paid",
+      "createdAt": "2026-08-09T08:22:24.433Z",
+      "payoutReleasedAt": "2026-09-08T08:22:24.434Z",
+      "payoutReleasedBy": "usr_admin"
+    },
     {
       "id": "slot_active_1",
       "subscriptionId": "sub_netflix_official",
@@ -610,10 +293,10 @@
       "buyerName": "Lucas_Py",
       "slotNumber": 1,
       "assignedPin": "1244",
-      "credentialsEncrypted": "1a22b51e454db38ce68271f5e5ceeb32:7b38e539dc7b21450231626f8e79e1221eee33d27a9df58f253146fd610a592f89462bbd7480e2e5afb827278ad61ebf",
+      "credentialsEncrypted": "84eb87e5203d09ea8b29924e0882b43f:4b9b50d4ba36a21ef00728b71e669aa94aca26bd741e5634834bfd94c5dff935bf4fafaa4c7265d153259765942dd00d",
       "pricePaidUsd": 4.99,
-      "expiresAt": "2026-10-06T10:37:13.049Z",
-      "createdAt": "2026-09-05T10:37:13.049Z"
+      "expiresAt": "2026-10-08T08:22:24.425Z",
+      "createdAt": "2026-09-07T08:22:24.425Z"
     }
   ],
   "store_products": [
@@ -871,137 +554,8 @@
       ]
     }
   ],
-  "user_store_orders": [
-    {
-      "id": "order_1788808779242_kapi",
-      "buyerId": "usr_client1",
-      "productId": "game_1788808779214_8pe4",
-      "productTitle": "EA Sports FC 25 Ultimate Edition (Updated)",
-      "type": "game",
-      "option": "Cuenta Primaria",
-      "platform": "PS5",
-      "pricePaidUsd": 46.67,
-      "pricePaidPyg": 350025,
-      "status": "delivered",
-      "code": "En preparación (Entrega en minutos)",
-      "credentials": "playstation_user_psn@gamesboy.net:::PasswordSeguro2026!",
-      "instructions": "1. Inicia sesión en tu PS5 con este perfil. 2. Activa como consola principal y descarga el juego.",
-      "createdAt": "2026-09-07T19:19:39.242Z",
-      "deliveredAt": "2026-09-07T19:19:39.281Z",
-      "adminNotes": ""
-    },
-    {
-      "id": "order_1788808647028_925l",
-      "buyerId": "usr_client1",
-      "productId": "game_1788808646999_aq8x",
-      "productTitle": "EA Sports FC 25 Ultimate Edition (Updated)",
-      "type": "game",
-      "option": "Cuenta Primaria",
-      "platform": "PS5",
-      "pricePaidUsd": 46.67,
-      "pricePaidPyg": 350025,
-      "status": "delivered",
-      "code": "En preparación (Entrega en minutos)",
-      "credentials": "playstation_user_psn@gamesboy.net:::PasswordSeguro2026!",
-      "instructions": "1. Inicia sesión en tu PS5 con este perfil. 2. Activa como consola principal y descarga el juego.",
-      "createdAt": "2026-09-07T19:17:27.028Z",
-      "deliveredAt": "2026-09-07T19:17:27.064Z",
-      "adminNotes": ""
-    },
-    {
-      "id": "order_1788808512346_swp8",
-      "buyerId": "usr_client1",
-      "productId": "game_1788808512322_6ryi",
-      "productTitle": "EA Sports FC 25 Ultimate Edition (Updated)",
-      "type": "game",
-      "option": "Cuenta Primaria",
-      "platform": "PS5",
-      "pricePaidUsd": 46.67,
-      "pricePaidPyg": 350025,
-      "status": "delivered",
-      "code": "En preparación (Entrega en minutos)",
-      "credentials": "playstation_user_psn@gamesboy.net:::PasswordSeguro2026!",
-      "instructions": "1. Inicia sesión en tu PS5 con este perfil. 2. Activa como consola principal y descarga el juego.",
-      "createdAt": "2026-09-07T19:15:12.346Z",
-      "deliveredAt": "2026-09-07T19:15:12.367Z",
-      "adminNotes": ""
-    },
-    {
-      "id": "order_1788808312768_hcvm",
-      "buyerId": "usr_client1",
-      "productId": "game_1788808312748_o5pu",
-      "productTitle": "EA Sports FC 25 Ultimate Edition (Updated)",
-      "type": "game",
-      "option": "Cuenta Primaria",
-      "platform": "PS5",
-      "pricePaidUsd": 46.67,
-      "pricePaidPyg": 350025,
-      "status": "delivered",
-      "code": "En preparación (Entrega en minutos)",
-      "credentials": "playstation_user_psn@gamesboy.net:::PasswordSeguro2026!",
-      "instructions": "1. Inicia sesión en tu PS5 con este perfil. 2. Activa como consola principal y descarga el juego.",
-      "createdAt": "2026-09-07T19:11:52.768Z",
-      "deliveredAt": "2026-09-07T19:11:52.782Z",
-      "adminNotes": ""
-    }
-  ],
+  "user_store_orders": [],
   "payout_requests": [
-    {
-      "id": "payout_1788774785832",
-      "sellerId": "usr_seller1",
-      "sellerName": "Carlos_Streams",
-      "amountUsd": 20,
-      "amountPyg": 150000,
-      "method": "binance_usdt",
-      "accountDetails": {
-        "binanceDestination": "PayID: 998811223"
-      },
-      "status": "completed",
-      "createdAt": "2026-09-07T09:53:05.832Z",
-      "processedAt": "2026-09-07T09:53:05.840Z"
-    },
-    {
-      "id": "payout_1788741827380",
-      "sellerId": "usr_seller1",
-      "sellerName": "Carlos_Streams",
-      "amountUsd": 20,
-      "amountPyg": 150000,
-      "method": "binance_usdt",
-      "accountDetails": {
-        "binanceDestination": "PayID: 998811223"
-      },
-      "status": "completed",
-      "createdAt": "2026-09-07T00:43:47.380Z",
-      "processedAt": "2026-09-07T00:43:47.389Z"
-    },
-    {
-      "id": "payout_1788741497916",
-      "sellerId": "usr_seller1",
-      "sellerName": "Carlos_Streams",
-      "amountUsd": 20,
-      "amountPyg": 150000,
-      "method": "binance_usdt",
-      "accountDetails": {
-        "binanceDestination": "PayID: 998811223"
-      },
-      "status": "completed",
-      "createdAt": "2026-09-07T00:38:17.916Z",
-      "processedAt": "2026-09-07T00:38:17.925Z"
-    },
-    {
-      "id": "payout_1788739685129",
-      "sellerId": "usr_seller1",
-      "sellerName": "Carlos_Streams",
-      "amountUsd": 20,
-      "amountPyg": 150000,
-      "method": "binance_usdt",
-      "accountDetails": {
-        "binanceDestination": "PayID: 998811223"
-      },
-      "status": "completed",
-      "createdAt": "2026-09-07T00:08:05.129Z",
-      "processedAt": "2026-09-07T00:08:05.139Z"
-    },
     {
       "id": "payout_sample_1",
       "sellerId": "usr_seller1",
@@ -1016,7 +570,7 @@
         "accountNumber": "03-998877-1",
         "aliasSipap": "carlos.stream.py"
       },
-      "createdAt": "2026-09-06T09:37:13.049Z"
+      "createdAt": "2026-09-08T07:22:24.425Z"
     }
   ],
   "platform_settings": {
@@ -1036,617 +590,94 @@
       "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F"
     }
   },
-  "group_chats": {
-    "sub_netflix_official": [
-      {
-        "id": "msg_init_sub_netflix_official",
-        "senderId": "usr_admin",
-        "senderName": "GamesBoy Oficial",
-        "senderAvatar": "👑",
-        "isOwnerAdmin": true,
-        "text": "¡Bienvenidos al grupo oficial de Netflix Premium 4K! Por favor respeten su perfil y PIN asignado. Dudas o consultas aquí.",
-        "timestamp": "2026-09-04T10:37:13.048Z"
-      },
-      {
-        "id": "msg_1788700823076_kk9m",
-        "senderId": "usr_client1",
-        "senderName": "Lucas_Py",
-        "senderAvatar": "🎮",
-        "isOwnerAdmin": false,
-        "text": "¡Hola a todos! Este es un mensaje de prueba en el grupo.",
-        "timestamp": "2026-09-06T13:20:23.076Z"
-      },
-      {
-        "id": "msg_1788774803480_5db7",
-        "senderId": "usr_client1",
-        "senderName": "Lucas",
-        "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-        "isOwnerAdmin": false,
-        "text": "¡Hola a todos! Este es un mensaje de prueba en el grupo.",
-        "timestamp": "2026-09-07T09:53:23.480Z"
-      },
-      {
-        "id": "msg_1788825537597_qlfq",
-        "senderId": "usr_client1",
-        "senderName": "Lucas",
-        "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-        "isOwnerAdmin": false,
-        "text": "Hola a todos en el grupo, todo funcionando excelente.",
-        "timestamp": "2026-09-07T23:58:57.597Z"
-      },
-      {
-        "id": "msg_1788825680973_uzw5",
-        "senderId": "usr_client1",
-        "senderName": "Lucas",
-        "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-        "isOwnerAdmin": false,
-        "text": "Hola a todos en el grupo, todo funcionando excelente.",
-        "timestamp": "2026-09-08T00:01:20.973Z"
-      },
-      {
-        "id": "msg_1788825729550_4gsv",
-        "senderId": "usr_client1",
-        "senderName": "Lucas",
-        "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-        "isOwnerAdmin": false,
-        "text": "Hola a todos en el grupo, todo funcionando excelente.",
-        "timestamp": "2026-09-08T00:02:09.550Z"
-      },
-      {
-        "id": "msg_1788825777845_ily2",
-        "senderId": "usr_client1",
-        "senderName": "Lucas",
-        "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-        "isOwnerAdmin": false,
-        "text": "Hola a todos en el grupo, todo funcionando excelente.",
-        "timestamp": "2026-09-08T00:02:57.845Z"
-      },
-      {
-        "id": "msg_1788828555618_d9f0",
-        "senderId": "usr_client1",
-        "senderName": "Lucas",
-        "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-        "isOwnerAdmin": false,
-        "text": "Hola a todos en el grupo, todo funcionando excelente.",
-        "timestamp": "2026-09-08T00:49:15.618Z"
-      }
-    ],
-    "sub_1788700823091_yysk": [
-      {
-        "id": "msg_init_sub_1788700823091_yysk",
-        "senderId": "usr_client1",
-        "senderName": "Lucas_Py",
-        "senderAvatar": "👑",
-        "isOwnerAdmin": true,
-        "text": "¡Hola a todos! Soy el administrador de esta cuenta de Disney+ Premium & Star+. Aquí compartiremos novedades e instrucciones del servicio.",
-        "timestamp": "2026-09-06T13:20:23.092Z"
-      }
-    ],
-    "sub_1788774803495_mv03": [
-      {
-        "id": "msg_init_sub_1788774803495_mv03",
-        "senderId": "usr_client1",
-        "senderName": "Lucas",
-        "senderAvatar": "👑",
-        "isOwnerAdmin": true,
-        "text": "¡Hola a todos! Soy el administrador de esta cuenta de Disney+ Premium & Star+. Aquí compartiremos novedades e instrucciones del servicio.",
-        "timestamp": "2026-09-07T09:53:23.496Z"
-      }
-    ]
-  },
-  "smm_config": {
-    "lastBalanceUsd": 245.8,
-    "status": "connected",
-    "lastSyncAt": "2026-09-07T18:44:28.454Z"
-  },
-  "official_streaming_services": [
-    {
-      "id": "netflix",
+  "streaming_services_config": {
+    "netflix": {
+      "key": "netflix",
       "name": "Netflix Premium 4K",
-      "category": "streaming",
-      "maxSlots": 4,
-      "suggestedPriceUsd": 4.99,
-      "icon": "netflix",
-      "badge": "Ultra HD"
+      "planName": "Ultra HD 4K (4 Pantallas)",
+      "maxSlots": 5,
+      "pricePerSlotPyg": 25000,
+      "pricePerSlotUsd": 3.33,
+      "commissionPercent": 10,
+      "netPayoutPyg": 22500,
+      "netPayoutUsd": 3
     },
-    {
-      "id": "spotify",
+    "spotify": {
+      "key": "spotify",
       "name": "Spotify Premium Familiar",
-      "category": "music",
+      "planName": "Plan Familiar (6 Cuentas)",
       "maxSlots": 5,
-      "suggestedPriceUsd": 3.99,
-      "icon": "spotify",
-      "badge": "Familiar"
+      "pricePerSlotPyg": 18000,
+      "pricePerSlotUsd": 2.4,
+      "commissionPercent": 10,
+      "netPayoutPyg": 16200,
+      "netPayoutUsd": 2.16
     },
-    {
-      "id": "disney",
+    "disney": {
+      "key": "disney",
       "name": "Disney+ Premium & Star+",
-      "category": "streaming",
+      "planName": "Plan Premium 4K",
       "maxSlots": 4,
-      "suggestedPriceUsd": 4.99,
-      "icon": "disney",
-      "badge": "4K HDR"
+      "pricePerSlotPyg": 25000,
+      "pricePerSlotUsd": 3.33,
+      "commissionPercent": 10,
+      "netPayoutPyg": 22500,
+      "netPayoutUsd": 3
     },
-    {
-      "id": "max",
-      "name": "Max (HBO Max) Platino 4K",
-      "category": "streaming",
+    "max": {
+      "key": "max",
+      "name": "Max (HBO Max) 4K",
+      "planName": "Platino 4K Dolby Atmos",
       "maxSlots": 3,
-      "suggestedPriceUsd": 4.99,
-      "icon": "max",
-      "badge": "4K Atmos"
+      "pricePerSlotPyg": 22000,
+      "pricePerSlotUsd": 2.93,
+      "commissionPercent": 10,
+      "netPayoutPyg": 19800,
+      "netPayoutUsd": 2.64
     },
-    {
-      "id": "youtube",
+    "youtube": {
+      "key": "youtube",
       "name": "YouTube Premium & Music",
-      "category": "streaming",
+      "planName": "Familiar Sin Anuncios",
       "maxSlots": 5,
-      "suggestedPriceUsd": 3.49,
-      "icon": "youtube",
-      "badge": "Sin Anuncios"
+      "pricePerSlotPyg": 20000,
+      "pricePerSlotUsd": 2.67,
+      "commissionPercent": 10,
+      "netPayoutPyg": 18000,
+      "netPayoutUsd": 2.4
     },
-    {
-      "id": "crunchyroll",
-      "name": "Crunchyroll Mega Fan",
-      "category": "anime",
-      "maxSlots": 4,
-      "suggestedPriceUsd": 2.99,
-      "icon": "crunchyroll",
-      "badge": "Simulcast"
-    },
-    {
-      "id": "appletv",
-      "name": "Apple TV+ 4K",
-      "category": "streaming",
-      "maxSlots": 3,
-      "suggestedPriceUsd": 4.99,
-      "icon": "appletv",
-      "badge": "Apple Originals"
-    },
-    {
-      "id": "paramount",
-      "name": "Paramount+ Premium",
-      "category": "streaming",
-      "maxSlots": 3,
-      "suggestedPriceUsd": 3.99,
-      "icon": "paramount",
-      "badge": "Deportes & Cine"
-    },
-    {
-      "id": "chatgpt",
+    "chatgpt": {
+      "key": "chatgpt",
       "name": "ChatGPT Plus & AI",
-      "category": "tools",
+      "planName": "Plus GPT-4o & Canvas",
       "maxSlots": 2,
-      "suggestedPriceUsd": 9.99,
-      "icon": "ai",
-      "badge": "GPT-4o & Canvas"
+      "pricePerSlotPyg": 35000,
+      "pricePerSlotUsd": 4.67,
+      "commissionPercent": 10,
+      "netPayoutPyg": 31500,
+      "netPayoutUsd": 4.2
+    },
+    "crunchyroll": {
+      "key": "crunchyroll",
+      "name": "Crunchyroll Mega Fan",
+      "planName": "Mega Fan 4 Pantallas",
+      "maxSlots": 4,
+      "pricePerSlotPyg": 18000,
+      "pricePerSlotUsd": 2.4,
+      "commissionPercent": 10,
+      "netPayoutPyg": 16200,
+      "netPayoutUsd": 2.16
+    },
+    "paramount": {
+      "key": "paramount",
+      "name": "Paramount+ Premium",
+      "planName": "Plan Estándar 3 Pantallas",
+      "maxSlots": 3,
+      "pricePerSlotPyg": 18000,
+      "pricePerSlotUsd": 2.4,
+      "commissionPercent": 10,
+      "netPayoutPyg": 16200,
+      "netPayoutUsd": 2.16
     }
-  ],
-  "smm_orders": [
-    {
-      "id": "smm_ord_1788806662181_zyfe",
-      "userId": "usr_client1",
-      "serviceId": "smm_ig_followers_hq",
-      "serviceName": "Seguidores HQ Reales (Garantizados 30 Días)",
-      "platform": "Instagram",
-      "link": "https://instagram.com/gamesboy_test_profile",
-      "quantity": 1000,
-      "pricePaidUsd": 5.85,
-      "pricePaidPyg": 43875,
-      "status": "in_progress",
-      "createdAt": "2026-09-07T18:44:22.181Z"
-    }
-  ],
-  "giftcard_brands": [
-    {
-      "id": "brand_playstation",
-      "name": "PlayStation Network",
-      "category": "Gaming",
-      "logoUrl": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80",
-      "description": "Tarjetas oficiales de saldo y membresías PlayStation Plus.",
-      "variations": [
-        {
-          "id": "var_psn_10",
-          "name": "PSN $10 USD",
-          "denomination": "$10 USD",
-          "pricePyg": 85000,
-          "priceUsd": 10
-        },
-        {
-          "id": "var_psn_25",
-          "name": "PSN $25 USD",
-          "denomination": "$25 USD",
-          "pricePyg": 210000,
-          "priceUsd": 25
-        },
-        {
-          "id": "var_psn_50",
-          "name": "PSN $50 USD",
-          "denomination": "$50 USD",
-          "pricePyg": 410000,
-          "priceUsd": 50
-        },
-        {
-          "id": "var_psn_100",
-          "name": "PSN $100 USD",
-          "denomination": "$100 USD",
-          "pricePyg": 810000,
-          "priceUsd": 100
-        },
-        {
-          "id": "var_psn_plus_1m",
-          "name": "PS Plus Essential 1 Mes",
-          "denomination": "1 Mes",
-          "pricePyg": 90000,
-          "priceUsd": 11.99
-        },
-        {
-          "id": "var_psn_plus_12m",
-          "name": "PS Plus Essential 12 Meses",
-          "denomination": "12 Meses",
-          "pricePyg": 620000,
-          "priceUsd": 79.99
-        }
-      ]
-    },
-    {
-      "id": "brand_steam",
-      "name": "Steam Wallet",
-      "category": "PC Gaming",
-      "logoUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80",
-      "description": "Saldo para la tienda de Steam en PC y Steam Deck.",
-      "variations": [
-        {
-          "id": "var_steam_5",
-          "name": "Steam $5 USD",
-          "denomination": "$5 USD",
-          "pricePyg": 42000,
-          "priceUsd": 5
-        },
-        {
-          "id": "var_steam_10",
-          "name": "Steam $10 USD",
-          "denomination": "$10 USD",
-          "pricePyg": 85000,
-          "priceUsd": 10
-        },
-        {
-          "id": "var_steam_20",
-          "name": "Steam $20 USD",
-          "denomination": "$20 USD",
-          "pricePyg": 168000,
-          "priceUsd": 20
-        },
-        {
-          "id": "var_steam_50",
-          "name": "Steam $50 USD",
-          "denomination": "$50 USD",
-          "pricePyg": 415000,
-          "priceUsd": 50
-        }
-      ]
-    },
-    {
-      "id": "brand_xbox",
-      "name": "Xbox & Game Pass",
-      "category": "Gaming",
-      "logoUrl": "https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?auto=format&fit=crop&w=400&q=80",
-      "description": "Tarjetas de regalo Xbox y suscripciones Game Pass Ultimate.",
-      "variations": [
-        {
-          "id": "var_xbox_10",
-          "name": "Xbox $10 USD",
-          "denomination": "$10 USD",
-          "pricePyg": 85000,
-          "priceUsd": 10
-        },
-        {
-          "id": "var_xbox_25",
-          "name": "Xbox $25 USD",
-          "denomination": "$25 USD",
-          "pricePyg": 210000,
-          "priceUsd": 25
-        },
-        {
-          "id": "var_xbox_gpu_1m",
-          "name": "Game Pass Ultimate 1 Mes",
-          "denomination": "1 Mes",
-          "pricePyg": 125000,
-          "priceUsd": 16.99
-        },
-        {
-          "id": "var_xbox_gpu_3m",
-          "name": "Game Pass Ultimate 3 Meses",
-          "denomination": "3 Meses",
-          "pricePyg": 350000,
-          "priceUsd": 49.99
-        }
-      ]
-    },
-    {
-      "id": "brand_nintendo",
-      "name": "Nintendo eShop",
-      "category": "Gaming",
-      "logoUrl": "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80",
-      "description": "Saldo para comprar juegos en Nintendo Switch.",
-      "variations": [
-        {
-          "id": "var_nin_10",
-          "name": "Nintendo $10 USD",
-          "denomination": "$10 USD",
-          "pricePyg": 85000,
-          "priceUsd": 10
-        },
-        {
-          "id": "var_nin_20",
-          "name": "Nintendo $20 USD",
-          "denomination": "$20 USD",
-          "pricePyg": 170000,
-          "priceUsd": 20
-        },
-        {
-          "id": "var_nin_35",
-          "name": "Nintendo $35 USD",
-          "denomination": "$35 USD",
-          "pricePyg": 295000,
-          "priceUsd": 35
-        },
-        {
-          "id": "var_nin_50",
-          "name": "Nintendo $50 USD",
-          "denomination": "$50 USD",
-          "pricePyg": 420000,
-          "priceUsd": 50
-        }
-      ]
-    },
-    {
-      "id": "brand_spotify",
-      "name": "Spotify Premium",
-      "category": "Música",
-      "logoUrl": "https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=400&q=80",
-      "description": "Música sin anuncios y descargas offline en Spotify.",
-      "variations": [
-        {
-          "id": "var_spot_1m",
-          "name": "Spotify 1 Mes Individual",
-          "denomination": "1 Mes",
-          "pricePyg": 45000,
-          "priceUsd": 5.99
-        },
-        {
-          "id": "var_spot_3m",
-          "name": "Spotify 3 Meses",
-          "denomination": "3 Meses",
-          "pricePyg": 125000,
-          "priceUsd": 16.5
-        },
-        {
-          "id": "var_spot_6m",
-          "name": "Spotify 6 Meses",
-          "denomination": "6 Meses",
-          "pricePyg": 240000,
-          "priceUsd": 32
-        }
-      ]
-    },
-    {
-      "id": "brand_netflix",
-      "name": "Netflix Gift Card",
-      "category": "Streaming",
-      "logoUrl": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80",
-      "description": "Saldo oficial de regalo para canjear en cuentas Netflix.",
-      "variations": [
-        {
-          "id": "var_net_15",
-          "name": "Netflix $15 USD",
-          "denomination": "$15 USD",
-          "pricePyg": 125000,
-          "priceUsd": 15
-        },
-        {
-          "id": "var_net_25",
-          "name": "Netflix $25 USD",
-          "denomination": "$25 USD",
-          "pricePyg": 205000,
-          "priceUsd": 25
-        },
-        {
-          "id": "var_net_50",
-          "name": "Netflix $50 USD",
-          "denomination": "$50 USD",
-          "pricePyg": 405000,
-          "priceUsd": 50
-        }
-      ]
-    },
-    {
-      "id": "brand_deezer",
-      "name": "Deezer Premium",
-      "category": "Música",
-      "logoUrl": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80",
-      "description": "Música en calidad Hi-Fi y sonido de alta fidelidad.",
-      "variations": [
-        {
-          "id": "var_deezer_1m",
-          "name": "Deezer 1 Mes",
-          "denomination": "1 Mes",
-          "pricePyg": 40000,
-          "priceUsd": 5
-        },
-        {
-          "id": "var_deezer_3m",
-          "name": "Deezer 3 Meses",
-          "denomination": "3 Meses",
-          "pricePyg": 110000,
-          "priceUsd": 14.5
-        }
-      ]
-    },
-    {
-      "id": "brand_googleplay",
-      "name": "Google Play Store",
-      "category": "Móvil",
-      "logoUrl": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=400&q=80",
-      "description": "Saldo para apps, juegos y diamantes en Android.",
-      "variations": [
-        {
-          "id": "var_gp_10",
-          "name": "Google Play $10 USD",
-          "denomination": "$10 USD",
-          "pricePyg": 85000,
-          "priceUsd": 10
-        },
-        {
-          "id": "var_gp_25",
-          "name": "Google Play $25 USD",
-          "denomination": "$25 USD",
-          "pricePyg": 210000,
-          "priceUsd": 25
-        },
-        {
-          "id": "var_gp_50",
-          "name": "Google Play $50 USD",
-          "denomination": "$50 USD",
-          "pricePyg": 415000,
-          "priceUsd": 50
-        }
-      ]
-    },
-    {
-      "id": "brand_apple",
-      "name": "Apple Gift Card & iTunes",
-      "category": "Apple",
-      "logoUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80",
-      "description": "Saldo para compras en App Store, Apple Arcade y suscripciones.",
-      "variations": [
-        {
-          "id": "var_apple_10",
-          "name": "Apple $10 USD",
-          "denomination": "$10 USD",
-          "pricePyg": 85000,
-          "priceUsd": 10
-        },
-        {
-          "id": "var_apple_25",
-          "name": "Apple $25 USD",
-          "denomination": "$25 USD",
-          "pricePyg": 210000,
-          "priceUsd": 25
-        },
-        {
-          "id": "var_apple_50",
-          "name": "Apple $50 USD",
-          "denomination": "$50 USD",
-          "pricePyg": 415000,
-          "priceUsd": 50
-        }
-      ]
-    },
-    {
-      "id": "brand_roblox",
-      "name": "Roblox Robux Card",
-      "category": "Gaming",
-      "logoUrl": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=400&q=80",
-      "description": "Robux y objetos virtuales para tu avatar en Roblox.",
-      "variations": [
-        {
-          "id": "var_rob_10",
-          "name": "Roblox $10 (800 Robux)",
-          "denomination": "$10 USD",
-          "pricePyg": 85000,
-          "priceUsd": 10
-        },
-        {
-          "id": "var_rob_25",
-          "name": "Roblox $25 (2000 Robux)",
-          "denomination": "$25 USD",
-          "pricePyg": 210000,
-          "priceUsd": 25
-        }
-      ]
-    }
-  ],
-  "seller_reviews": [
-    {
-      "id": "rev_1788828555578_pmnf",
-      "sellerId": "usr_admin",
-      "buyerId": "usr_client1",
-      "buyerName": "Lucas",
-      "buyerAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-      "rating": 5,
-      "comment": "¡Excelente atención y entrega inmediata de mi perfil 4K!",
-      "createdAt": "2026-09-08T00:49:15.578Z"
-    },
-    {
-      "id": "rev_1788825777816_3sdx",
-      "sellerId": "usr_admin",
-      "buyerId": "usr_client1",
-      "buyerName": "Lucas",
-      "buyerAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-      "rating": 5,
-      "comment": "¡Excelente atención y entrega inmediata de mi perfil 4K!",
-      "createdAt": "2026-09-08T00:02:57.816Z"
-    },
-    {
-      "id": "rev_1788825729514_scia",
-      "sellerId": "usr_admin",
-      "buyerId": "usr_client1",
-      "buyerName": "Lucas",
-      "buyerAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-      "rating": 5,
-      "comment": "¡Excelente atención y entrega inmediata de mi perfil 4K!",
-      "createdAt": "2026-09-08T00:02:09.514Z"
-    },
-    {
-      "id": "rev_1788825680945_0wrn",
-      "sellerId": "usr_admin",
-      "buyerId": "usr_client1",
-      "buyerName": "Lucas",
-      "buyerAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-      "rating": 5,
-      "comment": "¡Excelente atención y entrega inmediata de mi perfil 4K!",
-      "createdAt": "2026-09-08T00:01:20.945Z"
-    },
-    {
-      "id": "rev_1788825537563_0qwi",
-      "sellerId": "usr_admin",
-      "buyerId": "usr_client1",
-      "buyerName": "Lucas",
-      "buyerAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
-      "rating": 5,
-      "comment": "¡Excelente atención y entrega inmediata de mi perfil 4K!",
-      "createdAt": "2026-09-07T23:58:57.563Z"
-    },
-    {
-      "id": "rev_1",
-      "sellerId": "usr_seller1",
-      "buyerId": "usr_client1",
-      "buyerName": "Lucas González",
-      "buyerAvatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80",
-      "rating": 5,
-      "comment": "Excelente servicio con Netflix 4K. Mi perfil tiene su propio PIN y funciona perfecto en mi Smart TV sin caídas. Recomendado al 100% 🔥",
-      "createdAt": "2026-09-05T23:58:57.509Z"
-    },
-    {
-      "id": "rev_2",
-      "sellerId": "usr_seller1",
-      "buyerId": "usr_client2",
-      "buyerName": "María López",
-      "buyerAvatar": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80",
-      "rating": 5,
-      "comment": "Activación inmediata y muy buena atención en el chat del grupo. Renuevo mes a mes sin problemas.",
-      "createdAt": "2026-09-06T23:58:57.509Z"
-    },
-    {
-      "id": "rev_3",
-      "sellerId": "usr_admin",
-      "buyerId": "usr_client1",
-      "buyerName": "Lucas González",
-      "buyerAvatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80",
-      "rating": 5,
-      "comment": "Cuentas oficiales de GamesBoy con garantía total de 30 días. La mejor plataforma de Paraguay.",
-      "createdAt": "2026-09-07T11:58:57.509Z"
-    }
-  ]
+  }
 }

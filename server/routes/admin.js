@@ -1145,4 +1145,272 @@ router.delete('/products/:id', (req, res) => {
   res.json({ success: true, message: `Producto "${removed.title}" eliminado.`, product: removed });
 });
 
+// =======================================================
+// 8. CONFIGURACIÓN DE PRECIOS & COMISIONES (ESTILO GOSPLIT)
+// =======================================================
+const DEFAULT_STREAMING_SERVICES_CONFIG = [
+  {
+    key: 'netflix',
+    name: 'Netflix Premium 4K',
+    planName: 'Ultra HD 4 Pantallas',
+    totalSlots: 5,
+    pricePerSlotPyg: 25000,
+    pricePerSlotUsd: 3.33,
+    commissionPercent: 10,
+    icon: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80',
+    description: 'Cuentas oficiales 4K HDR con perfiles individuales y PIN privado.'
+  },
+  {
+    key: 'spotify',
+    name: 'Spotify Premium Familiar',
+    planName: 'Plan Familiar 6 Cuentas',
+    totalSlots: 5,
+    pricePerSlotPyg: 18000,
+    pricePerSlotUsd: 2.40,
+    commissionPercent: 10,
+    icon: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=400&q=80',
+    description: 'Invitaciones a planes familiares oficiales sin anuncios.'
+  },
+  {
+    key: 'disney',
+    name: 'Disney+ Premium & Star+',
+    planName: 'Plan Premium 4K HDR',
+    totalSlots: 4,
+    pricePerSlotPyg: 25000,
+    pricePerSlotUsd: 3.33,
+    commissionPercent: 10,
+    icon: 'https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=400&q=80',
+    description: 'Disney, Marvel, Star Wars, Pixar y deportes de ESPN en vivo.'
+  },
+  {
+    key: 'max',
+    name: 'Max (HBO Max) 4K',
+    planName: 'Platino 4K Dolby Atmos',
+    totalSlots: 3,
+    pricePerSlotPyg: 22000,
+    pricePerSlotUsd: 2.93,
+    commissionPercent: 10,
+    icon: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80',
+    description: 'Películas de Warner Bros, HBO Originales y Champions League.'
+  },
+  {
+    key: 'youtube',
+    name: 'YouTube Premium & Music',
+    planName: 'Familiar Sin Anuncios',
+    totalSlots: 5,
+    pricePerSlotPyg: 20000,
+    pricePerSlotUsd: 2.67,
+    commissionPercent: 10,
+    icon: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=400&q=80',
+    description: 'YouTube sin anuncios, descargas y YouTube Music en tu cuenta personal.'
+  },
+  {
+    key: 'chatgpt',
+    name: 'ChatGPT Plus & Claude Pro',
+    planName: 'GPT-4o & Canvas Team',
+    totalSlots: 4,
+    pricePerSlotPyg: 35000,
+    pricePerSlotUsd: 4.67,
+    commissionPercent: 10,
+    icon: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=400&q=80',
+    description: 'Acceso prioritario a modelos de IA GPT-4o, DALL-E 3 y Canvas.'
+  },
+  {
+    key: 'crunchyroll',
+    name: 'Crunchyroll Mega Fan',
+    planName: 'Mega Fan 4 Pantallas',
+    totalSlots: 4,
+    pricePerSlotPyg: 18000,
+    pricePerSlotUsd: 2.40,
+    commissionPercent: 10,
+    icon: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80',
+    description: 'Anime en estreno simultáneo con Japón sin publicidad en 1080p.'
+  },
+  {
+    key: 'paramount',
+    name: 'Paramount+ Premium',
+    planName: 'Plan Estándar 3 Pantallas',
+    totalSlots: 3,
+    pricePerSlotPyg: 18000,
+    pricePerSlotUsd: 2.40,
+    commissionPercent: 10,
+    icon: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80',
+    description: 'Series exclusivas, estrenos cinematográficos y eventos en vivo.'
+  }
+];
+
+// Get services configuration with calculated seller payout
+router.get('/services-config', (req, res) => {
+  try {
+    const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    if (!db.streaming_services_config || db.streaming_services_config.length === 0) {
+      db.streaming_services_config = DEFAULT_STREAMING_SERVICES_CONFIG;
+      saveStorage();
+    }
+
+    const services = db.streaming_services_config.map(s => {
+      const pricePyg = s.pricePerSlotPyg || Math.round((s.pricePerSlotUsd || 3.33) * rate);
+      const priceUsd = s.pricePerSlotUsd || parseFloat((pricePyg / rate).toFixed(2));
+      const comm = s.commissionPercent !== undefined ? s.commissionPercent : (db.platform_settings?.commissionPercent || 10);
+      const sellerPyg = Math.round(pricePyg * (1 - comm / 100));
+      const sellerUsd = parseFloat((priceUsd * (1 - comm / 100)).toFixed(2));
+
+      return {
+        ...s,
+        pricePerSlotPyg: pricePyg,
+        pricePerSlotUsd: priceUsd,
+        commissionPercent: comm,
+        sellerPayoutPyg: sellerPyg,
+        sellerPayoutUsd: sellerUsd
+      };
+    });
+
+    res.json({ success: true, count: services.length, services });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Update service configuration (price, default slots, commission %)
+router.put('/services-config/:key', (req, res) => {
+  try {
+    const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    if (!db.streaming_services_config) {
+      db.streaming_services_config = DEFAULT_STREAMING_SERVICES_CONFIG;
+    }
+
+    const serviceKey = req.params.key.toLowerCase();
+    let service = db.streaming_services_config.find(s => s.key.toLowerCase() === serviceKey);
+
+    if (!service) {
+      service = { key: serviceKey, name: req.body.name || serviceKey };
+      db.streaming_services_config.push(service);
+    }
+
+    const { pricePerSlotPyg, pricePerSlotUsd, totalSlots, commissionPercent, planName, name } = req.body;
+
+    if (name) service.name = name;
+    if (planName) service.planName = planName;
+    if (totalSlots) service.totalSlots = parseInt(totalSlots, 10);
+    if (commissionPercent !== undefined && !isNaN(parseFloat(commissionPercent))) {
+      service.commissionPercent = parseFloat(commissionPercent);
+    }
+
+    if (pricePerSlotPyg !== undefined && pricePerSlotPyg !== '') {
+      service.pricePerSlotPyg = parseInt(pricePerSlotPyg, 10);
+      service.pricePerSlotUsd = parseFloat((service.pricePerSlotPyg / rate).toFixed(2));
+    } else if (pricePerSlotUsd !== undefined && pricePerSlotUsd !== '') {
+      service.pricePerSlotUsd = parseFloat(pricePerSlotUsd);
+      service.pricePerSlotPyg = Math.round(service.pricePerSlotUsd * rate);
+    }
+
+    const comm = service.commissionPercent !== undefined ? service.commissionPercent : 10;
+    service.sellerPayoutPyg = Math.round(service.pricePerSlotPyg * (1 - comm / 100));
+    service.sellerPayoutUsd = parseFloat((service.pricePerSlotUsd * (1 - comm / 100)).toFixed(2));
+
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `Tarifa y comisión de "${service.name}" actualizada con éxito.`,
+      service
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// =======================================================
+// 9. LIQUIDACIÓN DE PAGOS EN CUSTODIA (MANUAL PAYOUTS)
+// =======================================================
+
+// Get all active / completed sales in custody
+router.get('/payouts/custody', (req, res) => {
+  try {
+    const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    const now = new Date();
+
+    const custodyList = (db.user_slots || []).map(slot => {
+      const sub = (db.subscriptions || []).find(s => s.id === slot.subscriptionId);
+      const sellerId = sub ? sub.sellerId : (slot.sellerId || 'usr_seller1');
+      const seller = (db.users || []).find(u => u.id === sellerId) || { name: 'Anfitrión GamesBoy', email: '' };
+
+      const expiresDate = new Date(slot.expiresAt || (Date.now() + 30 * 86400000));
+      const purchaseDate = new Date(slot.createdAt || Date.now());
+      const diffMs = expiresDate - now;
+      const daysRemaining = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+      const isReadyForRelease = daysRemaining === 0 || slot.payoutStatus === 'ready_for_release';
+
+      const pricePaidUsd = slot.pricePaidUsd || (sub ? sub.pricePerSlotUsd : 3.33);
+      const pricePaidPyg = slot.pricePaidPyg || Math.round(pricePaidUsd * rate);
+      const commissionPercent = slot.commissionPercent !== undefined ? slot.commissionPercent : (db.platform_settings?.commissionPercent || 10);
+      const commissionUsd = parseFloat((pricePaidUsd * (commissionPercent / 100)).toFixed(2));
+      const netPayoutUsd = slot.netPayoutUsd !== undefined ? slot.netPayoutUsd : parseFloat((pricePaidUsd - commissionUsd).toFixed(2));
+      const netPayoutPyg = slot.netPayoutPyg || Math.round(netPayoutUsd * rate);
+
+      return {
+        slotId: slot.id,
+        subscriptionId: slot.subscriptionId,
+        serviceName: slot.serviceName || (sub ? sub.serviceName : 'Suscripción'),
+        slotNumber: slot.slotNumber || 1,
+        sellerId,
+        sellerName: seller.name,
+        sellerEmail: seller.email,
+        buyerId: slot.buyerId,
+        buyerName: slot.buyerName || 'Comprador',
+        purchaseDate: slot.createdAt,
+        expiresAt: slot.expiresAt,
+        daysRemaining,
+        isReadyForRelease,
+        pricePaidUsd,
+        pricePaidPyg,
+        commissionPercent,
+        commissionUsd,
+        netPayoutUsd,
+        netPayoutPyg,
+        payoutStatus: slot.payoutStatus || 'custody', // 'custody', 'paid', 'refunded'
+        payoutReleasedAt: slot.payoutReleasedAt || null,
+        payoutReleasedBy: slot.payoutReleasedBy || null
+      };
+    });
+
+    const pendingCount = custodyList.filter(p => p.payoutStatus !== 'paid').length;
+    const readyCount = custodyList.filter(p => p.payoutStatus !== 'paid' && p.isReadyForRelease).length;
+    const totalPendingPayoutPyg = custodyList.filter(p => p.payoutStatus !== 'paid').reduce((sum, p) => sum + p.netPayoutPyg, 0);
+    const totalPendingPayoutUsd = parseFloat(custodyList.filter(p => p.payoutStatus !== 'paid').reduce((sum, p) => sum + p.netPayoutUsd, 0).toFixed(2));
+
+    res.json({
+      success: true,
+      stats: {
+        totalPendingSales: pendingCount,
+        readyForReleaseCount: readyCount,
+        totalPendingPayoutPyg,
+        totalPendingPayoutUsd
+      },
+      payouts: custodyList
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Release payment manually to seller
+router.post('/payouts/release/:slotId', (req, res) => {
+  try {
+    const { slotId } = req.params;
+    const result = releaseSellerPayout(slotId, 'usr_admin');
+
+    res.json({
+      success: true,
+      message: `¡Liquidación liberada con éxito! Se acreditaron ${result.netPayoutPyg.toLocaleString('es-PY')} Gs. ($${result.netPayoutUsd.toFixed(2)} USDT) al saldo disponible del anfitrión.`,
+      result
+    });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 export default router;

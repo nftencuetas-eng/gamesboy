@@ -79,6 +79,10 @@ router.post('/:id/buy', (req, res) => {
     sub.availableSlots = Math.max(0, sub.availableSlots - 1);
 
     // 4. Save user slot entry
+    const commissionPercent = sub.commissionPercent !== undefined ? sub.commissionPercent : (db.platform_settings.commissionPercent || 10);
+    const netPayoutUsd = sub.netPayoutUsd !== undefined ? sub.netPayoutUsd : parseFloat((sub.pricePerSlotUsd * (1 - (commissionPercent / 100))).toFixed(2));
+    const netPayoutPyg = sub.netPayoutPyg || convertFromUsd(netPayoutUsd, 'PYG');
+
     const userSlot = {
       id: `slot_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       subscriptionId: sub.id,
@@ -89,16 +93,20 @@ router.post('/:id/buy', (req, res) => {
       assignedPin,
       credentialsEncrypted: sub.credentialsEncrypted,
       pricePaidUsd: sub.pricePerSlotUsd,
+      pricePaidPyg: convertFromUsd(sub.pricePerSlotUsd, 'PYG'),
       instructions: sub.instructions,
       expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
       status: 'active',
+      payoutStatus: 'custody', // In custody/escrow until 30 days end & admin releases manually
+      commissionPercent,
+      netPayoutUsd,
+      netPayoutPyg,
       createdAt: new Date().toISOString()
     };
 
     db.user_slots.unshift(userSlot);
 
-    // 5. Credit seller (minus commission)
-    const commissionPercent = db.platform_settings.commissionPercent || 15;
+    // 5. Credit seller (held in pendingEscrowUsd custody)
     creditSellerEscrow(sub.sellerId, sub.pricePerSlotUsd, commissionPercent);
 
     saveStorage();
@@ -387,30 +395,70 @@ router.post('/:id/renew', (req, res) => {
   }
 });
 
-// Allow any logged-in user to publish a streaming account (Unified Client-Seller Role)
+// Public endpoint to get official streaming service pricing and parameters (GoSplit model)
+router.get('/services-config', (req, res) => {
+  try {
+    const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    const config = db.streaming_services_config || {};
+    res.json({
+      success: true,
+      rate,
+      commissionPercent: db.platform_settings?.commissionPercent || 10,
+      config
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Allow any logged-in user to publish a streaming account with GoSplit fixed pricing
 router.post('/publish', (req, res) => {
   try {
     const userId = req.headers['x-user-id'] || 'usr_client1';
     const db = getDb();
     const user = db.users.find(u => u.id === userId) || { name: 'Usuario GamesBoy', role: 'client' };
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
 
-    const { serviceName, category, planName, totalSlots, pricePerSlotUsd, credentials, pins, instructions } = req.body;
+    const { serviceKey, serviceName, planName, totalSlots, credentials, pins, instructions } = req.body;
 
-    if (!serviceName || !totalSlots || !pricePerSlotUsd || !credentials) {
+    if ((!serviceKey && !serviceName) || !totalSlots || !credentials) {
       return res.status(400).json({ error: 'Por favor completa todos los campos requeridos.' });
     }
+
+    // Lookup service config set by admin (GoSplit model)
+    const servicesConfig = db.streaming_services_config || {};
+    const key = serviceKey || Object.keys(servicesConfig).find(k => (servicesConfig[k].name || '').toLowerCase() === (serviceName || '').toLowerCase());
+    const cfg = key ? servicesConfig[key] : null;
+
+    const finalServiceName = cfg ? cfg.name : (serviceName || 'Servicio Streaming');
+    const finalPlanName = planName || (cfg ? cfg.planName : 'Plan Compartido');
+    const maxSlots = cfg ? cfg.maxSlots : 5;
+    const requestedSlots = Math.min(Math.max(1, parseInt(totalSlots, 10)), maxSlots);
+
+    // Fixed price defined by admin
+    const pricePerSlotPyg = cfg ? cfg.pricePerSlotPyg : 25000;
+    const pricePerSlotUsd = cfg ? cfg.pricePerSlotUsd : parseFloat((pricePerSlotPyg / rate).toFixed(2));
+    const commissionPercent = cfg ? (cfg.commissionPercent !== undefined ? cfg.commissionPercent : (db.platform_settings?.commissionPercent || 10)) : 10;
+    const netPayoutPyg = cfg ? cfg.netPayoutPyg : Math.round(pricePerSlotPyg * (1 - commissionPercent / 100));
+    const netPayoutUsd = cfg ? cfg.netPayoutUsd : parseFloat((pricePerSlotUsd * (1 - commissionPercent / 100)).toFixed(2));
 
     const newSub = {
       id: `sub_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       sellerId: userId,
       sellerName: user.name,
       isOfficial: user.role === 'admin',
-      serviceName,
+      serviceKey: key || 'custom',
+      serviceName: finalServiceName,
       category: 'streaming',
-      planName: planName || 'Plan Compartido',
-      totalSlots: parseInt(totalSlots, 10),
-      availableSlots: parseInt(totalSlots, 10),
-      pricePerSlotUsd: parseFloat(pricePerSlotUsd),
+      planName: finalPlanName,
+      totalSlots: requestedSlots,
+      availableSlots: requestedSlots,
+      pricePerSlotUsd,
+      pricePerSlotPyg,
+      commissionPercent,
+      netPayoutUsd,
+      netPayoutPyg,
       credentialsEncrypted: cryptoService.encrypt(credentials),
       pinsEncrypted: cryptoService.encrypt(typeof pins === 'object' ? JSON.stringify(pins) : pins || '{}'),
       instructions: instructions || 'Usa exclusivamente tu perfil asignado y no modifiques la contraseña.',
@@ -429,7 +477,7 @@ router.post('/publish', (req, res) => {
         senderName: user.name,
         senderAvatar: '👑',
         isOwnerAdmin: true,
-        text: `¡Hola a todos! Soy el administrador de esta cuenta de ${serviceName}. Aquí compartiremos novedades e instrucciones del servicio.`,
+        text: `¡Hola a todos! Soy el anfitrión de esta cuenta de ${finalServiceName}. Aquí compartiremos novedades e instrucciones del servicio.`,
         timestamp: new Date().toISOString()
       }
     ];
@@ -438,7 +486,7 @@ router.post('/publish', (req, res) => {
 
     res.json({
       success: true,
-      message: '¡Tu cuenta de streaming ha sido publicada con éxito y ya está disponible en el catálogo!',
+      message: `¡Tu cuenta de ${finalServiceName} ha sido publicada con éxito! Recibirás ${netPayoutPyg.toLocaleString('es-PY')} Gs. por cada perfil vendido una vez finalizado el ciclo mensual.`,
       subscription: newSub
     });
   } catch (err) {

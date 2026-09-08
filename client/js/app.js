@@ -826,7 +826,7 @@ function renderStreamingServices() {
   }).join('');
 }
 
-// --- 3. RENDER DIGITAL GAMES (CLEAN 3D BOX ART WITH STRAIGHT EDGES & DUAL PRICING) ---
+// --- 3. RENDER DIGITAL GAMES (CLEAN 3D BOX ART WITH STRAIGHT EDGES & SINGLE-LINE DUAL PRICING) ---
 function renderDigitalGames() {
   const container = document.getElementById('digital-games-grid');
   if (!container) return;
@@ -840,76 +840,56 @@ function renderDigitalGames() {
   container.innerHTML = games.map(g => {
     const isAvail = g.isAvailable !== false;
     const primaryPrice = g.primaryPriceUsd || g.priceUsd || 39.99;
-    const secondaryPrice = g.secondaryPriceUsd || Math.round(primaryPrice * 0.65);
+    const secondaryPrice = g.secondaryPriceUsd || (g.secondaryPricePyg ? (g.secondaryPricePyg / (state.exchangeRatePyg || 7500)) : Math.round(primaryPrice * 0.65));
 
     return `
       <div class="game-card ${isAvail ? '' : 'disabled'}" onclick="openBuyGameModal('${g.id}')">
         <div class="game-cover-container">
-          <img src="${g.coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'}" alt="${g.title}" class="game-cover-img" loading="lazy">
-          <div class="game-spine-highlight"></div>
-          <span style="position: absolute; top: 8px; left: 8px; background: rgba(0, 194, 255, 0.85); color: #040c1e; font-size: 0.68rem; font-weight: 800; padding: 2px 7px; border-radius: 6px;">${g.platform || 'PS5'}</span>
+          <img src="${g.coverUrl || g.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'}" alt="${g.title}" class="game-cover-img" loading="lazy">
         </div>
         <div class="game-card-body">
           <h3 class="game-title">${g.title}</h3>
-          <div class="game-price-box">
-            <div class="game-price-label">Primaria desde</div>
-            <div class="game-price-val">${formatPrice(primaryPrice)}</div>
-          </div>
-          ${g.secondaryPriceUsd ? `
-            <div style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 2px;">
-              Secundaria: <strong style="color: var(--accent-cyan);">${formatPrice(secondaryPrice)}</strong>
+          <div class="game-prices-inline-list">
+            <div class="game-price-inline-row primary-row">
+              <span class="game-price-inline-label">Primaria:</span>
+              <span class="game-price-inline-val primary-val">${formatPrice(primaryPrice)}</span>
             </div>
-          ` : ''}
+            ${g.secondaryPriceUsd || g.secondaryPricePyg ? `
+              <div class="game-price-inline-row secondary-row">
+                <span class="game-price-inline-label">Secundaria:</span>
+                <span class="game-price-inline-val secondary-val">${formatPrice(secondaryPrice)}</span>
+              </div>
+            ` : ''}
+          </div>
         </div>
       </div>
     `;
   }).join('');
 }
 
-// --- 4. RENDER REALISTIC VERTICAL RETAIL GIFT CARDS (ROUNDED CORNERS) ---
+// --- 4. RENDER REAL PNG UPLOADED GIFT CARDS (PURE TRANSPARENT PNG CARDS - AUDIO 3) ---
 function renderRetailGiftCards() {
   const container = document.getElementById('retail-giftcards-grid');
   if (!container) return;
 
-  const giftcards = state.storeProducts.filter(p => p.category === 'gift_card');
-  if (giftcards.length === 0) {
+  // Prefer official giftcard brands from admin if available, or fallback to giftcard store products
+  const brandsList = (state.giftcardBrands && state.giftcardBrands.length > 0)
+    ? state.giftcardBrands
+    : state.storeProducts.filter(p => p.category === 'gift_card');
+
+  if (brandsList.length === 0) {
     container.innerHTML = `<p style="color: var(--text-tertiary); padding: 1rem;">Cargando tarjetas de regalo...</p>`;
     return;
   }
 
-  const brandDisplayNames = {
-    'psn': 'PlayStation',
-    'xbox': 'Xbox',
-    'nintendo': 'Nintendo eShop',
-    'steam': 'Steam Wallet',
-    'googleplay': 'Google Play',
-    'apple': 'Apple Store',
-    'netflix': 'Netflix Gift',
-    'spotify': 'Spotify Gift',
-    'roblox': 'Roblox'
-  };
-
-  container.innerHTML = giftcards.map(gc => {
-    const themeKey = gc.brandTheme || 'psn';
-    const themeClass = `theme-${themeKey}`;
-    const brandName = brandDisplayNames[themeKey] || gc.title.split(' ')[0] || 'Gift Card';
-    const denom = gc.title.includes('$') ? gc.title.match(/\$[0-9]+/)?.[0] || '$10' : '$10';
+  container.innerHTML = brandsList.map(gc => {
+    const cardImg = gc.logoImage || gc.logoUrl || gc.coverImage || gc.coverUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80';
+    const cardTitle = gc.name || gc.title || 'Gift Card';
+    const cardId = gc.id || gc.brandId || `gc_${Math.random()}`;
 
     return `
-      <div class="giftcard-vertical-card" onclick="openBuyGiftCardModal('${gc.id}')">
-        <div class="giftcard-v-face ${themeClass}">
-          <div class="giftcard-peg-hole"></div>
-          <div class="giftcard-v-logo-brand">${brandName}</div>
-          <div class="giftcard-v-denom">${denom}</div>
-          <div class="giftcard-v-gloss"></div>
-        </div>
-        <div class="giftcard-v-body">
-          <h3 class="giftcard-v-title">${gc.title}</h3>
-          <div class="giftcard-v-pricing">
-            <span class="giftcard-v-label">Desde</span>
-            <span class="giftcard-v-val">${formatPrice(gc.priceUsd)}</span>
-          </div>
-        </div>
+      <div class="giftcard-clean-png-card" onclick="openGiftCardVariationsModal('${cardId}')" title="${cardTitle}">
+        <img src="${cardImg}" alt="${cardTitle}" class="giftcard-clean-png-img" loading="lazy">
       </div>
     `;
   }).join('');
@@ -1020,11 +1000,13 @@ async function renderMyVault() {
 // --- 7. FETCH INITIAL DATA FROM API (SILENT RECONCILIATION) ---
 async function fetchStoreData() {
   try {
-    const [subRes, storeRes, bannersRes, smmRes] = await Promise.all([
+    const [subRes, storeRes, bannersRes, smmRes, giftcardsRes, servicesCfgRes] = await Promise.all([
       fetch('/api/subscriptions').then(r => r.json()).catch(() => null),
       fetch('/api/store/products').then(r => r.json()).catch(() => null),
       fetch('/api/banners').then(r => r.json()).catch(() => null),
-      fetch('/api/smm/services').then(r => r.json()).catch(() => null)
+      fetch('/api/smm/services').then(r => r.json()).catch(() => null),
+      fetch('/api/admin/giftcards/brands').then(r => r.json()).catch(() => null),
+      fetch('/api/subscriptions/services-config').then(r => r.json()).catch(() => null)
     ]);
 
     if (Array.isArray(subRes) && subRes.length > 0) {
@@ -1037,6 +1019,17 @@ async function fetchStoreData() {
       state.storeProducts = storeRes;
     } else if (storeRes && storeRes.products && storeRes.products.length > 0) {
       state.storeProducts = storeRes.products;
+    }
+
+    if (giftcardsRes && giftcardsRes.brands && Array.isArray(giftcardsRes.brands)) {
+      state.giftcardBrands = giftcardsRes.brands;
+    }
+
+    if (servicesCfgRes && servicesCfgRes.config) {
+      state.servicesConfig = servicesCfgRes.config;
+      if (typeof initPublishStreamModalPricing === 'function') {
+        initPublishStreamModalPricing();
+      }
     }
 
     if (bannersRes && bannersRes.banners && bannersRes.banners.length >= 4) {
@@ -1241,44 +1234,99 @@ window.openBuyGameModal = function(id) {
   modal.style.display = 'grid';
 };
 
-window.openBuyGiftCardModal = function(id) {
-  const gc = state.storeProducts.find(p => p.id === id);
-  if (!gc) return;
+window.openGiftCardVariationsModal = function(id) {
+  // Find brand from state.giftcardBrands or state.storeProducts
+  const brand = (state.giftcardBrands || []).find(b => b.id === id || b.brandId === id) ||
+                (state.storeProducts || []).find(p => p.id === id);
+  if (!brand) return;
 
-  const modal = document.getElementById('modal-product-buy');
-  if (!modal) return;
+  const modal = document.getElementById('modal-giftcard-variations');
+  if (!modal) {
+    if (typeof openBuyGiftCardModal === 'function') openBuyGiftCardModal(id);
+    return;
+  }
 
-  document.getElementById('modal-buy-cover').src = gc.coverUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80';
-  document.getElementById('modal-buy-platform').textContent = gc.brand || 'GIFT CARD';
-  document.getElementById('modal-buy-title').textContent = gc.title;
-  document.getElementById('modal-buy-genre').textContent = 'Tarjeta de Regalo Digital';
-  document.getElementById('modal-buy-description').textContent = gc.description || 'Código oficial de activación inmediata. Se entrega directamente a tu cuenta al confirmar.';
+  const cardImg = brand.logoImage || brand.logoUrl || brand.coverImage || brand.coverUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80';
+  const brandName = brand.name || brand.title || 'Tarjeta de Regalo';
+  const brandDesc = brand.description || 'Saldo oficial y membresías con entrega digital inmediata a tu cuenta.';
 
-  document.getElementById('modal-buy-screenshots-container').innerHTML = '';
+  document.getElementById('modal-gc-cover').src = cardImg;
+  document.getElementById('modal-gc-title').textContent = brandName;
+  document.getElementById('modal-gc-category').textContent = brand.category || 'GIFT CARD';
+  document.getElementById('modal-gc-description').textContent = brandDesc;
 
   const rate = state.exchangeRatePyg || 7500;
-  const price = gc.priceUsd || 10.00;
-  const gs = Math.round(price * rate);
+  let variations = brand.variations || [];
+  if (!variations || variations.length === 0) {
+    variations = [
+      { id: `var_${brand.id}_10`, name: `${brandName} $10 USD`, denomination: '$10 USD', priceUsd: 10.00, pricePyg: Math.round(10 * rate) },
+      { id: `var_${brand.id}_25`, name: `${brandName} $25 USD`, denomination: '$25 USD', priceUsd: 25.00, pricePyg: Math.round(25 * rate) },
+      { id: `var_${brand.id}_50`, name: `${brandName} $50 USD`, denomination: '$50 USD', priceUsd: 50.00, pricePyg: Math.round(50 * rate) },
+      { id: `var_${brand.id}_100`, name: `${brandName} $100 USD`, denomination: '$100 USD', priceUsd: 100.00, pricePyg: Math.round(100 * rate) }
+    ];
+  }
 
-  document.getElementById('modal-buy-options-grid').innerHTML = `
-    <div style="background: rgba(0,194,255,0.08); border: 1px solid var(--accent-cyan); padding: 12px; border-radius: 10px;">
-      <div style="font-size: 0.84rem; font-weight: 800; color: #ffffff;">Entrega Instantánea</div>
-      <div style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: 800; color: var(--accent-cyan); margin-top: 4px;">$${price.toFixed(2)} USDT</div>
-      <div style="font-size: 0.72rem; color: var(--text-tertiary);">Código digital disponible en stock</div>
-    </div>
-  `;
+  let selectedVarIndex = 0;
 
-  document.getElementById('modal-buy-total-gs').textContent = `${gs.toLocaleString('es-PY')} Gs.`;
-  document.getElementById('modal-buy-total-usd').textContent = `$${price.toFixed(2)} USDT`;
+  function renderVariationsGrid() {
+    const grid = document.getElementById('modal-gc-variations-grid');
+    if (!grid) return;
 
-  const confirmBtn = document.getElementById('btn-confirm-product-buy');
-  confirmBtn.onclick = () => {
-    modal.style.display = 'none';
-    executePurchase(`/api/store/products/${gc.id}/buy`, { priceUsd: price }, gc.title);
+    grid.innerHTML = variations.map((v, idx) => {
+      const isSelected = idx === selectedVarIndex;
+      const vPyg = v.pricePyg || Math.round((v.priceUsd || 10) * rate);
+      const vUsd = v.priceUsd || parseFloat((vPyg / rate).toFixed(2));
+      const isMembership = (v.name || '').toLowerCase().includes('mes') || (v.name || '').toLowerCase().includes('plus') || (v.name || '').toLowerCase().includes('pass') || (v.denomination || '').toLowerCase().includes('mes');
+
+      return `
+        <div class="gc-variation-card ${isSelected ? 'selected' : ''}" onclick="selectGcVariation(${idx})">
+          <div class="gc-var-header">
+            <span class="gc-var-denom">${v.denomination || v.name}</span>
+            <span class="gc-var-badge ${isMembership ? 'membership' : 'balance'}">${isMembership ? 'Membresía' : 'Saldo'}</span>
+          </div>
+          <div class="gc-var-pricing">
+            <span class="gc-var-price-gs">${vPyg.toLocaleString('es-PY')} Gs.</span>
+            <span class="gc-var-price-usd">$${vUsd.toFixed(2)} USDT</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const currentVar = variations[selectedVarIndex] || variations[0];
+    const totalPyg = currentVar.pricePyg || Math.round((currentVar.priceUsd || 10) * rate);
+    const totalUsd = currentVar.priceUsd || parseFloat((totalPyg / rate).toFixed(2));
+
+    document.getElementById('modal-gc-total-gs').textContent = `${totalPyg.toLocaleString('es-PY')} Gs.`;
+    document.getElementById('modal-gc-total-usd').textContent = `$${totalUsd.toFixed(2)} USDT`;
+  }
+
+  window.selectGcVariation = function(idx) {
+    selectedVarIndex = idx;
+    renderVariationsGrid();
   };
 
-  document.getElementById('btn-close-product-buy-modal').onclick = () => modal.style.display = 'none';
+  renderVariationsGrid();
+
+  const confirmBtn = document.getElementById('btn-confirm-gc-buy');
+  if (confirmBtn) {
+    confirmBtn.onclick = () => {
+      const currentVar = variations[selectedVarIndex] || variations[0];
+      modal.style.display = 'none';
+      const targetPriceUsd = currentVar.priceUsd || parseFloat(((currentVar.pricePyg || 75000) / rate).toFixed(2));
+      executePurchase(`/api/store/products/${brand.id || 'gc_custom'}/buy`, {
+        option: currentVar.name || currentVar.denomination,
+        priceUsd: targetPriceUsd
+      }, `${brandName} (${currentVar.denomination || currentVar.name})`);
+    };
+  }
+
+  const closeBtn = document.getElementById('btn-close-gc-modal');
+  if (closeBtn) closeBtn.onclick = () => modal.style.display = 'none';
   modal.style.display = 'grid';
+};
+
+window.openBuyGiftCardModal = function(id) {
+  openGiftCardVariationsModal(id);
 };
 
 async function executePurchase(url, body, productName, subId = null) {
@@ -2048,18 +2096,81 @@ function initUserSession() {
     btnRenewGroupModal.onclick = () => renewSubscriptionWithDiscount(state.activeGroupSubId);
   }
 
-  // Publish Streaming Account Modal Handlers
+  // Publish Streaming Account Modal Handlers (GoSplit Fixed Pricing Model)
   const modalPublish = document.getElementById('modal-publish-stream');
   const btnOpenPublish = document.getElementById('btn-open-publish-modal');
   const btnClosePublish = document.getElementById('btn-close-publish-modal');
   const navSellerPills = document.querySelectorAll('.sub-nav-seller-pill');
 
-  if (btnOpenPublish && modalPublish) btnOpenPublish.onclick = () => modalPublish.style.display = 'grid';
-  if (btnClosePublish && modalPublish) btnClosePublish.onclick = () => modalPublish.style.display = 'none';
+  window.initPublishStreamModalPricing = function() {
+    const serviceSelect = document.getElementById('user-pub-service');
+    const planInput = document.getElementById('user-pub-plan');
+    const slotsInput = document.getElementById('user-pub-slots');
+    const priceDisplay = document.getElementById('user-pub-fixed-price-preview');
+    const commissionDisplay = document.getElementById('user-pub-commission-preview');
+    const netEarningsSlot = document.getElementById('user-pub-net-per-slot');
+    const netEarningsTotal = document.getElementById('user-pub-net-total');
+
+    if (!serviceSelect) return;
+
+    const servicesConfig = state.servicesConfig || {
+      'netflix': { name: 'Netflix Premium 4K', planName: 'Ultra HD 4K (4 Pantallas)', maxSlots: 5, pricePerSlotPyg: 25000, commissionPercent: 10, netPayoutPyg: 22500 },
+      'spotify': { name: 'Spotify Premium Familiar', planName: 'Plan Familiar (6 Cuentas)', maxSlots: 5, pricePerSlotPyg: 18000, commissionPercent: 10, netPayoutPyg: 16200 },
+      'disney': { name: 'Disney+ Premium & Star+', planName: 'Plan Premium 4K', maxSlots: 4, pricePerSlotPyg: 25000, commissionPercent: 10, netPayoutPyg: 22500 },
+      'max': { name: 'Max (HBO Max) 4K', planName: 'Platino 4K Dolby Atmos', maxSlots: 3, pricePerSlotPyg: 22000, commissionPercent: 10, netPayoutPyg: 19800 },
+      'youtube': { name: 'YouTube Premium & Music', planName: 'Familiar Sin Anuncios', maxSlots: 5, pricePerSlotPyg: 20000, commissionPercent: 10, netPayoutPyg: 18000 },
+      'chatgpt': { name: 'ChatGPT Plus & AI', planName: 'Plus GPT-4o & Canvas', maxSlots: 2, pricePerSlotPyg: 35000, commissionPercent: 10, netPayoutPyg: 31500 },
+      'crunchyroll': { name: 'Crunchyroll Mega Fan', planName: 'Mega Fan 4 Pantallas', maxSlots: 4, pricePerSlotPyg: 18000, commissionPercent: 10, netPayoutPyg: 16200 },
+      'paramount': { name: 'Paramount+ Premium', planName: 'Plan Estándar 3 Pantallas', maxSlots: 3, pricePerSlotPyg: 18000, commissionPercent: 10, netPayoutPyg: 16200 }
+    };
+
+    const updateCalculations = () => {
+      const selectedKey = serviceSelect.value;
+      const cfg = servicesConfig[selectedKey] || Object.values(servicesConfig).find(c => (c.name || '').toLowerCase() === (selectedKey || '').toLowerCase()) || servicesConfig['netflix'];
+
+      if (planInput && cfg) planInput.value = cfg.planName || 'Plan Compartido';
+      if (slotsInput && cfg) {
+        slotsInput.max = cfg.maxSlots || 5;
+        if (parseInt(slotsInput.value, 10) > (cfg.maxSlots || 5)) {
+          slotsInput.value = cfg.maxSlots || 5;
+        }
+      }
+
+      const pricePyg = cfg ? cfg.pricePerSlotPyg : 25000;
+      const commPct = cfg ? (cfg.commissionPercent !== undefined ? cfg.commissionPercent : 10) : 10;
+      const netPerSlot = cfg ? cfg.netPayoutPyg : Math.round(pricePyg * (1 - commPct / 100));
+      const slots = parseInt(slotsInput?.value, 10) || 1;
+      const totalNet = netPerSlot * slots;
+
+      if (priceDisplay) priceDisplay.textContent = `${pricePyg.toLocaleString('es-PY')} Gs.`;
+      if (commissionDisplay) commissionDisplay.textContent = `${commPct}%`;
+      if (netEarningsSlot) netEarningsSlot.textContent = `${netPerSlot.toLocaleString('es-PY')} Gs.`;
+      if (netEarningsTotal) netEarningsTotal.textContent = `${totalNet.toLocaleString('es-PY')} Gs.`;
+    };
+
+    serviceSelect.onchange = updateCalculations;
+    if (slotsInput) slotsInput.oninput = updateCalculations;
+    updateCalculations();
+  };
+
+  if (btnOpenPublish && modalPublish) {
+    btnOpenPublish.onclick = () => {
+      modalPublish.style.display = 'grid';
+      initPublishStreamModalPricing();
+    };
+  }
+
+  if (btnClosePublish && modalPublish) {
+    btnClosePublish.onclick = () => modalPublish.style.display = 'none';
+  }
+
   navSellerPills.forEach(pill => {
     pill.addEventListener('click', (e) => {
       e.preventDefault();
-      if (modalPublish) modalPublish.style.display = 'grid';
+      if (modalPublish) {
+        modalPublish.style.display = 'grid';
+        initPublishStreamModalPricing();
+      }
     });
   });
 
@@ -2068,12 +2179,13 @@ function initUserSession() {
     publishForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
+      const serviceKey = document.getElementById('user-pub-service').value;
 
       const payload = {
-        serviceName: document.getElementById('user-pub-service').value,
-        planName: document.getElementById('user-pub-plan').value,
+        serviceKey,
+        serviceName: document.getElementById('user-pub-service').selectedOptions[0]?.text || serviceKey,
+        planName: document.getElementById('user-pub-plan')?.value,
         totalSlots: document.getElementById('user-pub-slots').value,
-        pricePerSlotUsd: document.getElementById('user-pub-price').value,
         credentials: document.getElementById('user-pub-creds').value,
         pins: document.getElementById('user-pub-pins').value || '{}',
         instructions: document.getElementById('user-pub-instructions').value
@@ -2090,15 +2202,17 @@ function initUserSession() {
         });
         const data = await res.json();
         if (data.success) {
-          alert('🎉 ¡Tu cuenta ha sido publicada con éxito! Eres el Administrador de este nuevo grupo.');
+          window.showToast('success', '¡Cuenta Publicada!', data.message || 'Tu cuenta ha sido publicada con éxito en el catálogo.');
           if (modalPublish) modalPublish.style.display = 'none';
           await fetchStoreData();
-          openGroupChatModal(data.subscription.id);
+          if (data.subscription?.id) {
+            openGroupChatModal(data.subscription.id);
+          }
         } else {
-          alert(data.error || 'No se pudo publicar la cuenta.');
+          window.showToast('error', 'Error al Publicar', data.error || 'No se pudo publicar la cuenta.');
         }
       } catch (err) {
-        alert('Error al publicar cuenta de streaming.');
+        window.showToast('error', 'Error de Red', 'Error al publicar cuenta de streaming.');
       }
     });
   }
