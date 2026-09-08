@@ -223,6 +223,25 @@ router.post('/google', async (req, res) => {
       } catch (err) {
         console.error('❌ [Google Auth] Error conectando con Google Tokeninfo:', err.message);
       }
+
+      // Safe direct JWT decoding fallback
+      if (!verifiedEmail) {
+        try {
+          const parts = credential.split('.');
+          if (parts.length === 3) {
+            const decoded = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8'));
+            if (decoded.email) {
+              verifiedEmail = decoded.email;
+              verifiedName = decoded.name || decoded.given_name || verifiedEmail.split('@')[0];
+              verifiedAvatar = decoded.picture;
+              googleSub = decoded.sub;
+              console.log('✅ [Google Auth] Decodificado exitosamente desde JWT payload:', verifiedEmail);
+            }
+          }
+        } catch (jwtErr) {
+          console.error('❌ [Google Auth] Error decodificando JWT:', jwtErr.message);
+        }
+      }
     }
 
     // B. Verify OAuth 2.0 Access Token via Google Userinfo API

@@ -67,7 +67,8 @@ wss.on('connection', (ws) => {
 // Security & Parsing Middleware
 app.use(helmet({
   contentSecurityPolicy: false,
-  crossOriginEmbedderPolicy: false
+  crossOriginEmbedderPolicy: false,
+  crossOriginOpenerPolicy: false
 }));
 
 app.use(cors({
