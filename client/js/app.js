@@ -437,13 +437,352 @@ const defaultStoreProducts = [
   }
 ];
 
-// SMM Social Media Packages (Base API Ready)
-const smmServices = [
-  { id: 'smm_ig_followers', platform: 'Instagram', name: 'Seguidores Reales Latinos', priceUsd: 4.50, icon: '📸', desc: '1,000 Seguidores de alta calidad con entrega gradual y reposición.' },
-  { id: 'smm_tiktok_views', platform: 'TikTok', name: 'Visualizaciones Virales', priceUsd: 2.00, icon: '🎵', desc: '10,000 Views para impulsar tus videos en el algoritmo Para Ti.' },
-  { id: 'smm_yt_subscribers', platform: 'YouTube', name: 'Suscriptores para Monetización', priceUsd: 8.00, icon: '▶️', desc: '500 Suscriptores orgánicos compatibles con el programa de socios.' },
-  { id: 'smm_x_retweets', platform: 'X (Twitter)', name: 'Likes & Retweets', priceUsd: 3.00, icon: '✖️', desc: '500 Interacciones rápidas para posicionar tus publicaciones.' }
-];
+// SMM Social Media Platforms & Services Config (2-Column Architecture)
+const smmPlatformsData = {
+  'instagram': {
+    id: 'instagram',
+    platform: 'Instagram',
+    title: 'Instagram Pro',
+    bannerGradient: 'linear-gradient(135deg, #405DE6 0%, #833AB4 35%, #C13584 65%, #F56040 85%, #FFDC80 100%)',
+    servicesListText: 'Seguidores • Likes • Vistas • Comentarios',
+    startingPricePyg: 8775,
+    startingPriceUsd: 1.17,
+    categories: [
+      {
+        id: 'views',
+        title: 'Visualizaciones / Reels Views',
+        badge: '🚀 Impulso Algorítmico',
+        desc: 'Reproducciones de alta retención para Reels, videos y Stories en Instagram.',
+        base1kPricePyg: 8775,
+        base1kPriceUsd: 1.17,
+        targetLabel: 'Enlace del Reel / Video de Instagram:',
+        targetPlaceholder: 'https://www.instagram.com/reel/... o https://www.instagram.com/p/...',
+        packages: [
+          { qty: 1000, pricePyg: 8775, priceUsd: 1.17 },
+          { qty: 2500, pricePyg: 21500, priceUsd: 2.87 },
+          { qty: 5000, pricePyg: 42000, priceUsd: 5.60 },
+          { qty: 10000, pricePyg: 79000, priceUsd: 10.53 },
+          { qty: 25000, pricePyg: 185000, priceUsd: 24.67 },
+          { qty: 50000, pricePyg: 340000, priceUsd: 45.33 }
+        ]
+      },
+      {
+        id: 'likes',
+        title: 'Likes / Me Gusta Instantáneos',
+        badge: '⚡ Entrega Inmediata',
+        desc: 'Aumenta el alcance de tus posts y fotos en el algoritmo y sección Explorar.',
+        base1kPricePyg: 17550,
+        base1kPriceUsd: 2.34,
+        targetLabel: 'Enlace de la Publicación de Instagram:',
+        targetPlaceholder: 'https://www.instagram.com/p/...',
+        packages: [
+          { qty: 500, pricePyg: 9000, priceUsd: 1.20 },
+          { qty: 1000, pricePyg: 17550, priceUsd: 2.34 },
+          { qty: 2500, pricePyg: 42000, priceUsd: 5.60 },
+          { qty: 5000, pricePyg: 79000, priceUsd: 10.53 },
+          { qty: 10000, pricePyg: 149000, priceUsd: 19.87 }
+        ]
+      },
+      {
+        id: 'followers',
+        title: 'Seguidores HQ Reales',
+        badge: '⭐ Garantía 30 Días',
+        desc: 'Cuentas con fotos de perfil, publicaciones y actividad real. Entrega gradual segura.',
+        base1kPricePyg: 43875,
+        base1kPriceUsd: 5.85,
+        targetLabel: 'Usuario o Enlace de tu Perfil de Instagram:',
+        targetPlaceholder: '@tu_usuario o https://instagram.com/tu_usuario',
+        packages: [
+          { qty: 500, pricePyg: 23000, priceUsd: 3.07 },
+          { qty: 1000, pricePyg: 43875, priceUsd: 5.85 },
+          { qty: 2500, pricePyg: 105000, priceUsd: 14.00 },
+          { qty: 5000, pricePyg: 198000, priceUsd: 26.40 },
+          { qty: 10000, pricePyg: 375000, priceUsd: 50.00 }
+        ]
+      },
+      {
+        id: 'comments',
+        title: 'Comentarios Personalizados',
+        badge: '💬 100% Cuentas Reales',
+        desc: 'Comentarios relevantes y positivos de cuentas en español para tus publicaciones.',
+        base1kPricePyg: 85000,
+        base1kPriceUsd: 11.33,
+        targetLabel: 'Enlace del Post de Instagram:',
+        targetPlaceholder: 'https://www.instagram.com/p/...',
+        packages: [
+          { qty: 25, pricePyg: 15000, priceUsd: 2.00 },
+          { qty: 50, pricePyg: 28000, priceUsd: 3.73 },
+          { qty: 100, pricePyg: 52000, priceUsd: 6.93 },
+          { qty: 250, pricePyg: 115000, priceUsd: 15.33 }
+        ]
+      }
+    ]
+  },
+  'tiktok': {
+    id: 'tiktok',
+    platform: 'TikTok',
+    title: 'TikTok Viral',
+    bannerGradient: 'linear-gradient(135deg, #010101 0%, #00f2fe 30%, #1e1b4b 60%, #fe0979 100%)',
+    servicesListText: 'Visualizaciones FYP • Seguidores • Likes • Shares',
+    startingPricePyg: 8775,
+    startingPriceUsd: 1.17,
+    categories: [
+      {
+        id: 'views',
+        title: 'Visualizaciones Virales Para Ti (FYP)',
+        badge: '🔥 100% Retención',
+        desc: 'Potencia tus videos para entrar en tendencias mundiales y feed Para Ti de TikTok.',
+        base1kPricePyg: 8775,
+        base1kPriceUsd: 1.17,
+        targetLabel: 'Enlace del Video de TikTok:',
+        targetPlaceholder: 'https://www.tiktok.com/@usuario/video/...',
+        packages: [
+          { qty: 2500, pricePyg: 8775, priceUsd: 1.17 },
+          { qty: 5000, pricePyg: 16500, priceUsd: 2.20 },
+          { qty: 10000, pricePyg: 30000, priceUsd: 4.00 },
+          { qty: 25000, pricePyg: 68000, priceUsd: 9.07 },
+          { qty: 50000, pricePyg: 125000, priceUsd: 16.67 }
+        ]
+      },
+      {
+        id: 'followers',
+        title: 'Seguidores Activos TikTok',
+        badge: '👤 Habilita Lives & Monetización',
+        desc: 'Habilita funciones de LIVE y monetización alcanzando los 1.000 o 10.000 seguidores.',
+        base1kPricePyg: 63375,
+        base1kPriceUsd: 8.45,
+        targetLabel: 'Usuario o Enlace de tu Perfil TikTok:',
+        targetPlaceholder: '@tu_usuario o https://tiktok.com/@tu_usuario',
+        packages: [
+          { qty: 500, pricePyg: 33000, priceUsd: 4.40 },
+          { qty: 1000, pricePyg: 63375, priceUsd: 8.45 },
+          { qty: 2500, pricePyg: 152000, priceUsd: 20.27 },
+          { qty: 5000, pricePyg: 285000, priceUsd: 38.00 }
+        ]
+      },
+      {
+        id: 'likes',
+        title: 'Likes / Me Gusta en Videos',
+        badge: '⚡ Alta Velocidad',
+        desc: 'Likes inmediatos para aumentar la probabilidad de viralización de tus videos.',
+        base1kPricePyg: 24000,
+        base1kPriceUsd: 3.20,
+        targetLabel: 'Enlace del Video de TikTok:',
+        targetPlaceholder: 'https://www.tiktok.com/@usuario/video/...',
+        packages: [
+          { qty: 500, pricePyg: 13000, priceUsd: 1.73 },
+          { qty: 1000, pricePyg: 24000, priceUsd: 3.20 },
+          { qty: 2500, pricePyg: 56000, priceUsd: 7.47 },
+          { qty: 5000, pricePyg: 105000, priceUsd: 14.00 }
+        ]
+      },
+      {
+        id: 'shares',
+        title: 'Compartidos & Guardados',
+        badge: '🔄 Factor Viral',
+        desc: 'Multiplica las señales de retención y viralidad en el algoritmo de TikTok.',
+        base1kPricePyg: 15000,
+        base1kPriceUsd: 2.00,
+        targetLabel: 'Enlace del Video de TikTok:',
+        targetPlaceholder: 'https://www.tiktok.com/@usuario/video/...',
+        packages: [
+          { qty: 500, pricePyg: 8000, priceUsd: 1.07 },
+          { qty: 1000, pricePyg: 15000, priceUsd: 2.00 },
+          { qty: 2500, pricePyg: 34000, priceUsd: 4.53 },
+          { qty: 5000, pricePyg: 62000, priceUsd: 8.27 }
+        ]
+      }
+    ]
+  },
+  'youtube': {
+    id: 'youtube',
+    platform: 'YouTube',
+    title: 'YouTube Creator',
+    bannerGradient: 'linear-gradient(135deg, #1f0204 0%, #991b1b 45%, #ef4444 100%)',
+    servicesListText: 'Suscriptores • Vistas Shorts/Video • Likes',
+    startingPricePyg: 22000,
+    startingPriceUsd: 2.93,
+    categories: [
+      {
+        id: 'views',
+        title: 'Reproducciones Video / Shorts',
+        badge: '▶️ Horas de Reproducción',
+        desc: 'Vistas de alta retención para posicionar videos en el buscador y recomendaciones.',
+        base1kPricePyg: 22000,
+        base1kPriceUsd: 2.93,
+        targetLabel: 'Enlace del Video o Short de YouTube:',
+        targetPlaceholder: 'https://www.youtube.com/watch?v=... o https://youtu.be/...',
+        packages: [
+          { qty: 1000, pricePyg: 22000, priceUsd: 2.93 },
+          { qty: 2500, pricePyg: 52000, priceUsd: 6.93 },
+          { qty: 5000, pricePyg: 98000, priceUsd: 13.07 },
+          { qty: 10000, pricePyg: 185000, priceUsd: 24.67 }
+        ]
+      },
+      {
+        id: 'subscribers',
+        title: 'Suscriptores para Canal',
+        badge: '⭐ Compatibles con Monetización',
+        desc: 'Suscriptores reales para superar la meta de 1.000 subs y monetizar.',
+        base1kPricePyg: 95000,
+        base1kPriceUsd: 12.67,
+        targetLabel: 'Enlace de tu Canal de YouTube:',
+        targetPlaceholder: 'https://www.youtube.com/@tu_canal',
+        packages: [
+          { qty: 100, pricePyg: 15000, priceUsd: 2.00 },
+          { qty: 250, pricePyg: 32000, priceUsd: 4.27 },
+          { qty: 500, pricePyg: 58000, priceUsd: 7.73 },
+          { qty: 1000, pricePyg: 95000, priceUsd: 12.67 }
+        ]
+      },
+      {
+        id: 'likes',
+        title: 'Likes en Videos / Shorts',
+        badge: '👍 100% Permanentes',
+        desc: 'Mejora el ratio de me gusta de tus producciones audiovisuales.',
+        base1kPricePyg: 28000,
+        base1kPriceUsd: 3.73,
+        targetLabel: 'Enlace del Video de YouTube:',
+        targetPlaceholder: 'https://www.youtube.com/watch?v=...',
+        packages: [
+          { qty: 250, pricePyg: 9000, priceUsd: 1.20 },
+          { qty: 500, pricePyg: 16000, priceUsd: 2.13 },
+          { qty: 1000, pricePyg: 28000, priceUsd: 3.73 },
+          { qty: 2500, pricePyg: 65000, priceUsd: 8.67 }
+        ]
+      }
+    ]
+  },
+  'facebook': {
+    id: 'facebook',
+    platform: 'Facebook',
+    title: 'Facebook Fanpage & Perfil',
+    bannerGradient: 'linear-gradient(135deg, #061e47 0%, #1877f2 60%, #00c2ff 100%)',
+    servicesListText: 'Seguidores Fanpage • Reacciones • Vistas Reels',
+    startingPricePyg: 12000,
+    startingPriceUsd: 1.60,
+    categories: [
+      {
+        id: 'followers',
+        title: 'Seguidores Fanpage / Perfil Profesional',
+        badge: '👥 Monetización In-Stream',
+        desc: 'Seguidores para monetizar con estrellas y anuncios in-stream.',
+        base1kPricePyg: 48000,
+        base1kPriceUsd: 6.40,
+        targetLabel: 'Enlace de tu Fanpage o Perfil de Facebook:',
+        targetPlaceholder: 'https://www.facebook.com/tu_pagina',
+        packages: [
+          { qty: 500, pricePyg: 26000, priceUsd: 3.47 },
+          { qty: 1000, pricePyg: 48000, priceUsd: 6.40 },
+          { qty: 2500, pricePyg: 115000, priceUsd: 15.33 },
+          { qty: 5000, pricePyg: 215000, priceUsd: 28.67 }
+        ]
+      },
+      {
+        id: 'likes',
+        title: 'Reacciones (Me Gusta / Me Encanta)',
+        badge: '❤️ Reacciones Reales',
+        desc: 'Interacciones positivas en tus publicaciones, posts y fotos.',
+        base1kPricePyg: 22000,
+        base1kPriceUsd: 2.93,
+        targetLabel: 'Enlace de la Publicación de Facebook:',
+        targetPlaceholder: 'https://www.facebook.com/.../posts/...',
+        packages: [
+          { qty: 250, pricePyg: 8000, priceUsd: 1.07 },
+          { qty: 500, pricePyg: 13000, priceUsd: 1.73 },
+          { qty: 1000, pricePyg: 22000, priceUsd: 2.93 },
+          { qty: 2500, pricePyg: 50000, priceUsd: 6.67 }
+        ]
+      }
+    ]
+  },
+  'telegram': {
+    id: 'telegram',
+    platform: 'Telegram',
+    title: 'Telegram Canales & Grupos',
+    bannerGradient: 'linear-gradient(135deg, #092c42 0%, #229ed9 60%, #38d6ff 100%)',
+    servicesListText: 'Miembros Canales • Vistas Posts • Reacciones',
+    startingPricePyg: 6500,
+    startingPriceUsd: 0.87,
+    categories: [
+      {
+        id: 'members',
+        title: 'Miembros para Canales / Grupos',
+        badge: '🚀 Crecimiento Rápido',
+        desc: 'Miembros de alta retención para dar credibilidad a tu canal o grupo de Telegram.',
+        base1kPricePyg: 32000,
+        base1kPriceUsd: 4.27,
+        targetLabel: 'Enlace de tu Canal o Grupo de Telegram:',
+        targetPlaceholder: 'https://t.me/tu_canal',
+        packages: [
+          { qty: 500, pricePyg: 18000, priceUsd: 2.40 },
+          { qty: 1000, pricePyg: 32000, priceUsd: 4.27 },
+          { qty: 2500, pricePyg: 75000, priceUsd: 10.00 },
+          { qty: 5000, pricePyg: 140000, priceUsd: 18.67 }
+        ]
+      },
+      {
+        id: 'views',
+        title: 'Vistas en Últimos Posts',
+        badge: '👁️ Visibilidad Garantizada',
+        desc: 'Visualizaciones automáticas en los últimos mensajes de tu canal.',
+        base1kPricePyg: 6500,
+        base1kPriceUsd: 0.87,
+        targetLabel: 'Enlace de la Publicación de Telegram:',
+        targetPlaceholder: 'https://t.me/tu_canal/123',
+        packages: [
+          { qty: 1000, pricePyg: 6500, priceUsd: 0.87 },
+          { qty: 5000, pricePyg: 28000, priceUsd: 3.73 },
+          { qty: 10000, pricePyg: 50000, priceUsd: 6.67 },
+          { qty: 25000, pricePyg: 110000, priceUsd: 14.67 }
+        ]
+      }
+    ]
+  },
+  'x': {
+    id: 'x',
+    platform: 'X (Twitter)',
+    title: 'X (Twitter) Growth',
+    bannerGradient: 'linear-gradient(135deg, #0a0a0f 0%, #1e293b 50%, #334155 100%)',
+    servicesListText: 'Seguidores • Retweets • Likes • Vistas Tweets',
+    startingPricePyg: 28000,
+    startingPriceUsd: 3.73,
+    categories: [
+      {
+        id: 'followers',
+        title: 'Seguidores HQ para X',
+        badge: '✖️ Cuentas con Foto y Bio',
+        desc: 'Seguidores de calidad para aumentar tu autoridad en X / Twitter.',
+        base1kPricePyg: 55000,
+        base1kPriceUsd: 7.33,
+        targetLabel: 'Usuario o Enlace de tu Perfil de X:',
+        targetPlaceholder: '@tu_usuario o https://x.com/tu_usuario',
+        packages: [
+          { qty: 250, pricePyg: 16000, priceUsd: 2.13 },
+          { qty: 500, pricePyg: 30000, priceUsd: 4.00 },
+          { qty: 1000, pricePyg: 55000, priceUsd: 7.33 },
+          { qty: 2500, pricePyg: 130000, priceUsd: 17.33 }
+        ]
+      },
+      {
+        id: 'retweets',
+        title: 'Retweets & Likes en Posts',
+        badge: '🔄 Viralidad en Feed X',
+        desc: 'Impulsa tus hilos y posts para lograr mayor visibilidad y tendencias.',
+        base1kPricePyg: 28000,
+        base1kPriceUsd: 3.73,
+        targetLabel: 'Enlace del Tweet / Post en X:',
+        targetPlaceholder: 'https://x.com/usuario/status/...',
+        packages: [
+          { qty: 250, pricePyg: 9000, priceUsd: 1.20 },
+          { qty: 500, pricePyg: 16000, priceUsd: 2.13 },
+          { qty: 1000, pricePyg: 28000, priceUsd: 3.73 },
+          { qty: 2500, pricePyg: 65000, priceUsd: 8.67 }
+        ]
+      }
+    ]
+  }
+};
 
 const state = {
   country: autoDetectUserCountry(),
@@ -451,12 +790,13 @@ const state = {
   currentUser: JSON.parse(localStorage.getItem('gb_user') || 'null'),
   wallet: { balanceUsd: 25.0, pendingEscrowUsd: 0.0 },
   exchangeRates: { PYG: 7500, ARS: 1250, BRL: 5.60, USD: 1.0, USDT: 1.0 },
-  heroBanners: defaultBanners,
-  activeSlideIndex: 1, // Default Spider-Man 2
+  heroBanners: [],
+  activeSlideIndex: 0,
   heroInterval: null,
-  subscriptions: defaultSubscriptions,
-  storeProducts: defaultStoreProducts,
-  smmServices: smmServices,
+  subscriptions: [],
+  storeProducts: [],
+  giftcardBrands: [],
+  smmPlatforms: smmPlatformsData,
   myVault: [],
   cart: [],
   depositMethod: 'local'
@@ -479,11 +819,18 @@ window.scrollCarousel = function(containerId, offset) {
   }
 };
 
-// --- GLOBAL MOUSE DRAG-TO-SCROLL ENGINE FOR ALL HORIZONTAL CAROUSELS & ROWS ---
+// --- GLOBAL MOUSE DRAG-TO-SCROLL ENGINE (WITH GHOST IMAGE SUPPRESSION) ---
 function initDragToScrollEngine() {
   const scrollContainers = document.querySelectorAll('.catalog-scroll-row, .hub-releases-scroll, .services-grid');
   
   scrollContainers.forEach(slider => {
+    // Suppress native drag & drop on all inner media
+    slider.querySelectorAll('img, a, .game-card, .stream-thumb-card, .giftcard-clean-png-card, .smm-platform-card').forEach(el => {
+      el.setAttribute('draggable', 'false');
+    });
+
+    slider.addEventListener('dragstart', (e) => e.preventDefault());
+
     if (slider.dataset.dragInitialized === 'true') return;
     slider.dataset.dragInitialized = 'true';
 
@@ -491,26 +838,27 @@ function initDragToScrollEngine() {
     let startX = 0;
     let scrollLeft = 0;
     let hasDragged = false;
-    let movedDistance = 0;
 
     slider.addEventListener('mousedown', (e) => {
-      // Only drag on left click (button 0)
       if (e.button !== 0) return;
       isDown = true;
       hasDragged = false;
-      movedDistance = 0;
       startX = e.pageX - slider.offsetLeft;
       scrollLeft = slider.scrollLeft;
     });
 
-    window.addEventListener('mouseup', () => {
+    const endDrag = () => {
       if (isDown) {
         isDown = false;
         setTimeout(() => {
           slider.classList.remove('is-dragging');
         }, 50);
       }
-    });
+    };
+
+    window.addEventListener('mouseup', endDrag);
+    window.addEventListener('blur', endDrag);
+    window.addEventListener('dragend', endDrag);
 
     slider.addEventListener('mouseleave', () => {
       if (isDown) {
@@ -522,17 +870,16 @@ function initDragToScrollEngine() {
     slider.addEventListener('mousemove', (e) => {
       if (!isDown) return;
       const x = e.pageX - slider.offsetLeft;
-      movedDistance = Math.abs(x - startX);
-      if (movedDistance > 5) {
+      const walk = (x - startX);
+      if (Math.abs(walk) > 4) {
         e.preventDefault();
         hasDragged = true;
         slider.classList.add('is-dragging');
-        const walk = (x - startX) * 1.5;
         slider.scrollLeft = scrollLeft - walk;
       }
     });
 
-    // Suppress click actions if user dragged more than 5px
+    // Suppress click actions if user dragged more than 4px
     slider.addEventListener('click', (e) => {
       if (hasDragged) {
         e.preventDefault();
@@ -543,91 +890,174 @@ function initDragToScrollEngine() {
   });
 }
 
-// --- SALES LETTER INTERACTIVE CALCULATOR ---
-window.setCalcMode = function(mode) {
-  const tabSavings = document.getElementById('calc-tab-savings');
-  const tabEarnings = document.getElementById('calc-tab-earnings');
-  const controlsSavings = document.getElementById('calc-savings-controls');
-  const controlsEarnings = document.getElementById('calc-earnings-controls');
-  const resultSavings = document.getElementById('calc-result-savings-box');
-  const resultEarnings = document.getElementById('calc-result-earnings-box');
+// --- SMM 2-COLUMN PLATFORM MODAL CONTROLLER ---
+let currentSmmPlatform = 'instagram';
+let currentSmmCategory = 'views';
+let currentSmmSelectedPackage = null;
 
-  if (mode === 'savings') {
-    tabSavings?.classList.add('active');
-    tabEarnings?.classList.remove('active');
-    if (controlsSavings) controlsSavings.style.display = 'block';
-    if (controlsEarnings) controlsEarnings.style.display = 'none';
-    if (resultSavings) resultSavings.style.display = 'flex';
-    if (resultEarnings) resultEarnings.style.display = 'none';
-  } else {
-    tabEarnings?.classList.add('active');
-    tabSavings?.classList.remove('active');
-    if (controlsSavings) controlsSavings.style.display = 'none';
-    if (controlsEarnings) controlsEarnings.style.display = 'block';
-    if (resultSavings) resultSavings.style.display = 'none';
-    if (resultEarnings) resultEarnings.style.display = 'flex';
+window.openSmmPlatformModal = function(platformKey) {
+  const modal = document.getElementById('modal-smm-platform');
+  if (!modal) return;
+
+  const platform = smmPlatformsData[platformKey] || smmPlatformsData['instagram'];
+  currentSmmPlatform = platformKey;
+
+  // Header Details
+  const titleEl = document.getElementById('smm-modal-title');
+  const badgeEl = document.getElementById('smm-modal-platform-badge');
+  const iconEl = document.getElementById('smm-modal-platform-icon');
+
+  if (titleEl) titleEl.textContent = `Servicios para ${platform.platform}`;
+  if (badgeEl) badgeEl.textContent = platform.platform.toUpperCase();
+  if (iconEl) iconEl.innerHTML = platformSvgIcons[platform.platform] || platformSvgIcons['Instagram'];
+
+  // Render left category tabs
+  const tabsList = document.getElementById('smm-category-tabs-list');
+  if (tabsList) {
+    tabsList.innerHTML = platform.categories.map((cat, idx) => {
+      return `
+        <button type="button" class="smm-category-tab-btn ${idx === 0 ? 'active' : ''}" onclick="selectSmmCategory('${cat.id}')">
+          <span>${cat.title}</span>
+        </button>
+      `;
+    }).join('');
   }
-  window.updateCalculator();
+
+  // Select first category by default
+  if (platform.categories.length > 0) {
+    window.selectSmmCategory(platform.categories[0].id);
+  }
+
+  // Close handlers
+  const closeBtn = document.getElementById('btn-close-smm-platform-modal');
+  if (closeBtn) closeBtn.onclick = () => { modal.style.display = 'none'; };
+
+  modal.style.display = 'grid';
 };
 
-window.updateCalculator = function() {
-  const isSavings = document.getElementById('calc-tab-savings')?.classList.contains('active');
-  const rate = state.exchangeRate || 7500;
+window.selectSmmCategory = function(categoryId) {
+  const platform = smmPlatformsData[currentSmmPlatform] || smmPlatformsData['instagram'];
+  const category = platform.categories.find(c => c.id === categoryId) || platform.categories[0];
+  if (!category) return;
 
-  if (isSavings) {
-    const slider = document.getElementById('calc-services-slider');
-    const servicesCount = parseInt(slider?.value || '3', 10);
-    const displayEl = document.getElementById('calc-services-display');
-    if (displayEl) {
-      displayEl.textContent = `${servicesCount} ${servicesCount === 1 ? 'servicio' : 'plataformas'}`;
+  currentSmmCategory = categoryId;
+
+  // Update tabs active state
+  document.querySelectorAll('.smm-category-tab-btn').forEach((btn, idx) => {
+    if (platform.categories[idx]?.id === categoryId) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
     }
+  });
 
-    // Active chips styling
-    const chips = document.querySelectorAll('.calc-services-chips .service-chip');
-    chips.forEach((chip, idx) => {
-      if (idx < servicesCount) chip.classList.add('active');
-      else chip.classList.remove('active');
-    });
+  // Update right service info
+  const titleEl = document.getElementById('smm-selected-service-title');
+  const badgeEl = document.getElementById('smm-selected-quality-badge');
+  const descEl = document.getElementById('smm-selected-service-desc');
+  const rateEl = document.getElementById('smm-rate-indicator');
+  const targetLabelEl = document.getElementById('smm-target-input-label');
+  const targetInputEl = document.getElementById('smm-target-input');
 
-    const traditionalMonthly = servicesCount * 85000;
-    const gamesboyMonthly = servicesCount * 22000;
-    const monthlySaved = traditionalMonthly - gamesboyMonthly;
-    const annualSaved = monthlySaved * 12;
-    const annualSavedUsd = Math.round(annualSaved / rate);
-
-    const tradEl = document.getElementById('calc-traditional-price');
-    const gbEl = document.getElementById('calc-gamesboy-price');
-    const annEl = document.getElementById('calc-annual-savings');
-    const annUsdEl = document.getElementById('calc-annual-savings-usd');
-
-    if (tradEl) tradEl.textContent = `${traditionalMonthly.toLocaleString('es-PY')} Gs./mes`;
-    if (gbEl) gbEl.textContent = `${gamesboyMonthly.toLocaleString('es-PY')} Gs./mes`;
-    if (annEl) annEl.textContent = `${annualSaved.toLocaleString('es-PY')} Gs.`;
-    if (annUsdEl) annUsdEl.textContent = `≈ $${annualSavedUsd} USD al año en tu bolsillo`;
-  } else {
-    const slider = document.getElementById('calc-slots-slider');
-    const slotsCount = parseInt(slider?.value || '4', 10);
-    const displayEl = document.getElementById('calc-slots-display');
-    if (displayEl) {
-      displayEl.textContent = `${slotsCount} ${slotsCount === 1 ? 'cupo libre' : 'cupos libres'}`;
-    }
-
-    const monthlyEarnings = slotsCount * 45000;
-    const annualEarnings = monthlyEarnings * 12;
-    const annualEarningsUsd = Math.round(annualEarnings / rate);
-
-    const monthlyEl = document.getElementById('calc-monthly-earnings');
-    const annEl = document.getElementById('calc-annual-earnings');
-    const annUsdEl = document.getElementById('calc-annual-earnings-usd');
-
-    if (monthlyEl) monthlyEl.textContent = `+${monthlyEarnings.toLocaleString('es-PY')} Gs./mes`;
-    if (annEl) annEl.textContent = `+${annualEarnings.toLocaleString('es-PY')} Gs.`;
-    if (annUsdEl) annUsdEl.textContent = `≈ +$${annualEarningsUsd} USD al año sin esfuerzo`;
+  if (titleEl) titleEl.textContent = category.title;
+  if (badgeEl) badgeEl.textContent = category.badge;
+  if (descEl) descEl.textContent = category.desc;
+  if (rateEl) rateEl.textContent = `Tarifa: ${formatPrice(category.base1kPriceUsd || (category.base1kPricePyg / 7500))} / 1.000`;
+  if (targetLabelEl) targetLabelEl.textContent = `2. ${category.targetLabel || 'Enlace de tu Perfil o Publicación:'}`;
+  if (targetInputEl) {
+    targetInputEl.placeholder = category.targetPlaceholder || 'https://...';
+    targetInputEl.value = '';
   }
+
+  // Render package tiles
+  const tilesContainer = document.getElementById('smm-quantity-tiles-grid');
+  if (tilesContainer) {
+    tilesContainer.innerHTML = category.packages.map((pkg, idx) => {
+      const isSelected = idx === 0;
+      if (isSelected) currentSmmSelectedPackage = pkg;
+
+      return `
+        <div class="smm-quantity-tile ${isSelected ? 'selected' : ''}" onclick="selectSmmPackage(${pkg.qty}, ${pkg.pricePyg}, ${pkg.priceUsd}, this)">
+          <span class="smm-tile-amount">${pkg.qty.toLocaleString()}</span>
+          <span class="smm-tile-price">${formatPrice(pkg.priceUsd)}</span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  updateSmmOrderSummary();
 };
 
-function initSalesCalculator() {
-  window.updateCalculator();
+window.selectSmmPackage = function(qty, pricePyg, priceUsd, tileEl) {
+  currentSmmSelectedPackage = { qty, pricePyg, priceUsd };
+
+  document.querySelectorAll('.smm-quantity-tile').forEach(t => t.classList.remove('selected'));
+  if (tileEl) tileEl.classList.add('selected');
+
+  updateSmmOrderSummary();
+};
+
+function updateSmmOrderSummary() {
+  if (!currentSmmSelectedPackage) return;
+  const rate = state.exchangeRatePyg || 7500;
+  const pricePyg = currentSmmSelectedPackage.pricePyg || Math.round(currentSmmSelectedPackage.priceUsd * rate);
+  const priceUsd = currentSmmSelectedPackage.priceUsd || parseFloat((pricePyg / rate).toFixed(2));
+
+  const totalGsEl = document.getElementById('smm-modal-total-gs');
+  const totalUsdEl = document.getElementById('smm-modal-total-usd');
+
+  if (totalGsEl) totalGsEl.textContent = `${pricePyg.toLocaleString('es-PY')} Gs.`;
+  if (totalUsdEl) totalUsdEl.textContent = `$${priceUsd.toFixed(2)} USDT`;
+}
+
+// --- MOBILE 3D COIN JUMPER & TOOLTIP CONTROLLER ---
+function initMobileCoinWidget() {
+  const coinWrapper = document.getElementById('coin-3d-animated-wrapper');
+  const tooltip = document.getElementById('coin-floating-tooltip');
+  const btnMonetize = document.getElementById('sticky-monetize-pill');
+  const modalPublish = document.getElementById('modal-publish-stream');
+
+  if (btnMonetize) {
+    btnMonetize.onclick = () => {
+      if (modalPublish) {
+        modalPublish.style.display = 'grid';
+        if (typeof initPublishStreamModalPricing === 'function') {
+          initPublishStreamModalPricing();
+        }
+      }
+    };
+  }
+
+  if (!coinWrapper || !tooltip) return;
+
+  const tooltipMessages = [
+    '💰 ¡Genera Ingresos!',
+    '✨ Monetiza tus cuentas',
+    '💸 Gana dinero cada mes',
+    '🔒 Cobro 100% Garantizado'
+  ];
+  let msgIndex = 0;
+
+  setInterval(() => {
+    if (window.innerWidth > 768) return;
+
+    coinWrapper.classList.remove('is-jumping');
+    tooltip.classList.remove('is-active');
+
+    void coinWrapper.offsetWidth;
+
+    coinWrapper.classList.add('is-jumping');
+
+    setTimeout(() => {
+      msgIndex = (msgIndex + 1) % tooltipMessages.length;
+      tooltip.innerHTML = `<span>${tooltipMessages[msgIndex]}</span>`;
+      tooltip.classList.add('is-active');
+    }, 400);
+
+    setTimeout(() => {
+      tooltip.classList.remove('is-active');
+    }, 4000);
+  }, 6000);
 }
 
 // --- 1. HERO ACCORDION BANNER MODULE (ENEBA STYLE) ---
@@ -639,7 +1069,16 @@ function initHeroAccordion() {
 
   if (!container) return;
 
-  const banners = (state.heroBanners && state.heroBanners.length >= 4) ? state.heroBanners : defaultBanners;
+  // Anti-Flicker: Only render banners if loaded from API, otherwise show clean neutral state
+  const banners = (state.heroBanners && state.heroBanners.length >= 4) ? state.heroBanners : null;
+  if (!banners) {
+    container.innerHTML = `
+      <div class="eneba-slide active" style="background: linear-gradient(135deg, #091222 0%, #0d1a38 100%);">
+        <div class="eneba-slide-bg horizontal-bg" style="background: none;"></div>
+      </div>
+    `;
+    return;
+  }
 
   // Render Slides with pure artwork without dark text overlay
   container.innerHTML = banners.slice(0, 4).map((b, idx) => {
@@ -719,8 +1158,10 @@ function setActiveSlide(index) {
 
 function startHeroAutoplay() {
   stopHeroAutoplay();
+  const banners = (state.heroBanners && state.heroBanners.length >= 4) ? state.heroBanners : null;
+  if (!banners) return;
+
   state.heroInterval = setInterval(() => {
-    const banners = (state.heroBanners && state.heroBanners.length >= 4) ? state.heroBanners : defaultBanners;
     const nextIdx = (state.activeSlideIndex + 1) % banners.length;
     setActiveSlide(nextIdx);
   }, 6000);
@@ -740,23 +1181,24 @@ function renderStreamingServices() {
   const container = document.getElementById('streaming-services-grid');
   if (!container) return;
 
-  const defaultPlatforms = [
-    { id: 'netflix', name: 'Netflix', logoUrl: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80', brandColor: '#E50914', hasStock: true },
-    { id: 'spotify', name: 'Spotify', logoUrl: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=300&q=80', brandColor: '#1DB954', hasStock: true },
-    { id: 'disney', name: 'Disney+', logoUrl: 'https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=300&q=80', brandColor: '#113CCF', hasStock: true },
-    { id: 'max', name: 'Max (HBO)', logoUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=300&q=80', brandColor: '#002BE7', hasStock: true },
-    { id: 'youtube', name: 'YouTube', logoUrl: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=300&q=80', brandColor: '#FF0000', hasStock: true },
-    { id: 'chatgpt', name: 'ChatGPT', logoUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=300&q=80', brandColor: '#10A37F', hasStock: true },
-    { id: 'crunchyroll', name: 'Crunchyroll', logoUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=300&q=80', brandColor: '#F47521', hasStock: true },
-    { id: 'paramount', name: 'Paramount+', logoUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=300&q=80', brandColor: '#0064FF', hasStock: true },
-    { id: 'apple', name: 'Apple TV+', logoUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=300&q=80', brandColor: '#A2AAAD', hasStock: true },
-    { id: 'prime', name: 'Prime Video', logoUrl: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=300&q=80', brandColor: '#00A8E1', hasStock: true }
-  ];
-
-  // Merge live platform hubs if available from API
-  let platformList = (state.streamingPlatforms && state.streamingPlatforms.length > 0)
+  // Anti-Flicker: Render shimmer skeleton cards if data is still loading
+  const platformList = (state.streamingPlatforms && state.streamingPlatforms.length > 0)
     ? state.streamingPlatforms
-    : defaultPlatforms;
+    : [];
+
+  if (platformList.length === 0) {
+    container.innerHTML = `
+      <div class="stream-skeleton-card"></div>
+      <div class="stream-skeleton-card"></div>
+      <div class="stream-skeleton-card"></div>
+      <div class="stream-skeleton-card"></div>
+      <div class="stream-skeleton-card"></div>
+      <div class="stream-skeleton-card"></div>
+      <div class="stream-skeleton-card"></div>
+      <div class="stream-skeleton-card"></div>
+    `;
+    return;
+  }
 
   // Cross-reference stock with live subscriptions
   const activeSubs = Array.isArray(state.subscriptions) ? state.subscriptions : [];
@@ -772,7 +1214,7 @@ function renderStreamingServices() {
     });
 
     const hasActiveSlots = matching.some(s => (s.availableSlots || 0) > 0);
-    const inStock = (p.hasStock !== undefined) ? p.hasStock : (hasActiveSlots || matching.length > 0 || defaultPlatforms.some(d => d.id === platformKey));
+    const inStock = (p.hasStock !== undefined) ? p.hasStock : (hasActiveSlots || matching.length > 0);
 
     const thumbImg = p.thumbnailUrl || p.logoUrl || p.coverImage || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';
 
@@ -780,7 +1222,7 @@ function renderStreamingServices() {
       <div class="stream-thumb-card ${inStock ? '' : 'out-of-stock'}" 
            onclick="window.location.href='/service.html?platform=${platformKey}'" 
            title="${p.name || platformKey} - ${inStock ? 'Disponible' : 'Sin Stock'}">
-        <img src="${thumbImg}" alt="${p.name || platformKey}" class="stream-thumb-img" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';">
+        <img src="${thumbImg}" alt="${p.name || platformKey}" class="stream-thumb-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';">
         ${!inStock ? '<span class="stream-thumb-badge-stock">SIN STOCK</span>' : ''}
       </div>
     `;
@@ -828,9 +1270,20 @@ function renderDigitalGames() {
   const container = document.getElementById('digital-games-grid');
   if (!container) return;
 
-  const rawProducts = Array.isArray(state.storeProducts) && state.storeProducts.length > 0 
-    ? state.storeProducts 
-    : defaultStoreProducts;
+  const rawProducts = Array.isArray(state.storeProducts) ? state.storeProducts : [];
+
+  // Anti-Flicker: Skeletons while loading
+  if (rawProducts.length === 0) {
+    container.innerHTML = `
+      <div class="game-skeleton-card"></div>
+      <div class="game-skeleton-card"></div>
+      <div class="game-skeleton-card"></div>
+      <div class="game-skeleton-card"></div>
+      <div class="game-skeleton-card"></div>
+      <div class="game-skeleton-card"></div>
+    `;
+    return;
+  }
 
   const games = rawProducts.filter(p => {
     if (!p) return false;
@@ -851,7 +1304,7 @@ function renderDigitalGames() {
     return `
       <div class="game-card ${isAvail ? '' : 'disabled'}" onclick="openBuyGameModal('${g.id}')">
         <div class="game-cover-container">
-          <img src="${g.coverUrl || g.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'}" alt="${g.title || 'Videojuego'}" class="game-cover-img" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80';">
+          <img src="${g.coverUrl || g.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'}" alt="${g.title || 'Videojuego'}" class="game-cover-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80';">
         </div>
         <div class="game-card-body">
           <h3 class="game-title" title="${g.title || ''}">${g.title || 'Juego Digital'}</h3>
@@ -882,10 +1335,18 @@ function renderRetailGiftCards() {
   // Prefer official giftcard brands from admin if available, or fallback to giftcard store products
   const brandsList = (state.giftcardBrands && state.giftcardBrands.length > 0)
     ? state.giftcardBrands
-    : state.storeProducts.filter(p => p.category === 'gift_card');
+    : (state.storeProducts ? state.storeProducts.filter(p => p.category === 'gift_card') : []);
 
+  // Anti-Flicker: Skeletons while loading
   if (brandsList.length === 0) {
-    container.innerHTML = `<p style="color: var(--text-tertiary); padding: 1rem;">Cargando tarjetas de regalo...</p>`;
+    container.innerHTML = `
+      <div class="giftcard-skeleton-card"></div>
+      <div class="giftcard-skeleton-card"></div>
+      <div class="giftcard-skeleton-card"></div>
+      <div class="giftcard-skeleton-card"></div>
+      <div class="giftcard-skeleton-card"></div>
+      <div class="giftcard-skeleton-card"></div>
+    `;
     return;
   }
 
@@ -896,7 +1357,7 @@ function renderRetailGiftCards() {
 
     return `
       <div class="giftcard-clean-png-card" onclick="openGiftCardVariationsModal('${cardId}')" title="${cardTitle}">
-        <img src="${cardImg}" alt="${cardTitle}" class="giftcard-clean-png-img" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80';">
+        <img src="${cardImg}" alt="${cardTitle}" class="giftcard-clean-png-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80';">
       </div>
     `;
   }).join('');
@@ -907,36 +1368,57 @@ const platformSvgIcons = {
   'Instagram': `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`,
   'TikTok': `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>`,
   'YouTube': `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
+  'Facebook': `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`,
   'Telegram': `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>`,
   'X (Twitter)': `<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`
 };
 
-// --- 5. RENDER SMM SERVICES (HORIZONTAL BANNERS & ROUNDED CORNERS) ---
+// --- 5. RENDER SMM SERVICES (PLATFORM CARDS WITH TOP BANNER & 2-COLUMN MODAL) ---
 function renderSmmServices() {
   const container = document.getElementById('smm-services-grid');
   if (!container) return;
 
-  const services = (state.smmServices && state.smmServices.length > 0) ? state.smmServices : smmServices;
+  const platforms = Object.values(smmPlatformsData);
+  const platformBanners = {
+    'instagram': 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=600&q=80',
+    'tiktok': 'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?auto=format&fit=crop&w=600&q=80',
+    'youtube': 'https://images.unsplash.com/photo-1611162618071-b39a2ec055fb?auto=format&fit=crop&w=600&q=80',
+    'facebook': 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80',
+    'telegram': 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
+    'x': 'https://images.unsplash.com/photo-1611605698335-8b1569810432?auto=format&fit=crop&w=600&q=80'
+  };
 
-  container.innerHTML = services.map(smm => {
-    const iconSvg = platformSvgIcons[smm.platform] || platformSvgIcons['Instagram'];
-    const priceDisplay = smm.pricePer1kUsd ? formatPrice(smm.pricePer1kUsd) : formatPrice(smm.priceUsd || 4.50);
+  container.innerHTML = platforms.map(p => {
+    const bannerImg = platformBanners[p.id] || 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=600&q=80';
+    const iconSvg = platformSvgIcons[p.platform] || platformSvgIcons['Instagram'];
+    const servicesChips = (p.servicesListText || 'Seguidores • Likes • Vistas')
+      .split('•')
+      .map(s => `<span class="smm-service-chip">${s.trim()}</span>`)
+      .join('');
 
     return `
-      <div class="smm-banner-card">
-        <div class="smm-banner-header">
-          <span class="smm-platform-badge">${smm.platform}</span>
-          <div class="smm-icon-large" style="display: grid; place-items: center; width: 36px; height: 36px; color: var(--accent-cyan); background: rgba(0, 194, 255, 0.1); border-radius: 10px;">${iconSvg}</div>
+      <div class="smm-platform-card" onclick="openSmmPlatformModal('${p.id}')">
+        <div class="smm-platform-banner-wrap">
+          <img src="${bannerImg}" alt="${p.title}" class="smm-platform-banner-img" draggable="false">
+          <div class="smm-platform-banner-gradient"></div>
+          <span class="smm-platform-badge-float">${p.platform}</span>
         </div>
-        <div class="smm-banner-body">
-          <h3 class="smm-banner-title">${smm.name}</h3>
-          <p class="smm-banner-desc">${smm.desc || 'Crecimiento orgánico y seguro para tus redes.'}</p>
-          <div class="smm-banner-footer">
-            <div>
-              <span style="font-size: 0.65rem; color: var(--text-tertiary); display: block; text-transform: uppercase;">Por cada 1.000</span>
-              <span class="smm-banner-price">${priceDisplay}</span>
+        <div class="smm-platform-card-body">
+          <div class="smm-platform-header-row">
+            <div class="smm-platform-icon-bubble" style="background: ${p.bannerGradient || 'rgba(0, 194, 255, 0.2)'};">
+              ${iconSvg}
             </div>
-            <button class="btn-smm-buy" onclick="openBuySmmModal('${smm.id}')">Adquirir ➔</button>
+            <div class="smm-platform-name">${p.title}</div>
+          </div>
+          <div class="smm-platform-services-list">
+            ${servicesChips}
+          </div>
+          <div class="smm-platform-footer-row">
+            <div>
+              <span class="smm-platform-price-lbl">Desde</span>
+              <div class="smm-platform-price-val">${p.startingPricePyg ? p.startingPricePyg.toLocaleString('es-PY') + ' Gs.' : formatPrice(p.startingPriceUsd)}</div>
+            </div>
+            <span class="btn-smm-explore">Explorar ➔</span>
           </div>
         </div>
       </div>
@@ -2232,18 +2714,21 @@ function initUserSession() {
       }
     });
   }
-  // SMM Order Form Submission
-  const formSmmOrder = document.getElementById('form-smm-order');
-  if (formSmmOrder) {
-    formSmmOrder.addEventListener('submit', async (e) => {
+  // SMM 2-Column Package Order Form Submission
+  const formSmmPackageOrder = document.getElementById('form-smm-package-order');
+  if (formSmmPackageOrder) {
+    formSmmPackageOrder.addEventListener('submit', async (e) => {
       e.preventDefault();
       const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
-      const serviceId = document.getElementById('smm-order-service-id').value;
-      const link = document.getElementById('smm-order-link').value.trim();
-      const quantity = parseInt(document.getElementById('smm-order-quantity').value, 10);
+      const targetInput = document.getElementById('smm-target-input');
+      const link = targetInput ? targetInput.value.trim() : '';
 
-      if (!serviceId || !link || !quantity || quantity <= 0) {
-        window.showToast('warning', 'Campos Incompletos', 'Por favor ingresa un enlace válido y la cantidad deseada.');
+      if (!link) {
+        window.showToast('warning', 'Enlace Requerido', 'Por favor ingresa el enlace de tu perfil o publicación.');
+        return;
+      }
+      if (!currentSmmSelectedPackage) {
+        window.showToast('warning', 'Selecciona un Paquete', 'Por favor elige la cantidad deseada para continuar.');
         return;
       }
 
@@ -2254,33 +2739,40 @@ function initUserSession() {
             'Content-Type': 'application/json',
             'x-user-id': userId
           },
-          body: JSON.stringify({ serviceId, link, quantity })
+          body: JSON.stringify({
+            serviceId: `${currentSmmPlatform}_${currentSmmCategory}`,
+            serviceTitle: `${smmPlatformsData[currentSmmPlatform]?.platform || ''} - ${currentSmmCategory}`,
+            link,
+            quantity: currentSmmSelectedPackage.qty,
+            pricePyg: currentSmmSelectedPackage.pricePyg,
+            priceUsd: currentSmmSelectedPackage.priceUsd
+          })
         });
         const data = await res.json();
         if (data.success) {
-          const modalSmm = document.getElementById('modal-smm-buy');
-          if (modalSmm) modalSmm.style.display = 'none';
-          formSmmOrder.reset();
-          window.showToast('success', '¡Orden SMM Enviada!', data.message || `Tu orden de ${quantity.toLocaleString()} unidades ha sido procesada hacia la API del proveedor.`);
+          const modal = document.getElementById('modal-smm-platform');
+          if (modal) modal.style.display = 'none';
+          if (targetInput) targetInput.value = '';
+          window.showToast('success', '¡Orden SMM Procesada!', data.message || `Tu orden de ${currentSmmSelectedPackage.qty.toLocaleString()} para ${smmPlatformsData[currentSmmPlatform]?.platform || 'red social'} está en camino.`);
           updateUserBalanceDisplay();
         } else {
-          if (data.error && data.error.includes('Saldo insuficiente')) {
+          if (data.error && data.error.toLowerCase().includes('saldo')) {
             window.showToast('warning', 'Saldo Insuficiente', 'Tu saldo no cubre esta orden. Abriendo recargas SIPAP / USDT...');
-            const modalSmm = document.getElementById('modal-smm-buy');
-            if (modalSmm) modalSmm.style.display = 'none';
+            const modal = document.getElementById('modal-smm-platform');
+            if (modal) modal.style.display = 'none';
             setTimeout(() => {
               const modalDeposit = document.getElementById('modal-deposit');
               if (modalDeposit) {
                 updateUserBalanceDisplay();
                 modalDeposit.style.display = 'grid';
               }
-            }, 1000);
+            }, 800);
           } else {
-            window.showToast('error', 'Error en Orden SMM', data.error || 'No se pudo procesar la orden.');
+            window.showToast('error', 'Error en Orden', data.error || 'No se pudo procesar la orden.');
           }
         }
       } catch (err) {
-        window.showToast('error', 'Error de Red', 'Error al conectar con la API de Impulso Digital.');
+        window.showToast('error', 'Error de Red', 'Error al procesar la orden de redes sociales.');
       }
     });
   }
@@ -2374,7 +2866,6 @@ function instantRenderCatalog() {
     renderRetailGiftCards();
     renderSmmServices();
     initDragToScrollEngine();
-    initSalesCalculator();
   } catch (err) {
     console.warn('Instant hydration warning:', err);
   }
@@ -2387,7 +2878,7 @@ function initializeMarketplace() {
   fetchStoreData();        // Silent background update & seller sync
   initWebSocketClient();
   initDragToScrollEngine();
-  initSalesCalculator();
+  initMobileCoinWidget();
 }
 
 if (document.readyState === 'loading') {

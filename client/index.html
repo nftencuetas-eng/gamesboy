@@ -59,7 +59,8 @@
         <div class="header-auth-buttons" id="auth-unlogged-group">
           <a href="/login" class="btn-header-login-modern" id="btn-open-login-page">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            <span>Iniciar sesión</span>
+            <span class="header-login-txt-full">Iniciar sesión</span>
+            <span class="header-login-txt-short">Iniciar</span>
           </a>
         </div>
 
@@ -386,96 +387,7 @@
           </div>
         </div>
 
-        <!-- 2. WIDGET INTERACTIVO: CALCULADORA DE AHORRO & MONETIZACIÓN -->
-        <div class="sales-calculator-card">
-          <div class="calculator-header">
-            <div class="calculator-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="14"></line><line x1="12" y1="14" x2="12" y2="14"></line><line x1="8" y1="14" x2="8" y2="14"></line><line x1="16" y1="18" x2="16" y2="18"></line><line x1="12" y1="18" x2="12" y2="18"></line><line x1="8" y1="18" x2="8" y2="18"></line></svg>
-            </div>
-            <div>
-              <h3 class="calculator-title">Calculadora Interactiva de Ahorro y Ganancias</h3>
-              <p class="calculator-subtitle">Comprueba cuánto dinero estás ahorrando o cuánto puedes generar al mes con GamesBoy</p>
-            </div>
-          </div>
 
-          <div class="calculator-body-grid">
-            <!-- Left Controls -->
-            <div class="calc-controls-col">
-              <div class="calc-mode-switch">
-                <button type="button" class="calc-tab-btn active" id="calc-tab-savings" onclick="setCalcMode('savings')">
-                  💸 Calcular mi Ahorro
-                </button>
-                <button type="button" class="calc-tab-btn" id="calc-tab-earnings" onclick="setCalcMode('earnings')">
-                  💰 Calcular mis Ganancias
-                </button>
-              </div>
-
-              <div id="calc-savings-controls">
-                <label class="calc-slider-label">
-                  <span>Cantidad de Servicios que utilizas:</span>
-                  <strong id="calc-services-display" class="calc-badge-count">3 plataformas</strong>
-                </label>
-                <input type="range" id="calc-services-slider" min="1" max="6" value="3" class="calc-range-slider" oninput="updateCalculator()">
-                <div class="calc-services-chips">
-                  <span class="service-chip active">Netflix 4K</span>
-                  <span class="service-chip active">Spotify Family</span>
-                  <span class="service-chip active">ChatGPT Plus</span>
-                  <span class="service-chip">Disney+</span>
-                  <span class="service-chip">YouTube Premium</span>
-                  <span class="service-chip">Max HBO</span>
-                </div>
-              </div>
-
-              <div id="calc-earnings-controls" style="display: none;">
-                <label class="calc-slider-label">
-                  <span>Cupos libres que puedes compartir:</span>
-                  <strong id="calc-slots-display" class="calc-badge-count">4 cupos libres</strong>
-                </label>
-                <input type="range" id="calc-slots-slider" min="1" max="10" value="4" class="calc-range-slider" oninput="updateCalculator()">
-                <p style="font-size: 0.8rem; color: var(--text-tertiary); margin-top: 10px;">
-                  * Monetiza tus cuentas familiares existentes (ej. Netflix, Spotify, ChatGPT). Recibe tu pago garantizado cada 30 días sin lidiar con cobros manuales.
-                </p>
-              </div>
-            </div>
-
-            <!-- Right Live Results Display -->
-            <div class="calc-results-col">
-              <div class="calc-result-box" id="calc-result-savings-box">
-                <div class="calc-result-row">
-                  <span>Precio Tradicional Individual:</span>
-                  <strong id="calc-traditional-price" class="text-danger-strike">260.000 Gs./mes</strong>
-                </div>
-                <div class="calc-result-row">
-                  <span>Con Perfil Compartido GamesBoy:</span>
-                  <strong id="calc-gamesboy-price" class="text-success-bold">65.000 Gs./mes</strong>
-                </div>
-                <div class="calc-divider"></div>
-                <div class="calc-highlight-card">
-                  <span class="calc-highlight-title">¡TU AHORRO ANUAL ESTIMADO!</span>
-                  <div class="calc-highlight-amount" id="calc-annual-savings">2.340.000 Gs.</div>
-                  <div class="calc-highlight-usd" id="calc-annual-savings-usd">≈ $320 USD al año en tu bolsillo</div>
-                </div>
-              </div>
-
-              <div class="calc-result-box" id="calc-result-earnings-box" style="display: none;">
-                <div class="calc-result-row">
-                  <span>Ingreso Mensual Estimado:</span>
-                  <strong id="calc-monthly-earnings" class="text-success-bold">+180.000 Gs./mes</strong>
-                </div>
-                <div class="calc-result-row">
-                  <span>Cobro 100% Asegurado:</span>
-                  <strong style="color: var(--accent-cyan);">Garantía GamesBoy</strong>
-                </div>
-                <div class="calc-divider"></div>
-                <div class="calc-highlight-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.05)); border-color: rgba(16, 185, 129, 0.4);">
-                  <span class="calc-highlight-title" style="color: #34d399;">GANANCIA ANUAL PASIVA</span>
-                  <div class="calc-highlight-amount" id="calc-annual-earnings" style="color: #34d399;">+2.160.000 Gs.</div>
-                  <div class="calc-highlight-usd" id="calc-annual-earnings-usd">≈ +$300 USD al año sin esfuerzo</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
         <!-- 3. TABLA COMPARATIVA: TRADICIONAL VS GAMESBOY -->
         <div class="sales-comparison-container">
@@ -1241,64 +1153,102 @@
   </footer>
 
   <!-- ======================================================= -->
-  <!-- MODAL: COMPRA DE SERVICIOS SMM (IMPULSO DIGITAL)        -->
+  <!-- MODAL: CRECIMIENTO EN REDES SOCIALES (2 COLUMNAS)       -->
   <!-- ======================================================= -->
-  <div class="modal-overlay" id="modal-smm-buy" style="display: none;">
-    <div class="modal-content glass-modal" style="max-width: 580px; padding: 2rem; border-radius: 20px !important;">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(0,194,255,0.15); display: grid; place-items: center; color: var(--accent-cyan);">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+  <div class="modal-overlay" id="modal-smm-platform" style="display: none;">
+    <div class="modal-content smm-platform-modal-content">
+      <!-- Modal Header -->
+      <div class="smm-modal-header">
+        <div class="smm-modal-header-info">
+          <div class="smm-modal-brand-icon" id="smm-modal-platform-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
           </div>
           <div>
-            <h3 id="smm-buy-title" style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800; color: #ffffff;">Impulso Digital</h3>
-            <span id="smm-buy-platform" class="badge-official">INSTAGRAM</span>
-          </div>
-        </div>
-        <button class="btn-modal-close" id="btn-close-smm-modal">✕</button>
-      </div>
-
-      <p id="smm-buy-desc" style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
-        Crecimiento garantizado y entrega automática hacia tu enlace o perfil.
-      </p>
-
-      <form id="form-smm-order">
-        <input type="hidden" id="smm-order-service-id" value="">
-        <div class="form-group">
-          <label class="form-label">Enlace de tu Perfil / Publicación / Video:</label>
-          <input type="url" id="smm-order-link" class="form-input" placeholder="https://instagram.com/tu_usuario o enlace del post" required style="border-radius: 8px !important;">
-        </div>
-
-        <div class="form-group">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-            <label class="form-label" style="margin-bottom: 0;">Cantidad Deseada:</label>
-            <span id="smm-order-limits-note" style="font-size: 0.72rem; color: var(--text-tertiary);">Mín: 100 - Máx: 25.000</span>
-          </div>
-          <input type="number" id="smm-order-quantity" class="form-input" placeholder="1000" min="50" step="50" required style="border-radius: 8px !important; font-size: 1.05rem; font-weight: 800;">
-        </div>
-
-        <!-- Calculated Summary Box -->
-        <div style="background: rgba(0, 194, 255, 0.08); border: 1px solid rgba(0, 194, 255, 0.25); border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem;">
-          <div style="display: flex; justify-content: space-between; align-items: baseline;">
-            <span style="font-size: 0.8rem; color: var(--text-secondary);">Total a debitar:</span>
-            <div style="text-align: right;">
-              <strong id="smm-order-total-gs" style="font-family: var(--font-mono); font-size: 1.25rem; color: #ffffff;">0 Gs.</strong>
-              <div id="smm-order-total-usd" style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan);">$0.00 USDT</div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <h3 id="smm-modal-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: #ffffff;">Servicios para Instagram</h3>
+              <span class="badge-official" id="smm-modal-platform-badge">INSTAGRAM</span>
+            </div>
+            <div style="font-size: 0.78rem; color: var(--text-secondary);">
+              Entrega gradual automática • Perfiles de alta calidad • Garantía anti-caída
             </div>
           </div>
         </div>
+        <button class="btn-modal-close" id="btn-close-smm-platform-modal">✕</button>
+      </div>
 
-        <button type="submit" class="btn-primary-block" style="border-radius: 10px !important; padding: 13px; font-weight: 800;">
-          Confirmar Orden de Impulso ➔
-        </button>
-      </form>
+      <!-- 2-Column Modal Body -->
+      <div class="smm-modal-body-grid">
+        
+        <!-- Left Sidebar (1/4 width): Service Types -->
+        <div class="smm-categories-sidebar">
+          <div class="smm-sidebar-heading">Elige el Servicio:</div>
+          <div class="smm-category-tabs-list" id="smm-category-tabs-list">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- Right Content (3/4 width): Packages Matrix & Link Input -->
+        <div class="smm-packages-content">
+          
+          <div class="smm-service-info-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <h4 id="smm-selected-service-title" style="font-size: 0.95rem; font-weight: 800; color: #ffffff;">Seguidores HQ Reales</h4>
+              <span class="smm-quality-badge" id="smm-selected-quality-badge">⭐ Alta Retención</span>
+            </div>
+            <p id="smm-selected-service-desc" style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4;">
+              Cuentas con fotos de perfil, publicaciones y actividad real. Entrega gradual que respeta los algoritmos.
+            </p>
+          </div>
+
+          <!-- Quantity Tiles Selection Grid -->
+          <div style="margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 0.78rem; font-weight: 800; color: #ffffff; text-transform: uppercase; letter-spacing: 0.5px;">1. Selecciona la Cantidad:</span>
+              <span id="smm-rate-indicator" style="font-size: 0.72rem; color: var(--accent-cyan);">Tarifa base por 1.000</span>
+            </div>
+            <div class="smm-quantity-tiles-grid" id="smm-quantity-tiles-grid">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- Target Link / Username Input Form -->
+          <form id="form-smm-package-order" style="margin-top: 1.25rem;">
+            <div class="form-group">
+              <label class="form-label" id="smm-target-input-label">2. Enlace de tu Perfil o Publicación:</label>
+              <input type="text" id="smm-target-input" class="form-input" placeholder="https://instagram.com/tu_usuario o @usuario" required style="border-radius: 10px !important;">
+              <span style="font-size: 0.7rem; color: var(--text-tertiary); margin-top: 4px; display: block;">🔒 Tu perfil o publicación debe estar en modo <strong>público</strong> durante la entrega. Nunca te pediremos contraseñas.</span>
+            </div>
+
+            <!-- Total Price Summary & Checkout Action -->
+            <div class="smm-order-summary-box">
+              <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <div>
+                  <span style="font-size: 0.75rem; color: var(--text-secondary); display: block; text-transform: uppercase; font-weight: 700;">Total a abonar:</span>
+                  <div id="smm-modal-total-gs" style="font-family: var(--font-mono); font-size: 1.35rem; font-weight: 900; color: #ffffff;">0 Gs.</div>
+                </div>
+                <div style="text-align: right;">
+                  <span id="smm-modal-total-usd" style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--accent-cyan);">$0.00 USDT</span>
+                  <span style="font-size: 0.68rem; color: #34d399; display: block; font-weight: 700;">✓ Acreditación Automática</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="smm-modal-actions">
+              <button type="submit" class="btn-smm-confirm-order" id="btn-smm-confirm-order">
+                <span>Proceder al Pago Instantáneo</span> ➔
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- FLOATING WHATSAPP SUPPORT BUTTON -->
-  <a href="https://wa.me/595981000000?text=Hola%20GamesBoy,%20necesito%20asistencia%20con%20una%20compra" target="_blank" rel="noopener" class="floating-support-btn" title="Atención al Cliente WhatsApp Oficial 24/7">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-    <span>Soporte WhatsApp</span>
+  <a href="https://wa.me/595981000000?text=Hola%20GamesBoy,%20necesito%20asistencia%20con%20una%20compra" target="_blank" rel="noopener" class="floating-support-btn" id="floating-support-btn" title="Atención al Cliente WhatsApp Oficial 24/7">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+    <span class="support-btn-label">Soporte WhatsApp</span>
   </a>
 
   <!-- TOAST NOTIFICATIONS CONTAINER -->
@@ -1308,14 +1258,29 @@
   <!-- STICKY RIGHT FLOATING WIDGET: GENERAR INGRESOS          -->
   <!-- ======================================================= -->
   <button type="button" class="sticky-monetize-pill" id="sticky-monetize-pill" title="Gana dinero compartiendo los cupos libres de tus cuentas de streaming">
-    <div class="sticky-monetize-badge-icon">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    <!-- Desktop Layout -->
+    <div class="sticky-monetize-desktop-content">
+      <div class="sticky-monetize-badge-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <div class="sticky-monetize-text-wrap">
+        <span class="sticky-monetize-main-label">Generar Ingresos</span>
+        <span class="sticky-monetize-sub-label">Comparte tus cuentas</span>
+      </div>
+      <span class="sticky-monetize-glow"></span>
     </div>
-    <div class="sticky-monetize-text-wrap">
-      <span class="sticky-monetize-main-label">Generar Ingresos</span>
-      <span class="sticky-monetize-sub-label">Comparte tus cuentas</span>
+
+    <!-- Mobile 3D Coin Layout -->
+    <div class="sticky-monetize-mobile-coin">
+      <div class="coin-3d-wrapper" id="coin-3d-animated-wrapper">
+        <div class="coin-3d-face">
+          <span class="coin-dollar-symbol">$</span>
+        </div>
+      </div>
+      <div class="coin-floating-tooltip" id="coin-floating-tooltip">
+        <span>💰 ¡Genera Ingresos!</span>
+      </div>
     </div>
-    <span class="sticky-monetize-glow"></span>
   </button>
 
   <!-- App Client Scripts -->

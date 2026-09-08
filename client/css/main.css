@@ -127,7 +127,7 @@ body {
 }
 
 .brand-logo-img {
-  height: 38px;
+  height: 44px;
   width: auto;
   display: block;
   object-fit: contain;
@@ -135,6 +135,15 @@ body {
   box-shadow: none !important;
   background: transparent !important;
   border: none !important;
+  transition: height 0.2s ease;
+}
+
+.header-login-txt-full {
+  display: inline;
+}
+
+.header-login-txt-short {
+  display: none;
 }
 
 /* Global Strict Horizontal Single-Line Buttons Rule */
@@ -281,7 +290,7 @@ a.sub-nav-link,
 }
 
 /* ======================================================= */
-/* STICKY BOTTOM-RIGHT FLOATING WIDGET (WHATSAPP STYLE)     */
+/* STICKY BOTTOM-RIGHT FLOATING WIDGET (DESKTOP PILL / MOBILE 3D COIN) */
 /* ======================================================= */
 .sticky-monetize-pill {
   position: fixed;
@@ -301,6 +310,16 @@ a.sub-nav-link,
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
   color: #ffffff;
+}
+
+.sticky-monetize-desktop-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sticky-monetize-mobile-coin {
+  display: none;
 }
 
 .sticky-monetize-pill:hover {
@@ -351,15 +370,115 @@ a.sub-nav-link,
   box-shadow: inset 0 0 14px rgba(16, 185, 129, 0.25);
 }
 
-@media (max-width: 640px) {
+/* 3D Coin & Floating Tooltip Keyframes */
+@keyframes coinJumpBounce {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  18% { transform: translateY(-16px) rotate(8deg) scale(1.12); }
+  35% { transform: translateY(0) rotate(-4deg) scale(0.96, 1.04); }
+  50% { transform: translateY(-8px) rotate(3deg) scale(1.04); }
+  65% { transform: translateY(0) rotate(-1deg) scale(0.98, 1.02); }
+  80% { transform: translateY(-3px) rotate(0deg) scale(1.01); }
+  100% { transform: translateY(0) rotate(0deg) scale(1); }
+}
+
+@keyframes tooltipPopIn {
+  0% { opacity: 0; transform: translateY(6px) scale(0.88); }
+  15% { opacity: 1; transform: translateY(0) scale(1); }
+  85% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-4px) scale(0.92); }
+}
+
+@media (max-width: 768px) {
   .sticky-monetize-pill {
-    right: 16px;
-    bottom: 16px;
-    padding: 8px 12px;
-    gap: 6px;
+    right: 18px !important;
+    bottom: 18px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
-  .sticky-monetize-sub-label {
-    display: none;
+  .sticky-monetize-desktop-content {
+    display: none !important;
+  }
+  .sticky-monetize-mobile-coin {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+  .coin-3d-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffe066 0%, #f59e0b 45%, #d97706 75%, #b45309 100%);
+    border: 2px solid #fffbeb;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65), 0 0 16px rgba(245, 158, 11, 0.55), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 6px rgba(0, 0, 0, 0.45);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .coin-3d-wrapper.is-jumping {
+    animation: coinJumpBounce 1.2s cubic-bezier(0.28, 0.84, 0.42, 1);
+  }
+  .coin-3d-face {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(255, 255, 255, 0.6);
+    display: grid;
+    place-items: center;
+    background: radial-gradient(circle at 35% 35%, rgba(254, 240, 138, 0.9) 0%, rgba(217, 119, 6, 0.85) 100%);
+  }
+  .coin-dollar-symbol {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #78350f;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+    line-height: 1;
+  }
+  .coin-floating-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    background: rgba(7, 13, 30, 0.96);
+    border: 1px solid var(--accent-cyan);
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #38d6ff;
+    white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85), 0 0 14px rgba(0, 194, 255, 0.35);
+    backdrop-filter: blur(12px);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1000;
+  }
+  .coin-floating-tooltip.is-active {
+    animation: tooltipPopIn 3.5s ease forwards;
+  }
+
+  /* Compact WhatsApp Floating button on Mobile */
+  .floating-support-btn {
+    bottom: 18px !important;
+    left: 18px !important;
+    width: 44px !important;
+    height: 44px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    display: grid !important;
+    place-items: center !important;
+    justify-content: center !important;
+  }
+  .support-btn-label {
+    display: none !important;
   }
 }
 
@@ -1653,103 +1772,383 @@ a.sub-nav-link,
 }
 
 /* ======================================================== */
-/* 7. SMM & REDES SOCIALES (HORIZONTAL BANNERS)             */
+/* 7. SMM & REDES SOCIALES (PLATFORM CARDS & 2-COL MODAL)   */
 /* ======================================================== */
-.smm-banner-card {
-  flex: 0 0 250px;
-  width: 250px;
-  background: var(--bg-surface);
+.smm-platform-card {
+  flex: 0 0 260px;
+  width: 260px;
+  background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  border-radius: 10px !important;
-  padding: 1.15rem 1rem;
+  border-radius: 18px !important;
   display: flex;
   flex-direction: column;
+  overflow: hidden !important;
+  cursor: pointer;
   transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease, border-color 0.28s ease;
   flex-shrink: 0 !important;
-  transform-origin: center center;
-  z-index: 1;
   position: relative;
 }
 
-.smm-banner-card:hover {
-  background: var(--bg-surface-elevated);
-  border-color: rgba(168, 85, 247, 0.6);
-  transform: translateY(-4px) scale(1.025);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.75), 0 0 20px rgba(168, 85, 247, 0.25);
-  z-index: 10;
+.smm-platform-card:hover {
+  transform: translateY(-5px) scale(1.025);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 194, 255, 0.25);
 }
 
-
-.smm-banner-header {
+.smm-card-banner {
+  height: 105px;
+  width: 100%;
+  position: relative;
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.smm-platform-badge {
-  font-size: 0.68rem;
-  color: var(--accent-purple);
-  background: rgba(168, 85, 247, 0.12);
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  padding: 2px 8px;
-  border-radius: 9999px;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.smm-icon-large {
-  font-size: 1.25rem;
-}
-
-.smm-banner-title {
-  font-family: var(--font-heading);
-  font-size: 0.88rem;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 3px;
-}
-
-.smm-banner-desc {
-  font-size: 0.74rem;
-  color: var(--text-secondary);
-  line-height: 1.35;
-  margin-bottom: 0.75rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  padding: 12px 14px;
+  background-size: cover;
+  background-position: center;
   overflow: hidden;
 }
 
-.smm-banner-footer {
+/* Gradient Fade into card background (Efecto que desaparece la portada hacia el color de la tarjeta) */
+.smm-card-banner::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 70%;
+  background: linear-gradient(to bottom, transparent 0%, rgba(22, 25, 34, 0.6) 45%, var(--bg-card) 100%);
+  pointer-events: none;
+}
+
+.smm-card-platform-tag {
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  backdrop-filter: blur(8px);
+  position: relative;
+  z-index: 2;
+}
+
+.smm-card-platform-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  backdrop-filter: blur(8px);
+  position: relative;
+  z-index: 2;
+}
+
+.smm-card-body {
+  padding: 0.5rem 1rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  z-index: 3;
+}
+
+.smm-card-title {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.smm-card-services-list {
+  font-size: 0.72rem;
+  color: var(--accent-cyan);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.smm-card-footer {
   margin-top: auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.smm-banner-price {
+.smm-card-price-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.smm-card-price-label {
+  font-size: 0.62rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.smm-card-price-val {
   font-family: var(--font-mono);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 800;
   color: #ffffff;
 }
 
-.btn-smm-buy {
-  background: rgba(168, 85, 247, 0.15);
-  border: 1px solid rgba(168, 85, 247, 0.35);
-  color: #d8b4fe;
-  padding: 4px 10px;
+.btn-smm-explore {
+  background: rgba(0, 194, 255, 0.12);
+  border: 1px solid rgba(0, 194, 255, 0.35);
+  color: var(--accent-cyan);
+  padding: 5px 12px;
   font-size: 0.74rem;
   font-weight: 800;
-  border-radius: 6px !important;
+  border-radius: 8px !important;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.smm-banner-card:hover .btn-smm-buy {
-  background: var(--accent-purple);
+.smm-platform-card:hover .btn-smm-explore {
+  background: var(--accent-cyan);
+  color: #040c1e;
+  box-shadow: 0 0 12px rgba(0, 194, 255, 0.4);
+}
+
+/* ======================================================== */
+/* SMM 2-COLUMN MODAL STYLES (CATEGORY TABS + PACKAGES MATRIX) */
+/* ======================================================== */
+.smm-platform-modal-content {
+  max-width: 840px;
+  width: 95%;
+  padding: 1.5rem !important;
+  border-radius: 20px !important;
+  background: rgba(10, 14, 26, 0.98);
+  border: 1.5px solid rgba(0, 194, 255, 0.35);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 194, 255, 0.2);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.smm-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 1.25rem;
+}
+
+.smm-modal-header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.smm-modal-brand-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(0, 194, 255, 0.12);
+  border: 1px solid rgba(0, 194, 255, 0.3);
+  display: grid;
+  place-items: center;
+  color: var(--accent-cyan);
+  flex-shrink: 0;
+}
+
+.smm-modal-body-grid {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  gap: 20px;
+}
+
+.smm-categories-sidebar {
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  padding-right: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.smm-sidebar-heading {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-tertiary);
+  margin-bottom: 4px;
+}
+
+.smm-category-tabs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.smm-category-tab-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px !important;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #94a3b8;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.smm-category-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
   color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.smm-category-tab-btn.active {
+  background: linear-gradient(135deg, rgba(0, 194, 255, 0.18), rgba(0, 112, 243, 0.12));
+  border-color: var(--accent-cyan);
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(0, 194, 255, 0.25);
+}
+
+.smm-packages-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.smm-service-info-card {
+  background: rgba(5, 8, 16, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.smm-quality-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.smm-quantity-tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+}
+
+.smm-quantity-tile {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.smm-quantity-tile:hover {
+  border-color: rgba(0, 194, 255, 0.4);
+  background: rgba(0, 194, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.smm-quantity-tile.selected {
+  border-color: var(--accent-cyan);
+  background: rgba(0, 194, 255, 0.15);
+  box-shadow: 0 0 14px rgba(0, 194, 255, 0.3);
+}
+
+.smm-tile-amount {
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.smm-tile-price {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.smm-order-summary-box {
+  background: linear-gradient(135deg, rgba(0, 194, 255, 0.1), rgba(16, 185, 129, 0.06));
+  border: 1px solid rgba(0, 194, 255, 0.3);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-top: 10px;
+}
+
+.smm-modal-actions {
+  margin-top: 12px;
+}
+
+.btn-smm-confirm-order {
+  width: 100%;
+  background: linear-gradient(135deg, #00c2ff 0%, #0070f3 100%);
+  color: #040c1e;
+  font-weight: 900;
+  font-size: 0.92rem;
+  padding: 12px;
+  border-radius: 10px !important;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 194, 255, 0.4);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-smm-confirm-order:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 194, 255, 0.6);
+  color: #000000;
+}
+
+@media (max-width: 768px) {
+  .smm-modal-body-grid {
+    grid-template-columns: 1fr;
+  }
+  .smm-categories-sidebar {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-right: 0;
+    padding-bottom: 12px;
+  }
+  .smm-category-tabs-list {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .smm-category-tab-btn {
+    white-space: nowrap;
+    width: auto;
+    flex-shrink: 0;
+  }
 }
 
 /* ======================================================== */
@@ -2937,11 +3336,12 @@ a.sub-nav-link,
     gap: 14px;
   }
   .header-search-wrapper {
-    max-width: 360px;
-    min-width: 160px;
+    width: auto;
+    min-width: 0;
   }
   .header-right {
     gap: 10px;
+    margin-left: auto;
   }
   .btn-header-login {
     padding: 6px 12px;
@@ -2975,11 +3375,12 @@ a.sub-nav-link,
     gap: 10px;
   }
   .header-search-wrapper {
-    max-width: 240px;
-    min-width: 120px;
+    width: auto;
+    min-width: 0;
   }
   .header-right {
     gap: 8px;
+    margin-left: auto;
   }
   .btn-header-login {
     padding: 5px 10px;
@@ -2990,7 +3391,7 @@ a.sub-nav-link,
     font-size: 0.78rem;
   }
   .brand-logo-img {
-    height: 32px;
+    height: 38px;
   }
   .auth-split-layout {
     grid-template-columns: 1fr;
@@ -3010,9 +3411,9 @@ a.sub-nav-link,
 
 @media (max-width: 768px) {
   .header-top-bar {
-    flex-wrap: wrap;
-    padding: 0.6rem 1rem;
-    gap: 10px;
+    flex-wrap: nowrap;
+    padding: 0.55rem 0.85rem;
+    gap: 8px;
   }
   .header-left {
     flex: 0 0 auto;
@@ -3020,33 +3421,53 @@ a.sub-nav-link,
   .header-right {
     flex: 0 0 auto;
     margin-left: auto;
-    gap: 6px;
+    gap: 8px;
+    display: flex;
+    align-items: center;
   }
   .header-search-wrapper {
-    order: 3;
-    flex: 0 0 100%;
-    max-width: 100%;
-    width: 100%;
-    margin-top: 4px;
+    order: 1;
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+    margin-top: 0;
+  }
+  .header-auth-buttons, .header-user-group {
+    order: 2;
+    flex: 0 0 auto;
+  }
+  .header-search-box-expandable {
+    position: fixed;
+    top: 52px;
+    left: 10px;
+    right: 10px;
+    width: calc(100% - 20px);
+    max-width: calc(100% - 20px);
+    transform: translateY(0) scaleY(0);
+    transform-origin: top center;
+    border-radius: 14px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.95);
+  }
+  .header-search-box-expandable.expanded {
+    transform: translateY(0) scaleY(1);
   }
   .header-icon-action {
     width: 32px;
     height: 32px;
   }
-  .btn-header-register {
+  .btn-header-login-modern {
     padding: 5px 10px;
-    font-size: 0.75rem;
+    font-size: 0.78rem;
+    gap: 4px;
   }
-  /* Country & Currency Pill in Header */
-  .country-currency-pill, .lang-currency-pill {
-    padding: 3px 6px;
-    font-size: 0.74rem;
+  .header-login-txt-full {
+    display: none !important;
   }
-  .header-country-select, .header-currency-select {
-    font-size: 0.72rem;
+  .header-login-txt-short {
+    display: inline !important;
   }
   .brand-logo-img {
-    height: 28px;
+    height: 35px;
   }
 
   /* Compact Horizontal Hero Accordion on Mobile (1 Horizontal Banner + 3 Vertical Side-by-Side) */
@@ -3095,12 +3516,18 @@ a.sub-nav-link,
 }
 
 @media (max-width: 480px) {
+  .header-top-bar {
+    padding: 0.5rem 0.65rem;
+  }
   .header-right {
-    gap: 4px;
+    gap: 6px;
+  }
+  .brand-logo-img {
+    height: 33px;
   }
   .btn-header-login-modern {
-    padding: 4px 8px;
-    font-size: 0.72rem;
+    padding: 5px 9px;
+    font-size: 0.74rem;
   }
   .minimal-currency-pill {
     padding: 3px 6px;
@@ -5384,11 +5811,15 @@ a.sub-nav-link,
 /* SALES LETTER / HIGH-CONVERTING VALUE PROP SECTION       */
 /* ======================================================= */
 .sales-letter-section {
-  padding: 4.5rem 0 3rem 0;
+  padding: 3.5rem 2rem 3rem 2rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
-  gap: 3.5rem;
+  gap: 3rem;
 }
 
 .sales-letter-hero {
@@ -6314,6 +6745,629 @@ a.sub-nav-link,
   .group-detail-col-rules {
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+}
+
+/* ======================================================== */
+/* PREVENT GHOST IMAGE DRAGGING ACROSS CAROUSELS & CATALOGS */
+/* ======================================================== */
+.catalog-scroll-row,
+.catalog-scroll-row *,
+.stream-thumb-card,
+.game-card,
+.giftcard-clean-png-card,
+.smm-platform-card,
+.eneba-hero-section,
+.eneba-hero-section * {
+  -webkit-user-drag: none !important;
+  user-drag: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+.catalog-scroll-row img {
+  pointer-events: none !important;
+}
+
+/* Skeleton Loaders (Clean Pulse Shimmer) */
+.stream-skeleton-card {
+  flex: 0 0 100px;
+  width: 100px;
+  height: 100px;
+  border-radius: 18px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 100%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s infinite;
+  flex-shrink: 0 !important;
+}
+
+.game-skeleton-card {
+  flex: 0 0 175px;
+  width: 175px;
+  height: 240px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 100%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s infinite;
+  flex-shrink: 0 !important;
+}
+
+.giftcard-skeleton-card {
+  flex: 0 0 140px;
+  width: 140px;
+  height: 90px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.03) 100%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s infinite;
+  flex-shrink: 0 !important;
+}
+
+@keyframes skeletonShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ======================================================== */
+/* SALES LETTER CONTAINER DESKTOP PADDING & MAX-WIDTH       */
+/* ======================================================== */
+.sales-letter-section {
+  max-width: 1440px !important;
+  margin: 0 auto !important;
+  padding: 3.5rem 2rem !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ======================================================== */
+/* SMM PLATFORM CARDS (CATALOG ROW)                         */
+/* ======================================================== */
+.smm-platform-card {
+  flex: 0 0 240px !important;
+  width: 240px !important;
+  background: rgba(22, 25, 34, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0 !important;
+  user-select: none;
+}
+
+.smm-platform-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 10px 30px rgba(0, 194, 255, 0.25);
+}
+
+.smm-platform-banner-wrap {
+  position: relative;
+  width: 100%;
+  height: 110px;
+  overflow: hidden;
+  background: #11141e;
+}
+
+.smm-platform-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  pointer-events: none !important;
+  -webkit-user-drag: none !important;
+}
+
+.smm-platform-card:hover .smm-platform-banner-img {
+  transform: scale(1.06);
+}
+
+.smm-platform-banner-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(22, 25, 34, 0.05) 0%, rgba(22, 25, 34, 0.6) 60%, rgba(22, 25, 34, 1) 100%);
+  pointer-events: none;
+}
+
+.smm-platform-badge-float {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.smm-platform-card-body {
+  padding: 12px 14px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.smm-platform-header-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.smm-platform-icon-bubble {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.smm-platform-name {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.smm-platform-services-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 2px 0;
+}
+
+.smm-service-chip {
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.smm-platform-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.smm-platform-price-lbl {
+  font-size: 0.65rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.smm-platform-price-val {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--accent-emerald);
+}
+
+.btn-smm-explore {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--accent-cyan);
+  background: rgba(0, 194, 255, 0.1);
+  border: 1px solid rgba(0, 194, 255, 0.25);
+  padding: 4px 10px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.smm-platform-card:hover .btn-smm-explore {
+  background: var(--accent-cyan);
+  color: #040c1e;
+}
+
+/* ======================================================== */
+/* 2-COLUMN SMM SELECTION MODAL                             */
+/* ======================================================== */
+.smm-platform-modal-content {
+  max-width: 820px !important;
+  width: 95% !important;
+  background: #0d111a !important;
+  border: 1px solid rgba(0, 194, 255, 0.25) !important;
+  border-radius: 20px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 194, 255, 0.15) !important;
+}
+
+.smm-modal-header {
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, rgba(14, 20, 36, 0.98), rgba(9, 13, 24, 0.98));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.smm-modal-header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.smm-modal-brand-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.smm-modal-body-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 460px;
+}
+
+.smm-categories-sidebar {
+  background: rgba(6, 9, 16, 0.7);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1.25rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.smm-sidebar-heading {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  padding-left: 6px;
+}
+
+.smm-category-tabs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.smm-cat-tab-btn {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  width: 100% !important;
+  padding: 10px 12px !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: var(--text-secondary) !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  transition: all 0.18s ease !important;
+  justify-content: flex-start !important;
+}
+
+.smm-cat-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: #ffffff !important;
+}
+
+.smm-cat-tab-btn.active {
+  background: rgba(0, 194, 255, 0.12) !important;
+  border-color: rgba(0, 194, 255, 0.4) !important;
+  color: var(--accent-cyan) !important;
+}
+
+.smm-packages-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  background: rgba(13, 17, 26, 0.95);
+  overflow-y: auto;
+}
+
+.smm-service-info-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.smm-quality-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--accent-amber);
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.smm-quantity-tiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.smm-qty-tile {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.smm-qty-tile:hover {
+  border-color: rgba(0, 194, 255, 0.5);
+  background: rgba(0, 194, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.smm-qty-tile.selected {
+  border-color: var(--accent-cyan);
+  background: rgba(0, 194, 255, 0.15);
+  box-shadow: 0 0 14px rgba(0, 194, 255, 0.35);
+}
+
+.smm-qty-num {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.smm-qty-price {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--accent-emerald);
+}
+
+.smm-order-summary-box {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-top: 1rem;
+}
+
+.btn-smm-confirm-order {
+  width: 100%;
+  padding: 13px 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #00c2ff 0%, #0070f3 100%);
+  border: none;
+  color: #040c1e;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 194, 255, 0.35);
+}
+
+.btn-smm-confirm-order:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 26px rgba(0, 194, 255, 0.5);
+  color: #000000;
+}
+
+/* ======================================================== */
+/* 3D BOUNCING COIN WIDGET & FLOATING WHATSAPP BUTTON       */
+/* ======================================================== */
+.sticky-monetize-mobile-coin {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Header Mobile Adjustments */
+  .brand-logo-img {
+    height: 35px !important;
+  }
+
+  .header-login-txt-full {
+    display: none !important;
+  }
+
+  .header-login-txt-short {
+    display: inline !important;
+  }
+
+  .header-top-bar {
+    padding: 0.5rem 1rem !important;
+    gap: 8px !important;
+  }
+
+  .header-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .header-search-wrapper {
+    margin-right: 0 !important;
+  }
+
+  .btn-header-login-modern {
+    padding: 7px 12px !important;
+    font-size: 0.78rem !important;
+  }
+
+  /* 2-Column SMM Modal on Mobile */
+  .smm-modal-body-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .smm-categories-sidebar {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding: 0.85rem !important;
+  }
+
+  .smm-category-tabs-list {
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    padding-bottom: 4px !important;
+  }
+
+  .smm-cat-tab-btn {
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    padding: 8px 12px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Floating WhatsApp Button Mobile Compact */
+  .floating-support-btn {
+    bottom: 20px !important;
+    left: 16px !important;
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    justify-content: center !important;
+    background: #25D366 !important;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.45) !important;
+  }
+
+  .floating-support-btn .support-btn-label {
+    display: none !important;
+  }
+
+  /* Sticky Monetize Mobile: Convert to 3D Bouncing Coin */
+  .sticky-monetize-pill {
+    top: auto !important;
+    right: 16px !important;
+    bottom: 20px !important;
+    transform: none !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    width: 52px !important;
+    height: 52px !important;
+    z-index: 99 !important;
+  }
+
+  .sticky-monetize-desktop-content {
+    display: none !important;
+  }
+
+  .sticky-monetize-mobile-coin {
+    display: flex !important;
+    position: relative !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .coin-3d-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffd700 0%, #d4af37 40%, #996515 85%, #66460b 100%);
+    box-shadow: 0 4px 18px rgba(255, 215, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.7), inset 0 -3px 6px rgba(0, 0, 0, 0.6);
+    border: 2px solid #fff2a8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    animation: coinJumpBounce 5.5s infinite cubic-bezier(0.28, 0.84, 0.42, 1);
+  }
+
+  .coin-3d-face {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px dashed rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  .coin-dollar-symbol {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  }
+
+  .coin-floating-tooltip {
+    position: absolute;
+    bottom: 58px;
+    right: 0;
+    background: rgba(14, 19, 32, 0.96);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    color: #ffd700;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 5px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .coin-floating-tooltip.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes coinJumpBounce {
+  0%, 70%, 100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  75% {
+    transform: translateY(-16px) rotate(15deg) scale(1.1);
+  }
+  80% {
+    transform: translateY(-6px) rotate(-10deg) scale(1.05);
+  }
+  85% {
+    transform: translateY(-12px) rotate(5deg) scale(1.08);
+  }
+  90% {
+    transform: translateY(0) rotate(0deg) scale(1);
   }
 }
 
