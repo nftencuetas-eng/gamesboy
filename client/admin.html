@@ -14,7 +14,7 @@
   <style>
     .admin-layout {
       display: grid;
-      grid-template-columns: 280px minmax(0, 1fr);
+      grid-template-columns: 260px minmax(0, 1fr);
       min-height: 100vh;
       width: 100%;
       box-sizing: border-box;
@@ -22,13 +22,18 @@
       background-image: 
         radial-gradient(circle at 10% 10%, rgba(0, 194, 255, 0.05) 0%, transparent 40%),
         radial-gradient(circle at 90% 20%, rgba(245, 158, 11, 0.04) 0%, transparent 45%);
+      transition: grid-template-columns 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
+    .admin-layout.collapsed {
+      grid-template-columns: 74px minmax(0, 1fr);
+    }
+
     .admin-sidebar {
-      background: rgba(10, 13, 22, 0.94);
+      background: rgba(10, 13, 22, 0.96);
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
       border-right: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 1.5rem 1.1rem;
+      padding: 1.25rem 0.85rem;
       display: flex;
       flex-direction: column;
       position: sticky;
@@ -37,14 +42,90 @@
       box-sizing: border-box;
       z-index: 50;
       text-align: left;
-      overflow-x: hidden;
-      overflow-y: auto;
-      scrollbar-width: thin;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
       min-width: 0;
+      transition: padding 0.25s ease;
     }
+    .admin-sidebar::-webkit-scrollbar,
+    .admin-sidebar nav::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+
     .admin-sidebar nav {
       overflow-x: hidden !important;
+      overflow-y: auto !important;
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
     }
+
+    /* Top header of sidebar with Logo + Collapse Button */
+    .sidebar-header-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .btn-toggle-sidebar {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #94a3b8;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .btn-toggle-sidebar:hover {
+      background: rgba(0, 194, 255, 0.15);
+      border-color: rgba(0, 194, 255, 0.35);
+      color: var(--accent-cyan);
+    }
+
+    /* COLLAPSED SIDEBAR RULES */
+    .admin-layout.collapsed .admin-sidebar {
+      padding: 1.25rem 0.5rem;
+    }
+    .admin-layout.collapsed .sidebar-full-brand,
+    .admin-layout.collapsed .sidebar-category-header,
+    .admin-layout.collapsed .admin-menu-btn span,
+    .admin-layout.collapsed .sidebar-footer-session,
+    .admin-layout.collapsed #btn-admin-logout span {
+      display: none !important;
+    }
+    .admin-layout.collapsed .sidebar-mini-brand {
+      display: block !important;
+    }
+    .admin-layout.collapsed .admin-menu-btn {
+      justify-content: center;
+      padding: 11px 0;
+      position: relative;
+    }
+    .admin-layout.collapsed .badge-count {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 0.62rem;
+      padding: 1px 4px;
+      margin: 0;
+    }
+    .admin-layout.collapsed .btn-toggle-sidebar {
+      margin: 0 auto;
+    }
+    .admin-layout.collapsed #btn-admin-logout {
+      padding: 10px 0;
+    }
+
     .admin-content {
       padding: 2.25rem 2.5rem;
       min-width: 0;
@@ -653,26 +734,61 @@
     }
 
     @media (max-width: 1200px) {
-      .admin-layout { grid-template-columns: 240px minmax(0, 1fr); }
       .admin-content { padding: 1.75rem 1.5rem; }
     }
 
-    @media (max-width: 960px) {
-      .admin-layout { grid-template-columns: 1fr; }
+    @media (max-width: 900px) {
+      .admin-layout {
+        grid-template-columns: 74px minmax(0, 1fr) !important;
+      }
+      .admin-layout .admin-sidebar {
+        padding: 1.25rem 0.5rem !important;
+      }
+      .admin-layout .sidebar-full-brand,
+      .admin-layout .sidebar-category-header,
+      .admin-layout .admin-menu-btn span,
+      .admin-layout .sidebar-footer-session,
+      .admin-layout #btn-admin-logout span {
+        display: none !important;
+      }
+      .admin-layout .sidebar-mini-brand {
+        display: block !important;
+      }
+      .admin-layout .sidebar-header-box {
+        flex-direction: column !important;
+        gap: 10px !important;
+        justify-content: center !important;
+      }
+      .admin-layout .admin-menu-btn {
+        justify-content: center !important;
+        padding: 11px 0 !important;
+        position: relative !important;
+      }
+      .admin-layout .badge-count {
+        position: absolute !important;
+        top: 4px !important;
+        right: 4px !important;
+        font-size: 0.62rem !important;
+        padding: 1px 4px !important;
+        margin: 0 !important;
+      }
+      .admin-layout #btn-admin-logout {
+        padding: 10px 0 !important;
+        justify-content: center !important;
+      }
+      .admin-content { padding: 1.25rem 1rem !important; }
+    }
+
+    @media (max-width: 600px) {
+      .admin-layout {
+        grid-template-columns: 60px minmax(0, 1fr) !important;
+      }
       .admin-sidebar {
-        height: auto;
-        position: static;
-        padding: 1rem 1.25rem;
-        border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 0.75rem 0.35rem !important;
       }
-      .admin-sidebar nav {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-        gap: 6px;
-        max-height: none;
+      .admin-content {
+        padding: 1rem 0.75rem !important;
       }
-      .admin-content { padding: 1.25rem 1rem; }
     }
 
     @keyframes spinPublish { to { transform: rotate(360deg); } }
@@ -682,57 +798,69 @@
 </head>
 <body>
 
-  <div class="admin-layout">
+  <div class="admin-layout" id="admin-layout-container">
     
     <!-- LEFT EXECUTIVE SIDEBAR -->
-    <aside class="admin-sidebar">
-      <div style="margin-bottom: 2rem;">
-        <a href="/" title="GamesBoy.net">
-          <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 34px; width: auto;">
-        </a>
-        <div style="display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); padding: 2px 8px; border-radius: 12px !important;">
-          <span style="width: 6px; height: 6px; border-radius: 50%; background: #f59e0b;"></span>
-          <span style="font-size: 0.68rem; font-weight: 800; color: #f59e0b; text-transform: uppercase;">ADMIN MASTER</span>
+    <aside class="admin-sidebar" id="admin-sidebar-el">
+      <div class="sidebar-header-box">
+        <div class="sidebar-full-brand">
+          <a href="/" title="GamesBoy.net" style="display: inline-block; text-decoration: none;">
+            <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" style="height: 30px; width: auto; vertical-align: middle;">
+          </a>
+          <div style="display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); padding: 2px 8px; border-radius: 12px !important;">
+            <span style="width: 6px; height: 6px; border-radius: 50%; background: #f59e0b;"></span>
+            <span style="font-size: 0.65rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.05em;">ADMIN MASTER</span>
+          </div>
         </div>
+        <div class="sidebar-mini-brand" style="display: none; text-align: center; margin-bottom: 4px;">
+          <a href="/" title="GamesBoy.net">
+            <img src="/assets/branding/icon.png" alt="GamesBoy.net" style="height: 28px; width: 28px; border-radius: 6px; vertical-align: middle;">
+          </a>
+        </div>
+        <button id="btn-toggle-sidebar" class="btn-toggle-sidebar" title="Ocultar o Expandir menú lateral" type="button" onclick="toggleAdminSidebar()">
+          <svg id="icon-toggle-sidebar" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
       </div>
 
-      <nav style="display: flex; flex-direction: column; gap: 2px; overflow-y: auto; max-height: calc(100vh - 170px); padding-right: 4px;">
+      <nav id="admin-sidebar-nav" style="display: flex; flex-direction: column; gap: 3px; flex-grow: 1;">
         
         <!-- SECCIÓN 1: OPERACIONES & AUDITORÍA -->
         <div class="sidebar-category-header">Operaciones & Auditoría</div>
-        <button class="admin-menu-btn active" data-tab="tab-overview">
+        <button class="admin-menu-btn active" data-tab="tab-overview" title="1. Métricas & Balance">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
           <span>1. Métricas & Balance</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-orders-delivery">
+        <button class="admin-menu-btn" data-tab="tab-orders-delivery" title="2. Entregas Pendientes">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
           <span>2. Entregas Pendientes</span>
           <span class="badge-count red" id="badge-pending-orders" style="display: none;">0</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-finance">
+        <button class="admin-menu-btn" data-tab="tab-finance" title="3. Finanzas & Recargas">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
           <span>3. Finanzas & Recargas</span>
           <span class="badge-count red" id="badge-pending-deposits" style="display: none;">0</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-custody-payouts">
+        <button class="admin-menu-btn" data-tab="tab-custody-payouts" title="4. Liquidación Vendedores (Listo para Pagar)">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          <span>4. Liquidación Vendedores (Listo para Pagar)</span>
+          <span>4. Liquidación Vendedores</span>
           <span class="badge-count emerald" id="badge-ready-payouts" style="display: none;">0</span>
         </button>
 
         <!-- SECCIÓN 2: CATÁLOGO & TIENDA -->
         <div class="sidebar-category-header">Catálogo & Tienda</div>
-        <button class="admin-menu-btn" data-tab="tab-games-management">
+        <button class="admin-menu-btn" data-tab="tab-games-management" title="5. Videojuegos Digitales">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
           <span>5. Videojuegos Digitales</span>
           <span class="badge-count" id="badge-games-count">0</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-giftcards-management">
+        <button class="admin-menu-btn" data-tab="tab-giftcards-management" title="6. Tarjetas de Regalo">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="12" rx="2"></rect><path d="M12 8v12"></path><path d="M12 8h4.5a2.5 2.5 0 0 0 0-5C13 3 12 8 12 8z"></path><path d="M12 8H7.5a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8z"></path></svg>
           <span>6. Tarjetas de Regalo</span>
           <span class="badge-count cyan" id="badge-gc-count">0</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-streaming-moderation">
+        <button class="admin-menu-btn" data-tab="tab-streaming-moderation" title="7. Servicios de Streaming">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
           <span>7. Servicios de Streaming</span>
           <span class="badge-count red" id="badge-pending-subs" style="display: none;">0</span>
@@ -740,31 +868,31 @@
 
         <!-- SECCIÓN 3: PORTADAS & BANNERS -->
         <div class="sidebar-category-header">Portadas & Banners</div>
-        <button class="admin-menu-btn" data-tab="tab-hero-banners">
+        <button class="admin-menu-btn" data-tab="tab-hero-banners" title="8. Banners de Inicio (Hero)">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
           <span>8. Banners de Inicio (Hero)</span>
         </button>
 
         <!-- SECCIÓN 4: COMUNIDAD & SISTEMA -->
         <div class="sidebar-category-header">Comunidad & Sistema</div>
-        <button class="admin-menu-btn" data-tab="tab-users">
+        <button class="admin-menu-btn" data-tab="tab-users" title="9. Directorio de Usuarios">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
           <span>9. Directorio de Usuarios</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-smm-api">
+        <button class="admin-menu-btn" data-tab="tab-smm-api" title="10. Impulso Digital (API)">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
           <span>10. Impulso Digital (API)</span>
         </button>
       </nav>
 
-      <div style="margin-top: auto; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.08);">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08);">
+        <div class="sidebar-footer-session" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
           <div style="font-size: 0.74rem; color: var(--text-tertiary);">
             Sesión: <strong style="color: #ffffff;">Auditor Master</strong>
           </div>
           <span style="font-size: 0.68rem; background: rgba(0, 194, 255, 0.15); color: var(--accent-cyan); padding: 2px 6px; border-radius: 6px; font-weight: 800;">ADMIN</span>
         </div>
-        <button id="btn-admin-logout" class="btn-admin-action red" style="width: 100%; justify-content: center; padding: 9px 12px; font-size: 0.8rem; font-weight: 800;">
+        <button id="btn-admin-logout" class="btn-admin-action red" title="Cerrar Sesión Master" style="width: 100%; justify-content: center; padding: 9px 12px; font-size: 0.8rem; font-weight: 800;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
           <span>Cerrar Sesión Master</span>
         </button>
@@ -2396,6 +2524,44 @@
       });
     }
 
+
+    // --- SIDEBAR COLLAPSE & EXPAND ENGINE ---
+    window.toggleAdminSidebar = function(forceState) {
+      const container = document.getElementById('admin-layout-container');
+      const icon = document.getElementById('icon-toggle-sidebar');
+      if (!container) return;
+
+      let willBeCollapsed;
+      if (typeof forceState === 'boolean') {
+        willBeCollapsed = forceState;
+        if (willBeCollapsed) {
+          container.classList.add('collapsed');
+        } else {
+          container.classList.remove('collapsed');
+        }
+      } else {
+        willBeCollapsed = container.classList.toggle('collapsed');
+      }
+
+      localStorage.setItem('gamesboy_admin_sidebar_collapsed', willBeCollapsed ? '1' : '0');
+
+      if (icon) {
+        if (willBeCollapsed) {
+          icon.innerHTML = '<polyline points="9 18 15 12 9 6"></polyline>';
+        } else {
+          icon.innerHTML = '<polyline points="15 18 9 12 15 6"></polyline>';
+        }
+      }
+    };
+
+    window.initAdminSidebar = function() {
+      const savedState = localStorage.getItem('gamesboy_admin_sidebar_collapsed');
+      if (savedState === '1') {
+        window.toggleAdminSidebar(true);
+      } else if (savedState === '0') {
+        window.toggleAdminSidebar(false);
+      }
+    };
 
     // --- TAB SWITCHER ---
     const menuButtons = document.querySelectorAll('.admin-menu-btn');
@@ -4610,6 +4776,7 @@
 
     // Guard & WebSocket Real-time listener
     document.addEventListener('DOMContentLoaded', () => {
+      initAdminSidebar();
       const adminSession = localStorage.getItem('gb_admin_session');
       if (!adminSession) {
         window.location.href = '/admin/login';
