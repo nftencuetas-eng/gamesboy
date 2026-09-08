@@ -923,18 +923,20 @@ a.sub-nav-link,
   display: flex;
   flex-direction: row !important;
   gap: 0px !important;
-  height: 240px;
+  height: clamp(270px, 20vw, 340px);
   width: 100%;
   overflow: hidden;
   border-radius: 20px !important;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 194, 255, 0.08);
+  background: #050b18;
+  position: relative;
 }
 
 .eneba-slide {
   position: relative;
-  flex: 1;
-  min-width: 45px;
+  flex: 1.15;
+  min-width: 60px;
   border-radius: 0px !important;
   overflow: hidden;
   border: none !important;
@@ -945,6 +947,24 @@ a.sub-nav-link,
   background: #050b18;
 }
 
+.eneba-slide::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.45) 100%);
+  pointer-events: none;
+  opacity: 0.55;
+  transition: opacity 0.35s ease;
+}
+
+.eneba-slide:hover::after {
+  opacity: 0.2;
+}
+
+.eneba-slide.active::after {
+  opacity: 0;
+}
+
 .eneba-slide:hover {
   filter: brightness(1.08);
 }
@@ -953,21 +973,24 @@ a.sub-nav-link,
   position: absolute;
   inset: 0;
   background-size: cover;
-  background-position: center;
+  background-position: center 20%;
   transition: opacity 0.35s ease, transform 0.45s ease;
 }
 
 .eneba-slide .horizontal-bg {
   opacity: 0;
+  background-position: center center;
 }
 
 .eneba-slide .vertical-bg {
   opacity: 1;
+  background-position: center 20%;
+  background-size: cover;
 }
 
 /* ACTIVE STATE (Wide Horizontal Pure Artwork Banner - Flush Seamless) */
 .eneba-slide.active {
-  flex: 5.5;
+  flex: 4.8;
   box-shadow: none !important;
   border: none !important;
   cursor: pointer;
@@ -3517,7 +3540,7 @@ a.sub-nav-link,
     height: 35px;
   }
 
-  /* Compact Horizontal Hero Accordion on Mobile (1 Horizontal Banner + 3 Vertical Side-by-Side) */
+  /* Modern Responsive Hero Accordion on Mobile & Tablet */
   .eneba-hero-section {
     margin: 0.5rem auto 1rem auto;
     padding: 0 0.5rem;
@@ -3525,15 +3548,18 @@ a.sub-nav-link,
   .eneba-accordion-wrapper {
     display: flex !important;
     flex-direction: row !important;
-    height: 140px !important;
+    height: clamp(175px, 46vw, 215px) !important;
     gap: 4px !important;
+    border-radius: 14px !important;
+    touch-action: pan-y;
   }
   .eneba-slide {
-    min-width: 28px !important;
-    border-radius: 0px !important;
+    min-width: 36px !important;
+    border-radius: 6px !important;
   }
   .eneba-slide.active {
-    flex: 4.5 !important;
+    flex: 5.2 !important;
+    border-radius: 8px !important;
   }
   .arrow-prev, .arrow-next {
     display: none;
@@ -3589,16 +3615,19 @@ a.sub-nav-link,
     font-size: 0.75rem;
   }
 
-  /* Ultra-compact hero on small phones */
+  /* Responsive hero on small phones */
   .eneba-accordion-wrapper {
-    height: 125px !important;
+    height: clamp(165px, 45vw, 195px) !important;
     gap: 3px !important;
+    border-radius: 12px !important;
   }
   .eneba-slide {
-    min-width: 24px !important;
+    min-width: 30px !important;
+    border-radius: 5px !important;
   }
   .eneba-slide.active {
-    flex: 4.2 !important;
+    flex: 5.0 !important;
+    border-radius: 7px !important;
   }
 
   .stream-card-wide {

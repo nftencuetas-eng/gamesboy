@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css?v=3.2">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   
   <style>
     .auth-page-container {
@@ -383,17 +384,78 @@
       }
     });
 
-    document.getElementById('btn-google-login')?.addEventListener('click', async () => {
+    // --- GOOGLE OAUTH 2.0 / GOOGLE IDENTITY SERVICES INTEGRATION ---
+    let googleTokenClient = null;
+    let googleClientIdConfigured = '';
+
+    async function initGoogleAuth() {
+      try {
+        const res = await fetch('/api/auth/config');
+        if (res.ok) {
+          const cfg = await res.json();
+          googleClientIdConfigured = cfg.googleClientId || '';
+        }
+      } catch (e) {
+        console.warn('⚠️ No se pudo consultar /api/auth/config:', e);
+      }
+
+      function setupGsiClients() {
+        if (!window.google || !window.google.accounts) return;
+        if (!googleClientIdConfigured) return;
+
+        try {
+          // 1. Google OAuth2 Token Client (Custom button popup flow)
+          googleTokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: googleClientIdConfigured,
+            scope: 'email profile openid',
+            callback: async (tokenResponse) => {
+              if (tokenResponse.error) {
+                console.error('Google OAuth error:', tokenResponse);
+                alert('No se pudo autenticar con Google: ' + (tokenResponse.error_description || tokenResponse.error));
+                return;
+              }
+              if (tokenResponse.access_token) {
+                await handleGoogleAuthSuccess({ accessToken: tokenResponse.access_token });
+              }
+            }
+          });
+
+          // 2. Google Identity Services ID Token (One-Tap / Credential flow)
+          google.accounts.id.initialize({
+            client_id: googleClientIdConfigured,
+            callback: async (credentialResponse) => {
+              if (credentialResponse.credential) {
+                await handleGoogleAuthSuccess({ credential: credentialResponse.credential });
+              }
+            }
+          });
+        } catch (err) {
+          console.warn('Google GSI init warning:', err);
+        }
+      }
+
+      if (window.google && window.google.accounts) {
+        setupGsiClients();
+      } else {
+        window.addEventListener('load', () => {
+          setTimeout(setupGsiClients, 500);
+        });
+      }
+    }
+
+    async function handleGoogleAuthSuccess(payload) {
+      const googleBtn = document.getElementById('btn-google-login');
+      const originalText = googleBtn ? googleBtn.innerHTML : '';
+      if (googleBtn) {
+        googleBtn.style.opacity = '0.7';
+        googleBtn.innerHTML = '<span>Verificando con Google...</span>';
+      }
+
       try {
         const res = await fetch('/api/auth/google', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            googleUser: {
-              email: 'usuario.google@gmail.com',
-              name: 'Usuario Google'
-            }
-          })
+          body: JSON.stringify(payload)
         });
         const data = await res.json();
         if (data.success && data.user) {
@@ -401,12 +463,41 @@
           if (data.token) localStorage.setItem('gb_token', data.token);
           window.location.href = '/';
         } else {
-          alert('Error con Google Sign-In.');
+          alert(data.error || 'Error al autenticar cuenta de Google.');
+          if (googleBtn) {
+            googleBtn.style.opacity = '1';
+            googleBtn.innerHTML = originalText;
+          }
         }
       } catch (err) {
-        alert('Error de conexión con el proveedor.');
+        console.error('Error Google fetch:', err);
+        alert('Error de conexión al procesar la autenticación de Google.');
+        if (googleBtn) {
+          googleBtn.style.opacity = '1';
+          googleBtn.innerHTML = originalText;
+        }
+      }
+    }
+
+    document.getElementById('btn-google-login')?.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      if (!googleClientIdConfigured) {
+        alert('⚠️ GOOGLE_CLIENT_ID aún no está configurado en las variables de entorno de Railway / .env.\n\nPara activar Google Sign-In con tu proyecto existente (Tienfy/Almitro), agrega la variable GOOGLE_CLIENT_ID en Railway.');
+        return;
+      }
+
+      if (googleTokenClient) {
+        googleTokenClient.requestAccessToken({ prompt: 'select_account' });
+      } else if (window.google && window.google.accounts && window.google.accounts.id) {
+        google.accounts.id.prompt();
+      } else {
+        alert('Cargando servicios de autenticación de Google, intenta en un momento...');
       }
     });
+
+    // Run initialization
+    initGoogleAuth();
   </script>
 </body>
 </html>

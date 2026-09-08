@@ -28,7 +28,8 @@ export const config = {
     ssl: process.env.DB_SSL === 'true' || process.env.NODE_ENV === 'production'
   },
   
-  jwtSecret: process.env.JWT_SECRET || 'gamesboy_default_secret_key'
+  jwtSecret: process.env.JWT_SECRET || 'gamesboy_default_secret_key',
+  googleClientId: process.env.GOOGLE_CLIENT_ID || ''
 };
 
 export default config;

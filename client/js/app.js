@@ -1177,6 +1177,43 @@ function initHeroAccordion() {
     };
   }
 
+  // Mobile Touch Swipe Gesture Support
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let isSwiping = false;
+
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      isSwiping = true;
+      stopHeroAutoplay();
+    }
+  }, { passive: true });
+
+  container.addEventListener('touchend', (e) => {
+    if (!isSwiping) return;
+    isSwiping = false;
+    startHeroAutoplay();
+
+    if (e.changedTouches.length === 1) {
+      const deltaX = e.changedTouches[0].clientX - touchStartX;
+      const deltaY = e.changedTouches[0].clientY - touchStartY;
+
+      if (Math.abs(deltaX) > 35 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        if (deltaX < 0) {
+          // Swipe Left -> Next Slide
+          const nextIdx = (state.activeSlideIndex + 1) % banners.length;
+          setActiveSlide(nextIdx);
+        } else {
+          // Swipe Right -> Previous Slide
+          const prevIdx = (state.activeSlideIndex - 1 + banners.length) % banners.length;
+          setActiveSlide(prevIdx);
+        }
+      }
+    }
+  }, { passive: true });
+
   startHeroAutoplay();
 }
 
@@ -3067,6 +3104,95 @@ function initInteractiveDotGrid() {
   animId = requestAnimationFrame(render);
 }
 
+// --- GOOGLE OAUTH MODAL INTEGRATION ---
+let modalGoogleTokenClient = null;
+let modalGoogleClientId = '';
+
+async function initModalGoogleAuth() {
+  const googleBtn = document.getElementById('btn-google-signin');
+  if (!googleBtn) return;
+
+  try {
+    const res = await fetch('/api/auth/config');
+    if (res.ok) {
+      const cfg = await res.json();
+      modalGoogleClientId = cfg.googleClientId || '';
+    }
+  } catch (e) {}
+
+  function setupGsi() {
+    if (!window.google || !window.google.accounts || !modalGoogleClientId) return;
+    try {
+      modalGoogleTokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: modalGoogleClientId,
+        scope: 'email profile openid',
+        callback: async (tokenResponse) => {
+          if (tokenResponse.error) {
+            showToast('error', 'Google Auth', 'No se pudo autenticar con Google.');
+            return;
+          }
+          if (tokenResponse.access_token) {
+            await handleModalGoogleSuccess({ accessToken: tokenResponse.access_token });
+          }
+        }
+      });
+
+      google.accounts.id.initialize({
+        client_id: modalGoogleClientId,
+        callback: async (cred) => {
+          if (cred.credential) {
+            await handleModalGoogleSuccess({ credential: cred.credential });
+          }
+        }
+      });
+    } catch (e) {}
+  }
+
+  if (window.google && window.google.accounts) {
+    setupGsi();
+  } else {
+    window.addEventListener('load', () => setTimeout(setupGsi, 500));
+  }
+
+  googleBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!modalGoogleClientId) {
+      showToast('warning', 'Google Sign-In', 'GOOGLE_CLIENT_ID aún no está configurado en las variables de entorno de Railway.');
+      return;
+    }
+    if (modalGoogleTokenClient) {
+      modalGoogleTokenClient.requestAccessToken({ prompt: 'select_account' });
+    } else if (window.google && window.google.accounts && window.google.accounts.id) {
+      google.accounts.id.prompt();
+    }
+  });
+}
+
+async function handleModalGoogleSuccess(payload) {
+  try {
+    showToast('info', 'Verificando', 'Validando cuenta de Google...');
+    const res = await fetch('/api/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success && data.user) {
+      localStorage.setItem('gb_user', JSON.stringify(data.user));
+      if (data.token) localStorage.setItem('gb_token', data.token);
+      state.currentUser = data.user;
+      initUserSession();
+      const modalAuth = document.getElementById('modal-auth');
+      if (modalAuth) modalAuth.classList.remove('active');
+      showToast('success', '¡Bienvenido!', `Conectado como ${data.user.name}`);
+    } else {
+      showToast('error', 'Error', data.error || 'No se pudo autenticar con Google.');
+    }
+  } catch (err) {
+    showToast('error', 'Conexión', 'Error de conexión con el servidor.');
+  }
+}
+
 function initializeMarketplace() {
   initInteractiveDotGrid();
   initUserSession();
@@ -3075,6 +3201,7 @@ function initializeMarketplace() {
   fetchStoreData();        // Silent background update & seller sync
   initWebSocketClient();
   initDragToScrollEngine();
+  initModalGoogleAuth();
 }
 
 if (document.readyState === 'loading') {

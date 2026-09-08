@@ -3,8 +3,16 @@ import { getDb, saveStorage } from '../config/database.js';
 import postgresAdapter from '../db/postgresAdapter.js';
 import { getWallet } from '../services/walletService.js';
 import cryptoService from '../services/cryptoService.js';
+import config from '../config/env.js';
 
 const router = Router();
+
+// 0. Public Auth Configuration (Google Client ID, etc.)
+router.get('/config', (req, res) => {
+  res.json({
+    googleClientId: process.env.GOOGLE_CLIENT_ID || config.googleClientId || ''
+  });
+});
 
 // 1. Get current logged in user & wallet
 router.get('/me', (req, res) => {
@@ -190,52 +198,159 @@ router.post('/register', async (req, res) => {
   });
 });
 
-// 4. Google Sign-In Integration
+// 4. Google Sign-In & Sign-Up Integration (Official GSI / OAuth 2.0 Verification)
 router.post('/google', async (req, res) => {
-  const { googleUser } = req.body;
-  const db = getDb();
+  try {
+    const { credential, accessToken, googleUser } = req.body;
+    let verifiedEmail = null;
+    let verifiedName = null;
+    let verifiedAvatar = null;
+    let googleSub = null;
 
-  const email = (googleUser && googleUser.email) ? googleUser.email.toLowerCase() : `google.user_${Date.now()}@gmail.com`;
-  const name = (googleUser && googleUser.name) ? googleUser.name : 'Usuario Google';
-  
-  let user = db.users.find(u => u.email.toLowerCase() === email);
+    // A. Verify ID Token (credential JWT) via Google Tokeninfo API
+    if (credential) {
+      try {
+        const verifyRes = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`);
+        if (verifyRes.ok) {
+          const payload = await verifyRes.json();
+          verifiedEmail = payload.email;
+          verifiedName = payload.name || payload.given_name || (verifiedEmail ? verifiedEmail.split('@')[0] : 'Usuario Google');
+          verifiedAvatar = payload.picture;
+          googleSub = payload.sub;
+        } else {
+          console.warn('⚠️ [Google Auth] Falló verificación de id_token en Google API:', verifyRes.status);
+        }
+      } catch (err) {
+        console.error('❌ [Google Auth] Error conectando con Google Tokeninfo:', err.message);
+      }
+    }
 
-  if (!user) {
-    const newId = 'usr_g_' + Date.now();
-    user = {
-      id: newId,
-      name,
-      email,
-      role: 'client',
-      avatar: '🌐'
-    };
-    db.users.push(user);
-    getWallet(user.id);
-    saveStorage();
+    // B. Verify OAuth 2.0 Access Token via Google Userinfo API
+    if (!verifiedEmail && accessToken) {
+      try {
+        const userinfoRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        if (userinfoRes.ok) {
+          const profile = await userinfoRes.json();
+          verifiedEmail = profile.email;
+          verifiedName = profile.name || profile.given_name || (verifiedEmail ? verifiedEmail.split('@')[0] : 'Usuario Google');
+          verifiedAvatar = profile.picture;
+          googleSub = profile.sub;
+        } else {
+          console.warn('⚠️ [Google Auth] Falló verificación de accessToken en Google API:', userinfoRes.status);
+        }
+      } catch (err) {
+        console.error('❌ [Google Auth] Error conectando con Google Userinfo:', err.message);
+      }
+    }
 
-    if (postgresAdapter.isPgConnected()) {
+    // C. Fallback payload if provided directly (for local demo/dev mode)
+    if (!verifiedEmail && googleUser && googleUser.email) {
+      verifiedEmail = googleUser.email;
+      verifiedName = googleUser.name || verifiedEmail.split('@')[0];
+      verifiedAvatar = googleUser.avatar || googleUser.picture;
+    }
+
+    if (!verifiedEmail) {
+      return res.status(400).json({
+        error: 'No se pudo verificar la cuenta de Google. Por favor verifica tus credenciales e intenta nuevamente.'
+      });
+    }
+
+    const normalizedEmail = verifiedEmail.trim().toLowerCase();
+    const displayName = verifiedName || normalizedEmail.split('@')[0];
+    const avatarUrl = verifiedAvatar || '/assets/branding/icon.png';
+
+    const db = getDb();
+    let user = db.users.find(u => u.email.toLowerCase() === normalizedEmail);
+
+    // Look up in PostgreSQL if not in memory
+    if (!user && postgresAdapter.isPgConnected()) {
       try {
         const pool = postgresAdapter.getPool();
-        await pool.query(
-          'INSERT INTO gamesboy.gb_users (id, name, email, role, avatar) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (email) DO NOTHING',
-          [user.id, user.name, user.email, user.role, user.avatar]
-        );
-        await pool.query(
-          'INSERT INTO gamesboy.gb_wallets (user_id, balance_usd, pending_escrow_usd) VALUES ($1, 0, 0) ON CONFLICT (user_id) DO NOTHING',
-          [user.id]
-        );
-      } catch (e) {}
+        const pgUser = await pool.query('SELECT * FROM gamesboy.gb_users WHERE LOWER(email) = $1', [normalizedEmail]);
+        if (pgUser.rows.length > 0) {
+          user = {
+            id: pgUser.rows[0].id,
+            name: pgUser.rows[0].name,
+            email: pgUser.rows[0].email,
+            role: pgUser.rows[0].role,
+            avatar: pgUser.rows[0].avatar,
+            isGoogleLinked: true
+          };
+          db.users.push(user);
+        }
+      } catch (e) {
+        console.error('Error fetching Google user from Postgres:', e.message);
+      }
     }
-  }
 
-  const wallet = getWallet(user.id);
-  res.json({
-    success: true,
-    message: `Autenticado con Google como ${user.name}`,
-    user,
-    wallet,
-    token: `gb_google_token_${user.id}`
-  });
+    if (user) {
+      // User exists - update avatar if using default, and link Google
+      user.isGoogleLinked = true;
+      if (verifiedAvatar && (!user.avatar || user.avatar === '🎮' || user.avatar.includes('icon.png'))) {
+        user.avatar = avatarUrl;
+      }
+      saveStorage();
+
+      if (postgresAdapter.isPgConnected()) {
+        try {
+          const pool = postgresAdapter.getPool();
+          await pool.query(
+            'UPDATE gamesboy.gb_users SET avatar = COALESCE(NULLIF($1, \'\'), avatar), updated_at = NOW() WHERE id = $2',
+            [user.avatar, user.id]
+          );
+        } catch (e) {}
+      }
+    } else {
+      // Create new Google User
+      const newId = 'usr_g_' + Date.now();
+      user = {
+        id: newId,
+        name: displayName,
+        email: normalizedEmail,
+        role: 'client',
+        avatar: avatarUrl,
+        isGoogleLinked: true,
+        hasPassword: false,
+        googleSub: googleSub || undefined,
+        createdAt: new Date().toISOString()
+      };
+
+      db.users.push(user);
+      getWallet(user.id);
+      saveStorage();
+
+      if (postgresAdapter.isPgConnected()) {
+        try {
+          const pool = postgresAdapter.getPool();
+          await pool.query(
+            'INSERT INTO gamesboy.gb_users (id, name, email, role, avatar) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (email) DO UPDATE SET avatar = EXCLUDED.avatar, updated_at = NOW()',
+            [user.id, user.name, user.email, user.role, user.avatar]
+          );
+          await pool.query(
+            'INSERT INTO gamesboy.gb_wallets (user_id, balance_usd, pending_escrow_usd) VALUES ($1, 0, 0) ON CONFLICT (user_id) DO NOTHING',
+            [user.id]
+          );
+        } catch (e) {
+          console.error('Error saving Google user to Postgres:', e.message);
+        }
+      }
+    }
+
+    const wallet = getWallet(user.id);
+    res.json({
+      success: true,
+      message: `¡Bienvenido a GamesBoy, ${user.name}!`,
+      user,
+      wallet,
+      token: `gb_token_${user.id}_${Date.now()}`
+    });
+  } catch (err) {
+    console.error('❌ [Google Auth Endpoint Error]:', err);
+    res.status(500).json({ error: 'Error procesando la autenticación con Google.' });
+  }
 });
 
 // 5. Password Recovery Request
