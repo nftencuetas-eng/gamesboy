@@ -479,6 +479,157 @@ window.scrollCarousel = function(containerId, offset) {
   }
 };
 
+// --- GLOBAL MOUSE DRAG-TO-SCROLL ENGINE FOR ALL HORIZONTAL CAROUSELS & ROWS ---
+function initDragToScrollEngine() {
+  const scrollContainers = document.querySelectorAll('.catalog-scroll-row, .hub-releases-scroll, .services-grid');
+  
+  scrollContainers.forEach(slider => {
+    if (slider.dataset.dragInitialized === 'true') return;
+    slider.dataset.dragInitialized = 'true';
+
+    let isDown = false;
+    let startX = 0;
+    let scrollLeft = 0;
+    let hasDragged = false;
+    let movedDistance = 0;
+
+    slider.addEventListener('mousedown', (e) => {
+      // Only drag on left click (button 0)
+      if (e.button !== 0) return;
+      isDown = true;
+      hasDragged = false;
+      movedDistance = 0;
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDown) {
+        isDown = false;
+        setTimeout(() => {
+          slider.classList.remove('is-dragging');
+        }, 50);
+      }
+    });
+
+    slider.addEventListener('mouseleave', () => {
+      if (isDown) {
+        isDown = false;
+        slider.classList.remove('is-dragging');
+      }
+    });
+
+    slider.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      const x = e.pageX - slider.offsetLeft;
+      movedDistance = Math.abs(x - startX);
+      if (movedDistance > 5) {
+        e.preventDefault();
+        hasDragged = true;
+        slider.classList.add('is-dragging');
+        const walk = (x - startX) * 1.5;
+        slider.scrollLeft = scrollLeft - walk;
+      }
+    });
+
+    // Suppress click actions if user dragged more than 5px
+    slider.addEventListener('click', (e) => {
+      if (hasDragged) {
+        e.preventDefault();
+        e.stopPropagation();
+        hasDragged = false;
+      }
+    }, true);
+  });
+}
+
+// --- SALES LETTER INTERACTIVE CALCULATOR ---
+window.setCalcMode = function(mode) {
+  const tabSavings = document.getElementById('calc-tab-savings');
+  const tabEarnings = document.getElementById('calc-tab-earnings');
+  const controlsSavings = document.getElementById('calc-savings-controls');
+  const controlsEarnings = document.getElementById('calc-earnings-controls');
+  const resultSavings = document.getElementById('calc-result-savings-box');
+  const resultEarnings = document.getElementById('calc-result-earnings-box');
+
+  if (mode === 'savings') {
+    tabSavings?.classList.add('active');
+    tabEarnings?.classList.remove('active');
+    if (controlsSavings) controlsSavings.style.display = 'block';
+    if (controlsEarnings) controlsEarnings.style.display = 'none';
+    if (resultSavings) resultSavings.style.display = 'flex';
+    if (resultEarnings) resultEarnings.style.display = 'none';
+  } else {
+    tabEarnings?.classList.add('active');
+    tabSavings?.classList.remove('active');
+    if (controlsSavings) controlsSavings.style.display = 'none';
+    if (controlsEarnings) controlsEarnings.style.display = 'block';
+    if (resultSavings) resultSavings.style.display = 'none';
+    if (resultEarnings) resultEarnings.style.display = 'flex';
+  }
+  window.updateCalculator();
+};
+
+window.updateCalculator = function() {
+  const isSavings = document.getElementById('calc-tab-savings')?.classList.contains('active');
+  const rate = state.exchangeRate || 7500;
+
+  if (isSavings) {
+    const slider = document.getElementById('calc-services-slider');
+    const servicesCount = parseInt(slider?.value || '3', 10);
+    const displayEl = document.getElementById('calc-services-display');
+    if (displayEl) {
+      displayEl.textContent = `${servicesCount} ${servicesCount === 1 ? 'servicio' : 'plataformas'}`;
+    }
+
+    // Active chips styling
+    const chips = document.querySelectorAll('.calc-services-chips .service-chip');
+    chips.forEach((chip, idx) => {
+      if (idx < servicesCount) chip.classList.add('active');
+      else chip.classList.remove('active');
+    });
+
+    const traditionalMonthly = servicesCount * 85000;
+    const gamesboyMonthly = servicesCount * 22000;
+    const monthlySaved = traditionalMonthly - gamesboyMonthly;
+    const annualSaved = monthlySaved * 12;
+    const annualSavedUsd = Math.round(annualSaved / rate);
+
+    const tradEl = document.getElementById('calc-traditional-price');
+    const gbEl = document.getElementById('calc-gamesboy-price');
+    const annEl = document.getElementById('calc-annual-savings');
+    const annUsdEl = document.getElementById('calc-annual-savings-usd');
+
+    if (tradEl) tradEl.textContent = `${traditionalMonthly.toLocaleString('es-PY')} Gs./mes`;
+    if (gbEl) gbEl.textContent = `${gamesboyMonthly.toLocaleString('es-PY')} Gs./mes`;
+    if (annEl) annEl.textContent = `${annualSaved.toLocaleString('es-PY')} Gs.`;
+    if (annUsdEl) annUsdEl.textContent = `≈ $${annualSavedUsd} USD al año en tu bolsillo`;
+  } else {
+    const slider = document.getElementById('calc-slots-slider');
+    const slotsCount = parseInt(slider?.value || '4', 10);
+    const displayEl = document.getElementById('calc-slots-display');
+    if (displayEl) {
+      displayEl.textContent = `${slotsCount} ${slotsCount === 1 ? 'cupo libre' : 'cupos libres'}`;
+    }
+
+    const monthlyEarnings = slotsCount * 45000;
+    const annualEarnings = monthlyEarnings * 12;
+    const annualEarningsUsd = Math.round(annualEarnings / rate);
+
+    const monthlyEl = document.getElementById('calc-monthly-earnings');
+    const annEl = document.getElementById('calc-annual-earnings');
+    const annUsdEl = document.getElementById('calc-annual-earnings-usd');
+
+    if (monthlyEl) monthlyEl.textContent = `+${monthlyEarnings.toLocaleString('es-PY')} Gs./mes`;
+    if (annEl) annEl.textContent = `+${annualEarnings.toLocaleString('es-PY')} Gs.`;
+    if (annUsdEl) annUsdEl.textContent = `≈ +$${annualEarningsUsd} USD al año sin esfuerzo`;
+  }
+};
+
+function initSalesCalculator() {
+  window.updateCalculator();
+}
+
 // --- 1. HERO ACCORDION BANNER MODULE (ENEBA STYLE) ---
 function initHeroAccordion() {
   const container = document.getElementById('eneba-accordion-slides');
@@ -903,6 +1054,7 @@ async function fetchStoreData() {
     renderRetailGiftCards();
     renderSmmServices();
     renderMyVault();
+    initDragToScrollEngine();
   } catch (err) {
     console.error('Error loading marketplace data:', err);
   }
@@ -2091,6 +2243,8 @@ function instantRenderCatalog() {
     renderDigitalGames();
     renderRetailGiftCards();
     renderSmmServices();
+    initDragToScrollEngine();
+    initSalesCalculator();
   } catch (err) {
     console.warn('Instant hydration warning:', err);
   }
@@ -2102,6 +2256,8 @@ function initializeMarketplace() {
   instantRenderCatalog(); // Immediate 0ms paint - eliminates all reload flicker
   fetchStoreData();        // Silent background update & seller sync
   initWebSocketClient();
+  initDragToScrollEngine();
+  initSalesCalculator();
 }
 
 if (document.readyState === 'loading') {

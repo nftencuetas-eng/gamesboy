@@ -1100,6 +1100,15 @@
         "isOwnerAdmin": false,
         "text": "Hola a todos en el grupo, todo funcionando excelente.",
         "timestamp": "2026-09-08T00:02:57.845Z"
+      },
+      {
+        "id": "msg_1788828555618_d9f0",
+        "senderId": "usr_client1",
+        "senderName": "Lucas",
+        "senderAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+        "isOwnerAdmin": false,
+        "text": "Hola a todos en el grupo, todo funcionando excelente.",
+        "timestamp": "2026-09-08T00:49:15.618Z"
       }
     ],
     "sub_1788700823091_yysk": [
@@ -1559,6 +1568,16 @@
     }
   ],
   "seller_reviews": [
+    {
+      "id": "rev_1788828555578_pmnf",
+      "sellerId": "usr_admin",
+      "buyerId": "usr_client1",
+      "buyerName": "Lucas",
+      "buyerAvatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+      "rating": 5,
+      "comment": "¡Excelente atención y entrega inmediata de mi perfil 4K!",
+      "createdAt": "2026-09-08T00:49:15.578Z"
+    },
     {
       "id": "rev_1788825777816_3sdx",
       "sellerId": "usr_admin",

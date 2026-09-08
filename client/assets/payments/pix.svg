@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 64" width="100" height="64">
+  <rect width="100" height="64" rx="8" fill="#1C242D"/>
+  <path d="M42.8 23.2L35.2 30.8C34.6 31.4 34.6 32.6 35.2 33.2L42.8 40.8C43.4 41.4 44.6 41.4 45.2 40.8L52.8 33.2C53.4 32.6 53.4 31.4 52.8 30.8L45.2 23.2C44.6 22.6 43.4 22.6 42.8 23.2Z" fill="#32BCAD"/>
+  <path d="M57.2 23.2L49.6 30.8C49 31.4 49 32.6 49.6 33.2L57.2 40.8C57.8 41.4 59 41.4 59.6 40.8L67.2 33.2C67.8 32.6 67.8 31.4 67.2 30.8L59.6 23.2C59 22.6 57.8 22.6 57.2 23.2Z" fill="#32BCAD"/>
+  <text x="50" y="54" font-family="'Inter', sans-serif" font-weight="900" font-size="9" fill="#32BCAD" text-anchor="middle" letter-spacing="1.5">PIX BRASIL</text>
+</svg>

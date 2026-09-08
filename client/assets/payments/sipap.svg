@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 64" width="100" height="64">
+  <rect width="100" height="64" rx="8" fill="#0D47A1"/>
+  <text x="50" y="34" font-family="'Inter', sans-serif" font-weight="900" font-size="16" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">SIPAP</text>
+  <text x="50" y="47" font-family="'Inter', sans-serif" font-weight="700" font-size="8" fill="#90CAF9" text-anchor="middle" letter-spacing="1.2">TRANSFERENCIAS 24/7</text>
+</svg>

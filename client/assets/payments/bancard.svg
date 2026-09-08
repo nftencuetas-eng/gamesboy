@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 64" width="100" height="64">
+  <rect width="100" height="64" rx="8" fill="#D3141E"/>
+  <text x="50" y="38" font-family="'Inter', sans-serif" font-weight="900" font-size="16" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">BANCARD</text>
+  <text x="50" y="50" font-family="'Inter', sans-serif" font-weight="700" font-size="8" fill="#FFDE00" text-anchor="middle" letter-spacing="1.5">PAGO MÓVIL</text>
+</svg>

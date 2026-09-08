@@ -329,48 +329,210 @@
       </section>
 
       <!-- ======================================================= -->
-      <!-- 4 TRUST BADGES ROW                                      -->
+      <!-- SECCIÓN: CARTA DE VENTAS / PROPUESTA DE VALOR GAMESBOY  -->
       <!-- ======================================================= -->
-      <section class="trust-pillars-row">
-        <div class="trust-pillar-item">
-          <div class="pillar-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c2ff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+      <section class="sales-letter-section" id="section-sales-letter">
+        
+        <!-- Header / Main Hook -->
+        <div class="sales-letter-hero">
+          <div class="sales-badge-pill">
+            <span class="pulse-dot"></span>
+            <span>💡 LA NUEVA ERA DEL STREAMING Y GAMING</span>
           </div>
-          <div class="pillar-text-box">
-            <h4>Pago seguro</h4>
-            <p>Múltiples métodos de pago</p>
+          <h2 class="sales-main-title">
+            ¿Por qué pagar precio completo cuando puedes <span class="text-gradient-cyan">ahorrar hasta un 75%</span> de forma 100% legal y garantizada?
+          </h2>
+          <p class="sales-main-subtitle">
+            GamesBoy.net conecta a miles de usuarios para compartir perfiles oficiales de streaming, adquirir licencias digitales y monetizar suscripciones familiares con máxima seguridad y entrega automática.
+          </p>
+        </div>
+
+        <!-- 1. CÓMO FUNCIONA EN 3 PASOS (FORMATO INTERACTIVO STEP-CARDS) -->
+        <div class="sales-steps-wrapper">
+          <div class="sales-step-card">
+            <div class="step-card-number">01</div>
+            <div class="step-card-icon" style="color: var(--accent-cyan);">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+            <h3 class="step-card-title">1. Elige tu Servicio o Juego</h3>
+            <p class="step-card-desc">
+              Selecciona tu membresía de streaming favorita (Netflix, Spotify, ChatGPT Plus, etc.) o tu próximo videojuego digital para PS4, PS5 o PC.
+            </p>
+            <div class="step-card-tag">Perfiles privados con PIN</div>
+          </div>
+
+          <div class="sales-step-card">
+            <div class="step-card-number">02</div>
+            <div class="step-card-icon" style="color: #34d399;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            </div>
+            <h3 class="step-card-title">2. Recarga en Guaraníes o Cripto</h3>
+            <p class="step-card-desc">
+              Paga con comodidad vía SIPAP bancario 24/7, Bancard, Tigo Money, Pix Brasil o USDT Binance Pay sin recargos ocultos.
+            </p>
+            <div class="step-card-tag">Acreditación instantánea</div>
+          </div>
+
+          <div class="sales-step-card">
+            <div class="step-card-number">03</div>
+            <div class="step-card-icon" style="color: #f59e0b;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <h3 class="step-card-title">3. Acceso Inmediato y Garantía</h3>
+            <p class="step-card-desc">
+              Recibe tus credenciales al instante en tu Baúl Personal. Tu dinero queda protegido durante los 30 días del ciclo.
+            </p>
+            <div class="step-card-tag">Garantía GamesBoy 100%</div>
           </div>
         </div>
 
-        <div class="trust-pillar-item">
-          <div class="pillar-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c2ff" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        <!-- 2. WIDGET INTERACTIVO: CALCULADORA DE AHORRO & MONETIZACIÓN -->
+        <div class="sales-calculator-card">
+          <div class="calculator-header">
+            <div class="calculator-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="14"></line><line x1="12" y1="14" x2="12" y2="14"></line><line x1="8" y1="14" x2="8" y2="14"></line><line x1="16" y1="18" x2="16" y2="18"></line><line x1="12" y1="18" x2="12" y2="18"></line><line x1="8" y1="18" x2="8" y2="18"></line></svg>
+            </div>
+            <div>
+              <h3 class="calculator-title">Calculadora Interactiva de Ahorro y Ganancias</h3>
+              <p class="calculator-subtitle">Comprueba cuánto dinero estás ahorrando o cuánto puedes generar al mes con GamesBoy</p>
+            </div>
           </div>
-          <div class="pillar-text-box">
-            <h4>Entrega digital inmediata</h4>
-            <p>Recibe tu producto al instante</p>
+
+          <div class="calculator-body-grid">
+            <!-- Left Controls -->
+            <div class="calc-controls-col">
+              <div class="calc-mode-switch">
+                <button type="button" class="calc-tab-btn active" id="calc-tab-savings" onclick="setCalcMode('savings')">
+                  💸 Calcular mi Ahorro
+                </button>
+                <button type="button" class="calc-tab-btn" id="calc-tab-earnings" onclick="setCalcMode('earnings')">
+                  💰 Calcular mis Ganancias
+                </button>
+              </div>
+
+              <div id="calc-savings-controls">
+                <label class="calc-slider-label">
+                  <span>Cantidad de Servicios que utilizas:</span>
+                  <strong id="calc-services-display" class="calc-badge-count">3 plataformas</strong>
+                </label>
+                <input type="range" id="calc-services-slider" min="1" max="6" value="3" class="calc-range-slider" oninput="updateCalculator()">
+                <div class="calc-services-chips">
+                  <span class="service-chip active">Netflix 4K</span>
+                  <span class="service-chip active">Spotify Family</span>
+                  <span class="service-chip active">ChatGPT Plus</span>
+                  <span class="service-chip">Disney+</span>
+                  <span class="service-chip">YouTube Premium</span>
+                  <span class="service-chip">Max HBO</span>
+                </div>
+              </div>
+
+              <div id="calc-earnings-controls" style="display: none;">
+                <label class="calc-slider-label">
+                  <span>Cupos libres que puedes compartir:</span>
+                  <strong id="calc-slots-display" class="calc-badge-count">4 cupos libres</strong>
+                </label>
+                <input type="range" id="calc-slots-slider" min="1" max="10" value="4" class="calc-range-slider" oninput="updateCalculator()">
+                <p style="font-size: 0.8rem; color: var(--text-tertiary); margin-top: 10px;">
+                  * Monetiza tus cuentas familiares existentes (ej. Netflix, Spotify, ChatGPT). Recibe tu pago garantizado cada 30 días sin lidiar con cobros manuales.
+                </p>
+              </div>
+            </div>
+
+            <!-- Right Live Results Display -->
+            <div class="calc-results-col">
+              <div class="calc-result-box" id="calc-result-savings-box">
+                <div class="calc-result-row">
+                  <span>Precio Tradicional Individual:</span>
+                  <strong id="calc-traditional-price" class="text-danger-strike">260.000 Gs./mes</strong>
+                </div>
+                <div class="calc-result-row">
+                  <span>Con Perfil Compartido GamesBoy:</span>
+                  <strong id="calc-gamesboy-price" class="text-success-bold">65.000 Gs./mes</strong>
+                </div>
+                <div class="calc-divider"></div>
+                <div class="calc-highlight-card">
+                  <span class="calc-highlight-title">¡TU AHORRO ANUAL ESTIMADO!</span>
+                  <div class="calc-highlight-amount" id="calc-annual-savings">2.340.000 Gs.</div>
+                  <div class="calc-highlight-usd" id="calc-annual-savings-usd">≈ $320 USD al año en tu bolsillo</div>
+                </div>
+              </div>
+
+              <div class="calc-result-box" id="calc-result-earnings-box" style="display: none;">
+                <div class="calc-result-row">
+                  <span>Ingreso Mensual Estimado:</span>
+                  <strong id="calc-monthly-earnings" class="text-success-bold">+180.000 Gs./mes</strong>
+                </div>
+                <div class="calc-result-row">
+                  <span>Cobro 100% Asegurado:</span>
+                  <strong style="color: var(--accent-cyan);">Garantía GamesBoy</strong>
+                </div>
+                <div class="calc-divider"></div>
+                <div class="calc-highlight-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.05)); border-color: rgba(16, 185, 129, 0.4);">
+                  <span class="calc-highlight-title" style="color: #34d399;">GANANCIA ANUAL PASIVA</span>
+                  <div class="calc-highlight-amount" id="calc-annual-earnings" style="color: #34d399;">+2.160.000 Gs.</div>
+                  <div class="calc-highlight-usd" id="calc-annual-earnings-usd">≈ +$300 USD al año sin esfuerzo</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="trust-pillar-item">
-          <div class="pillar-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c2ff" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-          </div>
-          <div class="pillar-text-box">
-            <h4>Gran base de usuarios</h4>
-            <p>Miles de clientes nos eligen</p>
+        <!-- 3. TABLA COMPARATIVA: TRADICIONAL VS GAMESBOY -->
+        <div class="sales-comparison-container">
+          <h3 class="comparison-section-title">¿Por qué miles de usuarios eligen GamesBoy.net?</h3>
+          <div class="comparison-grid">
+            
+            <!-- Tarjeta Roja: Métodos Informales -->
+            <div class="comparison-card comp-bad">
+              <div class="comp-badge bad">❌ Cuentas en Redes / Informales</div>
+              <ul class="comp-list">
+                <li><span class="comp-icon bad">✕</span> Riesgo constante de estafa y pérdida de dinero.</li>
+                <li><span class="comp-icon bad">✕</span> Cuentas caídas a mitad de mes sin soporte ni respuesta.</li>
+                <li><span class="comp-icon bad">✕</span> Contraseñas cambiadas sin previo aviso por terceros.</li>
+                <li><span class="comp-icon bad">✕</span> Pagos por transferencia sin ninguna garantía ni intermediario.</li>
+                <li><span class="comp-icon bad">✕</span> Sin perfil exclusivo ni PIN personal de privacidad.</li>
+              </ul>
+            </div>
+
+            <!-- Tarjeta Verde/Cian: GamesBoy Marketplace Oficial -->
+            <div class="comparison-card comp-good">
+              <div class="comp-badge good">✨ GamesBoy Marketplace Oficial</div>
+              <ul class="comp-list">
+                <li><span class="comp-icon good">✓</span> <strong>Garantía de Reembolso GamesBoy:</strong> Tu dinero queda seguro durante todo el ciclo.</li>
+                <li><span class="comp-icon good">✓</span> <strong>Entrega Inmediata:</strong> Credenciales y PIN personal directo en tu Baúl.</li>
+                <li><span class="comp-icon good">✓</span> <strong>Chat Grupal en Vivo:</strong> Comunicación directa con tu anfitrión y miembros del grupo.</li>
+                <li><span class="comp-icon good">✓</span> <strong>Múltiples Métodos:</strong> Paga en Guaraníes vía SIPAP, Bancard, Tigo Money o Cripto USDT.</li>
+                <li><span class="comp-icon good">✓</span> <strong>Calificaciones Reales:</strong> Reseñas verificadas de compradores reales.</li>
+              </ul>
+            </div>
+
           </div>
         </div>
 
-        <div class="trust-pillar-item">
-          <div class="pillar-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c2ff" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
+        <!-- 4. GARANTÍA DE REEMBOLSO GAMESBOY BANNER FINAL -->
+        <div class="sales-guarantee-banner">
+          <div class="guarantee-shield-col">
+            <div class="guarantee-shield-icon">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#00c2ff" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+            </div>
           </div>
-          <div class="pillar-text-box">
-            <h4>Soporte 24/7</h4>
-            <p>Estamos para ayudarte</p>
+          <div class="guarantee-content-col">
+            <h3 class="guarantee-title">Tu Compra está 100% Protegida con la Garantía GamesBoy</h3>
+            <p class="guarantee-desc">
+              Si tu cuenta experimenta algún inconveniente que el anfitrión no solucione en menos de 24 horas, nuestro sistema automático te reasigna un perfil nuevo o te reembolsa el saldo íntegro a tu billetera. Cero riesgos.
+            </p>
+            <div class="guarantee-actions">
+              <a href="#section-streaming" class="btn-guarantee-cta">
+                Explorar Membresías Disponibles ➔
+              </a>
+              <a href="https://whatsapp.com/channel/0029VarWAJMBKfhy4EmCAr3X" target="_blank" rel="noopener noreferrer" class="btn-guarantee-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+                Canal Oficial de Ofertas
+              </a>
+            </div>
           </div>
         </div>
+
       </section>
 
     </div>
@@ -983,14 +1145,19 @@
 
       <!-- Col 4: Métodos de Pago & Idioma -->
       <div class="footer-col footer-payments-col">
-        <h4>Métodos de pago</h4>
+        <h4>Formatos de pago</h4>
         <div class="payment-methods-logos">
-          <span class="pay-logo-badge visa">VISA</span>
-          <span class="pay-logo-badge master">Mastercard</span>
-          <span class="pay-logo-badge paypal">PayPal</span>
-          <span class="pay-logo-badge binance">Binance Pay</span>
-          <span class="pay-logo-badge usdt">Tether USDT</span>
-          <span class="pay-logo-badge sipap">SIPAP PY</span>
+          <div class="payment-badges-grid">
+            <div class="pay-badge-card" title="Visa Débito / Crédito"><img src="/assets/payments/visa.svg" alt="Visa" class="payment-badge-img"></div>
+            <div class="pay-badge-card" title="Mastercard"><img src="/assets/payments/mastercard.svg" alt="Mastercard" class="payment-badge-img"></div>
+            <div class="pay-badge-card" title="Bancard / Pago Móvil"><img src="/assets/payments/bancard.svg" alt="Bancard Pago Móvil" class="payment-badge-img"></div>
+            <div class="pay-badge-card" title="SIPAP Transferencia 24/7"><img src="/assets/payments/sipap.svg" alt="SIPAP Paraguay" class="payment-badge-img"></div>
+            <div class="pay-badge-card" title="Tigo Money"><img src="/assets/payments/tigo-money.svg" alt="Tigo Money" class="payment-badge-img"></div>
+            <div class="pay-badge-card" title="Pix Brasil"><img src="/assets/payments/pix.svg" alt="Pix Brasil" class="payment-badge-img"></div>
+            <div class="pay-badge-card" title="Tether USDT TRC20 / BEP20"><img src="/assets/payments/usdt.svg" alt="Tether USDT" class="payment-badge-img"></div>
+            <div class="pay-badge-card" title="Binance Pay"><img src="/assets/payments/binance.svg" alt="Binance Pay" class="payment-badge-img"></div>
+            <div class="pay-badge-card" title="PayPal Internacional"><img src="/assets/payments/paypal.svg" alt="PayPal" class="payment-badge-img"></div>
+          </div>
         </div>
 
         <div class="footer-currency-row">
