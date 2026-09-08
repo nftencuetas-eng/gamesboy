@@ -225,9 +225,9 @@ function renderGroupsList() {
 
     // SLOTS SILHOUETTES:
     // LIBRE = PRENDIDO / VERDE BRILLANTE / GLOW
-    // OCUPADO = APAGADO / TENUE / GRIS
+    // OCUPADO = APAGADO / TENUE / GRIS (No cliqueable, tooltip "Ocupado")
     let slotsSvg = '';
-    const totalSlotsCount = Math.max(1, g.totalSlots || 5);
+    const totalSlotsCount = Math.max(1, g.totalSlots || state.hub?.maxSlots || 5);
     const availCount = Math.min(totalSlotsCount, Math.max(0, g.availableSlots !== undefined ? g.availableSlots : totalSlotsCount));
     const occupiedCount = totalSlotsCount - availCount;
 
@@ -237,8 +237,8 @@ function renderGroupsList() {
         const isOccupied = profile ? (profile.isOccupied === true || profile.isAvailable === false) : (i > availCount);
 
         slotsSvg += `
-          <div class="slot-sil-wrap" title="${isOccupied ? 'Perfil Ocupado / Personal' : 'Perfil Disponible para unirse'}">
-            <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <div class="slot-sil-wrap" title="${isOccupied ? 'Ocupado' : 'Disponible'}" style="${isOccupied ? 'cursor: not-allowed;' : ''}">
+            <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="${isOccupied ? 'pointer-events: none;' : ''}">
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
             </svg>
           </div>
@@ -390,13 +390,13 @@ window.openGroupDetailModal = function(groupId) {
   if (hostRating) hostRating.textContent = `${host.rating || '4.9 ★'} • ${host.badge || '⭐ Anfitrión Verificado'}`;
   if (hostInstructions) hostInstructions.textContent = group.instructions || 'Perfil privado exclusivo con PIN personal. Entrega inmediata en Bóveda tras unirse.';
 
-  const totalCap = Math.max(1, group.totalSlots || 5);
+  const totalCap = Math.max(1, group.totalSlots || state.hub?.maxSlots || 5);
   const availCount = Math.min(totalCap, Math.max(0, group.availableSlots !== undefined ? group.availableSlots : totalCap));
   const occupiedSlots = totalCap - availCount;
 
   if (slotsSummary) slotsSummary.textContent = `${availCount} de ${totalCap} Libres`;
 
-  // Render per-profile matrix (LIBRE = PRENDIDO / OCUPADO = APAGADO)
+  // Render per-profile matrix (LIBRE = PRENDIDO / OCUPADO = APAGADO / INCLICKEABLE)
   if (profilesGrid) {
     let tilesHtml = '';
     if (totalCap <= 20) {
@@ -414,7 +414,8 @@ window.openGroupDetailModal = function(groupId) {
 
         tilesHtml += `
           <div class="profile-slot-tile ${isOccupied ? 'occupied' : 'available'} ${isSelected ? 'selected' : ''}" 
-               title="${isOccupied ? `Perfil Ocupado (${profileName})` : `Perfil Disponible para ti (${profileName})`}">
+               style="${isOccupied ? 'cursor: not-allowed; opacity: 0.6; pointer-events: none;' : 'cursor: pointer;'}"
+               title="${isOccupied ? 'Ocupado' : `Perfil Disponible para ti (${profileName})`}">
             <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
             </svg>
@@ -598,18 +599,64 @@ function initUserSession() {
     if (navUserAvatarImg) navUserAvatarImg.src = avatarSrc;
     if (dropdownUserAvatarImg) dropdownUserAvatarImg.src = avatarSrc;
 
+    const roleBadge = document.querySelector('.user-role-badge');
     const adminMenu = document.getElementById('menu-item-admin-container');
-    if (adminMenu && user.role === 'admin') adminMenu.style.display = 'block';
+    if (user.role === 'admin') {
+      if (roleBadge) {
+        roleBadge.textContent = 'Administrador Master';
+        roleBadge.style.color = '#f59e0b';
+      }
+      if (adminMenu) adminMenu.style.display = 'block';
+    } else if (user.role === 'seller') {
+      if (roleBadge) {
+        roleBadge.textContent = 'Vendedor Verificado';
+        roleBadge.style.color = '#34d399';
+      }
+      if (adminMenu) adminMenu.style.display = 'none';
+    } else {
+      if (roleBadge) {
+        roleBadge.textContent = 'Cliente Verificado';
+        roleBadge.style.color = '#00c2ff';
+      }
+      if (adminMenu) adminMenu.style.display = 'none';
+    }
   };
 
-  if (state.currentUser && state.currentUser.name) {
-    if (unloggedGroup) unloggedGroup.style.display = 'none';
-    if (loggedGroup) loggedGroup.style.display = 'inline-flex';
+  if (state.currentUser && (state.currentUser.id || state.currentUser.name)) {
+    if (unloggedGroup) {
+      unloggedGroup.classList.add('is-hidden');
+      unloggedGroup.style.display = 'none';
+    }
+    if (loggedGroup) {
+      loggedGroup.classList.remove('is-hidden');
+      loggedGroup.style.removeProperty('display');
+      loggedGroup.style.display = 'inline-flex';
+    }
     updateUserDisplay(state.currentUser);
     updateUserBalance();
+
+    // Fetch latest profile to keep session fresh
+    fetch('/api/auth/profile', { headers: { 'x-user-id': state.currentUser.id } })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.user) {
+          state.currentUser = { ...state.currentUser, ...data.user, balanceUsd: data.balanceUsd };
+          localStorage.setItem('gb_user', JSON.stringify(state.currentUser));
+          updateUserDisplay(state.currentUser);
+          updateUserBalance();
+        }
+      })
+      .catch(() => {});
   } else {
-    if (unloggedGroup) unloggedGroup.style.display = 'inline-flex';
-    if (loggedGroup) loggedGroup.style.display = 'none';
+    if (unloggedGroup) {
+      unloggedGroup.classList.remove('is-hidden');
+      unloggedGroup.style.removeProperty('display');
+      unloggedGroup.style.display = 'inline-flex';
+    }
+    if (loggedGroup) {
+      loggedGroup.classList.add('is-hidden');
+      loggedGroup.style.display = 'none';
+    }
   }
 
   // Profile dropdown toggle
@@ -641,6 +688,12 @@ function initUserSession() {
       window.location.href = '/';
     };
   }
+
+  const btnOpenDeposit = document.getElementById('btn-open-deposit-modal');
+  const modalDeposit = document.getElementById('modal-deposit');
+  if (btnOpenDeposit && modalDeposit) {
+    btnOpenDeposit.onclick = () => { modalDeposit.style.display = 'grid'; };
+  }
 }
 
 async function updateUserBalance() {
@@ -654,7 +707,10 @@ async function updateUserBalance() {
     const data = await res.json();
     if (data.wallet && data.wallet.balanceUsd !== undefined) {
       state.wallet = data.wallet;
-      if (state.currentUser) state.currentUser.balanceUsd = data.wallet.balanceUsd;
+      if (state.currentUser) {
+        state.currentUser.balanceUsd = data.wallet.balanceUsd;
+        localStorage.setItem('gb_user', JSON.stringify(state.currentUser));
+      }
     }
     if (data.exchangeRatePyg) state.exchangeRatePyg = data.exchangeRatePyg;
   } catch (e) {}

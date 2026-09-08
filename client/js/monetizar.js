@@ -415,26 +415,86 @@ function initPublishModal() {
 
 // --- USER SESSION & HEADER SYNC ---
 function initSession() {
-  const user = JSON.parse(localStorage.getItem('gb_user') || 'null');
+  let user = JSON.parse(localStorage.getItem('gb_user') || 'null');
   const unlogged = document.getElementById('auth-unlogged-group');
   const logged = document.getElementById('auth-logged-group');
   const navName = document.getElementById('nav-user-name');
   const dropName = document.getElementById('dropdown-user-name');
   const dropEmail = document.getElementById('dropdown-user-email');
+  const navAvatarImg = document.getElementById('nav-user-avatar-img');
+  const dropAvatarImg = document.getElementById('dropdown-user-avatar-img');
 
-  if (user) {
-    if (unlogged) unlogged.style.display = 'none';
-    if (logged) logged.style.display = 'flex';
-    if (navName) navName.textContent = user.name || 'Usuario';
-    if (dropName) dropName.textContent = user.name || 'Usuario';
-    if (dropEmail) dropEmail.textContent = user.email || 'usuario@gamesboy.net';
+  const updateUserDisplay = (u) => {
+    if (!u) return;
+    if (navName) navName.textContent = u.name || 'Usuario';
+    if (dropName) dropName.textContent = u.name || 'Usuario';
+    if (dropEmail) dropEmail.textContent = u.email || 'usuario@gamesboy.net';
+
+    const avatarSrc = (u.avatar && (u.avatar.startsWith('http') || u.avatar.startsWith('data:') || u.avatar.startsWith('/assets'))) 
+      ? u.avatar 
+      : '/assets/branding/icon.png';
+    if (navAvatarImg) navAvatarImg.src = avatarSrc;
+    if (dropAvatarImg) dropAvatarImg.src = avatarSrc;
+
+    const roleBadge = document.querySelector('.user-role-badge');
+    const adminMenu = document.getElementById('menu-item-admin-container');
+    if (u.role === 'admin') {
+      if (roleBadge) {
+        roleBadge.textContent = 'Administrador Master';
+        roleBadge.style.color = '#f59e0b';
+      }
+      if (adminMenu) adminMenu.style.display = 'block';
+    } else if (u.role === 'seller') {
+      if (roleBadge) {
+        roleBadge.textContent = 'Vendedor Verificado';
+        roleBadge.style.color = '#34d399';
+      }
+      if (adminMenu) adminMenu.style.display = 'none';
+    } else {
+      if (roleBadge) {
+        roleBadge.textContent = 'Cliente Verificado';
+        roleBadge.style.color = '#00c2ff';
+      }
+      if (adminMenu) adminMenu.style.display = 'none';
+    }
 
     const balEl = document.getElementById('nav-user-balance-amount');
-    const balUsd = user.balanceUsd || 0;
+    const balUsd = u.balanceUsd || 0;
     if (balEl) balEl.textContent = `${Math.round(balUsd * 7500).toLocaleString('es-PY')} Gs.`;
+  };
+
+  if (user && (user.id || user.name)) {
+    if (unlogged) {
+      unlogged.classList.add('is-hidden');
+      unlogged.style.display = 'none';
+    }
+    if (logged) {
+      logged.classList.remove('is-hidden');
+      logged.style.removeProperty('display');
+      logged.style.display = 'inline-flex';
+    }
+    updateUserDisplay(user);
+
+    fetch('/api/auth/profile', { headers: { 'x-user-id': user.id } })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.user) {
+          user = { ...user, ...data.user, balanceUsd: data.balanceUsd };
+          localStorage.setItem('gb_user', JSON.stringify(user));
+          updateUserDisplay(user);
+        }
+      })
+      .catch(() => {});
   } else {
-    if (unlogged) unlogged.style.display = 'flex';
-    if (logged) logged.style.display = 'none';
+    if (unlogged) {
+      unlogged.classList.remove('is-hidden');
+      unlogged.style.removeProperty('display');
+      unlogged.style.display = 'inline-flex';
+    }
+    if (logged) {
+      logged.classList.add('is-hidden');
+      logged.style.display = 'none';
+    }
   }
 
   // Profile toggle

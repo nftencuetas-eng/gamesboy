@@ -413,18 +413,64 @@ function initUserSession() {
     if (navUserAvatarImg) navUserAvatarImg.src = avatarSrc;
     if (dropdownUserAvatarImg) dropdownUserAvatarImg.src = avatarSrc;
 
+    const roleBadge = document.querySelector('.user-role-badge');
     const adminMenu = document.getElementById('menu-item-admin-container');
-    if (adminMenu && user.role === 'admin') adminMenu.style.display = 'block';
+    if (user.role === 'admin') {
+      if (roleBadge) {
+        roleBadge.textContent = 'Administrador Master';
+        roleBadge.style.color = '#f59e0b';
+      }
+      if (adminMenu) adminMenu.style.display = 'block';
+    } else if (user.role === 'seller') {
+      if (roleBadge) {
+        roleBadge.textContent = 'Vendedor Verificado';
+        roleBadge.style.color = '#34d399';
+      }
+      if (adminMenu) adminMenu.style.display = 'none';
+    } else {
+      if (roleBadge) {
+        roleBadge.textContent = 'Cliente Verificado';
+        roleBadge.style.color = '#00c2ff';
+      }
+      if (adminMenu) adminMenu.style.display = 'none';
+    }
   };
 
-  if (state.currentUser && state.currentUser.name) {
-    if (unloggedGroup) unloggedGroup.style.display = 'none';
-    if (loggedGroup) loggedGroup.style.display = 'inline-flex';
+  if (state.currentUser && (state.currentUser.id || state.currentUser.name)) {
+    if (unloggedGroup) {
+      unloggedGroup.classList.add('is-hidden');
+      unloggedGroup.style.display = 'none';
+    }
+    if (loggedGroup) {
+      loggedGroup.classList.remove('is-hidden');
+      loggedGroup.style.removeProperty('display');
+      loggedGroup.style.display = 'inline-flex';
+    }
     updateUserDisplay(state.currentUser);
     updateUserBalance();
+
+    // Fetch latest profile to keep session fresh
+    fetch('/api/auth/profile', { headers: { 'x-user-id': state.currentUser.id } })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.user) {
+          state.currentUser = { ...state.currentUser, ...data.user, balanceUsd: data.balanceUsd };
+          localStorage.setItem('gb_user', JSON.stringify(state.currentUser));
+          updateUserDisplay(state.currentUser);
+          updateUserBalance();
+        }
+      })
+      .catch(() => {});
   } else {
-    if (unloggedGroup) unloggedGroup.style.display = 'inline-flex';
-    if (loggedGroup) loggedGroup.style.display = 'none';
+    if (unloggedGroup) {
+      unloggedGroup.classList.remove('is-hidden');
+      unloggedGroup.style.removeProperty('display');
+      unloggedGroup.style.display = 'inline-flex';
+    }
+    if (loggedGroup) {
+      loggedGroup.classList.add('is-hidden');
+      loggedGroup.style.display = 'none';
+    }
   }
 
   // Profile dropdown toggle
@@ -456,6 +502,12 @@ function initUserSession() {
       window.location.href = '/';
     };
   }
+
+  const btnOpenDeposit = document.getElementById('btn-open-deposit-modal');
+  const modalDeposit = document.getElementById('modal-deposit');
+  if (btnOpenDeposit && modalDeposit) {
+    btnOpenDeposit.onclick = () => { modalDeposit.style.display = 'grid'; };
+  }
 }
 
 async function updateUserBalance() {
@@ -468,7 +520,10 @@ async function updateUserBalance() {
     });
     const data = await res.json();
     if (data.wallet && data.wallet.balanceUsd !== undefined) {
-      if (state.currentUser) state.currentUser.balanceUsd = data.wallet.balanceUsd;
+      if (state.currentUser) {
+        state.currentUser.balanceUsd = data.wallet.balanceUsd;
+        localStorage.setItem('gb_user', JSON.stringify(state.currentUser));
+      }
     }
     if (data.exchangeRatePyg) state.exchangeRatePyg = data.exchangeRatePyg;
   } catch (e) {}

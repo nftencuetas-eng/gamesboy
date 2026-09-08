@@ -124,14 +124,18 @@ function renderSellerListings(listings) {
       : l.serviceName.toLowerCase().includes('paramount') ? 'paramount'
       : 'netflix';
 
-    // Inverted slot silhouettes
+    // Inverted slot silhouettes (LIBRE = PRENDIDO, OCUPADO = APAGADO / INCLICKEABLE)
     let slotsSvg = '';
-    if (l.totalSlots <= 12) {
-      for (let i = 0; i < l.totalSlots; i++) {
-        const isOccupied = i < occupiedSlots;
+    const totalSlotsCount = Math.max(1, l.totalSlots || 5);
+    const availCount = Math.min(totalSlotsCount, Math.max(0, l.availableSlots !== undefined ? l.availableSlots : totalSlotsCount));
+    const occupiedCount = totalSlotsCount - availCount;
+
+    if (totalSlotsCount <= 12) {
+      for (let i = 1; i <= totalSlotsCount; i++) {
+        const isOccupied = i > availCount;
         slotsSvg += `
-          <div class="slot-sil-wrap" title="${isOccupied ? 'Perfil Ocupado' : 'Perfil Disponible'}">
-            <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <div class="slot-sil-wrap" title="${isOccupied ? 'Ocupado' : 'Disponible'}" style="${isOccupied ? 'cursor: not-allowed;' : ''}">
+            <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="${isOccupied ? 'pointer-events: none;' : ''}">
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
             </svg>
           </div>
@@ -141,7 +145,7 @@ function renderSellerListings(listings) {
       slotsSvg = `
         <div class="slot-sil-wrap" style="padding: 3px 10px; border-radius: 8px; background: rgba(0, 194, 255, 0.08); border: 1px solid rgba(0, 194, 255, 0.25);">
           <span style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; color: var(--accent-emerald);">
-            👤 ${l.availableSlots} / ${l.totalSlots} cupos libres
+            👤 ${availCount} / ${totalSlotsCount} cupos libres
           </span>
         </div>
       `;
@@ -334,18 +338,64 @@ function initUserSession() {
     if (navUserAvatarImg) navUserAvatarImg.src = avatarSrc;
     if (dropdownUserAvatarImg) dropdownUserAvatarImg.src = avatarSrc;
 
+    const roleBadge = document.querySelector('.user-role-badge');
     const adminMenu = document.getElementById('menu-item-admin-container');
-    if (adminMenu && user.role === 'admin') adminMenu.style.display = 'block';
+    if (user.role === 'admin') {
+      if (roleBadge) {
+        roleBadge.textContent = 'Administrador Master';
+        roleBadge.style.color = '#f59e0b';
+      }
+      if (adminMenu) adminMenu.style.display = 'block';
+    } else if (user.role === 'seller') {
+      if (roleBadge) {
+        roleBadge.textContent = 'Vendedor Verificado';
+        roleBadge.style.color = '#34d399';
+      }
+      if (adminMenu) adminMenu.style.display = 'none';
+    } else {
+      if (roleBadge) {
+        roleBadge.textContent = 'Cliente Verificado';
+        roleBadge.style.color = '#00c2ff';
+      }
+      if (adminMenu) adminMenu.style.display = 'none';
+    }
   };
 
-  if (state.currentUser && state.currentUser.name) {
-    if (unloggedGroup) unloggedGroup.style.display = 'none';
-    if (loggedGroup) loggedGroup.style.display = 'inline-flex';
+  if (state.currentUser && (state.currentUser.id || state.currentUser.name)) {
+    if (unloggedGroup) {
+      unloggedGroup.classList.add('is-hidden');
+      unloggedGroup.style.display = 'none';
+    }
+    if (loggedGroup) {
+      loggedGroup.classList.remove('is-hidden');
+      loggedGroup.style.removeProperty('display');
+      loggedGroup.style.display = 'inline-flex';
+    }
     updateUserDisplay(state.currentUser);
     updateUserBalance();
+
+    // Fetch latest profile to keep session fresh
+    fetch('/api/auth/profile', { headers: { 'x-user-id': state.currentUser.id } })
+      .then(r => r.json())
+      .then(data => {
+        if (data.success && data.user) {
+          state.currentUser = { ...state.currentUser, ...data.user, balanceUsd: data.balanceUsd };
+          localStorage.setItem('gb_user', JSON.stringify(state.currentUser));
+          updateUserDisplay(state.currentUser);
+          updateUserBalance();
+        }
+      })
+      .catch(() => {});
   } else {
-    if (unloggedGroup) unloggedGroup.style.display = 'inline-flex';
-    if (loggedGroup) loggedGroup.style.display = 'none';
+    if (unloggedGroup) {
+      unloggedGroup.classList.remove('is-hidden');
+      unloggedGroup.style.removeProperty('display');
+      unloggedGroup.style.display = 'inline-flex';
+    }
+    if (loggedGroup) {
+      loggedGroup.classList.add('is-hidden');
+      loggedGroup.style.display = 'none';
+    }
   }
 
   // Profile dropdown toggle
@@ -377,6 +427,12 @@ function initUserSession() {
       window.location.href = '/';
     };
   }
+
+  const btnOpenDeposit = document.getElementById('btn-open-deposit-modal');
+  const modalDeposit = document.getElementById('modal-deposit');
+  if (btnOpenDeposit && modalDeposit) {
+    btnOpenDeposit.onclick = () => { modalDeposit.style.display = 'grid'; };
+  }
 }
 
 async function updateUserBalance() {
@@ -389,7 +445,10 @@ async function updateUserBalance() {
     });
     const data = await res.json();
     if (data.wallet && data.wallet.balanceUsd !== undefined) {
-      if (state.currentUser) state.currentUser.balanceUsd = data.wallet.balanceUsd;
+      if (state.currentUser) {
+        state.currentUser.balanceUsd = data.wallet.balanceUsd;
+        localStorage.setItem('gb_user', JSON.stringify(state.currentUser));
+      }
     }
     if (data.exchangeRatePyg) state.exchangeRatePyg = data.exchangeRatePyg;
   } catch (e) {}

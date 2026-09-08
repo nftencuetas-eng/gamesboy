@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getDb, saveStorage } from '../config/database.js';
 import { convertFromUsd } from '../services/currencyService.js';
+import cryptoService from '../services/cryptoService.js';
 
 const router = Router();
 
@@ -124,12 +125,40 @@ router.get('/:platform', (req, res) => {
     const isOfficial = s.isOfficial || s.sellerId === 'usr_admin' || s.sellerId === 'usr_admin_master';
     const groupPriceUsd = s.pricePerSlotUsd || fixedPriceUsd;
 
+    // Safe profiles list (without exposing secret passwords or PINs)
+    let profilesObj = {};
+    try {
+      if (s.pinsEncrypted) {
+        const dec = cryptoService.decrypt(s.pinsEncrypted);
+        const parsed = typeof dec === 'string' ? JSON.parse(dec) : dec;
+        if (parsed && typeof parsed === 'object') {
+          for (const key of Object.keys(parsed)) {
+            const p = parsed[key];
+            if (typeof p === 'object' && p !== null) {
+              profilesObj[key] = {
+                slotNumber: p.slotNumber || parseInt(key, 10),
+                name: p.name || `Cupo ${key}`,
+                isOccupied: p.isOccupied === true || p.isAvailable === false,
+                isAvailable: p.isAvailable === true || p.isOccupied === false
+              };
+            }
+          }
+        }
+      }
+    } catch (e) {
+      profilesObj = {};
+    }
+
+    const effectiveTotalSlots = Math.max(s.totalSlots || 0, maxSlots || 5);
+    const effectiveAvailSlots = s.availableSlots !== undefined ? Math.min(s.availableSlots, effectiveTotalSlots) : effectiveTotalSlots;
+
     return {
       id: s.id,
       serviceName: s.serviceName || hub.name,
-      planName: s.planName || hub.planName || `Plan ${maxSlots} Pantallas`,
-      totalSlots: s.totalSlots || maxSlots,
-      availableSlots: s.availableSlots !== undefined ? s.availableSlots : 0,
+      planName: s.planName || hub.planName || `Plan ${effectiveTotalSlots} Pantallas`,
+      totalSlots: effectiveTotalSlots,
+      availableSlots: effectiveAvailSlots,
+      profiles: profilesObj,
       pricePerSlotUsd: groupPriceUsd,
       pricePerSlotPyg: convertFromUsd(groupPriceUsd, 'PYG'),
       isOfficial,

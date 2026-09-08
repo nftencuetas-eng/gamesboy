@@ -73,19 +73,32 @@ router.get('/public/:id', (req, res) => {
       : '5.0';
 
     // Map public listings
-    const publicListings = listings.map(l => ({
-      id: l.id,
-      serviceName: l.serviceName,
-      category: l.category || 'streaming',
-      planName: l.planName || 'Plan Compartido',
-      totalSlots: l.totalSlots,
-      availableSlots: l.availableSlots,
-      occupiedSlots: l.totalSlots - l.availableSlots,
-      pricePerSlotUsd: l.pricePerSlotUsd,
-      pricePerSlotPyg: convertFromUsd(l.pricePerSlotUsd, 'PYG'),
-      instructions: l.instructions || 'Perfil privado exclusivo con PIN personal.',
-      createdAt: l.createdAt
-    }));
+    const publicListings = listings.map(l => {
+      const services = db.streaming_services || [];
+      const cleanKey = (l.serviceName || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const cfg = services.find(s => {
+        const sId = (s.id || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const sName = (s.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        return sId === cleanKey || sName === cleanKey || sId.includes(cleanKey) || cleanKey.includes(sId) || sName.includes(cleanKey) || cleanKey.includes(sName);
+      });
+      const maxSlots = cfg ? (cfg.maxSlots || 5) : 5;
+      const effectiveTotalSlots = Math.max(l.totalSlots || 0, maxSlots);
+      const effectiveAvailSlots = l.availableSlots !== undefined ? Math.min(l.availableSlots, effectiveTotalSlots) : effectiveTotalSlots;
+
+      return {
+        id: l.id,
+        serviceName: l.serviceName,
+        category: l.category || 'streaming',
+        planName: l.planName || 'Plan Compartido',
+        totalSlots: effectiveTotalSlots,
+        availableSlots: effectiveAvailSlots,
+        occupiedSlots: effectiveTotalSlots - effectiveAvailSlots,
+        pricePerSlotUsd: l.pricePerSlotUsd,
+        pricePerSlotPyg: convertFromUsd(l.pricePerSlotUsd, 'PYG'),
+        instructions: l.instructions || 'Perfil privado exclusivo con PIN personal.',
+        createdAt: l.createdAt
+      };
+    });
 
     res.json({
       success: true,

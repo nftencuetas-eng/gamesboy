@@ -57,7 +57,7 @@
         </div>
 
         <!-- Live Balance Display Pill & Profile Dropdown (Logged In Client) -->
-        <div class="header-user-group is-hidden" id="auth-logged-group" style="display: none !important;">
+        <div class="header-user-group is-hidden" id="auth-logged-group">
           <button class="btn-balance-display-pill" id="btn-open-deposit-modal" title="Saldo disponible en tu cuenta. Haz clic para recargar.">
             <svg class="wallet-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
             <span id="nav-user-balance-amount">0 Gs.</span>
@@ -332,6 +332,22 @@
       <div class="footer-slogan">Juega más. <span>Paga menos.</span></div>
     </div>
   </footer>
+
+  <!-- Deposit Modal -->
+  <div class="modal-overlay" id="modal-deposit" style="display: none;">
+    <div class="modal-card modal-deposit-card">
+      <button type="button" class="btn-modal-close" id="btn-close-deposit-modal">✕</button>
+      <div class="modal-header">
+        <h3 class="modal-title">Recargar Saldo en GamesBoy</h3>
+        <p class="modal-subtitle">Acreditación rápida en Guaraníes (Gs.) vía SIPAP o Cripto USDT</p>
+      </div>
+      <div style="padding: 1rem 0; text-align: center;">
+        <a href="/profile.html" class="btn-primary-block" style="text-decoration: none; padding: 12px;">
+          Ir al Panel de Billetera en Mi Cuenta ➔
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- Toast Container -->
   <div class="toast-container" id="toast-container"></div>

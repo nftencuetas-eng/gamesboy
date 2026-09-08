@@ -20,21 +20,34 @@ router.get('/', (req, res) => {
   }
 
   // Map public view without exposing raw credentials
-  const sanitized = list.map(s => ({
-    id: s.id,
-    sellerId: s.sellerId,
-    sellerName: s.sellerName,
-    isOfficial: s.isOfficial,
-    serviceName: s.serviceName,
-    category: s.category,
-    planName: s.planName,
-    totalSlots: s.totalSlots,
-    availableSlots: s.availableSlots,
-    pricePerSlotUsd: s.pricePerSlotUsd,
-    pricePerSlotPyg: convertFromUsd(s.pricePerSlotUsd, 'PYG'),
-    instructions: s.instructions,
-    createdAt: s.createdAt
-  }));
+  const sanitized = list.map(s => {
+    const services = db.streaming_services || [];
+    const cleanKey = (s.serviceKey || s.serviceName || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const cfg = services.find(srv => {
+      const sId = (srv.id || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const sName = (srv.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      return sId === cleanKey || sName === cleanKey || sId.includes(cleanKey) || cleanKey.includes(sId) || sName.includes(cleanKey) || cleanKey.includes(sName);
+    });
+    const maxSlots = cfg ? (cfg.maxSlots || 5) : 5;
+    const effectiveTotalSlots = Math.max(s.totalSlots || 0, maxSlots);
+    const effectiveAvailSlots = s.availableSlots !== undefined ? Math.min(s.availableSlots, effectiveTotalSlots) : effectiveTotalSlots;
+
+    return {
+      id: s.id,
+      sellerId: s.sellerId,
+      sellerName: s.sellerName,
+      isOfficial: s.isOfficial,
+      serviceName: s.serviceName,
+      category: s.category,
+      planName: s.planName || (cfg ? cfg.planName : `Plan ${effectiveTotalSlots} Pantallas`),
+      totalSlots: effectiveTotalSlots,
+      availableSlots: effectiveAvailSlots,
+      pricePerSlotUsd: s.pricePerSlotUsd,
+      pricePerSlotPyg: convertFromUsd(s.pricePerSlotUsd, 'PYG'),
+      instructions: s.instructions,
+      createdAt: s.createdAt
+    };
+  });
 
   res.json(sanitized);
 });
