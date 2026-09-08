@@ -126,13 +126,23 @@ function renderSellerListings(listings) {
 
     // Inverted slot silhouettes
     let slotsSvg = '';
-    for (let i = 0; i < l.totalSlots; i++) {
-      const isOccupied = i < occupiedSlots;
-      slotsSvg += `
-        <div class="slot-sil-wrap" title="${isOccupied ? 'Perfil Ocupado' : 'Perfil Disponible'}">
-          <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-          </svg>
+    if (l.totalSlots <= 12) {
+      for (let i = 0; i < l.totalSlots; i++) {
+        const isOccupied = i < occupiedSlots;
+        slotsSvg += `
+          <div class="slot-sil-wrap" title="${isOccupied ? 'Perfil Ocupado' : 'Perfil Disponible'}">
+            <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+          </div>
+        `;
+      }
+    } else {
+      slotsSvg = `
+        <div class="slot-sil-wrap" style="padding: 3px 10px; border-radius: 8px; background: rgba(0, 194, 255, 0.08); border: 1px solid rgba(0, 194, 255, 0.25);">
+          <span style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; color: var(--accent-emerald);">
+            👤 ${l.availableSlots} / ${l.totalSlots} cupos libres
+          </span>
         </div>
       `;
     }
