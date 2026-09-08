@@ -555,36 +555,28 @@
           <span>6. Tarjetas de Regalo</span>
           <span class="badge-count cyan" id="badge-gc-count">0</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-services-pricing">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-          <span>7. Precios Streaming & Comisiones (GoSplit)</span>
-        </button>
         <button class="admin-menu-btn" data-tab="tab-streaming-moderation">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
-          <span>8. Streaming Moderación</span>
+          <span>7. Streaming & Moderación</span>
           <span class="badge-count red" id="badge-pending-subs" style="display: none;">0</span>
-        </button>
-        <button class="admin-menu-btn" data-tab="tab-streaming-hubs">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-          <span>9. Páginas Streaming & IA</span>
         </button>
 
         <!-- SECCIÓN 3: PORTADAS & BANNERS -->
         <div class="sidebar-category-header">Portadas & Banners</div>
         <button class="admin-menu-btn" data-tab="tab-hero-banners">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-          <span>10. Banners de Inicio (Hero)</span>
+          <span>8. Banners de Inicio (Hero)</span>
         </button>
 
         <!-- SECCIÓN 4: COMUNIDAD & SISTEMA -->
         <div class="sidebar-category-header">Comunidad & Sistema</div>
         <button class="admin-menu-btn" data-tab="tab-users">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-          <span>11. Directorio de Usuarios</span>
+          <span>9. Directorio de Usuarios</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-smm-api">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
-          <span>12. Impulso Digital (API)</span>
+          <span>10. Impulso Digital (API)</span>
         </button>
       </nav>
 
@@ -909,66 +901,304 @@
       </section>
 
       <!-- ======================================================= -->
-      <!-- TAB 5: STREAMING: SERVICIOS OFICIALES & MODERACIÓN      -->
+      <!-- TAB 7: STREAMING & MODERACIÓN (MASTER 3-SUBTAB STUDIO)   -->
       <!-- ======================================================= -->
       <section id="tab-streaming-moderation" class="admin-section-pane">
         
-        <!-- Solicitudes Pendientes de Vendedores -->
-        <div class="admin-card" style="border-color: rgba(245, 158, 11, 0.3);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <!-- SUB-TABS NAVIGATION BAR -->
+        <div class="stream-subtabs-nav" style="display: flex; gap: 8px; margin-bottom: 1.5rem; background: rgba(14, 20, 36, 0.95); padding: 8px; border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.08); flex-wrap: wrap;">
+          <button type="button" class="stream-subtab-pill active" onclick="switchStreamingSubtab('subpane-services-crud')" id="btn-subtab-services-crud" style="padding: 10px 18px; border-radius: 10px; border: none; font-family: var(--font-heading); font-size: 0.88rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease;">
+            <span>📺 1. Catálogo & Creación de Servicios (CRUD Total)</span>
+          </button>
+          <button type="button" class="stream-subtab-pill" onclick="switchStreamingSubtab('subpane-accounts-moderation')" id="btn-subtab-accounts-moderation" style="padding: 10px 18px; border-radius: 10px; border: none; font-family: var(--font-heading); font-size: 0.88rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease;">
+            <span>🛡️ 2. Moderación de Cuentas & Bóveda Escrow</span>
+            <span class="badge-count red" id="badge-stream-pending-count" style="display: none;">0</span>
+          </button>
+          <button type="button" class="stream-subtab-pill" onclick="switchStreamingSubtab('subpane-hubs-design')" id="btn-subtab-hubs-design" style="padding: 10px 18px; border-radius: 10px; border: none; font-family: var(--font-heading); font-size: 0.88rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease;">
+            <span>🎨 3. Banners de Página, Portadas & IA</span>
+          </button>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- SUBPANE 1: SERVICIOS CRUD & PRICING                     -->
+        <!-- ======================================================= -->
+        <div id="subpane-services-crud" class="stream-subpane" style="display: block;">
+          <!-- Action & Summary Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 14px; background: rgba(16, 20, 32, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); padding: 1.25rem 1.5rem; border-radius: 16px;">
             <div>
-              <h3 style="font-size: 1.1rem; font-weight: 800; color: #f59e0b; display: flex; align-items: center; gap: 8px;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                <span>Solicitudes de Vendedores para Moderación & Aprobación</span>
+              <h3 style="font-size: 1.2rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                <span>Servicios de Streaming Disponibles para Alquiler & Monetización</span>
               </h3>
-              <p style="font-size: 0.8rem; color: var(--text-tertiary);">Revisa credenciales de streaming subidas por usuarios antes de publicarlas en la tienda.</p>
+              <p style="font-size: 0.82rem; color: var(--text-tertiary); margin: 0;">
+                Control total sobre los servicios: crea plataformas, define portada, ícono, precio por asiento en Gs., cantidad de asientos y margen de comisión.
+              </p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <button type="button" class="btn-admin-action emerald" onclick="openCreateServiceModal()" style="padding: 10px 18px; font-size: 0.88rem; font-weight: 800; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>+ Crear Nuevo Servicio de Streaming</span>
+              </button>
+              <button type="button" class="btn-admin-action cyan" onclick="loadServicesConfig()" style="padding: 10px 14px; font-size: 0.84rem;">
+                <span>🔄 Recargar</span>
+              </button>
             </div>
           </div>
-          <div style="overflow-x: auto;">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>Vendedor</th>
-                  <th>Servicio / Plan</th>
-                  <th>Cupos</th>
-                  <th>Precio Sugerido</th>
-                  <th>Credenciales (Descifradas para prueba)</th>
-                  <th>Acción</th>
-                </tr>
-              </thead>
-              <tbody id="table-streaming-pending">
-                <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">No hay solicitudes pendientes de aprobación.</td></tr>
-              </tbody>
-            </table>
+
+          <div class="admin-card">
+            <div style="overflow-x: auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Ícono & Servicio</th>
+                    <th>Portada & Banner</th>
+                    <th>Precio Venta por Asiento (Gs.)</th>
+                    <th>Asientos Máx.</th>
+                    <th>Comisión Plataforma</th>
+                    <th>Ganancia Vendedor (Neto)</th>
+                    <th>Lista de Espera</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="table-services-pricing-list">
+                  <tr><td colspan="9" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando servicios configurados...</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        <!-- Cuentas & Grupos Oficiales Activos -->
-        <div class="admin-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 12px;">
-            <div>
-              <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">Grupos de Suscripción Activos en Vivo</h3>
-              <p style="font-size: 0.8rem; color: var(--text-tertiary);">Cuentas oficiales y de vendedores verificados transmitiendo en la plataforma.</p>
+        <!-- ======================================================= -->
+        <!-- SUBPANE 2: MODERACIÓN DE CUENTAS & ESCROW               -->
+        <!-- ======================================================= -->
+        <div id="subpane-accounts-moderation" class="stream-subpane" style="display: none;">
+          <!-- Solicitudes Pendientes de Vendedores -->
+          <div class="admin-card" style="border-color: rgba(245, 158, 11, 0.3); margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+              <div>
+                <h3 style="font-size: 1.1rem; font-weight: 800; color: #f59e0b; display: flex; align-items: center; gap: 8px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  <span>Solicitudes de Vendedores para Moderación & Aprobación</span>
+                </h3>
+                <p style="font-size: 0.8rem; color: var(--text-tertiary);">Revisa credenciales de streaming subidas por usuarios antes de publicarlas en la tienda.</p>
+              </div>
+            </div>
+            <div style="overflow-x: auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Vendedor</th>
+                    <th>Servicio / Plan</th>
+                    <th>Cupos</th>
+                    <th>Precio Sugerido</th>
+                    <th>Credenciales (Descifradas para prueba)</th>
+                    <th>Acción</th>
+                  </tr>
+                </thead>
+                <tbody id="table-streaming-pending">
+                  <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">No hay solicitudes pendientes de aprobación.</td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
-          <div style="overflow-x: auto;">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>Servicio</th>
-                  <th>Administrador / Vendedor</th>
-                  <th>Cupos Ocupados</th>
-                  <th>Precio / Mes</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="table-streaming-active">
-                <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">Cargando suscripciones...</td></tr>
-              </tbody>
-            </table>
+
+          <!-- Cuentas & Grupos Oficiales Activos -->
+          <div class="admin-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff;">Grupos de Suscripción Activos en Vivo</h3>
+                <p style="font-size: 0.8rem; color: var(--text-tertiary);">Cuentas oficiales y de vendedores verificados transmitiendo en la plataforma.</p>
+              </div>
+            </div>
+            <div style="overflow-x: auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Servicio</th>
+                    <th>Administrador / Vendedor</th>
+                    <th>Cupos Ocupados</th>
+                    <th>Precio / Mes</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="table-streaming-active">
+                  <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">Cargando suscripciones...</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
+
+        <!-- ======================================================= -->
+        <!-- SUBPANE 3: BANNERS, PORTADAS & IA                       -->
+        <!-- ======================================================= -->
+        <div id="subpane-hubs-design" class="stream-subpane" style="display: none;">
+          <!-- Platform Selector Bar & AI Action -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; background: rgba(5, 7, 14, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); padding: 1.25rem; border-radius: 16px; margin-bottom: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 280px;">
+              <label style="font-size: 0.85rem; font-weight: 800; color: #ffffff; white-space: nowrap;">Seleccionar Plataforma:</label>
+              <select id="hub-admin-select-platform" class="admin-form-select" style="max-width: 320px; font-weight: 700; color: var(--accent-cyan);">
+                <option value="netflix">🔴 Netflix Premium 4K HDR</option>
+                <option value="spotify">🟢 Spotify Premium Hi-Fi</option>
+                <option value="disney">🔵 Disney+ & Star+ Premium</option>
+                <option value="max">🟣 Max (HBO Max Oficial)</option>
+                <option value="youtube">🔴 YouTube Premium & Music</option>
+                <option value="chatgpt">🟢 ChatGPT Plus & Team GPT-4o</option>
+                <option value="crunchyroll">🟠 Crunchyroll Mega Fan</option>
+                <option value="paramount">🔵 Paramount+ Premium</option>
+                <option value="apple">⚪ Apple TV+ 4K HDR</option>
+                <option value="prime">🔵 Amazon Prime Video 4K</option>
+              </select>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <button type="button" id="btn-admin-sync-ai" class="btn-admin-action emerald" style="padding: 10px 18px; font-size: 0.86rem; font-weight: 800;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                <span>⚡ Sincronizar Estrenos IA en Vivo</span>
+              </button>
+              <a id="btn-admin-view-hub-live" href="/service.html?platform=netflix" target="_blank" class="btn-admin-action cyan" style="padding: 10px 14px; font-size: 0.86rem;">
+                <span>👁️ Ver Página en Vivo ➔</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Platform Hub Editor Form -->
+          <form id="form-admin-hub-editor" class="admin-card">
+            <input type="hidden" id="hub-edit-platform-key" value="netflix">
+            <input type="hidden" id="hub-edit-thumbnail-base64" value="">
+            <input type="hidden" id="hub-edit-banner-horizontal-base64" value="">
+            <input type="hidden" id="hub-edit-banner-vertical-base64" value="">
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px;">
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+                <span id="hub-editor-title-badge">🔴 Configuración de Netflix Premium</span>
+              </h3>
+              <span id="hub-ai-last-sync-badge" style="font-size: 0.74rem; color: var(--text-tertiary);">IA: Sincronizado</span>
+            </div>
+
+            <!-- Basic Texts & Stock -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+              <div class="admin-form-group">
+                <label class="admin-form-label">Nombre Oficial de la Plataforma *</label>
+                <input type="text" id="hub-edit-name" class="admin-form-input" required>
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Badge de Calidad Superior *</label>
+                <input type="text" id="hub-edit-badge" class="admin-form-input" placeholder="ej: ULTRA HD 4K • DOLBY ATMOS" required>
+              </div>
+              <div class="admin-form-group">
+                <label class="admin-form-label">Disponibilidad / Estado de Stock *</label>
+                <select id="hub-edit-stock-status" class="admin-form-select" style="font-weight: 700;">
+                  <option value="true">🟢 En Stock (Disponible en Inicio)</option>
+                  <option value="false">🔴 Sin Stock (Apagado con Badge 'SIN STOCK')</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label">Lema / Subtítulo Destacado *</label>
+              <input type="text" id="hub-edit-tagline" class="admin-form-input" placeholder="ej: Películas, series y documentales ilimitados en Ultra HD" required>
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-form-label">Descripción Informativa</label>
+              <textarea id="hub-edit-desc" class="admin-form-textarea" rows="2" placeholder="Explicación del servicio y la protección de pago Escrow..."></textarea>
+            </div>
+
+            <!-- THUMBNAIL & BANNERS: SQUARE + HORIZONTAL + VERTICAL -->
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 1.25rem; margin-top: 1rem;">
+              <!-- Square Thumbnail (Home Carousel Icon) -->
+              <div class="admin-form-group">
+                <label class="admin-form-label">Miniatura Cuadrada de Inicio (Ícono)</label>
+                <div class="file-upload-zone" id="zone-hub-thumbnail">
+                  <input type="file" id="file-hub-thumbnail" accept="image/*">
+                  <div id="hub-preview-box-thumb" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;">
+                    <img id="img-hub-preview-thumb" src="" style="width: 80px; height: 80px; object-fit: cover; border-radius: 14px; margin-bottom: 6px; display: none;">
+                    <div style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">Subir ícono cuadrado</div>
+                    <div style="font-size: 0.72rem; color: var(--text-tertiary);">Recomendado: 400x400 px (PNG / WebP)</div>
+                  </div>
+                </div>
+                <input type="text" id="hub-edit-url-thumb" class="admin-form-input" style="margin-top: 8px;" placeholder="https://... URL de miniatura cuadrada">
+              </div>
+
+              <!-- Horizontal Panoramic Banner -->
+              <div class="admin-form-group">
+                <label class="admin-form-label">Banner Horizontal Panorámico (Hero)</label>
+                <div class="file-upload-zone" id="zone-hub-banner-h">
+                  <input type="file" id="file-hub-banner-h" accept="image/*">
+                  <div id="hub-preview-box-h" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;">
+                    <img id="img-hub-preview-h" src="" style="width: 100%; height: 80px; object-fit: cover; border-radius: 8px; margin-bottom: 6px; display: none;">
+                    <div style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">Subir imagen horizontal</div>
+                    <div style="font-size: 0.72rem; color: var(--text-tertiary);">Recomendado: 1600x600 px</div>
+                  </div>
+                </div>
+                <input type="text" id="hub-edit-url-h" class="admin-form-input" style="margin-top: 8px;" placeholder="https://... URL directa horizontal">
+              </div>
+
+              <!-- Vertical Desktop Sidebar Banner -->
+              <div class="admin-form-group">
+                <label class="admin-form-label">Banner Vertical Lateral</label>
+                <div class="file-upload-zone" id="zone-hub-banner-v">
+                  <input type="file" id="file-hub-banner-v" accept="image/*">
+                  <div id="hub-preview-box-v" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;">
+                    <img id="img-hub-preview-v" src="" style="width: 60px; height: 80px; object-fit: cover; border-radius: 8px; margin-bottom: 6px; display: none;">
+                    <div style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">Subir imagen vertical</div>
+                    <div style="font-size: 0.72rem; color: var(--text-tertiary);">Recomendado: 600x900 px</div>
+                  </div>
+                </div>
+                <input type="text" id="hub-edit-url-v" class="admin-form-input" style="margin-top: 8px;" placeholder="https://... URL directa vertical">
+              </div>
+            </div>
+
+            <!-- Impact Metrics Customization -->
+            <div style="margin-top: 1rem; background: rgba(0, 194, 255, 0.04); border: 1px solid rgba(0, 194, 255, 0.15); border-radius: 12px; padding: 1.25rem;">
+              <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 10px;">
+                📊 Métricas de Confianza & Impacto
+              </h4>
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                <div>
+                  <label class="admin-form-label">Cuentas Activas</label>
+                  <input type="number" id="hub-edit-metric-accounts" class="admin-form-input" value="48">
+                </div>
+                <div>
+                  <label class="admin-form-label">Usuarios este Mes</label>
+                  <input type="number" id="hub-edit-metric-users" class="admin-form-input" value="184">
+                </div>
+                <div>
+                  <label class="admin-form-label">Ahorro Promedio (%)</label>
+                  <input type="number" id="hub-edit-metric-savings" class="admin-form-input" value="75">
+                </div>
+                <div>
+                  <label class="admin-form-label">Calificación (Rating)</label>
+                  <input type="text" id="hub-edit-metric-rating" class="admin-form-input" value="4.95 / 5.0">
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Releases (Estrenos) List Editor -->
+            <div style="margin-top: 1.5rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h4 style="font-size: 0.95rem; font-weight: 800; color: #ffffff;">
+                  🎬 Cartelera de Estrenos & Novedades (Sincronizada con IA)
+                </h4>
+                <button type="button" class="btn-admin-action cyan" onclick="addNewHubReleaseRow()">+ Agregar Estreno Manual</button>
+              </div>
+              <div id="hub-releases-editor-container" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Dynamic release items -->
+              </div>
+            </div>
+
+            <!-- Submit Actions -->
+            <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 1.75rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.25rem;">
+              <button type="submit" class="btn-admin-action emerald" style="padding: 12px 28px; font-size: 0.92rem; font-weight: 800;">
+                <span>💾 Guardar Cambios de la Plataforma</span>
+              </button>
+            </div>
+          </form>
+        </div>
+
       </section>
 
       <!-- ======================================================= -->
@@ -1270,178 +1500,7 @@
 
       </section>
 
-      <!-- ======================================================= -->
-      <!-- TAB 9: PÁGINAS DE STREAMING (HUBS, BANNERS & IA EN VIVO)-->
-      <!-- ======================================================= -->
-      <section id="tab-streaming-hubs" class="admin-section-pane">
-        
-        <!-- Platform Selector Bar & AI Action -->
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; background: rgba(5, 7, 14, 0.7); border: 1px solid rgba(255, 255, 255, 0.08); padding: 1.25rem; border-radius: 16px; margin-bottom: 1.5rem;">
-          <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 280px;">
-            <label style="font-size: 0.85rem; font-weight: 800; color: #ffffff; white-space: nowrap;">Seleccionar Plataforma:</label>
-            <select id="hub-admin-select-platform" class="admin-form-select" style="max-width: 320px; font-weight: 700; color: var(--accent-cyan);">
-              <option value="netflix">🔴 Netflix Premium 4K HDR</option>
-              <option value="spotify">🟢 Spotify Premium Hi-Fi</option>
-              <option value="disney">🔵 Disney+ & Star+ Premium</option>
-              <option value="max">🟣 Max (HBO Max Oficial)</option>
-              <option value="youtube">🔴 YouTube Premium & Music</option>
-              <option value="chatgpt">🟢 ChatGPT Plus & Team GPT-4o</option>
-              <option value="crunchyroll">🟠 Crunchyroll Mega Fan</option>
-              <option value="paramount">🔵 Paramount+ Premium</option>
-              <option value="apple">⚪ Apple TV+ 4K HDR</option>
-              <option value="prime">🔵 Amazon Prime Video 4K</option>
-            </select>
-          </div>
 
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <button type="button" id="btn-admin-sync-ai" class="btn-admin-action emerald" style="padding: 10px 18px; font-size: 0.86rem; font-weight: 800;">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-              <span>⚡ Sincronizar Estrenos IA en Vivo</span>
-            </button>
-            <a id="btn-admin-view-hub-live" href="/service.html?platform=netflix" target="_blank" class="btn-admin-action cyan" style="padding: 10px 14px; font-size: 0.86rem;">
-              <span>👁️ Ver Página en Vivo ➔</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Platform Hub Editor Form -->
-        <form id="form-admin-hub-editor" class="admin-card">
-          <input type="hidden" id="hub-edit-platform-key" value="netflix">
-          <input type="hidden" id="hub-edit-thumbnail-base64" value="">
-          <input type="hidden" id="hub-edit-banner-horizontal-base64" value="">
-          <input type="hidden" id="hub-edit-banner-vertical-base64" value="">
-
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px;">
-            <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-              <span id="hub-editor-title-badge">🔴 Configuración de Netflix Premium</span>
-            </h3>
-            <span id="hub-ai-last-sync-badge" style="font-size: 0.74rem; color: var(--text-tertiary);">IA: Sincronizado</span>
-          </div>
-
-          <!-- Basic Texts & Stock -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
-            <div class="admin-form-group">
-              <label class="admin-form-label">Nombre Oficial de la Plataforma *</label>
-              <input type="text" id="hub-edit-name" class="admin-form-input" required>
-            </div>
-            <div class="admin-form-group">
-              <label class="admin-form-label">Badge de Calidad Superior *</label>
-              <input type="text" id="hub-edit-badge" class="admin-form-input" placeholder="ej: ULTRA HD 4K • DOLBY ATMOS" required>
-            </div>
-            <div class="admin-form-group">
-              <label class="admin-form-label">Disponibilidad / Estado de Stock *</label>
-              <select id="hub-edit-stock-status" class="admin-form-select" style="font-weight: 700;">
-                <option value="true">🟢 En Stock (Disponible en Inicio)</option>
-                <option value="false">🔴 Sin Stock (Apagado con Badge 'SIN STOCK')</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="admin-form-group">
-            <label class="admin-form-label">Lema / Subtítulo Destacado *</label>
-            <input type="text" id="hub-edit-tagline" class="admin-form-input" placeholder="ej: Películas, series y documentales ilimitados en Ultra HD" required>
-          </div>
-
-          <div class="admin-form-group">
-            <label class="admin-form-label">Descripción Informativa</label>
-            <textarea id="hub-edit-desc" class="admin-form-textarea" rows="2" placeholder="Explicación del servicio y la protección de pago Escrow..."></textarea>
-          </div>
-
-          <!-- THUMBNAIL & BANNERS: SQUARE + HORIZONTAL + VERTICAL -->
-          <div style="display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 1.25rem; margin-top: 1rem;">
-            
-            <!-- Square Thumbnail (Home Carousel Icon) -->
-            <div class="admin-form-group">
-              <label class="admin-form-label">Miniatura Cuadrada de Inicio (Ícono)</label>
-              <div class="file-upload-zone" id="zone-hub-thumbnail">
-                <input type="file" id="file-hub-thumbnail" accept="image/*">
-                <div id="hub-preview-box-thumb" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;">
-                  <img id="img-hub-preview-thumb" src="" style="width: 80px; height: 80px; object-fit: cover; border-radius: 14px; margin-bottom: 6px; display: none;">
-                  <div style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">Subir ícono cuadrado</div>
-                  <div style="font-size: 0.72rem; color: var(--text-tertiary);">Recomendado: 400x400 px (PNG / WebP)</div>
-                </div>
-              </div>
-              <input type="text" id="hub-edit-url-thumb" class="admin-form-input" style="margin-top: 8px;" placeholder="https://... URL de miniatura cuadrada">
-            </div>
-
-            <!-- Horizontal Panoramic Banner -->
-            <div class="admin-form-group">
-              <label class="admin-form-label">Banner Horizontal Panorámico (Hero)</label>
-              <div class="file-upload-zone" id="zone-hub-banner-h">
-                <input type="file" id="file-hub-banner-h" accept="image/*">
-                <div id="hub-preview-box-h" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;">
-                  <img id="img-hub-preview-h" src="" style="width: 100%; height: 80px; object-fit: cover; border-radius: 8px; margin-bottom: 6px; display: none;">
-                  <div style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">Subir imagen horizontal</div>
-                  <div style="font-size: 0.72rem; color: var(--text-tertiary);">Recomendado: 1600x600 px</div>
-                </div>
-              </div>
-              <input type="text" id="hub-edit-url-h" class="admin-form-input" style="margin-top: 8px;" placeholder="https://... URL directa horizontal">
-            </div>
-
-            <!-- Vertical Desktop Sidebar Banner -->
-            <div class="admin-form-group">
-              <label class="admin-form-label">Banner Vertical Lateral</label>
-              <div class="file-upload-zone" id="zone-hub-banner-v">
-                <input type="file" id="file-hub-banner-v" accept="image/*">
-                <div id="hub-preview-box-v" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px;">
-                  <img id="img-hub-preview-v" src="" style="width: 60px; height: 80px; object-fit: cover; border-radius: 8px; margin-bottom: 6px; display: none;">
-                  <div style="font-size: 0.82rem; font-weight: 700; color: #ffffff;">Subir imagen vertical</div>
-                  <div style="font-size: 0.72rem; color: var(--text-tertiary);">Recomendado: 600x900 px</div>
-                </div>
-              </div>
-              <input type="text" id="hub-edit-url-v" class="admin-form-input" style="margin-top: 8px;" placeholder="https://... URL directa vertical">
-            </div>
-
-          </div>
-
-          <!-- Impact Metrics Customization -->
-          <div style="margin-top: 1rem; background: rgba(0, 194, 255, 0.04); border: 1px solid rgba(0, 194, 255, 0.15); border-radius: 12px; padding: 1.25rem;">
-            <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 10px;">
-              📊 Métricas de Confianza & Impacto
-            </h4>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
-              <div>
-                <label class="admin-form-label">Cuentas Activas</label>
-                <input type="number" id="hub-edit-metric-accounts" class="admin-form-input" value="48">
-              </div>
-              <div>
-                <label class="admin-form-label">Usuarios este Mes</label>
-                <input type="number" id="hub-edit-metric-users" class="admin-form-input" value="184">
-              </div>
-              <div>
-                <label class="admin-form-label">Ahorro Promedio (%)</label>
-                <input type="number" id="hub-edit-metric-savings" class="admin-form-input" value="75">
-              </div>
-              <div>
-                <label class="admin-form-label">Calificación (Rating)</label>
-                <input type="text" id="hub-edit-metric-rating" class="admin-form-input" value="4.95 / 5.0">
-              </div>
-            </div>
-          </div>
-
-          <!-- Live Releases (Estrenos) List Editor -->
-          <div style="margin-top: 1.5rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-              <h4 style="font-size: 0.95rem; font-weight: 800; color: #ffffff;">
-                🎬 Cartelera de Estrenos & Novedades (Sincronizada con IA)
-              </h4>
-              <button type="button" class="btn-admin-action cyan" onclick="addNewHubReleaseRow()">+ Agregar Estreno Manual</button>
-            </div>
-            
-            <div id="hub-releases-editor-container" style="display: flex; flex-direction: column; gap: 10px;">
-              <!-- Dynamic release items -->
-            </div>
-          </div>
-
-          <!-- Submit Actions -->
-          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 1.75rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.25rem;">
-            <button type="submit" class="btn-admin-action emerald" style="padding: 12px 28px; font-size: 0.92rem; font-weight: 800;">
-              <span>💾 Guardar Cambios de la Plataforma</span>
-            </button>
-          </div>
-        </form>
-
-      </section>
 
       <!-- ======================================================= -->
       <!-- TAB: LIQUIDACIÓN A VENDEDORES (LISTO PARA PAGAR)        -->
@@ -1508,56 +1567,7 @@
         </div>
       </section>
 
-      <!-- ======================================================= -->
-      <!-- TAB: GESTIÓN DE SERVICIOS DE STREAMING & MONETIZACIÓN   -->
-      <!-- ======================================================= -->
-      <section id="tab-services-pricing" class="admin-section-pane">
-        
-        <!-- Action & Summary Bar -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 14px; background: rgba(16, 20, 32, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); padding: 1.25rem 1.5rem; border-radius: 16px;">
-          <div>
-            <h3 style="font-size: 1.2rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-              <span>Servicios de Streaming Disponibles para Alquiler & Monetización</span>
-            </h3>
-            <p style="font-size: 0.82rem; color: var(--text-tertiary); margin: 0;">
-              Control total sobre los servicios disponibles: crea plataformas, define la portada, ícono, precio fijo por asiento en Gs., cantidad de asientos y margen de comisión.
-            </p>
-          </div>
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <button type="button" class="btn-admin-action emerald" onclick="openCreateServiceModal()" style="padding: 10px 18px; font-size: 0.88rem; font-weight: 800; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              <span>+ Crear Nuevo Servicio de Streaming</span>
-            </button>
-            <button type="button" class="btn-admin-action cyan" onclick="loadServicesConfig()" style="padding: 10px 14px; font-size: 0.84rem;">
-              <span>🔄 Recargar</span>
-            </button>
-          </div>
-        </div>
 
-        <div class="admin-card">
-          <div style="overflow-x: auto;">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>Ícono & Servicio</th>
-                  <th>Portada & Banner</th>
-                  <th>Precio Venta por Asiento (Gs.)</th>
-                  <th>Asientos Máx.</th>
-                  <th>Comisión Plataforma</th>
-                  <th>Ganancia Vendedor (Neto)</th>
-                  <th>Lista de Espera</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="table-services-pricing-list">
-                <tr><td colspan="9" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando servicios configurados...</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
 
     </main>
   </div>
@@ -2147,12 +2157,39 @@
       'tab-custody-payouts': { title: 'Liquidación a Vendedores (Listo para Pagar)', subtitle: 'Fondos en custodia hasta cumplir el ciclo de 30 días con liberación manual de pagos a anfitriones.' },
       'tab-games-management': { title: 'Gestión de Videojuegos Digitales', subtitle: 'Catálogo por consolas, precios en Guaraníes, paginación inteligente y subida de capturas.' },
       'tab-giftcards-management': { title: 'Gift Cards / Tarjetas de Regalo', subtitle: 'Crea marcas (Netflix, Spotify, Deezer, Steam, etc.) y administra sus variaciones de saldo.' },
-      'tab-services-pricing': { title: 'Precios de Servicios Streaming & Comisiones (GoSplit)', subtitle: 'Configuración centralizada de precios fijos al público, comisiones y límites de perfiles.' },
-      'tab-streaming-moderation': { title: 'Streaming: Moderación & Servicios Oficiales', subtitle: 'Revisión y aprobación de cuentas subidas por vendedores y monitoreo de grupos en vivo.' },
-      'tab-streaming-hubs': { title: 'Páginas de Streaming (Hubs, Banners & IA en Vivo)', subtitle: 'Personalización de banners horizontales y verticales de escritorio, métricas de confianza y sincronización de cartelera con IA.' },
+      'tab-streaming-moderation': { title: 'Streaming & Moderación: Control Maestro de la Plataforma', subtitle: 'Catálogo de servicios (CRUD, portadas, precios por asiento, cupos y comisiones), moderación de cuentas en Bóveda Escrow y personalización de páginas.' },
       'tab-hero-banners': { title: 'Portadas & Banners de Inicio (Hero Accordion)', subtitle: 'Personalización de los 4 banners interactivos de la página de inicio, imágenes horizontales y verticales.' },
       'tab-users': { title: 'Directorio de Usuarios & Billeteras Auditadas', subtitle: 'Auditoría en tiempo real de clientes, vendedores, saldos reales en Gs./USDT y fondos en garantía.' },
       'tab-smm-api': { title: 'Integración API: Impulso Digital & Redes Sociales', subtitle: 'Conexión con el proveedor mayorista de servicios SMM, testing de saldo y márgenes.' }
+    };
+
+    window.switchStreamingSubtab = function(subpaneId) {
+      document.querySelectorAll('.stream-subtab-pill').forEach(b => {
+        b.classList.remove('active');
+        b.style.background = 'rgba(255, 255, 255, 0.04)';
+        b.style.color = '#94a3b8';
+        b.style.boxShadow = 'none';
+      });
+      document.querySelectorAll('.stream-subpane').forEach(p => p.style.display = 'none');
+
+      const activeBtn = document.getElementById('btn-' + subpaneId.replace('subpane-', 'subtab-'));
+      if (activeBtn) {
+        activeBtn.classList.add('active');
+        activeBtn.style.background = 'linear-gradient(135deg, #00c2ff 0%, #0070f3 100%)';
+        activeBtn.style.color = '#ffffff';
+        activeBtn.style.boxShadow = '0 4px 14px rgba(0, 194, 255, 0.35)';
+      }
+
+      const pane = document.getElementById(subpaneId);
+      if (pane) pane.style.display = 'block';
+
+      if (subpaneId === 'subpane-services-crud') {
+        loadServicesConfig();
+      } else if (subpaneId === 'subpane-accounts-moderation') {
+        loadStreamingData();
+      } else if (subpaneId === 'subpane-hubs-design') {
+        loadStreamingHubsAdmin();
+      }
     };
 
     menuButtons.forEach(btn => {
@@ -2172,10 +2209,12 @@
 
         if (tabId === 'tab-orders-delivery') loadPendingOrders();
         if (tabId === 'tab-custody-payouts') loadCustodyPayouts();
-        if (tabId === 'tab-services-pricing') loadServicesConfig();
+        if (tabId === 'tab-streaming-moderation') {
+          switchStreamingSubtab('subpane-services-crud');
+          loadStreamingData();
+        }
         if (tabId === 'tab-hero-banners') loadHeroBannersAdmin();
         if (tabId === 'tab-users') loadUsers();
-        if (tabId === 'tab-streaming-hubs') loadStreamingHubsAdmin();
       });
     });
 
