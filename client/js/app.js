@@ -1256,15 +1256,13 @@ function renderStreamingServices() {
   const container = document.getElementById('streaming-services-grid');
   if (!container) return;
 
-  // Anti-Flicker: Render shimmer skeleton cards if data is still loading
-  const platformList = (state.streamingPlatforms && state.streamingPlatforms.length > 0)
+  // Render platforms from state, fallback to default platforms if empty
+  const platformList = (Array.isArray(state.streamingPlatforms) && state.streamingPlatforms.length > 0)
     ? state.streamingPlatforms
     : [];
 
   if (platformList.length === 0) {
     container.innerHTML = `
-      <div class="stream-skeleton-card"></div>
-      <div class="stream-skeleton-card"></div>
       <div class="stream-skeleton-card"></div>
       <div class="stream-skeleton-card"></div>
       <div class="stream-skeleton-card"></div>
@@ -1290,8 +1288,8 @@ function renderStreamingServices() {
 
     const hasActiveSlots = matching.some(s => (s.availableSlots || 0) > 0);
     const inStock = (p.hasStock !== undefined) ? p.hasStock : (hasActiveSlots || matching.length > 0);
-
     const serviceName = p.name || (platformKey.charAt(0).toUpperCase() + platformKey.slice(1));
+    const thumbImg = p.iconUrl || p.icon || p.thumbnailUrl || p.coverUrl || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';
 
     return `
       <div class="stream-thumb-card ${inStock ? '' : 'out-of-stock'}" 
