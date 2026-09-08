@@ -491,6 +491,110 @@ let db = {
       qrUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F'
     }
   },
+  giftcard_brands: [
+    {
+      id: 'brand_playstation',
+      name: 'PlayStation Network',
+      category: 'Gaming',
+      logoUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80',
+      description: 'Tarjetas oficiales de saldo y membresías PlayStation Plus.',
+      variations: [
+        { id: 'var_psn_10', name: 'PSN $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
+        { id: 'var_psn_25', name: 'PSN $25 USD', denomination: '$25 USD', pricePyg: 210000, priceUsd: 25.00 },
+        { id: 'var_psn_50', name: 'PSN $50 USD', denomination: '$50 USD', pricePyg: 410000, priceUsd: 50.00 },
+        { id: 'var_psn_100', name: 'PSN $100 USD', denomination: '$100 USD', pricePyg: 810000, priceUsd: 100.00 },
+        { id: 'var_psn_plus_1m', name: 'PS Plus Essential 1 Mes', denomination: '1 Mes', pricePyg: 90000, priceUsd: 11.99 },
+        { id: 'var_psn_plus_12m', name: 'PS Plus Essential 12 Meses', denomination: '12 Meses', pricePyg: 620000, priceUsd: 79.99 }
+      ]
+    },
+    {
+      id: 'brand_steam',
+      name: 'Steam Wallet',
+      category: 'PC Gaming',
+      logoUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80',
+      description: 'Saldo para la tienda de Steam en PC y Steam Deck.',
+      variations: [
+        { id: 'var_steam_5', name: 'Steam $5 USD', denomination: '$5 USD', pricePyg: 42000, priceUsd: 5.00 },
+        { id: 'var_steam_10', name: 'Steam $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
+        { id: 'var_steam_20', name: 'Steam $20 USD', denomination: '$20 USD', pricePyg: 168000, priceUsd: 20.00 },
+        { id: 'var_steam_50', name: 'Steam $50 USD', denomination: '$50 USD', pricePyg: 415000, priceUsd: 50.00 }
+      ]
+    },
+    {
+      id: 'brand_xbox',
+      name: 'Xbox & Game Pass',
+      category: 'Gaming',
+      logoUrl: 'https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?auto=format&fit=crop&w=400&q=80',
+      description: 'Tarjetas de regalo Xbox y suscripciones Game Pass Ultimate.',
+      variations: [
+        { id: 'var_xbox_10', name: 'Xbox $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
+        { id: 'var_xbox_25', name: 'Xbox $25 USD', denomination: '$25 USD', pricePyg: 210000, priceUsd: 25.00 },
+        { id: 'var_xbox_gpu_1m', name: 'Game Pass Ultimate 1 Mes', denomination: '1 Mes', pricePyg: 125000, priceUsd: 16.99 },
+        { id: 'var_xbox_gpu_3m', name: 'Game Pass Ultimate 3 Meses', denomination: '3 Meses', pricePyg: 350000, priceUsd: 49.99 }
+      ]
+    },
+    {
+      id: 'brand_nintendo',
+      name: 'Nintendo eShop',
+      category: 'Gaming',
+      logoUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80',
+      description: 'Saldo para comprar juegos en Nintendo Switch.',
+      variations: [
+        { id: 'var_nin_10', name: 'Nintendo $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
+        { id: 'var_nin_20', name: 'Nintendo $20 USD', denomination: '$20 USD', pricePyg: 170000, priceUsd: 20.00 },
+        { id: 'var_nin_35', name: 'Nintendo $35 USD', denomination: '$35 USD', pricePyg: 295000, priceUsd: 35.00 },
+        { id: 'var_nin_50', name: 'Nintendo $50 USD', denomination: '$50 USD', pricePyg: 420000, priceUsd: 50.00 }
+      ]
+    },
+    {
+      id: 'brand_spotify',
+      name: 'Spotify Premium',
+      category: 'Música',
+      logoUrl: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=400&q=80',
+      description: 'Música sin anuncios y descargas offline en Spotify.',
+      variations: [
+        { id: 'var_spot_1m', name: 'Spotify 1 Mes Individual', denomination: '1 Mes', pricePyg: 45000, priceUsd: 5.99 },
+        { id: 'var_spot_3m', name: 'Spotify 3 Meses', denomination: '3 Meses', pricePyg: 125000, priceUsd: 16.50 },
+        { id: 'var_spot_6m', name: 'Spotify 6 Meses', denomination: '6 Meses', pricePyg: 240000, priceUsd: 32.00 }
+      ]
+    },
+    {
+      id: 'brand_netflix',
+      name: 'Netflix Gift Card',
+      category: 'Streaming',
+      logoUrl: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80',
+      description: 'Saldo oficial de regalo para canjear en cuentas Netflix.',
+      variations: [
+        { id: 'var_net_15', name: 'Netflix $15 USD', denomination: '$15 USD', pricePyg: 125000, priceUsd: 15.00 },
+        { id: 'var_net_25', name: 'Netflix $25 USD', denomination: '$25 USD', pricePyg: 205000, priceUsd: 25.00 },
+        { id: 'var_net_50', name: 'Netflix $50 USD', denomination: '$50 USD', pricePyg: 405000, priceUsd: 50.00 }
+      ]
+    },
+    {
+      id: 'brand_googleplay',
+      name: 'Google Play Store',
+      category: 'Móvil',
+      logoUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=400&q=80',
+      description: 'Saldo para apps, juegos y diamantes en Android.',
+      variations: [
+        { id: 'var_gp_10', name: 'Google Play $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
+        { id: 'var_gp_25', name: 'Google Play $25 USD', denomination: '$25 USD', pricePyg: 210000, priceUsd: 25.00 },
+        { id: 'var_gp_50', name: 'Google Play $50 USD', denomination: '$50 USD', pricePyg: 415000, priceUsd: 50.00 }
+      ]
+    },
+    {
+      id: 'brand_apple',
+      name: 'Apple Gift Card & iTunes',
+      category: 'Apple',
+      logoUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80',
+      description: 'Saldo para compras en App Store, Apple Arcade y suscripciones.',
+      variations: [
+        { id: 'var_apple_10', name: 'Apple $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
+        { id: 'var_apple_25', name: 'Apple $25 USD', denomination: '$25 USD', pricePyg: 210000, priceUsd: 25.00 },
+        { id: 'var_apple_50', name: 'Apple $50 USD', denomination: '$50 USD', pricePyg: 415000, priceUsd: 50.00 }
+      ]
+    }
+  ],
   streaming_services_config: {
     'netflix': { key: 'netflix', name: 'Netflix Premium 4K', planName: 'Ultra HD 4K (4 Pantallas)', maxSlots: 5, pricePerSlotPyg: 25000, pricePerSlotUsd: 3.33, commissionPercent: 10, netPayoutPyg: 22500, netPayoutUsd: 3.00 },
     'spotify': { key: 'spotify', name: 'Spotify Premium Familiar', planName: 'Plan Familiar (6 Cuentas)', maxSlots: 5, pricePerSlotPyg: 18000, pricePerSlotUsd: 2.40, commissionPercent: 10, netPayoutPyg: 16200, netPayoutUsd: 2.16 },
@@ -502,6 +606,7 @@ let db = {
     'paramount': { key: 'paramount', name: 'Paramount+ Premium', planName: 'Plan Estándar 3 Pantallas', maxSlots: 3, pricePerSlotPyg: 18000, pricePerSlotUsd: 2.40, commissionPercent: 10, netPayoutPyg: 16200, netPayoutUsd: 2.16 }
   }
 };
+
 
 // Persistence functions
 function initStorage() {
@@ -541,12 +646,35 @@ export function saveStorage() {
   } catch (e) {
     console.error('Error saving marketplace storage:', e);
   }
+  // Atomically persist to Supabase PostgreSQL in background
+  try {
+    postgresAdapter.syncToPostgres(db);
+  } catch (pgErr) {
+    console.warn('Postgres async sync notice:', pgErr.message);
+  }
 }
 
 export async function initDatabase() {
   initStorage();
   const pgResult = await postgresAdapter.initPostgres();
-  console.log(`✅ [Database: Marketplace Engine] Active with multi-currency wallet, credential vault & store. (PostgreSQL: ${pgResult.connected ? 'CONNECTED (Isolated Schema)' : 'LOCAL PERSISTENT STORE'})`);
+  if (pgResult.connected) {
+    try {
+      const cloudData = await postgresAdapter.loadFromPostgres();
+      if (cloudData && Object.keys(cloudData).length > 0) {
+        db = { ...db, ...cloudData };
+        try {
+          fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
+        } catch (e) {}
+        console.log('🔄 [Database] State hydrated directly from Supabase PostgreSQL cloud!');
+      } else {
+        // First time cloud initialization: push initial database state
+        postgresAdapter.syncToPostgres(db);
+      }
+    } catch (hydrateErr) {
+      console.warn('⚠️ Cloud hydration warning:', hydrateErr.message);
+    }
+  }
+  console.log(`✅ [Database: Marketplace Engine] Active with multi-currency wallet, credential vault & store. (PostgreSQL: ${pgResult.connected ? 'CONNECTED (Supabase Cloud)' : 'LOCAL PERSISTENT STORE'})`);
   return { connected: true, driver: pgResult.connected ? 'postgresql-supabase-isolated' : 'gamesboy-marketplace-store' };
 }
 
@@ -560,3 +688,4 @@ export default {
   getDb,
   saveStorage
 };
+

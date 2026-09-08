@@ -997,16 +997,17 @@ async function renderMyVault() {
   }).join('');
 }
 
-// --- 7. FETCH INITIAL DATA FROM API (SILENT RECONCILIATION) ---
+// --- 7. FETCH INITIAL DATA FROM API (LIVE DYNAMIC RECONCILIATION) ---
 async function fetchStoreData() {
   try {
-    const [subRes, storeRes, bannersRes, smmRes, giftcardsRes, servicesCfgRes] = await Promise.all([
+    const [subRes, storeRes, bannersRes, smmRes, giftcardsRes, servicesCfgRes, gamesRes] = await Promise.all([
       fetch('/api/subscriptions').then(r => r.json()).catch(() => null),
       fetch('/api/store/products').then(r => r.json()).catch(() => null),
       fetch('/api/banners').then(r => r.json()).catch(() => null),
       fetch('/api/smm/services').then(r => r.json()).catch(() => null),
       fetch('/api/admin/giftcards/brands').then(r => r.json()).catch(() => null),
-      fetch('/api/subscriptions/services-config').then(r => r.json()).catch(() => null)
+      fetch('/api/subscriptions/services-config').then(r => r.json()).catch(() => null),
+      fetch('/api/admin/games').then(r => r.json()).catch(() => null)
     ]);
 
     if (Array.isArray(subRes) && subRes.length > 0) {
@@ -1015,7 +1016,9 @@ async function fetchStoreData() {
       state.subscriptions = subRes.subscriptions;
     }
 
-    if (Array.isArray(storeRes) && storeRes.length > 0) {
+    if (gamesRes && gamesRes.games && Array.isArray(gamesRes.games) && gamesRes.games.length > 0) {
+      state.storeProducts = gamesRes.games;
+    } else if (Array.isArray(storeRes) && storeRes.length > 0) {
       state.storeProducts = storeRes;
     } else if (storeRes && storeRes.products && storeRes.products.length > 0) {
       state.storeProducts = storeRes.products;
@@ -1052,6 +1055,7 @@ async function fetchStoreData() {
     console.error('Error loading marketplace data:', err);
   }
 }
+
 
 // --- TOAST NOTIFICATION ENGINE (DARK LUXE FINTECH TOASTS) ---
 window.showToast = function(type = 'info', title = '', message = '', duration = 4000) {

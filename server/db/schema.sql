@@ -142,13 +142,45 @@ CREATE TABLE IF NOT EXISTS gamesboy.gb_hero_banners (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 11. MARCAS Y VARIACIONES DE TARJETAS DE REGALO (GIFT CARDS)
+CREATE TABLE IF NOT EXISTS gamesboy.gb_giftcard_brands (
+    id VARCHAR(64) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    category VARCHAR(64) NOT NULL DEFAULT 'Gaming',
+    logo_url TEXT NOT NULL,
+    description TEXT,
+    variations JSONB DEFAULT '[]'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 12. ALMACENAMIENTO ATÓMICO GLOBAL DE LA PLATAFORMA (SNAPSHOTS Y CONFIGURACIONES CENTRALIZADAS)
+CREATE TABLE IF NOT EXISTS gamesboy.gb_platform_storage (
+    key VARCHAR(64) PRIMARY KEY,
+    data JSONB NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Migraciones dinámicas para tablas existentes
 ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS brand_theme VARCHAR(64) DEFAULT 'psn';
 ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS badge VARCHAR(64);
 ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS icon VARCHAR(32);
 ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS codes JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS primary_price_pyg INT DEFAULT 0;
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS secondary_price_pyg INT DEFAULT 0;
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS primary_price_usd NUMERIC(10, 2) DEFAULT 0.00;
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS secondary_price_usd NUMERIC(10, 2) DEFAULT 0.00;
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS cover_url TEXT;
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS cover_image TEXT;
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS screenshots JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS genre VARCHAR(128) DEFAULT 'Acción';
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS is_available BOOLEAN DEFAULT true;
+
+ALTER TABLE gamesboy.gb_subscriptions ADD COLUMN IF NOT EXISTS renew_discount_percent INT DEFAULT 5;
+ALTER TABLE gamesboy.gb_subscriptions ADD COLUMN IF NOT EXISTS group_chat_messages JSONB DEFAULT '[]'::jsonb;
+
 ALTER TABLE gamesboy.gb_hero_banners ADD COLUMN IF NOT EXISTS sort_order INT DEFAULT 0;
 ALTER TABLE gamesboy.gb_hero_banners ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
+
 
 -- ============================================================================
 -- SEED DATA OFICIAL: USUARIOS, SALDOS REALES Y CONFIGURACIÓN INICIAL

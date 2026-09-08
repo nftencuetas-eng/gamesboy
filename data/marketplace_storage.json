@@ -49,7 +49,7 @@
   },
   "wallet_transactions": [
     {
-      "id": "tx_payout_rel_1788855744434",
+      "id": "tx_payout_rel_1788857211213",
       "userId": "usr_admin",
       "userName": "Admin GamesBoy",
       "type": "payout",
@@ -58,9 +58,9 @@
       "localAmount": 22500,
       "method": "escrow_release",
       "status": "approved",
-      "reference": "LIQUIDACIÓN-test_slot_1788855744433",
+      "reference": "LIQUIDACIÓN-test_slot_1788857211212",
       "notes": "Liquidación mensual de perfil 2 de Netflix Premium 4K",
-      "createdAt": "2026-09-08T08:22:24.434Z"
+      "createdAt": "2026-09-08T08:46:51.213Z"
     },
     {
       "id": "tx_init_1",
@@ -75,7 +75,7 @@
       "reference": "SIPAP-REF-892144",
       "receiptUrl": "",
       "notes": "Recarga aprobada por administración",
-      "createdAt": "2026-09-07T08:22:24.420Z"
+      "createdAt": "2026-09-07T08:46:51.196Z"
     }
   ],
   "hero_banners": [
@@ -140,11 +140,11 @@
       "totalSlots": 4,
       "availableSlots": 3,
       "pricePerSlotUsd": 4.99,
-      "credentialsEncrypted": "c770e96818184720dfd724dbcce236d2:c34f1e947bea3872335ac1546e930081b3f06499dbc5be3b9f073356c68d60297a1ef060f10ba903da0bbf48708d4362",
-      "pinsEncrypted": "91849e3986ed6af8c1d226ee948f5d93:19c6973e133eb2184bd3af78eb025ed8f879f638b3272d6ff3063a5a9abdcf8fdfcd555cbd464e3f77aab71fd049e676",
+      "credentialsEncrypted": "f574f003171eef53f7bcc687a357681a:934c2b3792ccd90834d227f61b7d2c559533f1bcda6f3d441f904cfe4ff745c839cd3c92ec1b429789da96e9bfec2234",
+      "pinsEncrypted": "3394bfc76c22634693404c05ac56d198:60f55c846d577f8decff21778978a31d0df901267bc106fcf4f2789e24f8fee2e9d1085cad8676cef9d359ddc481540f",
       "instructions": "Ingresa con el correo y contraseña provistos. Usa exclusivamente tu Perfil y PIN asignado. Prohibido cambiar credenciales.",
       "status": "active",
-      "createdAt": "2026-09-06T08:22:24.424Z"
+      "createdAt": "2026-09-06T08:46:51.199Z"
     },
     {
       "id": "sub_spotify_official",
@@ -157,11 +157,11 @@
       "totalSlots": 5,
       "availableSlots": 4,
       "pricePerSlotUsd": 3.99,
-      "credentialsEncrypted": "f11499776cc3f2da24c03cdb7e9c5e25:355228b80ec9538688886d163c96d3ec9bbd4b8b98c6e2623661a69fda7bf8199e93c29c601f3b75f3d60b28ecb758824e2b43cf2625ea3b72e4a0fc55bb8a6c80eb76f5e27669b89621c775006aeb08",
-      "pinsEncrypted": "252f685f6694d24103bd8a33cc3d78aa:47b8bb4fe29d20128d68a4c72aad4c36",
+      "credentialsEncrypted": "2bd5aed9ee6bf6d28badd5be95ca46c0:296c35127f40744b4c0eb60b2613ee430c0c31342edfab93d5e4c1d5fad698ced74d7dd412fe3e1fa83a2e57bdb082d45a659be0d678822cccd1a7792006c89022a0bb0272d23685687a57dbf9942d3e",
+      "pinsEncrypted": "936f0b6156248dd6d8a35e5d230e5db8:e72d4c3e79c697f40af40885d6b77852",
       "instructions": "Recibirás un enlace de invitación oficial para activar Spotify Premium en tu propia cuenta personal.",
       "status": "active",
-      "createdAt": "2026-09-07T08:22:24.424Z"
+      "createdAt": "2026-09-07T08:46:51.199Z"
     },
     {
       "id": "sub_disney_official",
@@ -174,11 +174,11 @@
       "totalSlots": 4,
       "availableSlots": 2,
       "pricePerSlotUsd": 4.99,
-      "credentialsEncrypted": "1afb5f75ea354a79872247cb45c2f79f:82c94f02258d4682bda2bbf8563c84be2b6085208ae88ee2dbf2703e97e73e36659b7c893db4a78dc6358f017194948d",
-      "pinsEncrypted": "1a95e11aaf0689d5f6b9ad20e40f41e8:5b00219df6d5b58033d319ebcb0d937df1928e062e9b35659f00d4afd7600051e3fbf00e2c9150edfdbecb61158aa8fa",
+      "credentialsEncrypted": "cf3b229f70e2f4f3f0acb8a232f94640:11bf1ebc8e9a20affcd31bd101d5791d1336b7a6ef08a6517ff5437f3032e25534265bde45b03b6a983cef3a6aa2e406",
+      "pinsEncrypted": "594e9bdc71d6147b357c635bb560c6f5:880135fd2bc9ec406d8bd91dd8016830efbfa44de466c3ff39d18d5e68e1af7a11186b77eac42391fb8f065267ef5a62",
       "instructions": "Acceso al catálogo completo de Disney, Marvel, Star Wars y deportes de ESPN.",
       "status": "active",
-      "createdAt": "2026-09-07T20:22:24.425Z"
+      "createdAt": "2026-09-07T20:46:51.199Z"
     },
     {
       "id": "sub_max_official",
@@ -191,11 +191,11 @@
       "totalSlots": 3,
       "availableSlots": 2,
       "pricePerSlotUsd": 4.99,
-      "credentialsEncrypted": "0e2a6b259f3b76fb6b99b54a3248b46c:7ee58ad5f9e7fba1c8821b9bb2d141b6a7c13b8ae55867e648d3e697868b0f72c5bf96983c4000511c43ea6dcc1b6eb8",
-      "pinsEncrypted": "c2b8072b0681f3e198173d851af889d0:522e2c4a3ad8b5e8ddd9c729d128c8d53d01ae6d8644b325ffa392e0e153ba8c7dfa5f60ccba9b74784b0c532dffd01e",
+      "credentialsEncrypted": "94ef75d408022add7fb4bfaa62bbcc5a:4105c8345be97be9fae91c2392a061f051b059307e98e0f74a6d9cbee40738c1cdb188829892ff56a6c64c9d1078cb32",
+      "pinsEncrypted": "2429f29ca6c714c0d6729c9c1009ae36:cde560e0523f71ce3f1470510568b7a81749f658e3f3b8a0d2b33241a70d75b0d542c2f224853173ae0e93ae50010de0",
       "instructions": "Disfruta de películas de Warner Bros, HBO Originales y Champions League.",
       "status": "active",
-      "createdAt": "2026-09-07T22:22:24.425Z"
+      "createdAt": "2026-09-07T22:46:51.199Z"
     },
     {
       "id": "sub_youtube_official",
@@ -208,11 +208,11 @@
       "totalSlots": 5,
       "availableSlots": 3,
       "pricePerSlotUsd": 3.99,
-      "credentialsEncrypted": "f23973d6ee51acc084e2a83120486fde:55024d64c4d09aba6902300744267e7377014252d3b440b19456569dc446841e86afa1a4d7aca1ffc4ddab1e20b7e928be6ae915f97a36d1309e9c703de0d1f1becbb18479983296eea58be48bd2461c",
-      "pinsEncrypted": "ae6f54db17744049a8b11e66dd820d83:ab1aeeb4b76183b3d851cbcc61097edd",
+      "credentialsEncrypted": "03acd9cce8ccae7897cef573a62e833a:8e179c8b5e95e677c8086091c98d1c85a8cac61a7da0d9d0ff39b24eb12b74e07eb5be716993bdd0f9afd8e696da668733b5e5e6045c6f88e9560d89180dc5bf69d5ecdb46cb6a7747735a991c3f8d29",
+      "pinsEncrypted": "6ec44ab5072cd4d8ea3a5c814ebd8378:2b4b8ebf02707adeec4edcb2429e1a8e",
       "instructions": "YouTube sin anuncios, descargas offline y YouTube Music en tu propia cuenta de Google.",
       "status": "active",
-      "createdAt": "2026-09-08T02:22:24.425Z"
+      "createdAt": "2026-09-08T02:46:51.199Z"
     },
     {
       "id": "sub_crunchyroll_official",
@@ -225,11 +225,11 @@
       "totalSlots": 4,
       "availableSlots": 3,
       "pricePerSlotUsd": 3.99,
-      "credentialsEncrypted": "362fb60805a39f7c83821477ceaf9c45:99524d3f21e398490eef1b0947a10b04c736446de4f7cd7688283ae4ef0f00319c1a024389f1b20ddf7c2cb0499d310f",
-      "pinsEncrypted": "447c5d7bc5b0371408906138b251bfa3:6c5ddb5fb636110cf7f4673e3fd9a9f66b574e9a52002c0b0ef5c9220b8f7e912bd6711159f6caaa67897da0c2d86a86",
+      "credentialsEncrypted": "b607e656a3b985849cb4d6243522b412:8945f65da96301cad26ec4df4620e066e03d3f1dba6f6205be4c9a68c38332e1b6267f15ef2ba53ae8a207fc43883e91",
+      "pinsEncrypted": "a7eda292c1649d4ee471235f4df81ece:74ab5f31ee6a77e4a31750b876c3dd8e45f095a3f245e524ce550a24ad8fb45aaf75f3422e4e4190512ce9d4e19527b2",
       "instructions": "Anime en simulcast desde Japón sin anuncios en calidad 1080p/4K.",
       "status": "active",
-      "createdAt": "2026-09-08T03:22:24.425Z"
+      "createdAt": "2026-09-08T03:46:51.200Z"
     },
     {
       "id": "sub_appletv_official",
@@ -242,11 +242,11 @@
       "totalSlots": 3,
       "availableSlots": 1,
       "pricePerSlotUsd": 4.99,
-      "credentialsEncrypted": "b6c808dd48ac2367954e4a621e687f34:ce6d63becfcfbf92809993d81b39d63f36b90ac72d88364ee1c44c41fb7b2d146d12c6e83b98f35c111c56117d0b4a4f",
-      "pinsEncrypted": "f2492ea17dc9ffeb38c84e6faf78acb4:718e7d1d20a495fa1d2c1c4472abdede5fec39a3e98694d397c41d1b6caadb5d6e11b54604df5b76cdce550d2c1272a1",
+      "credentialsEncrypted": "653b7239fa9f468b65891bb923974d6d:3d963f3f8da90fd455b5901ca8a07f92b5357202a2a2e3d121e7747d3a31f6f634c3a6a6744b4c91847a4de770a0e678",
+      "pinsEncrypted": "065e14f7ddea220f047713dafd6fbc58:bc76288c80a4a0dd629238c9b60c44794ce41c2493cd8e5587da506880b996c4b075bb055ad1e0f02846f796bfe24922",
       "instructions": "Acceso a series galardonadas de Apple Original en todos tus dispositivos.",
       "status": "active",
-      "createdAt": "2026-09-08T04:29:04.425Z"
+      "createdAt": "2026-09-08T04:53:31.200Z"
     },
     {
       "id": "sub_paramount_official",
@@ -259,16 +259,16 @@
       "totalSlots": 3,
       "availableSlots": 2,
       "pricePerSlotUsd": 3.99,
-      "credentialsEncrypted": "fa12cd9ddfa02ef7a1872aacfc402e45:5efb261773fea8248bf979a1bf88edcb508213c83c2dc26cd66d451a1ecaac13baa24c936a8af3b0b5a76722f6acf98e0916260feb90d6216dae940513b7cac9",
-      "pinsEncrypted": "78f706dd796643f6694cd26849cfef86:d185ac6827048057afc8aaf149180db5845d7588c9d335a5335a8a304cdaeb128e6cc4b2b6a9de6c8eb6106a41ec5a8b",
+      "credentialsEncrypted": "d31e391860132d6545e736362cdc3aae:90a20ab3cfa0c38d9cedf913f781f40f3decd6909a8e8ad3ad04bb23481b5c9f6bd28bca99852488590e8c66e6d446957c3ec2c22a2c0f07ac45182069de0e69",
+      "pinsEncrypted": "cddf9cbfaa6f7e922f4438d9b357a8bb:8593da360a47fa7a47f3c1506f45d60254ef46224e22400228a4717993eba41f59d2f56b8fc04ce5189cae0629d87444",
       "instructions": "Películas de estreno, deportes en vivo y series exclusivas de Paramount.",
       "status": "active",
-      "createdAt": "2026-09-08T05:35:44.425Z"
+      "createdAt": "2026-09-08T06:00:11.200Z"
     }
   ],
   "user_slots": [
     {
-      "id": "test_slot_1788855744433",
+      "id": "test_slot_1788857211212",
       "subscriptionId": "sub_netflix_official",
       "serviceName": "Netflix Premium 4K",
       "sellerId": "usr_seller1",
@@ -279,10 +279,10 @@
       "commissionPercent": 10,
       "netPayoutUsd": 3,
       "netPayoutPyg": 22500,
-      "expiresAt": "2026-09-08T08:22:23.433Z",
+      "expiresAt": "2026-09-08T08:46:50.212Z",
       "payoutStatus": "paid",
-      "createdAt": "2026-08-09T08:22:24.433Z",
-      "payoutReleasedAt": "2026-09-08T08:22:24.434Z",
+      "createdAt": "2026-08-09T08:46:51.212Z",
+      "payoutReleasedAt": "2026-09-08T08:46:51.213Z",
       "payoutReleasedBy": "usr_admin"
     },
     {
@@ -293,10 +293,10 @@
       "buyerName": "Lucas_Py",
       "slotNumber": 1,
       "assignedPin": "1244",
-      "credentialsEncrypted": "84eb87e5203d09ea8b29924e0882b43f:4b9b50d4ba36a21ef00728b71e669aa94aca26bd741e5634834bfd94c5dff935bf4fafaa4c7265d153259765942dd00d",
+      "credentialsEncrypted": "6089f78d92ab2ccee1ab9291f5620efb:b74c7c94892602160ef5785d19d2366c092939b5a3134b0fa0e59dbf5ece542c4e0d16d6f3f8b36747c46d8954abb7ab",
       "pricePaidUsd": 4.99,
-      "expiresAt": "2026-10-08T08:22:24.425Z",
-      "createdAt": "2026-09-07T08:22:24.425Z"
+      "expiresAt": "2026-10-08T08:46:51.200Z",
+      "createdAt": "2026-09-07T08:46:51.200Z"
     }
   ],
   "store_products": [
@@ -570,7 +570,7 @@
         "accountNumber": "03-998877-1",
         "aliasSipap": "carlos.stream.py"
       },
-      "createdAt": "2026-09-08T07:22:24.425Z"
+      "createdAt": "2026-09-08T07:46:51.200Z"
     }
   ],
   "platform_settings": {
@@ -590,6 +590,290 @@
       "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F"
     }
   },
+  "giftcard_brands": [
+    {
+      "id": "brand_playstation",
+      "name": "PlayStation Network",
+      "category": "Gaming",
+      "logoUrl": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80",
+      "description": "Tarjetas oficiales de saldo y membresías PlayStation Plus.",
+      "variations": [
+        {
+          "id": "var_psn_10",
+          "name": "PSN $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 85000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_psn_25",
+          "name": "PSN $25 USD",
+          "denomination": "$25 USD",
+          "pricePyg": 210000,
+          "priceUsd": 25
+        },
+        {
+          "id": "var_psn_50",
+          "name": "PSN $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 410000,
+          "priceUsd": 50
+        },
+        {
+          "id": "var_psn_100",
+          "name": "PSN $100 USD",
+          "denomination": "$100 USD",
+          "pricePyg": 810000,
+          "priceUsd": 100
+        },
+        {
+          "id": "var_psn_plus_1m",
+          "name": "PS Plus Essential 1 Mes",
+          "denomination": "1 Mes",
+          "pricePyg": 90000,
+          "priceUsd": 11.99
+        },
+        {
+          "id": "var_psn_plus_12m",
+          "name": "PS Plus Essential 12 Meses",
+          "denomination": "12 Meses",
+          "pricePyg": 620000,
+          "priceUsd": 79.99
+        }
+      ]
+    },
+    {
+      "id": "brand_steam",
+      "name": "Steam Wallet",
+      "category": "PC Gaming",
+      "logoUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80",
+      "description": "Saldo para la tienda de Steam en PC y Steam Deck.",
+      "variations": [
+        {
+          "id": "var_steam_5",
+          "name": "Steam $5 USD",
+          "denomination": "$5 USD",
+          "pricePyg": 42000,
+          "priceUsd": 5
+        },
+        {
+          "id": "var_steam_10",
+          "name": "Steam $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 85000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_steam_20",
+          "name": "Steam $20 USD",
+          "denomination": "$20 USD",
+          "pricePyg": 168000,
+          "priceUsd": 20
+        },
+        {
+          "id": "var_steam_50",
+          "name": "Steam $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 415000,
+          "priceUsd": 50
+        }
+      ]
+    },
+    {
+      "id": "brand_xbox",
+      "name": "Xbox & Game Pass",
+      "category": "Gaming",
+      "logoUrl": "https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?auto=format&fit=crop&w=400&q=80",
+      "description": "Tarjetas de regalo Xbox y suscripciones Game Pass Ultimate.",
+      "variations": [
+        {
+          "id": "var_xbox_10",
+          "name": "Xbox $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 85000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_xbox_25",
+          "name": "Xbox $25 USD",
+          "denomination": "$25 USD",
+          "pricePyg": 210000,
+          "priceUsd": 25
+        },
+        {
+          "id": "var_xbox_gpu_1m",
+          "name": "Game Pass Ultimate 1 Mes",
+          "denomination": "1 Mes",
+          "pricePyg": 125000,
+          "priceUsd": 16.99
+        },
+        {
+          "id": "var_xbox_gpu_3m",
+          "name": "Game Pass Ultimate 3 Meses",
+          "denomination": "3 Meses",
+          "pricePyg": 350000,
+          "priceUsd": 49.99
+        }
+      ]
+    },
+    {
+      "id": "brand_nintendo",
+      "name": "Nintendo eShop",
+      "category": "Gaming",
+      "logoUrl": "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80",
+      "description": "Saldo para comprar juegos en Nintendo Switch.",
+      "variations": [
+        {
+          "id": "var_nin_10",
+          "name": "Nintendo $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 85000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_nin_20",
+          "name": "Nintendo $20 USD",
+          "denomination": "$20 USD",
+          "pricePyg": 170000,
+          "priceUsd": 20
+        },
+        {
+          "id": "var_nin_35",
+          "name": "Nintendo $35 USD",
+          "denomination": "$35 USD",
+          "pricePyg": 295000,
+          "priceUsd": 35
+        },
+        {
+          "id": "var_nin_50",
+          "name": "Nintendo $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 420000,
+          "priceUsd": 50
+        }
+      ]
+    },
+    {
+      "id": "brand_spotify",
+      "name": "Spotify Premium",
+      "category": "Música",
+      "logoUrl": "https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=400&q=80",
+      "description": "Música sin anuncios y descargas offline en Spotify.",
+      "variations": [
+        {
+          "id": "var_spot_1m",
+          "name": "Spotify 1 Mes Individual",
+          "denomination": "1 Mes",
+          "pricePyg": 45000,
+          "priceUsd": 5.99
+        },
+        {
+          "id": "var_spot_3m",
+          "name": "Spotify 3 Meses",
+          "denomination": "3 Meses",
+          "pricePyg": 125000,
+          "priceUsd": 16.5
+        },
+        {
+          "id": "var_spot_6m",
+          "name": "Spotify 6 Meses",
+          "denomination": "6 Meses",
+          "pricePyg": 240000,
+          "priceUsd": 32
+        }
+      ]
+    },
+    {
+      "id": "brand_netflix",
+      "name": "Netflix Gift Card",
+      "category": "Streaming",
+      "logoUrl": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80",
+      "description": "Saldo oficial de regalo para canjear en cuentas Netflix.",
+      "variations": [
+        {
+          "id": "var_net_15",
+          "name": "Netflix $15 USD",
+          "denomination": "$15 USD",
+          "pricePyg": 125000,
+          "priceUsd": 15
+        },
+        {
+          "id": "var_net_25",
+          "name": "Netflix $25 USD",
+          "denomination": "$25 USD",
+          "pricePyg": 205000,
+          "priceUsd": 25
+        },
+        {
+          "id": "var_net_50",
+          "name": "Netflix $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 405000,
+          "priceUsd": 50
+        }
+      ]
+    },
+    {
+      "id": "brand_googleplay",
+      "name": "Google Play Store",
+      "category": "Móvil",
+      "logoUrl": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=400&q=80",
+      "description": "Saldo para apps, juegos y diamantes en Android.",
+      "variations": [
+        {
+          "id": "var_gp_10",
+          "name": "Google Play $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 85000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_gp_25",
+          "name": "Google Play $25 USD",
+          "denomination": "$25 USD",
+          "pricePyg": 210000,
+          "priceUsd": 25
+        },
+        {
+          "id": "var_gp_50",
+          "name": "Google Play $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 415000,
+          "priceUsd": 50
+        }
+      ]
+    },
+    {
+      "id": "brand_apple",
+      "name": "Apple Gift Card & iTunes",
+      "category": "Apple",
+      "logoUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80",
+      "description": "Saldo para compras en App Store, Apple Arcade y suscripciones.",
+      "variations": [
+        {
+          "id": "var_apple_10",
+          "name": "Apple $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 85000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_apple_25",
+          "name": "Apple $25 USD",
+          "denomination": "$25 USD",
+          "pricePyg": 210000,
+          "priceUsd": 25
+        },
+        {
+          "id": "var_apple_50",
+          "name": "Apple $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 415000,
+          "priceUsd": 50
+        }
+      ]
+    }
+  ],
   "streaming_services_config": {
     "netflix": {
       "key": "netflix",
