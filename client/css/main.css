@@ -1775,11 +1775,12 @@ a.sub-nav-link,
 /* 7. SMM & REDES SOCIALES (PLATFORM CARDS & 2-COL MODAL)   */
 /* ======================================================== */
 .smm-platform-card {
-  flex: 0 0 260px;
-  width: 260px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 18px !important;
+  flex: 0 0 270px;
+  width: 270px;
+  min-height: 195px;
+  background: #0b111e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px !important;
   display: flex;
   flex-direction: column;
   overflow: hidden !important;
@@ -1787,142 +1788,143 @@ a.sub-nav-link,
   transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease, border-color 0.28s ease;
   flex-shrink: 0 !important;
   position: relative;
+  user-select: none;
 }
 
 .smm-platform-card:hover {
-  transform: translateY(-5px) scale(1.025);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 194, 255, 0.25);
+  transform: translateY(-5px) scale(1.02);
+  border-color: rgba(0, 194, 255, 0.6);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.75), 0 0 22px rgba(0, 194, 255, 0.22);
 }
 
-.smm-card-banner {
-  height: 105px;
+/* UNIFIED TOP BANNER WITH ICON AND BRAND SIDE-BY-SIDE ON THE LEFT */
+.smm-platform-banner-wrap {
+  height: 46px;
   width: 100%;
-  position: relative;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  padding: 12px 14px;
-  background-size: cover;
-  background-position: center;
+  padding: 0 14px;
+  position: relative;
   overflow: hidden;
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.12);
 }
 
-/* Gradient Fade into card background (Efecto que desaparece la portada hacia el color de la tarjeta) */
-.smm-card-banner::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 70%;
-  background: linear-gradient(to bottom, transparent 0%, rgba(22, 25, 34, 0.6) 45%, var(--bg-card) 100%);
-  pointer-events: none;
+.smm-banner-brand-left {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #ffffff;
+  z-index: 2;
 }
 
-.smm-card-platform-tag {
-  font-size: 0.68rem;
+.smm-banner-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+}
+
+.smm-banner-title {
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.smm-platform-badge-float {
+  font-size: 0.58rem;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 3px 9px;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
   border-radius: 9999px;
-  background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  backdrop-filter: blur(8px);
-  position: relative;
-  z-index: 2;
-}
-
-.smm-card-platform-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
   background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  display: grid;
-  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.25);
   color: #ffffff;
-  backdrop-filter: blur(8px);
-  position: relative;
+  backdrop-filter: blur(6px);
   z-index: 2;
 }
 
-.smm-card-body {
-  padding: 0.5rem 1rem 1rem 1rem;
+/* CARD BODY */
+.smm-platform-card-body {
+  padding: 12px 14px 12px 14px;
   display: flex;
   flex-direction: column;
   flex: 1;
-  position: relative;
-  z-index: 3;
+  gap: 8px;
 }
 
-.smm-card-title {
+.smm-platform-heading {
   font-family: var(--font-heading);
   font-size: 0.95rem;
   font-weight: 800;
   color: #ffffff;
-  margin-bottom: 4px;
+  margin: 0;
+  line-height: 1.25;
 }
 
-.smm-card-services-list {
-  font-size: 0.72rem;
-  color: var(--accent-cyan);
+/* SERVICE CHIPS */
+.smm-platform-services-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.smm-service-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #94a3b8;
+  font-size: 0.70rem;
   font-weight: 600;
-  margin-bottom: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-.smm-card-footer {
+.smm-platform-card:hover .smm-service-chip {
+  background: rgba(0, 194, 255, 0.08);
+  border-color: rgba(0, 194, 255, 0.25);
+  color: #e2e8f0;
+}
+
+/* FOOTER ROW WITH EXPLORAR BUTTON AT BOTTOM RIGHT WITH CLEAR MARGINS */
+.smm-platform-footer-row {
   margin-top: auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.smm-card-price-wrap {
-  display: flex;
-  flex-direction: column;
-}
-
-.smm-card-price-label {
-  font-size: 0.62rem;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  font-weight: 700;
-}
-
-.smm-card-price-val {
-  font-family: var(--font-mono);
-  font-size: 0.88rem;
-  font-weight: 800;
-  color: #ffffff;
+  padding-top: 6px;
+  padding-bottom: 2px;
+  padding-right: 2px;
 }
 
 .btn-smm-explore {
-  background: rgba(0, 194, 255, 0.12);
-  border: 1px solid rgba(0, 194, 255, 0.35);
-  color: var(--accent-cyan);
-  padding: 5px 12px;
-  font-size: 0.74rem;
+  background: linear-gradient(135deg, rgba(0, 194, 255, 0.15), rgba(0, 112, 243, 0.25));
+  border: 1px solid rgba(0, 194, 255, 0.4);
+  color: #38bdf8;
+  padding: 6px 14px;
+  font-size: 0.76rem;
   font-weight: 800;
   border-radius: 8px !important;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.22s ease;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
 }
 
 .smm-platform-card:hover .btn-smm-explore {
-  background: var(--accent-cyan);
+  background: linear-gradient(135deg, #00c2ff, #0088ff);
   color: #040c1e;
-  box-shadow: 0 0 12px rgba(0, 194, 255, 0.4);
+  border-color: #00c2ff;
+  box-shadow: 0 4px 14px rgba(0, 194, 255, 0.45);
+  transform: scale(1.03);
 }
 
 /* ======================================================== */

@@ -1542,7 +1542,7 @@ const platformSvgIcons = {
   'X (Twitter)': `<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`
 };
 
-// --- 5. RENDER SMM SERVICES (COMPACT HORIZONTAL TOP BANNER CARDS - SLIM 42px HEADER) ---
+// --- 5. RENDER SMM SERVICES (UNIFIED HORIZONTAL TOP HEADER BANNER CARDS - ZERO PRICES ON FRONT) ---
 function renderSmmServices() {
   const container = document.getElementById('smm-services-grid');
   if (!container) return;
@@ -1556,35 +1556,22 @@ function renderSmmServices() {
       .map(s => `<span class="smm-service-chip">${s.trim()}</span>`)
       .join('');
 
-    const startingPriceFormatted = p.startingPricePyg 
-      ? `${p.startingPricePyg.toLocaleString('es-PY')} Gs.` 
-      : formatPrice(p.startingPriceUsd || 1.20);
-
     return `
       <div class="smm-platform-card" onclick="openSmmPlatformModal('${p.id}')" title="Ver servicios de ${p.platform}">
         <div class="smm-platform-banner-wrap" style="background: ${p.bannerGradient || 'linear-gradient(90deg, #1e293b, #0ea5e9)'};">
-          <div class="smm-platform-banner-pattern"></div>
-          <span class="smm-platform-badge-float">${p.platform}</span>
+          <div class="smm-banner-brand-left">
+            <span class="smm-banner-icon">${iconSvg}</span>
+            <span class="smm-banner-title">${p.platform}</span>
+          </div>
+          <span class="smm-platform-badge-float">AUTOMATIZADO</span>
         </div>
         <div class="smm-platform-card-body">
-          <div class="smm-platform-header-row">
-            <div class="smm-platform-icon-bubble" style="background: ${p.bannerGradient || 'rgba(0, 194, 255, 0.2)'};">
-              ${iconSvg}
-            </div>
-            <div class="smm-platform-title-wrap">
-              <span class="smm-platform-sub-name">${p.platform}</span>
-              <h3 class="smm-platform-name">${p.title}</h3>
-            </div>
-          </div>
+          <h3 class="smm-platform-heading">${p.title}</h3>
           <div class="smm-platform-services-list">
             ${chips}
           </div>
           <div class="smm-platform-footer-row">
-            <div>
-              <span class="smm-platform-price-lbl">Desde</span>
-              <div class="smm-platform-price-val">${startingPriceFormatted}</div>
-            </div>
-            <span class="btn-smm-explore">Explorar ➔</span>
+            <button type="button" class="btn-smm-explore" tabindex="-1">Explorar ➔</button>
           </div>
         </div>
       </div>
