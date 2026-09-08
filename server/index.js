@@ -114,6 +114,9 @@ app.get('/seller', (req, res) => res.sendFile(path.join(clientPath, 'seller.html
 app.get('/seller.html', (req, res) => res.sendFile(path.join(clientPath, 'seller.html')));
 app.get('/purchases', (req, res) => res.sendFile(path.join(clientPath, 'purchases.html')));
 app.get('/purchases.html', (req, res) => res.sendFile(path.join(clientPath, 'purchases.html')));
+app.get('/monetizar', (req, res) => res.sendFile(path.join(clientPath, 'monetizar.html')));
+app.get('/monetizar.html', (req, res) => res.sendFile(path.join(clientPath, 'monetizar.html')));
+app.get('/generar-ingresos', (req, res) => res.sendFile(path.join(clientPath, 'monetizar.html')));
 
 
 

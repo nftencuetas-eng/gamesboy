@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Genera Ingresos Compartiendo Cuentas - GamesBoy.net | Monetización Segura</title>
+  <meta name="description" content="Aprende cómo monetizar los cupos libres de tus cuentas de streaming (Netflix, Spotify, Disney+, Max, YouTube). Recibe ingresos mensuales garantizados con Bóveda Escrow y pagos por transferencia o USDT.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/assets/branding/icon.png">
+  <link rel="apple-touch-icon" href="/assets/branding/icon.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/css/main.css?v=4.1">
+</head>
+<body class="hub-page-body">
+
+  <!-- ======================================================= -->
+  <!-- MAIN SITE HEADER                                        -->
+  <!-- ======================================================= -->
+  <header class="site-header">
+    <div class="header-top-bar">
+      <div class="header-left">
+        <a href="/" class="brand" id="brand-logo" title="GamesBoy.net - Inicio">
+          <img src="/assets/branding/logo-white.png" alt="GamesBoy.net" class="brand-logo-img">
+        </a>
+      </div>
+
+      <div class="header-right">
+        <!-- Auth Actions (Client Login / Register) -->
+        <div class="header-auth-buttons" id="auth-unlogged-group">
+          <a href="/login" class="btn-header-login-modern" id="btn-open-login-page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Iniciar sesión</span>
+          </a>
+        </div>
+
+        <!-- Live Balance Display Pill & Profile Dropdown (Logged In Client) -->
+        <div class="header-user-group is-hidden" id="auth-logged-group" style="display: none !important;">
+          <button class="btn-balance-display-pill" id="btn-open-deposit-modal" title="Saldo disponible en tu cuenta. Haz clic para recargar.">
+            <svg class="wallet-icon-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+            <span id="nav-user-balance-amount">0 Gs.</span>
+          </button>
+
+          <!-- User Profile Dropdown Pill -->
+          <div class="user-profile-wrapper" id="user-profile-wrapper">
+            <button class="user-profile-btn" id="btn-user-profile-toggle" type="button" title="Mi Cuenta">
+              <div class="user-avatar-badge" id="nav-user-avatar-badge">
+                <img id="nav-user-avatar-img" src="/assets/branding/icon.png" alt="Avatar" class="header-avatar-img">
+              </div>
+              <span class="user-name-label" id="nav-user-name">Usuario</span>
+              <svg class="profile-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+
+            <div class="user-profile-dropdown-menu" id="user-profile-dropdown-menu" style="display: none;">
+              <div class="dropdown-user-header">
+                <div class="dropdown-user-avatar">
+                  <img id="dropdown-user-avatar-img" src="/assets/branding/icon.png" alt="Avatar">
+                </div>
+                <div class="dropdown-user-info">
+                  <strong id="dropdown-user-name">Usuario</strong>
+                  <span id="dropdown-user-email">usuario@gamesboy.net</span>
+                  <span class="user-role-badge">Cliente Verificado</span>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+              <ul class="dropdown-menu-list">
+                <li id="menu-item-admin-container" style="display: none;">
+                  <a href="/admin" class="dropdown-menu-item" style="color: #f59e0b !important; font-weight: 700;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    <span>Panel Administrador</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/purchases.html" class="dropdown-menu-item" style="font-weight: 700; color: var(--accent-cyan);">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span>Mis Compras & Bóveda</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/profile.html" class="dropdown-menu-item">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Mi Cuenta & Billetera</span>
+                  </a>
+                </li>
+                <li style="border-top: 1px solid var(--border-subtle); margin-top: 4px; padding-top: 4px;">
+                  <button type="button" class="dropdown-menu-item" id="btn-header-logout" style="width: 100%; border: none; background: transparent; cursor: pointer; color: #ef4444; font-weight: 700; text-align: left; display: flex; align-items: center; gap: 8px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Cerrar Sesión</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================= -->
+  <!-- MONETIZATION EXPLANATORY PAGE CONTAINER                 -->
+  <!-- ======================================================= -->
+  <main class="monetize-page-container">
+    
+    <!-- Top Breadcrumb Navigation -->
+    <div class="hub-breadcrumb-bar">
+      <a href="/" class="btn-hub-back">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        <span>Volver al Catálogo</span>
+      </a>
+      <div class="hub-breadcrumb-trail">
+        <span>Inicio</span>
+        <span>/</span>
+        <strong style="color: #ffd700;">Generar Ingresos</strong>
+      </div>
+    </div>
+
+    <!-- 1. HERO BANNER -->
+    <section class="monetize-hero-card">
+      <div class="monetize-hero-badge">
+        <span style="font-size: 0.9rem; margin-right: 4px;">💰</span>
+        PROGRAMA OFICIAL DE MONETIZACIÓN
+      </div>
+      <h1 class="monetize-hero-title">
+        Convierte los perfiles libres de tus cuentas en <span>ingresos mensuales garantizados</span>
+      </h1>
+      <p class="monetize-hero-subtitle">
+        ¿Pagas por suscripciones familiares o premium de Netflix, Spotify, Disney+ o YouTube y no usas todas las pantallas? GamesBoy administra y vende tus cupos disponibles a compradores verificados con garantía de cobro puntual cada 30 días.
+      </p>
+
+      <div class="monetize-hero-quick-perks">
+        <div class="quick-perk-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Precios Establecidos & Justos</span>
+        </div>
+        <div class="quick-perk-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Cobro 100% Garantizado por Escrow</span>
+        </div>
+        <div class="quick-perk-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Retiros a SIPAP (Paraguay) o USDT</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- 2. CORE 2-COLUMN SECTION (HOW IT WORKS vs CALCULATOR)   -->
+    <!-- ======================================================= -->
+    <section class="monetize-dual-layout">
+      
+      <!-- COLUMN 1: HOW IT WORKS STEP-BY-STEP -->
+      <div class="monetize-column-steps">
+        <div class="section-column-header">
+          <span class="sec-col-badge">PASO A PASO</span>
+          <h2 class="sec-col-title">¿Cómo Funciona el Proceso?</h2>
+          <p class="sec-col-desc">Empezar a generar ingresos es simple, seguro y 100% administrado por la plataforma.</p>
+        </div>
+
+        <div class="monetize-steps-list">
+          
+          <!-- Step 1 -->
+          <div class="step-card">
+            <div class="step-number-bubble">1</div>
+            <div class="step-card-content">
+              <h3 class="step-card-title">Publica tus Cupos Disponibles</h3>
+              <p class="step-card-desc">
+                Eliges el servicio de streaming que posees (ej. Netflix 4K, Spotify Familiar), defines cuántos perfiles libres tienes y configuras los PINs de seguridad en nuestra Bóveda cifrada.
+              </p>
+              <div class="step-card-footer-pill">
+                🔒 Tus contraseñas maestras nunca se exponen públicamente.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="step-card">
+            <div class="step-number-bubble">2</div>
+            <div class="step-card-content">
+              <h3 class="step-card-title">GamesBoy Asigna Clientes Verificados</h3>
+              <p class="step-card-desc">
+                Tus cupos se publican automáticamente en el catálogo oficial de GamesBoy.net. Compradores reales adquieren su suscripción pagando por adelantado con verificación de identidad.
+              </p>
+              <div class="step-card-footer-pill">
+                ⚡ Cada cuenta cuenta con chat interno privado para soporte.
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="step-card">
+            <div class="step-number-bubble">3</div>
+            <div class="step-card-content">
+              <h3 class="step-card-title">Recibe tu Dinero Cada 30 Días</h3>
+              <p class="step-card-desc">
+                Al cumplir el ciclo de suscripción, tus ganancias se liberan automáticamente en tu billetera. Puedes transferir tu dinero directo a tu cuenta bancaria (SIPAP) o retirarlo en Binance USDT.
+              </p>
+              <div class="step-card-footer-pill" style="color: #34d399; border-color: rgba(52, 211, 153, 0.3);">
+                💸 Cobro asegurado: si el cliente no renueva, GamesBoy asigna otro comprador.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- COLUMN 2: INTERACTIVE EARNINGS CALCULATOR -->
+      <div class="monetize-column-calculator">
+        <div class="calc-card-container">
+          <div class="calc-card-header">
+            <span class="calc-badge">SIMULADOR EN VIVO</span>
+            <h2 class="calc-title">Calculadora de Ganancias</h2>
+            <p class="calc-subtitle">Calcula cuánto dinero puedes generar cada mes compartiendo tus cupos.</p>
+          </div>
+
+          <div class="calc-card-body">
+            
+            <!-- Selector de Servicio -->
+            <div class="calc-form-group">
+              <label class="calc-label" for="calc-service-select">1. Elige tu Servicio de Streaming:</label>
+              <select id="calc-service-select" class="calc-select">
+                <option value="netflix" selected>Netflix Premium 4K (Ultra HD)</option>
+                <option value="spotify">Spotify Premium Familiar (6 cuentas)</option>
+                <option value="disney">Disney+ Premium & Star+</option>
+                <option value="max">Max (HBO Max Oficial) Platino 4K</option>
+                <option value="youtube">YouTube Premium & Music Familiar</option>
+                <option value="chatgpt">ChatGPT Plus & AI Team (GPT-4o)</option>
+                <option value="crunchyroll">Crunchyroll Mega Fan 4 Pantallas</option>
+                <option value="paramount">Paramount+ Premium</option>
+              </select>
+            </div>
+
+            <!-- Selector de Cupos -->
+            <div class="calc-form-group">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <label class="calc-label" style="margin-bottom: 0;">2. Cantidad de Cupos / Pantallas a Compartir:</label>
+                <strong id="calc-slots-display" style="color: #ffd700; font-family: var(--font-mono); font-size: 1.05rem;">3 Cupos</strong>
+              </div>
+              <div class="calc-slots-pill-group" id="calc-slots-pill-group">
+                <button type="button" class="calc-slot-btn" data-slots="1">1</button>
+                <button type="button" class="calc-slot-btn" data-slots="2">2</button>
+                <button type="button" class="calc-slot-btn active" data-slots="3">3</button>
+                <button type="button" class="calc-slot-btn" data-slots="4">4</button>
+                <button type="button" class="calc-slot-btn" data-slots="5">5</button>
+              </div>
+            </div>
+
+            <!-- Earnings Result Display Box -->
+            <div class="calc-results-box">
+              <div class="calc-results-row">
+                <span class="calc-res-label">Ganancia Neta por Cupo:</span>
+                <strong class="calc-res-val" id="calc-net-per-slot">22.500 Gs.</strong>
+              </div>
+              <div class="calc-results-row">
+                <span class="calc-res-label">Comisión de Administración:</span>
+                <span class="calc-res-sub" id="calc-commission-rate">10% (Cobro y soporte garantizado)</span>
+              </div>
+              <div class="calc-divider"></div>
+              
+              <div class="calc-total-highlight">
+                <div>
+                  <span class="calc-total-label">TUS INGRESOS ESTIMADOS AL MES:</span>
+                  <div class="calc-total-amount" id="calc-monthly-total">67.500 Gs.</div>
+                </div>
+                <div style="text-align: right;">
+                  <span class="calc-usd-equiv" id="calc-monthly-usd">~$9.00 USD</span>
+                  <span class="calc-payout-freq">Pago Automático Cada 30 Días</span>
+                </div>
+              </div>
+
+              <div class="calc-annual-projection" id="calc-annual-box">
+                🚀 Proyección a 1 Año: <strong id="calc-annual-total" style="color: #ffffff;">810.000 Gs.</strong> en ingresos pasivos directos a tu cuenta.
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <button type="button" class="btn-calc-publish-cta" id="btn-calc-open-publish">
+              <span>Publicar Mi Cuenta Ahora</span> ➔
+            </button>
+
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- 3. SECURITY & ESCROW PILLARS                            -->
+    <!-- ======================================================= -->
+    <section class="monetize-pillars-section">
+      <div class="pillars-header">
+        <h2 class="pillars-title">¿Por qué publicar tus cuentas en GamesBoy?</h2>
+        <p class="pillars-subtitle">Construido para proteger a los dueños de cuentas con tecnología y garantías reales.</p>
+      </div>
+
+      <div class="pillars-grid">
+        
+        <div class="pillar-card">
+          <div class="pillar-icon-box" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </div>
+          <h3 class="pillar-card-title">Bóveda Escrow Anti-Estafas</h3>
+          <p class="pillar-card-desc">
+            Los clientes pagan por adelantado a GamesBoy. Tu dinero se retiene de forma segura y se libera puntualmente al término de los 30 días, sin riesgo de impagos.
+          </p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon-box" style="background: rgba(0, 194, 255, 0.15); color: #00c2ff;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          </div>
+          <h3 class="pillar-card-title">Canal Grupal Privado</h3>
+          <p class="pillar-card-desc">
+            Cada cuenta compartida incluye un chat interno oficial en la plataforma para coordinar con tus suscriptores y compartir avisos sin revelar tu número o correo personal.
+          </p>
+        </div>
+
+        <div class="pillar-card">
+          <div class="pillar-icon-box" style="background: rgba(251, 191, 36, 0.15); color: #fbbf24;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+          </div>
+          <h3 class="pillar-card-title">Retiros Fáciles SIPAP & USDT</h3>
+          <p class="pillar-card-desc">
+            Retira tus fondos directamente por transferencia bancaria en Paraguay (SIPAP en Guaraníes) o mediante Cripto USDT (Binance Pay) sin comisiones ocultas.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- 4. FAQ ACCORDION                                        -->
+    <!-- ======================================================= -->
+    <section class="monetize-faq-section">
+      <div class="faq-header">
+        <span class="sec-col-badge">PREGUNTAS FRECUENTES</span>
+        <h2 class="faq-title">Dudas Comunes sobre la Monetización</h2>
+      </div>
+
+      <div class="faq-accordion-list">
+        
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn">
+            <span>¿Tengo que entregar la contraseña principal de mi correo personal?</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="faq-answer-content">
+            <p>No. En GamesBoy cada usuario recibe acceso únicamente a su perfil asignado y su PIN individual. Tus credenciales de administración se guardan bajo cifrado militar en nuestra Bóveda y nunca se revelan a terceros.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn">
+            <span>¿Qué ocurre si un comprador no paga la renovación de su cupo?</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="faq-answer-content">
+            <p>La plataforma automáticamente desasigna el perfil vencido y lo reasigna de inmediato a un nuevo cliente en lista de espera de nuestro catálogo, garantizando la continuidad de tus ingresos.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn">
+            <span>¿Cómo y cuándo puedo retirar el dinero generado?</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="faq-answer-content">
+            <p>Al completarse los 30 días de cada cupo activo, tu saldo queda disponible en tu Billetera GamesBoy. Puedes solicitar el retiro en cualquier momento hacia tu cuenta bancaria paraguaya (SIPAP) o a tu cuenta de Binance (USDT).</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button type="button" class="faq-question-btn">
+            <span>¿Puedo publicar más de una cuenta o diferentes servicios?</span>
+            <svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="faq-answer-content">
+            <p>¡Por supuesto! Puedes publicar todas las cuentas y servicios que desees (Netflix, Spotify, Disney, ChatGPT, YouTube, etc.) y gestionar todas tus ganancias y suscriptores desde un único panel centralizado.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================= -->
+    <!-- 5. FINAL CALL TO ACTION BANNER                          -->
+    <!-- ======================================================= -->
+    <section class="monetize-final-cta">
+      <div class="final-cta-content">
+        <h2 class="final-cta-title">¿Listo para comenzar a ganar dinero este mes?</h2>
+        <p class="final-cta-subtitle">Publica tu primera cuenta en menos de 2 minutos y deja que GamesBoy se encargue del resto.</p>
+        <div class="final-cta-buttons">
+          <button type="button" class="btn-final-publish" id="btn-final-open-publish">
+            <span>Publicar y Compartir Cuenta</span> ➔
+          </button>
+          <a href="https://wa.me/595981000000?text=Hola%20GamesBoy,%20tengo%20dudas%20sobre%20cómo%20monetizar%20mis%20cuentas" target="_blank" rel="noopener" class="btn-final-whatsapp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+            <span>Consultar por WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================= -->
+  <!-- MODAL: PUBLICAR CUENTA DE STREAMING (GOSPLIT MODEL)     -->
+  <!-- ======================================================= -->
+  <div class="modal-overlay" id="modal-publish-stream" style="display: none;">
+    <div class="modal-content" style="max-width: 580px; width: 95%;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="background: rgba(16, 185, 129, 0.15); color: #10b981; width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; color: #ffffff;">Publicar Cuenta & Cupos</h3>
+            <span style="font-size: 0.76rem; color: var(--text-secondary);">Precios preestablecidos con garantía de cobro</span>
+          </div>
+        </div>
+        <button class="btn-modal-close" id="btn-close-publish-modal">✕</button>
+      </div>
+
+      <form id="form-user-publish-stream" style="padding: 1rem 0 0 0;">
+        <div class="form-group">
+          <label class="form-label">Servicio a Compartir:</label>
+          <select id="user-pub-service" class="form-input" required style="border-radius: 8px !important;">
+            <option value="netflix">Netflix Premium 4K</option>
+            <option value="spotify">Spotify Premium Familiar</option>
+            <option value="disney">Disney+ Premium & Star+</option>
+            <option value="max">Max (HBO Max) 4K</option>
+            <option value="youtube">YouTube Premium & Music</option>
+            <option value="chatgpt">ChatGPT Plus & AI</option>
+            <option value="crunchyroll">Crunchyroll Mega Fan</option>
+            <option value="paramount">Paramount+ Premium</option>
+          </select>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">Plan / Tipo:</label>
+            <input type="text" id="user-pub-plan" class="form-input" value="Ultra HD 4K (4 Pantallas)" readonly style="background: rgba(255,255,255,0.04); color: var(--text-secondary);">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cupos Libres a Vender:</label>
+            <input type="number" id="user-pub-slots" class="form-input" min="1" max="5" value="3" required>
+          </div>
+        </div>
+
+        <!-- GoSplit Fixed Payout Preview Box -->
+        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 12px; margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+            <span style="color: var(--text-secondary);">Precio fijo por cupo:</span>
+            <strong id="user-pub-fixed-price-preview" style="color: #ffffff;">25.000 Gs.</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px;">
+            <span style="color: var(--text-secondary);">Comisión GamesBoy:</span>
+            <span id="user-pub-commission-preview" style="color: var(--accent-cyan); font-weight: 700;">10%</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 800; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 6px;">
+            <span style="color: #34d399;">Recibirás al mes:</span>
+            <strong id="user-pub-net-total" style="color: #34d399; font-size: 1.05rem;">67.500 Gs.</strong>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Credenciales de la Cuenta (Email y Contraseña):</label>
+          <input type="text" id="user-pub-creds" class="form-input" placeholder="ej: micorreo@gmail.com | miclave123" required style="border-radius: 8px !important;">
+          <span style="font-size: 0.72rem; color: var(--text-tertiary);">🔒 Se guardan de forma cifrada en la Bóveda y se entregan de forma segura.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">PINs de los Perfiles (Opcional):</label>
+          <input type="text" id="user-pub-pins" class="form-input" placeholder='ej: {"Perfil 1": "1234", "Perfil 2": "5678"}' style="border-radius: 8px !important;">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Instrucciones o Reglas Adicionales:</label>
+          <textarea id="user-pub-instructions" class="form-input" rows="2" placeholder="ej: No cambiar la contraseña ni el idioma del perfil." style="border-radius: 8px !important;"></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary-block" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); margin-top: 0.5rem; font-size: 0.95rem;">
+          🚀 Publicar Cuenta y Activar Cupos
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FLOATING WHATSAPP SUPPORT BUTTON -->
+  <a href="https://wa.me/595981000000?text=Hola%20GamesBoy,%20necesito%20asistencia%20con%20la%20monetización" target="_blank" rel="noopener" class="floating-support-btn" id="floating-support-btn" title="Atención al Cliente WhatsApp Oficial 24/7">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+    <span class="support-btn-label">Soporte WhatsApp</span>
+  </a>
+
+  <!-- ======================================================= -->
+  <!-- FOOTER                                                  -->
+  <!-- ======================================================= -->
+  <footer class="site-footer" style="margin-top: 4rem;">
+    <div class="footer-bottom-bar">
+      <div>© 2026 <strong>Gamesboy.net</strong>. Todos los derechos reservados. • <a href="/" style="color: var(--accent-cyan); text-decoration: none;">Ir al Catálogo Principal</a></div>
+      <div class="footer-slogan">Monetiza tus cuentas. <span>Gana dinero cada mes.</span></div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/monetizar.js"></script>
+</body>
+</html>

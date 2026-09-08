@@ -1100,56 +1100,6 @@ function updateSmmOrderSummary() {
   if (totalUsdEl) totalUsdEl.textContent = `$${priceUsd.toFixed(2)} USDT`;
 }
 
-// --- MOBILE 3D COIN JUMPER & TOOLTIP CONTROLLER ---
-function initMobileCoinWidget() {
-  const coinWrapper = document.getElementById('coin-3d-animated-wrapper');
-  const tooltip = document.getElementById('coin-floating-tooltip');
-  const btnMonetize = document.getElementById('sticky-monetize-pill');
-  const modalPublish = document.getElementById('modal-publish-stream');
-
-  if (btnMonetize) {
-    btnMonetize.onclick = () => {
-      if (modalPublish) {
-        modalPublish.style.display = 'grid';
-        if (typeof initPublishStreamModalPricing === 'function') {
-          initPublishStreamModalPricing();
-        }
-      }
-    };
-  }
-
-  if (!coinWrapper || !tooltip) return;
-
-  const tooltipMessages = [
-    '💰 ¡Genera Ingresos!',
-    '✨ Monetiza tus cuentas',
-    '💸 Gana dinero cada mes',
-    '🔒 Cobro 100% Garantizado'
-  ];
-  let msgIndex = 0;
-
-  setInterval(() => {
-    if (window.innerWidth > 768) return;
-
-    coinWrapper.classList.remove('is-jumping');
-    tooltip.classList.remove('is-active');
-
-    void coinWrapper.offsetWidth;
-
-    coinWrapper.classList.add('is-jumping');
-
-    setTimeout(() => {
-      msgIndex = (msgIndex + 1) % tooltipMessages.length;
-      tooltip.innerHTML = `<span>${tooltipMessages[msgIndex]}</span>`;
-      tooltip.classList.add('is-active');
-    }, 400);
-
-    setTimeout(() => {
-      tooltip.classList.remove('is-active');
-    }, 4000);
-  }, 6000);
-}
-
 // --- 1. HERO ACCORDION BANNER MODULE (ENEBA STYLE) ---
 function initHeroAccordion() {
   const container = document.getElementById('eneba-accordion-slides');
@@ -2680,12 +2630,12 @@ function initUserSession() {
     };
   }
 
-  // Sticky Right Monetize Pill ("Generar Ingresos")
+  // Sticky Right Monetize Lateral Tag ("Generar Ingresos")
   const stickyMonetizePill = document.getElementById('sticky-monetize-pill');
   if (stickyMonetizePill) {
-    stickyMonetizePill.onclick = () => {
-      const modal = document.getElementById('modal-publish-stream');
-      if (modal) modal.style.display = 'grid';
+    stickyMonetizePill.onclick = (e) => {
+      e.preventDefault();
+      window.location.href = '/monetizar';
     };
   }
 
@@ -3031,7 +2981,6 @@ function initializeMarketplace() {
   fetchStoreData();        // Silent background update & seller sync
   initWebSocketClient();
   initDragToScrollEngine();
-  initMobileCoinWidget();
 }
 
 if (document.readyState === 'loading') {
