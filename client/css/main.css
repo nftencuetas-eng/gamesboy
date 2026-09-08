@@ -983,10 +983,12 @@ a.sub-nav-link,
 
 .catalog-section-title h2 {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: clamp(0.92rem, 3.8vw, 1.25rem);
   font-weight: 800;
   color: #ffffff;
+  white-space: nowrap !important;
 }
+
 
 .catalog-header-actions {
   display: flex;
@@ -1063,10 +1065,11 @@ a.sub-nav-link,
 .stream-card-wide:hover {
   background: linear-gradient(145deg, #181c2c 0%, #1f2336 100%);
   border-color: rgba(0, 194, 255, 0.6);
-  transform: translateY(-8px) scale(1.18);
-  z-index: 30;
-  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.85), 0 0 32px rgba(0, 194, 255, 0.35);
+  transform: translateY(-4px) scale(1.025);
+  z-index: 10;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.75), 0 0 20px rgba(0, 194, 255, 0.25);
 }
+
 
 .stream-card-visual {
   width: 110px;
@@ -1232,10 +1235,10 @@ a.sub-nav-link,
 }
 
 .game-card:hover {
-  transform: translateY(-8px) scale(1.18);
+  transform: translateY(-4px) scale(1.025);
   border-color: rgba(59, 130, 246, 0.7);
-  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.9), 0 0 28px rgba(59, 130, 246, 0.4);
-  z-index: 30;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.8), 0 0 20px rgba(59, 130, 246, 0.3);
+  z-index: 10;
 }
 
 .game-cover-container {
@@ -1262,80 +1265,104 @@ a.sub-nav-link,
   height: 100%;
   object-fit: cover;
   border-radius: 0px !important;
-  transition: transform 0.3s ease;
+  transition: transform 0.28s ease;
 }
 
 .game-card:hover .game-cover-img {
-  transform: scale(1.04);
+  transform: scale(1.02);
 }
 
 .game-card-body {
-  padding: 0.65rem 0.75rem;
+  padding: 0.9rem;
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex-grow: 1;
+  justify-content: space-between;
+  border-radius: 0px !important;
 }
 
 .game-title {
   font-family: var(--font-heading);
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: #ffffff;
-  line-height: 1.2;
-  margin-bottom: 4px;
+  font-size: 0.94rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin-bottom: 0.6rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Digital Games Dual Price Inline Rows (Audio 1) */
+.game-price-tag-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.game-price-tag-val {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--accent-emerald);
+  font-family: var(--font-mono);
+}
+
+/* JUEGOS DIGITALES: INLINE PRICE ROWS */
 .game-prices-inline-list {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   margin-top: auto;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .game-price-inline-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  width: 100% !important;
   white-space: nowrap !important;
-  line-height: 1.25;
 }
 
 .game-price-inline-label {
-  font-size: 0.68rem;
-  color: var(--text-tertiary);
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  white-space: nowrap !important;
-}
-
-.game-price-inline-val.primary-val {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   font-weight: 700;
   color: #ffffff;
   white-space: nowrap !important;
 }
 
-.game-price-inline-val.secondary-val {
+.game-price-inline-val {
   font-family: var(--font-mono);
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   font-weight: 800;
-  color: var(--accent-cyan);
   white-space: nowrap !important;
+}
+
+.game-price-inline-val.primary-val {
+  color: #ffffff !important;
+}
+
+.game-price-inline-val.secondary-val {
+  color: var(--accent-cyan) !important;
 }
 
 /* ======================================================== */
 /* 6. CLEAN TRANSPARENT PNG GIFT CARDS (AUDIO 3)            */
 /* ======================================================== */
+/* RETAIL HANG-TAB GIFT CARDS */
 .giftcard-clean-png-card {
-  flex: 0 0 160px;
-  width: 160px;
+  width: 175px;
+  min-width: 175px;
+  height: 240px;
   background: transparent !important;
+  background-color: transparent !important;
   border: none !important;
+  outline: none !important;
   box-shadow: none !important;
   display: flex;
   justify-content: center;
@@ -1349,9 +1376,9 @@ a.sub-nav-link,
 }
 
 .giftcard-clean-png-card:hover {
-  transform: translateY(-8px) scale(1.15);
-  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 16px rgba(0, 194, 255, 0.3));
-  z-index: 20;
+  transform: translateY(-4px) scale(1.03);
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 12px rgba(0, 194, 255, 0.25));
+  z-index: 10;
 }
 
 .giftcard-clean-png-img {
@@ -1361,6 +1388,7 @@ a.sub-nav-link,
   object-fit: contain;
   border-radius: 0 !important;
   background: transparent !important;
+  background-color: transparent !important;
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.5));
   transition: transform 0.28s ease;
 }
@@ -1537,10 +1565,11 @@ a.sub-nav-link,
 .smm-banner-card:hover {
   background: var(--bg-surface-elevated);
   border-color: rgba(168, 85, 247, 0.6);
-  transform: translateY(-8px) scale(1.16);
-  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.85), 0 0 30px rgba(168, 85, 247, 0.35);
-  z-index: 30;
+  transform: translateY(-4px) scale(1.025);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.75), 0 0 20px rgba(168, 85, 247, 0.25);
+  z-index: 10;
 }
+
 
 .smm-banner-header {
   display: flex;

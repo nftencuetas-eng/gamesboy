@@ -831,9 +831,18 @@ function renderDigitalGames() {
   const container = document.getElementById('digital-games-grid');
   if (!container) return;
 
-  const games = state.storeProducts.filter(p => p.category === 'game_key' || p.category === 'digital_game');
+  const rawProducts = Array.isArray(state.storeProducts) && state.storeProducts.length > 0 
+    ? state.storeProducts 
+    : defaultStoreProducts;
+
+  const games = rawProducts.filter(p => {
+    if (!p) return false;
+    if (p.category === 'gift_card') return false;
+    return p.category === 'game_key' || p.category === 'digital_game' || !p.category || (typeof p.category === 'string' && p.category.includes('game')) || p.platform === 'PS5' || p.platform === 'PS4' || p.genre;
+  });
+
   if (games.length === 0) {
-    container.innerHTML = `<p style="color: var(--text-tertiary); padding: 1rem;">Cargando juegos digitales...</p>`;
+    container.innerHTML = `<p style="color: var(--text-tertiary); padding: 1.5rem; text-align: center; width: 100%;">No hay videojuegos disponibles en este momento.</p>`;
     return;
   }
 
@@ -866,6 +875,7 @@ function renderDigitalGames() {
     `;
   }).join('');
 }
+
 
 // --- 4. RENDER REAL PNG UPLOADED GIFT CARDS (PURE TRANSPARENT PNG CARDS - AUDIO 3) ---
 function renderRetailGiftCards() {

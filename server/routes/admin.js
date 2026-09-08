@@ -433,8 +433,8 @@ const DEFAULT_GIFT_CARD_BRANDS = [
 router.get('/giftcards/brands', (req, res) => {
   try {
     const db = getDb();
-    if (!db.giftcard_brands || db.giftcard_brands.length === 0) {
-      db.giftcard_brands = DEFAULT_GIFT_CARD_BRANDS;
+    if (!Array.isArray(db.giftcard_brands)) {
+      db.giftcard_brands = [];
       saveStorage();
     }
     res.json({ success: true, count: db.giftcard_brands.length, brands: db.giftcard_brands });
@@ -447,10 +447,11 @@ router.get('/giftcards/brands', (req, res) => {
 router.get('/giftcards', (req, res) => {
   try {
     const db = getDb();
-    if (!db.giftcard_brands || db.giftcard_brands.length === 0) {
-      db.giftcard_brands = DEFAULT_GIFT_CARD_BRANDS;
+    if (!Array.isArray(db.giftcard_brands)) {
+      db.giftcard_brands = [];
       saveStorage();
     }
+
     
     // Flat map variations
     const flatCards = [];
