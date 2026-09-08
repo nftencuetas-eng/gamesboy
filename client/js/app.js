@@ -838,7 +838,7 @@ function stopHeroAutoplay() {
   }
 }
 
-// --- 2. RENDER STREAMING SERVICES (CLEAN SQUARE THUMBNAILS WITH TITLE BELOW) ---
+// --- 2. RENDER STREAMING SERVICES (SORTED BY MOST ACTIVE ACCOUNTS / STOCK FIRST) ---
 function renderStreamingServices() {
   const container = document.getElementById('streaming-services-grid');
   if (!container) return;
@@ -861,7 +861,45 @@ function renderStreamingServices() {
   // Cross-reference stock with live subscriptions
   const activeSubs = Array.isArray(state.subscriptions) ? state.subscriptions : [];
 
-  container.innerHTML = platformList.map(p => {
+  // Sort descending: services with most active accounts and stock appear first
+  const sortedPlatforms = [...platformList].sort((a, b) => {
+    const keyA = (a.id || a.platformKey || a.name || '').toLowerCase();
+    const keyB = (b.id || b.platformKey || b.name || '').toLowerCase();
+
+    const matchingA = activeSubs.filter(s => {
+      if (s.status !== 'active') return false;
+      const sName = (s.serviceName || '').toLowerCase();
+      return sName.includes(keyA) || keyA.includes(sName);
+    });
+    const matchingB = activeSubs.filter(s => {
+      if (s.status !== 'active') return false;
+      const sName = (s.serviceName || '').toLowerCase();
+      return sName.includes(keyB) || keyB.includes(sName);
+    });
+
+    const activeCountA = matchingA.length;
+    const activeCountB = matchingB.length;
+    const slotsA = matchingA.reduce((sum, s) => sum + (s.availableSlots || 0), 0);
+    const slotsB = matchingB.reduce((sum, s) => sum + (s.availableSlots || 0), 0);
+
+    // Rule 1: Most active subscription accounts first (descending)
+    if (activeCountB !== activeCountA) {
+      return activeCountB - activeCountA;
+    }
+    // Rule 2: Most available slots first (descending)
+    if (slotsB !== slotsA) {
+      return slotsB - slotsA;
+    }
+    // Rule 3: Has stock flag priority
+    const inStockA = (a.hasStock !== false && (slotsA > 0 || activeCountA > 0));
+    const inStockB = (b.hasStock !== false && (slotsB > 0 || activeCountB > 0));
+    if (inStockA !== inStockB) {
+      return inStockB ? 1 : -1;
+    }
+    return 0;
+  });
+
+  container.innerHTML = sortedPlatforms.map(p => {
     const platformKey = (p.id || p.platformKey || p.name || 'netflix').toLowerCase();
     
     // Check if there are active subscriptions with stock for this platform
@@ -2348,6 +2386,41 @@ function initUserSession() {
   const btnClosePublish = document.getElementById('btn-close-publish-modal');
   const navSellerPills = document.querySelectorAll('.sub-nav-seller-pill');
 
+  window.renderPublishProfilesList = function(slotsCount) {
+    const container = document.getElementById('user-pub-profiles-container');
+    if (!container) return;
+
+    const count = Math.max(1, Math.min(10, parseInt(slotsCount, 10) || 1));
+    
+    // Preserve existing input values if user adjusted slot count
+    const existingData = {};
+    container.querySelectorAll('.pub-profile-slot-item').forEach(card => {
+      const idx = card.dataset.slot;
+      const name = card.querySelector('.pub-profile-name-input')?.value;
+      const pin = card.querySelector('.pub-profile-pin-input')?.value;
+      if (idx) existingData[idx] = { name, pin };
+    });
+
+    let html = '';
+    for (let i = 1; i <= count; i++) {
+      const defaultName = existingData[i]?.name || `Gboy ${i}`;
+      const defaultPin = existingData[i]?.pin || '';
+      html += `
+        <div class="pub-profile-slot-item" data-slot="${i}">
+          <div class="pub-profile-slot-header">
+            <span class="pub-profile-slot-num">#${i}</span>
+            <input type="text" class="pub-profile-name-input" data-slot="${i}" value="${defaultName}" placeholder="Nombre (ej: Gboy ${i})">
+          </div>
+          <div class="pub-profile-pin-wrap">
+            <span class="pub-profile-pin-label">PIN:</span>
+            <input type="text" class="pub-profile-pin-input" data-slot="${i}" value="${defaultPin}" placeholder="Opcional (ej: 1234)" maxlength="8">
+          </div>
+        </div>
+      `;
+    }
+    container.innerHTML = html;
+  };
+
   window.initPublishStreamModalPricing = function() {
     const serviceSelect = document.getElementById('user-pub-service');
     const planInput = document.getElementById('user-pub-plan');
@@ -2392,6 +2465,9 @@ function initUserSession() {
       if (commissionDisplay) commissionDisplay.textContent = `${commPct}%`;
       if (netEarningsSlot) netEarningsSlot.textContent = `${netPerSlot.toLocaleString('es-PY')} Gs.`;
       if (netEarningsTotal) netEarningsTotal.textContent = `${totalNet.toLocaleString('es-PY')} Gs.`;
+
+      // Render profile builder items
+      window.renderPublishProfilesList(slots);
     };
 
     serviceSelect.onchange = updateCalculations;
@@ -2426,15 +2502,37 @@ function initUserSession() {
       e.preventDefault();
       const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
       const serviceKey = document.getElementById('user-pub-service').value;
+      const email = document.getElementById('user-pub-email')?.value.trim() || '';
+      const password = document.getElementById('user-pub-password')?.value.trim() || '';
+      const instructions = document.getElementById('user-pub-instructions')?.value.trim() || 'Usa exclusivamente tu perfil asignado y no modifiques las credenciales.';
+
+      if (!email || !password) {
+        window.showToast('warning', 'Campos Requeridos', 'Por favor ingresa el correo y la contraseña de la cuenta.');
+        return;
+      }
+
+      // Collect profile names and pins
+      const profiles = {};
+      const pins = {};
+      document.querySelectorAll('#user-pub-profiles-container .pub-profile-slot-item').forEach(card => {
+        const slotNum = card.dataset.slot;
+        const nameVal = card.querySelector('.pub-profile-name-input')?.value.trim() || `Gboy ${slotNum}`;
+        const pinVal = card.querySelector('.pub-profile-pin-input')?.value.trim() || '';
+        profiles[slotNum] = { name: nameVal, pin: pinVal || 'N/A' };
+        if (pinVal) pins[slotNum] = pinVal;
+      });
 
       const payload = {
         serviceKey,
         serviceName: document.getElementById('user-pub-service').selectedOptions[0]?.text || serviceKey,
         planName: document.getElementById('user-pub-plan')?.value,
         totalSlots: document.getElementById('user-pub-slots').value,
-        credentials: document.getElementById('user-pub-creds').value,
-        pins: document.getElementById('user-pub-pins').value || '{}',
-        instructions: document.getElementById('user-pub-instructions').value
+        email,
+        password,
+        credentials: `${email} | ${password}`,
+        profiles,
+        pins,
+        instructions
       };
 
       try {
@@ -2450,6 +2548,7 @@ function initUserSession() {
         if (data.success) {
           window.showToast('success', '¡Cuenta Publicada!', data.message || 'Tu cuenta ha sido publicada con éxito en el catálogo.');
           if (modalPublish) modalPublish.style.display = 'none';
+          publishForm.reset();
           await fetchStoreData();
           if (data.subscription?.id) {
             openGroupChatModal(data.subscription.id);

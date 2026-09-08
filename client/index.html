@@ -567,17 +567,17 @@
   <!-- MODAL: PUBLICAR Y COMPARTIR CUENTA DE STREAMING         -->
   <!-- ======================================================= -->
   <div class="modal-overlay" id="modal-publish-stream" style="display: none;">
-    <div class="modal-content" style="max-width: 600px; border-radius: 16px !important;">
+    <div class="modal-content" style="max-width: 620px; border-radius: 16px !important;">
       <div class="modal-header">
         <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-          <span>Publicar y Monetizar tu Cuenta de Streaming</span>
+          <span>Publicar y Monetizar Cuenta de Streaming</span>
         </h3>
         <button class="btn-modal-close" id="btn-close-publish-modal">✕</button>
       </div>
       <div class="modal-body">
         <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
-          Como usuario de GamesBoy, puedes compartir los cupos libres de tus cuentas oficiales bajo el modelo GoSplit con precios fijados por la plataforma y liquidación garantizada.
+          Monetiza tus cupos libres bajo el modelo GoSplit con precios fijados por la plataforma y liquidación garantizada al término del ciclo mensual.
         </p>
         <form id="form-user-publish-stream">
           <div class="form-grid-2">
@@ -625,28 +625,44 @@
               <strong id="user-pub-net-total" style="font-family: var(--font-mono); font-size: 1.05rem; color: var(--accent-cyan);">67.500 Gs.</strong>
             </div>
             <div style="font-size: 0.68rem; color: var(--text-tertiary); margin-top: 6px;">
-              * El pago se mantiene en custodia durante el mes de servicio y se liquida al completar el ciclo de 30 días.
+              * El saldo se custodia de forma segura y se liquida al completar el ciclo de 30 días.
             </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Credenciales (Email ::: Contraseña o Enlace)</label>
-            <input type="text" id="user-pub-creds" class="form-input" placeholder="ej: micuenta@correo.com:::PassSeguro123!" required style="border-radius: 8px !important;">
-            <span style="font-size: 0.72rem; color: var(--text-tertiary);">Se almacenan encriptadas con AES-256 y solo se comparten con compradores confirmados.</span>
+          <!-- Credenciales Separadas (Email y Contraseña) -->
+          <div class="pub-creds-grid" style="margin-bottom: 1.15rem;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Correo / Usuario de la Cuenta</label>
+              <input type="text" id="user-pub-email" class="form-input" placeholder="ej: micuenta@correo.com" required autocomplete="off" style="border-radius: 8px !important;">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label">Contraseña de la Cuenta</label>
+              <input type="text" id="user-pub-password" class="form-input" placeholder="ej: MiClaveSegura2026!" required autocomplete="off" style="border-radius: 8px !important;">
+            </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">PINs por Perfil (Opcional - JSON)</label>
-            <input type="text" id="user-pub-pins" class="form-input" placeholder='{"1":"1122", "2":"3344", "3":"5566"}' style="border-radius: 8px !important;">
+          <!-- Perfiles y PINs Dinámicos por Cupo -->
+          <div class="form-group" style="margin-bottom: 1.15rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="form-label" style="margin-bottom: 0;">Perfiles y PINs por Cupo</label>
+              <span style="font-size: 0.72rem; color: var(--accent-cyan); font-weight: 700;">Nombres y PIN opcional</span>
+            </div>
+            <div id="user-pub-profiles-container" class="pub-profiles-grid">
+              <!-- Rendered dynamically according to number of slots -->
+            </div>
+            <span style="font-size: 0.72rem; color: var(--text-tertiary); display: block; margin-top: 4px;">
+              🔒 Las credenciales y PINs se almacenan cifradas en la Bóveda con AES-256 y solo se revelan al comprador asignado.
+            </span>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Instrucciones / Reglas del Grupo</label>
-            <input type="text" id="user-pub-instructions" class="form-input" placeholder="ej: Usa exclusivamente tu perfil asignado. No cambiar contraseña." required value="Usa exclusivamente tu perfil asignado y no modifiques las credenciales." style="border-radius: 8px !important;">
+          <!-- Instrucciones / Reglas del Anfitrión -->
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label class="form-label">Instrucciones o Reglas del Anfitrión</label>
+            <textarea id="user-pub-instructions" class="form-input" rows="2" placeholder="ej: Usa exclusivamente tu perfil asignado. No modificar la contraseña ni el correo de la cuenta." style="border-radius: 8px !important; resize: vertical;">Usa exclusivamente tu perfil asignado y no modifiques las credenciales.</textarea>
           </div>
 
-          <button type="submit" class="btn-primary-block" style="border-radius: 10px !important; font-weight: 800; padding: 12px;">
-            Publicar Cuenta de Streaming
+          <button type="submit" class="btn-primary-block" id="btn-submit-publish-stream" style="border-radius: 10px !important; font-weight: 800; padding: 13px; font-size: 0.95rem;">
+            🚀 Publicar Cuenta de Streaming
           </button>
         </form>
       </div>

@@ -447,7 +447,7 @@
           </div>
           <div class="form-group">
             <label class="form-label">Cupos Libres a Vender:</label>
-            <input type="number" id="user-pub-slots" class="form-input" min="1" max="10000" value="3" required>
+            <input type="number" id="user-pub-slots" class="form-input" min="1" max="10" value="3" required>
           </div>
         </div>
 
@@ -467,20 +467,36 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Credenciales de la Cuenta (Email y Contraseña):</label>
-          <input type="text" id="user-pub-creds" class="form-input" placeholder="ej: micorreo@gmail.com | miclave123" required style="border-radius: 8px !important;">
-          <span style="font-size: 0.72rem; color: var(--text-tertiary);">🔒 Se guardan de forma cifrada en la Bóveda y se entregan de forma segura.</span>
+        <!-- Credenciales Separadas (Email y Contraseña) -->
+        <div class="pub-creds-grid" style="margin-bottom: 1.15rem;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Correo / Usuario de la Cuenta</label>
+            <input type="text" id="user-pub-email" class="form-input" placeholder="ej: micuenta@correo.com" required autocomplete="off" style="border-radius: 8px !important;">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Contraseña de la Cuenta</label>
+            <input type="text" id="user-pub-password" class="form-input" placeholder="ej: MiClaveSegura2026!" required autocomplete="off" style="border-radius: 8px !important;">
+          </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">PINs de los Perfiles (Opcional):</label>
-          <input type="text" id="user-pub-pins" class="form-input" placeholder='ej: {"Perfil 1": "1234", "Perfil 2": "5678"}' style="border-radius: 8px !important;">
+        <!-- Perfiles y PINs Dinámicos por Cupo -->
+        <div class="form-group" style="margin-bottom: 1.15rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="form-label" style="margin-bottom: 0;">Perfiles y PINs por Cupo</label>
+            <span style="font-size: 0.72rem; color: var(--accent-cyan); font-weight: 700;">Nombres y PIN opcional</span>
+          </div>
+          <div id="user-pub-profiles-container" class="pub-profiles-grid">
+            <!-- Rendered dynamically according to number of slots -->
+          </div>
+          <span style="font-size: 0.72rem; color: var(--text-tertiary); display: block; margin-top: 4px;">
+            🔒 Se almacenan encriptadas con AES-256 en la Bóveda y se entregan de forma segura al comprador.
+          </span>
         </div>
 
+        <!-- Instrucciones o Reglas -->
         <div class="form-group">
           <label class="form-label">Instrucciones o Reglas Adicionales:</label>
-          <textarea id="user-pub-instructions" class="form-input" rows="2" placeholder="ej: No cambiar la contraseña ni el idioma del perfil." style="border-radius: 8px !important;"></textarea>
+          <textarea id="user-pub-instructions" class="form-input" rows="2" placeholder="ej: No cambiar la contraseña ni el idioma del perfil." style="border-radius: 8px !important;">Usa exclusivamente tu perfil asignado y no modifiques las credenciales.</textarea>
         </div>
 
         <button type="submit" class="btn-primary-block" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); margin-top: 0.5rem; font-size: 0.95rem;">

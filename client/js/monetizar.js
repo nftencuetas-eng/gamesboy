@@ -156,6 +156,40 @@ function initFaqAccordion() {
   });
 }
 
+function renderPublishProfilesList(slotsCount) {
+  const container = document.getElementById('user-pub-profiles-container');
+  if (!container) return;
+
+  const count = Math.max(1, Math.min(10, parseInt(slotsCount, 10) || 1));
+  
+  const existingData = {};
+  container.querySelectorAll('.pub-profile-slot-item').forEach(card => {
+    const idx = card.dataset.slot;
+    const name = card.querySelector('.pub-profile-name-input')?.value;
+    const pin = card.querySelector('.pub-profile-pin-input')?.value;
+    if (idx) existingData[idx] = { name, pin };
+  });
+
+  let html = '';
+  for (let i = 1; i <= count; i++) {
+    const defaultName = existingData[i]?.name || `Gboy ${i}`;
+    const defaultPin = existingData[i]?.pin || '';
+    html += `
+      <div class="pub-profile-slot-item" data-slot="${i}">
+        <div class="pub-profile-slot-header">
+          <span class="pub-profile-slot-num">#${i}</span>
+          <input type="text" class="pub-profile-name-input" data-slot="${i}" value="${defaultName}" placeholder="Nombre (ej: Gboy ${i})">
+        </div>
+        <div class="pub-profile-pin-wrap">
+          <span class="pub-profile-pin-label">PIN:</span>
+          <input type="text" class="pub-profile-pin-input" data-slot="${i}" value="${defaultPin}" placeholder="Opcional (ej: 1234)" maxlength="8">
+        </div>
+      </div>
+    `;
+  }
+  container.innerHTML = html;
+}
+
 // --- PUBLISH MODAL CONTROLLER ---
 function initPublishModal() {
   const modalPublish = document.getElementById('modal-publish-stream');
@@ -192,6 +226,8 @@ function initPublishModal() {
     if (priceDisplay) priceDisplay.textContent = `${pricePyg.toLocaleString('es-PY')} Gs.`;
     if (commissionDisplay) commissionDisplay.textContent = `${commPct}%`;
     if (netEarningsTotal) netEarningsTotal.textContent = `${totalNet.toLocaleString('es-PY')} Gs.`;
+
+    renderPublishProfilesList(slots);
   };
 
   const openPublishModal = () => {
@@ -219,15 +255,37 @@ function initPublishModal() {
       const user = JSON.parse(localStorage.getItem('gb_user') || 'null');
       const userId = user ? user.id : 'usr_client1';
       const serviceKey = document.getElementById('user-pub-service').value;
+      const email = document.getElementById('user-pub-email')?.value.trim() || '';
+      const password = document.getElementById('user-pub-password')?.value.trim() || '';
+      const instructions = document.getElementById('user-pub-instructions')?.value.trim() || 'Usa exclusivamente tu perfil asignado y no modifiques las credenciales.';
+
+      if (!email || !password) {
+        alert('Por favor ingresa el correo y la contraseña de la cuenta.');
+        return;
+      }
+
+      // Collect profile names and pins
+      const profiles = {};
+      const pins = {};
+      document.querySelectorAll('#user-pub-profiles-container .pub-profile-slot-item').forEach(card => {
+        const slotNum = card.dataset.slot;
+        const nameVal = card.querySelector('.pub-profile-name-input')?.value.trim() || `Gboy ${slotNum}`;
+        const pinVal = card.querySelector('.pub-profile-pin-input')?.value.trim() || '';
+        profiles[slotNum] = { name: nameVal, pin: pinVal || 'N/A' };
+        if (pinVal) pins[slotNum] = pinVal;
+      });
 
       const payload = {
         serviceKey,
         serviceName: document.getElementById('user-pub-service').selectedOptions[0]?.text || serviceKey,
         planName: document.getElementById('user-pub-plan')?.value,
         totalSlots: document.getElementById('user-pub-slots').value,
-        credentials: document.getElementById('user-pub-creds').value,
-        pins: document.getElementById('user-pub-pins').value || '{}',
-        instructions: document.getElementById('user-pub-instructions').value
+        email,
+        password,
+        credentials: `${email} | ${password}`,
+        profiles,
+        pins,
+        instructions
       };
 
       try {
@@ -243,6 +301,7 @@ function initPublishModal() {
         if (data.success) {
           alert(`🎉 ¡Cuenta Publicada con Éxito!\n\n${data.message || 'Tu cuenta ya está activa en el catálogo y los compradores comenzarán a asignarse.'}`);
           if (modalPublish) modalPublish.style.display = 'none';
+          publishForm.reset();
           window.location.href = '/purchases.html';
         } else {
           alert(`Aviso: ${data.error || 'No se pudo publicar la cuenta.'}`);

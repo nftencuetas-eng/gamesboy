@@ -7995,3 +7995,112 @@ a.sub-nav-link,
   }
 }
 
+/* PUBLISH STREAMING PROFILES & PINS DYNAMIC BUILDER */
+.pub-creds-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.pub-profiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 10px;
+  margin-top: 6px;
+  margin-bottom: 0.85rem;
+}
+
+.pub-profile-slot-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px !important;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.pub-profile-slot-item:hover {
+  border-color: rgba(0, 194, 255, 0.35);
+  background: rgba(0, 194, 255, 0.02);
+}
+
+.pub-profile-slot-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pub-profile-slot-num {
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: var(--accent-cyan);
+  background: rgba(0, 194, 255, 0.12);
+  border: 1px solid rgba(0, 194, 255, 0.25);
+  padding: 2px 7px;
+  border-radius: 6px !important;
+  flex-shrink: 0;
+}
+
+.pub-profile-name-input {
+  flex: 1;
+  background: rgba(5, 8, 16, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: 6px !important;
+  font-size: 0.82rem;
+  font-weight: 700;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.pub-profile-name-input:focus {
+  border-color: var(--accent-cyan);
+}
+
+.pub-profile-pin-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pub-profile-pin-label {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pub-profile-pin-input {
+  flex: 1;
+  background: rgba(5, 8, 16, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 5px 10px;
+  border-radius: 6px !important;
+  outline: none;
+  letter-spacing: 1.5px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.pub-profile-pin-input:focus {
+  border-color: var(--accent-cyan);
+}
+
+@media (max-width: 600px) {
+  .pub-creds-grid {
+    grid-template-columns: 1fr;
+  }
+  .pub-profiles-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+

@@ -68,10 +68,17 @@ router.post('/:id/buy', (req, res) => {
     // 2. Assign slot number & PIN
     const assignedSlotNumber = (sub.totalSlots - sub.availableSlots) + 1;
     let assignedPin = 'N/A';
+    let assignedProfileName = `Perfil #${assignedSlotNumber}`;
     try {
       const pinsObj = JSON.parse(cryptoService.decrypt(sub.pinsEncrypted) || '{}');
-      if (pinsObj[assignedSlotNumber]) {
-        assignedPin = pinsObj[assignedSlotNumber];
+      const slotData = pinsObj[assignedSlotNumber] || pinsObj[String(assignedSlotNumber)];
+      if (slotData) {
+        if (typeof slotData === 'object') {
+          assignedPin = slotData.pin || 'N/A';
+          if (slotData.name) assignedProfileName = slotData.name;
+        } else {
+          assignedPin = String(slotData);
+        }
       }
     } catch (e) {}
 
@@ -448,10 +455,12 @@ router.post('/publish', (req, res) => {
     const user = db.users.find(u => u.id === userId) || { name: 'Usuario GamesBoy', role: 'client' };
     const rate = db.platform_settings?.exchangeRatePyg || 7500;
 
-    const { serviceKey, serviceName, planName, totalSlots, credentials, pins, instructions } = req.body;
+    const { serviceKey, serviceName, planName, totalSlots, email, password, credentials, pins, profiles, instructions } = req.body;
 
-    if ((!serviceKey && !serviceName) || !totalSlots || !credentials) {
-      return res.status(400).json({ error: 'Por favor completa todos los campos requeridos.' });
+    const rawCreds = (email && password) ? `${email.trim()} | ${password.trim()}` : (credentials || '');
+
+    if ((!serviceKey && !serviceName) || !totalSlots || !rawCreds) {
+      return res.status(400).json({ error: 'Por favor ingresa el correo, contraseña y cantidad de cupos.' });
     }
 
     // Lookup service config set by admin from db.streaming_services
@@ -471,12 +480,14 @@ router.post('/publish', (req, res) => {
     const netPayoutPyg = Math.round(pricePerSlotPyg * (1 - commissionPercent / 100));
     const netPayoutUsd = parseFloat((pricePerSlotUsd * (1 - commissionPercent / 100)).toFixed(2));
 
+    const finalPins = profiles || pins || {};
+
     const newSub = {
       id: `sub_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       sellerId: userId,
       sellerName: user.name,
       isOfficial: user.role === 'admin',
-      serviceKey: key || 'custom',
+      serviceKey: rawKey || 'custom',
       serviceName: finalServiceName,
       category: 'streaming',
       planName: finalPlanName,
@@ -487,8 +498,8 @@ router.post('/publish', (req, res) => {
       commissionPercent,
       netPayoutUsd,
       netPayoutPyg,
-      credentialsEncrypted: cryptoService.encrypt(credentials),
-      pinsEncrypted: cryptoService.encrypt(typeof pins === 'object' ? JSON.stringify(pins) : pins || '{}'),
+      credentialsEncrypted: cryptoService.encrypt(rawCreds),
+      pinsEncrypted: cryptoService.encrypt(typeof finalPins === 'object' ? JSON.stringify(finalPins) : finalPins || '{}'),
       instructions: instructions || 'Usa exclusivamente tu perfil asignado y no modifiques la contraseña.',
       status: 'active',
       createdAt: new Date().toISOString()
