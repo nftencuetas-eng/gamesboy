@@ -6,17 +6,20 @@ import config from '../config/env.js';
 const router = Router();
 const startTime = Date.now();
 
-router.get('/', (req, res) => {
+router.get(['/', '/health'], (req, res) => {
   const uptimeSeconds = Math.floor((Date.now() - startTime) / 1000);
   const memoryUsage = process.memoryUsage();
-  const db = getDb();
+  let db = {};
+  try {
+    db = getDb() || {};
+  } catch (e) {}
   const pgActive = postgresAdapter.isPgConnected();
 
-  res.json({
+  res.status(200).json({
     status: 'ok',
-    app: config.appName,
-    domain: config.appDomain,
-    environment: config.nodeEnv,
+    app: config.appName || 'GamesBoy',
+    domain: config.appDomain || 'gamesboy.net',
+    environment: config.nodeEnv || 'production',
     uptime: `${uptimeSeconds}s`,
     timestamp: new Date().toISOString(),
     database: {
@@ -27,11 +30,11 @@ router.get('/', (req, res) => {
       sharedClusterSafe: true
     },
     marketplace: {
-      activeSubscriptions: db.subscriptions.length,
-      storeProducts: db.store_products.length,
-      usersCount: db.users.length,
-      commissionPercent: db.platform_settings.commissionPercent,
-      exchangeRatePyg: db.platform_settings.exchangeRatePyg
+      activeSubscriptions: db.subscriptions?.length || 0,
+      storeProducts: db.store_products?.length || 0,
+      usersCount: db.users?.length || 0,
+      commissionPercent: db.platform_settings?.commissionPercent || 15,
+      exchangeRatePyg: db.platform_settings?.exchangeRatePyg || 7500
     },
     memory: {
       rss: `${Math.round(memoryUsage.rss / 1024 / 1024)} MB`,
@@ -41,3 +44,4 @@ router.get('/', (req, res) => {
 });
 
 export default router;
+
