@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/main.css?v=3.2">
+  <link rel="stylesheet" href="/css/main.css?v=6.0">
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   
   <style>
@@ -223,7 +223,7 @@
       <div class="auth-left-col">
         <div style="margin-bottom: 1.5rem;">
           <a href="/" title="GamesBoy.net">
-            <img src="/assets/branding/logo-white.png?v=5.0" alt="GamesBoy.net" style="height: 38px; width: auto; filter: none;">
+            <img src="/assets/branding/logo-white.png?v=6.0" alt="GamesBoy.net" style="height: 38px; width: auto; filter: none;">
           </a>
         </div>
 
@@ -326,6 +326,16 @@
   </div>
 
   <script>
+    // 0. Auto-redirect if already logged in
+    (function checkAlreadyLoggedIn() {
+      try {
+        const user = JSON.parse(localStorage.getItem('gb_user') || 'null');
+        if (user && user.id) {
+          window.location.replace('/');
+        }
+      } catch (e) {}
+    })();
+
     let isRegisterMode = false;
     const titleEl = document.getElementById('auth-form-title');
     const subTitleEl = document.getElementById('auth-form-subtitle');
@@ -375,7 +385,7 @@
         if (data.success && data.user) {
           localStorage.setItem('gb_user', JSON.stringify(data.user));
           if (data.token) localStorage.setItem('gb_token', data.token);
-          window.location.href = '/';
+          window.location.replace('/');
         } else {
           alert(data.error || 'No se pudo completar la autenticación.');
         }
@@ -463,7 +473,7 @@
         if (data.success && data.user) {
           localStorage.setItem('gb_user', JSON.stringify(data.user));
           if (data.token) localStorage.setItem('gb_token', data.token);
-          window.location.href = '/';
+          window.location.replace('/');
         } else {
           alert(data.error || 'Error al autenticar cuenta de Google.');
           if (googleBtn) {

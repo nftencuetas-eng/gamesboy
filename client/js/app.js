@@ -104,428 +104,14 @@ function autoDetectUserCountry() {
   return 'PY';
 }
 
-// Fallback Default Hero Banners (ENEBA Style)
-const defaultBanners = [
-  {
-    id: 'banner_fc25',
-    title: 'EA SPORTS FC 25',
-    tagline: 'CLUBES, ULTIMATE TEAM & MODO CARRERA',
-    badge: 'PS5 • XBOX • PC',
-    imgHorizontal: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1600&q=80',
-    imgVertical: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80',
-    ctaText: 'Ver Ediciones',
-    ctaUrl: '#section-games',
-    sortOrder: 0
-  },
-  {
-    id: 'banner_spiderman2',
-    title: 'MARVEL SPIDER-MAN 2',
-    tagline: 'BE GREATER. TOGETHER.',
-    badge: 'PS5 EXCLUSIVE',
-    imgHorizontal: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1600&q=80',
-    imgVertical: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80',
-    ctaText: 'Comprar ahora',
-    ctaUrl: '#section-games',
-    sortOrder: 1
-  },
-  {
-    id: 'banner_cod_bo6',
-    title: 'CALL OF DUTY: BLACK OPS 6',
-    tagline: 'LA VERDAD MIENTE. VUELVE EL REY DEL SHOOTER',
-    badge: 'CROSS-GEN BUNDLE',
-    imgHorizontal: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80',
-    imgVertical: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
-    ctaText: 'Comprar Código',
-    ctaUrl: '#section-games',
-    sortOrder: 2
-  },
-  {
-    id: 'banner_gta6',
-    title: 'GRAND THEFT AUTO VI',
-    tagline: 'BIENVENIDO A LEONIDA & VICE CITY',
-    badge: 'NEXT-GEN PRE-ORDER',
-    imgHorizontal: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1600&q=80',
-    imgVertical: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80',
-    ctaText: 'Reservar Ahora',
-    ctaUrl: '#section-games',
-    sortOrder: 3
+// Instant Cache Hydration (0ms, Zero-Flicker)
+const cachedCatalog = (() => {
+  try {
+    return JSON.parse(localStorage.getItem('gb_catalog_cache') || '{}');
+  } catch (e) {
+    return {};
   }
-];
-
-// Fallback Default Streaming Subscriptions
-const defaultSubscriptions = [
-  {
-    id: 'sub_netflix_4k',
-    serviceName: 'Netflix Premium 4K HDR',
-    category: 'streaming',
-    planName: 'Ultra HD 4 Pantallas',
-    totalSlots: 4,
-    availableSlots: 2,
-    pricePerSlotUsd: 3.99,
-    pricePyg: 30000,
-    renewDiscountPercent: 5
-  },
-  {
-    id: 'sub_spotify_prem',
-    serviceName: 'Spotify Premium',
-    category: 'streaming',
-    planName: 'Individual / Familiar',
-    totalSlots: 6,
-    availableSlots: 4,
-    pricePerSlotUsd: 2.50,
-    pricePyg: 19000,
-    renewDiscountPercent: 5
-  },
-  {
-    id: 'sub_disney_prem',
-    serviceName: 'Disney+ & Star+ Premium',
-    category: 'streaming',
-    planName: 'Plan Estándar sin Anuncios',
-    totalSlots: 4,
-    availableSlots: 1,
-    pricePerSlotUsd: 3.20,
-    pricePyg: 24000,
-    renewDiscountPercent: 5
-  },
-  {
-    id: 'sub_max_hbo',
-    serviceName: 'Max (HBO Max Oficial)',
-    category: 'streaming',
-    planName: 'Platino 4K + Dolby Atmos',
-    totalSlots: 4,
-    availableSlots: 3,
-    pricePerSlotUsd: 2.80,
-    pricePyg: 21000,
-    renewDiscountPercent: 5
-  },
-  {
-    id: 'sub_yt_premium',
-    serviceName: 'YouTube Premium & Music',
-    category: 'streaming',
-    planName: 'Familiar Sin Anuncios',
-    totalSlots: 5,
-    availableSlots: 2,
-    pricePerSlotUsd: 2.99,
-    pricePyg: 22500,
-    renewDiscountPercent: 5
-  },
-  {
-    id: 'sub_chatgpt_plus',
-    serviceName: 'ChatGPT Plus & Team GPT-4o',
-    category: 'streaming',
-    planName: 'Acceso Directo GPT-4o',
-    totalSlots: 3,
-    availableSlots: 1,
-    pricePerSlotUsd: 6.50,
-    pricePyg: 49000,
-    renewDiscountPercent: 5
-  },
-  {
-    id: 'sub_crunchyroll',
-    serviceName: 'Crunchyroll Mega Fan',
-    category: 'streaming',
-    planName: 'Mega Fan 4 Pantallas',
-    totalSlots: 4,
-    availableSlots: 3,
-    pricePerSlotUsd: 2.20,
-    pricePyg: 16500,
-    renewDiscountPercent: 5
-  },
-  {
-    id: 'sub_paramount',
-    serviceName: 'Paramount+ Premium',
-    category: 'streaming',
-    planName: 'Plan Completo HD',
-    totalSlots: 3,
-    availableSlots: 2,
-    pricePerSlotUsd: 2.30,
-    pricePyg: 17500,
-    renewDiscountPercent: 5
-  }
-];
-
-// Fallback Default Store Products (Games & Gift Cards)
-const defaultStoreProducts = [
-  // JUEGOS DIGITALES
-  {
-    id: 'game_fc25_digital',
-    title: 'EA SPORTS FC 25',
-    category: 'digital_game',
-    platform: 'PS5',
-    genre: 'Deportes / Fútbol',
-    primaryPricePyg: 320000,
-    secondaryPricePyg: 210000,
-    primaryPriceUsd: 42.67,
-    secondaryPriceUsd: 28.00,
-    priceUsd: 42.67,
-    coverUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80',
-    description: 'Edición oficial PlayStation 5 con licencias completas y Modo Carrera.',
-    isAvailable: true
-  },
-  {
-    id: 'game_spiderman2_game',
-    title: 'Marvel Spider-Man 2',
-    category: 'digital_game',
-    platform: 'PS5',
-    genre: 'Acción / Aventura',
-    primaryPricePyg: 295000,
-    secondaryPricePyg: 185000,
-    primaryPriceUsd: 39.33,
-    secondaryPriceUsd: 24.67,
-    priceUsd: 39.33,
-    coverUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80',
-    description: 'Juega como Peter Parker y Miles Morales enfrentando a Venom en Nueva York.',
-    isAvailable: true
-  },
-  {
-    id: 'game_gtav_premium',
-    title: 'Grand Theft Auto V Premium',
-    category: 'digital_game',
-    platform: 'PS5',
-    genre: 'Mundo Abierto',
-    primaryPricePyg: 160000,
-    secondaryPricePyg: 105000,
-    primaryPriceUsd: 21.33,
-    secondaryPriceUsd: 14.00,
-    priceUsd: 21.33,
-    coverUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80',
-    description: 'Incluye Modo Historia completo, GTA Online y Criminal Enterprise Starter Pack.',
-    isAvailable: true
-  },
-  {
-    id: 'game_lastofus_1',
-    title: 'The Last of Us Part I',
-    category: 'digital_game',
-    platform: 'PS5',
-    genre: 'Acción / Drama',
-    primaryPricePyg: 280000,
-    secondaryPricePyg: 175000,
-    primaryPriceUsd: 37.33,
-    secondaryPriceUsd: 23.33,
-    priceUsd: 37.33,
-    coverUrl: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=600&q=80',
-    description: 'Reconstruido desde cero para PS5 con gráficos de última generación.',
-    isAvailable: true
-  },
-  {
-    id: 'game_wukong',
-    title: 'Black Myth: Wukong',
-    category: 'digital_game',
-    platform: 'PS5',
-    genre: 'Action RPG',
-    primaryPricePyg: 340000,
-    secondaryPricePyg: 220000,
-    primaryPriceUsd: 45.33,
-    secondaryPriceUsd: 29.33,
-    priceUsd: 45.33,
-    coverUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
-    description: 'Encarna al Predestinado en una aventura mística por la mitología china.',
-    isAvailable: true
-  },
-  {
-    id: 'game_cod_bo6_digital',
-    title: 'Call of Duty: Black Ops 6',
-    category: 'digital_game',
-    platform: 'PS5',
-    genre: 'FPS / Shooter',
-    primaryPricePyg: 395000,
-    secondaryPricePyg: 255000,
-    primaryPriceUsd: 52.67,
-    secondaryPriceUsd: 34.00,
-    priceUsd: 52.67,
-    coverUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80',
-    description: 'Campaña de espionaje cinematográfica, multijugador y regreso de Zombies por rondas.',
-    isAvailable: true
-  },
-  {
-    id: 'game_gow_ragnarok',
-    title: 'God of War Ragnarök',
-    category: 'digital_game',
-    platform: 'PS5',
-    genre: 'Acción / Mitología',
-    primaryPricePyg: 285000,
-    secondaryPricePyg: 180000,
-    primaryPriceUsd: 38.00,
-    secondaryPriceUsd: 24.00,
-    priceUsd: 38.00,
-    coverUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
-    description: 'Kratos y Atreus deben viajar a cada uno de los Nueve Reinos buscando respuestas.',
-    isAvailable: true
-  },
-  {
-    id: 'game_cyberpunk2077',
-    title: 'Cyberpunk 2077 Ultimate',
-    category: 'digital_game',
-    platform: 'PS5',
-    genre: 'RPG / Mundo Abierto',
-    primaryPricePyg: 240000,
-    secondaryPricePyg: 155000,
-    primaryPriceUsd: 32.00,
-    secondaryPriceUsd: 20.67,
-    priceUsd: 32.00,
-    coverUrl: 'https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=600&q=80',
-    description: 'Incluye el juego base con Night City y la expansión de espionaje Phantom Liberty.',
-    isAvailable: true
-  },
-  {
-    id: 'game_eldenring',
-    title: 'Elden Ring: Shadow of Erdtree',
-    category: 'digital_game',
-    platform: 'PS5',
-    genre: 'Action RPG / Souls',
-    primaryPricePyg: 310000,
-    secondaryPricePyg: 195000,
-    primaryPriceUsd: 41.33,
-    secondaryPriceUsd: 26.00,
-    priceUsd: 41.33,
-    coverUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80',
-    description: 'El aclamado juego del año con su masiva expansión de la Tierra de las Sombras.',
-    isAvailable: true
-  },
-  {
-    id: 'game_rdr2',
-    title: 'Red Dead Redemption 2',
-    category: 'digital_game',
-    platform: 'PS5',
-    genre: 'Mundo Abierto / Western',
-    primaryPricePyg: 175000,
-    secondaryPricePyg: 110000,
-    primaryPriceUsd: 23.33,
-    secondaryPriceUsd: 14.67,
-    priceUsd: 23.33,
-    coverUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
-    description: 'La épica historia de Arthur Morgan y la banda de Van der Linde en el salvaje oeste.',
-    isAvailable: true
-  },
-  {
-    id: 'game_hogwarts',
-    title: 'Hogwarts Legacy',
-    category: 'digital_game',
-    platform: 'PS5',
-    genre: 'Aventura Mágica',
-    primaryPricePyg: 260000,
-    secondaryPricePyg: 165000,
-    primaryPriceUsd: 34.67,
-    secondaryPriceUsd: 22.00,
-    priceUsd: 34.67,
-    coverUrl: 'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=600&q=80',
-    description: 'Vive una aventura mágica en el Colegio Hogwarts en el siglo XIX.',
-    isAvailable: true
-  },
-  {
-    id: 'game_re4_remake',
-    title: 'Resident Evil 4 Remake',
-    category: 'digital_game',
-    platform: 'PS5',
-    genre: 'Survival Horror',
-    primaryPricePyg: 270000,
-    secondaryPricePyg: 170000,
-    primaryPriceUsd: 36.00,
-    secondaryPriceUsd: 22.67,
-    priceUsd: 36.00,
-    coverUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80',
-    description: 'Leon S. Kennedy viaja a una recóndita aldea europea para rescatar a la hija del presidente.',
-    isAvailable: true
-  },
-
-  // RETAIL GIFT CARDS
-  {
-    id: 'gc_psn_10',
-    title: 'PlayStation Store $10 USD',
-    category: 'gift_card',
-    platform: 'PlayStation',
-    brand: 'PlayStation',
-    brandTheme: 'psn',
-    pricePyg: 85000,
-    priceUsd: 10.00,
-    coverUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80',
-    description: 'Tarjeta oficial de PlayStation Network para canjear en la PS Store.'
-  },
-  {
-    id: 'gc_steam_10',
-    title: 'Steam Wallet $10 USD',
-    category: 'gift_card',
-    platform: 'Steam',
-    brand: 'Steam',
-    brandTheme: 'steam',
-    pricePyg: 85000,
-    priceUsd: 10.00,
-    coverUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80',
-    description: 'Saldo para recargar tu billetera Steam y comprar juegos o ítems en PC.'
-  },
-  {
-    id: 'gc_xbox_10',
-    title: 'Xbox Gift Card $10 USD',
-    category: 'gift_card',
-    platform: 'Xbox',
-    brand: 'Xbox',
-    brandTheme: 'xbox',
-    pricePyg: 85000,
-    priceUsd: 10.00,
-    coverUrl: 'https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?auto=format&fit=crop&w=400&q=80',
-    description: 'Saldo oficial para comprar juegos, DLCs y suscripciones en Xbox y Windows.'
-  },
-  {
-    id: 'gc_netflix_15',
-    title: 'Netflix Gift Card $15 USD',
-    category: 'gift_card',
-    platform: 'Netflix',
-    brand: 'Netflix',
-    brandTheme: 'netflix',
-    pricePyg: 125000,
-    priceUsd: 15.00,
-    coverUrl: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80',
-    description: 'Saldo oficial de regalo para canjear en cuentas de Netflix.'
-  },
-  {
-    id: 'gc_spotify_1m',
-    title: 'Spotify Premium 1 Mes',
-    category: 'gift_card',
-    platform: 'Spotify',
-    brand: 'Spotify',
-    brandTheme: 'spotify',
-    pricePyg: 45000,
-    priceUsd: 5.99,
-    coverUrl: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=400&q=80',
-    description: 'Música sin anuncios y descargas offline en Spotify.'
-  },
-  {
-    id: 'gc_googleplay_10',
-    title: 'Google Play $10 USD',
-    category: 'gift_card',
-    platform: 'Google Play',
-    brand: 'Google Play',
-    brandTheme: 'googleplay',
-    pricePyg: 85000,
-    priceUsd: 10.00,
-    coverUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=400&q=80',
-    description: 'Saldo para juegos, apps, películas y diamantes en Android.'
-  },
-  {
-    id: 'gc_apple_10',
-    title: 'Apple Store & iTunes $10',
-    category: 'gift_card',
-    platform: 'Apple',
-    brand: 'Apple',
-    brandTheme: 'apple',
-    pricePyg: 85000,
-    priceUsd: 10.00,
-    coverUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80',
-    description: 'Saldo para App Store, iCloud, Apple Music y compras en iOS.'
-  },
-  {
-    id: 'gc_roblox_10',
-    title: 'Roblox $10 (800 Robux)',
-    category: 'gift_card',
-    platform: 'Roblox',
-    brand: 'Roblox',
-    brandTheme: 'roblox',
-    pricePyg: 85000,
-    priceUsd: 10.00,
-    coverUrl: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=400&q=80',
-    description: 'Canjea 800 Robux para personalizar tu avatar y comprar pases en Roblox.'
-  }
-];
+})();
 
 // SMM Social Media Platforms & Services Config (2-Column Architecture)
 const smmPlatformsData = {
@@ -880,12 +466,13 @@ const state = {
   currentUser: JSON.parse(localStorage.getItem('gb_user') || 'null'),
   wallet: { balanceUsd: 25.0, pendingEscrowUsd: 0.0 },
   exchangeRates: { PYG: 7500, ARS: 1250, BRL: 5.60, USD: 1.0, USDT: 1.0 },
-  heroBanners: [],
+  heroBanners: cachedCatalog.heroBanners || [],
   activeSlideIndex: 0,
   heroInterval: null,
   subscriptions: [],
-  storeProducts: [],
-  giftcardBrands: [],
+  storeProducts: cachedCatalog.storeProducts || [],
+  streamingPlatforms: cachedCatalog.streamingPlatforms || [],
+  giftcardBrands: cachedCatalog.giftcardBrands || [],
   smmPlatforms: smmPlatformsData,
   myVault: [],
   cart: [],
@@ -1251,25 +838,23 @@ function stopHeroAutoplay() {
   }
 }
 
-// --- 2. RENDER STREAMING SERVICES (CLEAN SQUARE THUMBNAILS - MANUAL SCROLL ONLY, NO AUTO-SCROLL) ---
+// --- 2. RENDER STREAMING SERVICES (CLEAN SQUARE THUMBNAILS WITH TITLE BELOW) ---
 function renderStreamingServices() {
   const container = document.getElementById('streaming-services-grid');
   if (!container) return;
 
-  // Render platforms from state, fallback to default platforms if empty
+  // Render platforms from state
   const platformList = (Array.isArray(state.streamingPlatforms) && state.streamingPlatforms.length > 0)
     ? state.streamingPlatforms
     : [];
 
   if (platformList.length === 0) {
-    container.innerHTML = `
-      <div class="stream-skeleton-card"></div>
-      <div class="stream-skeleton-card"></div>
-      <div class="stream-skeleton-card"></div>
-      <div class="stream-skeleton-card"></div>
-      <div class="stream-skeleton-card"></div>
-      <div class="stream-skeleton-card"></div>
-    `;
+    container.innerHTML = Array(8).fill(0).map(() => `
+      <div class="stream-skeleton-card">
+        <div class="stream-skeleton-box"></div>
+        <div class="stream-skeleton-text"></div>
+      </div>
+    `).join('');
     return;
   }
 
@@ -1289,21 +874,23 @@ function renderStreamingServices() {
     const hasActiveSlots = matching.some(s => (s.availableSlots || 0) > 0);
     const inStock = (p.hasStock !== undefined) ? p.hasStock : (hasActiveSlots || matching.length > 0);
     const serviceName = p.name || (platformKey.charAt(0).toUpperCase() + platformKey.slice(1));
-    const thumbImg = p.iconUrl || p.icon || p.thumbnailUrl || p.coverUrl || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';
+    const thumbImg = p.iconUrl || p.icon || p.thumbnailUrl || p.coverUrl || '/assets/branding/icon.png';
 
     return `
-      <div class="stream-thumb-card ${inStock ? '' : 'out-of-stock'}" 
+      <div class="stream-thumb-wrapper ${inStock ? '' : 'out-of-stock'}" 
            onclick="window.location.href='/service.html?platform=${platformKey}'" 
            title="${serviceName} - ${inStock ? 'Disponible' : 'Sin Stock'}">
-        <img src="${thumbImg}" alt="${serviceName}" class="stream-thumb-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';">
-        <span class="stream-thumb-name-badge">${serviceName}</span>
-        ${!inStock ? '<span class="stream-thumb-badge-stock">SIN STOCK</span>' : ''}
+        <div class="stream-thumb-card">
+          <img src="${thumbImg}" alt="${serviceName}" class="stream-thumb-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='/assets/branding/icon.png';">
+          ${!inStock ? '<span class="stream-thumb-badge-stock">SIN STOCK</span>' : ''}
+        </div>
+        <span class="stream-thumb-title-below">${serviceName}</span>
       </div>
     `;
   }).join('');
 }
 
-// --- 3. RENDER DIGITAL GAMES & STADIUM WAVE DROP/REBOUND ENGINE ---
+// --- 3. RENDER DIGITAL GAMES (CLEAN SKELETONS ON LOAD, 0 DUMMY GAMES) ---
 let gamesWaveTimer = null;
 let gamesPoolIndex = 0;
 
@@ -1313,20 +900,7 @@ function renderDigitalGames() {
 
   const rawProducts = (Array.isArray(state.storeProducts) && state.storeProducts.length > 0)
     ? state.storeProducts
-    : defaultStoreProducts;
-
-  // Anti-Flicker: Skeletons while loading
-  if (!rawProducts || rawProducts.length === 0) {
-    container.innerHTML = `
-      <div class="game-skeleton-card"></div>
-      <div class="game-skeleton-card"></div>
-      <div class="game-skeleton-card"></div>
-      <div class="game-skeleton-card"></div>
-      <div class="game-skeleton-card"></div>
-      <div class="game-skeleton-card"></div>
-    `;
-    return;
-  }
+    : [];
 
   const games = rawProducts.filter(p => {
     if (!p) return false;
@@ -1334,8 +908,15 @@ function renderDigitalGames() {
     return true;
   });
 
+  // Anti-Flicker: Skeletons while loading
   if (games.length === 0) {
-    container.innerHTML = `<p style="color: var(--text-tertiary); padding: 1.5rem; text-align: center; width: 100%;">No hay videojuegos disponibles en este momento.</p>`;
+    container.innerHTML = Array(6).fill(0).map(() => `
+      <div class="game-skeleton-card">
+        <div class="game-skeleton-cover"></div>
+        <div class="game-skeleton-title"></div>
+        <div class="game-skeleton-price"></div>
+      </div>
+    `).join('');
     return;
   }
 
@@ -1350,7 +931,7 @@ function renderDigitalGames() {
     return `
       <div class="game-card ${isAvail ? '' : 'disabled'}" data-slot-index="${slotIdx}" onclick="openBuyGameModal('${g.id}')">
         <div class="game-cover-container">
-          <img src="${g.coverUrl || g.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'}" alt="${g.title || 'Videojuego'}" class="game-cover-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80';">
+          <img src="${g.coverUrl || g.coverImage || '/assets/branding/icon.png'}" alt="${g.title || 'Videojuego'}" class="game-cover-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='/assets/branding/icon.png';">
         </div>
         <div class="game-card-body">
           <h3 class="game-title" title="${g.title || ''}">${g.title || 'Juego Digital'}</h3>
@@ -1371,7 +952,7 @@ function renderDigitalGames() {
     `;
   }).join('');
 
-  // Start the wave animation cycle every 6s
+  // Start the wave animation cycle only if multiple games exist
   initGamesWaveEngine(games);
 }
 
@@ -1387,7 +968,7 @@ function initGamesWaveEngine(allGamesList) {
 
   const allGames = (Array.isArray(allGamesList) && allGamesList.length > 0)
     ? allGamesList
-    : defaultStoreProducts.filter(p => p.category === 'digital_game');
+    : (state.storeProducts ? state.storeProducts.filter(p => p.category !== 'gift_card') : []);
 
   if (allGames.length <= 4) return;
 
@@ -1438,7 +1019,7 @@ function initGamesWaveEngine(allGamesList) {
           cardEl.setAttribute('onclick', `openBuyGameModal('${nextGame.id}')`);
           cardEl.innerHTML = `
             <div class="game-cover-container">
-              <img src="${nextGame.coverUrl || nextGame.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'}" alt="${nextGame.title || 'Videojuego'}" class="game-cover-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80';">
+              <img src="${nextGame.coverUrl || nextGame.coverImage || '/assets/branding/icon.png'}" alt="${nextGame.title || 'Videojuego'}" class="game-cover-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='/assets/branding/icon.png';">
             </div>
             <div class="game-card-body">
               <h3 class="game-title" title="${nextGame.title || ''}">${nextGame.title || 'Juego Digital'}</h3>
@@ -1482,7 +1063,7 @@ function initGamesWaveEngine(allGamesList) {
 }
 
 
-// --- 4. RENDER REAL PNG UPLOADED GIFT CARDS (PURE TRANSPARENT PNG CARDS - AUDIO 3) ---
+// --- 4. RENDER REAL PNG UPLOADED GIFT CARDS (CLEAN SKELETONS ON LOAD, 0 DUMMY CARDS) ---
 function renderRetailGiftCards() {
   const container = document.getElementById('retail-giftcards-grid');
   if (!container) return;
@@ -1494,25 +1075,20 @@ function renderRetailGiftCards() {
 
   // Anti-Flicker: Skeletons while loading
   if (brandsList.length === 0) {
-    container.innerHTML = `
+    container.innerHTML = Array(6).fill(0).map(() => `
       <div class="giftcard-skeleton-card"></div>
-      <div class="giftcard-skeleton-card"></div>
-      <div class="giftcard-skeleton-card"></div>
-      <div class="giftcard-skeleton-card"></div>
-      <div class="giftcard-skeleton-card"></div>
-      <div class="giftcard-skeleton-card"></div>
-    `;
+    `).join('');
     return;
   }
 
   container.innerHTML = brandsList.map(gc => {
-    const cardImg = gc.logoImage || gc.logoUrl || gc.coverImage || gc.coverUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80';
+    const cardImg = gc.logoImage || gc.logoUrl || gc.coverImage || gc.coverUrl || '/assets/branding/icon.png';
     const cardTitle = gc.name || gc.title || 'Gift Card';
     const cardId = gc.id || gc.brandId || `gc_${Math.random()}`;
 
     return `
       <div class="giftcard-clean-png-card" onclick="openGiftCardVariationsModal('${cardId}')" title="${cardTitle}">
-        <img src="${cardImg}" alt="${cardTitle}" class="giftcard-clean-png-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80';">
+        <img src="${cardImg}" alt="${cardTitle}" class="giftcard-clean-png-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='/assets/branding/icon.png';">
       </div>
     `;
   }).join('');
@@ -1697,6 +1273,16 @@ async function fetchStoreData() {
       state.smmServices = smmRes.services;
     }
 
+    // Cache live catalog for 0ms next instant load without example flickers
+    try {
+      localStorage.setItem('gb_catalog_cache', JSON.stringify({
+        storeProducts: state.storeProducts,
+        streamingPlatforms: state.streamingPlatforms,
+        giftcardBrands: state.giftcardBrands,
+        heroBanners: state.heroBanners
+      }));
+    } catch (e) {}
+
     // Re-render only to update dynamic prices or active seller stock
     initHeroAccordion();
     renderStreamingServices();
@@ -1820,7 +1406,7 @@ window.openBuyGameModal = function(id) {
   const modal = document.getElementById('modal-product-buy');
   if (!modal) return;
 
-  document.getElementById('modal-buy-cover').src = game.coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80';
+  document.getElementById('modal-buy-cover').src = game.coverUrl || '/assets/branding/icon.png';
   document.getElementById('modal-buy-platform').textContent = game.platform || 'PS5';
   document.getElementById('modal-buy-title').textContent = game.title;
   document.getElementById('modal-buy-genre').textContent = game.genre || 'Videojuego Digital';
@@ -1828,13 +1414,15 @@ window.openBuyGameModal = function(id) {
 
   // Screenshots
   const screenshotsContainer = document.getElementById('modal-buy-screenshots-container');
-  const shots = (game.screenshots && game.screenshots.length > 0) ? game.screenshots : [
-    'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
-  ];
-  screenshotsContainer.innerHTML = shots.map(url => `
-    <img src="${url}" style="height: 85px; width: 140px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1);">
-  `).join('');
+  const shots = (game.screenshots && game.screenshots.length > 0) ? game.screenshots : (game.coverUrl ? [game.coverUrl] : []);
+  if (shots.length > 0) {
+    screenshotsContainer.style.display = 'flex';
+    screenshotsContainer.innerHTML = shots.map(url => `
+      <img src="${url}" style="height: 85px; width: 140px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1);">
+    `).join('');
+  } else {
+    screenshotsContainer.style.display = 'none';
+  }
 
   // Options Grid (Only Primary & Secondary Accounts as per platform business model)
   const rate = state.exchangeRatePyg || 7500;
@@ -1904,7 +1492,7 @@ window.openGiftCardVariationsModal = function(id) {
     return;
   }
 
-  const cardImg = brand.logoImage || brand.logoUrl || brand.coverImage || brand.coverUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80';
+  const cardImg = brand.logoImage || brand.logoUrl || brand.coverImage || brand.coverUrl || '/assets/branding/icon.png';
   const brandName = brand.name || brand.title || 'Tarjeta de Regalo';
   const brandDesc = brand.description || 'Saldo oficial y membresías con entrega digital inmediata a tu cuenta.';
 

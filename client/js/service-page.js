@@ -116,7 +116,7 @@ function renderSidebarReleases() {
   container.innerHTML = releases.map(rel => `
     <div class="hub-sidebar-release-item">
       <div class="hub-sidebar-rel-thumb">
-        <img src="${rel.posterUrl || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=150&q=80'}" alt="${rel.title}" loading="lazy">
+        <img src="${rel.posterUrl || '/assets/branding/icon.png'}" alt="${rel.title}" loading="lazy">
       </div>
       <div class="hub-sidebar-rel-info">
         <span class="hub-sidebar-rel-badge">${rel.type || 'Oficial'}</span>
