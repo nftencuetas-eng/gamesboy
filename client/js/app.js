@@ -733,97 +733,94 @@ function stopHeroAutoplay() {
   }
 }
 
-// --- 2. RENDER STREAMING SERVICES (WIDESCREEN HORIZONTAL CARDS & SVG SILHOUETTES) ---
+// --- 2. RENDER STREAMING SERVICES (CLEAN SQUARE THUMBNAILS - NO TEXT, NO PRICES, AUTOMATIC STOCK BADGE) ---
+let streamingAutoScrollTimer = null;
+
 function renderStreamingServices() {
   const container = document.getElementById('streaming-services-grid');
   if (!container) return;
 
-  const services = state.subscriptions.filter(s => s.category === 'streaming');
-  if (services.length === 0) {
-    container.innerHTML = `<p style="color: var(--text-tertiary); padding: 1rem;">Cargando servicios de streaming...</p>`;
-    return;
-  }
+  const defaultPlatforms = [
+    { id: 'netflix', name: 'Netflix', logoUrl: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80', brandColor: '#E50914', hasStock: true },
+    { id: 'spotify', name: 'Spotify', logoUrl: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=300&q=80', brandColor: '#1DB954', hasStock: true },
+    { id: 'disney', name: 'Disney+', logoUrl: 'https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=300&q=80', brandColor: '#113CCF', hasStock: true },
+    { id: 'max', name: 'Max (HBO)', logoUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=300&q=80', brandColor: '#002BE7', hasStock: true },
+    { id: 'youtube', name: 'YouTube', logoUrl: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=300&q=80', brandColor: '#FF0000', hasStock: true },
+    { id: 'chatgpt', name: 'ChatGPT', logoUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=300&q=80', brandColor: '#10A37F', hasStock: true },
+    { id: 'crunchyroll', name: 'Crunchyroll', logoUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=300&q=80', brandColor: '#F47521', hasStock: true },
+    { id: 'paramount', name: 'Paramount+', logoUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=300&q=80', brandColor: '#0064FF', hasStock: true },
+    { id: 'apple', name: 'Apple TV+', logoUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=300&q=80', brandColor: '#A2AAAD', hasStock: true },
+    { id: 'prime', name: 'Prime Video', logoUrl: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=300&q=80', brandColor: '#00A8E1', hasStock: true }
+  ];
 
-  const brandImages = {
-    'Netflix': 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80',
-    'Spotify': 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=400&q=80',
-    'Disney': 'https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=400&q=80',
-    'Max': 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80',
-    'YouTube': 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=400&q=80',
-    'Crunchyroll': 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80',
-    'Apple': 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80',
-    'Paramount': 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80',
-    'ChatGPT': 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=400&q=80'
-  };
+  // Merge live platform hubs if available from API
+  let platformList = (state.streamingPlatforms && state.streamingPlatforms.length > 0)
+    ? state.streamingPlatforms
+    : defaultPlatforms;
 
-  const brandColors = {
-    'Netflix': '#E50914',
-    'Spotify': '#1DB954',
-    'Disney': '#113CCF',
-    'Max': '#002BE7',
-    'YouTube': '#FF0000',
-    'Crunchyroll': '#F47521',
-    'Apple': '#A2AAAD',
-    'Paramount': '#0064FF',
-    'ChatGPT': '#10A37F'
-  };
+  // Cross-reference stock with live subscriptions
+  const activeSubs = Array.isArray(state.subscriptions) ? state.subscriptions : [];
 
-  container.innerHTML = services.map(s => {
-    const isAvail = s.availableSlots > 0;
+  container.innerHTML = platformList.map(p => {
+    const platformKey = (p.id || p.platformKey || p.name || 'netflix').toLowerCase();
     
-    let matchedBrand = 'Netflix';
-    for (const key of Object.keys(brandImages)) {
-      if (s.serviceName.toLowerCase().includes(key.toLowerCase())) {
-        matchedBrand = key;
-        break;
-      }
-    }
-    const coverImg = brandImages[matchedBrand] || brandImages['Netflix'];
-    const accentColor = brandColors[matchedBrand] || '#00c2ff';
+    // Check if there are active subscriptions with stock for this platform
+    const matching = activeSubs.filter(s => {
+      if (s.status !== 'active') return false;
+      const sName = (s.serviceName || '').toLowerCase();
+      return sName.includes(platformKey) || platformKey.includes(sName);
+    });
 
-    // SVG silhouette human icons for profiles
-    const occupiedSlots = s.totalSlots - s.availableSlots;
-    let slotsSvg = '';
-    for (let i = 0; i < s.totalSlots; i++) {
-      const isOccupied = i < occupiedSlots;
-      slotsSvg += `
-        <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-        </svg>
-      `;
-    }
+    const hasActiveSlots = matching.some(s => (s.availableSlots || 0) > 0);
+    const inStock = (p.hasStock !== undefined) ? p.hasStock : (hasActiveSlots || matching.length > 0 || defaultPlatforms.some(d => d.id === platformKey));
 
-    const platformSlug = matchedBrand.toLowerCase();
+    const thumbImg = p.thumbnailUrl || p.logoUrl || p.coverImage || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';
 
     return `
-      <div class="stream-card-wide" onclick="window.location.href='/service.html?platform=${platformSlug}'" style="cursor: pointer;">
-        <div class="stream-card-visual" style="background-image: url('${coverImg}');">
-          <div class="stream-visual-overlay"></div>
-          <span class="stream-brand-badge" style="background: ${accentColor};">${matchedBrand}</span>
-        </div>
-        <div class="stream-card-content">
-          <div class="stream-card-header">
-            <h3 class="stream-card-title">${s.serviceName}</h3>
-            <span class="stream-card-plan">${s.planName}</span>
-          </div>
-          
-          <div class="stream-card-pricing">
-            <span class="stream-price-tag-label">Desde</span>
-            <span class="stream-price-tag-val">${formatPrice(s.pricePerSlotUsd)}</span>
-          </div>
-
-          <div class="stream-card-slots">
-            <div class="stream-slots-icons">${slotsSvg}</div>
-            <span class="stream-slots-text">${s.availableSlots} de ${s.totalSlots} libres</span>
-          </div>
-
-          <button class="btn-stream-cta-modern ${isAvail ? '' : 'disabled'}" onclick="event.stopPropagation(); window.location.href='/service.html?platform=${platformSlug}'">
-            ${isAvail ? 'Ver más ➔' : 'Agotado'}
-          </button>
-        </div>
+      <div class="stream-thumb-card ${inStock ? '' : 'out-of-stock'}" 
+           onclick="window.location.href='/service.html?platform=${platformKey}'" 
+           title="${p.name || platformKey} - ${inStock ? 'Disponible' : 'Sin Stock'}">
+        <img src="${thumbImg}" alt="${p.name || platformKey}" class="stream-thumb-img" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';">
+        ${!inStock ? '<span class="stream-thumb-badge-stock">SIN STOCK</span>' : ''}
       </div>
     `;
   }).join('');
+
+  // Initialize smooth auto-scrolling engine for memberships
+  initStreamingAutoScrollEngine();
+}
+
+// --- AUTO-SLIDING ENGINE: SLOWLY SLIDES 1 COLUMN EVERY 3.5 SECONDS ---
+function initStreamingAutoScrollEngine() {
+  const container = document.getElementById('streaming-services-grid');
+  if (!container) return;
+
+  if (streamingAutoScrollTimer) {
+    clearInterval(streamingAutoScrollTimer);
+    streamingAutoScrollTimer = null;
+  }
+
+  streamingAutoScrollTimer = setInterval(() => {
+    if (container.dataset.isPaused === 'true') return;
+
+    const isMobile = window.innerWidth <= 768;
+    const colStep = isMobile ? (container.clientWidth / 3) + 3.33 : 128; // 1 column width + gap
+
+    const maxScroll = container.scrollWidth - container.clientWidth;
+    if (container.scrollLeft >= maxScroll - 12) {
+      container.scrollTo({ left: 0, behavior: 'smooth' });
+    } else {
+      container.scrollBy({ left: colStep, behavior: 'smooth' });
+    }
+  }, 3500);
+
+  // Interaction handlers to avoid interrupting user manual swipes
+  container.onmouseenter = () => { container.dataset.isPaused = 'true'; };
+  container.onmouseleave = () => { container.dataset.isPaused = 'false'; };
+  container.ontouchstart = () => { container.dataset.isPaused = 'true'; };
+  container.ontouchend = () => {
+    setTimeout(() => { container.dataset.isPaused = 'false'; }, 2500);
+  };
 }
 
 // --- 3. RENDER DIGITAL GAMES (CLEAN 3D BOX ART WITH STRAIGHT EDGES & SINGLE-LINE DUAL PRICING) ---
@@ -1010,15 +1007,20 @@ async function renderMyVault() {
 // --- 7. FETCH INITIAL DATA FROM API (LIVE DYNAMIC RECONCILIATION) ---
 async function fetchStoreData() {
   try {
-    const [subRes, storeRes, bannersRes, smmRes, giftcardsRes, servicesCfgRes, gamesRes] = await Promise.all([
+    const [subRes, storeRes, bannersRes, smmRes, giftcardsRes, servicesCfgRes, gamesRes, hubsRes] = await Promise.all([
       fetch('/api/subscriptions').then(r => r.json()).catch(() => null),
       fetch('/api/store/products').then(r => r.json()).catch(() => null),
       fetch('/api/banners').then(r => r.json()).catch(() => null),
       fetch('/api/smm/services').then(r => r.json()).catch(() => null),
       fetch('/api/admin/giftcards/brands').then(r => r.json()).catch(() => null),
       fetch('/api/subscriptions/services-config').then(r => r.json()).catch(() => null),
-      fetch('/api/admin/games').then(r => r.json()).catch(() => null)
+      fetch('/api/admin/games').then(r => r.json()).catch(() => null),
+      fetch('/api/streaming-hubs').then(r => r.json()).catch(() => null)
     ]);
+
+    if (hubsRes && hubsRes.platforms && Array.isArray(hubsRes.platforms)) {
+      state.streamingPlatforms = hubsRes.platforms;
+    }
 
     if (Array.isArray(subRes) && subRes.length > 0) {
       state.subscriptions = subRes;

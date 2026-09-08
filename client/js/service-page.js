@@ -151,9 +151,9 @@ function renderGroupsList() {
     const host = g.host || { id: 'usr_admin', name: 'Anfitrión Verificado', avatar: '/assets/branding/icon.png', rating: '4.9 ★', badge: '⭐ Anfitrión Verificado' };
     const hostId = host.id || g.sellerId || 'usr_seller1';
 
-    // INVERTED SLOTS SILHOUETTES:
-    // ENCENDIDO / BRILLANTE / GLOW = OCUPADO
-    // APAGADO / TENUE / GRIS = DISPONIBLE
+    // CORRECTED SLOTS SILHOUETTES:
+    // LIBRE / DISPONIBLE = PRENDIDO / VERDE BRILLANTE / GLOW
+    // OCUPADO = APAGADO / TENUE / GRIS
     let slotsSvg = '';
     for (let i = 0; i < g.totalSlots; i++) {
       const isOccupied = i < occupiedSlots;
@@ -167,14 +167,14 @@ function renderGroupsList() {
     }
 
     return `
-      <div class="hub-group-card ${isAvail ? '' : 'disabled'}">
+      <div class="hub-group-card ${isAvail ? '' : 'disabled'}" onclick="openGroupDetailModal('${g.id}')" style="cursor: pointer;">
         <!-- Host Profile Info (Linked to Public Seller Profile) -->
         <div class="hub-group-host-column">
           <div class="hub-group-host-avatar-wrap">
             <img src="${host.avatar || '/assets/branding/icon.png'}" alt="${host.name}" class="hub-group-host-avatar">
           </div>
           <div class="hub-group-host-details">
-            <a href="/seller.html?id=${hostId}" class="hub-group-host-name-link" title="Ver perfil público del vendedor y reseñas">
+            <a href="/seller.html?id=${hostId}" class="hub-group-host-name-link" onclick="event.stopPropagation();" title="Ver perfil público del vendedor y reseñas">
               ${host.name} ➔
             </a>
             <span class="hub-group-host-badge">${host.badge || '⭐ Anfitrión Verificado'}</span>
@@ -193,7 +193,7 @@ function renderGroupsList() {
             <span>⚡ Entrega Inmediata</span>
           </div>
           
-          <!-- Inverted Slots Bar with Visual Guide -->
+          <!-- Slots Bar with Corrected Visual Guide -->
           <div class="hub-group-slots-bar">
             <div class="hub-group-slots-icons">${slotsSvg}</div>
             <span class="hub-group-slots-text">
@@ -203,9 +203,9 @@ function renderGroupsList() {
           </div>
 
           <!-- Rules & Info Button -->
-          <button type="button" class="btn-group-rules-link" onclick="openRulesModal('${g.id}')">
+          <button type="button" class="btn-group-rules-link" onclick="event.stopPropagation(); openGroupDetailModal('${g.id}')">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            <span>Ver Reglas del Grupo & Normas</span>
+            <span>Ver Detalles, Perfiles & Reglas ➔</span>
           </button>
         </div>
 
@@ -216,8 +216,8 @@ function renderGroupsList() {
             <span class="hub-group-price-gs">${formatPriceGs(g.pricePerSlotUsd)}</span>
             <span class="hub-group-price-usd">$${parseFloat(g.pricePerSlotUsd).toFixed(2)} USDT</span>
           </div>
-          <button class="btn-hub-join-group ${isAvail ? '' : 'disabled'}" onclick="openEscrowModal('${g.id}')">
-            ${isAvail ? 'Unirse al Grupo ➔' : 'Agotado'}
+          <button class="btn-hub-join-group ${isAvail ? '' : 'disabled'}" onclick="event.stopPropagation(); openGroupDetailModal('${g.id}')">
+            ${isAvail ? 'Ver Grupo & Perfiles ➔' : 'Agotado'}
           </button>
         </div>
       </div>
@@ -225,21 +225,87 @@ function renderGroupsList() {
   }).join('');
 }
 
-// --- 5. GROUP RULES MODAL CONTROLLER ---
-window.openRulesModal = function(groupId) {
+// --- 5. 2-COLUMN GROUP DETAIL POP-UP MODAL (1/4 RULES + 3/4 PROFILES & ACTIVATION) ---
+window.openGroupDetailModal = function(groupId) {
   const group = state.groups.find(g => g.id === groupId);
   if (!group) return;
 
-  const modal = document.getElementById('modal-group-rules');
-  const title = document.getElementById('rules-group-title');
-  const subtitle = document.getElementById('rules-group-subtitle');
-  const instructions = document.getElementById('rules-host-instructions');
+  state.selectedGroup = group;
 
-  if (title) title.textContent = `Reglas del Grupo: ${group.serviceName}`;
-  if (subtitle) subtitle.textContent = `Plan: ${group.planName} • Anfitrión: ${group.host?.name || 'Verificado'}`;
-  if (instructions) instructions.textContent = group.instructions || 'Perfil privado exclusivo con PIN personal. Uso estricto de 1 pantalla a la vez. No compartir credenciales con terceros.';
+  const modal = document.getElementById('modal-group-detail');
+  const planBadge = document.getElementById('modal-detail-plan-badge');
+  const title = document.getElementById('modal-detail-title');
+  const subtitle = document.getElementById('modal-detail-subtitle');
+  const priceGs = document.getElementById('modal-detail-price-gs');
+  const priceUsd = document.getElementById('modal-detail-price-usd');
+  const hostAvatar = document.getElementById('modal-detail-host-avatar');
+  const hostName = document.getElementById('modal-detail-host-name');
+  const hostRating = document.getElementById('modal-detail-host-rating');
+  const hostInstructions = document.getElementById('modal-detail-host-instructions');
+  const slotsSummary = document.getElementById('modal-detail-slots-summary');
+  const profilesGrid = document.getElementById('modal-detail-profiles-grid');
+  const buyBtnText = document.getElementById('btn-group-detail-buy-text');
+
+  if (planBadge) planBadge.textContent = group.planName || 'Plan Ultra HD 4K';
+  if (title) title.textContent = group.serviceName || 'Suscripción de Streaming';
+  if (subtitle) subtitle.textContent = `Membresía compartida • PIN exclusivo asignado`;
+  if (priceGs) priceGs.textContent = formatPriceGs(group.pricePerSlotUsd);
+  if (priceUsd) priceUsd.textContent = `$${parseFloat(group.pricePerSlotUsd).toFixed(2)} USDT / mes`;
+
+  const host = group.host || { name: 'Anfitrión Verificado', avatar: '/assets/branding/icon.png', rating: '4.9 ★', badge: '⭐ Anfitrión Verificado' };
+  if (hostAvatar) hostAvatar.src = host.avatar || '/assets/branding/icon.png';
+  if (hostName) hostName.textContent = host.name || 'Anfitrión Verificado';
+  if (hostRating) hostRating.textContent = `${host.rating || '4.9 ★'} • ${host.badge || '⭐ Anfitrión Verificado'}`;
+  if (hostInstructions) hostInstructions.textContent = group.instructions || 'Perfil privado exclusivo con PIN personal. Entrega inmediata en Bóveda tras unirse.';
+
+  const occupiedSlots = group.totalSlots - group.availableSlots;
+  if (slotsSummary) slotsSummary.textContent = `${group.availableSlots} de ${group.totalSlots} Libres`;
+
+  // Render per-profile matrix (LIBRE = PRENDIDO / OCUPADO = APAGADO)
+  if (profilesGrid) {
+    let tilesHtml = '';
+    for (let i = 0; i < group.totalSlots; i++) {
+      const isOccupied = i < occupiedSlots;
+      const isFirstFree = !isOccupied && (i === occupiedSlots);
+
+      tilesHtml += `
+        <div class="profile-slot-tile ${isOccupied ? 'occupied' : 'available'} ${isFirstFree ? 'selected' : ''}" 
+             title="${isOccupied ? 'Perfil Ocupado por otro miembro' : 'Perfil Disponible para ti'}">
+          <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+          <span class="profile-tile-num">Perfil ${i + 1}</span>
+          <span class="profile-tile-status ${isOccupied ? 'occ' : 'lib'}">
+            ${isOccupied ? 'Ocupado' : 'Disponible'}
+          </span>
+        </div>
+      `;
+    }
+    profilesGrid.innerHTML = tilesHtml;
+  }
+
+  if (buyBtnText) {
+    buyBtnText.textContent = `Unirme a este Grupo • ${formatPriceGs(group.pricePerSlotUsd)} (Garantía 30 Días) ➔`;
+  }
 
   if (modal) modal.style.display = 'grid';
+};
+
+window.closeGroupDetailModal = function() {
+  const modal = document.getElementById('modal-group-detail');
+  if (modal) modal.style.display = 'none';
+};
+
+// --- 6. CONFIRM JOIN FROM 2-COLUMN MODAL WITH ESCROW GUARANTEE ---
+window.confirmGroupDetailJoin = function() {
+  if (!state.selectedGroup) return;
+  closeGroupDetailModal();
+  openEscrowModal(state.selectedGroup.id);
+};
+
+// --- GROUP RULES MODAL CONTROLLER ---
+window.openRulesModal = function(groupId) {
+  openGroupDetailModal(groupId);
 };
 
 window.closeRulesModal = function() {
@@ -247,7 +313,7 @@ window.closeRulesModal = function() {
   if (modal) modal.style.display = 'none';
 };
 
-// --- 6. REFUND GUARANTEE MODAL CONTROLLER ---
+// --- REFUND GUARANTEE MODAL CONTROLLER ---
 window.openEscrowModal = function(groupId) {
   const group = state.groups.find(g => g.id === groupId);
   if (!group) return;

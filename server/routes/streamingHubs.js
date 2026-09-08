@@ -300,6 +300,66 @@ const defaultHubs = {
         synopsis: 'El desenlace por el control del rancho más grande de Norteamérica.'
       }
     ]
+  },
+  'apple': {
+    id: 'apple',
+    name: 'Apple TV+ 4K HDR',
+    tagline: 'Apple Originals galardonadas con calidad de imagen y sonido de referencia',
+    category: 'streaming',
+    brandColor: '#A2AAAD',
+    logoUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=300&q=80',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=300&q=80',
+    bannerHorizontal: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1600&q=80',
+    bannerVertical: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
+    badgeText: 'APPLE ORIGINALS • 4K DOLBY VISION',
+    description: 'Disfruta de Ted Lasso, Severance, The Morning Show y grandes producciones exclusivas de Apple.',
+    metrics: {
+      activeAccounts: 16,
+      activeUsersMonth: 64,
+      avgSavingsPercent: 75,
+      rating: '4.92 / 5.0'
+    },
+    releases: [
+      {
+        id: 'rel_apple_severance_2',
+        title: 'Severance (Temporada 2)',
+        type: 'Apple Original • IMDb 8.7',
+        releaseDate: 'Disponible en 4K',
+        genre: 'Ciencia Ficción / Misterio',
+        posterUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'Mark Scout y sus compañeros descubren las consecuencias de romper la separación.'
+      }
+    ]
+  },
+  'prime': {
+    id: 'prime',
+    name: 'Amazon Prime Video 4K',
+    tagline: 'Series exclusivas de Amazon, The Boys, Rings of Power y películas de estreno',
+    category: 'streaming',
+    brandColor: '#00A8E1',
+    logoUrl: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=300&q=80',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=300&q=80',
+    bannerHorizontal: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?auto=format&fit=crop&w=1600&q=80',
+    bannerVertical: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
+    badgeText: 'PRIME 4K HDR • X-RAY',
+    description: 'Accede a producciones galardonadas y las franquicias más importantes en Prime Video.',
+    metrics: {
+      activeAccounts: 24,
+      activeUsersMonth: 90,
+      avgSavingsPercent: 70,
+      rating: '4.87 / 5.0'
+    },
+    releases: [
+      {
+        id: 'rel_prime_the_boys',
+        title: 'The Boys (Temporada 5)',
+        type: 'Prime Original • IMDb 8.7',
+        releaseDate: 'Estreno: 2025',
+        genre: 'Acción / Superhéroes',
+        posterUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80',
+        synopsis: 'La temporada final de la guerra total entre Carnicero y Patriota.'
+      }
+    ]
   }
 };
 
@@ -414,18 +474,48 @@ router.get('/:platform', (req, res) => {
   });
 });
 
-// 2. GET ALL PLATFORMS FOR ADMIN PANEL
+// 2. GET ALL PLATFORMS FOR PUBLIC & ADMIN CAROUSEL
 router.get('/', (req, res) => {
+  const db = getDb();
+  const platforms = Object.keys(streamingHubsStorage).map(key => {
+    const hub = streamingHubsStorage[key];
+    // Check if there are active subscriptions with available slots for this platform
+    const matchingSubs = (db.subscriptions || []).filter(s => {
+      if (s.status !== 'active') return false;
+      const name = (s.serviceName || '').toLowerCase();
+      return name.includes(key) || key.includes(name);
+    });
+    const totalAvailSlots = matchingSubs.reduce((acc, curr) => acc + (curr.availableSlots || 0), 0);
+    // Explicit override or active subs existence
+    const hasStock = (hub.hasStock !== undefined) ? Boolean(hub.hasStock) : (totalAvailSlots > 0 || matchingSubs.length > 0 || (hub.metrics && hub.metrics.activeAccounts > 0));
+
+    return {
+      id: key,
+      name: hub.name,
+      tagline: hub.tagline,
+      brandColor: hub.brandColor || '#00c2ff',
+      logoUrl: hub.logoUrl || hub.thumbnailUrl,
+      thumbnailUrl: hub.thumbnailUrl || hub.logoUrl,
+      bannerHorizontal: hub.bannerHorizontal,
+      bannerVertical: hub.bannerVertical,
+      badgeText: hub.badgeText,
+      hasStock: Boolean(hasStock),
+      availableAccounts: matchingSubs.length || (hub.metrics?.activeAccounts || 0),
+      totalAvailSlots
+    };
+  });
+
   res.json({
     success: true,
-    hubs: streamingHubsStorage
+    hubs: streamingHubsStorage,
+    platforms
   });
 });
 
-// 3. UPDATE PLATFORM BANNERS, TEXTS & METRICS (ADMIN)
+// 3. UPDATE PLATFORM BANNERS, THUMBNAILS, TEXTS & METRICS (ADMIN)
 router.put('/:platform', (req, res) => {
   const platformKey = matchPlatformKey(req.params.platform);
-  const { name, tagline, bannerHorizontal, bannerVertical, badgeText, description, metrics, releases } = req.body;
+  const { name, tagline, logoUrl, thumbnailUrl, brandColor, hasStock, bannerHorizontal, bannerVertical, badgeText, description, metrics, releases } = req.body;
 
   if (!streamingHubsStorage[platformKey]) {
     streamingHubsStorage[platformKey] = { ...defaultHubs[platformKey] };
@@ -434,6 +524,10 @@ router.put('/:platform', (req, res) => {
   const current = streamingHubsStorage[platformKey];
   if (name) current.name = name;
   if (tagline) current.tagline = tagline;
+  if (logoUrl) current.logoUrl = logoUrl;
+  if (thumbnailUrl) current.thumbnailUrl = thumbnailUrl;
+  if (brandColor) current.brandColor = brandColor;
+  if (hasStock !== undefined) current.hasStock = Boolean(hasStock);
   if (bannerHorizontal) current.bannerHorizontal = bannerHorizontal;
   if (bannerVertical) current.bannerVertical = bannerVertical;
   if (badgeText) current.badgeText = badgeText;
@@ -441,9 +535,11 @@ router.put('/:platform', (req, res) => {
   if (metrics) current.metrics = { ...current.metrics, ...metrics };
   if (Array.isArray(releases)) current.releases = releases;
 
+  saveStorage('gb_streaming_hubs', streamingHubsStorage);
+
   res.json({
     success: true,
-    message: `Página dedicada de ${current.name} actualizada correctamente.`,
+    message: `Página dedicada y miniatura de ${current.name} actualizada correctamente.`,
     hub: current
   });
 });
