@@ -1254,13 +1254,14 @@ function renderStreamingServices() {
     const hasActiveSlots = matching.some(s => (s.availableSlots || 0) > 0);
     const inStock = (p.hasStock !== undefined) ? p.hasStock : (hasActiveSlots || matching.length > 0);
 
-    const thumbImg = p.iconUrl || p.thumbnailUrl || p.logoUrl || p.coverImage || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';
+    const serviceName = p.name || (platformKey.charAt(0).toUpperCase() + platformKey.slice(1));
 
     return `
       <div class="stream-thumb-card ${inStock ? '' : 'out-of-stock'}" 
            onclick="window.location.href='/service.html?platform=${platformKey}'" 
-           title="${p.name || platformKey} - ${inStock ? 'Disponible' : 'Sin Stock'}">
-        <img src="${thumbImg}" alt="${p.name || platformKey}" class="stream-thumb-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';">
+           title="${serviceName} - ${inStock ? 'Disponible' : 'Sin Stock'}">
+        <img src="${thumbImg}" alt="${serviceName}" class="stream-thumb-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';">
+        <span class="stream-thumb-name-badge">${serviceName}</span>
         ${!inStock ? '<span class="stream-thumb-badge-stock">SIN STOCK</span>' : ''}
       </div>
     `;
@@ -1492,7 +1493,7 @@ const platformSvgIcons = {
   'X (Twitter)': `<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`
 };
 
-// --- 5. RENDER SMM SERVICES (UNIFIED HORIZONTAL TOP HEADER BANNER CARDS - ZERO PRICES ON FRONT) ---
+// --- 5. RENDER SMM SERVICES (UNIFIED GLASS CARDS WITH 2x2 BENEFITS GRID & RIGHT-ALIGNED EXPLORAR BUTTON) ---
 function renderSmmServices() {
   const container = document.getElementById('smm-services-grid');
   if (!container) return;
@@ -1501,10 +1502,25 @@ function renderSmmServices() {
 
   container.innerHTML = platforms.map(p => {
     const iconSvg = platformSvgIcons[p.platform] || platformSvgIcons['Instagram'];
-    const chips = (p.servicesListText || 'Seguidores • Likes • Vistas')
+    const rawServices = (p.servicesListText || 'Seguidores • Likes • Vistas • Comentarios')
       .split('•')
-      .map(s => `<span class="smm-service-chip">${s.trim()}</span>`)
-      .join('');
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    // Default 4 benefits for clean 2x2 grid
+    const benefits = rawServices.slice(0, 4);
+    while (benefits.length < 4) {
+      if (benefits.length === 1) benefits.push('Likes Reales');
+      else if (benefits.length === 2) benefits.push('Visualizaciones');
+      else if (benefits.length === 3) benefits.push('Entrega Rápida');
+    }
+
+    const benefitsHtml = benefits.map(b => `
+      <div class="smm-benefit-item">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <span>${b}</span>
+      </div>
+    `).join('');
 
     return `
       <div class="smm-platform-card" onclick="openSmmPlatformModal('${p.id}')" title="Ver servicios de ${p.platform}">
@@ -1513,12 +1529,11 @@ function renderSmmServices() {
             <span class="smm-banner-icon">${iconSvg}</span>
             <span class="smm-banner-title">${p.platform}</span>
           </div>
-          <span class="smm-platform-badge-float">AUTOMATIZADO</span>
         </div>
         <div class="smm-platform-card-body">
           <h3 class="smm-platform-heading">${p.title}</h3>
-          <div class="smm-platform-services-list">
-            ${chips}
+          <div class="smm-platform-benefits-grid">
+            ${benefitsHtml}
           </div>
           <div class="smm-platform-footer-row">
             <button type="button" class="btn-smm-explore" tabindex="-1">Explorar ➔</button>
@@ -2974,7 +2989,86 @@ function instantRenderCatalog() {
   }
 }
 
+// --- INTERACTIVE BACKGROUND DOT GRID (SUBTLE MOUSE GLOW & MICRO-FLOAT) ---
+function initInteractiveDotGrid() {
+  const canvas = document.getElementById('bg-interactive-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d', { alpha: true });
+  if (!ctx) return;
+
+  let width = 0;
+  let height = 0;
+  let mouse = { x: -1000, y: -1000, targetX: -1000, targetY: -1000, active: false };
+  const spacing = 36;
+  let animId = null;
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+
+  window.addEventListener('resize', resize, { passive: true });
+  resize();
+
+  window.addEventListener('mousemove', (e) => {
+    mouse.targetX = e.clientX;
+    mouse.targetY = e.clientY;
+    mouse.active = true;
+  }, { passive: true });
+
+  window.addEventListener('mouseleave', () => {
+    mouse.active = false;
+    mouse.targetX = -1000;
+    mouse.targetY = -1000;
+  });
+
+  function render() {
+    animId = requestAnimationFrame(render);
+
+    // Smooth mouse follow
+    mouse.x += (mouse.targetX - mouse.x) * 0.15;
+    mouse.y += (mouse.targetY - mouse.y) * 0.15;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const cols = Math.ceil(width / spacing) + 1;
+    const rows = Math.ceil(height / spacing) + 1;
+    const mouseRadius = 140;
+    const mouseRadiusSq = mouseRadius * mouseRadius;
+
+    for (let c = 0; c < cols; c++) {
+      for (let r = 0; r < rows; r++) {
+        const x = c * spacing;
+        const y = r * spacing;
+
+        const dx = x - mouse.x;
+        const dy = y - mouse.y;
+        const distSq = dx * dx + dy * dy;
+
+        let alpha = 0.08;
+        let radius = 1.0;
+        let color = '255, 255, 255';
+
+        if (distSq < mouseRadiusSq && mouse.active) {
+          const ratio = 1 - Math.sqrt(distSq) / mouseRadius;
+          alpha = 0.08 + ratio * 0.42;
+          radius = 1.0 + ratio * 1.0;
+          color = '0, 194, 255'; // subtle cyan illumination near mouse
+        }
+
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${color}, ${alpha})`;
+        ctx.fill();
+      }
+    }
+  }
+
+  animId = requestAnimationFrame(render);
+}
+
 function initializeMarketplace() {
+  initInteractiveDotGrid();
   initUserSession();
   initLiveSearch();
   instantRenderCatalog(); // Immediate 0ms paint - eliminates all reload flicker
