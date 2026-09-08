@@ -234,6 +234,143 @@
       box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.08), 0 20px 50px rgba(0, 0, 0, 0.6);
     }
 
+    /* Module Blocks & Grouping Cards */
+    .admin-blocks-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+      margin-bottom: 2rem;
+    }
+    .admin-block-category {
+      background: rgba(16, 20, 32, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .admin-block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .admin-block-title {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-heading);
+    }
+    .admin-block-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .admin-block-badge.cyan {
+      background: rgba(0, 194, 255, 0.12);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(0, 194, 255, 0.25);
+    }
+    .admin-block-badge.emerald {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+    .admin-block-badge.purple {
+      background: rgba(168, 85, 247, 0.12);
+      color: var(--accent-purple);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+    }
+    .admin-modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .admin-module-card {
+      background: rgba(10, 14, 26, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .admin-module-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-cyan);
+      background: rgba(14, 22, 42, 0.9);
+      box-shadow: 0 10px 25px rgba(0, 194, 255, 0.15), inset 0 0 15px rgba(0, 194, 255, 0.05);
+    }
+    .admin-module-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .admin-module-card:hover .admin-module-icon-wrap {
+      background: rgba(0, 194, 255, 0.15);
+      border-color: rgba(0, 194, 255, 0.35);
+    }
+    .admin-module-card h4 {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 6px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .admin-module-card p {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      margin: 0 0 14px 0;
+      line-height: 1.45;
+      flex-grow: 1;
+    }
+    .admin-module-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 10px;
+      margin-top: auto;
+    }
+    .admin-module-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .admin-module-card:hover .admin-module-btn {
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+
     .admin-table {
       width: 100%;
       border-collapse: separate;
@@ -619,11 +756,34 @@
       </div>
 
       <!-- ======================================================= -->
-      <!-- TAB 1: OVERVIEW & GENERAL BALANCE                       -->
+      <!-- TAB 1: OVERVIEW & GENERAL BALANCE (RESTRUCTURED STUDIO) -->
       <!-- ======================================================= -->
       <section id="tab-overview" class="admin-section-pane active">
-        <div class="kpi-grid">
-          <div class="kpi-card emerald">
+        
+        <!-- EXECUTIVE GREETING & STATUS BANNER -->
+        <div style="background: linear-gradient(135deg, rgba(0, 194, 255, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%); border: 1px solid rgba(0, 194, 255, 0.2); border-radius: 18px; padding: 1.5rem; margin-bottom: 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+          <div>
+            <div style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.74rem; font-weight: 800; color: var(--accent-cyan); background: rgba(0, 194, 255, 0.12); padding: 3px 10px; border-radius: 20px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">
+              <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
+              <span>Sistema Operativo en Tiempo Real • Mercado Paraguay</span>
+            </div>
+            <h2 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 900; color: #ffffff; margin: 0;">
+              Centro de Mando General & Métricas de GamesBoy.net
+            </h2>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0 0 0;">
+              Supervisa el flujo financiero, gestiona catálogos y accede directamente a cualquiera de los módulos administrativos organizados por bloques.
+            </p>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button type="button" class="btn-admin-action cyan" onclick="loadAdminData()" style="padding: 10px 18px; font-size: 0.85rem; font-weight: 800;">
+              <span>🔄 Actualizar Métricas</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. TOP METRICS GRID (KPIS) -->
+        <div class="kpi-grid" style="margin-bottom: 2rem;">
+          <div class="kpi-card emerald" style="cursor: pointer;" onclick="switchAdminTab('tab-finance')">
             <div class="kpi-header">
               <span class="kpi-title">Billetera Master (Admin)</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
@@ -639,7 +799,7 @@
             <div class="kpi-value-gs" id="kpi-volume-gs">0 Gs.</div>
             <div class="kpi-value-usd" id="kpi-volume-usd">$0.00 USDT</div>
           </div>
-          <div class="kpi-card purple">
+          <div class="kpi-card purple" style="cursor: pointer;" onclick="switchAdminTab('tab-custody-payouts')">
             <div class="kpi-header">
               <span class="kpi-title">Saldos en Garantía (Escrow)</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
@@ -657,6 +817,195 @@
           </div>
         </div>
 
+        <!-- 2. ORGANIZED MODULE BLOCKS -->
+        <div class="admin-blocks-container">
+          
+          <!-- BLOQUE 1: OPERACIONES & FINANZAS -->
+          <div class="admin-block-category">
+            <div class="admin-block-header">
+              <div class="admin-block-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                <span>Bloque 1: Operaciones, Despacho & Finanzas</span>
+              </div>
+              <span class="admin-block-badge cyan">Operaciones Diarias</span>
+            </div>
+            
+            <div class="admin-modules-grid">
+              <!-- Módulo 2: Entregas Pendientes -->
+              <div class="admin-module-card" onclick="switchAdminTab('tab-orders-delivery')">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div class="admin-module-icon-wrap" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">📦</div>
+                    <span class="badge-count red" id="overview-badge-pending-orders" style="display: none;">0 pendientes</span>
+                  </div>
+                  <h4><span>2. Entregas Pendientes</span></h4>
+                  <p>Bandeja de despacho para entregar credenciales de videojuegos y códigos de gift cards a los compradores.</p>
+                </div>
+                <div class="admin-module-footer">
+                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Despacho digital</span>
+                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
+                </div>
+              </div>
+
+              <!-- Módulo 3: Finanzas & Recargas -->
+              <div class="admin-module-card" onclick="switchAdminTab('tab-finance')">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div class="admin-module-icon-wrap" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">💳</div>
+                    <span class="badge-count red" id="overview-badge-pending-deposits" style="display: none;">0 por auditar</span>
+                  </div>
+                  <h4><span>3. Finanzas & Recargas</span></h4>
+                  <p>Aprobación de comprobantes de transferencia SIPAP en Paraguay, depósitos USDT y retiros bancarios.</p>
+                </div>
+                <div class="admin-module-footer">
+                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Bancos & Cripto</span>
+                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
+                </div>
+              </div>
+
+              <!-- Módulo 4: Liquidación Vendedores -->
+              <div class="admin-module-card" onclick="switchAdminTab('tab-custody-payouts')">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div class="admin-module-icon-wrap" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">⏳</div>
+                    <span class="badge-count emerald" id="overview-badge-ready-payouts" style="display: none;">0 listos</span>
+                  </div>
+                  <h4><span>4. Liquidación a Vendedores</span></h4>
+                  <p>Fondos en garantía cumpliendo el ciclo de 30 días con botón de liberación directa a la billetera del anfitrión.</p>
+                </div>
+                <div class="admin-module-footer">
+                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Listo para pagar</span>
+                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BLOQUE 2: CATÁLOGO, TIENDA & SERVICIOS -->
+          <div class="admin-block-category">
+            <div class="admin-block-header">
+              <div class="admin-block-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <span>Bloque 2: Catálogo, Tienda Oficial & Servicios</span>
+              </div>
+              <span class="admin-block-badge emerald">Productos & Streaming</span>
+            </div>
+            
+            <div class="admin-modules-grid">
+              <!-- Módulo 5: Videojuegos Digitales -->
+              <div class="admin-module-card" onclick="switchAdminTab('tab-games-management')">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div class="admin-module-icon-wrap" style="color: #00c2ff; background: rgba(0, 194, 255, 0.1);">🎮</div>
+                    <span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.7rem;" id="overview-badge-games-count">0 juegos</span>
+                  </div>
+                  <h4><span>5. Videojuegos Digitales</span></h4>
+                  <p>Catálogo oficial por consolas (PS5, PS4, Xbox, PC), precios en Guaraníes para cuenta primaria/secundaria y capturas.</p>
+                </div>
+                <div class="admin-module-footer">
+                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Consolas & Keys</span>
+                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
+                </div>
+              </div>
+
+              <!-- Módulo 6: Tarjetas de Regalo -->
+              <div class="admin-module-card" onclick="switchAdminTab('tab-giftcards-management')">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div class="admin-module-icon-wrap" style="color: #a855f7; background: rgba(168, 85, 247, 0.1);">🎁</div>
+                    <span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.7rem;" id="overview-badge-gc-count">0 marcas</span>
+                  </div>
+                  <h4><span>6. Tarjetas de Regalo</span></h4>
+                  <p>Crea marcas oficiales (PlayStation, Xbox, Steam, Nintendo, etc.) y administra sus diferentes variaciones de saldo en Gs.</p>
+                </div>
+                <div class="admin-module-footer">
+                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Gift Cards</span>
+                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
+                </div>
+              </div>
+
+              <!-- Módulo 7: Servicios de Streaming -->
+              <div class="admin-module-card" onclick="switchAdminTab('tab-streaming-moderation')">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div class="admin-module-icon-wrap" style="color: #ef4444; background: rgba(239, 68, 68, 0.1);">📺</div>
+                    <span class="btn-admin-action emerald" style="padding: 2px 8px; font-size: 0.7rem;">2 Pestañas</span>
+                  </div>
+                  <h4><span>7. Servicios de Streaming</span></h4>
+                  <p>Catálogo de plataformas oficiales (precios por asiento en Gs., cupos, portadas e íconos) y moderación de cuentas de vendedores.</p>
+                </div>
+                <div class="admin-module-footer">
+                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Catálogo & Moderación</span>
+                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BLOQUE 3: PERSONALIZACIÓN, USUARIOS & SISTEMA -->
+          <div class="admin-block-category">
+            <div class="admin-block-header">
+              <div class="admin-block-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2.5"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                <span>Bloque 3: Personalización, Usuarios & Redes</span>
+              </div>
+              <span class="admin-block-badge purple">Diseño & Comunidad</span>
+            </div>
+            
+            <div class="admin-modules-grid">
+              <!-- Módulo 8: Banners de Inicio -->
+              <div class="admin-module-card" onclick="switchAdminTab('tab-hero-banners')">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div class="admin-module-icon-wrap" style="color: #00c2ff; background: rgba(0, 194, 255, 0.1);">🖼️</div>
+                    <span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.7rem;">4 Portadas</span>
+                  </div>
+                  <h4><span>8. Banners de Inicio (Hero)</span></h4>
+                  <p>Personalización de los 4 banners interactivos de la página de inicio (imágenes horizontales y verticales para móviles).</p>
+                </div>
+                <div class="admin-module-footer">
+                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Hero Accordion</span>
+                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
+                </div>
+              </div>
+
+              <!-- Módulo 9: Directorio de Usuarios -->
+              <div class="admin-module-card" onclick="switchAdminTab('tab-users')">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div class="admin-module-icon-wrap" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">👥</div>
+                    <span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.7rem;" id="overview-badge-users-count">Directorio</span>
+                  </div>
+                  <h4><span>9. Directorio de Usuarios</span></h4>
+                  <p>Auditoría de clientes, vendedores, saldos reales en Gs./USDT, fondos en garantía y ajuste manual de balances.</p>
+                </div>
+                <div class="admin-module-footer">
+                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Billeteras & Roles</span>
+                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
+                </div>
+              </div>
+
+              <!-- Módulo 10: Impulso Digital SMM -->
+              <div class="admin-module-card" onclick="switchAdminTab('tab-smm-api')">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div class="admin-module-icon-wrap" style="color: #a855f7; background: rgba(168, 85, 247, 0.1);">🚀</div>
+                    <span class="btn-admin-action emerald" style="padding: 2px 8px; font-size: 0.7rem;">API Conectada</span>
+                  </div>
+                  <h4><span>10. Impulso Digital (SMM)</span></h4>
+                  <p>Conexión API con proveedor mayorista para seguidores, likes y vistas de Instagram, TikTok y YouTube con márgenes configurables.</p>
+                </div>
+                <div class="admin-module-footer">
+                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Redes Sociales</span>
+                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 3. TABLA DE ACTIVIDAD RECIENTE -->
         <div class="admin-card">
           <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
@@ -2019,29 +2368,53 @@
       }
     };
 
+    window.switchAdminTab = function(tabId) {
+      menuButtons.forEach(b => {
+        if (b.getAttribute('data-tab') === tabId) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
+      sectionPanes.forEach(p => {
+        if (p.id === tabId) {
+          p.classList.add('active');
+        } else {
+          p.classList.remove('active');
+        }
+      });
+
+      const contentEl = document.querySelector('.admin-content');
+      if (contentEl) {
+        contentEl.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      if (tabDescriptions[tabId]) {
+        headingEl.textContent = tabDescriptions[tabId].title;
+        subtitleEl.textContent = tabDescriptions[tabId].subtitle;
+      }
+
+      if (tabId === 'tab-overview') loadAdminData();
+      if (tabId === 'tab-orders-delivery') loadPendingOrders();
+      if (tabId === 'tab-finance') loadAdminData();
+      if (tabId === 'tab-custody-payouts') loadCustodyPayouts();
+      if (tabId === 'tab-games-management') loadGames();
+      if (tabId === 'tab-giftcards-management') loadGiftCardBrands();
+      if (tabId === 'tab-streaming-moderation') {
+        switchStreamingSubtab('subpane-services-crud');
+        loadStreamingData();
+      }
+      if (tabId === 'tab-hero-banners') loadHeroBannersAdmin();
+      if (tabId === 'tab-users') loadUsers();
+      if (tabId === 'tab-smm-api') loadSmmConfig();
+    };
+
     menuButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const tabId = btn.getAttribute('data-tab');
-        menuButtons.forEach(b => b.classList.remove('active'));
-        sectionPanes.forEach(p => p.classList.remove('active'));
-        btn.classList.add('active');
-        
-        const targetPane = document.getElementById(tabId);
-        if (targetPane) targetPane.classList.add('active');
-
-        if (tabDescriptions[tabId]) {
-          headingEl.textContent = tabDescriptions[tabId].title;
-          subtitleEl.textContent = tabDescriptions[tabId].subtitle;
-        }
-
-        if (tabId === 'tab-orders-delivery') loadPendingOrders();
-        if (tabId === 'tab-custody-payouts') loadCustodyPayouts();
-        if (tabId === 'tab-streaming-moderation') {
-          switchStreamingSubtab('subpane-services-crud');
-          loadStreamingData();
-        }
-        if (tabId === 'tab-hero-banners') loadHeroBannersAdmin();
-        if (tabId === 'tab-users') loadUsers();
+        if (tabId) window.switchAdminTab(tabId);
       });
     });
 
@@ -2067,14 +2440,25 @@
           document.getElementById('kpi-commissions-gs').textContent = (s.totalCommissionsPyg || 0).toLocaleString('es-PY') + ' Gs.';
           document.getElementById('kpi-commissions-usd').textContent = '$' + (s.totalCommissionsUsd || 0).toFixed(2) + ' USDT';
 
-          document.getElementById('badge-games-count').textContent = s.totalGames || 0;
+          const badgeGames = document.getElementById('badge-games-count');
+          if (badgeGames) badgeGames.textContent = s.totalGames || 0;
+          const ovGames = document.getElementById('overview-badge-games-count');
+          if (ovGames) ovGames.textContent = `${s.totalGames || 0} juegos`;
 
+          const bDep = document.getElementById('badge-pending-deposits');
+          const ovDep = document.getElementById('overview-badge-pending-deposits');
           if (s.pendingDepositsCount > 0) {
-            const b = document.getElementById('badge-pending-deposits');
-            b.textContent = s.pendingDepositsCount;
-            b.style.display = 'inline-block';
+            if (bDep) {
+              bDep.textContent = s.pendingDepositsCount;
+              bDep.style.display = 'inline-block';
+            }
+            if (ovDep) {
+              ovDep.textContent = `${s.pendingDepositsCount} por auditar`;
+              ovDep.style.display = 'inline-block';
+            }
           } else {
-            document.getElementById('badge-pending-deposits').style.display = 'none';
+            if (bDep) bDep.style.display = 'none';
+            if (ovDep) ovDep.style.display = 'none';
           }
         }
 
@@ -2480,6 +2864,8 @@
         allGiftCardBrands = data.brands || [];
 
         document.getElementById('badge-gc-count').textContent = allGiftCardBrands.length;
+        const ovGc = document.getElementById('overview-badge-gc-count');
+        if (ovGc) ovGc.textContent = `${allGiftCardBrands.length} marcas`;
         document.getElementById('gc-brands-count-tab').textContent = allGiftCardBrands.length;
 
         let totalVars = 0;
@@ -2696,12 +3082,21 @@
         const data = await res.json();
 
         const badge = document.getElementById('badge-pending-orders');
+        const ovBadge = document.getElementById('overview-badge-pending-orders');
         if (badge) {
           if (data.pendingCount > 0) {
             badge.textContent = data.pendingCount;
             badge.style.display = 'inline-block';
           } else {
             badge.style.display = 'none';
+          }
+        }
+        if (ovBadge) {
+          if (data.pendingCount > 0) {
+            ovBadge.textContent = `${data.pendingCount} pendientes`;
+            ovBadge.style.display = 'inline-block';
+          } else {
+            ovBadge.style.display = 'none';
           }
         }
 
@@ -3232,6 +3627,9 @@
           document.getElementById('users-kpi-payouts-usd').textContent = '$' + (s.approvedPayoutsUsd || 0).toFixed(2) + ' USDT';
         }
 
+        const ovUsers = document.getElementById('overview-badge-users-count');
+        if (ovUsers) ovUsers.textContent = `${allUsersList.length} usuarios`;
+
         applyUsersFilters();
       } catch (e) { console.error('Error loading users:', e); }
     }
@@ -3444,12 +3842,21 @@
 
         // Badges & Stats
         const badgeReady = document.getElementById('badge-ready-payouts');
+        const ovReady = document.getElementById('overview-badge-ready-payouts');
         if (badgeReady) {
           if (stats.readyForReleaseCount > 0) {
             badgeReady.textContent = stats.readyForReleaseCount;
             badgeReady.style.display = 'inline-block';
           } else {
             badgeReady.style.display = 'none';
+          }
+        }
+        if (ovReady) {
+          if (stats.readyForReleaseCount > 0) {
+            ovReady.textContent = `${stats.readyForReleaseCount} listos`;
+            ovReady.style.display = 'inline-block';
+          } else {
+            ovReady.style.display = 'none';
           }
         }
 
