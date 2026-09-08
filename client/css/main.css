@@ -1217,8 +1217,8 @@ a.sub-nav-link,
 /* 5. DIGITAL GAMES (3D CASE ART & 20% ZOOM PHYSICS)       */
 /* ======================================================== */
 .game-card {
-  flex: 0 0 155px;
-  width: 155px;
+  flex: 0 0 165px;
+  width: 165px;
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 0px !important;
@@ -1273,7 +1273,7 @@ a.sub-nav-link,
 }
 
 .game-card-body {
-  padding: 0.9rem;
+  padding: 0.65rem 0.55rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -1283,11 +1283,11 @@ a.sub-nav-link,
 
 .game-title {
   font-family: var(--font-heading);
-  font-size: 0.94rem;
-  font-weight: 800;
+  font-size: 0.88rem;
+  font-weight: 700;
   color: var(--text-primary);
   line-height: 1.25;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.4rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1313,42 +1313,44 @@ a.sub-nav-link,
 .game-prices-inline-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   margin-top: auto;
-  padding-top: 6px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .game-price-inline-row {
   display: flex !important;
   flex-direction: row !important;
-  align-items: center !important;
+  align-items: baseline !important;
   justify-content: space-between !important;
-  gap: 8px !important;
+  gap: 4px !important;
   width: 100% !important;
   white-space: nowrap !important;
 }
 
 .game-price-inline-label {
-  font-size: 0.74rem;
-  font-weight: 700;
-  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: #94a3b8;
   white-space: nowrap !important;
+  letter-spacing: -0.2px;
 }
 
 .game-price-inline-val {
   font-family: var(--font-mono);
-  font-size: 0.88rem;
-  font-weight: 800;
+  font-size: 0.74rem;
+  font-weight: 600;
   white-space: nowrap !important;
+  letter-spacing: -0.3px;
 }
 
 .game-price-inline-val.primary-val {
-  color: #ffffff !important;
+  color: #f8fafc !important;
 }
 
 .game-price-inline-val.secondary-val {
-  color: var(--accent-cyan) !important;
+  color: #38bdf8 !important;
 }
 
 /* ======================================================== */
@@ -3037,11 +3039,11 @@ a.sub-nav-link,
   }
 
   .game-card {
-    flex: 0 0 135px;
-    width: 135px;
+    flex: 0 0 150px;
+    width: 150px;
   }
   .game-cover-container {
-    height: 170px;
+    height: 185px;
   }
 }
 

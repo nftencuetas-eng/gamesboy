@@ -854,10 +854,10 @@ function renderDigitalGames() {
     return `
       <div class="game-card ${isAvail ? '' : 'disabled'}" onclick="openBuyGameModal('${g.id}')">
         <div class="game-cover-container">
-          <img src="${g.coverUrl || g.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'}" alt="${g.title}" class="game-cover-img" loading="lazy">
+          <img src="${g.coverUrl || g.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80'}" alt="${g.title || 'Videojuego'}" class="game-cover-img" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80';">
         </div>
         <div class="game-card-body">
-          <h3 class="game-title">${g.title}</h3>
+          <h3 class="game-title" title="${g.title || ''}">${g.title || 'Juego Digital'}</h3>
           <div class="game-prices-inline-list">
             <div class="game-price-inline-row primary-row">
               <span class="game-price-inline-label">Primaria:</span>
@@ -899,7 +899,7 @@ function renderRetailGiftCards() {
 
     return `
       <div class="giftcard-clean-png-card" onclick="openGiftCardVariationsModal('${cardId}')" title="${cardTitle}">
-        <img src="${cardImg}" alt="${cardTitle}" class="giftcard-clean-png-img" loading="lazy">
+        <img src="${cardImg}" alt="${cardTitle}" class="giftcard-clean-png-img" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80';">
       </div>
     `;
   }).join('');
