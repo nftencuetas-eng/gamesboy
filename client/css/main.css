@@ -290,180 +290,93 @@ a.sub-nav-link,
 }
 
 /* ======================================================= */
-/* STICKY BOTTOM-RIGHT FLOATING WIDGET (DESKTOP PILL / MOBILE 3D COIN) */
+/* 3. STICKY LATERAL OFFER TAG (RIGHT WALL VERTICAL DOCK)  */
 /* ======================================================= */
-.sticky-monetize-pill {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  z-index: 999;
-  background: linear-gradient(135deg, #07152b 0%, #0d2847 50%, #064e3b 100%);
-  border: 1.5px solid rgba(52, 211, 153, 0.6);
-  border-radius: 50px;
-  padding: 10px 18px 10px 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 24px rgba(16, 185, 129, 0.35);
-  backdrop-filter: blur(16px);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  text-decoration: none;
-  color: #ffffff;
+.sticky-lateral-monetize-tag,
+#sticky-monetize-pill {
+  position: fixed !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 99999 !important;
+  text-decoration: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: linear-gradient(180deg, rgba(14, 21, 38, 0.97) 0%, rgba(9, 14, 26, 0.99) 100%) !important;
+  border: 1.5px solid #fbbf24 !important;
+  border-right: none !important;
+  border-radius: 12px 0 0 12px !important;
+  padding: 10px 6px 12px 6px !important;
+  box-shadow: -4px 0 22px rgba(0, 0, 0, 0.8), -2px 0 14px rgba(251, 191, 36, 0.4) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  cursor: pointer !important;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, border-color 0.22s ease !important;
+  user-select: none !important;
 }
 
-.sticky-monetize-desktop-content {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.sticky-lateral-monetize-tag:hover,
+#sticky-monetize-pill:hover {
+  border-color: #ffd700 !important;
+  box-shadow: -6px 0 30px rgba(0, 0, 0, 0.9), -3px 0 20px rgba(255, 215, 0, 0.65) !important;
+  transform: translateY(-50%) translateX(-5px) !important;
 }
 
-.sticky-monetize-mobile-coin {
-  display: none;
+.lateral-tag-coin {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 35% 35%, #ffd700 0%, #d4af37 50%, #85580e 100%) !important;
+  border: 1.5px solid #fff2a8 !important;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.8), inset 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  animation: lateralCoinPulse 3.5s infinite ease-in-out !important;
 }
 
-.sticky-monetize-pill:hover {
-  transform: translateY(-4px) scale(1.03);
-  border-color: #34d399;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.9), 0 0 35px rgba(16, 185, 129, 0.55);
+.coin-symbol {
+  font-family: var(--font-heading) !important;
+  font-size: 0.88rem !important;
+  font-weight: 900 !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8) !important;
+  line-height: 1 !important;
 }
 
-.sticky-monetize-badge-icon {
-  font-size: 1.4rem;
-  line-height: 1;
-  filter: drop-shadow(0 2px 8px rgba(16, 185, 129, 0.7));
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.lateral-tag-text {
+  writing-mode: vertical-rl !important;
+  text-orientation: mixed !important;
+  font-family: var(--font-heading) !important;
+  font-size: 0.76rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+  transition: color 0.2s ease !important;
 }
 
-.sticky-monetize-text-wrap {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
+.sticky-lateral-monetize-tag:hover .lateral-tag-text,
+#sticky-monetize-pill:hover .lateral-tag-text {
+  color: #ffd700 !important;
 }
 
-.sticky-monetize-main-label {
-  font-family: var(--font-heading);
-  font-size: 0.88rem;
-  font-weight: 900;
-  color: #34d399;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-}
-
-.sticky-monetize-sub-label {
-  font-size: 0.7rem;
-  color: #cbd5e1;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.sticky-monetize-glow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50px;
-  pointer-events: none;
-  box-shadow: inset 0 0 14px rgba(16, 185, 129, 0.25);
-}
-
-/* 3D Coin & Floating Tooltip Keyframes */
-@keyframes coinJumpBounce {
-  0% { transform: translateY(0) rotate(0deg) scale(1); }
-  18% { transform: translateY(-16px) rotate(8deg) scale(1.12); }
-  35% { transform: translateY(0) rotate(-4deg) scale(0.96, 1.04); }
-  50% { transform: translateY(-8px) rotate(3deg) scale(1.04); }
-  65% { transform: translateY(0) rotate(-1deg) scale(0.98, 1.02); }
-  80% { transform: translateY(-3px) rotate(0deg) scale(1.01); }
-  100% { transform: translateY(0) rotate(0deg) scale(1); }
-}
-
-@keyframes tooltipPopIn {
-  0% { opacity: 0; transform: translateY(6px) scale(0.88); }
-  15% { opacity: 1; transform: translateY(0) scale(1); }
-  85% { opacity: 1; transform: translateY(0) scale(1); }
-  100% { opacity: 0; transform: translateY(-4px) scale(0.92); }
-}
-
-@media (max-width: 768px) {
-  .sticky-monetize-pill {
-    right: 18px !important;
-    bottom: 18px !important;
-    padding: 0 !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+@keyframes lateralCoinPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.5));
   }
-  .sticky-monetize-desktop-content {
-    display: none !important;
+  50% {
+    transform: scale(1.1) rotate(6deg);
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.9));
   }
-  .sticky-monetize-mobile-coin {
-    display: flex !important;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-  }
-  .coin-3d-wrapper {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #ffe066 0%, #f59e0b 45%, #d97706 75%, #b45309 100%);
-    border: 2px solid #fffbeb;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65), 0 0 16px rgba(245, 158, 11, 0.55), inset 0 2px 4px rgba(255, 255, 255, 0.8), inset 0 -2px 6px rgba(0, 0, 0, 0.45);
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .coin-3d-wrapper.is-jumping {
-    animation: coinJumpBounce 1.2s cubic-bezier(0.28, 0.84, 0.42, 1);
-  }
-  .coin-3d-face {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    border: 1.5px dashed rgba(255, 255, 255, 0.6);
-    display: grid;
-    place-items: center;
-    background: radial-gradient(circle at 35% 35%, rgba(254, 240, 138, 0.9) 0%, rgba(217, 119, 6, 0.85) 100%);
-  }
-  .coin-dollar-symbol {
-    font-family: var(--font-heading);
-    font-size: 1.4rem;
-    font-weight: 900;
-    color: #78350f;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
-    line-height: 1;
-  }
-  .coin-floating-tooltip {
-    position: absolute;
-    bottom: calc(100% + 8px);
-    right: 0;
-    background: rgba(7, 13, 30, 0.96);
-    border: 1px solid var(--accent-cyan);
-    border-radius: 10px;
-    padding: 5px 10px;
-    font-size: 0.72rem;
-    font-weight: 800;
-    color: #38d6ff;
-    white-space: nowrap;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85), 0 0 14px rgba(0, 194, 255, 0.35);
-    backdrop-filter: blur(12px);
-    pointer-events: none;
-    opacity: 0;
-    transform: translateY(4px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    z-index: 1000;
-  }
-  .coin-floating-tooltip.is-active {
-    animation: tooltipPopIn 3.5s ease forwards;
-  }
+}
 
   /* Compact WhatsApp Floating button on Mobile */
   .floating-support-btn {
@@ -7401,115 +7314,6 @@ a.sub-nav-link,
 
   .floating-support-btn .support-btn-label {
     display: none !important;
-  }
-
-  /* ======================================================== */
-  /* 8. STICKY LATERAL OFFER TAG (GENERA INGRESOS)            */
-  /* ======================================================== */
-  .sticky-lateral-monetize-tag {
-    position: fixed;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 998;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    background: linear-gradient(135deg, rgba(14, 21, 38, 0.96) 0%, rgba(9, 14, 26, 0.98) 100%);
-    border: 1.5px solid rgba(251, 191, 36, 0.6);
-    border-right: none;
-    border-radius: 30px 0 0 30px;
-    padding: 9px 16px 9px 12px;
-    box-shadow: -4px 6px 20px rgba(0, 0, 0, 0.7), 0 0 16px rgba(251, 191, 36, 0.25);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    user-select: none;
-  }
-
-  .sticky-lateral-monetize-tag:hover {
-    padding-left: 16px;
-    border-color: #ffd700;
-    box-shadow: -6px 8px 26px rgba(0, 0, 0, 0.85), 0 0 24px rgba(251, 191, 36, 0.45);
-    transform: translateY(-50%) translateX(-4px);
-  }
-
-  .lateral-tag-inner {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .lateral-tag-coin {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #ffd700 0%, #d4af37 50%, #85580e 100%);
-    border: 1.5px solid #fff2a8;
-    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    animation: lateralCoinPulse 4s infinite ease-in-out;
-  }
-
-  .coin-symbol {
-    font-family: var(--font-heading);
-    font-size: 0.95rem;
-    font-weight: 900;
-    color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
-    line-height: 1;
-  }
-
-  .lateral-tag-text {
-    font-family: var(--font-heading);
-    font-size: 0.84rem;
-    font-weight: 800;
-    color: #ffffff;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-    transition: color 0.2s ease;
-  }
-
-  .sticky-lateral-monetize-tag:hover .lateral-tag-text {
-    color: #ffd700;
-  }
-
-  @keyframes lateralCoinPulse {
-    0%, 100% {
-      transform: scale(1);
-      filter: drop-shadow(0 0 3px rgba(255, 215, 0, 0.5));
-    }
-    50% {
-      transform: scale(1.1) rotate(6deg);
-      filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.9));
-    }
-  }
-
-  /* Responsive Mobile Side Tag */
-  @media (max-width: 768px) {
-    .sticky-lateral-monetize-tag {
-      top: 54% !important;
-      padding: 7px 10px 7px 8px !important;
-      border-radius: 20px 0 0 20px !important;
-      box-shadow: -3px 4px 14px rgba(0, 0, 0, 0.7), 0 0 12px rgba(251, 191, 36, 0.3) !important;
-      display: flex !important;
-    }
-    .lateral-tag-coin {
-      width: 24px !important;
-      height: 24px !important;
-    }
-    .coin-symbol {
-      font-size: 0.82rem !important;
-    }
-    .lateral-tag-text {
-      font-size: 0.72rem !important;
-      font-weight: 800 !important;
-    }
   }
 }
 
