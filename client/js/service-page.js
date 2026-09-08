@@ -128,31 +128,98 @@ function renderSidebarReleases() {
   `).join('');
 }
 
-// --- 4. RENDER HOST GROUPS LIST WITH INVERTED SLOT SILHOUETTES & RULES BUTTON ---
+// --- 4. RENDER HOST GROUPS LIST WITH EMPTY / SOLD-OUT STATES & WAITING LIST ---
 function renderGroupsList() {
   const container = document.getElementById('hub-groups-list');
   if (!container) return;
 
-  if (state.groups.length === 0) {
+  const hub = state.hub || {};
+  const pricePyg = hub.pricePerSlotPyg || 25000;
+  const netSlotPyg = hub.netPerSlotPyg || Math.round(pricePyg * 0.9);
+  const maxSlots = hub.maxSlots || 5;
+  const potentialPyg = hub.potentialMonthlyEarningsPyg || (netSlotPyg * maxSlots);
+  const waitingCount = hub.waitingCount || 0;
+
+  const totalAvailSlots = (state.groups || []).reduce((sum, g) => sum + (g.availableSlots || 0), 0);
+  const hasAvailableSeats = state.groups.length > 0 && totalAvailSlots > 0;
+
+  // SCENARIO 1: NO ACCOUNTS PUBLISHED YET OR ALL ACCOUNTS ARE SOLD OUT (0 SEATS AVAILABLE)
+  if (!hasAvailableSeats) {
+    const isSoldOut = state.groups.length > 0 && totalAvailSlots === 0;
+
     container.innerHTML = `
-      <div style="background: rgba(16, 20, 32, 0.7); border: 1px solid var(--border-medium); border-radius: 14px; padding: 2.5rem 1.5rem; text-align: center;">
-        <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">No hay grupos de anfitriones abiertos en este momento para esta plataforma.</p>
-        <button class="btn-primary-block" style="width: auto; margin: 0 auto; padding: 10px 22px;" onclick="window.location.href='/?publish=true'">
-          ¿Tienes una cuenta familiar? Sé el primer anfitrión ➔
-        </button>
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        
+        <!-- MONETIZATION / HOST INVITATION CARD -->
+        <div style="background: linear-gradient(135deg, rgba(16, 21, 38, 0.92) 0%, rgba(9, 14, 26, 0.98) 100%); border: 1.5px solid rgba(251, 191, 36, 0.4); border-radius: 18px; padding: 2rem; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6); position: relative; overflow: hidden;">
+          <div style="position: absolute; top: -20px; right: -20px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(251, 191, 36, 0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+          
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+            <span style="font-size: 1.6rem;">💡</span>
+            <h3 style="font-size: 1.25rem; font-weight: 900; color: #ffffff; margin: 0;">
+              ${isSoldOut ? `¡Todos los cupos de ${hub.name} están ocupados!` : `¿Tienes una cuenta de ${hub.name}?`}
+            </h3>
+          </div>
+
+          <p style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 1.25rem;">
+            Sé el próximo anfitrión y comparte los cupos libres de tu cuenta familiar con usuarios verificados. GamesBoy retiene los pagos y te garantiza el cobro puntual de tu saldo cada 30 días con <strong>Bóveda Escrow</strong>.
+          </p>
+
+          <!-- Live Potential Earnings Box -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(251, 191, 36, 0.2); border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: 1.5rem;">
+            <div>
+              <span style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; font-weight: 700;">Ganancia Neta por Asiento:</span>
+              <div style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 800; color: var(--accent-emerald);">${netSlotPyg.toLocaleString('es-PY')} Gs.</div>
+            </div>
+            <div>
+              <span style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; font-weight: 700;">Ingreso Máximo por Cuenta (${maxSlots} cupos):</span>
+              <div style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 900; color: #ffd700;">Hasta ${potentialPyg.toLocaleString('es-PY')} Gs. / mes</div>
+            </div>
+          </div>
+
+          <button class="btn-primary-block" style="width: auto; padding: 12px 28px; font-size: 0.95rem; font-weight: 800; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: none; color: #000; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4); display: inline-flex; align-items: center; gap: 8px;" onclick="window.location.href='/monetizar'">
+            <span>Publicar Mi Cuenta y Empezar a Ganar ➔</span>
+          </button>
+        </div>
+
+        <!-- HIGH DEMAND & WAITING LIST DEMAND WIDGET -->
+        <div style="background: rgba(16, 20, 32, 0.75); border: 1px solid rgba(0, 194, 255, 0.25); border-radius: 18px; padding: 1.75rem; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+          <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); padding: 4px 14px; border-radius: 20px; margin-bottom: 12px;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 8px #ef4444;"></span>
+            <span style="font-size: 0.76rem; font-weight: 800; color: #ef4444; text-transform: uppercase;">ALTA DEMANDA EN VIVO</span>
+          </div>
+
+          <h3 style="font-size: 1.3rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">
+            Hay <strong id="waiting-count-display" style="color: #ef4444; font-size: 1.45rem; font-family: var(--font-mono);">${waitingCount} personas esperando</strong> por un asiento en ${hub.name}
+          </h3>
+
+          <p style="font-size: 0.86rem; color: var(--text-secondary); max-width: 580px; margin: 0 auto 1.5rem auto; line-height: 1.5;">
+            Actualmente no hay cupos libres disponibles para compra inmediata. Haz clic en el botón de abajo para unirte a la lista de espera y recibir notificación instantánea cuando un usuario comparta su cuenta.
+          </p>
+
+          <!-- Interactive Waiting List Button -->
+          <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <button type="button" id="btn-join-waiting-list" class="btn-primary-block" style="width: auto; padding: 13px 30px; font-size: 0.95rem; font-weight: 800; background: linear-gradient(135deg, rgba(0, 194, 255, 0.25) 0%, rgba(0, 112, 243, 0.2) 100%); border: 1.5px solid var(--accent-cyan); color: #ffffff; border-radius: 12px; cursor: pointer; box-shadow: 0 0 25px rgba(0, 194, 255, 0.25); display: inline-flex; align-items: center; gap: 10px;" onclick="joinWaitingList()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              <span id="btn-join-waiting-text">🙋‍♂️ Me gustaría adquirir un asiento / Unirme a la Lista de Espera</span>
+            </button>
+          </div>
+        </div>
+
       </div>
     `;
     return;
   }
 
+  // SCENARIO 2: ACTIVE GROUPS WITH AVAILABLE SEATS EXIST
   container.innerHTML = state.groups.map(g => {
     const isAvail = g.availableSlots > 0;
     const occupiedSlots = g.totalSlots - g.availableSlots;
     const host = g.host || { id: 'usr_admin', name: 'Anfitrión Verificado', avatar: '/assets/branding/icon.png', rating: '4.9 ★', badge: '⭐ Anfitrión Verificado' };
     const hostId = host.id || g.sellerId || 'usr_seller1';
 
-    // CORRECTED SLOTS SILHOUETTES:
-    // LIBRE / DISPONIBLE = PRENDIDO / VERDE BRILLANTE / GLOW
+    // SLOTS SILHOUETTES:
+    // LIBRE = PRENDIDO / VERDE BRILLANTE / GLOW
     // OCUPADO = APAGADO / TENUE / GRIS
     let slotsSvg = '';
     for (let i = 0; i < g.totalSlots; i++) {
@@ -193,7 +260,7 @@ function renderGroupsList() {
             <span>⚡ Entrega Inmediata</span>
           </div>
           
-          <!-- Slots Bar with Corrected Visual Guide -->
+          <!-- Slots Bar with Visual Guide -->
           <div class="hub-group-slots-bar">
             <div class="hub-group-slots-icons">${slotsSvg}</div>
             <span class="hub-group-slots-text">
@@ -224,6 +291,50 @@ function renderGroupsList() {
     `;
   }).join('');
 }
+
+// --- 5. JOIN WAITING LIST HANDLER ---
+window.joinWaitingList = async function() {
+  const btn = document.getElementById('btn-join-waiting-list');
+  const btnText = document.getElementById('btn-join-waiting-text');
+  const countDisplay = document.getElementById('waiting-count-display');
+
+  if (btn) btn.disabled = true;
+  if (btnText) btnText.textContent = 'Sumándote a la lista de espera...';
+
+  try {
+    const res = await fetch(`/api/streaming-hubs/${state.platformKey}/waiting-list`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: state.currentUser?.id || null,
+        email: state.currentUser?.email || null
+      })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      if (countDisplay) {
+        countDisplay.textContent = `${data.waitingCount} personas esperando`;
+      }
+      if (btn) {
+        btn.style.background = 'rgba(16, 185, 129, 0.2)';
+        btn.style.borderColor = 'var(--accent-emerald)';
+      }
+      if (btnText) {
+        btnText.textContent = `✅ ¡Te has sumado a la lista de espera! (${data.waitingCount} en fila)`;
+      }
+      showToast('success', '¡Lista de Espera Confirmada!', data.message);
+    } else {
+      if (btn) btn.disabled = false;
+      if (btnText) btnText.textContent = '🙋‍♂️ Me gustaría adquirir un asiento / Unirme a la Lista de Espera';
+      showToast('error', 'Aviso', data.error || 'No se pudo registrar en la lista de espera');
+    }
+  } catch (err) {
+    if (btn) btn.disabled = false;
+    if (btnText) btnText.textContent = '🙋‍♂️ Me gustaría adquirir un asiento / Unirme a la Lista de Espera';
+    showToast('error', 'Error de Conexión', 'No se pudo conectar con el servidor.');
+  }
+};
 
 // --- 5. 2-COLUMN GROUP DETAIL POP-UP MODAL (1/4 RULES + 3/4 PROFILES & ACTIVATION) ---
 window.openGroupDetailModal = function(groupId) {

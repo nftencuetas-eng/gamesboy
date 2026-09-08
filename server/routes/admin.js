@@ -713,37 +713,226 @@ const DEFAULT_OFFICIAL_SERVICES = [
   { id: 'chatgpt', name: 'ChatGPT Plus & AI', category: 'tools', maxSlots: 2, suggestedPriceUsd: 9.99, icon: 'ai', badge: 'GPT-4o & Canvas' }
 ];
 
+// GET all streaming services with full administrative data
 router.get('/streaming/services', (req, res) => {
-  const db = getDb();
-  if (!db.official_streaming_services || db.official_streaming_services.length === 0) {
-    db.official_streaming_services = DEFAULT_OFFICIAL_SERVICES;
-    saveStorage();
+  try {
+    const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    const services = (db.streaming_services || []).map(s => {
+      const pricePyg = s.pricePerSlotPyg || Math.round((s.pricePerSlotUsd || 3.33) * rate);
+      const priceUsd = s.pricePerSlotUsd || parseFloat((pricePyg / rate).toFixed(2));
+      const comm = s.commissionPercent !== undefined ? s.commissionPercent : 10;
+      const netPerSlotPyg = Math.round(pricePyg * (1 - comm / 100));
+      const netPerSlotUsd = parseFloat((priceUsd * (1 - comm / 100)).toFixed(2));
+      const maxSlots = s.maxSlots || 5;
+      const totalPotentialPyg = netPerSlotPyg * maxSlots;
+      const totalPotentialUsd = parseFloat((netPerSlotUsd * maxSlots).toFixed(2));
+
+      return {
+        ...s,
+        pricePerSlotPyg: pricePyg,
+        pricePerSlotUsd: priceUsd,
+        commissionPercent: comm,
+        netPerSlotPyg,
+        netPerSlotUsd,
+        totalPotentialPyg,
+        totalPotentialUsd,
+        waitingCount: s.waitingCount || 0
+      };
+    });
+
+    res.json({ success: true, count: services.length, services });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-  res.json({ success: true, services: db.official_streaming_services });
 });
 
+// POST: Create a new streaming service
 router.post('/streaming/services', (req, res) => {
   try {
     const db = getDb();
-    const { name, maxSlots = 4, suggestedPriceUsd = 4.99, badge = 'OFICIAL', icon = 'streaming' } = req.body;
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    const {
+      name,
+      planName,
+      tagline,
+      description,
+      badgeText,
+      iconUrl,
+      thumbnailUrl,
+      bannerHorizontal,
+      bannerVertical,
+      pricePerSlotPyg,
+      pricePerSlotUsd,
+      maxSlots = 5,
+      commissionPercent = 10,
+      isActive = true
+    } = req.body;
 
-    if (!name) return res.status(400).json({ error: 'Nombre del servicio requerido' });
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: 'El nombre del servicio es obligatorio' });
+    }
+
+    const id = req.body.id 
+      ? req.body.id.toLowerCase().trim().replace(/[^a-z0-9]/g, '_')
+      : name.toLowerCase().trim().replace(/[^a-z0-9]/g, '_');
+
+    if (!db.streaming_services) db.streaming_services = [];
+
+    // Check if duplicate ID exists
+    const existingIndex = db.streaming_services.findIndex(s => s.id === id);
+    if (existingIndex !== -1) {
+      return res.status(400).json({ error: `Ya existe un servicio registrado con el identificador "${id}".` });
+    }
+
+    const finalPricePyg = pricePerSlotPyg ? parseInt(pricePerSlotPyg, 10) : (pricePerSlotUsd ? Math.round(parseFloat(pricePerSlotUsd) * rate) : 25000);
+    const finalPriceUsd = parseFloat((finalPricePyg / rate).toFixed(2));
+    const finalIcon = iconUrl || thumbnailUrl || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';
+    const finalBannerH = bannerHorizontal || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=1600&q=80';
+    const finalBannerV = bannerVertical || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';
 
     const newService = {
-      id: name.toLowerCase().replace(/[^a-z0-9]/g, '_'),
+      id,
       name: name.trim(),
-      category: 'streaming',
-      maxSlots: parseInt(maxSlots),
-      suggestedPriceUsd: parseFloat(suggestedPriceUsd),
-      badge,
-      icon
+      category: req.body.category || 'streaming',
+      planName: planName ? planName.trim() : `Plan Ultra HD (${maxSlots} Pantallas)`,
+      tagline: tagline ? tagline.trim() : 'Streaming de alta calidad con PIN privado',
+      badgeText: badgeText ? badgeText.trim() : 'ULTRA HD 4K • GARANTÍA',
+      description: description ? description.trim() : 'Disfruta de este servicio con tu propio perfil privado y PIN personal con protección Bóveda Escrow.',
+      iconUrl: finalIcon,
+      thumbnailUrl: finalIcon,
+      bannerHorizontal: finalBannerH,
+      bannerVertical: finalBannerV,
+      pricePerSlotPyg: finalPricePyg,
+      pricePerSlotUsd: finalPriceUsd,
+      maxSlots: parseInt(maxSlots, 10) || 5,
+      commissionPercent: parseFloat(commissionPercent) || 10,
+      waitingCount: 0,
+      waitingList: [],
+      hasStock: true,
+      isActive: isActive === true || isActive === 'true',
+      metrics: {
+        activeAccounts: 0,
+        activeUsersMonth: 0,
+        avgSavingsPercent: 75,
+        rating: '5.0 / 5.0'
+      },
+      releases: [],
+      createdAt: new Date().toISOString()
     };
 
-    if (!db.official_streaming_services) db.official_streaming_services = DEFAULT_OFFICIAL_SERVICES;
-    db.official_streaming_services.push(newService);
+    db.streaming_services.unshift(newService);
     saveStorage();
 
-    res.json({ success: true, message: `Servicio "${newService.name}" agregado.`, service: newService });
+    res.json({
+      success: true,
+      message: `¡Servicio "${newService.name}" creado con éxito en GamesBoy!`,
+      service: newService
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// PUT: Update an existing streaming service
+router.put('/streaming/services/:id', (req, res) => {
+  try {
+    const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    const serviceId = req.params.id.toLowerCase();
+    const service = (db.streaming_services || []).find(s => s.id === serviceId);
+
+    if (!service) {
+      return res.status(404).json({ error: 'Servicio no encontrado' });
+    }
+
+    const {
+      name,
+      planName,
+      tagline,
+      description,
+      badgeText,
+      iconUrl,
+      thumbnailUrl,
+      bannerHorizontal,
+      bannerVertical,
+      pricePerSlotPyg,
+      pricePerSlotUsd,
+      maxSlots,
+      commissionPercent,
+      waitingCount,
+      hasStock,
+      isActive
+    } = req.body;
+
+    if (name) service.name = name.trim();
+    if (planName) service.planName = planName.trim();
+    if (tagline) service.tagline = tagline.trim();
+    if (description !== undefined) service.description = description.trim();
+    if (badgeText) service.badgeText = badgeText.trim();
+    if (iconUrl || thumbnailUrl) {
+      service.iconUrl = iconUrl || thumbnailUrl;
+      service.thumbnailUrl = iconUrl || thumbnailUrl;
+    }
+    if (bannerHorizontal) service.bannerHorizontal = bannerHorizontal;
+    if (bannerVertical) service.bannerVertical = bannerVertical;
+    
+    if (pricePerSlotPyg !== undefined && pricePerSlotPyg !== '') {
+      service.pricePerSlotPyg = parseInt(pricePerSlotPyg, 10);
+      service.pricePerSlotUsd = parseFloat((service.pricePerSlotPyg / rate).toFixed(2));
+    } else if (pricePerSlotUsd !== undefined && pricePerSlotUsd !== '') {
+      service.pricePerSlotUsd = parseFloat(pricePerSlotUsd);
+      service.pricePerSlotPyg = Math.round(service.pricePerSlotUsd * rate);
+    }
+
+    if (maxSlots !== undefined && maxSlots !== '') {
+      service.maxSlots = parseInt(maxSlots, 10);
+    }
+    if (commissionPercent !== undefined && commissionPercent !== '') {
+      service.commissionPercent = parseFloat(commissionPercent);
+    }
+    if (waitingCount !== undefined && waitingCount !== '') {
+      service.waitingCount = parseInt(waitingCount, 10);
+    }
+    if (hasStock !== undefined) {
+      service.hasStock = hasStock === true || hasStock === 'true';
+    }
+    if (isActive !== undefined) {
+      service.isActive = isActive === true || isActive === 'true';
+    }
+
+    service.updatedAt = new Date().toISOString();
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `¡Servicio "${service.name}" actualizado correctamente!`,
+      service
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// DELETE: Remove a streaming service
+router.delete('/streaming/services/:id', (req, res) => {
+  try {
+    const db = getDb();
+    const serviceId = req.params.id.toLowerCase();
+    const idx = (db.streaming_services || []).findIndex(s => s.id === serviceId);
+
+    if (idx === -1) {
+      return res.status(404).json({ error: 'Servicio no encontrado' });
+    }
+
+    const removed = db.streaming_services.splice(idx, 1)[0];
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `Servicio "${removed.name}" eliminado del catálogo.`,
+      service: removed
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -1245,29 +1434,39 @@ router.get('/services-config', (req, res) => {
   try {
     const db = getDb();
     const rate = db.platform_settings?.exchangeRatePyg || 7500;
-    if (!db.streaming_services_config || db.streaming_services_config.length === 0) {
-      db.streaming_services_config = DEFAULT_STREAMING_SERVICES_CONFIG;
-      saveStorage();
-    }
+    const servicesList = db.streaming_services || [];
 
-    const services = db.streaming_services_config.map(s => {
+    const configMap = {};
+    const services = servicesList.map(s => {
       const pricePyg = s.pricePerSlotPyg || Math.round((s.pricePerSlotUsd || 3.33) * rate);
       const priceUsd = s.pricePerSlotUsd || parseFloat((pricePyg / rate).toFixed(2));
-      const comm = s.commissionPercent !== undefined ? s.commissionPercent : (db.platform_settings?.commissionPercent || 10);
+      const comm = s.commissionPercent !== undefined ? s.commissionPercent : 10;
       const sellerPyg = Math.round(pricePyg * (1 - comm / 100));
       const sellerUsd = parseFloat((priceUsd * (1 - comm / 100)).toFixed(2));
+      const maxSlots = s.maxSlots || 5;
 
-      return {
-        ...s,
+      const obj = {
+        key: s.id,
+        id: s.id,
+        name: s.name,
+        planName: s.planName || `Plan Ultra HD (${maxSlots} Pantallas)`,
+        maxSlots,
+        totalSlots: maxSlots,
         pricePerSlotPyg: pricePyg,
         pricePerSlotUsd: priceUsd,
         commissionPercent: comm,
         sellerPayoutPyg: sellerPyg,
-        sellerPayoutUsd: sellerUsd
+        sellerPayoutUsd: sellerUsd,
+        iconUrl: s.iconUrl || s.thumbnailUrl,
+        bannerHorizontal: s.bannerHorizontal,
+        waitingCount: s.waitingCount || 0
       };
+
+      configMap[s.id] = obj;
+      return obj;
     });
 
-    res.json({ success: true, count: services.length, services });
+    res.json({ success: true, count: services.length, services, config: configMap });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -1278,23 +1477,28 @@ router.put('/services-config/:key', (req, res) => {
   try {
     const db = getDb();
     const rate = db.platform_settings?.exchangeRatePyg || 7500;
-    if (!db.streaming_services_config) {
-      db.streaming_services_config = DEFAULT_STREAMING_SERVICES_CONFIG;
-    }
-
     const serviceKey = req.params.key.toLowerCase();
-    let service = db.streaming_services_config.find(s => s.key.toLowerCase() === serviceKey);
+    
+    if (!db.streaming_services) db.streaming_services = [];
+    let service = db.streaming_services.find(s => s.id === serviceKey || (s.id && s.id.toLowerCase() === serviceKey));
 
     if (!service) {
-      service = { key: serviceKey, name: req.body.name || serviceKey };
-      db.streaming_services_config.push(service);
+      service = {
+        id: serviceKey,
+        name: req.body.name || serviceKey,
+        maxSlots: 5,
+        pricePerSlotPyg: 25000,
+        commissionPercent: 10,
+        isActive: true
+      };
+      db.streaming_services.push(service);
     }
 
-    const { pricePerSlotPyg, pricePerSlotUsd, totalSlots, commissionPercent, planName, name } = req.body;
+    const { pricePerSlotPyg, pricePerSlotUsd, maxSlots, totalSlots, commissionPercent, planName, name } = req.body;
 
-    if (name) service.name = name;
-    if (planName) service.planName = planName;
-    if (totalSlots) service.totalSlots = parseInt(totalSlots, 10);
+    if (name) service.name = name.trim();
+    if (planName) service.planName = planName.trim();
+    if (maxSlots || totalSlots) service.maxSlots = parseInt(maxSlots || totalSlots, 10);
     if (commissionPercent !== undefined && !isNaN(parseFloat(commissionPercent))) {
       service.commissionPercent = parseFloat(commissionPercent);
     }
@@ -1307,15 +1511,12 @@ router.put('/services-config/:key', (req, res) => {
       service.pricePerSlotPyg = Math.round(service.pricePerSlotUsd * rate);
     }
 
-    const comm = service.commissionPercent !== undefined ? service.commissionPercent : 10;
-    service.sellerPayoutPyg = Math.round(service.pricePerSlotPyg * (1 - comm / 100));
-    service.sellerPayoutUsd = parseFloat((service.pricePerSlotUsd * (1 - comm / 100)).toFixed(2));
-
+    service.updatedAt = new Date().toISOString();
     saveStorage();
 
     res.json({
       success: true,
-      message: `Tarifa y comisión de "${service.name}" actualizada con éxito.`,
+      message: `Configuración de ${service.name} actualizada con éxito.`,
       service
     });
   } catch (err) {

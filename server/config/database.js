@@ -604,7 +604,210 @@ let db = {
     'chatgpt': { key: 'chatgpt', name: 'ChatGPT Plus & AI', planName: 'Plus GPT-4o & Canvas', maxSlots: 2, pricePerSlotPyg: 35000, pricePerSlotUsd: 4.67, commissionPercent: 10, netPayoutPyg: 31500, netPayoutUsd: 4.20 },
     'crunchyroll': { key: 'crunchyroll', name: 'Crunchyroll Mega Fan', planName: 'Mega Fan 4 Pantallas', maxSlots: 4, pricePerSlotPyg: 18000, pricePerSlotUsd: 2.40, commissionPercent: 10, netPayoutPyg: 16200, netPayoutUsd: 2.16 },
     'paramount': { key: 'paramount', name: 'Paramount+ Premium', planName: 'Plan Estándar 3 Pantallas', maxSlots: 3, pricePerSlotPyg: 18000, pricePerSlotUsd: 2.40, commissionPercent: 10, netPayoutPyg: 16200, netPayoutUsd: 2.16 }
-  }
+  },
+  streaming_services: [
+    {
+      id: 'netflix',
+      name: 'Netflix Premium 4K HDR',
+      category: 'streaming',
+      planName: 'Ultra HD 4K (4 Pantallas)',
+      tagline: 'Películas, series y documentales ilimitados en Ultra HD',
+      badgeText: 'ULTRA HD 4K • DOLBY ATMOS',
+      description: 'Disfruta de Netflix con tu propio perfil privado y PIN personal. Comparte el costo de la cuenta de forma 100% segura con Bóveda Escrow.',
+      iconUrl: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80',
+      thumbnailUrl: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80',
+      bannerHorizontal: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=1600&q=80',
+      bannerVertical: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
+      pricePerSlotPyg: 25000,
+      pricePerSlotUsd: 3.33,
+      maxSlots: 5,
+      commissionPercent: 10,
+      waitingCount: 14,
+      waitingList: [],
+      hasStock: true,
+      isActive: true,
+      metrics: { activeAccounts: 48, activeUsersMonth: 184, avgSavingsPercent: 75, rating: '4.95 / 5.0' },
+      releases: [
+        { id: 'rel_stranger_things_5', title: 'Stranger Things 5: El Final', type: 'Estreno 4K', releaseDate: 'Estreno 2025/2026', genre: 'Ciencia Ficción', posterUrl: 'https://images.unsplash.com/photo-1618336753974-aae8e04506aa?auto=format&fit=crop&w=400&q=80', synopsis: 'El desenlace decisivo de Hawkins.' },
+        { id: 'rel_squid_game_2', title: 'Squid Game 2', type: 'Tendencia #1', releaseDate: 'Disponible', genre: 'Thriller', posterUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80', synopsis: 'Nuevos desafíos mortales.' }
+      ]
+    },
+    {
+      id: 'spotify',
+      name: 'Spotify Premium Familiar',
+      category: 'streaming',
+      planName: 'Plan Familiar (6 Cuentas)',
+      tagline: 'Música y podcasts sin anuncios, descargas ilimitadas y audio Hi-Fi',
+      badgeText: 'HI-FI AUDIO • MÚSICA SIN LÍMITES',
+      description: 'Acceso a millones de canciones con tu propia cuenta individual conectada a un plan familiar protegido con Bóveda Escrow.',
+      iconUrl: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=300&q=80',
+      thumbnailUrl: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=300&q=80',
+      bannerHorizontal: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=1600&q=80',
+      bannerVertical: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80',
+      pricePerSlotPyg: 18000,
+      pricePerSlotUsd: 2.40,
+      maxSlots: 5,
+      commissionPercent: 10,
+      waitingCount: 9,
+      waitingList: [],
+      hasStock: true,
+      isActive: true,
+      metrics: { activeAccounts: 35, activeUsersMonth: 142, avgSavingsPercent: 70, rating: '4.95 / 5.0' },
+      releases: [
+        { id: 'rel_sp_latam', title: 'Top 50 Global & Latinos', type: 'Billboard #1', releaseDate: 'Semanal', genre: 'Urbano / Pop', posterUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80', synopsis: 'Los hits más escuchados sin interrupciones.' }
+      ]
+    },
+    {
+      id: 'disney',
+      name: 'Disney+ & Star+ Premium',
+      category: 'streaming',
+      planName: 'Plan Premium 4K HDR',
+      tagline: 'Marvel, Star Wars, Pixar, Disney y deportes en vivo de ESPN',
+      badgeText: 'IMAX ENHANCED • ESPN EN VIVO',
+      description: 'Todo el entretenimiento de Disney, Star Wars y Marvel con partidos en vivo de ESPN y perfiles privados.',
+      iconUrl: 'https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=300&q=80',
+      thumbnailUrl: 'https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=300&q=80',
+      bannerHorizontal: 'https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=1600&q=80',
+      bannerVertical: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80',
+      pricePerSlotPyg: 25000,
+      pricePerSlotUsd: 3.33,
+      maxSlots: 4,
+      commissionPercent: 10,
+      waitingCount: 11,
+      waitingList: [],
+      hasStock: true,
+      isActive: true,
+      metrics: { activeAccounts: 29, activeUsersMonth: 110, avgSavingsPercent: 78, rating: '4.88 / 5.0' },
+      releases: [
+        { id: 'rel_dis_daredevil', title: 'Daredevil: Born Again', type: 'Marvel Studios', releaseDate: 'Estreno 2025', genre: 'Acción', posterUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80', synopsis: 'Matt Murdock regresa a Hell’s Kitchen.' }
+      ]
+    },
+    {
+      id: 'max',
+      name: 'Max (HBO Max) Platino 4K',
+      category: 'streaming',
+      planName: 'Platino 4K Dolby Atmos',
+      tagline: 'El hogar de HBO, Warner Bros, DC Comics y Discovery en 4K',
+      badgeText: 'PLATINO 4K • DOLBY VISION',
+      description: 'Accede a producciones ganadoras de Emmys, estrenos de cine y clásicos universales con PIN exclusivo.',
+      iconUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=300&q=80',
+      thumbnailUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=300&q=80',
+      bannerHorizontal: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1600&q=80',
+      bannerVertical: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80',
+      pricePerSlotPyg: 22000,
+      pricePerSlotUsd: 2.93,
+      maxSlots: 3,
+      commissionPercent: 10,
+      waitingCount: 7,
+      waitingList: [],
+      hasStock: true,
+      isActive: true,
+      metrics: { activeAccounts: 22, activeUsersMonth: 95, avgSavingsPercent: 72, rating: '4.91 / 5.0' },
+      releases: [
+        { id: 'rel_max_tlou2', title: 'The Last of Us T2', type: 'HBO Original', releaseDate: 'Estreno 2025', genre: 'Drama', posterUrl: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=400&q=80', synopsis: 'Ellie busca justicia en Seattle.' }
+      ]
+    },
+    {
+      id: 'youtube',
+      name: 'YouTube Premium & Music',
+      category: 'streaming',
+      planName: 'Familiar Sin Anuncios',
+      tagline: 'Videos sin publicidad, reproducción en segundo plano y YouTube Music',
+      badgeText: 'SIN ANUNCIOS • FONDO & DESCARGAS',
+      description: 'Navega en YouTube en todos tus dispositivos sin anuncios con tu propia cuenta Google.',
+      iconUrl: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=300&q=80',
+      thumbnailUrl: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=300&q=80',
+      bannerHorizontal: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1600&q=80',
+      bannerVertical: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
+      pricePerSlotPyg: 20000,
+      pricePerSlotUsd: 2.67,
+      maxSlots: 5,
+      commissionPercent: 10,
+      waitingCount: 16,
+      waitingList: [],
+      hasStock: true,
+      isActive: true,
+      metrics: { activeAccounts: 31, activeUsersMonth: 125, avgSavingsPercent: 74, rating: '4.93 / 5.0' },
+      releases: [
+        { id: 'rel_yt_features', title: 'YouTube Music Premium', type: 'Google Oficial', releaseDate: 'Disponible 24/7', genre: 'Música', posterUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80', synopsis: 'Música sin anuncios y descargas inteligentes.' }
+      ]
+    },
+    {
+      id: 'crunchyroll',
+      name: 'Crunchyroll Mega Fan',
+      category: 'streaming',
+      planName: 'Mega Fan 4 Pantallas',
+      tagline: 'El mayor catálogo de anime en simulcast directo desde Japón sin publicidad',
+      badgeText: 'SIMULCAST • FULL HD SIN CENSURA',
+      description: 'Episodios de anime 1 hora después de su emisión en Japón con doblajes y subtítulos oficiales.',
+      iconUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=300&q=80',
+      thumbnailUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=300&q=80',
+      bannerHorizontal: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1600&q=80',
+      bannerVertical: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80',
+      pricePerSlotPyg: 18000,
+      pricePerSlotUsd: 2.40,
+      maxSlots: 4,
+      commissionPercent: 10,
+      waitingCount: 8,
+      waitingList: [],
+      hasStock: true,
+      isActive: true,
+      metrics: { activeAccounts: 20, activeUsersMonth: 86, avgSavingsPercent: 70, rating: '4.89 / 5.0' },
+      releases: [
+        { id: 'rel_cr_demon_slayer', title: 'Demon Slayer: Castillo Infinito', type: 'Película', releaseDate: 'Estreno 2025', genre: 'Anime', posterUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80', synopsis: 'La batalla final contra Muzan Kibutsuji.' }
+      ]
+    },
+    {
+      id: 'paramount',
+      name: 'Paramount+ Premium',
+      category: 'streaming',
+      planName: 'Plan Estándar 3 Pantallas',
+      tagline: 'Películas de Paramount Pictures, Halo, Yellowstone y producciones exclusivas',
+      badgeText: 'PREMIUM HD • SERIES ORIGINALES',
+      description: 'Acceso a estrenos de cine, series exclusivas de Paramount y deportes en vivo.',
+      iconUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=300&q=80',
+      thumbnailUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=300&q=80',
+      bannerHorizontal: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80',
+      bannerVertical: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80',
+      pricePerSlotPyg: 18000,
+      pricePerSlotUsd: 2.40,
+      maxSlots: 3,
+      commissionPercent: 10,
+      waitingCount: 5,
+      waitingList: [],
+      hasStock: true,
+      isActive: true,
+      metrics: { activeAccounts: 14, activeUsersMonth: 55, avgSavingsPercent: 73, rating: '4.85 / 5.0' },
+      releases: [
+        { id: 'rel_par_yellowstone', title: 'Yellowstone: Temporada Final', type: 'Paramount Original', releaseDate: 'Episodios Finales', genre: 'Drama', posterUrl: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80', synopsis: 'El desenlace de la familia Dutton.' }
+      ]
+    },
+    {
+      id: 'chatgpt',
+      name: 'ChatGPT Plus & AI',
+      category: 'streaming',
+      planName: 'Plus GPT-4o & Canvas',
+      tagline: 'Acceso prioritario a GPT-4o, Canvas, generación DALL-E 3 y modo de voz avanzado',
+      badgeText: 'GPT-4o PRO • CANVAS & VOICE',
+      description: 'Potencia tu productividad con la suscripción compartida a ChatGPT Plus.',
+      iconUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=300&q=80',
+      thumbnailUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=300&q=80',
+      bannerHorizontal: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1600&q=80',
+      bannerVertical: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
+      pricePerSlotPyg: 35000,
+      pricePerSlotUsd: 4.67,
+      maxSlots: 2,
+      commissionPercent: 10,
+      waitingCount: 19,
+      waitingList: [],
+      hasStock: true,
+      isActive: true,
+      metrics: { activeAccounts: 18, activeUsersMonth: 72, avgSavingsPercent: 80, rating: '4.98 / 5.0' },
+      releases: [
+        { id: 'rel_gpt_voice', title: 'Advanced Voice Mode & Canvas', type: 'OpenAI GPT-4o', releaseDate: 'Actualizado', genre: 'IA Generativa', posterUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=400&q=80', synopsis: 'Conversaciones de voz avanzadas y edición visual.' }
+      ]
+    }
+  ]
 };
 
 
@@ -618,18 +821,11 @@ function initStorage() {
     try {
       const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
       db = { ...db, ...data };
+      if (!Array.isArray(db.streaming_services) || db.streaming_services.length === 0) {
+        db.streaming_services = db.streaming_services || [];
+      }
       if (!db.streaming_services_config || Object.keys(db.streaming_services_config).length === 0) {
-        db.streaming_services_config = {
-          'netflix': { key: 'netflix', name: 'Netflix Premium 4K', planName: 'Ultra HD 4K (4 Pantallas)', maxSlots: 5, pricePerSlotPyg: 25000, pricePerSlotUsd: 3.33, commissionPercent: 10, netPayoutPyg: 22500, netPayoutUsd: 3.00 },
-          'spotify': { key: 'spotify', name: 'Spotify Premium Familiar', planName: 'Plan Familiar (6 Cuentas)', maxSlots: 5, pricePerSlotPyg: 18000, pricePerSlotUsd: 2.40, commissionPercent: 10, netPayoutPyg: 16200, netPayoutUsd: 2.16 },
-          'disney': { key: 'disney', name: 'Disney+ Premium & Star+', planName: 'Plan Premium 4K', maxSlots: 4, pricePerSlotPyg: 25000, pricePerSlotUsd: 3.33, commissionPercent: 10, netPayoutPyg: 22500, netPayoutUsd: 3.00 },
-          'max': { key: 'max', name: 'Max (HBO Max) 4K', planName: 'Platino 4K Dolby Atmos', maxSlots: 3, pricePerSlotPyg: 22000, pricePerSlotUsd: 2.93, commissionPercent: 10, netPayoutPyg: 19800, netPayoutUsd: 2.64 },
-          'youtube': { key: 'youtube', name: 'YouTube Premium & Music', planName: 'Familiar Sin Anuncios', maxSlots: 5, pricePerSlotPyg: 20000, pricePerSlotUsd: 2.67, commissionPercent: 10, netPayoutPyg: 18000, netPayoutUsd: 2.40 },
-          'chatgpt': { key: 'chatgpt', name: 'ChatGPT Plus & AI', planName: 'Plus GPT-4o & Canvas', maxSlots: 2, pricePerSlotPyg: 35000, pricePerSlotUsd: 4.67, commissionPercent: 10, netPayoutPyg: 31500, netPayoutUsd: 4.20 },
-          'crunchyroll': { key: 'crunchyroll', name: 'Crunchyroll Mega Fan', planName: 'Mega Fan 4 Pantallas', maxSlots: 4, pricePerSlotPyg: 18000, pricePerSlotUsd: 2.40, commissionPercent: 10, netPayoutPyg: 16200, netPayoutUsd: 2.16 },
-          'paramount': { key: 'paramount', name: 'Paramount+ Premium', planName: 'Plan Estándar 3 Pantallas', maxSlots: 3, pricePerSlotPyg: 18000, pricePerSlotUsd: 2.40, commissionPercent: 10, netPayoutPyg: 16200, netPayoutUsd: 2.16 }
-        };
-        saveStorage();
+        db.streaming_services_config = db.streaming_services_config || {};
       }
     } catch (e) {
       console.warn('⚠️ Could not parse existing marketplace storage, writing defaults.');

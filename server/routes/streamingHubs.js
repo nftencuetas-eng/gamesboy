@@ -366,46 +366,89 @@ const defaultHubs = {
 // In-Memory Storage for Hubs Customization
 let streamingHubsStorage = { ...defaultHubs };
 
-// Helper to find or match platform key
-function matchPlatformKey(rawKey) {
-  if (!rawKey) return 'netflix';
-  const clean = rawKey.toLowerCase().trim();
-  for (const k of Object.keys(streamingHubsStorage)) {
-    if (clean.includes(k) || k.includes(clean)) return k;
-  }
-  return 'netflix';
+// Helper to find or match platform from db.streaming_services
+function getPlatformService(platformKey) {
+  const db = getDb();
+  const services = db.streaming_services || [];
+  const clean = (platformKey || '').toLowerCase().trim();
+  
+  // Exact match first
+  let found = services.find(s => s.id === clean || (s.id && s.id.toLowerCase() === clean));
+  if (found) return found;
+
+  // Name or partial match
+  found = services.find(s => {
+    const sId = (s.id || '').toLowerCase();
+    const sName = (s.name || '').toLowerCase();
+    return sId.includes(clean) || clean.includes(sId) || sName.includes(clean) || clean.includes(sName);
+  });
+
+  if (found) return found;
+
+  // Fallback to first available or default
+  return services[0] || {
+    id: 'netflix',
+    name: 'Netflix Premium 4K HDR',
+    planName: 'Ultra HD 4K (4 Pantallas)',
+    tagline: 'Películas, series y documentales ilimitados en Ultra HD',
+    badgeText: 'ULTRA HD 4K • DOLBY ATMOS',
+    description: 'Disfruta de Netflix con tu propio perfil privado y PIN personal.',
+    iconUrl: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80',
+    thumbnailUrl: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80',
+    bannerHorizontal: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=1600&q=80',
+    bannerVertical: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
+    pricePerSlotPyg: 25000,
+    pricePerSlotUsd: 3.33,
+    maxSlots: 5,
+    commissionPercent: 10,
+    waitingCount: 14,
+    waitingList: [],
+    hasStock: true,
+    isActive: true,
+    metrics: { activeAccounts: 48, activeUsersMonth: 184, avgSavingsPercent: 75, rating: '4.95 / 5.0' },
+    releases: []
+  };
 }
 
-// 1. GET PUBLIC PLATFORM HUB DETAILS & LIVE HOST GROUPS
+// 1. GET PUBLIC PLATFORM HUB DETAILS & REAL USER HOST GROUPS
 router.get('/:platform', (req, res) => {
-  const platformKey = matchPlatformKey(req.params.platform);
-  const hub = streamingHubsStorage[platformKey] || defaultHubs[platformKey] || defaultHubs['netflix'];
-  
   const db = getDb();
+  const rawKey = req.params.platform;
+  const hub = getPlatformService(rawKey);
+  const platformKey = hub.id;
+  
+  const rate = db.platform_settings?.exchangeRatePyg || 7500;
+  const fixedPricePyg = hub.pricePerSlotPyg || (hub.pricePerSlotUsd ? Math.round(hub.pricePerSlotUsd * rate) : 25000);
+  const fixedPriceUsd = parseFloat((fixedPricePyg / rate).toFixed(2));
+  const commPercent = hub.commissionPercent !== undefined ? hub.commissionPercent : 10;
+  const netPerSlotPyg = Math.round(fixedPricePyg * (1 - commPercent / 100));
+  const maxSlots = hub.maxSlots || 5;
+  const potentialMonthlyEarningsPyg = netPerSlotPyg * maxSlots;
+
   // Filter active subscription groups matching this platform
-  const matchingSubs = db.subscriptions.filter(s => {
+  const matchingSubs = (db.subscriptions || []).filter(s => {
     if (s.status !== 'active') return false;
     const name = (s.serviceName || '').toLowerCase();
-    return name.includes(platformKey) || platformKey.includes(name);
+    const subId = (s.serviceId || '').toLowerCase();
+    return name.includes(platformKey) || platformKey.includes(name) || subId === platformKey;
   });
 
   // Strict Host/Seller Privacy: Only expose public name, avatar, verified badges, rating, pricing & slot counts
-  // ZERO personal phones, private emails or raw credentials exposed!
   const groups = matchingSubs.map(s => {
-    // Find seller info for avatar & badge
     const seller = db.users ? db.users.find(u => u.id === s.sellerId) : null;
     const sellerName = seller?.name || s.sellerName || 'Anfitrión Verificado';
     const sellerAvatar = (seller && seller.avatar) ? seller.avatar : '/assets/branding/icon.png';
     const isOfficial = s.isOfficial || s.sellerId === 'usr_admin_master';
+    const groupPriceUsd = s.pricePerSlotUsd || fixedPriceUsd;
 
     return {
       id: s.id,
-      serviceName: s.serviceName,
-      planName: s.planName || 'Plan Ultra HD 4K',
-      totalSlots: s.totalSlots || 4,
-      availableSlots: s.availableSlots,
-      pricePerSlotUsd: s.pricePerSlotUsd,
-      pricePerSlotPyg: convertFromUsd(s.pricePerSlotUsd, 'PYG'),
+      serviceName: s.serviceName || hub.name,
+      planName: s.planName || hub.planName || 'Plan Ultra HD 4K',
+      totalSlots: s.totalSlots || maxSlots,
+      availableSlots: s.availableSlots !== undefined ? s.availableSlots : 0,
+      pricePerSlotUsd: groupPriceUsd,
+      pricePerSlotPyg: convertFromUsd(groupPriceUsd, 'PYG'),
       isOfficial,
       host: {
         id: s.sellerId,
@@ -421,130 +464,160 @@ router.get('/:platform', (req, res) => {
     };
   });
 
-  // If no database groups exist yet, provide realistic active demo groups
-  const finalGroups = groups.length > 0 ? groups : [
-    {
-      id: `sub_${platformKey}_official_1`,
-      serviceName: hub.name,
-      planName: 'Ultra HD 4K HDR (Plan Familiar)',
-      totalSlots: 4,
-      availableSlots: 2,
-      pricePerSlotUsd: 3.99,
-      pricePerSlotPyg: convertFromUsd(3.99, 'PYG'),
-      isOfficial: true,
-      host: {
-        id: 'usr_admin_master',
-        name: 'GamesBoy Store Oficial',
-        avatar: '/assets/branding/icon.png',
-        isVerified: true,
-        rating: '5.0 ★',
-        totalHostedGroups: 45,
-        badge: '🛡️ Tienda Oficial GamesBoy'
-      },
-      instructions: 'Acceso oficial garantizado 24/7 con PIN privado.',
-      createdAt: new Date().toISOString()
-    },
-    {
-      id: `sub_${platformKey}_host_2`,
-      serviceName: hub.name,
-      planName: 'Ultra HD 4K HDR (Compartido)',
-      totalSlots: 4,
-      availableSlots: 1,
-      pricePerSlotUsd: 3.50,
-      pricePerSlotPyg: convertFromUsd(3.50, 'PYG'),
-      isOfficial: false,
-      host: {
-        id: 'usr_seller_lucas',
-        name: 'Lucas González',
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80',
-        isVerified: true,
-        rating: '4.9 ★',
-        totalHostedGroups: 8,
-        badge: '⭐ Anfitrión Verificado'
-      },
-      instructions: 'Cuenta estable renovable mes a mes. Reglas de uso estricto en perfil asignado.',
-      createdAt: new Date().toISOString()
-    }
-  ];
-
+  // ONLY return REAL groups. If no users have published accounts or all are sold out, groups is []
   res.json({
     success: true,
-    hub,
-    groups: finalGroups
+    hub: {
+      ...hub,
+      pricePerSlotPyg: fixedPricePyg,
+      pricePerSlotUsd: fixedPriceUsd,
+      netPerSlotPyg,
+      potentialMonthlyEarningsPyg,
+      commissionPercent: commPercent,
+      maxSlots,
+      waitingCount: hub.waitingCount || 0
+    },
+    groups
   });
 });
 
-// 2. GET ALL PLATFORMS FOR PUBLIC & ADMIN CAROUSEL
+// 2. JOIN WAITING LIST FOR A STREAMING SERVICE
+router.post('/:platform/waiting-list', (req, res) => {
+  try {
+    const db = getDb();
+    const rawKey = req.params.platform;
+    const hub = getPlatformService(rawKey);
+    
+    // Find service in db.streaming_services
+    const service = (db.streaming_services || []).find(s => s.id === hub.id);
+    if (service) {
+      if (!service.waitingList) service.waitingList = [];
+      service.waitingCount = (service.waitingCount || 0) + 1;
+      
+      const entry = {
+        userId: req.body?.userId || 'guest_' + Date.now(),
+        email: req.body?.email || null,
+        requestedAt: new Date().toISOString()
+      };
+      service.waitingList.push(entry);
+      saveStorage();
+      
+      return res.json({
+        success: true,
+        message: `¡Te has sumado con éxito a la lista de espera para ${service.name}! Te avisaremos tan pronto un anfitrión publique un asiento.`,
+        waitingCount: service.waitingCount
+      });
+    }
+
+    res.json({
+      success: true,
+      message: '¡Te has unido a la lista de espera!',
+      waitingCount: (hub.waitingCount || 0) + 1
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 3. GET ALL PLATFORMS FOR PUBLIC & ADMIN CAROUSEL
 router.get('/', (req, res) => {
   const db = getDb();
-  const platforms = Object.keys(streamingHubsStorage).map(key => {
-    const hub = streamingHubsStorage[key];
-    // Check if there are active subscriptions with available slots for this platform
-    const matchingSubs = (db.subscriptions || []).filter(s => {
-      if (s.status !== 'active') return false;
-      const name = (s.serviceName || '').toLowerCase();
-      return name.includes(key) || key.includes(name);
+  const services = (db.streaming_services || []).filter(s => s.isActive !== false);
+  const rate = db.platform_settings?.exchangeRatePyg || 7500;
+
+  const platforms = services.map(s => {
+    const matchingSubs = (db.subscriptions || []).filter(sub => {
+      if (sub.status !== 'active') return false;
+      const name = (sub.serviceName || '').toLowerCase();
+      const sId = (s.id || '').toLowerCase();
+      return name.includes(sId) || sId.includes(name);
     });
+
     const totalAvailSlots = matchingSubs.reduce((acc, curr) => acc + (curr.availableSlots || 0), 0);
-    // Explicit override or active subs existence
-    const hasStock = (hub.hasStock !== undefined) ? Boolean(hub.hasStock) : (totalAvailSlots > 0 || matchingSubs.length > 0 || (hub.metrics && hub.metrics.activeAccounts > 0));
+    const hasStock = totalAvailSlots > 0;
+    const pricePyg = s.pricePerSlotPyg || Math.round((s.pricePerSlotUsd || 3.33) * rate);
 
     return {
-      id: key,
-      name: hub.name,
-      tagline: hub.tagline,
-      brandColor: hub.brandColor || '#00c2ff',
-      logoUrl: hub.logoUrl || hub.thumbnailUrl,
-      thumbnailUrl: hub.thumbnailUrl || hub.logoUrl,
-      bannerHorizontal: hub.bannerHorizontal,
-      bannerVertical: hub.bannerVertical,
-      badgeText: hub.badgeText,
-      hasStock: Boolean(hasStock),
-      availableAccounts: matchingSubs.length || (hub.metrics?.activeAccounts || 0),
-      totalAvailSlots
+      id: s.id,
+      name: s.name,
+      tagline: s.tagline,
+      brandColor: s.brandColor || '#00c2ff',
+      logoUrl: s.iconUrl || s.thumbnailUrl,
+      thumbnailUrl: s.thumbnailUrl || s.iconUrl,
+      bannerHorizontal: s.bannerHorizontal,
+      bannerVertical: s.bannerVertical,
+      badgeText: s.badgeText,
+      pricePerSlotPyg: pricePyg,
+      pricePerSlotUsd: parseFloat((pricePyg / rate).toFixed(2)),
+      hasStock,
+      availableAccounts: matchingSubs.length,
+      totalAvailSlots,
+      waitingCount: s.waitingCount || 0
     };
   });
 
   res.json({
     success: true,
-    hubs: streamingHubsStorage,
+    services,
     platforms
   });
 });
 
-// 3. UPDATE PLATFORM BANNERS, THUMBNAILS, TEXTS & METRICS (ADMIN)
+// 4. UPDATE PLATFORM BANNERS, THUMBNAILS, TEXTS & METRICS (ADMIN)
 router.put('/:platform', (req, res) => {
-  const platformKey = matchPlatformKey(req.params.platform);
-  const { name, tagline, logoUrl, thumbnailUrl, brandColor, hasStock, bannerHorizontal, bannerVertical, badgeText, description, metrics, releases } = req.body;
+  const db = getDb();
+  const platformKey = req.params.platform;
+  const service = (db.streaming_services || []).find(s => s.id === platformKey || (s.id && s.id.toLowerCase() === platformKey.toLowerCase()));
 
-  if (!streamingHubsStorage[platformKey]) {
-    streamingHubsStorage[platformKey] = { ...defaultHubs[platformKey] };
+  if (!service) {
+    return res.status(404).json({ error: 'Servicio no encontrado' });
   }
 
-  const current = streamingHubsStorage[platformKey];
-  if (name) current.name = name;
-  if (tagline) current.tagline = tagline;
-  if (logoUrl) current.logoUrl = logoUrl;
-  if (thumbnailUrl) current.thumbnailUrl = thumbnailUrl;
-  if (brandColor) current.brandColor = brandColor;
-  if (hasStock !== undefined) current.hasStock = Boolean(hasStock);
-  if (bannerHorizontal) current.bannerHorizontal = bannerHorizontal;
-  if (bannerVertical) current.bannerVertical = bannerVertical;
-  if (badgeText) current.badgeText = badgeText;
-  if (description) current.description = description;
-  if (metrics) current.metrics = { ...current.metrics, ...metrics };
-  if (Array.isArray(releases)) current.releases = releases;
+  const {
+    name,
+    tagline,
+    logoUrl,
+    iconUrl,
+    thumbnailUrl,
+    brandColor,
+    hasStock,
+    bannerHorizontal,
+    bannerVertical,
+    badgeText,
+    description,
+    pricePerSlotPyg,
+    maxSlots,
+    commissionPercent,
+    metrics,
+    releases
+  } = req.body;
 
-  saveStorage('gb_streaming_hubs', streamingHubsStorage);
+  if (name) service.name = name;
+  if (tagline) service.tagline = tagline;
+  if (logoUrl || iconUrl) service.iconUrl = iconUrl || logoUrl;
+  if (thumbnailUrl || iconUrl) service.thumbnailUrl = thumbnailUrl || iconUrl || service.iconUrl;
+  if (brandColor) service.brandColor = brandColor;
+  if (hasStock !== undefined) service.hasStock = Boolean(hasStock);
+  if (bannerHorizontal) service.bannerHorizontal = bannerHorizontal;
+  if (bannerVertical) service.bannerVertical = bannerVertical;
+  if (badgeText) service.badgeText = badgeText;
+  if (description) service.description = description;
+  if (pricePerSlotPyg) service.pricePerSlotPyg = parseInt(pricePerSlotPyg, 10);
+  if (maxSlots) service.maxSlots = parseInt(maxSlots, 10);
+  if (commissionPercent !== undefined) service.commissionPercent = parseFloat(commissionPercent);
+  if (metrics) service.metrics = { ...service.metrics, ...metrics };
+  if (Array.isArray(releases)) service.releases = releases;
+
+  saveStorage();
 
   res.json({
     success: true,
-    message: `Página dedicada y miniatura de ${current.name} actualizada correctamente.`,
-    hub: current
+    message: `Página y servicio de ${service.name} actualizado correctamente.`,
+    hub: service
   });
 });
 
-// 4. AI / REAL-TIME LIVE RELEASES SYNCHRONIZER
+// 5. AI / REAL-TIME LIVE RELEASES SYNCHRONIZER
 router.post('/:platform/sync-ai', async (req, res) => {
   try {
     const platformKey = matchPlatformKey(req.params.platform);

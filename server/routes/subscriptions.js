@@ -400,12 +400,40 @@ router.get('/services-config', (req, res) => {
   try {
     const db = getDb();
     const rate = db.platform_settings?.exchangeRatePyg || 7500;
-    const config = db.streaming_services_config || {};
+    const services = (db.streaming_services || []).filter(s => s.isActive !== false);
+
+    const config = {};
+    services.forEach(s => {
+      const pricePyg = s.pricePerSlotPyg || Math.round((s.pricePerSlotUsd || 3.33) * rate);
+      const priceUsd = s.pricePerSlotUsd || parseFloat((pricePyg / rate).toFixed(2));
+      const comm = s.commissionPercent !== undefined ? s.commissionPercent : 10;
+      const netPayoutPyg = Math.round(pricePyg * (1 - comm / 100));
+      const netPayoutUsd = parseFloat((priceUsd * (1 - comm / 100)).toFixed(2));
+      const maxSlots = s.maxSlots || 5;
+
+      config[s.id] = {
+        key: s.id,
+        id: s.id,
+        name: s.name,
+        planName: s.planName || `Plan Ultra HD (${maxSlots} Pantallas)`,
+        maxSlots,
+        pricePerSlotPyg: pricePyg,
+        pricePerSlotUsd: priceUsd,
+        commissionPercent: comm,
+        netPayoutPyg,
+        netPayoutUsd,
+        potentialMonthlyEarningsPyg: netPayoutPyg * maxSlots,
+        iconUrl: s.iconUrl || s.thumbnailUrl,
+        bannerHorizontal: s.bannerHorizontal
+      };
+    });
+
     res.json({
       success: true,
       rate,
       commissionPercent: db.platform_settings?.commissionPercent || 10,
-      config
+      config,
+      services
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -426,22 +454,22 @@ router.post('/publish', (req, res) => {
       return res.status(400).json({ error: 'Por favor completa todos los campos requeridos.' });
     }
 
-    // Lookup service config set by admin (GoSplit model)
-    const servicesConfig = db.streaming_services_config || {};
-    const key = serviceKey || Object.keys(servicesConfig).find(k => (servicesConfig[k].name || '').toLowerCase() === (serviceName || '').toLowerCase());
-    const cfg = key ? servicesConfig[key] : null;
+    // Lookup service config set by admin from db.streaming_services
+    const rawKey = (serviceKey || '').toLowerCase();
+    const services = db.streaming_services || [];
+    const cfg = services.find(s => s.id === rawKey || (s.id && s.id.toLowerCase() === rawKey) || (s.name && s.name.toLowerCase() === (serviceName || '').toLowerCase())) || (db.streaming_services_config ? db.streaming_services_config[rawKey] : null);
 
     const finalServiceName = cfg ? cfg.name : (serviceName || 'Servicio Streaming');
-    const finalPlanName = planName || (cfg ? cfg.planName : 'Plan Compartido');
-    const maxSlots = cfg ? cfg.maxSlots : 5;
+    const finalPlanName = planName || (cfg ? (cfg.planName || 'Plan Compartido') : 'Plan Compartido');
+    const maxSlots = cfg ? (cfg.maxSlots || 5) : 5;
     const requestedSlots = Math.min(Math.max(1, parseInt(totalSlots, 10)), maxSlots);
 
     // Fixed price defined by admin
-    const pricePerSlotPyg = cfg ? cfg.pricePerSlotPyg : 25000;
-    const pricePerSlotUsd = cfg ? cfg.pricePerSlotUsd : parseFloat((pricePerSlotPyg / rate).toFixed(2));
-    const commissionPercent = cfg ? (cfg.commissionPercent !== undefined ? cfg.commissionPercent : (db.platform_settings?.commissionPercent || 10)) : 10;
-    const netPayoutPyg = cfg ? cfg.netPayoutPyg : Math.round(pricePerSlotPyg * (1 - commissionPercent / 100));
-    const netPayoutUsd = cfg ? cfg.netPayoutUsd : parseFloat((pricePerSlotUsd * (1 - commissionPercent / 100)).toFixed(2));
+    const pricePerSlotPyg = cfg ? (cfg.pricePerSlotPyg || 25000) : 25000;
+    const pricePerSlotUsd = cfg ? (cfg.pricePerSlotUsd || parseFloat((pricePerSlotPyg / rate).toFixed(2))) : parseFloat((pricePerSlotPyg / rate).toFixed(2));
+    const commissionPercent = cfg ? (cfg.commissionPercent !== undefined ? cfg.commissionPercent : 10) : 10;
+    const netPayoutPyg = Math.round(pricePerSlotPyg * (1 - commissionPercent / 100));
+    const netPayoutUsd = parseFloat((pricePerSlotUsd * (1 - commissionPercent / 100)).toFixed(2));
 
     const newSub = {
       id: `sub_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,

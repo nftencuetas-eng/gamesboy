@@ -1254,7 +1254,7 @@ function renderStreamingServices() {
     const hasActiveSlots = matching.some(s => (s.availableSlots || 0) > 0);
     const inStock = (p.hasStock !== undefined) ? p.hasStock : (hasActiveSlots || matching.length > 0);
 
-    const thumbImg = p.thumbnailUrl || p.logoUrl || p.coverImage || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';
+    const thumbImg = p.iconUrl || p.thumbnailUrl || p.logoUrl || p.coverImage || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';
 
     return `
       <div class="stream-thumb-card ${inStock ? '' : 'out-of-stock'}" 

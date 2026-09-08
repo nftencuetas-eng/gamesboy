@@ -1509,39 +1509,50 @@
       </section>
 
       <!-- ======================================================= -->
-      <!-- TAB: PRECIOS DE STREAMING & COMISIONES (GOSPLIT)        -->
+      <!-- TAB: GESTIÓN DE SERVICIOS DE STREAMING & MONETIZACIÓN   -->
       <!-- ======================================================= -->
       <section id="tab-services-pricing" class="admin-section-pane">
-        <div class="admin-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 12px;">
-            <div>
-              <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                <span>Configuración Centralizada de Precios & Comisiones (GoSplit)</span>
-              </h3>
-              <p style="font-size: 0.8rem; color: var(--text-tertiary);">
-                Establece el precio fijo de venta al público en Guaraníes, los cupos máximos permitidos y la comisión de la plataforma para cada servicio de streaming. Los vendedores no fijan precios arbitrarios.
-              </p>
-            </div>
-            <button class="btn-admin-action cyan" onclick="loadServicesConfig()" style="padding: 7px 12px; font-size: 0.82rem;">
-              🔄 Recargar Configuración
+        
+        <!-- Action & Summary Bar -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 14px; background: rgba(16, 20, 32, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); padding: 1.25rem 1.5rem; border-radius: 16px;">
+          <div>
+            <h3 style="font-size: 1.2rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              <span>Servicios de Streaming Disponibles para Alquiler & Monetización</span>
+            </h3>
+            <p style="font-size: 0.82rem; color: var(--text-tertiary); margin: 0;">
+              Control total sobre los servicios disponibles: crea plataformas, define la portada, ícono, precio fijo por asiento en Gs., cantidad de asientos y margen de comisión.
+            </p>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button type="button" class="btn-admin-action emerald" onclick="openCreateServiceModal()" style="padding: 10px 18px; font-size: 0.88rem; font-weight: 800; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>+ Crear Nuevo Servicio de Streaming</span>
+            </button>
+            <button type="button" class="btn-admin-action cyan" onclick="loadServicesConfig()" style="padding: 10px 14px; font-size: 0.84rem;">
+              <span>🔄 Recargar</span>
             </button>
           </div>
+        </div>
 
+        <div class="admin-card">
           <div style="overflow-x: auto;">
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th>Servicio & Plan</th>
-                  <th>Cupos Máx.</th>
-                  <th>Precio Venta Público (Gs.)</th>
-                  <th>Comisión GamesBoy (%)</th>
-                  <th>Ganancia Neta Vendedor por Perfil</th>
-                  <th>Acción</th>
+                  <th>Ícono & Servicio</th>
+                  <th>Portada & Banner</th>
+                  <th>Precio Venta por Asiento (Gs.)</th>
+                  <th>Asientos Máx.</th>
+                  <th>Comisión Plataforma</th>
+                  <th>Ganancia Vendedor (Neto)</th>
+                  <th>Lista de Espera</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody id="table-services-pricing-list">
-                <tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">Cargando servicios configurados...</td></tr>
+                <tr><td colspan="9" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando servicios configurados...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1549,6 +1560,250 @@
       </section>
 
     </main>
+  </div>
+
+  <!-- ======================================================= -->
+  <!-- MODAL: CREAR NUEVO SERVICIO DE STREAMING                -->
+  <!-- ======================================================= -->
+  <div class="modal-overlay" id="modal-create-streaming-service" style="display: none;">
+    <div class="glass-modal" style="width: 100%; max-width: 760px; max-height: 90vh; overflow-y: auto; padding: 2rem; box-sizing: border-box; margin: auto; background: rgba(10, 13, 22, 0.95); border: 1px solid rgba(0, 194, 255, 0.3); border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.85);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+          <span style="color: var(--accent-emerald);">✨</span>
+          <span>Crear Nuevo Servicio de Streaming</span>
+        </h3>
+        <button type="button" class="btn-modal-close" onclick="closeCreateServiceModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 1.3rem; cursor: pointer;">✕</button>
+      </div>
+
+      <form id="form-create-streaming-service">
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1rem;">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Nombre del Servicio de Streaming *</label>
+            <input type="text" id="create-srv-name" class="admin-form-input" placeholder="ej: Netflix Premium 4K HDR, Disney+ Ultra..." required>
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">Identificador / Slug (opcional)</label>
+            <input type="text" id="create-srv-id" class="admin-form-input" placeholder="ej: netflix, spotify, crunchymax">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Nombre del Plan Oficial</label>
+            <input type="text" id="create-srv-plan" class="admin-form-input" placeholder="ej: Plan Familiar (5 Pantallas 4K)">
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">Badge Destacado</label>
+            <input type="text" id="create-srv-badge" class="admin-form-input" placeholder="ej: ULTRA HD 4K • DOLBY VISION">
+          </div>
+        </div>
+
+        <div class="admin-form-group" style="margin-top: 0.5rem;">
+          <label class="admin-form-label">Lema / Tagline Destacado</label>
+          <input type="text" id="create-srv-tagline" class="admin-form-input" placeholder="ej: Películas, series y documentales ilimitados en Ultra HD">
+        </div>
+
+        <div class="admin-form-group" style="margin-top: 0.5rem;">
+          <label class="admin-form-label">Breve Descripción Informativa</label>
+          <textarea id="create-srv-desc" class="admin-form-textarea" rows="2" placeholder="Explicación del servicio y la protección de pago Escrow con PIN personal..."></textarea>
+        </div>
+
+        <!-- IMAGES: ICON + COVER -->
+        <div style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 1rem; margin-top: 1rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 1rem; border-radius: 12px;">
+          <!-- Icon -->
+          <div class="admin-form-group">
+            <label class="admin-form-label">Ícono / Miniatura Cuadrada (Página de Inicio)</label>
+            <input type="file" id="file-create-srv-icon" accept="image/*" class="admin-form-input" style="font-size: 0.78rem;">
+            <input type="text" id="create-srv-icon-url" class="admin-form-input" placeholder="https://... URL de ícono" style="margin-top: 6px;">
+            <div id="preview-create-srv-icon" style="margin-top: 6px; display: none;">
+              <img src="" style="width: 50px; height: 50px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255,255,255,0.2);">
+            </div>
+          </div>
+
+          <!-- Cover / Banner -->
+          <div class="admin-form-group">
+            <label class="admin-form-label">Portada Panorámica Hero (Página del Servicio)</label>
+            <input type="file" id="file-create-srv-banner" accept="image/*" class="admin-form-input" style="font-size: 0.78rem;">
+            <input type="text" id="create-srv-banner-url" class="admin-form-input" placeholder="https://... URL de portada horizontal" style="margin-top: 6px;">
+            <div id="preview-create-srv-banner" style="margin-top: 6px; display: none;">
+              <img src="" style="width: 100%; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(255,255,255,0.2);">
+            </div>
+          </div>
+        </div>
+
+        <!-- FINANCIALS & SEATS CALCULATOR -->
+        <div style="margin-top: 1.25rem; background: rgba(0, 194, 255, 0.05); border: 1px solid rgba(0, 194, 255, 0.2); border-radius: 14px; padding: 1.25rem;">
+          <h4 style="font-size: 0.92rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+            <span>💰</span>
+            <span>Precios de Venta por Asiento, Cupos & Margen de Ganancia</span>
+          </h4>
+
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 1rem;">
+            <div class="admin-form-group">
+              <label class="admin-form-label">Precio por Asiento (Gs.) *</label>
+              <input type="number" id="create-srv-price" class="admin-form-input" value="25000" step="1000" min="5000" required oninput="updateCreateModalCalc()" style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan);">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Cantidad de Asientos *</label>
+              <input type="number" id="create-srv-slots" class="admin-form-input" value="5" min="1" max="10" required oninput="updateCreateModalCalc()" style="font-weight: 800; text-align: center;">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Comisión GamesBoy (%) *</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="number" id="create-srv-comm" class="admin-form-input" value="10" min="0" max="50" required oninput="updateCreateModalCalc()" style="font-weight: 800; text-align: center;">
+                <span style="font-weight: 800; color: var(--text-tertiary);">%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Visual Calculation Result -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(0, 194, 255, 0.15);">
+            <div style="background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: 10px;">
+              <span style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; display: block;">Ganancia Neta Vendedor por Asiento:</span>
+              <strong id="create-calc-net-slot" style="font-family: var(--font-mono); font-size: 1.1rem; color: var(--accent-emerald);">22.500 Gs.</strong>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: 10px;">
+              <span style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; display: block;">Ingreso Máximo por Cuenta Completa:</span>
+              <strong id="create-calc-total-account" style="font-family: var(--font-mono); font-size: 1.1rem; color: #fbbf24;">112.500 Gs. / mes</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.25rem;">
+          <button type="button" class="btn-admin-action" onclick="closeCreateServiceModal()" style="padding: 10px 18px;">Cancelar</button>
+          <button type="submit" class="btn-admin-action emerald" style="padding: 10px 24px; font-size: 0.92rem; font-weight: 800;">
+            <span>✨ Guardar & Publicar Servicio</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================= -->
+  <!-- MODAL: EDITAR SERVICIO DE STREAMING                     -->
+  <!-- ======================================================= -->
+  <div class="modal-overlay" id="modal-edit-streaming-service" style="display: none;">
+    <div class="glass-modal" style="width: 100%; max-width: 760px; max-height: 90vh; overflow-y: auto; padding: 2rem; box-sizing: border-box; margin: auto; background: rgba(10, 13, 22, 0.95); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.85);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px;">
+          <span style="color: var(--accent-amber);">✏️</span>
+          <span id="edit-srv-modal-title">Editar Servicio de Streaming</span>
+        </h3>
+        <button type="button" class="btn-modal-close" onclick="closeEditServiceModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 1.3rem; cursor: pointer;">✕</button>
+      </div>
+
+      <form id="form-edit-streaming-service">
+        <input type="hidden" id="edit-srv-id">
+
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1rem;">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Nombre del Servicio de Streaming *</label>
+            <input type="text" id="edit-srv-name" class="admin-form-input" required>
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">Estado del Servicio</label>
+            <select id="edit-srv-status" class="admin-form-select" style="font-weight: 700;">
+              <option value="true">🟢 Activo en Plataforma</option>
+              <option value="false">🔴 Inactivo / Oculto</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+          <div class="admin-form-group">
+            <label class="admin-form-label">Nombre del Plan</label>
+            <input type="text" id="edit-srv-plan" class="admin-form-input">
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">Badge Destacado</label>
+            <input type="text" id="edit-srv-badge" class="admin-form-input">
+          </div>
+        </div>
+
+        <div class="admin-form-group" style="margin-top: 0.5rem;">
+          <label class="admin-form-label">Lema / Tagline Destacado</label>
+          <input type="text" id="edit-srv-tagline" class="admin-form-input">
+        </div>
+
+        <div class="admin-form-group" style="margin-top: 0.5rem;">
+          <label class="admin-form-label">Breve Descripción Informativa</label>
+          <textarea id="edit-srv-desc" class="admin-form-textarea" rows="2"></textarea>
+        </div>
+
+        <!-- IMAGES: ICON + COVER -->
+        <div style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 1rem; margin-top: 1rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 1rem; border-radius: 12px;">
+          <!-- Icon -->
+          <div class="admin-form-group">
+            <label class="admin-form-label">Ícono / Miniatura (Home & Catálogo)</label>
+            <input type="file" id="file-edit-srv-icon" accept="image/*" class="admin-form-input" style="font-size: 0.78rem;">
+            <input type="text" id="edit-srv-icon-url" class="admin-form-input" placeholder="https://..." style="margin-top: 6px;">
+            <div id="preview-edit-srv-icon" style="margin-top: 6px;">
+              <img id="img-preview-edit-icon" src="" style="width: 50px; height: 50px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255,255,255,0.2);">
+            </div>
+          </div>
+
+          <!-- Cover / Banner -->
+          <div class="admin-form-group">
+            <label class="admin-form-label">Portada Panorámica Hero (Cabecera Hub)</label>
+            <input type="file" id="file-edit-srv-banner" accept="image/*" class="admin-form-input" style="font-size: 0.78rem;">
+            <input type="text" id="edit-srv-banner-url" class="admin-form-input" placeholder="https://..." style="margin-top: 6px;">
+            <div id="preview-edit-srv-banner" style="margin-top: 6px;">
+              <img id="img-preview-edit-banner" src="" style="width: 100%; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(255,255,255,0.2);">
+            </div>
+          </div>
+        </div>
+
+        <!-- FINANCIALS & SEATS CALCULATOR -->
+        <div style="margin-top: 1.25rem; background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 14px; padding: 1.25rem;">
+          <h4 style="font-size: 0.92rem; font-weight: 800; color: var(--accent-amber); margin-bottom: 12px;">
+            💰 Tarifa de Venta por Asiento, Cupos & Comisión
+          </h4>
+
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 1rem;">
+            <div class="admin-form-group">
+              <label class="admin-form-label">Precio por Asiento (Gs.) *</label>
+              <input type="number" id="edit-srv-price" class="admin-form-input" step="1000" min="5000" required oninput="updateEditModalCalc()" style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan);">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Cantidad de Asientos *</label>
+              <input type="number" id="edit-srv-slots" class="admin-form-input" min="1" max="10" required oninput="updateEditModalCalc()" style="font-weight: 800; text-align: center;">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-form-label">Comisión GamesBoy (%) *</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <input type="number" id="edit-srv-comm" class="admin-form-input" min="0" max="50" required oninput="updateEditModalCalc()" style="font-weight: 800; text-align: center;">
+                <span style="font-weight: 800; color: var(--text-tertiary);">%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Visual Calculation Result -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(245, 158, 11, 0.15);">
+            <div style="background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: 10px;">
+              <span style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; display: block;">Ganancia Neta por Asiento:</span>
+              <strong id="edit-calc-net-slot" style="font-family: var(--font-mono); font-size: 1.05rem; color: var(--accent-emerald);">0 Gs.</strong>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: 10px;">
+              <span style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; display: block;">Ingreso Mensual por Cuenta:</span>
+              <strong id="edit-calc-total-account" style="font-family: var(--font-mono); font-size: 1.05rem; color: #fbbf24;">0 Gs. / mes</strong>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 10px 14px; border-radius: 10px;">
+              <span style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; display: block;">Personas en Lista de Espera:</span>
+              <input type="number" id="edit-srv-waiting" class="admin-form-input" style="padding: 3px 8px; font-weight: 800; color: #ef4444; font-size: 0.9rem; margin-top: 2px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.25rem;">
+          <button type="button" class="btn-admin-action" onclick="closeEditServiceModal()" style="padding: 10px 18px;">Cancelar</button>
+          <button type="submit" class="btn-admin-action emerald" style="padding: 10px 24px; font-size: 0.92rem; font-weight: 800;">
+            <span>💾 Guardar Cambios</span>
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <!-- ======================================================= -->
@@ -3692,20 +3947,20 @@
     };
 
     // =======================================================
-    // TAB: SERVICES PRICING CONFIG (GOSPLIT CENTRALIZED)
+    // TAB: GESTIÓN DE SERVICIOS DE STREAMING & MONETIZACIÓN
     // =======================================================
-    let currentServicesConfig = {};
+    let currentStreamingServices = [];
 
     async function loadServicesConfig() {
       try {
-        const res = await fetch('/api/admin/services-config');
+        const res = await fetch('/api/admin/streaming-services');
         const data = await res.json();
         if (!data.success) return;
 
-        currentServicesConfig = data.config || {};
+        currentStreamingServices = data.services || [];
         renderServicesConfigTable();
       } catch (err) {
-        console.error('Error loading services config:', err);
+        console.error('Error loading streaming services:', err);
       }
     }
 
@@ -3713,76 +3968,325 @@
       const tbody = document.getElementById('table-services-pricing-list');
       if (!tbody) return;
 
-      const keys = Object.keys(currentServicesConfig);
-      if (keys.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">No hay servicios de streaming configurados.</td></tr>';
+      if (!currentStreamingServices || currentStreamingServices.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: var(--text-tertiary); padding: 2.5rem;">No hay servicios de streaming creados. Haz clic en <strong>"+ Crear Nuevo Servicio de Streaming"</strong> para agregar uno.</td></tr>';
         return;
       }
 
-      tbody.innerHTML = keys.map(key => {
-        const s = currentServicesConfig[key];
-        const netPerSlot = Math.round(s.pricePerSlotPyg * (1 - (s.commissionPercent || 10) / 100));
+      tbody.innerHTML = currentStreamingServices.map(s => {
+        const pricePyg = s.pricePerSlotPyg || 25000;
+        const comm = s.commissionPercent !== undefined ? s.commissionPercent : 10;
+        const netSlot = Math.round(pricePyg * (1 - comm / 100));
+        const maxSlots = s.maxSlots || 5;
+        const totalAccount = netSlot * maxSlots;
+        const iconUrl = s.iconUrl || s.thumbnailUrl || '/assets/branding/icon.png';
+        const bannerUrl = s.bannerHorizontal || '/assets/branding/icon.png';
+        const waiting = s.waitingCount || 0;
+        const isActive = s.isActive !== false;
 
         return `
           <tr>
             <td>
-              <div style="font-weight: 800; color: #ffffff; font-size: 0.92rem;">${s.name}</div>
-              <input type="text" class="admin-form-input" id="cfg-plan-${key}" value="${s.planName || ''}" style="margin-top: 4px; padding: 4px 8px; font-size: 0.76rem; width: 100%; max-width: 220px;" placeholder="Plan oficial">
-            </td>
-            <td>
-              <input type="number" class="admin-form-input" id="cfg-slots-${key}" value="${s.maxSlots || 5}" min="1" max="10" style="width: 70px; padding: 6px; font-weight: 700; text-align: center;">
-            </td>
-            <td>
-              <input type="number" class="admin-form-input" id="cfg-price-${key}" value="${s.pricePerSlotPyg || 25000}" step="1000" min="5000" style="width: 130px; padding: 6px 10px; font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan);" oninput="updateLiveNetCalc('${key}')">
-            </td>
-            <td>
-              <div style="display: flex; align-items: center; gap: 4px;">
-                <input type="number" class="admin-form-input" id="cfg-comm-${key}" value="${s.commissionPercent !== undefined ? s.commissionPercent : 10}" min="0" max="50" style="width: 70px; padding: 6px; font-weight: 700; text-align: center;" oninput="updateLiveNetCalc('${key}')">
-                <span style="font-weight: 800; color: var(--text-tertiary);">%</span>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <img src="${iconUrl}" alt="${s.name}" style="width: 40px; height: 40px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255,255,255,0.15);" onerror="this.src='/assets/branding/icon.png'">
+                <div>
+                  <strong style="color: #ffffff; font-size: 0.92rem; display: block;">${s.name}</strong>
+                  <span style="font-size: 0.72rem; color: var(--accent-cyan);">${s.planName || `Plan ${maxSlots} Pantallas`}</span>
+                  <span style="display: inline-block; font-size: 0.65rem; background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 4px; color: var(--text-tertiary); margin-left: 4px;">ID: ${s.id}</span>
+                </div>
               </div>
             </td>
             <td>
-              <strong id="cfg-net-preview-${key}" style="font-family: var(--font-mono); color: var(--accent-emerald); font-size: 0.92rem;">
-                ${netPerSlot.toLocaleString('es-PY')} Gs.
-              </strong>
-              <span style="font-size: 0.7rem; color: var(--text-tertiary); display: block;">por perfil al mes</span>
+              <div style="position: relative; width: 90px; height: 42px; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.12); background: #000;">
+                <img src="${bannerUrl}" alt="${s.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/assets/branding/icon.png'">
+              </div>
             </td>
             <td>
-              <button class="btn-admin-action emerald" onclick="saveServiceConfigRow('${key}')" style="padding: 7px 14px; font-size: 0.8rem; font-weight: 800;">
-                <span>💾 Guardar</span>
-              </button>
+              <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan); font-size: 0.95rem;">
+                ${pricePyg.toLocaleString('es-PY')} Gs.
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-tertiary);">
+                $${(s.pricePerSlotUsd || (pricePyg / 7500)).toFixed(2)} USDT
+              </div>
+            </td>
+            <td>
+              <span style="font-weight: 800; color: #ffffff; background: rgba(255,255,255,0.06); padding: 4px 10px; border-radius: 8px;">
+                ${maxSlots}
+              </span>
+            </td>
+            <td>
+              <div style="font-weight: 800; color: var(--accent-amber);">
+                ${comm}%
+              </div>
+              <div style="font-size: 0.7rem; color: var(--text-tertiary);">
+                ${Math.round(pricePyg * (comm / 100)).toLocaleString('es-PY')} Gs.
+              </div>
+            </td>
+            <td>
+              <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald); font-size: 0.95rem;">
+                ${netSlot.toLocaleString('es-PY')} Gs. <span style="font-size: 0.7rem; font-weight: normal; color: var(--text-tertiary);">/asiento</span>
+              </div>
+              <div style="font-size: 0.74rem; color: #fbbf24; font-weight: 700;">
+                Hasta ${totalAccount.toLocaleString('es-PY')} Gs./mes
+              </div>
+            </td>
+            <td>
+              <span class="btn-admin-action ${waiting > 0 ? 'red' : ''}" style="padding: 3px 9px; font-size: 0.76rem; font-weight: 800; ${waiting > 0 ? 'background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: rgba(239, 68, 68, 0.3);' : 'background: rgba(255,255,255,0.04); color: var(--text-tertiary);'}">
+                🔥 ${waiting} esperando
+              </span>
+            </td>
+            <td>
+              <span class="btn-admin-action ${isActive ? 'emerald' : 'red'}" style="padding: 3px 8px; font-size: 0.74rem; font-weight: 800;">
+                ${isActive ? '🟢 Activo' : '🔴 Oculto'}
+              </span>
+            </td>
+            <td>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <button type="button" class="btn-admin-action amber" onclick="openEditServiceModal('${s.id}')" title="Editar parámetros, imágenes y precios" style="padding: 6px 10px; font-size: 0.76rem; font-weight: 800;">
+                  <span>✏️ Editar</span>
+                </button>
+                <a href="/service.html?platform=${s.id}" target="_blank" class="btn-admin-action cyan" title="Ver Hub en vivo" style="padding: 6px 8px; font-size: 0.76rem;">
+                  <span>👁️</span>
+                </a>
+                <button type="button" class="btn-admin-action red" onclick="deleteStreamingService('${s.id}', '${s.name.replace(/'/g, "\\'")}')" title="Eliminar servicio" style="padding: 6px 8px; font-size: 0.76rem;">
+                  <span>🗑️</span>
+                </button>
+              </div>
             </td>
           </tr>
         `;
       }).join('');
     }
 
-    window.updateLiveNetCalc = function(key) {
-      const price = parseInt(document.getElementById(`cfg-price-${key}`)?.value, 10) || 0;
-      const comm = parseFloat(document.getElementById(`cfg-comm-${key}`)?.value) || 0;
-      const net = Math.round(price * (1 - comm / 100));
-      const previewEl = document.getElementById(`cfg-net-preview-${key}`);
-      if (previewEl) previewEl.textContent = `${net.toLocaleString('es-PY')} Gs.`;
+    // --- MODAL: CREAR SERVICIO ---
+    window.openCreateServiceModal = function() {
+      const modal = document.getElementById('modal-create-streaming-service');
+      const form = document.getElementById('form-create-streaming-service');
+      if (form) form.reset();
+      updateCreateModalCalc();
+      if (modal) modal.style.display = 'grid';
     };
 
-    window.saveServiceConfigRow = async function(key) {
-      const planName = document.getElementById(`cfg-plan-${key}`)?.value.trim();
-      const maxSlots = parseInt(document.getElementById(`cfg-slots-${key}`)?.value, 10) || 5;
-      const pricePerSlotPyg = parseInt(document.getElementById(`cfg-price-${key}`)?.value, 10) || 25000;
-      const commissionPercent = parseFloat(document.getElementById(`cfg-comm-${key}`)?.value) || 10;
+    window.closeCreateServiceModal = function() {
+      const modal = document.getElementById('modal-create-streaming-service');
+      if (modal) modal.style.display = 'none';
+    };
+
+    window.updateCreateModalCalc = function() {
+      const price = parseInt(document.getElementById('create-srv-price')?.value, 10) || 0;
+      const slots = parseInt(document.getElementById('create-srv-slots')?.value, 10) || 1;
+      const comm = parseFloat(document.getElementById('create-srv-comm')?.value) || 0;
+
+      const netSlot = Math.round(price * (1 - comm / 100));
+      const totalAccount = netSlot * slots;
+
+      const elSlot = document.getElementById('create-calc-net-slot');
+      const elAcc = document.getElementById('create-calc-total-account');
+
+      if (elSlot) elSlot.textContent = `${netSlot.toLocaleString('es-PY')} Gs.`;
+      if (elAcc) elAcc.textContent = `${totalAccount.toLocaleString('es-PY')} Gs. / mes`;
+    };
+
+    // Create Service Image Handlers
+    document.getElementById('file-create-srv-icon')?.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('create-srv-icon-url').value = evt.target.result;
+          const box = document.getElementById('preview-create-srv-icon');
+          if (box) {
+            box.style.display = 'block';
+            box.querySelector('img').src = evt.target.result;
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('file-create-srv-banner')?.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('create-srv-banner-url').value = evt.target.result;
+          const box = document.getElementById('preview-create-srv-banner');
+          if (box) {
+            box.style.display = 'block';
+            box.querySelector('img').src = evt.target.result;
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Create Service Submit
+    document.getElementById('form-create-streaming-service')?.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById('create-srv-name').value.trim(),
+        id: document.getElementById('create-srv-id').value.trim(),
+        planName: document.getElementById('create-srv-plan').value.trim(),
+        badgeText: document.getElementById('create-srv-badge').value.trim(),
+        tagline: document.getElementById('create-srv-tagline').value.trim(),
+        description: document.getElementById('create-srv-desc').value.trim(),
+        iconUrl: document.getElementById('create-srv-icon-url').value.trim(),
+        bannerHorizontal: document.getElementById('create-srv-banner-url').value.trim(),
+        pricePerSlotPyg: parseInt(document.getElementById('create-srv-price').value, 10) || 25000,
+        maxSlots: parseInt(document.getElementById('create-srv-slots').value, 10) || 5,
+        commissionPercent: parseFloat(document.getElementById('create-srv-comm').value) || 10,
+        isActive: true
+      };
 
       try {
-        const res = await fetch(`/api/admin/services-config/${key}`, {
-          method: 'PUT',
+        const res = await fetch('/api/admin/streaming-services', {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ planName, maxSlots, pricePerSlotPyg, commissionPercent })
+          body: JSON.stringify(payload)
         });
         const data = await res.json();
         if (data.success) {
           alert(`🎉 ${data.message}`);
+          closeCreateServiceModal();
           loadServicesConfig();
         } else {
-          alert(data.error || 'No se pudo guardar la configuración.');
+          alert(data.error || 'No se pudo crear el servicio.');
+        }
+      } catch (err) {
+        alert('Error al conectar con el servidor.');
+      }
+    });
+
+    // --- MODAL: EDITAR SERVICIO ---
+    window.openEditServiceModal = function(serviceId) {
+      const s = currentStreamingServices.find(item => item.id === serviceId);
+      if (!s) return;
+
+      document.getElementById('edit-srv-id').value = s.id;
+      document.getElementById('edit-srv-name').value = s.name || '';
+      document.getElementById('edit-srv-status').value = s.isActive !== false ? 'true' : 'false';
+      document.getElementById('edit-srv-plan').value = s.planName || '';
+      document.getElementById('edit-srv-badge').value = s.badgeText || '';
+      document.getElementById('edit-srv-tagline').value = s.tagline || '';
+      document.getElementById('edit-srv-desc').value = s.description || '';
+      document.getElementById('edit-srv-icon-url').value = s.iconUrl || s.thumbnailUrl || '';
+      document.getElementById('edit-srv-banner-url').value = s.bannerHorizontal || '';
+      document.getElementById('edit-srv-price').value = s.pricePerSlotPyg || 25000;
+      document.getElementById('edit-srv-slots').value = s.maxSlots || 5;
+      document.getElementById('edit-srv-comm').value = s.commissionPercent !== undefined ? s.commissionPercent : 10;
+      document.getElementById('edit-srv-waiting').value = s.waitingCount || 0;
+
+      const imgIcon = document.getElementById('img-preview-edit-icon');
+      if (imgIcon) imgIcon.src = s.iconUrl || s.thumbnailUrl || '/assets/branding/icon.png';
+
+      const imgBanner = document.getElementById('img-preview-edit-banner');
+      if (imgBanner) imgBanner.src = s.bannerHorizontal || '/assets/branding/icon.png';
+
+      updateEditModalCalc();
+
+      const modal = document.getElementById('modal-edit-streaming-service');
+      if (modal) modal.style.display = 'grid';
+    };
+
+    window.closeEditServiceModal = function() {
+      const modal = document.getElementById('modal-edit-streaming-service');
+      if (modal) modal.style.display = 'none';
+    };
+
+    window.updateEditModalCalc = function() {
+      const price = parseInt(document.getElementById('edit-srv-price')?.value, 10) || 0;
+      const slots = parseInt(document.getElementById('edit-srv-slots')?.value, 10) || 1;
+      const comm = parseFloat(document.getElementById('edit-srv-comm')?.value) || 0;
+
+      const netSlot = Math.round(price * (1 - comm / 100));
+      const totalAccount = netSlot * slots;
+
+      const elSlot = document.getElementById('edit-calc-net-slot');
+      const elAcc = document.getElementById('edit-calc-total-account');
+
+      if (elSlot) elSlot.textContent = `${netSlot.toLocaleString('es-PY')} Gs.`;
+      if (elAcc) elAcc.textContent = `${totalAccount.toLocaleString('es-PY')} Gs. / mes`;
+    };
+
+    // Edit Service Image Handlers
+    document.getElementById('file-edit-srv-icon')?.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('edit-srv-icon-url').value = evt.target.result;
+          const img = document.getElementById('img-preview-edit-icon');
+          if (img) img.src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('file-edit-srv-banner')?.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('edit-srv-banner-url').value = evt.target.result;
+          const img = document.getElementById('img-preview-edit-banner');
+          if (img) img.src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Edit Service Submit
+    document.getElementById('form-edit-streaming-service')?.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const serviceId = document.getElementById('edit-srv-id').value;
+      const payload = {
+        name: document.getElementById('edit-srv-name').value.trim(),
+        isActive: document.getElementById('edit-srv-status').value === 'true',
+        planName: document.getElementById('edit-srv-plan').value.trim(),
+        badgeText: document.getElementById('edit-srv-badge').value.trim(),
+        tagline: document.getElementById('edit-srv-tagline').value.trim(),
+        description: document.getElementById('edit-srv-desc').value.trim(),
+        iconUrl: document.getElementById('edit-srv-icon-url').value.trim(),
+        bannerHorizontal: document.getElementById('edit-srv-banner-url').value.trim(),
+        pricePerSlotPyg: parseInt(document.getElementById('edit-srv-price').value, 10) || 25000,
+        maxSlots: parseInt(document.getElementById('edit-srv-slots').value, 10) || 5,
+        commissionPercent: parseFloat(document.getElementById('edit-srv-comm').value) || 10,
+        waitingCount: parseInt(document.getElementById('edit-srv-waiting').value, 10) || 0
+      };
+
+      try {
+        const res = await fetch(`/api/admin/streaming-services/${serviceId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert(`🎉 ${data.message}`);
+          closeEditServiceModal();
+          loadServicesConfig();
+        } else {
+          alert(data.error || 'No se pudo actualizar el servicio.');
+        }
+      } catch (err) {
+        alert('Error al conectar con el servidor.');
+      }
+    });
+
+    // Delete Service
+    window.deleteStreamingService = async function(serviceId, serviceName) {
+      if (!confirm(`¿Estás seguro de eliminar el servicio "${serviceName}"? Ya no aparecerá en el catálogo ni en la página de inicio.`)) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/admin/streaming-services/${serviceId}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          alert(`🗑️ ${data.message}`);
+          loadServicesConfig();
+        } else {
+          alert(data.error || 'No se pudo eliminar el servicio.');
         }
       } catch (err) {
         alert('Error al conectar con el servidor.');
