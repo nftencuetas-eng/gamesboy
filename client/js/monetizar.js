@@ -156,39 +156,93 @@ function initFaqAccordion() {
   });
 }
 
-function renderPublishProfilesList(slotsCount) {
+function renderPublishProfilesList(totalCapacity, initialAvailableCount) {
   const container = document.getElementById('user-pub-profiles-container');
   if (!container) return;
 
-  const count = Math.max(1, Math.min(10, parseInt(slotsCount, 10) || 1));
+  const capacity = Math.max(1, Math.min(20, parseInt(totalCapacity, 10) || 5));
+  const availCount = Math.max(1, Math.min(capacity, parseInt(initialAvailableCount, 10) || capacity));
   
   const existingData = {};
   container.querySelectorAll('.pub-profile-slot-item').forEach(card => {
     const idx = card.dataset.slot;
     const name = card.querySelector('.pub-profile-name-input')?.value;
     const pin = card.querySelector('.pub-profile-pin-input')?.value;
-    if (idx) existingData[idx] = { name, pin };
+    const isOccupied = card.getAttribute('data-occupied') === 'true';
+    if (idx) existingData[idx] = { name, pin, isOccupied };
   });
 
   let html = '';
-  for (let i = 1; i <= count; i++) {
-    const defaultName = existingData[i]?.name || `Gboy ${i}`;
+  for (let i = 1; i <= capacity; i++) {
+    const isOcc = existingData[i] ? existingData[i].isOccupied : (i > availCount);
+    const defaultName = existingData[i]?.name || (isOcc ? `Mi Perfil` : `Perfil ${i}`);
     const defaultPin = existingData[i]?.pin || '';
+
     html += `
-      <div class="pub-profile-slot-item" data-slot="${i}">
-        <div class="pub-profile-slot-header">
-          <span class="pub-profile-slot-num">#${i}</span>
-          <input type="text" class="pub-profile-name-input" data-slot="${i}" value="${defaultName}" placeholder="Nombre (ej: Gboy ${i})">
+      <div class="pub-profile-slot-item ${isOcc ? 'is-occupied' : ''}" data-slot="${i}" data-occupied="${isOcc}">
+        <div class="pub-profile-slot-top-row">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span class="pub-profile-slot-num">#${i}</span>
+            <span style="font-size: 0.76rem; font-weight: 800; color: #fff;">Asiento ${i}</span>
+          </div>
+          <button type="button" class="pub-slot-toggle-btn ${isOcc ? 'occupied' : ''}" onclick="toggleMonetizarSlotState(${i})">
+            ${isOcc ? '🔴 Ocupado / Personal' : '🟢 Disponible'}
+          </button>
         </div>
+        
+        <div class="pub-profile-slot-header">
+          <input type="text" class="pub-profile-name-input" data-slot="${i}" value="${defaultName}" placeholder="Nombre (ej: Papá, Mi Perfil)">
+        </div>
+
         <div class="pub-profile-pin-wrap">
           <span class="pub-profile-pin-label">PIN:</span>
-          <input type="text" class="pub-profile-pin-input" data-slot="${i}" value="${defaultPin}" placeholder="Opcional (ej: 1234)" maxlength="8">
+          <input type="text" class="pub-profile-pin-input" data-slot="${i}" value="${isOcc ? '' : defaultPin}" ${isOcc ? 'disabled' : ''} placeholder="${isOcc ? 'No requiere PIN (Personal)' : 'Opcional (ej: 1234)'}" maxlength="8">
         </div>
       </div>
     `;
   }
   container.innerHTML = html;
 }
+
+window.toggleMonetizarSlotState = function(slotNum) {
+  const card = document.querySelector(`#user-pub-profiles-container .pub-profile-slot-item[data-slot="${slotNum}"]`);
+  if (!card) return;
+
+  const currentOccupied = card.getAttribute('data-occupied') === 'true';
+  const nextOccupied = !currentOccupied;
+
+  card.setAttribute('data-occupied', nextOccupied ? 'true' : 'false');
+  card.classList.toggle('is-occupied', nextOccupied);
+
+  const toggleBtn = card.querySelector('.pub-slot-toggle-btn');
+  if (toggleBtn) {
+    toggleBtn.className = `pub-slot-toggle-btn ${nextOccupied ? 'occupied' : ''}`;
+    toggleBtn.innerHTML = nextOccupied ? '🔴 Ocupado / Personal' : '🟢 Disponible';
+  }
+
+  const pinInput = card.querySelector('.pub-profile-pin-input');
+  if (pinInput) {
+    pinInput.disabled = nextOccupied;
+    if (nextOccupied) {
+      pinInput.dataset.prevPin = pinInput.value;
+      pinInput.value = '';
+      pinInput.placeholder = 'No requiere PIN (Personal)';
+    } else {
+      pinInput.value = pinInput.dataset.prevPin || '';
+      pinInput.placeholder = 'Opcional (ej: 1234)';
+    }
+  }
+
+  const totalAvail = document.querySelectorAll('#user-pub-profiles-container .pub-profile-slot-item[data-occupied="false"]').length;
+  const slotsInput = document.getElementById('user-pub-slots');
+  if (slotsInput) {
+    slotsInput.value = totalAvail;
+  }
+
+  if (typeof window.updateMonetizarModalPricing === 'function') {
+    window.updateMonetizarModalPricing();
+  }
+};
 
 // --- PUBLISH MODAL CONTROLLER ---
 function initPublishModal() {
@@ -204,37 +258,55 @@ function initPublishModal() {
   const commissionDisplay = document.getElementById('user-pub-commission-preview');
   const netEarningsTotal = document.getElementById('user-pub-net-total');
 
-  const updateModalPricing = () => {
+  window.updateMonetizarModalPricing = () => {
     if (!serviceSelect) return;
     const selectedKey = serviceSelect.value;
     const cfg = servicesConfig[selectedKey] || servicesConfig['netflix'];
 
+    const maxCapacity = cfg ? (cfg.maxSlots || 5) : 5;
+
     if (planInput && cfg) planInput.value = cfg.planName || 'Plan Compartido';
-    if (slotsInput && cfg) {
-      slotsInput.max = cfg.maxSlots || 5;
-      if (parseInt(slotsInput.value, 10) > (cfg.maxSlots || 5)) {
-        slotsInput.value = cfg.maxSlots || 5;
-      }
+    if (slotsInput) {
+      slotsInput.max = maxCapacity;
     }
 
     const pricePyg = cfg ? cfg.pricePerSlotPyg : 25000;
     const commPct = cfg ? (cfg.commissionPercent !== undefined ? cfg.commissionPercent : 10) : 10;
     const netPerSlot = cfg ? cfg.netPayoutPyg : Math.round(pricePyg * (1 - commPct / 100));
-    const slots = parseInt(slotsInput?.value, 10) || 1;
-    const totalNet = netPerSlot * slots;
+    
+    const availCount = parseInt(slotsInput?.value, 10) || 1;
+    const totalNet = netPerSlot * availCount;
 
     if (priceDisplay) priceDisplay.textContent = `${pricePyg.toLocaleString('es-PY')} Gs.`;
     if (commissionDisplay) commissionDisplay.textContent = `${commPct}%`;
     if (netEarningsTotal) netEarningsTotal.textContent = `${totalNet.toLocaleString('es-PY')} Gs.`;
+  };
 
-    renderPublishProfilesList(slots);
+  const handleServiceOrSlotsChange = (rebuildProfiles = true) => {
+    const selectedKey = serviceSelect.value;
+    const cfg = servicesConfig[selectedKey] || servicesConfig['netflix'];
+    const maxCapacity = cfg ? (cfg.maxSlots || 5) : 5;
+
+    if (slotsInput) {
+      slotsInput.max = maxCapacity;
+      if (parseInt(slotsInput.value, 10) > maxCapacity) {
+        slotsInput.value = maxCapacity;
+      }
+    }
+
+    window.updateMonetizarModalPricing();
+
+    if (rebuildProfiles) {
+      const avail = parseInt(slotsInput?.value, 10) || maxCapacity;
+      renderPublishProfilesList(maxCapacity, avail);
+    }
   };
 
   const openPublishModal = () => {
     if (!modalPublish) return;
     if (serviceSelect) serviceSelect.value = selectedServiceKey;
     if (slotsInput) slotsInput.value = selectedSlotsCount;
-    updateModalPricing();
+    handleServiceOrSlotsChange(true);
     modalPublish.style.display = 'grid';
   };
 
@@ -245,8 +317,8 @@ function initPublishModal() {
     btnClosePublish.onclick = () => { modalPublish.style.display = 'none'; };
   }
 
-  if (serviceSelect) serviceSelect.onchange = updateModalPricing;
-  if (slotsInput) slotsInput.oninput = updateModalPricing;
+  if (serviceSelect) serviceSelect.onchange = () => handleServiceOrSlotsChange(true);
+  if (slotsInput) slotsInput.oninput = () => handleServiceOrSlotsChange(true);
 
   const publishForm = document.getElementById('form-user-publish-stream');
   if (publishForm) {
@@ -264,22 +336,45 @@ function initPublishModal() {
         return;
       }
 
-      // Collect profile names and pins
+      // Collect all profile slots, occupancy, and pins
       const profiles = {};
       const pins = {};
+      let availableCount = 0;
+      let totalCount = 0;
+
       document.querySelectorAll('#user-pub-profiles-container .pub-profile-slot-item').forEach(card => {
+        totalCount++;
         const slotNum = card.dataset.slot;
-        const nameVal = card.querySelector('.pub-profile-name-input')?.value.trim() || `Gboy ${slotNum}`;
+        const isOccupied = card.getAttribute('data-occupied') === 'true';
+        const nameVal = card.querySelector('.pub-profile-name-input')?.value.trim() || `Perfil ${slotNum}`;
         const pinVal = card.querySelector('.pub-profile-pin-input')?.value.trim() || '';
-        profiles[slotNum] = { name: nameVal, pin: pinVal || 'N/A' };
-        if (pinVal) pins[slotNum] = pinVal;
+
+        if (!isOccupied) availableCount++;
+
+        profiles[slotNum] = {
+          slotNumber: parseInt(slotNum, 10),
+          name: nameVal,
+          pin: isOccupied ? 'N/A' : (pinVal || 'N/A'),
+          isOccupied: isOccupied,
+          isAvailable: !isOccupied
+        };
+
+        if (!isOccupied && pinVal) {
+          pins[slotNum] = pinVal;
+        }
       });
+
+      if (availableCount < 1) {
+        alert('Debes marcar al menos 1 cupo como Disponible para compartir en la plataforma.');
+        return;
+      }
 
       const payload = {
         serviceKey,
         serviceName: document.getElementById('user-pub-service').selectedOptions[0]?.text || serviceKey,
         planName: document.getElementById('user-pub-plan')?.value,
-        totalSlots: document.getElementById('user-pub-slots').value,
+        totalSlots: totalCount || document.getElementById('user-pub-slots').value,
+        availableSlots: availableCount,
         email,
         password,
         credentials: `${email} | ${password}`,
@@ -299,7 +394,12 @@ function initPublishModal() {
         });
         const data = await res.json();
         if (data.success) {
-          alert(`🎉 ¡Cuenta Publicada con Éxito!\n\n${data.message || 'Tu cuenta ya está activa en el catálogo y los compradores comenzarán a asignarse.'}`);
+          const isPending = data.subscription?.status === 'pending_approval';
+          alert(
+            isPending
+              ? `⏳ Solicitud Enviada para Moderación\n\nTu cuenta ha sido enviada al Administrador para verificar los accesos. Una vez aprobada, se publicará automáticamente en el catálogo.`
+              : `🎉 ¡Cuenta Publicada con Éxito!\n\n${data.message || 'Tu cuenta ya está activa en el catálogo oficial.'}`
+          );
           if (modalPublish) modalPublish.style.display = 'none';
           publishForm.reset();
           window.location.href = '/purchases.html';

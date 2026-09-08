@@ -428,6 +428,26 @@ router.get('/profile', (req, res) => {
   // Gather user purchases & subscriptions
   const mySlots = (db.user_slots || []).filter(s => s.buyerId === user.id);
   const myOrders = (db.user_store_orders || []).filter(o => o.buyerId === user.id);
+  const myPublications = (db.subscriptions || [])
+    .filter(s => s.sellerId === user.id)
+    .map(s => {
+      let profilesObj = {};
+      try {
+        const dec = cryptoService.decrypt(s.pinsEncrypted || '');
+        profilesObj = typeof dec === 'string' ? JSON.parse(dec) : (dec || {});
+      } catch (e) {
+        profilesObj = {};
+      }
+
+      const activeBuyersCount = (db.user_slots || []).filter(us => us.subscriptionId === s.id && us.status === 'active').length;
+
+      return {
+        ...s,
+        credentialsDecrypted: cryptoService.decrypt(s.credentialsEncrypted),
+        pinsDecrypted: profilesObj,
+        activeBuyersCount
+      };
+    });
 
   res.json({
     success: true,
@@ -447,10 +467,12 @@ router.get('/profile', (req, res) => {
     balancePyg: Math.round((wallet.balanceUsd || 0) * rate),
     stats: {
       activeSubscriptionsCount: mySlots.length,
-      purchasedGamesCount: myOrders.length
+      purchasedGamesCount: myOrders.length,
+      publishedAccountsCount: myPublications.length
     },
     mySlots,
-    myOrders
+    myOrders,
+    myPublications
   });
 });
 

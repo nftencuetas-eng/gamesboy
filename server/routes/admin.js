@@ -944,11 +944,21 @@ router.get('/streaming/pending', (req, res) => {
     const db = getDb();
     const pending = (db.subscriptions || [])
       .filter(s => s.status === 'pending_approval' || s.status === 'pending')
-      .map(s => ({
-        ...s,
-        credentialsDecrypted: cryptoService.decrypt(s.credentialsEncrypted),
-        pinsDecrypted: cryptoService.decrypt(s.pinsEncrypted || '')
-      }));
+      .map(s => {
+        let pinsObj = {};
+        try {
+          const dec = cryptoService.decrypt(s.pinsEncrypted || '');
+          pinsObj = typeof dec === 'string' ? JSON.parse(dec) : (dec || {});
+        } catch (e) {
+          pinsObj = {};
+        }
+
+        return {
+          ...s,
+          credentialsDecrypted: cryptoService.decrypt(s.credentialsEncrypted),
+          pinsDecrypted: pinsObj
+        };
+      });
 
     res.json({ success: true, count: pending.length, submissions: pending });
   } catch (err) {

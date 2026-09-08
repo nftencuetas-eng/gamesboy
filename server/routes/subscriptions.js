@@ -455,23 +455,34 @@ router.post('/publish', (req, res) => {
     const user = db.users.find(u => u.id === userId) || { name: 'Usuario GamesBoy', role: 'client' };
     const rate = db.platform_settings?.exchangeRatePyg || 7500;
 
-    const { serviceKey, serviceName, planName, totalSlots, email, password, credentials, pins, profiles, instructions } = req.body;
+    const { serviceKey, serviceName, planName, totalSlots, availableSlots, email, password, credentials, pins, profiles, instructions } = req.body;
 
     const rawCreds = (email && password) ? `${email.trim()} | ${password.trim()}` : (credentials || '');
 
-    if ((!serviceKey && !serviceName) || !totalSlots || !rawCreds) {
-      return res.status(400).json({ error: 'Por favor ingresa el correo, contraseña y cantidad de cupos.' });
+    if ((!serviceKey && !serviceName) || !rawCreds) {
+      return res.status(400).json({ error: 'Por favor ingresa el correo, contraseña y detalles de la cuenta.' });
     }
 
     // Lookup service config set by admin from db.streaming_services
     const rawKey = (serviceKey || '').toLowerCase();
+    const cleanKey = rawKey.replace(/[^a-z0-9]/g, '');
     const services = db.streaming_services || [];
-    const cfg = services.find(s => s.id === rawKey || (s.id && s.id.toLowerCase() === rawKey) || (s.name && s.name.toLowerCase() === (serviceName || '').toLowerCase())) || (db.streaming_services_config ? db.streaming_services_config[rawKey] : null);
+    const cfg = services.find(s => {
+      const sId = (s.id || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const sName = (s.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      return sId === cleanKey || sName === cleanKey || sId.includes(cleanKey) || cleanKey.includes(sId) || sName.includes(cleanKey) || cleanKey.includes(sName);
+    }) || (db.streaming_services_config ? db.streaming_services_config[rawKey] : null);
 
     const finalServiceName = cfg ? cfg.name : (serviceName || 'Servicio Streaming');
     const finalPlanName = planName || (cfg ? (cfg.planName || 'Plan Compartido') : 'Plan Compartido');
-    const maxSlots = cfg ? (cfg.maxSlots || 5) : 5;
-    const requestedSlots = Math.min(Math.max(1, parseInt(totalSlots, 10)), maxSlots);
+    const maxCapacity = cfg ? (cfg.maxSlots || 5) : (parseInt(totalSlots, 10) || 5);
+
+    // Calculate available slots
+    let finalAvailSlots = availableSlots !== undefined ? parseInt(availableSlots, 10) : parseInt(totalSlots, 10);
+    if (isNaN(finalAvailSlots) || finalAvailSlots <= 0) finalAvailSlots = maxCapacity;
+    if (finalAvailSlots > maxCapacity) finalAvailSlots = maxCapacity;
+
+    const finalTotalSlots = maxCapacity;
 
     // Fixed price defined by admin
     const pricePerSlotPyg = cfg ? (cfg.pricePerSlotPyg || 25000) : 25000;
@@ -480,28 +491,31 @@ router.post('/publish', (req, res) => {
     const netPayoutPyg = Math.round(pricePerSlotPyg * (1 - commissionPercent / 100));
     const netPayoutUsd = parseFloat((pricePerSlotUsd * (1 - commissionPercent / 100)).toFixed(2));
 
-    const finalPins = profiles || pins || {};
+    const finalProfiles = profiles || pins || {};
+
+    const isUserAdmin = user.role === 'admin';
+    const subStatus = isUserAdmin ? 'active' : 'pending_approval';
 
     const newSub = {
       id: `sub_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       sellerId: userId,
       sellerName: user.name,
-      isOfficial: user.role === 'admin',
-      serviceKey: rawKey || 'custom',
+      isOfficial: isUserAdmin,
+      serviceKey: cfg ? cfg.id : (rawKey || 'custom'),
       serviceName: finalServiceName,
       category: 'streaming',
       planName: finalPlanName,
-      totalSlots: requestedSlots,
-      availableSlots: requestedSlots,
+      totalSlots: finalTotalSlots,
+      availableSlots: finalAvailSlots,
       pricePerSlotUsd,
       pricePerSlotPyg,
       commissionPercent,
       netPayoutUsd,
       netPayoutPyg,
       credentialsEncrypted: cryptoService.encrypt(rawCreds),
-      pinsEncrypted: cryptoService.encrypt(typeof finalPins === 'object' ? JSON.stringify(finalPins) : finalPins || '{}'),
+      pinsEncrypted: cryptoService.encrypt(typeof finalProfiles === 'object' ? JSON.stringify(finalProfiles) : finalProfiles || '{}'),
       instructions: instructions || 'Usa exclusivamente tu perfil asignado y no modifiques la contraseña.',
-      status: 'active',
+      status: subStatus,
       createdAt: new Date().toISOString()
     };
 
@@ -523,9 +537,13 @@ router.post('/publish', (req, res) => {
 
     saveStorage();
 
+    const returnMsg = isUserAdmin
+      ? `¡Cuenta oficial de ${finalServiceName} publicada directamente en el catálogo!`
+      : `¡Tu cuenta de ${finalServiceName} ha sido enviada a moderación! Nuestro equipo verificará el acceso y la activará en la tienda oficial en unos minutos.`;
+
     res.json({
       success: true,
-      message: `¡Tu cuenta de ${finalServiceName} ha sido publicada con éxito! Recibirás ${netPayoutPyg.toLocaleString('es-PY')} Gs. por cada perfil vendido una vez finalizado el ciclo mensual.`,
+      message: returnMsg,
       subscription: newSub
     });
   } catch (err) {

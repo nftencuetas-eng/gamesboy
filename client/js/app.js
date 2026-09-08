@@ -2386,39 +2386,95 @@ function initUserSession() {
   const btnClosePublish = document.getElementById('btn-close-publish-modal');
   const navSellerPills = document.querySelectorAll('.sub-nav-seller-pill');
 
-  window.renderPublishProfilesList = function(slotsCount) {
+  window.renderPublishProfilesList = function(totalCapacity, initialAvailableCount) {
     const container = document.getElementById('user-pub-profiles-container');
     if (!container) return;
 
-    const count = Math.max(1, Math.min(10, parseInt(slotsCount, 10) || 1));
+    const capacity = Math.max(1, Math.min(20, parseInt(totalCapacity, 10) || 5));
+    const availCount = Math.max(1, Math.min(capacity, parseInt(initialAvailableCount, 10) || capacity));
     
-    // Preserve existing input values if user adjusted slot count
+    // Preserve existing user inputs
     const existingData = {};
     container.querySelectorAll('.pub-profile-slot-item').forEach(card => {
       const idx = card.dataset.slot;
       const name = card.querySelector('.pub-profile-name-input')?.value;
       const pin = card.querySelector('.pub-profile-pin-input')?.value;
-      if (idx) existingData[idx] = { name, pin };
+      const isOccupied = card.getAttribute('data-occupied') === 'true';
+      if (idx) existingData[idx] = { name, pin, isOccupied };
     });
 
     let html = '';
-    for (let i = 1; i <= count; i++) {
-      const defaultName = existingData[i]?.name || `Gboy ${i}`;
+    for (let i = 1; i <= capacity; i++) {
+      // Default: if i > availCount, mark as occupied/personal
+      const isOcc = existingData[i] ? existingData[i].isOccupied : (i > availCount);
+      const defaultName = existingData[i]?.name || (isOcc ? `Mi Perfil` : `Perfil ${i}`);
       const defaultPin = existingData[i]?.pin || '';
+
       html += `
-        <div class="pub-profile-slot-item" data-slot="${i}">
-          <div class="pub-profile-slot-header">
-            <span class="pub-profile-slot-num">#${i}</span>
-            <input type="text" class="pub-profile-name-input" data-slot="${i}" value="${defaultName}" placeholder="Nombre (ej: Gboy ${i})">
+        <div class="pub-profile-slot-item ${isOcc ? 'is-occupied' : ''}" data-slot="${i}" data-occupied="${isOcc}">
+          <div class="pub-profile-slot-top-row">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span class="pub-profile-slot-num">#${i}</span>
+              <span style="font-size: 0.76rem; font-weight: 800; color: #fff;">Asiento ${i}</span>
+            </div>
+            <button type="button" class="pub-slot-toggle-btn ${isOcc ? 'occupied' : ''}" onclick="window.togglePublishSlotState(${i})">
+              ${isOcc ? '🔴 Ocupado / Personal' : '🟢 Disponible'}
+            </button>
           </div>
+          
+          <div class="pub-profile-slot-header">
+            <input type="text" class="pub-profile-name-input" data-slot="${i}" value="${defaultName}" placeholder="Nombre del perfil (ej: Papá, Lucas)">
+          </div>
+
           <div class="pub-profile-pin-wrap">
             <span class="pub-profile-pin-label">PIN:</span>
-            <input type="text" class="pub-profile-pin-input" data-slot="${i}" value="${defaultPin}" placeholder="Opcional (ej: 1234)" maxlength="8">
+            <input type="text" class="pub-profile-pin-input" data-slot="${i}" value="${isOcc ? '' : defaultPin}" ${isOcc ? 'disabled' : ''} placeholder="${isOcc ? 'No requiere PIN (Personal)' : 'Opcional (ej: 1234)'}" maxlength="8">
           </div>
         </div>
       `;
     }
     container.innerHTML = html;
+  };
+
+  window.togglePublishSlotState = function(slotNum) {
+    const card = document.querySelector(`#user-pub-profiles-container .pub-profile-slot-item[data-slot="${slotNum}"]`);
+    if (!card) return;
+
+    const currentOccupied = card.getAttribute('data-occupied') === 'true';
+    const nextOccupied = !currentOccupied;
+
+    card.setAttribute('data-occupied', nextOccupied ? 'true' : 'false');
+    card.classList.toggle('is-occupied', nextOccupied);
+
+    const toggleBtn = card.querySelector('.pub-slot-toggle-btn');
+    if (toggleBtn) {
+      toggleBtn.className = `pub-slot-toggle-btn ${nextOccupied ? 'occupied' : ''}`;
+      toggleBtn.innerHTML = nextOccupied ? '🔴 Ocupado / Personal' : '🟢 Disponible';
+    }
+
+    const pinInput = card.querySelector('.pub-profile-pin-input');
+    if (pinInput) {
+      pinInput.disabled = nextOccupied;
+      if (nextOccupied) {
+        pinInput.dataset.prevPin = pinInput.value;
+        pinInput.value = '';
+        pinInput.placeholder = 'No requiere PIN (Personal)';
+      } else {
+        pinInput.value = pinInput.dataset.prevPin || '';
+        pinInput.placeholder = 'Opcional (ej: 1234)';
+      }
+    }
+
+    // Recalculate available slots
+    const totalAvail = document.querySelectorAll('#user-pub-profiles-container .pub-profile-slot-item[data-occupied="false"]').length;
+    const slotsInput = document.getElementById('user-pub-slots');
+    if (slotsInput) {
+      slotsInput.value = totalAvail;
+    }
+
+    if (typeof window.updatePublishCalculations === 'function') {
+      window.updatePublishCalculations();
+    }
   };
 
   window.initPublishStreamModalPricing = function() {
@@ -2436,43 +2492,65 @@ function initUserSession() {
       'netflix': { name: 'Netflix Premium 4K', planName: 'Ultra HD 4K (4 Pantallas)', maxSlots: 5, pricePerSlotPyg: 25000, commissionPercent: 10, netPayoutPyg: 22500 },
       'spotify': { name: 'Spotify Premium Familiar', planName: 'Plan Familiar (6 Cuentas)', maxSlots: 5, pricePerSlotPyg: 18000, commissionPercent: 10, netPayoutPyg: 16200 },
       'disney': { name: 'Disney+ Premium & Star+', planName: 'Plan Premium 4K', maxSlots: 4, pricePerSlotPyg: 25000, commissionPercent: 10, netPayoutPyg: 22500 },
-      'max': { name: 'Max (HBO Max) 4K', planName: 'Platino 4K Dolby Atmos', maxSlots: 3, pricePerSlotPyg: 22000, commissionPercent: 10, netPayoutPyg: 19800 },
+      'max': { name: 'Max (HBO Max) 4K', planName: 'Platino 4K Dolby Atmos', maxSlots: 5, pricePerSlotPyg: 22000, commissionPercent: 10, netPayoutPyg: 19800 },
+      'flujo': { name: 'Flujo TV Oficial', planName: 'Plan Familiar 3 Pantallas', maxSlots: 5, pricePerSlotPyg: 25000, commissionPercent: 10, netPayoutPyg: 22500 },
+      'flujo-tv': { name: 'Flujo TV Oficial', planName: 'Plan Familiar 3 Pantallas', maxSlots: 5, pricePerSlotPyg: 25000, commissionPercent: 10, netPayoutPyg: 22500 },
       'youtube': { name: 'YouTube Premium & Music', planName: 'Familiar Sin Anuncios', maxSlots: 5, pricePerSlotPyg: 20000, commissionPercent: 10, netPayoutPyg: 18000 },
       'chatgpt': { name: 'ChatGPT Plus & AI', planName: 'Plus GPT-4o & Canvas', maxSlots: 2, pricePerSlotPyg: 35000, commissionPercent: 10, netPayoutPyg: 31500 },
       'crunchyroll': { name: 'Crunchyroll Mega Fan', planName: 'Mega Fan 4 Pantallas', maxSlots: 4, pricePerSlotPyg: 18000, commissionPercent: 10, netPayoutPyg: 16200 },
       'paramount': { name: 'Paramount+ Premium', planName: 'Plan Estándar 3 Pantallas', maxSlots: 3, pricePerSlotPyg: 18000, commissionPercent: 10, netPayoutPyg: 16200 }
     };
 
-    const updateCalculations = () => {
+    window.updatePublishCalculations = () => {
       const selectedKey = serviceSelect.value;
-      const cfg = servicesConfig[selectedKey] || Object.values(servicesConfig).find(c => (c.name || '').toLowerCase() === (selectedKey || '').toLowerCase()) || servicesConfig['netflix'];
+      const cfg = servicesConfig[selectedKey] || Object.values(servicesConfig).find(c => (c.name || '').toLowerCase().includes((selectedKey || '').toLowerCase())) || servicesConfig['netflix'];
+
+      const maxCapacity = cfg ? (cfg.maxSlots || 5) : 5;
 
       if (planInput && cfg) planInput.value = cfg.planName || 'Plan Compartido';
-      if (slotsInput && cfg) {
-        slotsInput.max = cfg.maxSlots || 5;
-        if (parseInt(slotsInput.value, 10) > (cfg.maxSlots || 5)) {
-          slotsInput.value = cfg.maxSlots || 5;
-        }
+      if (slotsInput) {
+        slotsInput.max = maxCapacity;
       }
 
       const pricePyg = cfg ? cfg.pricePerSlotPyg : 25000;
       const commPct = cfg ? (cfg.commissionPercent !== undefined ? cfg.commissionPercent : 10) : 10;
       const netPerSlot = cfg ? cfg.netPayoutPyg : Math.round(pricePyg * (1 - commPct / 100));
-      const slots = parseInt(slotsInput?.value, 10) || 1;
-      const totalNet = netPerSlot * slots;
+      
+      const availCount = parseInt(slotsInput?.value, 10) || 1;
+      const totalNet = netPerSlot * availCount;
 
       if (priceDisplay) priceDisplay.textContent = `${pricePyg.toLocaleString('es-PY')} Gs.`;
       if (commissionDisplay) commissionDisplay.textContent = `${commPct}%`;
       if (netEarningsSlot) netEarningsSlot.textContent = `${netPerSlot.toLocaleString('es-PY')} Gs.`;
       if (netEarningsTotal) netEarningsTotal.textContent = `${totalNet.toLocaleString('es-PY')} Gs.`;
-
-      // Render profile builder items
-      window.renderPublishProfilesList(slots);
     };
 
-    serviceSelect.onchange = updateCalculations;
-    if (slotsInput) slotsInput.oninput = updateCalculations;
-    updateCalculations();
+    const handleServiceOrSlotsChange = (rebuildProfiles = true) => {
+      const selectedKey = serviceSelect.value;
+      const cfg = servicesConfig[selectedKey] || Object.values(servicesConfig).find(c => (c.name || '').toLowerCase().includes((selectedKey || '').toLowerCase())) || servicesConfig['netflix'];
+      const maxCapacity = cfg ? (cfg.maxSlots || 5) : 5;
+
+      if (slotsInput) {
+        slotsInput.max = maxCapacity;
+        if (parseInt(slotsInput.value, 10) > maxCapacity) {
+          slotsInput.value = maxCapacity;
+        }
+      }
+
+      window.updatePublishCalculations();
+
+      if (rebuildProfiles) {
+        const avail = parseInt(slotsInput?.value, 10) || maxCapacity;
+        window.renderPublishProfilesList(maxCapacity, avail);
+      }
+    };
+
+    serviceSelect.onchange = () => handleServiceOrSlotsChange(true);
+    if (slotsInput) {
+      slotsInput.oninput = () => handleServiceOrSlotsChange(true);
+    }
+    
+    handleServiceOrSlotsChange(true);
   };
 
   if (btnOpenPublish && modalPublish) {
@@ -2511,22 +2589,45 @@ function initUserSession() {
         return;
       }
 
-      // Collect profile names and pins
+      // Collect all profiles, occupancy and pins
       const profiles = {};
       const pins = {};
+      let availableCount = 0;
+      let totalCount = 0;
+
       document.querySelectorAll('#user-pub-profiles-container .pub-profile-slot-item').forEach(card => {
+        totalCount++;
         const slotNum = card.dataset.slot;
-        const nameVal = card.querySelector('.pub-profile-name-input')?.value.trim() || `Gboy ${slotNum}`;
+        const isOccupied = card.getAttribute('data-occupied') === 'true';
+        const nameVal = card.querySelector('.pub-profile-name-input')?.value.trim() || `Perfil ${slotNum}`;
         const pinVal = card.querySelector('.pub-profile-pin-input')?.value.trim() || '';
-        profiles[slotNum] = { name: nameVal, pin: pinVal || 'N/A' };
-        if (pinVal) pins[slotNum] = pinVal;
+
+        if (!isOccupied) availableCount++;
+
+        profiles[slotNum] = {
+          slotNumber: parseInt(slotNum, 10),
+          name: nameVal,
+          pin: isOccupied ? 'N/A' : (pinVal || 'N/A'),
+          isOccupied: isOccupied,
+          isAvailable: !isOccupied
+        };
+
+        if (!isOccupied && pinVal) {
+          pins[slotNum] = pinVal;
+        }
       });
+
+      if (availableCount < 1) {
+        window.showToast('warning', 'Sin cupos libres', 'Debes marcar al menos 1 cupo como Disponible para compartir en la plataforma.');
+        return;
+      }
 
       const payload = {
         serviceKey,
         serviceName: document.getElementById('user-pub-service').selectedOptions[0]?.text || serviceKey,
         planName: document.getElementById('user-pub-plan')?.value,
-        totalSlots: document.getElementById('user-pub-slots').value,
+        totalSlots: totalCount || document.getElementById('user-pub-slots').value,
+        availableSlots: availableCount,
         email,
         password,
         credentials: `${email} | ${password}`,
@@ -2546,11 +2647,16 @@ function initUserSession() {
         });
         const data = await res.json();
         if (data.success) {
-          window.showToast('success', '¡Cuenta Publicada!', data.message || 'Tu cuenta ha sido publicada con éxito en el catálogo.');
+          const isPending = data.subscription?.status === 'pending_approval';
+          window.showToast(
+            'success',
+            isPending ? '⏳ Solicitud Enviada para Moderación' : '¡Cuenta Publicada!',
+            isPending ? 'Tu cuenta ha sido enviada al Administrador para verificación de credenciales. Se publicará en breve.' : (data.message || 'Tu cuenta ha sido publicada con éxito en el catálogo.')
+          );
           if (modalPublish) modalPublish.style.display = 'none';
           publishForm.reset();
           await fetchStoreData();
-          if (data.subscription?.id) {
+          if (data.subscription?.id && !isPending) {
             openGroupChatModal(data.subscription.id);
           }
         } else {

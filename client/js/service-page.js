@@ -227,11 +227,17 @@ function renderGroupsList() {
     // LIBRE = PRENDIDO / VERDE BRILLANTE / GLOW
     // OCUPADO = APAGADO / TENUE / GRIS
     let slotsSvg = '';
-    if (g.totalSlots <= 12) {
-      for (let i = 0; i < g.totalSlots; i++) {
-        const isOccupied = i < occupiedSlots;
+    const totalSlotsCount = Math.max(1, g.totalSlots || 5);
+    const availCount = Math.min(totalSlotsCount, Math.max(0, g.availableSlots !== undefined ? g.availableSlots : totalSlotsCount));
+    const occupiedCount = totalSlotsCount - availCount;
+
+    if (totalSlotsCount <= 12) {
+      for (let i = 1; i <= totalSlotsCount; i++) {
+        const profile = g.profiles ? (g.profiles[i] || g.profiles[String(i)] || g.profiles[i - 1]) : null;
+        const isOccupied = profile ? (profile.isOccupied === true || profile.isAvailable === false) : (i > availCount);
+
         slotsSvg += `
-          <div class="slot-sil-wrap" title="${isOccupied ? 'Perfil Ocupado' : 'Perfil Disponible para unirse'}">
+          <div class="slot-sil-wrap" title="${isOccupied ? 'Perfil Ocupado / Personal' : 'Perfil Disponible para unirse'}">
             <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
             </svg>
@@ -240,9 +246,9 @@ function renderGroupsList() {
       }
     } else {
       slotsSvg = `
-        <div class="slot-sil-wrap" style="padding: 3px 10px; border-radius: 8px; background: rgba(0, 194, 255, 0.08); border: 1px solid rgba(0, 194, 255, 0.25);" title="${g.availableSlots} de ${g.totalSlots} cupos disponibles">
+        <div class="slot-sil-wrap" style="padding: 3px 10px; border-radius: 8px; background: rgba(0, 194, 255, 0.08); border: 1px solid rgba(0, 194, 255, 0.25);" title="${availCount} de ${totalSlotsCount} cupos disponibles">
           <span style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; color: var(--accent-emerald);">
-            👤 ${g.availableSlots} / ${g.totalSlots} cupos libres
+            👤 ${availCount} / ${totalSlotsCount} cupos libres
           </span>
         </div>
       `;
@@ -279,8 +285,8 @@ function renderGroupsList() {
           <div class="hub-group-slots-bar">
             <div class="hub-group-slots-icons">${slotsSvg}</div>
             <span class="hub-group-slots-text">
-              <strong style="color: var(--accent-emerald);">${g.availableSlots} libres</strong> de ${g.totalSlots} cupos
-              <span class="slots-legend">(${occupiedSlots} ocupados)</span>
+              <strong style="color: var(--accent-emerald);">${availCount} libres</strong> de ${totalSlotsCount} cupos
+              <span class="slots-legend">(${occupiedCount} ocupados)</span>
             </span>
           </div>
 
@@ -384,24 +390,35 @@ window.openGroupDetailModal = function(groupId) {
   if (hostRating) hostRating.textContent = `${host.rating || '4.9 ★'} • ${host.badge || '⭐ Anfitrión Verificado'}`;
   if (hostInstructions) hostInstructions.textContent = group.instructions || 'Perfil privado exclusivo con PIN personal. Entrega inmediata en Bóveda tras unirse.';
 
-  const occupiedSlots = group.totalSlots - group.availableSlots;
-  if (slotsSummary) slotsSummary.textContent = `${group.availableSlots} de ${group.totalSlots} Libres`;
+  const totalCap = Math.max(1, group.totalSlots || 5);
+  const availCount = Math.min(totalCap, Math.max(0, group.availableSlots !== undefined ? group.availableSlots : totalCap));
+  const occupiedSlots = totalCap - availCount;
+
+  if (slotsSummary) slotsSummary.textContent = `${availCount} de ${totalCap} Libres`;
 
   // Render per-profile matrix (LIBRE = PRENDIDO / OCUPADO = APAGADO)
   if (profilesGrid) {
     let tilesHtml = '';
-    if (group.totalSlots <= 20) {
-      for (let i = 0; i < group.totalSlots; i++) {
-        const isOccupied = i < occupiedSlots;
-        const isFirstFree = !isOccupied && (i === occupiedSlots);
+    if (totalCap <= 20) {
+      let firstFreeFound = false;
+      for (let i = 1; i <= totalCap; i++) {
+        const profile = group.profiles ? (group.profiles[i] || group.profiles[String(i)] || group.profiles[i - 1]) : null;
+        const isOccupied = profile ? (profile.isOccupied === true || profile.isAvailable === false) : (i > availCount);
+        const profileName = profile?.name ? profile.name : `Cupo ${i}`;
+        
+        let isSelected = false;
+        if (!isOccupied && !firstFreeFound) {
+          isSelected = true;
+          firstFreeFound = true;
+        }
 
         tilesHtml += `
-          <div class="profile-slot-tile ${isOccupied ? 'occupied' : 'available'} ${isFirstFree ? 'selected' : ''}" 
-               title="${isOccupied ? 'Perfil Ocupado por otro miembro' : 'Perfil Disponible para ti'}">
+          <div class="profile-slot-tile ${isOccupied ? 'occupied' : 'available'} ${isSelected ? 'selected' : ''}" 
+               title="${isOccupied ? `Perfil Ocupado (${profileName})` : `Perfil Disponible para ti (${profileName})`}">
             <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
             </svg>
-            <span class="profile-tile-num">Cupo ${i + 1}</span>
+            <span class="profile-tile-num">${profileName}</span>
             <span class="profile-tile-status ${isOccupied ? 'occ' : 'lib'}">
               ${isOccupied ? 'Ocupado' : 'Disponible'}
             </span>
@@ -409,18 +426,18 @@ window.openGroupDetailModal = function(groupId) {
         `;
       }
     } else {
-      const percentOccupied = Math.round((occupiedSlots / group.totalSlots) * 100);
+      const percentOccupied = Math.round((occupiedSlots / totalCap) * 100);
       tilesHtml = `
         <div style="grid-column: 1 / -1; background: rgba(0,0,0,0.35); border: 1px solid rgba(0,194,255,0.2); border-radius: 12px; padding: 1.25rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-            <span style="font-size: 0.9rem; font-weight: 700; color: #fff;">Panel Multiusuario (${group.totalSlots} cupos)</span>
-            <span style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald); font-size: 0.95rem;">${group.availableSlots} cupos disponibles</span>
+            <span style="font-size: 0.9rem; font-weight: 700; color: #fff;">Panel Multiusuario (${totalCap} cupos)</span>
+            <span style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald); font-size: 0.95rem;">${availCount} cupos disponibles</span>
           </div>
           <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; margin-bottom: 0.75rem;">
             <div style="width: ${percentOccupied}%; height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-emerald)); border-radius: 6px;"></div>
           </div>
           <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">
-            ✨ Tu cuenta o invitación privada será asignada automáticamente en el cupo #${occupiedSlots + 1} con acceso total e inmediato.
+            ✨ Tu cuenta o invitación privada será asignada automáticamente en el cupo disponible con acceso total e inmediato.
           </p>
         </div>
       `;

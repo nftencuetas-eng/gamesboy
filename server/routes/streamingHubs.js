@@ -4,6 +4,25 @@ import { convertFromUsd } from '../services/currencyService.js';
 
 const router = Router();
 
+// Helper to normalize strings for robust fuzzy matching (e.g. 'flujo-tv' <-> 'Flujo TV')
+export function normalizeStr(str) {
+  if (!str) return '';
+  return str.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+export function matchesService(sub, service) {
+  if (!sub || !service) return false;
+  const nSubName = normalizeStr(sub.serviceName);
+  const nSubKey = normalizeStr(sub.serviceKey || sub.serviceId);
+  const nSvcId = normalizeStr(service.id);
+  const nSvcName = normalizeStr(service.name);
+
+  return (nSubKey && nSvcId && nSubKey === nSvcId) ||
+         (nSubName && nSvcName && nSubName === nSvcName) ||
+         (nSubName && nSvcId && (nSubName === nSvcId || nSubName.includes(nSvcId) || nSvcId.includes(nSubName))) ||
+         (nSubName && nSvcName && (nSubName.includes(nSvcName) || nSvcName.includes(nSubName)));
+}
+
 // Helper to find or match platform dynamically from db.streaming_services
 export function getPlatformService(platformKey) {
   const db = getDb();
@@ -11,16 +30,17 @@ export function getPlatformService(platformKey) {
   if (!platformKey) return services[0] || null;
 
   const clean = platformKey.toLowerCase().trim();
+  const nClean = normalizeStr(clean);
   
   // Exact match first
-  let found = services.find(s => s.id === clean || (s.id && s.id.toLowerCase() === clean));
+  let found = services.find(s => s.id === clean || (s.id && s.id.toLowerCase() === clean) || normalizeStr(s.id) === nClean || normalizeStr(s.name) === nClean);
   if (found) return found;
 
   // Name or partial match
   found = services.find(s => {
-    const sId = (s.id || '').toLowerCase();
-    const sName = (s.name || '').toLowerCase();
-    return sId.includes(clean) || clean.includes(sId) || sName.includes(clean) || clean.includes(sName);
+    const sId = normalizeStr(s.id);
+    const sName = normalizeStr(s.name);
+    return sId.includes(nClean) || nClean.includes(sId) || sName.includes(nClean) || nClean.includes(sName);
   });
 
   return found || services[0] || null;
@@ -35,9 +55,7 @@ router.get('/', (req, res) => {
   const platforms = services.map(s => {
     const matchingSubs = (db.subscriptions || []).filter(sub => {
       if (sub.status !== 'active') return false;
-      const name = (sub.serviceName || '').toLowerCase();
-      const sId = (s.id || '').toLowerCase();
-      return name.includes(sId) || sId.includes(name);
+      return matchesService(sub, s);
     });
 
     const totalAvailSlots = matchingSubs.reduce((acc, curr) => acc + (curr.availableSlots || 0), 0);
@@ -47,6 +65,7 @@ router.get('/', (req, res) => {
     return {
       id: s.id,
       name: s.name,
+      category: s.category || 'streaming',
       planName: s.planName,
       tagline: s.tagline,
       brandColor: s.brandColor || '#00c2ff',
@@ -94,9 +113,7 @@ router.get('/:platform', (req, res) => {
   // Filter active subscription groups matching this platform
   const matchingSubs = (db.subscriptions || []).filter(s => {
     if (s.status !== 'active') return false;
-    const name = (s.serviceName || '').toLowerCase();
-    const subId = (s.serviceId || '').toLowerCase();
-    return name.includes(platformKey) || platformKey.includes(name) || subId === platformKey;
+    return matchesService(s, hub);
   });
 
   // Strict Host/Seller Privacy: Only expose public name, avatar, verified badges, rating, pricing & slot counts

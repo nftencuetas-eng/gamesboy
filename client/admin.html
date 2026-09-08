@@ -3535,26 +3535,83 @@
       try {
         const resPending = await fetch('/api/admin/streaming/pending');
         const dataPending = await resPending.json();
+        
+        const badgePending = document.getElementById('badge-pending-subs');
+        if (badgePending) {
+          if (dataPending.count > 0) {
+            badgePending.textContent = dataPending.count;
+            badgePending.style.display = 'inline-block';
+          } else {
+            badgePending.style.display = 'none';
+          }
+        }
+
         const tbodyPending = document.getElementById('table-streaming-pending');
         if (tbodyPending) {
           if (!dataPending.submissions || dataPending.submissions.length === 0) {
-            tbodyPending.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary);">No hay solicitudes pendientes de moderación.</td></tr>';
+            tbodyPending.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">🎉 ¡Excelente! No hay solicitudes pendientes de moderación.</td></tr>';
           } else {
-            tbodyPending.innerHTML = dataPending.submissions.map(s => `
-              <tr>
-                <td><strong style="color: #ffffff;">${s.sellerName || s.sellerId}</strong></td>
-                <td><strong style="color: var(--accent-cyan);">${s.serviceName}</strong><div style="font-size: 0.72rem; color: var(--text-tertiary);">${s.planName}</div></td>
-                <td>${s.totalSlots} perfiles</td>
-                <td style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald);">$${s.pricePerSlotUsd}/mes</td>
-                <td><code style="background: rgba(0,0,0,0.4); padding: 4px 6px; border-radius: 4px; font-size: 0.74rem;">${s.credentialsDecrypted || 'Oculto'}</code></td>
-                <td>
-                  <div style="display: flex; gap: 6px;">
-                    <button class="btn-admin-action emerald" onclick="approveStreaming('${s.id}')">Aprobar</button>
-                    <button class="btn-admin-action red" onclick="rejectStreaming('${s.id}')">Rechazar</button>
-                  </div>
-                </td>
-              </tr>
-            `).join('');
+            tbodyPending.innerHTML = dataPending.submissions.map(s => {
+              const profiles = s.pinsDecrypted || {};
+              const totalCap = Math.max(1, s.totalSlots || 5);
+              const availCount = Math.min(totalCap, Math.max(0, s.availableSlots !== undefined ? s.availableSlots : totalCap));
+              
+              let profilesSummary = '';
+              for (let i = 1; i <= totalCap; i++) {
+                const p = profiles[i] || profiles[String(i)] || {};
+                const isOcc = typeof p === 'object' ? (p.status === 'occupied' || p.isOccupied === true || p.isAvailable === false) : (i > availCount);
+                const pName = typeof p === 'object' && p.name ? p.name : `Perfil ${i}`;
+                const pin = typeof p === 'object' ? (p.pin || '') : (typeof p === 'string' ? p : '');
+                
+                profilesSummary += `
+                  <span style="display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.04); border: 1px solid ${isOcc ? 'rgba(239,68,68,0.3)' : 'rgba(16,185,129,0.3)'}; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; margin: 2px;">
+                    <strong style="color: #ffffff;">#${i} ${pName}:</strong>
+                    <span style="color: ${isOcc ? '#f87171' : '#34d399'}; font-weight: 700;">${isOcc ? '🔴 Personal' : (pin ? `PIN: ${pin}` : '🟢 Libre')}</span>
+                  </span>
+                `;
+              }
+
+              return `
+                <tr>
+                  <td>
+                    <strong style="color: #ffffff; display: block;">${s.sellerName || s.sellerId}</strong>
+                    <span style="font-size: 0.72rem; color: var(--text-tertiary);">ID: ${s.sellerId}</span>
+                  </td>
+                  <td>
+                    <strong style="color: var(--accent-cyan); display: block;">${s.serviceName}</strong>
+                    <span style="font-size: 0.74rem; color: var(--text-tertiary);">${s.planName || 'Plan Compartido'}</span>
+                  </td>
+                  <td>
+                    <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald);">
+                      ${availCount} / ${totalCap} cupos libres
+                    </div>
+                    <div style="margin-top: 4px; display: flex; flex-wrap: wrap; gap: 2px; max-width: 260px;">
+                      ${profilesSummary}
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-family: var(--font-mono); font-weight: 800; color: #ffffff;">${((s.pricePerSlotUsd || 3.99) * adminExchangeRate).toLocaleString('es-PY')} Gs.</div>
+                    <div style="font-family: var(--font-mono); font-size: 0.74rem; color: var(--accent-cyan);">$${(s.pricePerSlotUsd || 3.99).toFixed(2)} USDT</div>
+                  </td>
+                  <td>
+                    <div style="background: rgba(0,0,0,0.5); padding: 6px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); font-family: var(--font-mono); font-size: 0.74rem; word-break: break-all;">
+                      <div style="color: #38bdf8; margin-bottom: 2px;">🔑 ${s.credentialsDecrypted || 'Credenciales protegidas'}</div>
+                      <button type="button" class="btn-admin-action cyan" style="padding: 2px 6px; font-size: 0.68rem; margin-top: 2px;" onclick="navigator.clipboard.writeText('${s.credentialsDecrypted || ''}'); alert('Credenciales copiadas al portapapeles');">Copiar para Probar</button>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                      <button class="btn-admin-action emerald" onclick="approveStreaming('${s.id}')" style="justify-content: center; font-weight: 800;">
+                        <span>✓ Aprobar y Publicar</span>
+                      </button>
+                      <button class="btn-admin-action red" onclick="rejectStreaming('${s.id}')" style="justify-content: center; font-size: 0.74rem;">
+                        <span>✕ Rechazar</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              `;
+            }).join('');
           }
         }
 
@@ -3569,9 +3626,9 @@
               <tr>
                 <td><strong style="color: #ffffff;">${g.serviceName}</strong><div style="font-size: 0.72rem; color: var(--text-tertiary);">${g.planName}</div></td>
                 <td><strong style="color: var(--accent-cyan);">${g.sellerName || 'Oficial'}</strong></td>
-                <td><span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.72rem;">${g.slotsSold || 0} de ${g.totalSlots} cupos</span></td>
+                <td><span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.72rem;">${g.availableSlots || 0} libres / ${g.totalSlots} total</span></td>
                 <td style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald);">$${g.pricePerSlotUsd} / ${(g.pricePyg || 0).toLocaleString('es-PY')} Gs.</td>
-                <td><span class="btn-admin-action emerald" style="padding: 2px 8px; font-size: 0.7rem;">Activo</span></td>
+                <td><span class="btn-admin-action emerald" style="padding: 2px 8px; font-size: 0.7rem;">Activo en Tienda</span></td>
                 <td>
                   <button class="btn-admin-action red" onclick="rejectStreaming('${g.id}')">Desactivar</button>
                 </td>

@@ -229,38 +229,165 @@ router.post('/publish', (req, res) => {
     const sellerId = req.headers['x-user-id'] || 'usr_seller1';
     const db = getDb();
     const seller = db.users.find(u => u.id === sellerId) || { name: 'Vendedor' };
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
 
-    const { serviceName, category, planName, totalSlots, pricePerSlotUsd, credentials, pins, instructions } = req.body;
+    const { serviceName, category, planName, totalSlots, availableSlots, pricePerSlotUsd, credentials, pins, profiles, instructions } = req.body;
 
-    if (!serviceName || !totalSlots || !pricePerSlotUsd || !credentials) {
+    if (!serviceName || !credentials) {
       return res.status(400).json({ error: 'Por favor completa todos los campos requeridos.' });
     }
+
+    const maxCap = parseInt(totalSlots, 10) || 5;
+    let availCount = availableSlots !== undefined ? parseInt(availableSlots, 10) : maxCap;
+    if (isNaN(availCount) || availCount <= 0) availCount = maxCap;
+    if (availCount > maxCap) availCount = maxCap;
+
+    const finalProfiles = profiles || pins || {};
+    const isUserAdmin = seller.role === 'admin';
+    const subStatus = isUserAdmin ? 'active' : 'pending_approval';
 
     const newSub = {
       id: `sub_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       sellerId,
       sellerName: seller.name,
-      isOfficial: seller.role === 'admin',
+      isOfficial: isUserAdmin,
       serviceName,
       category: category || 'streaming',
       planName: planName || 'Plan Compartido',
-      totalSlots: parseInt(totalSlots, 10),
-      availableSlots: parseInt(totalSlots, 10),
-      pricePerSlotUsd: parseFloat(pricePerSlotUsd),
+      totalSlots: maxCap,
+      availableSlots: availCount,
+      pricePerSlotUsd: parseFloat(pricePerSlotUsd) || 3.99,
       credentialsEncrypted: cryptoService.encrypt(credentials),
-      pinsEncrypted: cryptoService.encrypt(typeof pins === 'object' ? JSON.stringify(pins) : pins || '{}'),
+      pinsEncrypted: cryptoService.encrypt(typeof finalProfiles === 'object' ? JSON.stringify(finalProfiles) : finalProfiles || '{}'),
       instructions: instructions || 'Usa tu perfil asignado y no modifiques las contraseñas.',
-      status: 'active',
+      status: subStatus,
       createdAt: new Date().toISOString()
     };
 
     db.subscriptions.unshift(newSub);
     saveStorage();
 
+    const returnMsg = isUserAdmin
+      ? '¡Suscripción publicada con éxito en el catálogo oficial!'
+      : '¡Suscripción enviada a moderación! Será revisada y aprobada por el administrador en breve.';
+
     res.json({
       success: true,
-      message: '¡Suscripción publicada con éxito en el catálogo de GamesBoy.net!',
+      message: returnMsg,
       subscription: newSub
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 4.1 TOGGLE INDIVIDUAL PROFILE SLOT STATUS (Occupied vs Available)
+router.post('/subscription/:id/toggle-slot', (req, res) => {
+  try {
+    const sellerId = req.headers['x-user-id'] || 'usr_seller1';
+    const db = getDb();
+    const sub = (db.subscriptions || []).find(s => s.id === req.params.id);
+
+    if (!sub) {
+      return res.status(404).json({ error: 'Suscripción no encontrada.' });
+    }
+
+    const user = (db.users || []).find(u => u.id === sellerId);
+    if (sub.sellerId !== sellerId && user?.role !== 'admin') {
+      return res.status(403).json({ error: 'No tienes permisos para modificar esta cuenta.' });
+    }
+
+    const { slotNumber, status } = req.body;
+    const slotIdx = String(slotNumber || '1');
+    const targetStatus = status === 'occupied' ? 'occupied' : 'available';
+
+    // Check if slot has an active paid subscriber
+    const activeBuyer = (db.user_slots || []).find(us => us.subscriptionId === sub.id && String(us.slotNumber) === slotIdx && us.status === 'active');
+    if (activeBuyer && targetStatus === 'available') {
+      return res.status(400).json({
+        error: `El cupo #${slotIdx} está asignado a un comprador activo (${activeBuyer.userId}). No puede liberarse mientras esté en uso.`
+      });
+    }
+
+    // Decrypt and update profile dict
+    let profilesDict = {};
+    try {
+      const dec = cryptoService.decrypt(sub.pinsEncrypted || '');
+      profilesDict = typeof dec === 'string' ? JSON.parse(dec) : (dec || {});
+    } catch (e) {
+      profilesDict = {};
+    }
+
+    if (!profilesDict[slotIdx]) {
+      profilesDict[slotIdx] = { name: `Perfil ${slotIdx}`, pin: '', status: targetStatus };
+    } else if (typeof profilesDict[slotIdx] === 'object') {
+      profilesDict[slotIdx].status = targetStatus;
+    } else {
+      profilesDict[slotIdx] = { name: `Perfil ${slotIdx}`, pin: String(profilesDict[slotIdx]), status: targetStatus };
+    }
+
+    // Recalculate available slots
+    let availCount = 0;
+    for (let i = 1; i <= sub.totalSlots; i++) {
+      const p = profilesDict[String(i)];
+      if (!p || (typeof p === 'object' && p.status !== 'occupied')) {
+        availCount++;
+      }
+    }
+
+    sub.availableSlots = Math.max(0, Math.min(availCount, sub.totalSlots));
+    sub.pinsEncrypted = cryptoService.encrypt(JSON.stringify(profilesDict));
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `Cupo #${slotIdx} marcado como ${targetStatus === 'occupied' ? 'Ocupado' : 'Disponible'}.`,
+      subscription: {
+        ...sub,
+        credentialsDecrypted: cryptoService.decrypt(sub.credentialsEncrypted),
+        pinsDecrypted: profilesDict
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 4.2 SAFE REMOVAL / WITHDRAWAL OF HOST SUBSCRIPTION
+router.delete('/subscription/:id', (req, res) => {
+  try {
+    const sellerId = req.headers['x-user-id'] || 'usr_seller1';
+    const db = getDb();
+    const idx = (db.subscriptions || []).findIndex(s => s.id === req.params.id);
+
+    if (idx === -1) {
+      return res.status(404).json({ error: 'Suscripción no encontrada.' });
+    }
+
+    const sub = db.subscriptions[idx];
+    const user = (db.users || []).find(u => u.id === sellerId);
+    if (sub.sellerId !== sellerId && user?.role !== 'admin') {
+      return res.status(403).json({ error: 'No tienes permisos para retirar esta cuenta.' });
+    }
+
+    // Verify if there are ANY active paid subscribers
+    const activeBuyers = (db.user_slots || []).filter(us => us.subscriptionId === sub.id && us.status === 'active');
+    const activeEscrows = (db.subscription_escrow || []).filter(e => e.subscriptionId === sub.id && e.status === 'active');
+    const activeCount = Math.max(activeBuyers.length, activeEscrows.length);
+
+    if (activeCount > 0) {
+      return res.status(400).json({
+        error: `⚠️ No puedes retirar esta cuenta porque tiene ${activeCount} suscriptor(es) activo(s) con membresía vigente. Debes esperar a que concluyan los 30 días de su ciclo o contactar con Soporte de Administración.`
+      });
+    }
+
+    const removed = db.subscriptions.splice(idx, 1)[0];
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `La cuenta "${removed.serviceName}" ha sido retirada exitosamente.`,
+      subscriptionId: sub.id
     });
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -851,6 +851,7 @@
 
         renderPurchasesList(data.mySlots || [], data.myOrders || []);
         renderTransactionsList(data.transactions || []);
+        renderSellerPublicationsList(data.myPublications || []);
       } catch (err) {
         console.error('Error loading profile:', err);
       }
@@ -1017,6 +1018,171 @@
         `;
       }).join('');
     }
+
+    // Render Seller Published Accounts & Real-Time Slot Occupancy Controls
+    function renderSellerPublicationsList(publications) {
+      const container = document.getElementById('seller-groups-list');
+      if (!container) return;
+
+      if (!publications || publications.length === 0) {
+        container.innerHTML = `
+          <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 2rem; text-align: center;">
+            <p style="color: var(--text-tertiary); font-size: 0.86rem; margin-bottom: 8px;">No tienes cuentas compartidas publicadas activamente.</p>
+            <span style="font-size: 0.76rem; color: var(--text-secondary);">Haz clic en "Publicar Nueva Cuenta" para comenzar a monetizar tus cupos libres.</span>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = publications.map(sub => {
+        const isPending = sub.status === 'pending_approval' || sub.status === 'pending';
+        const totalCap = Math.max(1, sub.totalSlots || 5);
+        const availCount = Math.min(totalCap, Math.max(0, sub.availableSlots !== undefined ? sub.availableSlots : totalCap));
+        const occupiedCount = totalCap - availCount;
+        const activeSubscribers = sub.activeBuyersCount || 0;
+        const profiles = sub.pinsDecrypted || {};
+
+        let slotsControlHtml = '';
+        for (let i = 1; i <= totalCap; i++) {
+          const profile = profiles[i] || profiles[String(i)] || {};
+          const isSlotOcc = typeof profile === 'object' ? (profile.status === 'occupied' || profile.isOccupied === true || profile.isAvailable === false) : (i > availCount);
+          const pName = typeof profile === 'object' && profile.name ? profile.name : `Perfil ${i}`;
+          const pinVal = typeof profile === 'object' ? (profile.pin || '') : (typeof profile === 'string' ? profile : '');
+
+          slotsControlHtml += `
+            <div class="seller-slot-control-item ${isSlotOcc ? 'occupied' : 'available'}">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <strong style="color: #ffffff; font-size: 0.82rem;">#${i} ${pName}</strong>
+                <span style="font-size: 0.68rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; background: ${isSlotOcc ? 'rgba(239,68,68,0.15)' : 'rgba(16,185,129,0.15)'}; color: ${isSlotOcc ? '#f87171' : '#34d399'};">
+                  ${isSlotOcc ? 'Ocupado' : 'Disponible'}
+                </span>
+              </div>
+              <div style="font-size: 0.72rem; color: var(--text-tertiary); font-family: var(--font-mono);">
+                PIN: <strong style="color: ${pinVal ? '#38bdf8' : 'var(--text-tertiary)'};">${pinVal || 'Sin PIN'}</strong>
+              </div>
+              <button type="button" class="btn-action-sm" onclick="toggleSellerSlot('${sub.id}', ${i}, '${isSlotOcc ? 'available' : 'occupied'}')" style="margin-top: 4px; padding: 4px 8px; font-size: 0.72rem; font-weight: 700; width: 100%; justify-content: center; background: ${isSlotOcc ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; color: ${isSlotOcc ? '#34d399' : '#f87171'}; border: 1px solid ${isSlotOcc ? 'rgba(16,185,129,0.35)' : 'rgba(239,68,68,0.35)'}; border-radius: 6px; cursor: pointer;">
+                ${isSlotOcc ? '🟢 Marcar Disponible' : '🔴 Marcar Ocupado (Personal)'}
+              </button>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="seller-sub-card">
+            <!-- Header -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                  <strong style="color: #ffffff; font-size: 1.05rem;">${sub.serviceName}</strong>
+                  <span style="font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; background: ${isPending ? 'rgba(245,158,11,0.15)' : 'rgba(16,185,129,0.15)'}; color: ${isPending ? '#f59e0b' : '#34d399'}; border: 1px solid ${isPending ? 'rgba(245,158,11,0.35)' : 'rgba(16,185,129,0.35)'};">
+                    ${isPending ? '⏳ En Revisión por Admin' : '🟢 Publicada en Catálogo'}
+                  </span>
+                </div>
+                <div style="font-size: 0.78rem; color: var(--text-tertiary);">${sub.planName || 'Plan Compartido'} • Creado el ${new Date(sub.createdAt).toLocaleDateString('es-PY')}</div>
+              </div>
+
+              <div style="text-align: right;">
+                <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald); font-size: 1rem;">
+                  ${availCount} / ${totalCap} cupos libres
+                </div>
+                <span style="font-size: 0.72rem; color: ${activeSubscribers > 0 ? '#38bdf8' : 'var(--text-tertiary)'}; font-weight: 700;">
+                  👥 ${activeSubscribers} suscriptor(es) activo(s)
+                </span>
+              </div>
+            </div>
+
+            <!-- Credentials Box -->
+            <div class="purchase-creds-box" style="margin-bottom: 10px;">
+              <div>
+                <span style="color: var(--text-tertiary); font-size: 0.72rem; display: block;">Credenciales Registradas:</span>
+                <span style="font-size: 0.8rem;">${sub.credentialsDecrypted || 'Email / Clave protegidos'}</span>
+              </div>
+              <button type="button" class="btn-copy-sm" onclick="navigator.clipboard.writeText('${sub.credentialsDecrypted || ''}'); alert('Credenciales copiadas');">Copiar</button>
+            </div>
+
+            <!-- Per-profile slots manager -->
+            <div style="margin-top: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 0.76rem; font-weight: 800; color: var(--text-secondary); text-transform: uppercase;">Control de Perfiles & Disponibilidad:</span>
+                <span style="font-size: 0.72rem; color: var(--text-tertiary);">Marca si vendiste por fuera o usas un perfil</span>
+              </div>
+              <div class="seller-slots-manager-grid">
+                ${slotsControlHtml}
+              </div>
+            </div>
+
+            <!-- Actions Footer -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px; flex-wrap: wrap; gap: 8px;">
+              <div style="font-size: 0.76rem; color: var(--text-tertiary);">
+                🛡️ Cuenta respaldada con Garantía Escrow GamesBoy.
+              </div>
+              <button type="button" class="btn-action-sm" onclick="deleteSellerAccount('${sub.id}', '${sub.serviceName}', ${activeSubscribers})" style="background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.3); padding: 6px 14px; border-radius: 8px; font-size: 0.76rem; font-weight: 800; cursor: pointer;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 4px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Retirar / Eliminar Cuenta</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Toggle Slot Occupancy Handler for Sellers
+    window.toggleSellerSlot = async function(subId, slotNumber, targetStatus) {
+      const storedUser = JSON.parse(localStorage.getItem('gb_user') || 'null');
+      const userId = storedUser ? storedUser.id : 'usr_client1';
+
+      try {
+        const res = await fetch(`/api/seller/subscription/${subId}/toggle-slot`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-user-id': userId
+          },
+          body: JSON.stringify({ slotNumber, status: targetStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+          loadProfileData();
+        } else {
+          alert(`Aviso: ${data.error || 'No se pudo modificar el cupo.'}`);
+        }
+      } catch (err) {
+        alert('Error al actualizar el estado del cupo.');
+      }
+    };
+
+    // Safe Account Withdrawal Handler
+    window.deleteSellerAccount = async function(subId, serviceName, activeSubsCount) {
+      if (activeSubsCount > 0) {
+        alert(
+          `⚠️ ACCIÓN BLOQUEADA POR SEGURIDAD\n\nNo puedes retirar la cuenta "${serviceName}" porque tiene ${activeSubsCount} suscriptor(es) con membresía activa y pagada.\n\nDebes esperar a que termine el ciclo de 30 días o comunicarte con el Administrador para coordinar una reasignación.`
+        );
+        return;
+      }
+
+      if (!confirm(`¿Estás seguro de que deseas retirar la cuenta "${serviceName}" de GamesBoy? Dejará de aparecer en la tienda.`)) {
+        return;
+      }
+
+      const storedUser = JSON.parse(localStorage.getItem('gb_user') || 'null');
+      const userId = storedUser ? storedUser.id : 'usr_client1';
+
+      try {
+        const res = await fetch(`/api/seller/subscription/${subId}`, {
+          method: 'DELETE',
+          headers: { 'x-user-id': userId }
+        });
+        const data = await res.json();
+        if (data.success) {
+          alert(`✅ Cuenta "${serviceName}" retirada exitosamente.`);
+          loadProfileData();
+        } else {
+          alert(`⚠️ ${data.error || 'No se pudo retirar la cuenta.'}`);
+        }
+      } catch (err) {
+        alert('Error al conectar con el servidor.');
+      }
+    };
 
     // Avatar Upload Listener
     const avatarFile = document.getElementById('input-avatar-file');
