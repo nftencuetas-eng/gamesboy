@@ -1829,7 +1829,7 @@
           <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 1rem;">
             <div class="admin-form-group">
               <label class="admin-form-label">Precio por Asiento (Gs.) *</label>
-              <input type="number" id="create-srv-price" class="admin-form-input" value="25000" step="1000" min="5000" required oninput="updateCreateModalCalc()" style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan);">
+              <input type="number" id="create-srv-price" class="admin-form-input" value="25000" step="any" min="0" required oninput="updateCreateModalCalc()" style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan);">
             </div>
             <div class="admin-form-group">
               <label class="admin-form-label">Cantidad de Asientos *</label>
@@ -1951,7 +1951,7 @@
           <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 1rem;">
             <div class="admin-form-group">
               <label class="admin-form-label">Precio por Asiento (Gs.) *</label>
-              <input type="number" id="edit-srv-price" class="admin-form-input" step="1000" min="5000" required oninput="updateEditModalCalc()" style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan);">
+              <input type="number" id="edit-srv-price" class="admin-form-input" step="any" min="0" required oninput="updateEditModalCalc()" style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan);">
             </div>
             <div class="admin-form-group">
               <label class="admin-form-label">Cantidad de Asientos *</label>
@@ -4102,7 +4102,7 @@
     };
 
     window.updateCreateModalCalc = function() {
-      const price = parseInt(document.getElementById('create-srv-price')?.value, 10) || 0;
+      const price = Math.round(parseFloat(document.getElementById('create-srv-price')?.value) || 0);
       const slots = parseInt(document.getElementById('create-srv-slots')?.value, 10) || 1;
       const comm = parseFloat(document.getElementById('create-srv-comm')?.value) || 0;
 
@@ -4152,16 +4152,19 @@
     // Create Service Submit
     document.getElementById('form-create-streaming-service')?.addEventListener('submit', async function(e) {
       e.preventDefault();
+      const srvName = document.getElementById('create-srv-name').value.trim();
+      const srvId = document.getElementById('create-srv-id').value.trim() || srvName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+
       const payload = {
-        name: document.getElementById('create-srv-name').value.trim(),
-        id: document.getElementById('create-srv-id').value.trim(),
+        name: srvName,
+        id: srvId,
         planName: document.getElementById('create-srv-plan').value.trim(),
         badgeText: document.getElementById('create-srv-badge').value.trim(),
         tagline: document.getElementById('create-srv-tagline').value.trim(),
         description: document.getElementById('create-srv-desc').value.trim(),
         iconUrl: document.getElementById('create-srv-icon-url').value.trim(),
         bannerHorizontal: document.getElementById('create-srv-banner-url').value.trim(),
-        pricePerSlotPyg: parseInt(document.getElementById('create-srv-price').value, 10) || 25000,
+        pricePerSlotPyg: Math.round(parseFloat(document.getElementById('create-srv-price').value) || 25000),
         maxSlots: parseInt(document.getElementById('create-srv-slots').value, 10) || 5,
         commissionPercent: parseFloat(document.getElementById('create-srv-comm').value) || 10,
         isActive: true
@@ -4223,7 +4226,7 @@
     };
 
     window.updateEditModalCalc = function() {
-      const price = parseInt(document.getElementById('edit-srv-price')?.value, 10) || 0;
+      const price = Math.round(parseFloat(document.getElementById('edit-srv-price')?.value) || 0);
       const slots = parseInt(document.getElementById('edit-srv-slots')?.value, 10) || 1;
       const comm = parseFloat(document.getElementById('edit-srv-comm')?.value) || 0;
 
@@ -4277,7 +4280,7 @@
         description: document.getElementById('edit-srv-desc').value.trim(),
         iconUrl: document.getElementById('edit-srv-icon-url').value.trim(),
         bannerHorizontal: document.getElementById('edit-srv-banner-url').value.trim(),
-        pricePerSlotPyg: parseInt(document.getElementById('edit-srv-price').value, 10) || 25000,
+        pricePerSlotPyg: Math.round(parseFloat(document.getElementById('edit-srv-price').value) || 25000),
         maxSlots: parseInt(document.getElementById('edit-srv-slots').value, 10) || 5,
         commissionPercent: parseFloat(document.getElementById('edit-srv-comm').value) || 10,
         waitingCount: parseInt(document.getElementById('edit-srv-waiting').value, 10) || 0

@@ -241,7 +241,139 @@ router.put('/:platform', (req, res) => {
   });
 });
 
-// 5. AI / REAL-TIME LIVE RELEASES SYNCHRONIZER
+// 5. CREATE NEW STREAMING SERVICE (ADMIN)
+router.post('/', (req, res) => {
+  try {
+    const db = getDb();
+    if (!db.streaming_services) db.streaming_services = [];
+
+    const {
+      id, name, planName, badgeText, tagline, description,
+      iconUrl, bannerHorizontal, pricePerSlotPyg, maxSlots,
+      commissionPercent, isActive
+    } = req.body;
+
+    const cleanId = (id || name || '').toLowerCase().trim().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+
+    if (!name || !cleanId) {
+      return res.status(400).json({ error: 'El nombre del servicio es requerido.' });
+    }
+
+    // Check for duplicate ID
+    const existing = db.streaming_services.find(s => s.id === cleanId);
+    if (existing) {
+      return res.status(409).json({ error: `Ya existe un servicio con el ID "${cleanId}". Por favor usa otro nombre o ID.` });
+    }
+
+    const newService = {
+      id: cleanId,
+      name,
+      planName: planName || `Plan ${maxSlots || 5} Pantallas`,
+      badgeText: badgeText || '',
+      tagline: tagline || '',
+      description: description || '',
+      iconUrl: iconUrl || '',
+      thumbnailUrl: iconUrl || '',
+      bannerHorizontal: bannerHorizontal || '',
+      brandColor: '#00c2ff',
+      pricePerSlotPyg: Math.round(parseFloat(pricePerSlotPyg)) || 25000,
+      maxSlots: parseInt(maxSlots, 10) || 5,
+      commissionPercent: commissionPercent !== undefined ? parseFloat(commissionPercent) : 10,
+      isActive: isActive !== false,
+      waitingCount: 0,
+      waitingList: [],
+      createdAt: new Date().toISOString()
+    };
+
+    db.streaming_services.push(newService);
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `✅ Servicio "${newService.name}" creado exitosamente y publicado en el catálogo.`,
+      service: newService
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 6. UPDATE STREAMING SERVICE BY ID (ADMIN - FULL UPDATE)
+router.put('/:serviceId', (req, res) => {
+  try {
+    const db = getDb();
+    const serviceId = req.params.serviceId;
+    const services = db.streaming_services || [];
+    const service = services.find(s => s.id === serviceId);
+
+    if (!service) {
+      return res.status(404).json({ error: 'Servicio no encontrado.' });
+    }
+
+    const {
+      name, isActive, planName, badgeText, tagline, description,
+      iconUrl, bannerHorizontal, pricePerSlotPyg, maxSlots,
+      commissionPercent, waitingCount, brandColor,
+      thumbnailUrl, logoUrl, bannerVertical, hasStock, metrics, releases
+    } = req.body;
+
+    if (name !== undefined) service.name = name;
+    if (isActive !== undefined) service.isActive = Boolean(isActive);
+    if (planName !== undefined) service.planName = planName;
+    if (badgeText !== undefined) service.badgeText = badgeText;
+    if (tagline !== undefined) service.tagline = tagline;
+    if (description !== undefined) service.description = description;
+    if (iconUrl !== undefined) { service.iconUrl = iconUrl; service.thumbnailUrl = iconUrl; }
+    if (thumbnailUrl !== undefined) service.thumbnailUrl = thumbnailUrl;
+    if (logoUrl !== undefined) service.iconUrl = logoUrl;
+    if (bannerHorizontal !== undefined) service.bannerHorizontal = bannerHorizontal;
+    if (bannerVertical !== undefined) service.bannerVertical = bannerVertical;
+    if (brandColor !== undefined) service.brandColor = brandColor;
+    if (pricePerSlotPyg !== undefined) service.pricePerSlotPyg = Math.round(parseFloat(pricePerSlotPyg)) || 25000;
+    if (maxSlots !== undefined) service.maxSlots = parseInt(maxSlots, 10);
+    if (commissionPercent !== undefined) service.commissionPercent = parseFloat(commissionPercent);
+    if (waitingCount !== undefined) service.waitingCount = parseInt(waitingCount, 10);
+    if (hasStock !== undefined) service.hasStock = Boolean(hasStock);
+    if (metrics) service.metrics = { ...service.metrics, ...metrics };
+    if (Array.isArray(releases)) service.releases = releases;
+
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `✅ Servicio "${service.name}" actualizado correctamente.`,
+      service
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 7. DELETE STREAMING SERVICE (ADMIN)
+router.delete('/:serviceId', (req, res) => {
+  try {
+    const db = getDb();
+    const serviceId = req.params.serviceId;
+    const services = db.streaming_services || [];
+    const index = services.findIndex(s => s.id === serviceId);
+
+    if (index === -1) {
+      return res.status(404).json({ error: 'Servicio no encontrado.' });
+    }
+
+    const removed = services.splice(index, 1)[0];
+    saveStorage();
+
+    res.json({
+      success: true,
+      message: `🗑️ Servicio "${removed.name}" eliminado del catálogo.`
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 8. AI / REAL-TIME LIVE RELEASES SYNCHRONIZER
 router.post('/:platform/sync-ai', async (req, res) => {
   try {
     const db = getDb();

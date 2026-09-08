@@ -96,6 +96,7 @@ app.use('/api/banners', bannersRouter);
 app.use('/api/smm', smmRouter);
 app.use('/api/streaming-hubs', streamingHubsRouter);
 app.use('/api/admin/streaming-hubs', streamingHubsRouter);
+app.use('/api/admin/streaming-services', streamingHubsRouter);
 
 // Clean Routes & Admin aliases
 app.get('/login', (req, res) => res.sendFile(path.join(clientPath, 'login.html')));
