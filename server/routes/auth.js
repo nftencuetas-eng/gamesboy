@@ -439,13 +439,39 @@ router.get('/profile', (req, res) => {
         profilesObj = {};
       }
 
-      const activeBuyersCount = (db.user_slots || []).filter(us => us.subscriptionId === s.id && us.status === 'active').length;
+      const services = db.streaming_services || [];
+      const cleanKey = (s.serviceKey || s.serviceName || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const cfg = services.find(srv => {
+        const sId = (srv.id || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        const sName = (srv.name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        return sId === cleanKey || sName === cleanKey || sId.includes(cleanKey) || cleanKey.includes(sId) || sName.includes(cleanKey) || cleanKey.includes(sName);
+      });
+      const maxSlots = cfg ? (cfg.maxSlots || 5) : 5;
+      const effectiveTotalSlots = Math.max(s.totalSlots || 0, maxSlots);
+      const effectiveAvailSlots = s.availableSlots !== undefined ? Math.min(s.availableSlots, effectiveTotalSlots) : effectiveTotalSlots;
+      const serviceIcon = (cfg && cfg.icon) ? cfg.icon : (s.serviceIcon || `/assets/services/${cleanKey || 'netflix'}.png`);
+
+      const activeBuyers = (db.user_slots || [])
+        .filter(us => us.subscriptionId === s.id && us.status === 'active')
+        .map(us => {
+          const buyerUser = (db.users || []).find(u => u.id === (us.buyerId || us.userId));
+          return {
+            slotNumber: us.slotNumber,
+            buyerId: us.buyerId || us.userId,
+            buyerName: (buyerUser && buyerUser.name) ? buyerUser.name : (us.buyerName || 'Comprador GamesBoy'),
+            expiresAt: us.expiresAt || new Date(Date.now() + 30 * 86400000).toISOString()
+          };
+        });
 
       return {
         ...s,
+        totalSlots: effectiveTotalSlots,
+        availableSlots: effectiveAvailSlots,
+        serviceIcon,
         credentialsDecrypted: cryptoService.decrypt(s.credentialsEncrypted),
         pinsDecrypted: profilesObj,
-        activeBuyersCount
+        activeBuyersCount: activeBuyers.length,
+        activeBuyers
       };
     });
 

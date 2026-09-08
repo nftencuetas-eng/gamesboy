@@ -861,7 +861,7 @@ function renderStreamingServices() {
   // Cross-reference stock with live subscriptions
   const activeSubs = Array.isArray(state.subscriptions) ? state.subscriptions : [];
 
-  // Sort descending: services with most active accounts and stock appear first
+  // Sort strictly: services with real active accounts and available slots appear FIRST (left)
   const sortedPlatforms = [...platformList].sort((a, b) => {
     const keyA = (a.id || a.platformKey || a.name || '').toLowerCase();
     const keyB = (b.id || b.platformKey || b.name || '').toLowerCase();
@@ -882,20 +882,24 @@ function renderStreamingServices() {
     const slotsA = matchingA.reduce((sum, s) => sum + (s.availableSlots || 0), 0);
     const slotsB = matchingB.reduce((sum, s) => sum + (s.availableSlots || 0), 0);
 
-    // Rule 1: Most active subscription accounts first (descending)
-    if (activeCountB !== activeCountA) {
-      return activeCountB - activeCountA;
+    const hasRealStockA = slotsA > 0 || (a.hasStock === true && (a.availableAccounts > 0 || a.totalAvailSlots > 0 || activeCountA > 0));
+    const hasRealStockB = slotsB > 0 || (b.hasStock === true && (b.availableAccounts > 0 || b.totalAvailSlots > 0 || activeCountB > 0));
+
+    // Priority 1: In-Stock services strictly before Out-of-Stock services
+    if (hasRealStockA !== hasRealStockB) {
+      return hasRealStockB ? 1 : -1;
     }
-    // Rule 2: Most available slots first (descending)
+
+    // Priority 2: Most available slots first
     if (slotsB !== slotsA) {
       return slotsB - slotsA;
     }
-    // Rule 3: Has stock flag priority
-    const inStockA = (a.hasStock !== false && (slotsA > 0 || activeCountA > 0));
-    const inStockB = (b.hasStock !== false && (slotsB > 0 || activeCountB > 0));
-    if (inStockA !== inStockB) {
-      return inStockB ? 1 : -1;
+
+    // Priority 3: Most active accounts
+    if (activeCountB !== activeCountA) {
+      return activeCountB - activeCountA;
     }
+
     return 0;
   });
 

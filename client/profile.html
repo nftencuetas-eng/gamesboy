@@ -101,12 +101,20 @@
       position: relative;
     }
 
-    /* Left Sidebar User Identity */
+    /* Left Sidebar User Identity - Sticky on Desktop */
     .profile-identity-box {
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
+    }
+
+    @media (min-width: 961px) {
+      .profile-identity-box {
+        position: sticky;
+        top: 90px;
+        z-index: 10;
+      }
     }
 
     .profile-avatar-frame {
@@ -383,6 +391,323 @@
       border-color: #00c2ff;
       box-shadow: 0 4px 14px rgba(0, 194, 255, 0.35);
     }
+
+    /* ======================================================== */
+    /* CUENTAS COMPARTIDAS & MONETIZACIÓN DESIGN SYSTEM         */
+    /* ======================================================== */
+
+    /* Top KPI Summary Metrics Bar */
+    .shared-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 820px) {
+      .shared-kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .shared-kpi-card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 14px;
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .shared-kpi-card:hover {
+      background: rgba(255, 255, 255, 0.045);
+      border-color: rgba(0, 194, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .shared-kpi-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .shared-kpi-val {
+      font-family: var(--font-mono);
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .shared-kpi-lbl {
+      font-size: 0.74rem;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-top: 3px;
+      font-weight: 700;
+    }
+
+    /* Live Search & Filter Platform Toolbar */
+    .shared-toolbar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .shared-search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .shared-search-wrap svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-tertiary);
+      pointer-events: none;
+    }
+
+    .shared-search-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px 14px 10px 38px;
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-family: var(--font-sans);
+      transition: all 0.2s ease;
+      box-sizing: border-box;
+    }
+
+    .shared-search-input:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+      background: rgba(0, 0, 0, 0.7);
+      box-shadow: 0 0 14px rgba(0, 194, 255, 0.2);
+    }
+
+    .shared-filter-select {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #ffffff;
+      font-size: 0.85rem;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      min-width: 190px;
+      transition: all 0.2s ease;
+    }
+
+    .shared-filter-select:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+    }
+
+    .shared-filter-select option {
+      background: #121520;
+      color: #ffffff;
+    }
+
+    /* Account Card List Layout */
+    .seller-sub-card {
+      background: linear-gradient(145deg, #11141e 0%, #161a27 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px !important;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .seller-sub-card:hover {
+      border-color: rgba(0, 194, 255, 0.35);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65), 0 0 16px rgba(0, 194, 255, 0.1);
+    }
+
+    .seller-sub-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .seller-service-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .seller-service-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      object-fit: contain;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .seller-creds-box {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .seller-cred-pill {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .seller-slots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .seller-slot-card {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .seller-slot-card.available {
+      border-left: 3.5px solid #10b981;
+    }
+
+    .seller-slot-card.occupied-personal {
+      border-left: 3.5px solid #ef4444;
+      background: rgba(239, 68, 68, 0.03);
+    }
+
+    .seller-slot-card.occupied-buyer {
+      border-left: 3.5px solid #38bdf8;
+      background: rgba(0, 194, 255, 0.05);
+    }
+
+    .badge-slot-avail {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-slot-occupied {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #f87171;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-slot-buyer {
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: rgba(0, 194, 255, 0.15);
+      border: 1px solid rgba(0, 194, 255, 0.35);
+      color: #38bdf8;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .btn-toggle-slot-sleek {
+      width: 100%;
+      padding: 6px 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+      box-sizing: border-box;
+    }
+
+    .btn-toggle-slot-sleek.make-occupied {
+      background: rgba(239, 68, 68, 0.12);
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-toggle-slot-sleek.make-occupied:hover {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #ef4444;
+    }
+
+    .btn-toggle-slot-sleek.make-available {
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-toggle-slot-sleek.make-available:hover {
+      background: rgba(16, 185, 129, 0.25);
+      border-color: #10b981;
+    }
+
+    .btn-toggle-slot-sleek.disabled {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-tertiary);
+      border-color: rgba(255, 255, 255, 0.08);
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -458,7 +783,7 @@
           </a>
           <a class="profile-tab-item" data-tab="tab-seller">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-            <span>Compartir Cuenta</span>
+            <span>Cuentas Compartidas</span>
           </a>
           <a class="profile-tab-item" data-tab="tab-transactions">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -580,31 +905,71 @@
           </div>
         </div>
 
-        <!-- Tab 4: Compartir Cuenta (Vendedor / Monetización) -->
+        <!-- Tab 4: Cuentas Compartidas (Vendedor / Monetización) -->
         <div id="pane-tab-seller" class="profile-surface-card" style="display: none;">
+          
           <div class="profile-pane-header">
             <h2 class="profile-pane-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-              <span>Compartir Cuenta & Monetización</span>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              <span>Cuentas Compartidas & Monetización</span>
             </h2>
-          </div>
-
-          <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem;">
-            <h3 style="font-size: 1.05rem; font-weight: 800; color: #34d399; margin-bottom: 6px;">¿Tienes cupos libres en tus cuentas de Streaming?</h3>
-            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45; margin-bottom: 1rem;">
-              Monetiza tus suscripciones oficiales (Netflix, Spotify, Disney+, Max, etc.). Administras tu grupo con chat privado y recibes tus ganancias garantizadas en Guaraníes o USDT.
-            </p>
-            <a href="/#section-dual-callouts" class="btn-primary-block" style="display: inline-flex; width: auto; padding: 10px 20px; font-weight: 800; border-radius: 10px; text-decoration: none;">
-              Publicar Nueva Cuenta
+            <a href="/#section-dual-callouts" class="btn-primary-block" style="display: inline-flex; width: auto; padding: 8px 18px; font-size: 0.82rem; font-weight: 800; border-radius: 10px; text-decoration: none; gap: 7px; align-items: center; box-shadow: 0 4px 14px rgba(0, 194, 255, 0.25);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Publicar Nueva Cuenta</span>
             </a>
           </div>
 
-          <div id="seller-publications-container">
-            <h4 style="font-size: 0.92rem; font-weight: 800; color: #ffffff; margin-bottom: 10px;">Tus Cuentas Publicadas</h4>
-            <div id="seller-groups-list">
-              <p style="color: var(--text-tertiary); font-size: 0.84rem;">No tienes cuentas publicadas activas actualmente.</p>
+          <!-- Top KPI Metrics Cards Bar -->
+          <div class="shared-kpi-grid" id="shared-kpi-container">
+            <div class="shared-kpi-card">
+              <div class="shared-kpi-icon" style="background: rgba(0, 194, 255, 0.12); color: var(--accent-cyan); border: 1px solid rgba(0, 194, 255, 0.25);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+              </div>
+              <div>
+                <div class="shared-kpi-val" id="kpi-total-accounts">0</div>
+                <div class="shared-kpi-lbl">Cuentas Compartidas</div>
+              </div>
+            </div>
+
+            <div class="shared-kpi-card">
+              <div class="shared-kpi-icon" style="background: rgba(16, 185, 129, 0.12); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.25);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+              <div>
+                <div class="shared-kpi-val" id="kpi-total-occupied-slots">0 / 0</div>
+                <div class="shared-kpi-lbl">Perfiles Ocupados</div>
+              </div>
+            </div>
+
+            <div class="shared-kpi-card">
+              <div class="shared-kpi-icon" style="background: rgba(168, 85, 247, 0.12); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.25);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              </div>
+              <div>
+                <div class="shared-kpi-val" id="kpi-estimated-income-pyg" style="color: #34d399;">0 Gs.</div>
+                <div class="shared-kpi-lbl" id="kpi-estimated-income-usd">Ingresos Estimados / Mes</div>
+              </div>
             </div>
           </div>
+
+          <!-- Toolbar: Live Search & Platform Dropdown -->
+          <div class="shared-toolbar">
+            <div class="shared-search-wrap">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="shared-accounts-search" class="shared-search-input" placeholder="Buscar por plataforma, correo o perfil...">
+            </div>
+            <select id="shared-accounts-filter" class="shared-filter-select">
+              <option value="all">Todas las Plataformas</option>
+            </select>
+          </div>
+
+          <!-- Account Publications List Container -->
+          <div id="seller-publications-container">
+            <div id="seller-groups-list">
+              <p style="color: var(--text-tertiary); font-size: 0.84rem; text-align: center; padding: 2.5rem;">Cargando tus cuentas compartidas...</p>
+            </div>
+          </div>
+
         </div>
 
         <!-- Tab 5: Historial Financiero -->
@@ -851,7 +1216,9 @@
 
         renderPurchasesList(data.mySlots || [], data.myOrders || []);
         renderTransactionsList(data.transactions || []);
-        renderSellerPublicationsList(data.myPublications || []);
+        _allSellerPublications = data.myPublications || [];
+        updateSellerKpisAndFilterOptions(_allSellerPublications);
+        applySellerFiltersAndRender();
       } catch (err) {
         console.error('Error loading profile:', err);
       }
@@ -1019,18 +1386,141 @@
       }).join('');
     }
 
+    // State for seller publications
+    let _allSellerPublications = [];
+
+    // Global toggle for password visibility
+    window.toggleCredPwd = function(subId) {
+      const pwdEl = document.getElementById(`pwd-text-${subId}`);
+      const btnEl = document.getElementById(`pwd-btn-${subId}`);
+      if (!pwdEl || !btnEl) return;
+      const realPwd = pwdEl.getAttribute('data-real') || '';
+      const isMasked = pwdEl.getAttribute('data-masked') !== 'false';
+      
+      if (isMasked) {
+        pwdEl.textContent = realPwd || '(vacía)';
+        pwdEl.setAttribute('data-masked', 'false');
+        btnEl.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg><span>Ocultar</span>`;
+      } else {
+        pwdEl.textContent = '••••••••••••';
+        pwdEl.setAttribute('data-masked', 'true');
+        btnEl.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg><span>Revelar</span>`;
+      }
+    };
+
+    // Update KPI summary cards & platform filter options
+    function updateSellerKpisAndFilterOptions(publications) {
+      const totalAccounts = publications.length;
+      let totalOccupied = 0;
+      let totalCapacity = 0;
+      let totalEstIncomePyg = 0;
+      let totalEstIncomeUsd = 0;
+
+      const platformsSet = new Set();
+
+      publications.forEach(sub => {
+        if (sub.serviceName) platformsSet.add(sub.serviceName.trim());
+        const totalCap = Math.max(1, sub.totalSlots || 5);
+        const availCount = Math.min(totalCap, Math.max(0, sub.availableSlots !== undefined ? sub.availableSlots : totalCap));
+        const occCount = totalCap - availCount;
+
+        totalCapacity += totalCap;
+        totalOccupied += occCount;
+
+        const priceSlotPyg = sub.pricePerSlotPyg || Math.round((sub.pricePerSlotUsd || 3.99) * 7500);
+        const priceSlotUsd = sub.pricePerSlotUsd || (priceSlotPyg / 7500);
+
+        totalEstIncomePyg += Math.round(occCount * priceSlotPyg * 0.9);
+        totalEstIncomeUsd += (occCount * priceSlotUsd * 0.9);
+      });
+
+      const kpiAccs = document.getElementById('kpi-total-accounts');
+      if (kpiAccs) kpiAccs.textContent = totalAccounts;
+
+      const kpiSlots = document.getElementById('kpi-total-occupied-slots');
+      if (kpiSlots) {
+        const pct = totalCapacity > 0 ? Math.round((totalOccupied / totalCapacity) * 100) : 0;
+        kpiSlots.textContent = `${totalOccupied} / ${totalCapacity} (${pct}%)`;
+      }
+
+      const kpiPyg = document.getElementById('kpi-estimated-income-pyg');
+      if (kpiPyg) kpiPyg.textContent = `${totalEstIncomePyg.toLocaleString('es-PY')} Gs.`;
+
+      const kpiUsd = document.getElementById('kpi-estimated-income-usd');
+      if (kpiUsd) kpiUsd.textContent = `~$${totalEstIncomeUsd.toFixed(2)} USD / Mes (Neto)`;
+
+      // Populate filter select options
+      const filterSelect = document.getElementById('shared-accounts-filter');
+      if (filterSelect) {
+        const currentVal = filterSelect.value;
+        filterSelect.innerHTML = '<option value="all">Todas las Plataformas</option>';
+        platformsSet.forEach(plat => {
+          const opt = document.createElement('option');
+          opt.value = plat;
+          opt.textContent = plat;
+          if (plat === currentVal) opt.selected = true;
+          filterSelect.appendChild(opt);
+        });
+      }
+    }
+
+    // Filter publications by search text & platform dropdown
+    function applySellerFiltersAndRender() {
+      const searchInput = document.getElementById('shared-accounts-search');
+      const filterSelect = document.getElementById('shared-accounts-filter');
+      const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
+      const filterVal = filterSelect ? filterSelect.value : 'all';
+
+      const filtered = _allSellerPublications.filter(sub => {
+        const sName = (sub.serviceName || '').toLowerCase();
+        const pName = (sub.planName || '').toLowerCase();
+        const creds = (sub.credentialsDecrypted || '').toLowerCase();
+
+        const matchesPlatform = (filterVal === 'all' || sName === filterVal.toLowerCase() || sName.includes(filterVal.toLowerCase()));
+        const matchesSearch = !searchVal || sName.includes(searchVal) || pName.includes(searchVal) || creds.includes(searchVal);
+
+        return matchesPlatform && matchesSearch;
+      });
+
+      renderSellerPublicationsList(filtered);
+    }
+
+    // Attach search and filter events
+    const searchInputEl = document.getElementById('shared-accounts-search');
+    if (searchInputEl) {
+      searchInputEl.addEventListener('input', applySellerFiltersAndRender);
+    }
+    const filterSelectEl = document.getElementById('shared-accounts-filter');
+    if (filterSelectEl) {
+      filterSelectEl.addEventListener('change', applySellerFiltersAndRender);
+    }
+
     // Render Seller Published Accounts & Real-Time Slot Occupancy Controls
     function renderSellerPublicationsList(publications) {
       const container = document.getElementById('seller-groups-list');
       if (!container) return;
 
       if (!publications || publications.length === 0) {
-        container.innerHTML = `
-          <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 2rem; text-align: center;">
-            <p style="color: var(--text-tertiary); font-size: 0.86rem; margin-bottom: 8px;">No tienes cuentas compartidas publicadas activamente.</p>
-            <span style="font-size: 0.76rem; color: var(--text-secondary);">Haz clic en "Publicar Nueva Cuenta" para comenzar a monetizar tus cupos libres.</span>
-          </div>
-        `;
+        if (_allSellerPublications.length === 0) {
+          container.innerHTML = `
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 2.5rem 1.5rem; text-align: center;">
+              <div style="color: var(--accent-cyan); margin-bottom: 10px;">
+                <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              </div>
+              <h4 style="color: #ffffff; font-size: 1.05rem; font-weight: 800; margin-bottom: 6px;">No tienes cuentas compartidas publicadas</h4>
+              <p style="color: var(--text-tertiary); font-size: 0.82rem; margin-bottom: 1.25rem;">Comienza a monetizar tus cupos libres de Netflix, Spotify, Disney+ y más con pagos seguros garantizados.</p>
+              <a href="/#section-dual-callouts" class="btn-primary-block" style="display: inline-flex; width: auto; padding: 9px 20px; font-weight: 800; border-radius: 10px; text-decoration: none;">
+                Publicar Nueva Cuenta
+              </a>
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 2.5rem 1.5rem; text-align: center;">
+              <p style="color: var(--text-tertiary); font-size: 0.88rem;">No se encontraron cuentas que coincidan con tu búsqueda o filtro.</p>
+            </div>
+          `;
+        }
         return;
       }
 
@@ -1038,83 +1528,164 @@
         const isPending = sub.status === 'pending_approval' || sub.status === 'pending';
         const totalCap = Math.max(1, sub.totalSlots || 5);
         const availCount = Math.min(totalCap, Math.max(0, sub.availableSlots !== undefined ? sub.availableSlots : totalCap));
-        const occupiedCount = totalCap - availCount;
         const activeSubscribers = sub.activeBuyersCount || 0;
         const profiles = sub.pinsDecrypted || {};
+
+        // Parse email and password
+        const rawCreds = sub.credentialsDecrypted || '';
+        let emailVal = rawCreds;
+        let passVal = '';
+        if (rawCreds.includes(':::')) {
+          const parts = rawCreds.split(':::');
+          emailVal = parts[0].trim();
+          passVal = parts[1].trim();
+        } else if (rawCreds.includes('\n')) {
+          const parts = rawCreds.split('\n');
+          emailVal = parts[0].trim();
+          passVal = parts[1].trim();
+        } else if (rawCreds.includes(':') && !rawCreds.includes('://')) {
+          const parts = rawCreds.split(':');
+          emailVal = parts[0].trim();
+          passVal = parts.slice(1).join(':').trim();
+        }
+
+        const iconSrc = sub.serviceIcon || '/assets/branding/icon.png';
 
         let slotsControlHtml = '';
         for (let i = 1; i <= totalCap; i++) {
           const profile = profiles[i] || profiles[String(i)] || {};
           const isSlotOcc = typeof profile === 'object' ? (profile.status === 'occupied' || profile.isOccupied === true || profile.isAvailable === false) : (i > availCount);
-          const pName = typeof profile === 'object' && profile.name ? profile.name : `Perfil ${i}`;
+          const pName = typeof profile === 'object' && profile.name ? profile.name : `Perfil #${i}`;
           const pinVal = typeof profile === 'object' ? (profile.pin || '') : (typeof profile === 'string' ? profile : '');
 
-          slotsControlHtml += `
-            <div class="seller-slot-control-item ${isSlotOcc ? 'occupied' : 'available'}">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <strong style="color: #ffffff; font-size: 0.82rem;">#${i} ${pName}</strong>
-                <span style="font-size: 0.68rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; background: ${isSlotOcc ? 'rgba(239,68,68,0.15)' : 'rgba(16,185,129,0.15)'}; color: ${isSlotOcc ? '#f87171' : '#34d399'};">
-                  ${isSlotOcc ? 'Ocupado' : 'Disponible'}
-                </span>
+          // Check if slot has active buyer
+          const buyerObj = (sub.activeBuyers || []).find(b => String(b.slotNumber) === String(i));
+
+          if (buyerObj) {
+            slotsControlHtml += `
+              <div class="seller-slot-card occupied-buyer">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <strong style="color: #ffffff; font-size: 0.82rem;">#${i} ${pName}</strong>
+                    <span class="badge-slot-buyer" title="Comprador: ${buyerObj.buyerName}">👤 ${buyerObj.buyerName || 'Comprador'}</span>
+                  </div>
+                  <div style="font-size: 0.7rem; color: #38bdf8; font-family: var(--font-mono); margin-bottom: 6px;">
+                    Vence: ${new Date(buyerObj.expiresAt).toLocaleDateString('es-PY')}
+                  </div>
+                </div>
+                <button type="button" class="btn-toggle-slot-sleek disabled" disabled title="Cupo con suscripción activa (protegido por Escrow)">
+                  🔒 Asignado a Comprador
+                </button>
               </div>
-              <div style="font-size: 0.72rem; color: var(--text-tertiary); font-family: var(--font-mono);">
-                PIN: <strong style="color: ${pinVal ? '#38bdf8' : 'var(--text-tertiary)'};">${pinVal || 'Sin PIN'}</strong>
+            `;
+          } else if (isSlotOcc) {
+            slotsControlHtml += `
+              <div class="seller-slot-card occupied-personal">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <strong style="color: #ffffff; font-size: 0.82rem;">#${i} ${pName}</strong>
+                    <span class="badge-slot-occupied">🔴 Ocupado</span>
+                  </div>
+                  <div style="font-size: 0.7rem; color: var(--text-tertiary); font-family: var(--font-mono); margin-bottom: 6px;">
+                    PIN: <strong style="color: ${pinVal ? '#38bdf8' : 'var(--text-tertiary)'};">${pinVal || 'Sin PIN'}</strong>
+                  </div>
+                </div>
+                <button type="button" class="btn-toggle-slot-sleek make-available" onclick="toggleSellerSlot('${sub.id}', ${i}, 'available')">
+                  🟢 Marcar Disponible
+                </button>
               </div>
-              <button type="button" class="btn-action-sm" onclick="toggleSellerSlot('${sub.id}', ${i}, '${isSlotOcc ? 'available' : 'occupied'}')" style="margin-top: 4px; padding: 4px 8px; font-size: 0.72rem; font-weight: 700; width: 100%; justify-content: center; background: ${isSlotOcc ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.15)'}; color: ${isSlotOcc ? '#34d399' : '#f87171'}; border: 1px solid ${isSlotOcc ? 'rgba(16,185,129,0.35)' : 'rgba(239,68,68,0.35)'}; border-radius: 6px; cursor: pointer;">
-                ${isSlotOcc ? '🟢 Marcar Disponible' : '🔴 Marcar Ocupado (Personal)'}
-              </button>
-            </div>
-          `;
+            `;
+          } else {
+            slotsControlHtml += `
+              <div class="seller-slot-card available">
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <strong style="color: #ffffff; font-size: 0.82rem;">#${i} ${pName}</strong>
+                    <span class="badge-slot-avail">🟢 Disponible</span>
+                  </div>
+                  <div style="font-size: 0.7rem; color: var(--text-tertiary); font-family: var(--font-mono); margin-bottom: 6px;">
+                    PIN: <strong style="color: ${pinVal ? '#38bdf8' : 'var(--text-tertiary)'};">${pinVal || 'Sin PIN'}</strong>
+                  </div>
+                </div>
+                <button type="button" class="btn-toggle-slot-sleek make-occupied" onclick="toggleSellerSlot('${sub.id}', ${i}, 'occupied')">
+                  🔴 Marcar Ocupado
+                </button>
+              </div>
+            `;
+          }
         }
 
         return `
           <div class="seller-sub-card">
             <!-- Header -->
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px;">
-              <div>
-                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                  <strong style="color: #ffffff; font-size: 1.05rem;">${sub.serviceName}</strong>
-                  <span style="font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; background: ${isPending ? 'rgba(245,158,11,0.15)' : 'rgba(16,185,129,0.15)'}; color: ${isPending ? '#f59e0b' : '#34d399'}; border: 1px solid ${isPending ? 'rgba(245,158,11,0.35)' : 'rgba(16,185,129,0.35)'};">
-                    ${isPending ? '⏳ En Revisión por Admin' : '🟢 Publicada en Catálogo'}
-                  </span>
+            <div class="seller-sub-header">
+              <div class="seller-service-info">
+                <img src="${iconSrc}" alt="${sub.serviceName}" class="seller-service-logo" onerror="this.src='/assets/branding/icon.png'">
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 3px;">
+                    <strong style="color: #ffffff; font-size: 1.05rem; font-family: var(--font-heading);">${sub.serviceName}</strong>
+                    <span style="font-size: 0.68rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase; background: ${isPending ? 'rgba(245,158,11,0.15)' : 'rgba(16,185,129,0.15)'}; color: ${isPending ? '#f59e0b' : '#34d399'}; border: 1px solid ${isPending ? 'rgba(245,158,11,0.35)' : 'rgba(16,185,129,0.35)'};">
+                      ${isPending ? '⏳ En Revisión por Admin' : '🟢 Publicada en Catálogo'}
+                    </span>
+                  </div>
+                  <div style="font-size: 0.78rem; color: var(--text-tertiary);">${sub.planName || 'Plan Compartido'} • Publicado el ${new Date(sub.createdAt).toLocaleDateString('es-PY')}</div>
                 </div>
-                <div style="font-size: 0.78rem; color: var(--text-tertiary);">${sub.planName || 'Plan Compartido'} • Creado el ${new Date(sub.createdAt).toLocaleDateString('es-PY')}</div>
               </div>
 
               <div style="text-align: right;">
-                <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald); font-size: 1rem;">
+                <div style="font-family: var(--font-mono); font-weight: 800; color: #34d399; font-size: 1rem;">
                   ${availCount} / ${totalCap} cupos libres
                 </div>
                 <span style="font-size: 0.72rem; color: ${activeSubscribers > 0 ? '#38bdf8' : 'var(--text-tertiary)'}; font-weight: 700;">
-                  👥 ${activeSubscribers} suscriptor(es) activo(s)
+                  👥 ${activeSubscribers} comprador(es) en GamesBoy
                 </span>
               </div>
             </div>
 
-            <!-- Credentials Box -->
-            <div class="purchase-creds-box" style="margin-bottom: 10px;">
-              <div>
-                <span style="color: var(--text-tertiary); font-size: 0.72rem; display: block;">Credenciales Registradas:</span>
-                <span style="font-size: 0.8rem;">${sub.credentialsDecrypted || 'Email / Clave protegidos'}</span>
+            <!-- Credentials Box with Password Mask & Reveal -->
+            <div class="seller-creds-box">
+              <div style="display: flex; flex-direction: column; gap: 4px; max-width: 68%;">
+                <div class="seller-cred-pill">
+                  <span style="color: var(--text-tertiary); font-size: 0.72rem;">Correo:</span>
+                  <span id="email-text-${sub.id}" style="color: #ffffff;">${emailVal || 'No registrado'}</span>
+                </div>
+                ${passVal ? `
+                  <div class="seller-cred-pill">
+                    <span style="color: var(--text-tertiary); font-size: 0.72rem;">Clave:</span>
+                    <span id="pwd-text-${sub.id}" data-real="${passVal}" data-masked="true" style="color: #38bdf8;">••••••••••••</span>
+                  </div>
+                ` : ''}
               </div>
-              <button type="button" class="btn-copy-sm" onclick="navigator.clipboard.writeText('${sub.credentialsDecrypted || ''}'); alert('Credenciales copiadas');">Copiar</button>
+
+              <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                ${passVal ? `
+                  <button type="button" class="btn-copy-sm" id="pwd-btn-${sub.id}" onclick="toggleCredPwd('${sub.id}')" style="display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.06); color: #cbd5e1; border-color: rgba(255,255,255,0.12);">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    <span>Revelar</span>
+                  </button>
+                ` : ''}
+                <button type="button" class="btn-copy-sm" onclick="navigator.clipboard.writeText('${rawCreds}'); alert('Credenciales completas copiadas');">
+                  Copiar Todo
+                </button>
+              </div>
             </div>
 
             <!-- Per-profile slots manager -->
             <div style="margin-top: 10px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                <span style="font-size: 0.76rem; font-weight: 800; color: var(--text-secondary); text-transform: uppercase;">Control de Perfiles & Disponibilidad:</span>
-                <span style="font-size: 0.72rem; color: var(--text-tertiary);">Marca si vendiste por fuera o usas un perfil</span>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.76rem; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.03em;">Matriz de Perfiles & Ocupación:</span>
+                <span style="font-size: 0.72rem; color: var(--text-tertiary);">Gestiona la disponibilidad en tiempo real</span>
               </div>
-              <div class="seller-slots-manager-grid">
+              <div class="seller-slots-grid">
                 ${slotsControlHtml}
               </div>
             </div>
 
             <!-- Actions Footer -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px; flex-wrap: wrap; gap: 8px;">
-              <div style="font-size: 0.76rem; color: var(--text-tertiary);">
-                🛡️ Cuenta respaldada con Garantía Escrow GamesBoy.
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 12px; flex-wrap: wrap; gap: 8px;">
+              <div style="font-size: 0.74rem; color: var(--text-tertiary); display: flex; align-items: center; gap: 5px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>Protegida con Garantía Escrow GamesBoy.</span>
               </div>
               <button type="button" class="btn-action-sm" onclick="deleteSellerAccount('${sub.id}', '${sub.serviceName}', ${activeSubscribers})" style="background: rgba(239,68,68,0.12); color: #f87171; border: 1px solid rgba(239,68,68,0.3); padding: 6px 14px; border-radius: 8px; font-size: 0.76rem; font-weight: 800; cursor: pointer;">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 4px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
