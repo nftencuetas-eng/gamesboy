@@ -14,19 +14,21 @@
   <style>
     .admin-layout {
       display: grid;
-      grid-template-columns: 280px 1fr;
+      grid-template-columns: 280px minmax(0, 1fr);
       min-height: 100vh;
+      width: 100%;
+      box-sizing: border-box;
       background: #080a10;
       background-image: 
         radial-gradient(circle at 10% 10%, rgba(0, 194, 255, 0.05) 0%, transparent 40%),
         radial-gradient(circle at 90% 20%, rgba(245, 158, 11, 0.04) 0%, transparent 45%);
     }
     .admin-sidebar {
-      background: rgba(10, 13, 22, 0.92);
+      background: rgba(10, 13, 22, 0.94);
       backdrop-filter: blur(20px) saturate(180%);
       -webkit-backdrop-filter: blur(20px) saturate(180%);
       border-right: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 1.5rem 1.25rem;
+      padding: 1.5rem 1.1rem;
       display: flex;
       flex-direction: column;
       position: sticky;
@@ -35,11 +37,18 @@
       box-sizing: border-box;
       z-index: 50;
       text-align: left;
+      overflow-x: hidden;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      min-width: 0;
+    }
+    .admin-sidebar nav {
+      overflow-x: hidden !important;
     }
     .admin-content {
       padding: 2.25rem 2.5rem;
-      overflow-y: auto;
-      max-height: 100vh;
+      min-width: 0;
+      width: 100%;
       box-sizing: border-box;
       text-align: left;
     }
@@ -376,6 +385,7 @@
       border-collapse: separate;
       border-spacing: 0;
       font-size: 0.84rem;
+      min-width: 860px;
     }
     .admin-table th {
       background: rgba(255, 255, 255, 0.02);
@@ -384,18 +394,27 @@
       font-size: 0.72rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      padding: 12px 16px;
+      padding: 12px 14px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.07);
       text-align: left;
+      white-space: nowrap;
     }
     .admin-table td {
-      padding: 14px 16px;
+      padding: 12px 14px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       color: #e2e8f0;
       vertical-align: middle;
+      white-space: nowrap;
     }
     .admin-table tr:hover td {
       background: rgba(255, 255, 255, 0.02);
+    }
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      border-radius: 12px;
     }
 
     .btn-admin-action {
@@ -633,10 +652,27 @@
       cursor: not-allowed;
     }
 
-    @media (max-width: 992px) {
+    @media (max-width: 1200px) {
+      .admin-layout { grid-template-columns: 240px minmax(0, 1fr); }
+      .admin-content { padding: 1.75rem 1.5rem; }
+    }
+
+    @media (max-width: 960px) {
       .admin-layout { grid-template-columns: 1fr; }
-      .admin-sidebar { height: auto; position: static; }
-      .admin-content { padding: 1.5rem 1rem; }
+      .admin-sidebar {
+        height: auto;
+        position: static;
+        padding: 1rem 1.25rem;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .admin-sidebar nav {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 6px;
+        max-height: none;
+      }
+      .admin-content { padding: 1.25rem 1rem; }
     }
 
     @keyframes spinPublish { to { transform: rotate(360deg); } }
@@ -1296,25 +1332,46 @@
           </div>
 
           <div class="admin-card">
-            <div style="overflow-x: auto;">
+            <!-- Barra de Búsqueda y Filtros -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 12px;">
+              <div style="position: relative; width: 100%; max-width: 380px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2.5" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                  <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="input-search-streaming" placeholder="🔍 Buscar por nombre, plan o ID..." class="admin-form-input" style="padding-left: 36px; padding-top: 8px; padding-bottom: 8px; font-size: 0.84rem; background: rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.12); width: 100%;">
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-tertiary);" id="streaming-search-count">
+              </div>
+            </div>
+
+            <div class="table-responsive">
               <table class="admin-table">
                 <thead>
                   <tr>
                     <th>Ícono & Servicio</th>
                     <th>Portada & Banner</th>
-                    <th>Precio Venta por Asiento (Gs.)</th>
-                    <th>Asientos Máx.</th>
-                    <th>Comisión Plataforma</th>
-                    <th>Ganancia Vendedor (Neto)</th>
-                    <th>Lista de Espera</th>
+                    <th>Precio Asiento (Gs.)</th>
+                    <th>Asientos</th>
+                    <th>Comisión GB</th>
+                    <th>Ganancia Neta</th>
+                    <th>Espera</th>
                     <th>Estado</th>
-                    <th>Acciones</th>
+                    <th style="text-align: right;">Acciones</th>
                   </tr>
                 </thead>
                 <tbody id="table-services-pricing-list">
                   <tr><td colspan="9" style="text-align: center; color: var(--text-tertiary); padding: 2rem;">Cargando servicios configurados...</td></tr>
                 </tbody>
               </table>
+            </div>
+
+            <!-- Paginación de 10 en 10 -->
+            <div id="streaming-pagination-container" style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 12px;">
+              <div style="font-size: 0.8rem; color: var(--text-tertiary);" id="streaming-pagination-info">
+                Mostrando 0 de 0 servicios
+              </div>
+              <div style="display: flex; align-items: center; gap: 6px;" id="streaming-pagination-buttons">
+              </div>
             </div>
           </div>
         </div>
@@ -3997,6 +4054,9 @@
     // TAB: GESTIÓN DE SERVICIOS DE STREAMING & MONETIZACIÓN
     // =======================================================
     let currentStreamingServices = [];
+    let streamingSearchQuery = '';
+    let streamingCurrentPage = 1;
+    const streamingPageSize = 10;
 
     async function loadServicesConfig() {
       try {
@@ -4011,91 +4071,118 @@
       }
     }
 
+    function getFilteredStreamingServices() {
+      if (!streamingSearchQuery) return currentStreamingServices;
+      const q = streamingSearchQuery.toLowerCase().trim();
+      return currentStreamingServices.filter(s => {
+        const name = (s.name || '').toLowerCase();
+        const id = (s.id || '').toLowerCase();
+        const plan = (s.planName || '').toLowerCase();
+        const badge = (s.badgeText || '').toLowerCase();
+        return name.includes(q) || id.includes(q) || plan.includes(q) || badge.includes(q);
+      });
+    }
+
     function renderServicesConfigTable() {
       const tbody = document.getElementById('table-services-pricing-list');
       if (!tbody) return;
 
-      if (!currentStreamingServices || currentStreamingServices.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: var(--text-tertiary); padding: 2.5rem;">No hay servicios de streaming creados. Haz clic en <strong>"+ Crear Nuevo Servicio de Streaming"</strong> para agregar uno.</td></tr>';
+      const filtered = getFilteredStreamingServices();
+      const totalItems = filtered.length;
+      const totalPages = Math.max(1, Math.ceil(totalItems / streamingPageSize));
+
+      if (streamingCurrentPage > totalPages) {
+        streamingCurrentPage = totalPages;
+      }
+
+      const startIndex = (streamingCurrentPage - 1) * streamingPageSize;
+      const endIndex = Math.min(startIndex + streamingPageSize, totalItems);
+      const pageItems = filtered.slice(startIndex, endIndex);
+
+      // Search counter badge
+      const countEl = document.getElementById('streaming-search-count');
+      if (countEl) {
+        if (streamingSearchQuery) {
+          countEl.innerHTML = `<span style="color: var(--accent-cyan); font-weight: 700;">${totalItems}</span> de ${currentStreamingServices.length} servicios encontrados`;
+        } else {
+          countEl.innerHTML = `Total: <strong style="color: #ffffff;">${totalItems}</strong> servicios`;
+        }
+      }
+
+      if (pageItems.length === 0) {
+        if (streamingSearchQuery) {
+          tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: var(--text-tertiary); padding: 2.5rem;">No se encontraron servicios que coincidan con "<strong>${streamingSearchQuery}</strong>".</td></tr>`;
+        } else {
+          tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: var(--text-tertiary); padding: 2.5rem;">No hay servicios de streaming creados. Haz clic en <strong>"+ Crear Nuevo Servicio"</strong> para agregar uno.</td></tr>';
+        }
+        renderStreamingPagination(0, 0, 0, 1);
         return;
       }
 
-      tbody.innerHTML = currentStreamingServices.map(s => {
+      tbody.innerHTML = pageItems.map(s => {
         const pricePyg = s.pricePerSlotPyg || 25000;
         const comm = s.commissionPercent !== undefined ? s.commissionPercent : 10;
         const netSlot = Math.round(pricePyg * (1 - comm / 100));
         const maxSlots = s.maxSlots || 5;
-        const totalAccount = netSlot * maxSlots;
         const iconUrl = s.iconUrl || s.thumbnailUrl || '/assets/branding/icon.png';
         const bannerUrl = s.bannerHorizontal || '/assets/branding/icon.png';
         const waiting = s.waitingCount || 0;
         const isActive = s.isActive !== false;
+        const usdPrice = (s.pricePerSlotUsd || (pricePyg / 7500)).toFixed(2);
 
         return `
           <tr>
-            <td>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="${iconUrl}" alt="${s.name}" style="width: 40px; height: 40px; border-radius: 10px; object-fit: cover; border: 1px solid rgba(255,255,255,0.15);" onerror="this.src='/assets/branding/icon.png'">
+            <td style="white-space: nowrap;">
+              <div style="display: inline-flex; align-items: center; gap: 10px;">
+                <img src="${iconUrl}" alt="${s.name}" style="width: 34px; height: 34px; border-radius: 8px; object-fit: cover; border: 1px solid rgba(255,255,255,0.12); flex-shrink: 0;" onerror="this.src='/assets/branding/icon.png'">
                 <div>
-                  <strong style="color: #ffffff; font-size: 0.92rem; display: block;">${s.name}</strong>
-                  <span style="font-size: 0.72rem; color: var(--accent-cyan);">${s.planName || `Plan ${maxSlots} Pantallas`}</span>
-                  <span style="display: inline-block; font-size: 0.65rem; background: rgba(255,255,255,0.06); padding: 1px 5px; border-radius: 4px; color: var(--text-tertiary); margin-left: 4px;">ID: ${s.id}</span>
+                  <strong style="color: #ffffff; font-size: 0.88rem; display: inline-block;">${s.name}</strong>
+                  <span style="display: inline-block; font-size: 0.72rem; color: var(--accent-cyan); background: rgba(0,194,255,0.08); padding: 2px 7px; border-radius: 6px; border: 1px solid rgba(0,194,255,0.2); margin-left: 6px;">${s.planName || `Plan ${maxSlots} Pantallas`}</span>
+                  <span style="display: inline-block; font-size: 0.65rem; background: rgba(255,255,255,0.05); padding: 1px 5px; border-radius: 4px; color: var(--text-tertiary); margin-left: 4px;">ID: ${s.id}</span>
                 </div>
               </div>
             </td>
-            <td>
-              <div style="position: relative; width: 90px; height: 42px; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.12); background: #000;">
+            <td style="white-space: nowrap;">
+              <div style="width: 76px; height: 36px; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.12); background: #000; display: inline-block; vertical-align: middle;">
                 <img src="${bannerUrl}" alt="${s.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/assets/branding/icon.png'">
               </div>
             </td>
-            <td>
-              <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan); font-size: 0.95rem;">
-                ${pricePyg.toLocaleString('es-PY')} Gs.
-              </div>
-              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-tertiary);">
-                $${(s.pricePerSlotUsd || (pricePyg / 7500)).toFixed(2)} USDT
-              </div>
+            <td style="white-space: nowrap;">
+              <span style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan); font-size: 0.9rem;">${pricePyg.toLocaleString('es-PY')} Gs.</span>
+              <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-tertiary); margin-left: 4px;">($${usdPrice})</span>
             </td>
-            <td>
-              <span style="font-weight: 800; color: #ffffff; background: rgba(255,255,255,0.06); padding: 4px 10px; border-radius: 8px;">
-                ${maxSlots}
+            <td style="white-space: nowrap; text-align: center;">
+              <span style="font-weight: 800; color: #ffffff; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 3px 9px; border-radius: 7px; font-size: 0.82rem;">
+                ${maxSlots} cupos
               </span>
             </td>
-            <td>
-              <div style="font-weight: 800; color: var(--accent-amber);">
-                ${comm}%
-              </div>
-              <div style="font-size: 0.7rem; color: var(--text-tertiary);">
-                ${Math.round(pricePyg * (comm / 100)).toLocaleString('es-PY')} Gs.
-              </div>
+            <td style="white-space: nowrap;">
+              <span style="font-weight: 800; color: var(--accent-amber); font-size: 0.88rem;">${comm}%</span>
+              <span style="font-size: 0.74rem; color: var(--text-tertiary); margin-left: 4px;">(${Math.round(pricePyg * (comm / 100)).toLocaleString('es-PY')} Gs.)</span>
             </td>
-            <td>
-              <div style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald); font-size: 0.95rem;">
-                ${netSlot.toLocaleString('es-PY')} Gs. <span style="font-size: 0.7rem; font-weight: normal; color: var(--text-tertiary);">/asiento</span>
-              </div>
-              <div style="font-size: 0.74rem; color: #fbbf24; font-weight: 700;">
-                Hasta ${totalAccount.toLocaleString('es-PY')} Gs./mes
-              </div>
+            <td style="white-space: nowrap;">
+              <span style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald); font-size: 0.9rem;">${netSlot.toLocaleString('es-PY')} Gs.</span>
+              <span style="font-size: 0.72rem; color: var(--text-tertiary);">/asiento</span>
             </td>
-            <td>
-              <span class="btn-admin-action ${waiting > 0 ? 'red' : ''}" style="padding: 3px 9px; font-size: 0.76rem; font-weight: 800; ${waiting > 0 ? 'background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: rgba(239, 68, 68, 0.3);' : 'background: rgba(255,255,255,0.04); color: var(--text-tertiary);'}">
-                🔥 ${waiting} esperando
+            <td style="white-space: nowrap;">
+              <span style="padding: 3px 8px; font-size: 0.74rem; font-weight: 800; border-radius: 6px; ${waiting > 0 ? 'background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);' : 'background: rgba(255,255,255,0.04); color: var(--text-tertiary);'}">
+                ${waiting > 0 ? `🔥 ${waiting} esperando` : '0 esperando'}
               </span>
             </td>
-            <td>
-              <span class="btn-admin-action ${isActive ? 'emerald' : 'red'}" style="padding: 3px 8px; font-size: 0.74rem; font-weight: 800;">
+            <td style="white-space: nowrap;">
+              <span style="padding: 3px 8px; font-size: 0.74rem; font-weight: 800; border-radius: 6px; ${isActive ? 'background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);' : 'background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);'}">
                 ${isActive ? '🟢 Activo' : '🔴 Oculto'}
               </span>
             </td>
-            <td>
-              <div style="display: flex; gap: 6px; align-items: center;">
-                <button type="button" class="btn-admin-action amber" onclick="openEditServiceModal('${s.id}')" title="Editar parámetros, imágenes y precios" style="padding: 6px 10px; font-size: 0.76rem; font-weight: 800;">
+            <td style="white-space: nowrap; text-align: right;">
+              <div style="display: inline-flex; gap: 6px; align-items: center;">
+                <button type="button" class="btn-admin-action amber" onclick="openEditServiceModal('${s.id}')" title="Editar parámetros, imágenes y precios" style="padding: 5px 10px; font-size: 0.74rem; font-weight: 800;">
                   <span>✏️ Editar</span>
                 </button>
-                <a href="/service.html?platform=${s.id}" target="_blank" class="btn-admin-action cyan" title="Ver Hub en vivo" style="padding: 6px 8px; font-size: 0.76rem;">
+                <a href="/service.html?platform=${s.id}" target="_blank" class="btn-admin-action cyan" title="Ver Hub en vivo" style="padding: 5px 8px; font-size: 0.74rem;">
                   <span>👁️</span>
                 </a>
-                <button type="button" class="btn-admin-action red" onclick="deleteStreamingService('${s.id}', '${s.name.replace(/'/g, "\\'")}')" title="Eliminar servicio" style="padding: 6px 8px; font-size: 0.76rem;">
+                <button type="button" class="btn-admin-action red" onclick="deleteStreamingService('${s.id}', '${s.name.replace(/'/g, "\\'")}')" title="Eliminar servicio" style="padding: 5px 8px; font-size: 0.74rem;">
                   <span>🗑️</span>
                 </button>
               </div>
@@ -4103,7 +4190,61 @@
           </tr>
         `;
       }).join('');
+
+      renderStreamingPagination(startIndex + 1, endIndex, totalItems, totalPages);
     }
+
+    function renderStreamingPagination(start, end, total, totalPages) {
+      const infoEl = document.getElementById('streaming-pagination-info');
+      const btnsEl = document.getElementById('streaming-pagination-buttons');
+      if (!infoEl || !btnsEl) return;
+
+      if (total === 0) {
+        infoEl.textContent = 'Sin resultados';
+        btnsEl.innerHTML = '';
+        return;
+      }
+
+      infoEl.textContent = `Mostrando ${start} - ${end} de ${total} servicios`;
+
+      let btnsHtml = `
+        <button type="button" class="btn-page" ${streamingCurrentPage <= 1 ? 'disabled' : ''} onclick="changeStreamingPage(${streamingCurrentPage - 1})">
+          ‹ Anterior
+        </button>
+      `;
+
+      for (let p = 1; p <= totalPages; p++) {
+        if (p === 1 || p === totalPages || (p >= streamingCurrentPage - 1 && p <= streamingCurrentPage + 1)) {
+          btnsHtml += `
+            <button type="button" class="btn-page ${p === streamingCurrentPage ? 'active' : ''}" onclick="changeStreamingPage(${p})">
+              ${p}
+            </button>
+          `;
+        } else if (p === streamingCurrentPage - 2 || p === streamingCurrentPage + 2) {
+          btnsHtml += `<span style="color: var(--text-tertiary); padding: 0 4px;">...</span>`;
+        }
+      }
+
+      btnsHtml += `
+        <button type="button" class="btn-page" ${streamingCurrentPage >= totalPages ? 'disabled' : ''} onclick="changeStreamingPage(${streamingCurrentPage + 1})">
+          Siguiente ›
+        </button>
+      `;
+
+      btnsEl.innerHTML = btnsHtml;
+    }
+
+    window.changeStreamingPage = function(page) {
+      streamingCurrentPage = page;
+      renderServicesConfigTable();
+    };
+
+    // Live search listener
+    document.getElementById('input-search-streaming')?.addEventListener('input', function(e) {
+      streamingSearchQuery = e.target.value;
+      streamingCurrentPage = 1;
+      renderServicesConfigTable();
+    });
 
     // --- RESET COMPLETO DE FORMULARIO E IMÁGENES DE SERVICIO ---
     window.resetCreateServiceForm = function() {
