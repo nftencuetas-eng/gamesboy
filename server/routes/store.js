@@ -46,6 +46,13 @@ router.get('/products', (req, res) => {
   res.json(products);
 });
 
+// Get gift card brands (public storefront)
+router.get('/giftcards/brands', (req, res) => {
+  const db = getDb();
+  const brands = db.giftcard_brands || [];
+  res.json({ success: true, count: brands.length, brands });
+});
+
 // Buy a digital game or gift card
 router.post('/products/:id/buy', (req, res) => {
   try {

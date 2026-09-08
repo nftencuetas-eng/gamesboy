@@ -1330,8 +1330,8 @@ function renderDigitalGames() {
 
   const games = rawProducts.filter(p => {
     if (!p) return false;
-    if (p.category === 'gift_card') return false;
-    return p.category === 'game_key' || p.category === 'digital_game' || !p.category || (typeof p.category === 'string' && p.category.includes('game')) || p.platform === 'PS5' || p.platform === 'PS4' || p.genre;
+    if (p.category === 'gift_card' || p.category === 'smm') return false;
+    return true;
   });
 
   if (games.length === 0) {
@@ -1642,7 +1642,7 @@ async function renderMyVault() {
 // --- 7. FETCH INITIAL DATA FROM API (LIVE DYNAMIC RECONCILIATION) ---
 async function fetchStoreData() {
   try {
-    const [subRes, storeRes, bannersRes, smmRes, giftcardsRes, servicesCfgRes, gamesRes, hubsRes] = await Promise.all([
+    const [subRes, storeRes, bannersRes, smmRes, giftcardsRes, servicesCfgRes, gamesRes, hubsRes, storeGiftcardsRes] = await Promise.all([
       fetch('/api/subscriptions').then(r => r.json()).catch(() => null),
       fetch('/api/store/products').then(r => r.json()).catch(() => null),
       fetch('/api/banners').then(r => r.json()).catch(() => null),
@@ -1650,11 +1650,14 @@ async function fetchStoreData() {
       fetch('/api/admin/giftcards/brands').then(r => r.json()).catch(() => null),
       fetch('/api/subscriptions/services-config').then(r => r.json()).catch(() => null),
       fetch('/api/admin/games').then(r => r.json()).catch(() => null),
-      fetch('/api/streaming-hubs').then(r => r.json()).catch(() => null)
+      fetch('/api/streaming-hubs').then(r => r.json()).catch(() => null),
+      fetch('/api/store/giftcards/brands').then(r => r.json()).catch(() => null)
     ]);
 
     if (hubsRes && hubsRes.platforms && Array.isArray(hubsRes.platforms)) {
       state.streamingPlatforms = hubsRes.platforms;
+    } else if (hubsRes && hubsRes.services && Array.isArray(hubsRes.services)) {
+      state.streamingPlatforms = hubsRes.services;
     }
 
     if (Array.isArray(subRes) && subRes.length > 0) {
@@ -1663,16 +1666,20 @@ async function fetchStoreData() {
       state.subscriptions = subRes.subscriptions;
     }
 
-    if (gamesRes && gamesRes.games && Array.isArray(gamesRes.games) && gamesRes.games.length > 0) {
-      state.storeProducts = gamesRes.games;
-    } else if (Array.isArray(storeRes) && storeRes.length > 0) {
+    if (Array.isArray(storeRes) && storeRes.length > 0) {
       state.storeProducts = storeRes;
+    } else if (gamesRes && gamesRes.games && Array.isArray(gamesRes.games) && gamesRes.games.length > 0) {
+      state.storeProducts = gamesRes.games;
     } else if (storeRes && storeRes.products && storeRes.products.length > 0) {
       state.storeProducts = storeRes.products;
     }
 
-    if (giftcardsRes && giftcardsRes.brands && Array.isArray(giftcardsRes.brands)) {
-      state.giftcardBrands = giftcardsRes.brands;
+    const loadedGcBrands = (giftcardsRes && giftcardsRes.brands && Array.isArray(giftcardsRes.brands) && giftcardsRes.brands.length > 0)
+      ? giftcardsRes.brands
+      : ((storeGiftcardsRes && storeGiftcardsRes.brands && Array.isArray(storeGiftcardsRes.brands) && storeGiftcardsRes.brands.length > 0) ? storeGiftcardsRes.brands : null);
+
+    if (loadedGcBrands) {
+      state.giftcardBrands = loadedGcBrands;
     }
 
     if (servicesCfgRes && servicesCfgRes.config) {

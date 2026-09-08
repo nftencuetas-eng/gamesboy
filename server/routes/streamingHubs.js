@@ -26,7 +26,53 @@ export function getPlatformService(platformKey) {
   return found || services[0] || null;
 }
 
-// 1. GET PUBLIC PLATFORM HUB DETAILS & REAL USER HOST GROUPS
+// 1. GET ALL PLATFORMS FOR PUBLIC & ADMIN CAROUSEL (100% DYNAMIC FROM DB)
+router.get('/', (req, res) => {
+  const db = getDb();
+  const services = (db.streaming_services || []).filter(s => s.isActive !== false);
+  const rate = db.platform_settings?.exchangeRatePyg || 7500;
+
+  const platforms = services.map(s => {
+    const matchingSubs = (db.subscriptions || []).filter(sub => {
+      if (sub.status !== 'active') return false;
+      const name = (sub.serviceName || '').toLowerCase();
+      const sId = (s.id || '').toLowerCase();
+      return name.includes(sId) || sId.includes(name);
+    });
+
+    const totalAvailSlots = matchingSubs.reduce((acc, curr) => acc + (curr.availableSlots || 0), 0);
+    const hasStock = totalAvailSlots > 0;
+    const pricePyg = s.pricePerSlotPyg || Math.round((s.pricePerSlotUsd || 3.33) * rate);
+
+    return {
+      id: s.id,
+      name: s.name,
+      planName: s.planName,
+      tagline: s.tagline,
+      brandColor: s.brandColor || '#00c2ff',
+      logoUrl: s.iconUrl || s.thumbnailUrl,
+      thumbnailUrl: s.thumbnailUrl || s.iconUrl,
+      iconUrl: s.iconUrl || s.thumbnailUrl,
+      bannerHorizontal: s.bannerHorizontal,
+      bannerVertical: s.bannerVertical,
+      badgeText: s.badgeText,
+      pricePerSlotPyg: pricePyg,
+      pricePerSlotUsd: parseFloat((pricePyg / rate).toFixed(2)),
+      hasStock,
+      availableAccounts: matchingSubs.length,
+      totalAvailSlots,
+      waitingCount: s.waitingCount || 0
+    };
+  });
+
+  res.json({
+    success: true,
+    services,
+    platforms
+  });
+});
+
+// 2. GET PUBLIC PLATFORM HUB DETAILS & REAL USER HOST GROUPS
 router.get('/:platform', (req, res) => {
   const db = getDb();
   const rawKey = req.params.platform;
@@ -97,93 +143,6 @@ router.get('/:platform', (req, res) => {
       waitingCount: hub.waitingCount || 0
     },
     groups
-  });
-});
-
-// 2. JOIN WAITING LIST FOR A STREAMING SERVICE
-router.post('/:platform/waiting-list', (req, res) => {
-  try {
-    const db = getDb();
-    const rawKey = req.params.platform;
-    const hub = getPlatformService(rawKey);
-    
-    if (!hub) {
-      return res.status(404).json({ error: 'Servicio no encontrado' });
-    }
-
-    const service = (db.streaming_services || []).find(s => s.id === hub.id);
-    if (service) {
-      if (!service.waitingList) service.waitingList = [];
-      service.waitingCount = (service.waitingCount || 0) + 1;
-      
-      const entry = {
-        userId: req.body?.userId || 'guest_' + Date.now(),
-        email: req.body?.email || null,
-        requestedAt: new Date().toISOString()
-      };
-      service.waitingList.push(entry);
-      saveStorage();
-      
-      return res.json({
-        success: true,
-        message: `¡Te has sumado con éxito a la lista de espera para ${service.name}! Te avisaremos tan pronto un anfitrión publique un asiento.`,
-        waitingCount: service.waitingCount
-      });
-    }
-
-    res.json({
-      success: true,
-      message: '¡Te has unido a la lista de espera!',
-      waitingCount: (hub.waitingCount || 0) + 1
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// 3. GET ALL PLATFORMS FOR PUBLIC & ADMIN CAROUSEL (100% DYNAMIC FROM DB)
-router.get('/', (req, res) => {
-  const db = getDb();
-  const services = (db.streaming_services || []).filter(s => s.isActive !== false);
-  const rate = db.platform_settings?.exchangeRatePyg || 7500;
-
-  const platforms = services.map(s => {
-    const matchingSubs = (db.subscriptions || []).filter(sub => {
-      if (sub.status !== 'active') return false;
-      const name = (sub.serviceName || '').toLowerCase();
-      const sId = (s.id || '').toLowerCase();
-      return name.includes(sId) || sId.includes(name);
-    });
-
-    const totalAvailSlots = matchingSubs.reduce((acc, curr) => acc + (curr.availableSlots || 0), 0);
-    const hasStock = totalAvailSlots > 0;
-    const pricePyg = s.pricePerSlotPyg || Math.round((s.pricePerSlotUsd || 3.33) * rate);
-
-    return {
-      id: s.id,
-      name: s.name,
-      planName: s.planName,
-      tagline: s.tagline,
-      brandColor: s.brandColor || '#00c2ff',
-      logoUrl: s.iconUrl || s.thumbnailUrl,
-      thumbnailUrl: s.thumbnailUrl || s.iconUrl,
-      iconUrl: s.iconUrl || s.thumbnailUrl,
-      bannerHorizontal: s.bannerHorizontal,
-      bannerVertical: s.bannerVertical,
-      badgeText: s.badgeText,
-      pricePerSlotPyg: pricePyg,
-      pricePerSlotUsd: parseFloat((pricePyg / rate).toFixed(2)),
-      hasStock,
-      availableAccounts: matchingSubs.length,
-      totalAvailSlots,
-      waitingCount: s.waitingCount || 0
-    };
-  });
-
-  res.json({
-    success: true,
-    services,
-    platforms
   });
 });
 
