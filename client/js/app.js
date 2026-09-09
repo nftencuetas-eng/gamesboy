@@ -976,8 +976,9 @@ function renderDigitalGames() {
 
   container.innerHTML = initialGames.map((g, slotIdx) => {
     const isAvail = g.isAvailable !== false;
-    const primaryPrice = g.primaryPriceUsd || g.priceUsd || 39.99;
-    const secondaryPrice = g.secondaryPriceUsd || (g.secondaryPricePyg ? (g.secondaryPricePyg / (state.exchangeRatePyg || 7500)) : Math.round(primaryPrice * 0.65));
+    const rate = state.exchangeRatePyg || 7500;
+    const primaryPyg = g.primaryPricePyg || g.pricePyg || Math.round((g.primaryPriceUsd || g.priceUsd || 39.99) * rate);
+    const secondaryPyg = g.secondaryPricePyg !== undefined ? g.secondaryPricePyg : (g.secondaryPriceUsd ? Math.round(g.secondaryPriceUsd * rate) : Math.round(primaryPyg * 0.65));
 
     return `
       <div class="game-card ${isAvail ? '' : 'disabled'}" data-slot-index="${slotIdx}" onclick="openBuyGameModal('${g.id}')">
@@ -989,12 +990,12 @@ function renderDigitalGames() {
           <div class="game-prices-inline-list">
             <div class="game-price-inline-row primary-row">
               <span class="game-price-inline-label">Primaria:</span>
-              <span class="game-price-inline-val primary-val">${formatPrice(primaryPrice)}</span>
+              <span class="game-price-inline-val primary-val">${primaryPyg.toLocaleString('es-PY')} Gs.</span>
             </div>
-            ${g.secondaryPriceUsd || g.secondaryPricePyg ? `
+            ${secondaryPyg > 0 ? `
               <div class="game-price-inline-row secondary-row">
                 <span class="game-price-inline-label">Secundaria:</span>
-                <span class="game-price-inline-val secondary-val">${formatPrice(secondaryPrice)}</span>
+                <span class="game-price-inline-val secondary-val">${secondaryPyg.toLocaleString('es-PY')} Gs.</span>
               </div>
             ` : ''}
           </div>
@@ -1065,8 +1066,9 @@ function initGamesWaveEngine(allGamesList) {
           const nextGame = allGames[(gamesPoolIndex + i) % allGames.length];
           if (!nextGame) return;
 
-          const primaryPrice = nextGame.primaryPriceUsd || nextGame.priceUsd || 39.99;
-          const secondaryPrice = nextGame.secondaryPriceUsd || (nextGame.secondaryPricePyg ? (nextGame.secondaryPricePyg / (state.exchangeRatePyg || 7500)) : Math.round(primaryPrice * 0.65));
+          const rate = state.exchangeRatePyg || 7500;
+          const primaryPyg = nextGame.primaryPricePyg || nextGame.pricePyg || Math.round((nextGame.primaryPriceUsd || nextGame.priceUsd || 39.99) * rate);
+          const secondaryPyg = nextGame.secondaryPricePyg !== undefined ? nextGame.secondaryPricePyg : (nextGame.secondaryPriceUsd ? Math.round(nextGame.secondaryPriceUsd * rate) : Math.round(primaryPyg * 0.65));
 
           cardEl.setAttribute('onclick', `openBuyGameModal('${nextGame.id}')`);
           cardEl.innerHTML = `
@@ -1078,12 +1080,12 @@ function initGamesWaveEngine(allGamesList) {
               <div class="game-prices-inline-list">
                 <div class="game-price-inline-row primary-row">
                   <span class="game-price-inline-label">Primaria:</span>
-                  <span class="game-price-inline-val primary-val">${formatPrice(primaryPrice)}</span>
+                  <span class="game-price-inline-val primary-val">${primaryPyg.toLocaleString('es-PY')} Gs.</span>
                 </div>
-                ${nextGame.secondaryPriceUsd || nextGame.secondaryPricePyg ? `
+                ${secondaryPyg > 0 ? `
                   <div class="game-price-inline-row secondary-row">
                     <span class="game-price-inline-label">Secundaria:</span>
-                    <span class="game-price-inline-val secondary-val">${formatPrice(secondaryPrice)}</span>
+                    <span class="game-price-inline-val secondary-val">${secondaryPyg.toLocaleString('es-PY')} Gs.</span>
                   </div>
                 ` : ''}
               </div>

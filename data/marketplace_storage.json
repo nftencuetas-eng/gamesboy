@@ -370,26 +370,73 @@
   ],
   "subscriptions": [
     {
-      "id": "sub_1788944484548_i73v",
-      "status": "pending_approval",
+      "id": "sub_1788966160305_kqle",
+      "status": "active",
       "category": "streaming",
-      "planName": "Plan 4K 4 Pantallas Compartidas",
-      "sellerId": "usr_client1",
-      "createdAt": "2026-09-09T09:01:24.549Z",
+      "planName": "Flujo TV",
+      "sellerId": "usr_g_1788900445835",
+      "createdAt": "2026-09-09T15:02:40.305Z",
+      "approvedAt": "2026-09-09T15:03:02.052Z",
       "isOfficial": false,
-      "sellerName": "Lucas González",
-      "serviceKey": "youtube-premium",
+      "sellerName": "Zequi",
+      "serviceKey": "flujo-tv",
       "totalSlots": 5,
-      "serviceName": "YouTube Premium",
-      "instructions": "Usa exclusivamente tu perfil asignado y no cambies contraseña.",
-      "netPayoutPyg": 26010,
-      "netPayoutUsd": 3.47,
-      "pinsEncrypted": "76733620f8ecd25ad6205b16ac1daa5d:4979850d69311e8573f7f3810fcd819f10d5e71d16bccd5e752d7300e145ee897a60879619beb3bcebc13e940bae2be0",
-      "availableSlots": 4,
-      "pricePerSlotPyg": 28900,
-      "pricePerSlotUsd": 3.85,
+      "serviceName": "Flujo TV",
+      "instructions": "Usa exclusivamente tu perfil asignado y no modifiques las credenciales.",
+      "netPayoutPyg": 22995,
+      "netPayoutUsd": 3.07,
+      "pinsEncrypted": "ce8e57ff4142385c93008f03d8e92cdf:c45fb1a45bdd6b62bbc41150f3ec1278c3c2311260079a47e116a55b91f1fde024feb8d14ee81f27d8f644de39211ed34b8f5e47d72ca579104fc4bf68cf98a50ecebf05fc0b61e18b225a8ade8e121554f1bd48456b1bc613a797c0e94cd84b6be0f228f3e2b12d8f6bee551b341c185bbcbfb949c5645d37f8968a2c168b44c1ea38c85e91b42bf3cfe3e3e3aecf3de50cd11cb22158c567c89434afd037bb58f27688486dfdc8c3613813dac7feb148641e751d6d01c383291958ac50f25297708e5c5fa6af7f9171f1b5223722ccd0e5b99d47c70f9f24ab5ad9281a90144a20b3192993e4edce3c4d030039c6a152a0093c1c718145630b4bf3b788a27ed6faacb019a4fad5f585d9fbbd7a0dd00a221b81ad51f39f223c0e92b8e31e7f41f0f87de8e021df925f7c8001ab93205ae2aa1809c8a510af2e480dd34fdd15e4947f0dc7631e2daba79ad52b810cb645dc622e420cababd6e066b75976bf5273dc62afa72aceb7767a27931e0a4e2c7e6fb60c675a11c0f0191a4f22e73179b4419900a02209af97179c4b8ea2b443d4ff2b9775547af4fb2aadf26064c159da696b0f7ce1454ac5824da3e696bb285df5e2c8ba4d6465776351fd8335aa55af5ef2d17b305749f864bfe077a330da",
+      "availableSlots": 3,
+      "pricePerSlotPyg": 25550,
+      "pricePerSlotUsd": 3.41,
       "commissionPercent": 10,
-      "credentialsEncrypted": "a103fd948cbf6ae585ddfc03d6c1bd66:2745e854a458f3deab5502b4cda02dda4f418fecbcabf145f35b079367f0510f1ea3769f7f992e13e0741f2aecf70ddf"
+      "credentialsEncrypted": "13e152c6f0a16d58e5501b9830b62666:7438aa6eeaf83078104da003b868ebfc7d3273606e6325ee7b3553ad7e2df2b7"
+    },
+    {
+      "id": "sub_1788963345169_pdul",
+      "status": "active",
+      "category": "streaming",
+      "planName": "Premium",
+      "sellerId": "usr_g_1788900445835",
+      "createdAt": "2026-09-09T14:15:45.169Z",
+      "approvedAt": "2026-09-09T14:59:10.502Z",
+      "isOfficial": false,
+      "sellerName": "Zequi",
+      "serviceKey": "max",
+      "totalSlots": 5,
+      "serviceName": "MAX",
+      "instructions": "Usa exclusivamente tu perfil asignado y no modifiques las credenciales.",
+      "netPayoutPyg": 17550,
+      "netPayoutUsd": 2.34,
+      "pinsEncrypted": "e6796a57f9b79e4cfed225e8a58e7755:e4cb3f7ab4139440a32f06f68a7232c5a33a1ca212a3f7ac974b6e01338f0607be1fa3db565312a649f2f27bfdef3375140dc5914b8002a3d4adf8a7e87d53ca94d6332d2a17c9009b9cb084e1d359aed848646f72e0fd6a42894189ed4d413826831c5d30d6b1834de9cff298c3441edcac7e0e79ca3f6b8721cbfb710fab3978e589c818ada80ed2988b653bcb5ec482155a4e53a63f77b2bf8f355de2d529dfdedf21ea479564e371338021d5356216311b0eca77a5747a515f9abcd37166415e1283cd2a21abba1e916a6d95d2c7565b07b4a75d9eb80cbdec0861192ff868e011c64ec5998f1bb25829f50d46dff7fe1a60526233bb8903dbd041d8a0dd638a49703da554d11fb230dcaef42c5b1f0c5f81825d2133cba0976b556a195a2608004a8dd1d54c0ff0f3a67e443b02bd1cd61a7a40292de3e17b8aa2fc8ea75e5ee741c06251f270b15e64de7f0b30112c88d89cfef4b965f4b327ebd2993884a439c3ad3a0c666bff088384228a1132786b0e31209200ea1d40d17ddd4eb6a9c1b5856ce887fdb3d7a3f30404367832f38f07536d32acf8fd22a500dfa6ab89fcb8439b286fb2f3b01488de807cb56c3b8f8473943ef92ec3e81e66a6960f769cd79cae4d90da835b669453413f8c",
+      "availableSlots": 5,
+      "pricePerSlotPyg": 19500,
+      "pricePerSlotUsd": 2.6,
+      "commissionPercent": 10,
+      "credentialsEncrypted": "896f9d265fcc6bdff03af0ee48a537f0:6d63e97a93f3825b2839d40c4469b973374c7e861d5eda71c3adb00e83dfb726d09e55c13a62285dd011d9731fb6b3c8"
+    },
+    {
+      "id": "sub_1788963281126_e1vq",
+      "status": "active",
+      "category": "streaming",
+      "planName": "Premium",
+      "sellerId": "usr_g_1788900445835",
+      "createdAt": "2026-09-09T14:14:41.126Z",
+      "approvedAt": "2026-09-09T14:59:13.820Z",
+      "isOfficial": false,
+      "sellerName": "Zequi",
+      "serviceKey": "max",
+      "totalSlots": 5,
+      "serviceName": "MAX",
+      "instructions": "Usa exclusivamente tu perfil asignado y no modifiques las credenciales.",
+      "netPayoutPyg": 17550,
+      "netPayoutUsd": 2.34,
+      "pinsEncrypted": "e137fc555ee5020c7f32ddfbd31c6949:5f567c6bddea60e1c3148b61096a6b4dcb43ffab1bfc3d96858734317575c5cf83de782dcb1318ac86337ba549e28491f0704dd6cd6cae43872923f8f3c06553d21f76632dca24bad66a90b8dbd545a882ea36d21bdef8a0d9564cb3706cc7610c6efcbdb276b7620f2d0c3812828ce8f89ae929e213961fce18150f28977cd71ba5713c4e965b12d6635ed4460637568f4e50043c6dfcb63c4ce070c05c25ecfc283ac2292e7e918c5e31e91da7176bb280e9b2b551d2decd90fa9da60f83ce44cae26362780da05c93c693502c3ec29b8a69b50cfd72297b8827352d1caad5253fcc85b935e8e69f0d91fa1692e150cbf7be19345023e8572de74ebeba5f8e109bdb2852495604bf0ebe4922d575ad8ecabcaeef037a85c380eb8f87c2bb969070a963f9bcd7c093b08650232a548d2738dd2e536e7333983f06efa3c053616c1ea893ae52bbaa28641e300c03f3fd8e9c5e324a6895362ae4474e38222687d55dd758da8b86a939eab2e1b2b30f564592c60ca857835274160f7a7eed9d9871cc612c7ab1cfdf5a4d1db6cafeead36d705d51104ba165b8bff8378674741d2596686d409a8444ebeacee99e10b09a789999ebb53bd6185bece9c2d1813c9b91a00d5812fa685c7c046d863007186e",
+      "availableSlots": 5,
+      "pricePerSlotPyg": 19500,
+      "pricePerSlotUsd": 2.6,
+      "commissionPercent": 10,
+      "credentialsEncrypted": "40679d3748eb24085edc79e99e6cf303:782708f3a612e433a9e2863137cfe3de62214afec3df914a2076fca17ddee85ba94bdac7b85027fc74cc1c76f683a77b"
     },
     {
       "id": "sub_1788914420123_1yp8",
@@ -449,66 +496,6 @@
     }
   ],
   "store_products": [
-    {
-      "id": "prod_prov_1788948630478_domr",
-      "name": "Grand Theft Auto VI - Key Digital Oficial",
-      "tags": [
-        "juegos"
-      ],
-      "type": "juegos",
-      "brand": "GamSplit Digital",
-      "image": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
-      "stock": 20,
-      "title": "Grand Theft Auto VI - Key Digital Oficial",
-      "rating": 5,
-      "region": "Global / LATAM",
-      "status": "active",
-      "category": "juegos",
-      "imageUrl": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
-      "platform": "PS5",
-      "pricePyg": 420000,
-      "priceUsd": 56,
-      "createdAt": "2026-09-09T10:10:30.478Z",
-      "totalSold": 0,
-      "updatedAt": "2026-09-09T10:10:31.946Z",
-      "isOfficial": true,
-      "providerId": "usr_provider_demo",
-      "description": "Clave digital original para PlayStation 5 activable en cuenta LATAM.",
-      "deliveryType": "auto_code",
-      "providerName": "Usuario usr_provider_demo",
-      "providerBadge": "🛡️ Proveedor Autorizado",
-      "inventorySecret": ""
-    },
-    {
-      "id": "prod_prov_1788948533474_z6xa",
-      "name": "Grand Theft Auto VI - Key Digital Oficial",
-      "tags": [
-        "juegos"
-      ],
-      "type": "juegos",
-      "brand": "GamSplit Digital",
-      "image": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
-      "stock": 20,
-      "title": "Grand Theft Auto VI - Key Digital Oficial",
-      "rating": 5,
-      "region": "Global / LATAM",
-      "status": "active",
-      "category": "juegos",
-      "imageUrl": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
-      "platform": "PS5",
-      "pricePyg": 420000,
-      "priceUsd": 56,
-      "createdAt": "2026-09-09T10:08:53.475Z",
-      "totalSold": 0,
-      "updatedAt": "2026-09-09T10:08:54.045Z",
-      "isOfficial": true,
-      "providerId": "usr_provider_demo",
-      "description": "Clave digital original para PlayStation 5 activable en cuenta LATAM.",
-      "deliveryType": "auto_code",
-      "providerName": "Usuario usr_provider_demo",
-      "providerBadge": "🛡️ Proveedor Autorizado",
-      "inventorySecret": ""
-    },
     {
       "id": "game_1788864455957_3wz5",
       "badge": "OFICIAL",
@@ -1347,6 +1334,21 @@
       "commissionPercent": 10
     }
   ],
+  "smm_orders": [
+    {
+      "id": "smm_ord_1788944436754_p62u",
+      "link": "https://instagram.com/gamesboy_test_profile",
+      "status": "in_progress",
+      "userId": "usr_client1",
+      "platform": "Instagram",
+      "quantity": 1000,
+      "createdAt": "2026-09-09T09:00:36.754Z",
+      "serviceId": "smm_ig_followers_hq",
+      "serviceName": "Seguidores HQ Reales (Garantizados 30 Días)",
+      "pricePaidPyg": 43875,
+      "pricePaidUsd": 5.85
+    }
+  ],
   "group_chats": {
     "sub_1788902126241_2epm": [
       {
@@ -1446,23 +1448,41 @@
         "isOwnerAdmin": true,
         "senderAvatar": "👑"
       }
+    ],
+    "sub_1788963281126_e1vq": [
+      {
+        "id": "msg_init_sub_1788963281126_e1vq",
+        "text": "¡Hola a todos! Soy el anfitrión de esta cuenta de MAX. Aquí compartiremos novedades e instrucciones del servicio.",
+        "senderId": "usr_g_1788900445835",
+        "timestamp": "2026-09-09T14:14:41.126Z",
+        "senderName": "Zequi",
+        "isOwnerAdmin": true,
+        "senderAvatar": "👑"
+      }
+    ],
+    "sub_1788963345169_pdul": [
+      {
+        "id": "msg_init_sub_1788963345169_pdul",
+        "text": "¡Hola a todos! Soy el anfitrión de esta cuenta de MAX. Aquí compartiremos novedades e instrucciones del servicio.",
+        "senderId": "usr_g_1788900445835",
+        "timestamp": "2026-09-09T14:15:45.169Z",
+        "senderName": "Zequi",
+        "isOwnerAdmin": true,
+        "senderAvatar": "👑"
+      }
+    ],
+    "sub_1788966160305_kqle": [
+      {
+        "id": "msg_init_sub_1788966160305_kqle",
+        "text": "¡Hola a todos! Soy el anfitrión de esta cuenta de Flujo TV. Aquí compartiremos novedades e instrucciones del servicio.",
+        "senderId": "usr_g_1788900445835",
+        "timestamp": "2026-09-09T15:02:40.305Z",
+        "senderName": "Zequi",
+        "isOwnerAdmin": true,
+        "senderAvatar": "👑"
+      }
     ]
   },
-  "smm_orders": [
-    {
-      "id": "smm_ord_1788944436754_p62u",
-      "link": "https://instagram.com/gamesboy_test_profile",
-      "status": "in_progress",
-      "userId": "usr_client1",
-      "platform": "Instagram",
-      "quantity": 1000,
-      "createdAt": "2026-09-09T09:00:36.754Z",
-      "serviceId": "smm_ig_followers_hq",
-      "serviceName": "Seguidores HQ Reales (Garantizados 30 Días)",
-      "pricePaidPyg": 43875,
-      "pricePaidUsd": 5.85
-    }
-  ],
   "catalog_templates": [
     {
       "id": "tmpl_gta6",

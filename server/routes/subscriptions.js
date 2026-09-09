@@ -431,6 +431,11 @@ router.get('/services-config', (req, res) => {
       const netPayoutUsd = parseFloat((priceUsd * (1 - comm / 100)).toFixed(2));
       const maxSlots = s.maxSlots || 5;
 
+      const minPricePyg = s.minPricePyg || Math.round(pricePyg * 0.70);
+      const maxPricePyg = s.maxPricePyg || Math.round(pricePyg * 1.40);
+      const minPriceUsd = parseFloat((minPricePyg / rate).toFixed(2));
+      const maxPriceUsd = parseFloat((maxPricePyg / rate).toFixed(2));
+
       config[s.id] = {
         key: s.id,
         id: s.id,
@@ -439,10 +444,14 @@ router.get('/services-config', (req, res) => {
         maxSlots,
         pricePerSlotPyg: pricePyg,
         pricePerSlotUsd: priceUsd,
+        minPricePyg,
+        maxPricePyg,
+        minPriceUsd,
+        maxPriceUsd,
         commissionPercent: comm,
         netPayoutPyg,
         netPayoutUsd,
-        potentialMonthlyEarningsPyg: netPayoutPyg * maxSlots,
+        potentialMonthlyEarningsPyg: netPayoutPyg * Math.max(1, maxSlots - 1),
         iconUrl: s.iconUrl || s.thumbnailUrl,
         bannerHorizontal: s.bannerHorizontal
       };
@@ -468,7 +477,7 @@ router.post('/publish', (req, res) => {
     const user = db.users.find(u => u.id === userId) || { name: 'Usuario GamesBoy', role: 'client' };
     const rate = db.platform_settings?.exchangeRatePyg || 7500;
 
-    const { serviceKey, serviceName, planName, totalSlots, availableSlots, email, password, credentials, pins, profiles, instructions } = req.body;
+    const { serviceKey, serviceName, planName, totalSlots, availableSlots, email, password, credentials, pins, profiles, instructions, customPricePyg, pricePerSlotPyg: reqPricePyg } = req.body;
 
     const rawCreds = (email && password) ? `${email.trim()} | ${password.trim()}` : (credentials || '');
 
@@ -497,9 +506,21 @@ router.post('/publish', (req, res) => {
 
     const finalTotalSlots = maxCapacity;
 
-    // Fixed price defined by admin
-    const pricePerSlotPyg = cfg ? (cfg.pricePerSlotPyg || 25000) : 25000;
-    const pricePerSlotUsd = cfg ? (cfg.pricePerSlotUsd || parseFloat((pricePerSlotPyg / rate).toFixed(2))) : parseFloat((pricePerSlotPyg / rate).toFixed(2));
+    // Determine custom price selected by the seller or default from admin
+    const defaultPricePyg = cfg ? (cfg.pricePerSlotPyg || 25000) : 25000;
+    const minPyg = cfg ? (cfg.minPricePyg || Math.round(defaultPricePyg * 0.6)) : 10000;
+    const maxPyg = cfg ? (cfg.maxPricePyg || Math.round(defaultPricePyg * 1.5)) : 60000;
+
+    let chosenPricePyg = parseInt(customPricePyg || reqPricePyg, 10);
+    if (isNaN(chosenPricePyg) || chosenPricePyg <= 0) {
+      chosenPricePyg = defaultPricePyg;
+    } else {
+      // Keep within suggested boundaries
+      chosenPricePyg = Math.max(minPyg, Math.min(maxPyg, chosenPricePyg));
+    }
+
+    const pricePerSlotPyg = chosenPricePyg;
+    const pricePerSlotUsd = parseFloat((pricePerSlotPyg / rate).toFixed(2));
     const commissionPercent = cfg ? (cfg.commissionPercent !== undefined ? cfg.commissionPercent : 10) : 10;
     const netPayoutPyg = Math.round(pricePerSlotPyg * (1 - commissionPercent / 100));
     const netPayoutUsd = parseFloat((pricePerSlotUsd * (1 - commissionPercent / 100)).toFixed(2));

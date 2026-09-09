@@ -470,15 +470,30 @@
           </div>
         </div>
 
-        <!-- GoSplit Fixed Payout Preview Box -->
+        <!-- Custom Price Input by Seller (within Admin Suggested Range) -->
+        <div class="form-group" style="margin-bottom: 1.15rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="form-label" style="margin-bottom: 0;">Precio por Cupo / Perfil (Gs.):</label>
+            <span id="user-pub-range-hint" style="font-size: 0.74rem; color: #fbbf24; font-family: var(--font-mono); font-weight: 700;">Rango sugerido: 15.000 ₲ - 35.000 ₲</span>
+          </div>
+          <div style="position: relative;">
+            <input type="number" id="user-pub-custom-price" class="form-input" min="5000" max="100000" step="500" value="25000" required style="padding-right: 70px; font-family: var(--font-mono); font-weight: 800; font-size: 1.05rem; color: #fbbf24; border-radius: 8px !important;">
+            <span style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: var(--text-tertiary); font-weight: 700;">₲ / mes</span>
+          </div>
+          <span style="font-size: 0.72rem; color: var(--text-tertiary); display: block; margin-top: 4px;">
+            💡 Tú decides el precio mensual para tus compradores dentro del rango sugerido por la plataforma.
+          </span>
+        </div>
+
+        <!-- GoSplit Seller Payout Preview Box -->
         <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 12px; margin-bottom: 1rem;">
           <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
-            <span style="color: var(--text-secondary);">Precio fijo por cupo:</span>
+            <span style="color: var(--text-secondary);">Precio que cobrarás al cliente:</span>
             <strong id="user-pub-fixed-price-preview" style="color: #ffffff;">25.000 Gs.</strong>
           </div>
           <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px;">
-            <span style="color: var(--text-secondary);">Comisión GamesBoy:</span>
-            <span id="user-pub-commission-preview" style="color: var(--accent-cyan); font-weight: 700;">10%</span>
+            <span style="color: var(--text-secondary);">Ganancia neta por cupo (-10% comisión):</span>
+            <strong id="user-pub-net-per-slot-preview" style="color: #38bdf8;">22.500 Gs.</strong>
           </div>
           <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 800; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 6px;">
             <span style="color: #34d399;">Recibirás al mes:</span>

@@ -1504,7 +1504,7 @@ router.put('/services-config/:key', (req, res) => {
       db.streaming_services.push(service);
     }
 
-    const { pricePerSlotPyg, pricePerSlotUsd, maxSlots, totalSlots, commissionPercent, planName, name } = req.body;
+    const { pricePerSlotPyg, pricePerSlotUsd, minPricePyg, maxPricePyg, maxSlots, totalSlots, commissionPercent, planName, name } = req.body;
 
     if (name) service.name = name.trim();
     if (planName) service.planName = planName.trim();
@@ -1519,6 +1519,13 @@ router.put('/services-config/:key', (req, res) => {
     } else if (pricePerSlotUsd !== undefined && pricePerSlotUsd !== '') {
       service.pricePerSlotUsd = parseFloat(pricePerSlotUsd);
       service.pricePerSlotPyg = Math.round(service.pricePerSlotUsd * rate);
+    }
+
+    if (minPricePyg !== undefined && minPricePyg !== '') {
+      service.minPricePyg = parseInt(minPricePyg, 10);
+    }
+    if (maxPricePyg !== undefined && maxPricePyg !== '') {
+      service.maxPricePyg = parseInt(maxPricePyg, 10);
     }
 
     service.updatedAt = new Date().toISOString();

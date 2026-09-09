@@ -9,39 +9,41 @@ const router = Router();
 router.get('/products', (req, res) => {
   const db = getDb();
   const rate = db.platform_settings?.exchangeRatePyg || 7500;
-  const products = (db.store_products || []).map(p => {
-    const primaryPyg = p.primaryPricePyg || (p.priceUsd ? Math.round(p.priceUsd * rate) : 295000);
-    const primaryUsd = p.primaryPriceUsd || (p.priceUsd ? parseFloat(p.priceUsd) : parseFloat((primaryPyg / rate).toFixed(2)));
-    const secondaryPyg = p.secondaryPricePyg || Math.round(primaryPyg * 0.65);
-    const secondaryUsd = p.secondaryPriceUsd || parseFloat((secondaryPyg / rate).toFixed(2));
+  const products = (db.store_products || [])
+    .filter(p => p && p.isAvailable !== false && (p.category === 'game_key' || p.category === 'digital_game' || p.category === 'gift_card'))
+    .map(p => {
+      const primaryPyg = p.primaryPricePyg || (p.pricePyg ? p.pricePyg : (p.priceUsd ? Math.round(p.priceUsd * rate) : (p.primaryPriceUsd ? Math.round(p.primaryPriceUsd * rate) : 0)));
+      const primaryUsd = p.primaryPriceUsd || (p.priceUsd ? parseFloat(p.priceUsd) : parseFloat((primaryPyg / rate).toFixed(2)));
+      const secondaryPyg = p.secondaryPricePyg !== undefined ? p.secondaryPricePyg : (p.secondaryPriceUsd ? Math.round(p.secondaryPriceUsd * rate) : Math.round(primaryPyg * 0.65));
+      const secondaryUsd = p.secondaryPriceUsd || parseFloat((secondaryPyg / rate).toFixed(2));
 
-    return {
-      id: p.id,
-      title: p.title,
-      category: p.category || 'digital_game',
-      platform: p.platform || 'PS5',
-      genre: p.genre || 'Acción',
-      priceUsd: primaryUsd,
-      pricePyg: primaryPyg,
-      primaryPriceUsd: primaryUsd,
-      primaryPricePyg: primaryPyg,
-      secondaryPriceUsd: secondaryUsd,
-      secondaryPricePyg: secondaryPyg,
-      badge: p.badge || 'DISPONIBLE',
-      icon: p.icon,
-      coverUrl: p.coverUrl || p.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
-      coverImage: p.coverImage || p.coverUrl,
-      screenshots: Array.isArray(p.screenshots) && p.screenshots.length > 0 ? p.screenshots : [
-        'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
-        'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
-      ],
-      brand: p.brand,
-      brandTheme: p.brandTheme,
-      description: p.description,
-      isAvailable: p.isAvailable !== false,
-      stockCount: (p.codes || []).length
-    };
-  });
+      return {
+        id: p.id,
+        title: p.title || p.name || 'Producto Digital',
+        category: p.category || 'digital_game',
+        platform: p.platform || 'PS5',
+        genre: p.genre || 'Acción',
+        priceUsd: primaryUsd,
+        pricePyg: primaryPyg,
+        primaryPriceUsd: primaryUsd,
+        primaryPricePyg: primaryPyg,
+        secondaryPriceUsd: secondaryUsd,
+        secondaryPricePyg: secondaryPyg,
+        badge: p.badge || 'DISPONIBLE',
+        icon: p.icon,
+        coverUrl: p.coverUrl || p.coverImage || p.imageUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
+        coverImage: p.coverImage || p.coverUrl || p.imageUrl,
+        screenshots: Array.isArray(p.screenshots) && p.screenshots.length > 0 ? p.screenshots : [
+          'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
+        ],
+        brand: p.brand,
+        brandTheme: p.brandTheme,
+        description: p.description || '',
+        isAvailable: p.isAvailable !== false,
+        stockCount: Array.isArray(p.codes) ? p.codes.length : (p.stock || 0)
+      };
+    });
 
   res.json(products);
 });

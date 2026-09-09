@@ -5,6 +5,8 @@ const state = {
   hub: null,
   groups: [],
   selectedGroup: null,
+  activeFilter: 'all',
+  activeSort: 'price-asc',
   currentUser: JSON.parse(localStorage.getItem('gb_user') || 'null'),
   wallet: { balanceUsd: 25.0 },
   exchangeRatePyg: 7500
@@ -14,7 +16,7 @@ const state = {
 function formatPriceGs(amountUsd) {
   const rate = state.exchangeRatePyg || 7500;
   const pyg = Math.round((parseFloat(amountUsd) || 0) * rate);
-  return `${pyg.toLocaleString('es-PY')} Gs.`;
+  return `${pyg.toLocaleString('es-PY')} ₲`;
 }
 
 // --- EXTRACT PLATFORM KEY FROM URL QUERY OR PATHNAME ---
@@ -93,12 +95,114 @@ function renderHubView() {
   if (elSav) elSav.textContent = `Hasta -${metrics.avgSavingsPercent || 75}% OFF`;
   if (elRat) elRat.textContent = `${metrics.rating || '4.95 / 5.0'} ★`;
 
-  // 3. Render Groups List in Main Section
+  // 3. Render Top Crown Incentive Banner (GoSplit style)
+  renderShareIncentiveBanner();
+
+  // 4. Render Filters & Sorting
+  renderFiltersAndSorting();
+
+  // 5. Render Groups List in 3-Column Grid
   renderGroupsList();
 
-  // 4. Render Sidebar Releases & Top Rankings
+  // 6. Render Sidebar Releases & Top Rankings
   renderSidebarReleases();
 }
+
+// --- RENDER TOP CROWN INCENTIVE BANNER ---
+function renderShareIncentiveBanner() {
+  const container = document.getElementById('hub-share-incentive-banner');
+  if (!container) return;
+  const hub = state.hub;
+  if (!hub) return;
+
+  const rate = state.exchangeRatePyg || 7500;
+  const maxSlots = hub.maxSlots || 5;
+  const shareableSlots = Math.max(1, maxSlots - 1);
+  const netSlotPyg = hub.netPerSlotPyg || Math.round((hub.pricePerSlotPyg || 25000) * 0.9);
+  const maxEarningsPyg = hub.potentialMonthlyEarningsPyg || (netSlotPyg * shareableSlots);
+  const maxEarningsUsd = parseFloat((maxEarningsPyg / rate).toFixed(2));
+
+  container.innerHTML = `
+    <div class="hub-share-banner-card" onclick="window.location.href='/monetizar.html?platform=${encodeURIComponent(state.platformKey)}'">
+      <div class="hub-share-banner-left">
+        <div class="hub-share-banner-icon-box">👑</div>
+        <div class="hub-share-banner-text">
+          <h4 class="hub-share-banner-title">Compartir mi ${hub.name}</h4>
+          <p class="hub-share-banner-sub">
+            Con máximo puedes recibir: <strong class="hub-share-payout-val">${maxEarningsPyg.toLocaleString('es-PY')} ₲ / Mes</strong> <span class="hub-share-usd-val">($${maxEarningsUsd.toFixed(2)} USD/mes)</span>
+          </p>
+        </div>
+      </div>
+      <button type="button" class="btn-hub-share-action" onclick="event.stopPropagation(); window.location.href='/monetizar.html?platform=${encodeURIComponent(state.platformKey)}'">
+        <span>Publicar Cuenta</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+  `;
+}
+
+// --- RENDER FILTER TABS & SORTING BAR ---
+function renderFiltersAndSorting() {
+  const container = document.getElementById('hub-filters-sorting-bar');
+  if (!container) return;
+  const groups = state.groups || [];
+
+  // Distinct plans
+  const planCounts = {};
+  groups.forEach(g => {
+    const p = g.planName || 'Plan Estándar';
+    planCounts[p] = (planCounts[p] || 0) + 1;
+  });
+
+  const planKeys = Object.keys(planCounts);
+
+  let filterPillsHtml = `
+    <button type="button" class="hub-filter-pill ${state.activeFilter === 'all' ? 'active' : ''}" onclick="setGroupFilter('all')">
+      Todo (${groups.length})
+    </button>
+  `;
+
+  planKeys.forEach(planName => {
+    const isAct = state.activeFilter === planName;
+    filterPillsHtml += `
+      <button type="button" class="hub-filter-pill ${isAct ? 'active' : ''}" onclick="setGroupFilter('${encodeURIComponent(planName)}')">
+        ${planName} (${planCounts[planName]})
+      </button>
+    `;
+  });
+
+  container.innerHTML = `
+    <div class="hub-filters-row">
+      <div class="hub-filter-pills-wrap">
+        ${filterPillsHtml}
+      </div>
+      <div class="hub-sort-pills-wrap">
+        <span class="hub-sort-label">Ordenar:</span>
+        <button type="button" class="hub-sort-pill ${state.activeSort === 'price-asc' ? 'active' : ''}" onclick="setGroupSort('price-asc')" title="Menor precio primero">
+          ⚡ Menor Precio
+        </button>
+        <button type="button" class="hub-sort-pill ${state.activeSort === 'slots-desc' ? 'active' : ''}" onclick="setGroupSort('slots-desc')" title="Más asientos libres primero">
+          👥 Más Libres
+        </button>
+        <button type="button" class="hub-sort-pill ${state.activeSort === 'rating-desc' ? 'active' : ''}" onclick="setGroupSort('rating-desc')" title="Mejor calificación">
+          ⭐ Confianza
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+window.setGroupFilter = function(filterVal) {
+  state.activeFilter = filterVal === 'all' ? 'all' : decodeURIComponent(filterVal);
+  renderFiltersAndSorting();
+  renderGroupsList();
+};
+
+window.setGroupSort = function(sortVal) {
+  state.activeSort = sortVal;
+  renderFiltersAndSorting();
+  renderGroupsList();
+};
 
 // --- 3. RENDER RELEASES & NOVEDADES (IN NARROW RIGHT SIDEBAR) ---
 function renderSidebarReleases() {
@@ -133,160 +237,94 @@ function renderSidebarReleases() {
   `).join('');
 }
 
-// --- 4. RENDER HOST GROUPS LIST WITH EMPTY / SOLD-OUT STATES & WAITING LIST ---
+// --- 4. RENDER HOST GROUPS LIST WITH MINIMALIST GOSPLIT STYLE CARDS ---
 function renderGroupsList() {
   const container = document.getElementById('hub-groups-list');
   if (!container) return;
 
   const hub = state.hub || {};
-  const pricePyg = hub.pricePerSlotPyg || 25000;
-  const netSlotPyg = hub.netPerSlotPyg || Math.round(pricePyg * 0.9);
-  const maxSlots = hub.maxSlots || 5;
-  const potentialPyg = hub.potentialMonthlyEarningsPyg || (netSlotPyg * maxSlots);
-  const waitingCount = hub.waitingCount || 0;
+  let filtered = [...(state.groups || [])];
 
-  const totalAvailSlots = (state.groups || []).reduce((sum, g) => sum + (g.availableSlots || 0), 0);
-  const hasAvailableSeats = state.groups.length > 0 && totalAvailSlots > 0;
+  // 1. Filter by plan
+  if (state.activeFilter && state.activeFilter !== 'all') {
+    filtered = filtered.filter(g => (g.planName || '') === state.activeFilter);
+  }
 
-  // SCENARIO 1: NO ACCOUNTS PUBLISHED YET OR ALL ACCOUNTS ARE SOLD OUT (0 SEATS AVAILABLE)
-  if (!hasAvailableSeats) {
-    const isSoldOut = state.groups.length > 0 && totalAvailSlots === 0;
+  // 2. Sort
+  if (state.activeSort === 'price-asc') {
+    filtered.sort((a, b) => (parseFloat(a.pricePerSlotUsd) || 0) - (parseFloat(b.pricePerSlotUsd) || 0));
+  } else if (state.activeSort === 'slots-desc') {
+    filtered.sort((a, b) => (b.availableSlots || 0) - (a.availableSlots || 0));
+  } else if (state.activeSort === 'rating-desc') {
+    filtered.sort((a, b) => (b.host?.trustScore || 90) - (a.host?.trustScore || 90));
+  }
 
+  if (filtered.length === 0) {
     container.innerHTML = `
-      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-        
-        <!-- MONETIZATION / HOST INVITATION CARD -->
-        <div style="background: linear-gradient(135deg, rgba(16, 21, 38, 0.92) 0%, rgba(9, 14, 26, 0.98) 100%); border: 1.5px solid rgba(251, 191, 36, 0.4); border-radius: 18px; padding: 2rem; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6); position: relative; overflow: hidden;">
-          <div style="position: absolute; top: -20px; right: -20px; width: 140px; height: 140px; background: radial-gradient(circle, rgba(251, 191, 36, 0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
-          
-          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-            <span style="font-size: 1.6rem;">💡</span>
-            <h3 style="font-size: 1.25rem; font-weight: 900; color: #ffffff; margin: 0;">
-              ${isSoldOut ? `¡Todos los cupos de ${hub.name} están ocupados!` : `¿Tienes una cuenta de ${hub.name}?`}
-            </h3>
-          </div>
-
-          <p style="font-size: 0.88rem; color: #cbd5e1; line-height: 1.5; margin-bottom: 1.25rem;">
-            Sé el próximo anfitrión y comparte los cupos libres de tu cuenta familiar con usuarios verificados. GamesBoy retiene los pagos y te garantiza el cobro puntual de tu saldo cada 30 días con <strong>Bóveda Escrow</strong>.
-          </p>
-
-          <!-- Live Potential Earnings Box -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(251, 191, 36, 0.2); border-radius: 14px; padding: 1rem 1.25rem; margin-bottom: 1.5rem;">
-            <div>
-              <span style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; font-weight: 700;">Ganancia Neta por Asiento:</span>
-              <div style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 800; color: var(--accent-emerald);">${netSlotPyg.toLocaleString('es-PY')} Gs.</div>
-            </div>
-            <div>
-              <span style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase; font-weight: 700;">Ingreso Máximo por Cuenta (${maxSlots} cupos):</span>
-              <div style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 900; color: #ffd700;">Hasta ${potentialPyg.toLocaleString('es-PY')} Gs. / mes</div>
-            </div>
-          </div>
-
-          <button class="btn-primary-block" style="width: auto; padding: 12px 28px; font-size: 0.95rem; font-weight: 800; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border: none; color: #000; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4); display: inline-flex; align-items: center; gap: 8px;" onclick="window.location.href='/monetizar'">
-            <span>Publicar Mi Cuenta y Empezar a Ganar ➔</span>
-          </button>
-        </div>
-
-        <!-- HIGH DEMAND & WAITING LIST DEMAND WIDGET -->
-        <div style="background: rgba(16, 20, 32, 0.75); border: 1px solid rgba(0, 194, 255, 0.25); border-radius: 18px; padding: 1.75rem; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-          <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); padding: 4px 14px; border-radius: 20px; margin-bottom: 12px;">
-            <span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 8px #ef4444;"></span>
-            <span style="font-size: 0.76rem; font-weight: 800; color: #ef4444; text-transform: uppercase;">ALTA DEMANDA EN VIVO</span>
-          </div>
-
-          <h3 style="font-size: 1.3rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;">
-            Hay <strong id="waiting-count-display" style="color: #ef4444; font-size: 1.45rem; font-family: var(--font-mono);">${waitingCount} personas esperando</strong> por un asiento en ${hub.name}
-          </h3>
-
-          <p style="font-size: 0.86rem; color: var(--text-secondary); max-width: 580px; margin: 0 auto 1.5rem auto; line-height: 1.5;">
-            Actualmente no hay cupos libres disponibles para compra inmediata. Haz clic en el botón de abajo para unirte a la lista de espera y recibir notificación instantánea cuando un usuario comparta su cuenta.
-          </p>
-
-          <!-- Interactive Waiting List Button -->
-          <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
-            <button type="button" id="btn-join-waiting-list" class="btn-primary-block" style="width: auto; padding: 13px 30px; font-size: 0.95rem; font-weight: 800; background: linear-gradient(135deg, rgba(0, 194, 255, 0.25) 0%, rgba(0, 112, 243, 0.2) 100%); border: 1.5px solid var(--accent-cyan); color: #ffffff; border-radius: 12px; cursor: pointer; box-shadow: 0 0 25px rgba(0, 194, 255, 0.25); display: inline-flex; align-items: center; gap: 10px;" onclick="joinWaitingList()">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-              <span id="btn-join-waiting-text">🙋‍♂️ Me gustaría adquirir un asiento / Unirme a la Lista de Espera</span>
-            </button>
-          </div>
-        </div>
-
+      <div class="hub-empty-groups-notice" style="grid-column: 1 / -1; padding: 2.5rem; text-align: center; background: rgba(16, 21, 38, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px;">
+        <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 0.95rem;">No se encontraron cuentas activas con los filtros seleccionados.</p>
+        <button type="button" class="hub-filter-pill active" onclick="setGroupFilter('all')" style="margin: 0 auto; display: inline-block;">Ver todas las cuentas</button>
       </div>
     `;
     return;
   }
 
-  // SCENARIO 2: ACTIVE GROUPS WITH AVAILABLE SEATS EXIST (MINIMALIST GOSPLIT STYLE)
-  container.innerHTML = state.groups.map(g => {
-    const isAvail = g.availableSlots > 0;
-    const host = g.host || { id: 'usr_admin', name: 'Anfitrión Verificado', avatar: '/assets/branding/icon.png', rating: '4.9 ★', badge: '⭐ Anfitrión Verificado' };
-    const totalSlotsCount = Math.max(1, g.totalSlots || state.hub?.maxSlots || 5);
+  container.innerHTML = filtered.map((g, idx) => {
+    const isAvail = (g.availableSlots || 0) > 0;
+    const host = g.host || { id: 'usr_admin', name: 'Anfitrión Verificado', avatar: '/assets/branding/icon.png', trustScore: 95, activityText: 'En línea' };
+    const totalSlotsCount = Math.max(1, g.totalSlots || hub.maxSlots || 5);
     const availCount = Math.min(totalSlotsCount, Math.max(0, g.availableSlots !== undefined ? g.availableSlots : totalSlotsCount));
-    const occupiedCount = totalSlotsCount - availCount;
-
-    // Brand icon & color
-    const hub = state.hub || {};
-    const iconUrl = hub.iconUrl || hub.thumbnailUrl || hub.logoUrl || '';
-    const brandColor = hub.brandColor || '#00c2ff';
     const cleanServiceName = g.serviceName || hub.name || 'Streaming';
-    const shortLogoText = cleanServiceName.split(' ')[0].slice(0, 4).toUpperCase();
 
-    let brandIconHtml = '';
-    if (iconUrl && (iconUrl.startsWith('/') || iconUrl.startsWith('http') || iconUrl.startsWith('data:'))) {
-      brandIconHtml = `<img src="${iconUrl}" alt="${cleanServiceName}" class="hub-mini-brand-img" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\\'hub-mini-brand-letter\\'>${shortLogoText}</span>'">`;
-    } else {
-      brandIconHtml = `<span class="hub-mini-brand-letter">${shortLogoText}</span>`;
+    // Build silhouettes: 👤
+    let silhouettesHtml = '';
+    for (let i = 1; i <= totalSlotsCount; i++) {
+      const isSeatFree = i <= availCount;
+      silhouettesHtml += `
+        <span class="hub-seat-sil-icon ${isSeatFree ? 'is-free' : 'is-occupied'}" title="${isSeatFree ? `Asiento ${i}: Disponible` : `Asiento ${i}: Ocupado`}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </span>
+      `;
     }
 
-    // Overlapping Avatars (Host + simulated/active members + count bubble)
-    const hostAvatar = host.avatar || '/assets/branding/icon.png';
-    const avatarStackHtml = `
-      <div class="hub-mini-avatar-stack">
-        <img src="${hostAvatar}" alt="${host.name}" class="hub-mini-stack-img" title="Anfitrión: ${host.name}">
-        <div class="hub-mini-stack-user" style="background: linear-gradient(135deg, #0284c7, #0369a1);" title="Usuario Activo">👤</div>
-        <div class="hub-mini-stack-user" style="background: linear-gradient(135deg, #9333ea, #7e22ce);" title="Usuario Activo">👤</div>
-        <span class="hub-mini-stack-count" title="${availCount} de ${totalSlotsCount} cupos libres">
-          ${availCount > 0 ? (availCount >= 10 ? '99+' : `${availCount} libres`) : 'Lleno'}
-        </span>
-      </div>
-    `;
-
-    const badgeText = g.isOfficial ? '🛡️ Tienda Oficial' : (availCount > 0 ? '⚡ Compartir para incentivo' : '🔒 Grupo Lleno');
-    const badgeClass = g.isOfficial ? 'verified' : 'incentive';
-
     return `
-      <div class="hub-group-card ${isAvail ? '' : 'disabled'}" onclick="openGroupDetailModal('${g.id}')" title="Haz clic para ver perfiles y unirte a este grupo">
-        <!-- Top Row: Brand Logo + Tag Badge -->
-        <div class="hub-mini-card-top">
-          <div class="hub-mini-brand-icon" style="background: ${brandColor}22; border-color: ${brandColor}55;">
-            ${brandIconHtml}
+      <div class="hub-gosplit-card ${isAvail ? '' : 'is-sold-out'}" onclick="openGroupDetailModal('${g.id}')">
+        <!-- Top Row: Host Avatar, Name, Plan & Time -->
+        <div class="hub-card-header-row">
+          <div class="hub-host-avatar-wrap">
+            <img src="${host.avatar}" alt="${host.name}" class="hub-host-avatar-img" onerror="this.src='/assets/branding/icon.png'">
+            <span class="hub-host-trust-pill" title="Puntaje de Confianza: ${host.trustScore || 95}%">${host.trustScore || 95}</span>
           </div>
-          <span class="hub-mini-badge-pill ${badgeClass}">
-            ${badgeText}
-          </span>
+          <div class="hub-host-meta">
+            <div class="hub-host-name-line">
+              <strong class="hub-host-name">${host.name}</strong>
+              <svg class="verified-check" width="13" height="13" viewBox="0 0 24 24" fill="#00c2ff" title="Verificado"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <span class="hub-card-plan-tag">${g.planName || cleanServiceName}</span>
+          </div>
+          <span class="hub-card-activity-tag">${host.activityText || 'En línea'}</span>
         </div>
 
-        <!-- Middle Row: Overlapping Avatars & Slot count -->
-        <div class="hub-mini-avatars-row">
-          ${avatarStackHtml}
+        <!-- Middle Row: Pricing -->
+        <div class="hub-card-pricing-block">
+          <div class="hub-card-price-gs">${formatPriceGs(g.pricePerSlotUsd)} <span class="hub-card-period">/ Mes</span></div>
+          <div class="hub-card-price-usd">$${parseFloat(g.pricePerSlotUsd).toFixed(2)} USD</div>
         </div>
 
-        <!-- Info: Platform & Plan Name -->
-        <div class="hub-mini-info-wrap">
-          <h3 class="hub-mini-service-title">${cleanServiceName}</h3>
-          <p class="hub-mini-plan-subtitle">${g.planName || 'Membresía Mensual'}</p>
+        <!-- Seats Row: Silhouettes + Remaining Counter -->
+        <div class="hub-card-seats-row">
+          <div class="hub-card-silhouettes">
+            ${silhouettesHtml}
+          </div>
+          <span class="hub-card-seats-count">${availCount} ${availCount === 1 ? 'asiento restante' : 'asientos restantes'}</span>
         </div>
 
-        <!-- Pricing Row -->
-        <div class="hub-mini-price-row">
-          <div class="hub-mini-price-left">
-            <span class="hub-mini-price-lbl">Mínimo por mes</span>
-            <div class="hub-mini-price-gs">${formatPriceGs(g.pricePerSlotUsd)}</div>
-          </div>
-          <div class="hub-mini-price-right">
-            <span class="hub-mini-price-usd">$${parseFloat(g.pricePerSlotUsd).toFixed(2)} USD</span>
-          </div>
-        </div>
+        <!-- Action Button -->
+        <button type="button" class="btn-join-group-card ${isAvail ? '' : 'disabled'}" onclick="event.stopPropagation(); openGroupDetailModal('${g.id}')">
+          ${isAvail ? 'Unirse al Grupo' : 'Grupo Lleno'}
+        </button>
       </div>
     `;
   }).join('');
@@ -296,16 +334,25 @@ function renderGroupsList() {
 
 function initGroupCardTiltEffects() {
   const container = document.getElementById('hub-groups-list');
-  if (!container) return;
-  const cards = container.querySelectorAll('.hub-mini-group-card');
-  cards.forEach(card => {
+  const cards = container ? container.querySelectorAll('.hub-gosplit-card') : [];
+  const banner = document.querySelector('.hub-share-banner-card');
+  const allInteractiveCards = [...cards];
+  if (banner) allInteractiveCards.push(banner);
+
+  allInteractiveCards.forEach((card, idx) => {
+    if (!card) return;
     if (card.dataset.tiltAttached === 'true') return;
     card.dataset.tiltAttached = 'true';
     let rafId = null;
 
+    const isBanner = card.classList.contains('hub-share-banner-card');
+    const maxTiltAngle = isBanner ? 3.5 : 6;
+    const elevatePx = isBanner ? -3 : -5;
+    const scaleFactor = isBanner ? 1.01 : 1.025;
+
     card.addEventListener('mouseenter', () => {
-      card.style.transition = 'transform 0.08s ease-out, box-shadow 0.15s ease';
-      card.style.zIndex = '10';
+      card.style.transition = 'transform 0.08s ease-out, box-shadow 0.15s ease, border-color 0.15s ease';
+      card.style.zIndex = '12';
     });
 
     card.addEventListener('mousemove', (e) => {
@@ -315,19 +362,23 @@ function initGroupCardTiltEffects() {
       const normX = (x - rect.width / 2) / (rect.width / 2);
       const normY = (y - rect.height / 2) / (rect.height / 2);
 
-      const rotX = -normY * 6;
-      const rotY = normX * 6;
+      const rotX = -normY * maxTiltAngle;
+      const rotY = normX * maxTiltAngle;
 
       if (rafId) cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
-        card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-4px) scale3d(1.02, 1.02, 1.02)`;
-        card.style.boxShadow = `${(-rotY * 1.5).toFixed(1)}px ${(12 + Math.abs(rotX)).toFixed(1)}px 24px rgba(0, 0, 0, 0.7), 0 0 16px rgba(0, 194, 255, 0.25)`;
+        card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(${elevatePx}px) scale3d(${scaleFactor}, ${scaleFactor}, ${scaleFactor})`;
+        if (!isBanner) {
+          card.style.boxShadow = `${(-rotY * 1.5).toFixed(1)}px ${(12 + Math.abs(rotX)).toFixed(1)}px 26px rgba(0, 0, 0, 0.75), 0 0 18px rgba(0, 194, 255, 0.22)`;
+        } else {
+          card.style.boxShadow = `${(-rotY * 1.2).toFixed(1)}px ${(10 + Math.abs(rotX)).toFixed(1)}px 22px rgba(0, 0, 0, 0.65), 0 0 16px rgba(251, 191, 36, 0.22)`;
+        }
       });
     });
 
     card.addEventListener('mouseleave', () => {
       if (rafId) cancelAnimationFrame(rafId);
-      card.style.transition = 'transform 0.45s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.45s ease';
+      card.style.transition = 'transform 0.45s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.45s ease, border-color 0.45s ease';
       card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)';
       card.style.boxShadow = '';
       card.style.zIndex = '';

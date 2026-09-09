@@ -4933,262 +4933,414 @@ body.modal-open #sticky-monetize-pill,
 }
 
 /* ======================================================== */
-/* MINIMALIST STREAMING GROUP CARDS (GOSPLIT LUXE STYLE)    */
+/* TOP SHARE & MONETIZE INCENTIVE BANNER (GOSPLIT CROWN)     */
+/* ======================================================== */
+.hub-share-banner-card {
+  background: linear-gradient(135deg, #131724 0%, #191e30 100%);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: 16px;
+  padding: 1rem 1.4rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.hub-share-banner-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(251, 191, 36, 0.6);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65), 0 0 20px rgba(251, 191, 36, 0.15);
+}
+
+.hub-share-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hub-share-banner-icon-box {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(217, 119, 6, 0.2) 100%);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+}
+
+.hub-share-banner-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 2px 0;
+}
+
+.hub-share-banner-sub {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.hub-share-payout-val {
+  color: #fbbf24;
+  font-family: var(--font-mono);
+  font-weight: 800;
+}
+
+.hub-share-usd-val {
+  color: #38bdf8;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.btn-hub-share-action {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border: none;
+  color: #080c16;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 9px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+}
+
+.hub-share-banner-card:hover .btn-hub-share-action {
+  transform: scale(1.03);
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.5);
+}
+
+/* ======================================================== */
+/* FILTERS & SORTING BAR (CLEAN TABS & PILLS)               */
+/* ======================================================== */
+.hub-filters-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hub-filter-pills-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.hub-filter-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.hub-filter-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.hub-filter-pill.active {
+  background: linear-gradient(135deg, rgba(0, 194, 255, 0.18), rgba(0, 112, 243, 0.2));
+  border-color: rgba(0, 194, 255, 0.5);
+  color: #38bdf8;
+}
+
+.hub-sort-pills-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.hub-sort-label {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+
+.hub-sort-pill {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #94a3b8;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hub-sort-pill:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+}
+
+.hub-sort-pill.active {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+/* ======================================================== */
+/* 3-COLUMN GOSPLIT STYLE PROFILE CARDS GRID                */
 /* ======================================================== */
 .hub-groups-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   width: 100%;
 }
 
-@media (min-width: 640px) and (max-width: 1024px) {
+@media (max-width: 1100px) {
   .hub-groups-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 1025px) and (max-width: 1400px) {
-  .hub-groups-list {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  }
-}
-
-@media (min-width: 1401px) {
-  .hub-groups-list {
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  }
-}
-
-@media (max-width: 540px) {
+@media (max-width: 640px) {
   .hub-groups-list {
     grid-template-columns: 1fr;
   }
 }
 
-.hub-group-card {
-  background: linear-gradient(145deg, #111522 0%, #171b2b 100%);
+.hub-gosplit-card {
+  background: linear-gradient(145deg, #101420 0%, #161b2a 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px !important;
-  padding: 1.25rem 1.25rem 1.15rem 1.25rem;
+  border-radius: 16px !important;
+  padding: 1.15rem 1.15rem 1.1rem 1.15rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 12px;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 14px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease, border-color 0.22s ease;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
-.hub-group-card:hover {
+.hub-gosplit-card:hover {
   transform: translateY(-4px);
   border-color: rgba(0, 194, 255, 0.45);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.65), 0 0 20px rgba(0, 194, 255, 0.15);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65), 0 0 20px rgba(0, 194, 255, 0.15);
 }
 
-.hub-group-card.disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  pointer-events: none;
+.hub-gosplit-card.is-sold-out {
+  opacity: 0.65;
 }
 
-/* Card Header: Brand Icon/Circle + Top Badge */
-.hub-mini-card-top {
+/* 1. Header Row (Host Avatar + Meta + Activity) */
+.hub-card-header-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
 }
 
-.hub-mini-brand-icon {
+.hub-host-avatar-wrap {
+  position: relative;
   width: 42px;
   height: 42px;
   min-width: 42px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-  padding: 2px;
 }
 
-.hub-mini-brand-img {
+.hub-host-avatar-img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  border-radius: 50%;
-}
-
-.hub-mini-brand-letter {
-  font-family: var(--font-heading);
-  font-size: 0.82rem;
-  font-weight: 900;
-  color: #ffffff;
-  text-transform: uppercase;
-}
-
-.hub-mini-badge-pill {
-  font-size: 0.64rem;
-  font-weight: 800;
-  padding: 3px 8px;
-  border-radius: 9999px;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  white-space: nowrap;
-  background: rgba(168, 85, 247, 0.15);
-  border: 1px solid rgba(168, 85, 247, 0.35);
-  color: #c084fc;
-}
-
-.hub-mini-badge-pill.verified {
-  background: rgba(16, 185, 129, 0.12);
-  border-color: rgba(16, 185, 129, 0.35);
-  color: #34d399;
-}
-
-.hub-mini-badge-pill.incentive {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(236, 72, 153, 0.22));
-  border-color: rgba(168, 85, 247, 0.45);
-  color: #e879f9;
-}
-
-/* Card Middle: Overlapping Avatars & Slot count */
-.hub-mini-avatars-row {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin-top: -8px;
-  margin-bottom: 2px;
-}
-
-.hub-mini-avatar-stack {
-  display: flex;
-  align-items: center;
-}
-
-.hub-mini-stack-img {
-  width: 26px;
-  height: 26px;
-  min-width: 26px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #111522;
-  margin-left: -7px;
-  background: #080c16;
-}
-.hub-mini-stack-img:first-child {
-  margin-left: 0;
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  background: #090c16;
 }
 
-.hub-mini-stack-user {
-  width: 26px;
-  height: 26px;
-  min-width: 26px;
-  border-radius: 50%;
-  border: 2px solid #111522;
-  margin-left: -7px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.65rem;
-  font-weight: 800;
+.hub-host-trust-pill {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  background: linear-gradient(135deg, #10b981, #059669);
   color: #ffffff;
-}
-
-.hub-mini-stack-count {
-  height: 24px;
-  padding: 0 8px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 1px 4px;
   border-radius: 9999px;
-  border: 2px solid #111522;
-  margin-left: -7px;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: #0b0f19;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 900;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Card Info: Platform Name & Subtitle */
-.hub-mini-info-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.hub-mini-service-title {
-  font-family: var(--font-heading);
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #ffffff;
-  line-height: 1.25;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.hub-mini-plan-subtitle {
-  font-size: 0.74rem;
-  color: var(--text-tertiary);
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Card Bottom: Pricing Row */
-.hub-mini-price-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 10px;
-  margin-top: 2px;
-}
-
-.hub-mini-price-left {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.hub-mini-price-lbl {
-  font-size: 0.66rem;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-}
-
-.hub-mini-price-gs {
-  font-family: var(--font-mono);
-  font-size: 1.2rem;
-  font-weight: 900;
-  color: #fbbf24;
+  border: 1.5px solid #101420;
   line-height: 1;
 }
 
-.hub-mini-price-usd {
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
+.hub-host-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.hub-host-name-line {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.hub-host-name {
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
   font-weight: 800;
-  color: #38bdf8;
-  padding: 2px 6px;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hub-card-plan-tag {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.hub-card-activity-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #64748b;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px 7px;
   border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* 2. Pricing Block */
+.hub-card-pricing-block {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px 0;
+}
+
+.hub-card-price-gs {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #fbbf24;
+  letter-spacing: -0.02em;
+}
+
+.hub-card-period {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: normal;
+}
+
+.hub-card-price-usd {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #38bdf8;
   background: rgba(0, 194, 255, 0.08);
   border: 1px solid rgba(0, 194, 255, 0.2);
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+/* 3. Seats / Silhouettes Row */
+.hub-card-seats-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.hub-card-silhouettes {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hub-seat-sil-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.hub-seat-sil-icon.is-free {
+  color: #fbbf24 !important;
+  filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.6));
+}
+
+.hub-seat-sil-icon.is-occupied {
+  color: rgba(255, 255, 255, 0.18) !important;
+}
+
+.hub-card-seats-count {
+  font-size: 0.73rem;
+  font-weight: 700;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+/* 4. Action Button */
+.btn-join-group-card {
+  width: 100%;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border: none;
+  color: #080c16;
+  font-family: var(--font-heading);
+  font-size: 0.86rem;
+  font-weight: 900;
+  border-radius: 10px !important;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+  text-align: center;
+}
+
+.hub-gosplit-card:hover .btn-join-group-card {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.45);
+}
+
+.btn-join-group-card.disabled {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 /* 4. Right Sidebar Desktop Blocks */

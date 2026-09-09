@@ -1,14 +1,14 @@
 // GamesBoy.net - Monetization Page Interactive Engine
 
 let servicesConfig = {
-  'netflix': { name: 'Netflix Premium 4K', planName: 'Ultra HD 4K (4 Pantallas)', maxSlots: 5, pricePerSlotPyg: 25000, commissionPercent: 10, netPayoutPyg: 22500 },
-  'spotify': { name: 'Spotify Premium Familiar', planName: 'Plan Familiar (6 Cuentas)', maxSlots: 5, pricePerSlotPyg: 18000, commissionPercent: 10, netPayoutPyg: 16200 },
-  'disney': { name: 'Disney+ Premium & Star+', planName: 'Plan Premium 4K', maxSlots: 4, pricePerSlotPyg: 25000, commissionPercent: 10, netPayoutPyg: 22500 },
-  'max': { name: 'Max (HBO Max) 4K', planName: 'Platino 4K Dolby Atmos', maxSlots: 3, pricePerSlotPyg: 22000, commissionPercent: 10, netPayoutPyg: 19800 },
-  'youtube': { name: 'YouTube Premium & Music', planName: 'Familiar Sin Anuncios', maxSlots: 5, pricePerSlotPyg: 20000, commissionPercent: 10, netPayoutPyg: 18000 },
-  'chatgpt': { name: 'ChatGPT Plus & AI', planName: 'Plus GPT-4o & Canvas', maxSlots: 2, pricePerSlotPyg: 35000, commissionPercent: 10, netPayoutPyg: 31500 },
-  'crunchyroll': { name: 'Crunchyroll Mega Fan', planName: 'Mega Fan 4 Pantallas', maxSlots: 4, pricePerSlotPyg: 18000, commissionPercent: 10, netPayoutPyg: 16200 },
-  'paramount': { name: 'Paramount+ Premium', planName: 'Plan Estándar 3 Pantallas', maxSlots: 3, pricePerSlotPyg: 18000, commissionPercent: 10, netPayoutPyg: 16200 }
+  'netflix': { name: 'Netflix Premium 4K', planName: 'Ultra HD 4K (4 Pantallas)', maxSlots: 5, pricePerSlotPyg: 25000, minPricePyg: 18000, maxPricePyg: 35000, commissionPercent: 10, netPayoutPyg: 22500 },
+  'spotify': { name: 'Spotify Premium Familiar', planName: 'Plan Familiar (6 Cuentas)', maxSlots: 5, pricePerSlotPyg: 18000, minPricePyg: 12000, maxPricePyg: 25000, commissionPercent: 10, netPayoutPyg: 16200 },
+  'disney': { name: 'Disney+ Premium & Star+', planName: 'Plan Premium 4K', maxSlots: 4, pricePerSlotPyg: 25000, minPricePyg: 18000, maxPricePyg: 35000, commissionPercent: 10, netPayoutPyg: 22500 },
+  'max': { name: 'Max (HBO Max) 4K', planName: 'Platino 4K Dolby Atmos', maxSlots: 3, pricePerSlotPyg: 22000, minPricePyg: 15000, maxPricePyg: 30000, commissionPercent: 10, netPayoutPyg: 19800 },
+  'youtube': { name: 'YouTube Premium & Music', planName: 'Familiar Sin Anuncios', maxSlots: 5, pricePerSlotPyg: 20000, minPricePyg: 14000, maxPricePyg: 28000, commissionPercent: 10, netPayoutPyg: 18000 },
+  'chatgpt': { name: 'ChatGPT Plus & AI', planName: 'Plus GPT-4o & Canvas', maxSlots: 2, pricePerSlotPyg: 35000, minPricePyg: 25000, maxPricePyg: 50000, commissionPercent: 10, netPayoutPyg: 31500 },
+  'crunchyroll': { name: 'Crunchyroll Mega Fan', planName: 'Mega Fan 4 Pantallas', maxSlots: 4, pricePerSlotPyg: 18000, minPricePyg: 12000, maxPricePyg: 25000, commissionPercent: 10, netPayoutPyg: 16200 },
+  'paramount': { name: 'Paramount+ Premium', planName: 'Plan Estándar 3 Pantallas', maxSlots: 3, pricePerSlotPyg: 18000, minPricePyg: 12000, maxPricePyg: 25000, commissionPercent: 10, netPayoutPyg: 16200 }
 };
 
 let selectedServiceKey = 'netflix';
@@ -17,46 +17,37 @@ let exchangeRatePyg = 7500;
 
 async function loadDynamicServices() {
   try {
-    const res = await fetch('/api/streaming-hubs');
+    const res = await fetch('/api/subscriptions/services-config');
     const data = await res.json();
-    if (data.success && Array.isArray(data.services) && data.services.length > 0) {
-      const newConfig = {};
+    if (data.success && data.config) {
+      servicesConfig = data.config;
+      exchangeRatePyg = data.rate || 7500;
+
       const selectCalc = document.getElementById('calc-service-select');
       const selectPub = document.getElementById('user-pub-service');
 
       if (selectCalc) selectCalc.innerHTML = '';
       if (selectPub) selectPub.innerHTML = '';
 
-      data.services.forEach(s => {
+      Object.keys(servicesConfig).forEach(key => {
+        const s = servicesConfig[key];
         const price = s.pricePerSlotPyg || 25000;
-        const comm = s.commissionPercent !== undefined ? s.commissionPercent : 10;
-        const net = Math.round(price * (1 - comm / 100));
-
-        newConfig[s.id] = {
-          name: s.name,
-          planName: s.planName || `Plan ${s.maxSlots || 5} Pantallas`,
-          maxSlots: s.maxSlots || 5,
-          pricePerSlotPyg: price,
-          commissionPercent: comm,
-          netPayoutPyg: net
-        };
 
         if (selectCalc) {
           const opt = document.createElement('option');
-          opt.value = s.id;
+          opt.value = s.id || key;
           opt.textContent = `${s.name} (${price.toLocaleString('es-PY')} Gs./cupo)`;
           selectCalc.appendChild(opt);
         }
 
         if (selectPub) {
           const opt = document.createElement('option');
-          opt.value = s.id;
+          opt.value = s.id || key;
           opt.textContent = `${s.name} (${price.toLocaleString('es-PY')} Gs.)`;
           selectPub.appendChild(opt);
         }
       });
 
-      servicesConfig = newConfig;
       const firstKey = Object.keys(servicesConfig)[0] || 'netflix';
       selectedServiceKey = firstKey;
       if (selectCalc) selectCalc.value = firstKey;
@@ -64,7 +55,7 @@ async function loadDynamicServices() {
       initCalculator();
     }
   } catch (err) {
-    console.warn('Could not load dynamic services, using defaults:', err);
+    console.warn('Could not load dynamic services config, using defaults:', err);
   }
 }
 
@@ -254,7 +245,10 @@ function initPublishModal() {
   const serviceSelect = document.getElementById('user-pub-service');
   const planInput = document.getElementById('user-pub-plan');
   const slotsInput = document.getElementById('user-pub-slots');
+  const customPriceInput = document.getElementById('user-pub-custom-price');
+  const rangeHint = document.getElementById('user-pub-range-hint');
   const priceDisplay = document.getElementById('user-pub-fixed-price-preview');
+  const netPerSlotDisplay = document.getElementById('user-pub-net-per-slot-preview');
   const commissionDisplay = document.getElementById('user-pub-commission-preview');
   const netEarningsTotal = document.getElementById('user-pub-net-total');
 
@@ -270,19 +264,38 @@ function initPublishModal() {
       slotsInput.max = maxCapacity;
     }
 
-    const pricePyg = cfg ? cfg.pricePerSlotPyg : 25000;
+    const defaultPricePyg = cfg ? (cfg.pricePerSlotPyg || 25000) : 25000;
+    const minPyg = cfg ? (cfg.minPricePyg || Math.round(defaultPricePyg * 0.7)) : 15000;
+    const maxPyg = cfg ? (cfg.maxPricePyg || Math.round(defaultPricePyg * 1.4)) : 35000;
+
+    if (rangeHint) {
+      rangeHint.textContent = `Rango sugerido: ${minPyg.toLocaleString('es-PY')} ₲ - ${maxPyg.toLocaleString('es-PY')} ₲`;
+    }
+
+    let currentCustomPrice = parseInt(customPriceInput?.value, 10);
+    if (isNaN(currentCustomPrice) || currentCustomPrice <= 0) {
+      currentCustomPrice = defaultPricePyg;
+      if (customPriceInput) customPriceInput.value = defaultPricePyg;
+    }
+
+    if (customPriceInput) {
+      customPriceInput.min = minPyg;
+      customPriceInput.max = maxPyg;
+    }
+
     const commPct = cfg ? (cfg.commissionPercent !== undefined ? cfg.commissionPercent : 10) : 10;
-    const netPerSlot = cfg ? cfg.netPayoutPyg : Math.round(pricePyg * (1 - commPct / 100));
+    const netPerSlot = Math.round(currentCustomPrice * (1 - commPct / 100));
     
     const availCount = parseInt(slotsInput?.value, 10) || 1;
     const totalNet = netPerSlot * availCount;
 
-    if (priceDisplay) priceDisplay.textContent = `${pricePyg.toLocaleString('es-PY')} Gs.`;
+    if (priceDisplay) priceDisplay.textContent = `${currentCustomPrice.toLocaleString('es-PY')} Gs.`;
+    if (netPerSlotDisplay) netPerSlotDisplay.textContent = `${netPerSlot.toLocaleString('es-PY')} Gs.`;
     if (commissionDisplay) commissionDisplay.textContent = `${commPct}%`;
     if (netEarningsTotal) netEarningsTotal.textContent = `${totalNet.toLocaleString('es-PY')} Gs.`;
   };
 
-  const handleServiceOrSlotsChange = (rebuildProfiles = true) => {
+  const handleServiceOrSlotsChange = (rebuildProfiles = true, resetCustomPrice = false) => {
     const selectedKey = serviceSelect.value;
     const cfg = servicesConfig[selectedKey] || servicesConfig['netflix'];
     const maxCapacity = cfg ? (cfg.maxSlots || 5) : 5;
@@ -292,6 +305,10 @@ function initPublishModal() {
       if (parseInt(slotsInput.value, 10) > maxCapacity) {
         slotsInput.value = maxCapacity;
       }
+    }
+
+    if (resetCustomPrice && customPriceInput && cfg) {
+      customPriceInput.value = cfg.pricePerSlotPyg || 25000;
     }
 
     window.updateMonetizarModalPricing();
@@ -306,7 +323,7 @@ function initPublishModal() {
     if (!modalPublish) return;
     if (serviceSelect) serviceSelect.value = selectedServiceKey;
     if (slotsInput) slotsInput.value = selectedSlotsCount;
-    handleServiceOrSlotsChange(true);
+    handleServiceOrSlotsChange(true, true);
     modalPublish.style.display = 'grid';
   };
 
@@ -317,8 +334,9 @@ function initPublishModal() {
     btnClosePublish.onclick = () => { modalPublish.style.display = 'none'; };
   }
 
-  if (serviceSelect) serviceSelect.onchange = () => handleServiceOrSlotsChange(true);
-  if (slotsInput) slotsInput.oninput = () => handleServiceOrSlotsChange(true);
+  if (serviceSelect) serviceSelect.onchange = () => handleServiceOrSlotsChange(true, true);
+  if (slotsInput) slotsInput.oninput = () => handleServiceOrSlotsChange(true, false);
+  if (customPriceInput) customPriceInput.oninput = () => window.updateMonetizarModalPricing();
 
   const publishForm = document.getElementById('form-user-publish-stream');
   if (publishForm) {
@@ -330,6 +348,7 @@ function initPublishModal() {
       const email = document.getElementById('user-pub-email')?.value.trim() || '';
       const password = document.getElementById('user-pub-password')?.value.trim() || '';
       const instructions = document.getElementById('user-pub-instructions')?.value.trim() || 'Usa exclusivamente tu perfil asignado y no modifiques las credenciales.';
+      const customPricePyg = parseInt(document.getElementById('user-pub-custom-price')?.value, 10) || 25000;
 
       if (!email || !password) {
         alert('Por favor ingresa el correo y la contraseña de la cuenta.');
@@ -375,6 +394,8 @@ function initPublishModal() {
         planName: document.getElementById('user-pub-plan')?.value,
         totalSlots: totalCount || document.getElementById('user-pub-slots').value,
         availableSlots: availableCount,
+        customPricePyg,
+        pricePerSlotPyg: customPricePyg,
         email,
         password,
         credentials: `${email} | ${password}`,
@@ -397,7 +418,7 @@ function initPublishModal() {
           const isPending = data.subscription?.status === 'pending_approval';
           alert(
             isPending
-              ? `⏳ Solicitud Enviada para Moderación\n\nTu cuenta ha sido enviada al Administrador para verificar los accesos. Una vez aprobada, se publicará automáticamente en el catálogo.`
+              ? `⏳ Solicitud Enviada para Moderación\n\nTu cuenta ha sido enviada al Administrador para verificar los accesos con tu precio de ${customPricePyg.toLocaleString('es-PY')} Gs./cupo. Una vez aprobada, se publicará automáticamente en el catálogo.`
               : `🎉 ¡Cuenta Publicada con Éxito!\n\n${data.message || 'Tu cuenta ya está activa en el catálogo oficial.'}`
           );
           if (modalPublish) modalPublish.style.display = 'none';
