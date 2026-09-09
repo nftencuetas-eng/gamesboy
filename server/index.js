@@ -19,6 +19,8 @@ import adminRouter from './routes/admin.js';
 import bannersRouter from './routes/banners.js';
 import smmRouter from './routes/smm.js';
 import streamingHubsRouter from './routes/streamingHubs.js';
+import saasRouter from './routes/saas.js';
+import tenantResolver from './middleware/tenantResolver.js';
 import { notFoundHandler, globalErrorHandler } from './middleware/errorHandler.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -80,12 +82,17 @@ app.use(express.json({ limit: '35mb' })); // Support direct image file uploads a
 app.use(express.urlencoded({ extended: true, limit: '35mb' }));
 app.use(morgan(config.nodeEnv === 'production' ? 'combined' : 'dev'));
 
+// Multi-Tenant Resolution Middleware (Applies tenant context to all incoming requests)
+app.use(tenantResolver);
+
 // Static Client Files
 const clientPath = path.resolve(__dirname, '../client');
 app.use(express.static(clientPath));
 
 // Mount Modular API Routes
 app.use('/health', healthRouter);
+app.use('/api/tenant', saasRouter);
+app.use('/api/saas', saasRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/wallet', walletRouter);
 app.use('/api/subscriptions', subscriptionsRouter);

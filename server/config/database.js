@@ -10,11 +10,86 @@ const DATA_FILE = path.resolve(__dirname, '../../data/marketplace_storage.json')
 
 // Default initial database state with seed data
 let db = {
+  tenants: [
+    {
+      id: 'tnt_gamesboy_main',
+      slug: 'gamesboy',
+      name: 'GamesBoy Oficial',
+      customDomain: 'gamesboy.net',
+      planId: 'plan_enterprise',
+      status: 'active',
+      branding: {
+        brandName: 'GamesBoy',
+        logoUrl: '/assets/branding/logo.png',
+        iconUrl: '/assets/branding/icon.png',
+        primaryColor: '#0284c7',
+        accentColor: '#00c2ff',
+        currency: 'PYG',
+        exchangeRate: 7500,
+        whatsappSupport: '+595981123456'
+      },
+      settings: {
+        commissionPercent: 15.00,
+        paraguayBankDetails: {
+          bank: 'Banco Familiar / Itaú Paraguay',
+          accountHolder: 'GamesBoy Paraguay S.A.',
+          rucOrCi: '80091234-5',
+          accountNumber: '01-445566-7',
+          aliasSipap: 'gamesboy.py'
+        },
+        binanceDetails: {
+          payId: '849201934',
+          network: 'USDT (Binance Pay / BEP-20 / TRC-20)',
+          walletAddress: '0x71C9414B3b27bA134a6C3f07a757657A82e4b92F',
+          qrUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F'
+        }
+      }
+    },
+    {
+      id: 'tnt_streamflow_demo',
+      slug: 'streamflow',
+      name: 'StreamFlow Paraguay',
+      customDomain: 'streamflow.gamesboy.net',
+      planId: 'plan_pro',
+      status: 'active',
+      branding: {
+        brandName: 'StreamFlow',
+        logoUrl: '/assets/branding/icon.png',
+        iconUrl: '/assets/branding/icon.png',
+        primaryColor: '#10b981',
+        accentColor: '#34d399',
+        currency: 'PYG',
+        exchangeRate: 7500,
+        whatsappSupport: '+595982000111'
+      },
+      settings: {
+        commissionPercent: 12.00,
+        paraguayBankDetails: {
+          bank: 'Banco Continental',
+          accountHolder: 'StreamFlow Digital',
+          rucOrCi: '4455667-8',
+          accountNumber: '15-998877-2',
+          aliasSipap: 'streamflow.py'
+        },
+        binanceDetails: {
+          payId: '992144551',
+          network: 'USDT (BEP-20)',
+          walletAddress: '0x33B10A98F722cE434a6C3f07a757657A82e4b88B',
+          qrUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x33B10A98F722cE434a6C3f07a757657A82e4b88B'
+        }
+      }
+    }
+  ],
+  tenant_plans: [
+    { id: 'plan_starter', name: 'Starter Reseller', priceMonthlyUsd: 19.99, maxSlotsAllowed: 50, maxProductsAllowed: 30, customDomainEnabled: false, platformFeePercent: 5.00 },
+    { id: 'plan_pro', name: 'Pro Marketplace', priceMonthlyUsd: 49.99, maxSlotsAllowed: 250, maxProductsAllowed: 150, customDomainEnabled: true, platformFeePercent: 3.00 },
+    { id: 'plan_enterprise', name: 'Enterprise White-Label', priceMonthlyUsd: 99.99, maxSlotsAllowed: 1000, maxProductsAllowed: 500, customDomainEnabled: true, platformFeePercent: 1.50 }
+  ],
   users: [
-    { id: 'usr_admin', name: 'Admin GamesBoy', email: 'admin@gamesboy.net', role: 'admin', avatar: '/assets/branding/icon.png' },
-    { id: 'usr_seller1', name: 'Carlos_Streams', email: 'carlos@vendedor.com', role: 'seller', avatar: '/assets/branding/icon.png' },
-    { id: 'usr_client1', name: 'Lucas_Py', email: 'lucas@cliente.com', role: 'client', avatar: '/assets/branding/icon.png' },
-    { id: 'usr_client2', name: 'María López', email: 'maria@cliente.com', role: 'client', avatar: '/assets/branding/icon.png' }
+    { id: 'usr_admin', tenantId: 'tnt_gamesboy_main', name: 'Admin GamesBoy', email: 'admin@gamesboy.net', role: 'superadmin', avatar: '/assets/branding/icon.png' },
+    { id: 'usr_seller1', tenantId: 'tnt_gamesboy_main', name: 'Carlos_Streams', email: 'carlos@vendedor.com', role: 'seller', avatar: '/assets/branding/icon.png' },
+    { id: 'usr_client1', tenantId: 'tnt_gamesboy_main', name: 'Lucas_Py', email: 'lucas@cliente.com', role: 'client', avatar: '/assets/branding/icon.png' },
+    { id: 'usr_client2', tenantId: 'tnt_gamesboy_main', name: 'María López', email: 'maria@cliente.com', role: 'client', avatar: '/assets/branding/icon.png' }
   ],
   wallets: {
     'usr_admin': { balanceUsd: 1250.00, pendingEscrowUsd: 0 },
@@ -773,9 +848,12 @@ export function getDb() {
   return db;
 }
 
+export const saveDb = saveStorage;
+
 export default {
   initDatabase,
   getDb,
-  saveStorage
+  saveStorage,
+  saveDb
 };
 

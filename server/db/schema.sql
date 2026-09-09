@@ -8,15 +8,69 @@
 CREATE SCHEMA IF NOT EXISTS gamesboy;
 SET search_path TO gamesboy, public;
 
+-- 0. TABLA DE PLANES SAAS
+CREATE TABLE IF NOT EXISTS gamesboy.gb_tenant_plans (
+    id VARCHAR(32) PRIMARY KEY,
+    name VARCHAR(64) NOT NULL,
+    price_monthly_usd NUMERIC(10, 2) NOT NULL DEFAULT 0.00,
+    max_slots_allowed INT DEFAULT 100,
+    max_products_allowed INT DEFAULT 50,
+    custom_domain_enabled BOOLEAN DEFAULT false,
+    platform_fee_percent NUMERIC(5, 2) DEFAULT 5.00,
+    features JSONB DEFAULT '[]'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 0.1 TABLA MAESTRA DE INQUILINOS / TIENDAS (TENANTS)
+CREATE TABLE IF NOT EXISTS gamesboy.gb_tenants (
+    id VARCHAR(64) PRIMARY KEY,
+    slug VARCHAR(64) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    custom_domain VARCHAR(255) UNIQUE,
+    owner_user_id VARCHAR(64),
+    plan_id VARCHAR(32) REFERENCES gamesboy.gb_tenant_plans(id) DEFAULT 'plan_enterprise',
+    status VARCHAR(32) NOT NULL DEFAULT 'active', -- 'active', 'trial', 'suspended'
+    branding JSONB NOT NULL DEFAULT '{
+        "brandName": "GamesBoy",
+        "logoUrl": "/assets/branding/logo.png",
+        "iconUrl": "/assets/branding/icon.png",
+        "primaryColor": "#0284c7",
+        "accentColor": "#00c2ff",
+        "currency": "PYG",
+        "exchangeRate": 7500,
+        "whatsappSupport": "+595981000000"
+    }'::jsonb,
+    settings JSONB NOT NULL DEFAULT '{
+        "commissionPercent": 15.00,
+        "paraguayBankDetails": {
+            "bank": "Banco Familiar / Itaú Paraguay",
+            "accountHolder": "GamesBoy Paraguay S.A.",
+            "rucOrCi": "80091234-5",
+            "accountNumber": "01-445566-7",
+            "aliasSipap": "gamesboy.py"
+        },
+        "binanceDetails": {
+            "payId": "849201934",
+            "network": "USDT (Binance Pay / BEP-20 / TRC-20)",
+            "walletAddress": "0x71C9414B3b27bA134a6C3f07a757657A82e4b92F",
+            "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F"
+        }
+    }'::jsonb,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 -- 1. TABLA DE USUARIOS DE GAMESBOY (100% aislada de auth.users)
 CREATE TABLE IF NOT EXISTS gamesboy.gb_users (
     id VARCHAR(64) PRIMARY KEY,
+    tenant_id VARCHAR(64) DEFAULT 'tnt_gamesboy_main' REFERENCES gamesboy.gb_tenants(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    role VARCHAR(32) NOT NULL DEFAULT 'client', -- 'admin', 'seller', 'client'
+    email VARCHAR(255) NOT NULL,
+    role VARCHAR(32) NOT NULL DEFAULT 'client', -- 'admin', 'seller', 'client', 'superadmin'
     avatar VARCHAR(255) DEFAULT '🎮',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_tenant_user_email UNIQUE (tenant_id, email)
 );
 
 -- 2. BILLETERAS DE USUARIO (Saldo USD + Fondos en Escrow)
@@ -160,7 +214,18 @@ CREATE TABLE IF NOT EXISTS gamesboy.gb_platform_storage (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Migraciones dinámicas para tablas existentes
+-- Migraciones dinámicas para tablas existentes y soporte Multi-Tenant
+ALTER TABLE gamesboy.gb_users ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(64) DEFAULT 'tnt_gamesboy_main' REFERENCES gamesboy.gb_tenants(id) ON DELETE CASCADE;
+ALTER TABLE gamesboy.gb_wallets ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(64) DEFAULT 'tnt_gamesboy_main' REFERENCES gamesboy.gb_tenants(id) ON DELETE CASCADE;
+ALTER TABLE gamesboy.gb_wallet_transactions ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(64) DEFAULT 'tnt_gamesboy_main' REFERENCES gamesboy.gb_tenants(id) ON DELETE CASCADE;
+ALTER TABLE gamesboy.gb_subscriptions ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(64) DEFAULT 'tnt_gamesboy_main' REFERENCES gamesboy.gb_tenants(id) ON DELETE CASCADE;
+ALTER TABLE gamesboy.gb_user_slots ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(64) DEFAULT 'tnt_gamesboy_main' REFERENCES gamesboy.gb_tenants(id) ON DELETE CASCADE;
+ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(64) DEFAULT 'tnt_gamesboy_main' REFERENCES gamesboy.gb_tenants(id) ON DELETE CASCADE;
+ALTER TABLE gamesboy.gb_user_store_orders ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(64) DEFAULT 'tnt_gamesboy_main' REFERENCES gamesboy.gb_tenants(id) ON DELETE CASCADE;
+ALTER TABLE gamesboy.gb_payout_requests ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(64) DEFAULT 'tnt_gamesboy_main' REFERENCES gamesboy.gb_tenants(id) ON DELETE CASCADE;
+ALTER TABLE gamesboy.gb_hero_banners ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(64) DEFAULT 'tnt_gamesboy_main' REFERENCES gamesboy.gb_tenants(id) ON DELETE CASCADE;
+ALTER TABLE gamesboy.gb_giftcard_brands ADD COLUMN IF NOT EXISTS tenant_id VARCHAR(64) DEFAULT 'tnt_gamesboy_main' REFERENCES gamesboy.gb_tenants(id) ON DELETE CASCADE;
+
 ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS brand_theme VARCHAR(64) DEFAULT 'psn';
 ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS badge VARCHAR(64);
 ALTER TABLE gamesboy.gb_store_products ADD COLUMN IF NOT EXISTS icon VARCHAR(32);
@@ -181,26 +246,121 @@ ALTER TABLE gamesboy.gb_subscriptions ADD COLUMN IF NOT EXISTS group_chat_messag
 ALTER TABLE gamesboy.gb_hero_banners ADD COLUMN IF NOT EXISTS sort_order INT DEFAULT 0;
 ALTER TABLE gamesboy.gb_hero_banners ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
 
+-- 0. Insertar Tenants Semilla
+INSERT INTO gamesboy.gb_tenants (id, slug, name, custom_domain, plan_id, status, branding, settings)
+VALUES
+    (
+        'tnt_gamesboy_main',
+        'gamesboy',
+        'GamesBoy Oficial',
+        'gamesboy.net',
+        'plan_enterprise',
+        'active',
+        '{
+            "brandName": "GamesBoy",
+            "logoUrl": "/assets/branding/logo.png",
+            "iconUrl": "/assets/branding/icon.png",
+            "primaryColor": "#0284c7",
+            "accentColor": "#00c2ff",
+            "currency": "PYG",
+            "exchangeRate": 7500,
+            "whatsappSupport": "+595981123456"
+        }'::jsonb,
+        '{
+            "commissionPercent": 15.00,
+            "paraguayBankDetails": {
+                "bank": "Banco Familiar / Itaú Paraguay",
+                "accountHolder": "GamesBoy Paraguay S.A.",
+                "rucOrCi": "80091234-5",
+                "accountNumber": "01-445566-7",
+                "aliasSipap": "gamesboy.py"
+            },
+            "binanceDetails": {
+                "payId": "849201934",
+                "network": "USDT (Binance Pay / BEP-20 / TRC-20)",
+                "walletAddress": "0x71C9414B3b27bA134a6C3f07a757657A82e4b92F",
+                "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F"
+            }
+        }'::jsonb
+    ),
+    (
+        'tnt_streamflow_demo',
+        'streamflow',
+        'StreamFlow Paraguay',
+        'streamflow.gamesboy.net',
+        'plan_pro',
+        'active',
+        '{
+            "brandName": "StreamFlow",
+            "logoUrl": "/assets/branding/icon.png",
+            "iconUrl": "/assets/branding/icon.png",
+            "primaryColor": "#10b981",
+            "accentColor": "#34d399",
+            "currency": "PYG",
+            "exchangeRate": 7500,
+            "whatsappSupport": "+595982000111"
+        }'::jsonb,
+        '{
+            "commissionPercent": 12.00,
+            "paraguayBankDetails": {
+                "bank": "Banco Continental",
+                "accountHolder": "StreamFlow Digital",
+                "rucOrCi": "4455667-8",
+                "accountNumber": "15-998877-2",
+                "aliasSipap": "streamflow.py"
+            },
+            "binanceDetails": {
+                "payId": "992144551",
+                "network": "USDT (BEP-20)",
+                "walletAddress": "0x33B10A98F722cE434a6C3f07a757657A82e4b88B",
+                "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x33B10A98F722cE434a6C3f07a757657A82e4b88B"
+            }
+        }'::jsonb
+    )
+ON CONFLICT (id) DO NOTHING;
+
+-- Backfill tenant_id en datos existentes
+UPDATE gamesboy.gb_users SET tenant_id = 'tnt_gamesboy_main' WHERE tenant_id IS NULL;
+UPDATE gamesboy.gb_wallets SET tenant_id = 'tnt_gamesboy_main' WHERE tenant_id IS NULL;
+UPDATE gamesboy.gb_wallet_transactions SET tenant_id = 'tnt_gamesboy_main' WHERE tenant_id IS NULL;
+UPDATE gamesboy.gb_subscriptions SET tenant_id = 'tnt_gamesboy_main' WHERE tenant_id IS NULL;
+UPDATE gamesboy.gb_user_slots SET tenant_id = 'tnt_gamesboy_main' WHERE tenant_id IS NULL;
+UPDATE gamesboy.gb_store_products SET tenant_id = 'tnt_gamesboy_main' WHERE tenant_id IS NULL;
+UPDATE gamesboy.gb_user_store_orders SET tenant_id = 'tnt_gamesboy_main' WHERE tenant_id IS NULL;
+UPDATE gamesboy.gb_payout_requests SET tenant_id = 'tnt_gamesboy_main' WHERE tenant_id IS NULL;
+UPDATE gamesboy.gb_hero_banners SET tenant_id = 'tnt_gamesboy_main' WHERE tenant_id IS NULL;
+UPDATE gamesboy.gb_giftcard_brands SET tenant_id = 'tnt_gamesboy_main' WHERE tenant_id IS NULL;
+
+-- Índices de alto rendimiento
+CREATE INDEX IF NOT EXISTS idx_users_tenant ON gamesboy.gb_users(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_subs_tenant ON gamesboy.gb_subscriptions(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_slots_tenant ON gamesboy.gb_user_slots(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_products_tenant ON gamesboy.gb_store_products(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_orders_tenant ON gamesboy.gb_user_store_orders(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_tx_tenant ON gamesboy.gb_wallet_transactions(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_banners_tenant ON gamesboy.gb_hero_banners(tenant_id);
+CREATE INDEX IF NOT EXISTS idx_tenants_slug ON gamesboy.gb_tenants(slug);
+CREATE INDEX IF NOT EXISTS idx_tenants_domain ON gamesboy.gb_tenants(custom_domain);
 
 -- ============================================================================
 -- SEED DATA OFICIAL: USUARIOS, SALDOS REALES Y CONFIGURACIÓN INICIAL
 -- ============================================================================
 
 -- 1. Insertar Usuarios
-INSERT INTO gamesboy.gb_users (id, name, email, role, avatar)
+INSERT INTO gamesboy.gb_users (id, tenant_id, name, email, role, avatar)
 VALUES
-    ('usr_admin', 'Admin GamesBoy', 'admin@gamesboy.net', 'admin', '/assets/branding/icon.png'),
-    ('usr_seller1', 'Carlos Streams', 'carlos@vendedor.com', 'seller', '/assets/branding/icon.png'),
-    ('usr_client1', 'Lucas González', 'lucas@cliente.com', 'client', '/assets/branding/icon.png'),
-    ('usr_client2', 'María López', 'maria@cliente.com', 'client', '/assets/branding/icon.png')
-ON CONFLICT (email) DO UPDATE SET
+    ('usr_admin', 'tnt_gamesboy_main', 'Admin GamesBoy', 'admin@gamesboy.net', 'superadmin', '/assets/branding/icon.png'),
+    ('usr_seller1', 'tnt_gamesboy_main', 'Carlos Streams', 'carlos@vendedor.com', 'seller', '/assets/branding/icon.png'),
+    ('usr_client1', 'tnt_gamesboy_main', 'Lucas González', 'lucas@cliente.com', 'client', '/assets/branding/icon.png'),
+    ('usr_client2', 'tnt_gamesboy_main', 'María López', 'maria@cliente.com', 'client', '/assets/branding/icon.png')
+ON CONFLICT (id) DO UPDATE SET
     name = EXCLUDED.name,
     role = EXCLUDED.role,
     avatar = EXCLUDED.avatar;
 
 -- 2. Insertar Billeteras con Saldos Reales en USD (Convertibles a Guaraníes)
-INSERT INTO gamesboy.gb_wallets (user_id, balance_usd, pending_escrow_usd)
-SELECT u.id, v.bal, v.esc
+INSERT INTO gamesboy.gb_wallets (user_id, tenant_id, balance_usd, pending_escrow_usd)
+SELECT u.id, 'tnt_gamesboy_main', v.bal, v.esc
 FROM (VALUES 
     ('admin@gamesboy.net', 1250.00, 0.00),     -- 9.375.000 Gs.
     ('carlos@vendedor.com', 85.50, 22.00),    -- 641.250 Gs. (+ 165.000 Gs. en Escrow)
@@ -228,12 +388,12 @@ ON CONFLICT (id) DO UPDATE SET
     binance_details = EXCLUDED.binance_details;
 
 -- 4. Insertar Portadas Hero Acordeón Estilo ENEBA
-INSERT INTO gamesboy.gb_hero_banners (id, title, tagline, badge, img_horizontal, img_vertical, cta_text, cta_url, sort_order, is_active)
+INSERT INTO gamesboy.gb_hero_banners (id, tenant_id, title, tagline, badge, img_horizontal, img_vertical, cta_text, cta_url, sort_order, is_active)
 VALUES
-    ('banner_fc25', 'EA SPORTS FC 25', 'CLUBES, ULTIMATE TEAM & MODO CARRERA', 'PS5 • XBOX • PC', 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1600&q=80', 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80', 'Ver Ediciones', '#section-games', 0, true),
-    ('banner_spiderman2', 'Marvel Spider-Man 2', 'BE GREATER. TOGETHER.', 'PS5 EXCLUSIVE', 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1600&q=80', 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80', 'Comprar ahora', '#section-games', 1, true),
-    ('banner_cod_bo6', 'Call of Duty: Black Ops 6', 'LA VERDAD MIENTE. VUELVE EL REY DEL SHOOTER', 'CROSS-GEN BUNDLE', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80', 'Comprar Código', '#section-games', 2, true),
-    ('banner_gta6', 'Grand Theft Auto VI', 'BIENVENIDO A LEONIDA & VICE CITY', 'NEXT-GEN PRE-ORDER', 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1600&q=80', 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80', 'Reservar Ahora', '#section-games', 3, true)
+    ('banner_fc25', 'tnt_gamesboy_main', 'EA SPORTS FC 25', 'CLUBES, ULTIMATE TEAM & MODO CARRERA', 'PS5 • XBOX • PC', 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1600&q=80', 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80', 'Ver Ediciones', '#section-games', 0, true),
+    ('banner_spiderman2', 'tnt_gamesboy_main', 'Marvel Spider-Man 2', 'BE GREATER. TOGETHER.', 'PS5 EXCLUSIVE', 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1600&q=80', 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80', 'Comprar ahora', '#section-games', 1, true),
+    ('banner_cod_bo6', 'tnt_gamesboy_main', 'Call of Duty: Black Ops 6', 'LA VERDAD MIENTE. VUELVE EL REY DEL SHOOTER', 'CROSS-GEN BUNDLE', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80', 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80', 'Comprar Código', '#section-games', 2, true),
+    ('banner_gta6', 'tnt_gamesboy_main', 'Grand Theft Auto VI', 'BIENVENIDO A LEONIDA & VICE CITY', 'NEXT-GEN PRE-ORDER', 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1600&q=80', 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80', 'Reservar Ahora', '#section-games', 3, true)
 ON CONFLICT (id) DO UPDATE SET
     title = EXCLUDED.title,
     img_horizontal = EXCLUDED.img_horizontal,
@@ -244,8 +404,8 @@ ON CONFLICT (id) DO UPDATE SET
     is_active = EXCLUDED.is_active;
 
 -- 5. Insertar Cuentas de Streaming Oficiales y de Vendedor
-INSERT INTO gamesboy.gb_subscriptions (id, seller_id, seller_name, is_official, service_name, category, plan_name, total_slots, available_slots, price_per_slot_usd, credentials_encrypted, pins_encrypted, instructions, status)
-SELECT v.id, u.id, v.seller_name, v.is_official, v.service_name, v.category, v.plan_name, v.total_slots, v.available_slots, v.price_per_slot_usd, v.credentials_encrypted, v.pins_encrypted, v.instructions, v.status
+INSERT INTO gamesboy.gb_subscriptions (id, tenant_id, seller_id, seller_name, is_official, service_name, category, plan_name, total_slots, available_slots, price_per_slot_usd, credentials_encrypted, pins_encrypted, instructions, status)
+SELECT v.id, 'tnt_gamesboy_main', u.id, v.seller_name, v.is_official, v.service_name, v.category, v.plan_name, v.total_slots, v.available_slots, v.price_per_slot_usd, v.credentials_encrypted, v.pins_encrypted, v.instructions, v.status
 FROM (VALUES
     ('sub_netflix_official', 'admin@gamesboy.net', 'GamesBoy Oficial', true, 'Netflix Premium 4K', 'streaming', 'Ultra HD 4 Pantallas', 4, 3, 4.99, 'netflix.vip@gamesboy.net:::StreamPass2026!', '{"1": "1244", "2": "5821", "3": "9032", "4": "7110"}', 'Ingresa con el correo y contraseña provistos. Usa exclusivamente tu Perfil y PIN asignado.', 'active'),
     ('sub_spotify_official', 'admin@gamesboy.net', 'GamesBoy Oficial', true, 'Spotify Premium Familiar', 'streaming', 'Plan Familiar 6 Cuentas', 5, 4, 3.99, 'https://spotify.com/family/join/invite/xyz987token:::Invitar a tu cuenta propia', '{}', 'Recibirás un enlace de invitación oficial para activar Spotify Premium en tu propia cuenta personal.', 'active'),
@@ -259,16 +419,17 @@ ON CONFLICT (id) DO UPDATE SET
     price_per_slot_usd = EXCLUDED.price_per_slot_usd;
 
 -- 6. Insertar Productos de Tienda (Juegos Digitales y Gift Cards)
-INSERT INTO gamesboy.gb_store_products (id, title, category, platform, price_usd, badge, icon, brand_theme, description, stock_count, codes)
+INSERT INTO gamesboy.gb_store_products (id, tenant_id, title, category, platform, price_usd, badge, icon, brand_theme, description, stock_count, codes)
 VALUES
-    ('prod_game_fc25', 'EA SPORTS FC 25', 'game_key', 'PlayStation 5', 59.99, 'PS5 / PS4', '⚽', 'psn', 'Clave digital original para PlayStation Store. Compatible con PS4 y PS5.', 15, '["FC25-PS5-9988-7744-1122", "FC25-PS5-3344-5566-7788"]'::jsonb),
-    ('prod_game_codbo6', 'Call of Duty: Black Ops 6', 'game_key', 'PC / Steam', 69.99, 'STEAM / PC', '🎯', 'steam', 'Código digital para canjear en Steam o Battle.net.', 8, '["BO6-STM-4455-6677-8899"]'::jsonb),
-    ('prod_game_rdr2', 'Red Dead Redemption 2', 'game_key', 'PC / Steam', 39.99, 'STEAM', '🤠', 'steam', 'Obra maestra de Rockstar Games para PC Steam.', 12, '["RDR2-STM-1122-3344-5566"]'::jsonb),
-    ('prod_gc_psn_10', 'PlayStation Network $10 USD', 'gift_card', 'PlayStation', 10.00, 'USA / LATAM', '🎮', 'psn', 'Tarjeta de regalo digital de $10 USD para PlayStation Store USA.', 25, '["PSN-10-AABB-CCDD-EEFF", "PSN-10-1122-3344-5566"]'::jsonb),
-    ('prod_gc_psn_20', 'PlayStation Network $20 USD', 'gift_card', 'PlayStation', 20.00, 'USA / LATAM', '🎮', 'psn', 'Tarjeta de regalo digital de $20 USD para PlayStation Store USA.', 18, '["PSN-20-9988-7766-5544"]'::jsonb),
-    ('prod_gc_steam_10', 'Steam Wallet $10 USD', 'gift_card', 'Steam', 10.00, 'GLOBAL', '🕹️', 'steam', 'Código de recarga de $10 USD para la billetera de Steam.', 30, '["STM-10-ABCD-EFGH-IJKL"]'::jsonb),
-    ('prod_gc_xbox_15', 'Xbox Game Pass Ultimate 1 Mes', 'gift_card', 'Xbox', 14.99, 'XBOX / PC', '💚', 'xbox', 'Suscripción de 1 mes a Xbox Game Pass Ultimate con más de 400 juegos.', 20, '["XGP-1M-5566-7788-9900"]'::jsonb)
+    ('prod_game_fc25', 'tnt_gamesboy_main', 'EA SPORTS FC 25', 'game_key', 'PlayStation 5', 59.99, 'PS5 / PS4', '⚽', 'psn', 'Clave digital original para PlayStation Store. Compatible con PS4 y PS5.', 15, '["FC25-PS5-9988-7744-1122", "FC25-PS5-3344-5566-7788"]'::jsonb),
+    ('prod_game_codbo6', 'tnt_gamesboy_main', 'Call of Duty: Black Ops 6', 'game_key', 'PC / Steam', 69.99, 'STEAM / PC', '🎯', 'steam', 'Código digital para canjear en Steam o Battle.net.', 8, '["BO6-STM-4455-6677-8899"]'::jsonb),
+    ('prod_game_rdr2', 'tnt_gamesboy_main', 'Red Dead Redemption 2', 'game_key', 'PC / Steam', 39.99, 'STEAM', '🤠', 'steam', 'Obra maestra de Rockstar Games para PC Steam.', 12, '["RDR2-STM-1122-3344-5566"]'::jsonb),
+    ('prod_gc_psn_10', 'tnt_gamesboy_main', 'PlayStation Network $10 USD', 'gift_card', 'PlayStation', 10.00, 'USA / LATAM', '🎮', 'psn', 'Tarjeta de regalo digital de $10 USD para PlayStation Store USA.', 25, '["PSN-10-AABB-CCDD-EEFF", "PSN-10-1122-3344-5566"]'::jsonb),
+    ('prod_gc_psn_20', 'tnt_gamesboy_main', 'PlayStation Network $20 USD', 'gift_card', 'PlayStation', 20.00, 'USA / LATAM', '🎮', 'psn', 'Tarjeta de regalo digital de $20 USD para PlayStation Store USA.', 18, '["PSN-20-9988-7766-5544"]'::jsonb),
+    ('prod_gc_steam_10', 'tnt_gamesboy_main', 'Steam Wallet $10 USD', 'gift_card', 'Steam', 10.00, 'GLOBAL', '🕹️', 'steam', 'Código de recarga de $10 USD para la billetera de Steam.', 30, '["STM-10-ABCD-EFGH-IJKL"]'::jsonb),
+    ('prod_gc_xbox_15', 'tnt_gamesboy_main', 'Xbox Game Pass Ultimate 1 Mes', 'gift_card', 'Xbox', 14.99, 'XBOX / PC', '💚', 'xbox', 'Suscripción de 1 mes a Xbox Game Pass Ultimate con más de 400 juegos.', 20, '["XGP-1M-5566-7788-9900"]'::jsonb)
 ON CONFLICT (id) DO UPDATE SET
     title = EXCLUDED.title,
     price_usd = EXCLUDED.price_usd,
     stock_count = EXCLUDED.stock_count;
+

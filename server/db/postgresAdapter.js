@@ -91,7 +91,7 @@ export async function loadFromPostgres() {
     // 2. If no snapshot yet, load from relational tables
     const state = {};
 
-    const [usersRes, walletsRes, txsRes, subsRes, slotsRes, prodsRes, ordersRes, payoutsRes, settingsRes, bannersRes, brandsRes] = await Promise.allSettled([
+    const [usersRes, walletsRes, txsRes, subsRes, slotsRes, prodsRes, ordersRes, payoutsRes, settingsRes, bannersRes, brandsRes, tenantsRes, plansRes] = await Promise.allSettled([
       pool.query(`SELECT * FROM gamesboy.gb_users`),
       pool.query(`SELECT * FROM gamesboy.gb_wallets`),
       pool.query(`SELECT * FROM gamesboy.gb_wallet_transactions ORDER BY created_at DESC`),
@@ -102,11 +102,42 @@ export async function loadFromPostgres() {
       pool.query(`SELECT * FROM gamesboy.gb_payout_requests ORDER BY created_at DESC`),
       pool.query(`SELECT * FROM gamesboy.gb_platform_settings LIMIT 1`),
       pool.query(`SELECT * FROM gamesboy.gb_hero_banners ORDER BY sort_order ASC`),
-      pool.query(`SELECT * FROM gamesboy.gb_giftcard_brands`)
+      pool.query(`SELECT * FROM gamesboy.gb_giftcard_brands`),
+      pool.query(`SELECT * FROM gamesboy.gb_tenants`),
+      pool.query(`SELECT * FROM gamesboy.gb_tenant_plans`)
     ]);
 
+    if (tenantsRes.status === 'fulfilled' && tenantsRes.value.rows.length > 0) {
+      state.tenants = tenantsRes.value.rows.map(r => ({
+        id: r.id,
+        slug: r.slug,
+        name: r.name,
+        customDomain: r.custom_domain,
+        ownerUserId: r.owner_user_id,
+        planId: r.plan_id,
+        status: r.status,
+        branding: r.branding || {},
+        settings: r.settings || {},
+        createdAt: r.created_at,
+        updatedAt: r.updated_at
+      }));
+    }
+
+    if (plansRes.status === 'fulfilled' && plansRes.value.rows.length > 0) {
+      state.tenant_plans = plansRes.value.rows.map(r => ({
+        id: r.id,
+        name: r.name,
+        priceMonthlyUsd: parseFloat(r.price_monthly_usd || 0),
+        maxSlotsAllowed: r.max_slots_allowed,
+        maxProductsAllowed: r.max_products_allowed,
+        customDomainEnabled: r.custom_domain_enabled,
+        platformFeePercent: parseFloat(r.platform_fee_percent || 0),
+        features: Array.isArray(r.features) ? r.features : []
+      }));
+    }
+
     if (usersRes.status === 'fulfilled' && usersRes.value.rows.length > 0) {
-      state.users = usersRes.value.rows.map(r => ({ id: r.id, name: r.name, email: r.email, role: r.role, avatar: r.avatar }));
+      state.users = usersRes.value.rows.map(r => ({ id: r.id, tenantId: r.tenant_id || 'tnt_gamesboy_main', name: r.name, email: r.email, role: r.role, avatar: r.avatar }));
     }
 
     if (walletsRes.status === 'fulfilled' && walletsRes.value.rows.length > 0) {
