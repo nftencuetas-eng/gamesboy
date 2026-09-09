@@ -859,7 +859,7 @@ function initDepositModal() {
       if (labelRef) labelRef.textContent = 'N° de Comprobante / Referencia SIPAP:';
       if (depositAmountInput) {
         depositAmountInput.placeholder = 'ej: 100000';
-        depositAmountInput.step = '1000';
+        depositAmountInput.step = 'any';
       }
       updateDepositPreview();
     };
@@ -874,7 +874,7 @@ function initDepositModal() {
       if (labelRef) labelRef.textContent = 'N° de Referencia / Hash / Binance Pay ID:';
       if (depositAmountInput) {
         depositAmountInput.placeholder = 'ej: 15.00';
-        depositAmountInput.step = '0.01';
+        depositAmountInput.step = 'any';
       }
       updateDepositPreview();
     };
