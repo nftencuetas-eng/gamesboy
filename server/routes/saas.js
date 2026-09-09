@@ -68,7 +68,7 @@ router.get('/plans', (req, res) => {
       customDomainEnabled: false,
       p2pMarketplaceEnabled: false,
       platformFeePercent: 5.00,
-      features: ['Tienda Digital Directa (Venta Propia)', 'Gestión Streaming con PIN', 'Subdominio mitienda.gamesboy.net', 'Pasarela SIPAP y Binance Pay']
+      features: ['Tienda Digital Directa (Venta Propia)', 'Gestión Streaming con PIN', 'Subdominio mitienda.gamsplit.com', 'Pasarela SIPAP y Binance Pay']
     },
     {
       id: 'plan_pro',
@@ -116,7 +116,7 @@ router.get('/check-slug/:slug', (req, res) => {
   res.json({
     available: !exists,
     slug: cleanSlug,
-    subdomain: `${cleanSlug}.gamesboy.net`
+    subdomain: `${cleanSlug}.gamsplit.com`
   });
 });
 
@@ -172,7 +172,7 @@ router.post('/onboarding', (req, res) => {
     }
 
     if (db.tenants.some(t => t.slug === cleanSlug)) {
-      return res.status(400).json({ error: `El subdominio "${cleanSlug}.gamesboy.net" ya está en uso. Por favor elige otro.` });
+      return res.status(400).json({ error: `El subdominio "${cleanSlug}.gamsplit.com" ya está en uso. Por favor elige otro.` });
     }
 
     const tenantId = `tnt_${cleanSlug}_${Date.now()}`;
@@ -180,7 +180,7 @@ router.post('/onboarding', (req, res) => {
       id: tenantId,
       slug: cleanSlug,
       name: name.trim(),
-      customDomain: customDomain ? customDomain.toLowerCase().trim() : `${cleanSlug}.gamesboy.net`,
+      customDomain: customDomain ? customDomain.toLowerCase().trim() : `${cleanSlug}.gamsplit.com`,
       ownerUserId: null,
       planId: planId || 'plan_pro',
       status: 'active',
@@ -195,14 +195,16 @@ router.post('/onboarding', (req, res) => {
         whatsappSupport: branding?.whatsappSupport || '+595981000000'
       },
       settings: {
-        commissionPercent: parseFloat(settings?.commissionPercent) || 15.00,
+        commissionPercent: parseFloat(settings?.commissionPercent) || (planId === 'plan_enterprise' ? 1.5 : (planId === 'plan_pro' ? 3.0 : 5.0)),
+        allowUserReselling: settings?.allowUserReselling !== undefined ? Boolean(settings.allowUserReselling) : (planId !== 'plan_starter'),
         paraguayBankDetails: settings?.paraguayBankDetails || DEFAULT_TENANT.settings.paraguayBankDetails,
         binanceDetails: settings?.binanceDetails || DEFAULT_TENANT.settings.binanceDetails,
         enabledModules: enabledModules || {
           streaming: true,
           games: true,
           giftcards: true,
-          smm: false
+          smm: false,
+          p2pSharing: (planId !== 'plan_starter')
         }
       },
       createdAt: new Date().toISOString(),

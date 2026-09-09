@@ -2,305 +2,345 @@
   "tenants": [
     {
       "id": "tnt_gamesboy_main",
-      "slug": "gamesboy",
       "name": "GamesBoy Store Oficial",
-      "customDomain": "gamesboy.gamesboy.net",
+      "slug": "gamesboy",
       "planId": "plan_enterprise",
       "status": "active",
       "branding": {
-        "brandName": "GamesBoy",
-        "logoUrl": "/assets/branding/logo.png",
         "iconUrl": "/assets/branding/icon.png",
-        "primaryColor": "#0284c7",
-        "accentColor": "#00c2ff",
+        "logoUrl": "/assets/branding/logo.png",
         "currency": "PYG",
+        "brandName": "GamesBoy",
+        "accentColor": "#00c2ff",
         "exchangeRate": 7500,
+        "primaryColor": "#0284c7",
         "whatsappSupport": "+595981123456"
       },
       "settings": {
-        "commissionPercent": 15,
-        "allowUserReselling": true,
-        "enabledModules": {
-          "streaming": true,
-          "games": true,
-          "giftcards": true,
-          "smm": true,
-          "p2pSharing": true
-        },
-        "paraguayBankDetails": {
-          "bank": "Banco Familiar / Itaú Paraguay",
-          "accountHolder": "GamesBoy Paraguay S.A.",
-          "rucOrCi": "80091234-5",
-          "accountNumber": "01-445566-7",
-          "aliasSipap": "gamesboy.py"
-        },
         "binanceDetails": {
           "payId": "849201934",
+          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F",
           "network": "USDT (Binance Pay / BEP-20 / TRC-20)",
-          "walletAddress": "0x71C9414B3b27bA134a6C3f07a757657A82e4b92F",
-          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F"
+          "walletAddress": "0x71C9414B3b27bA134a6C3f07a757657A82e4b92F"
+        },
+        "enabledModules": {
+          "smm": true,
+          "games": true,
+          "giftcards": true,
+          "streaming": true,
+          "p2pSharing": true
+        },
+        "commissionPercent": 15,
+        "allowUserReselling": true,
+        "paraguayBankDetails": {
+          "bank": "Banco Familiar / Itaú Paraguay",
+          "rucOrCi": "80091234-5",
+          "aliasSipap": "gamesboy.py",
+          "accountHolder": "GamesBoy Paraguay S.A.",
+          "accountNumber": "01-445566-7"
         }
-      }
+      },
+      "customDomain": "gamesboy.gamesboy.net"
     },
     {
       "id": "tnt_streamflow_demo",
-      "slug": "streamflow",
       "name": "StreamFlow Paraguay",
-      "customDomain": "streamflow.gamesboy.net",
+      "slug": "streamflow",
       "planId": "plan_pro",
       "status": "active",
       "branding": {
-        "brandName": "StreamFlow",
-        "logoUrl": "/assets/branding/icon.png",
         "iconUrl": "/assets/branding/icon.png",
-        "primaryColor": "#10b981",
-        "accentColor": "#34d399",
+        "logoUrl": "/assets/branding/icon.png",
         "currency": "PYG",
+        "brandName": "StreamFlow",
+        "accentColor": "#34d399",
         "exchangeRate": 7500,
+        "primaryColor": "#10b981",
         "whatsappSupport": "+595982000111"
       },
       "settings": {
-        "commissionPercent": 12,
-        "allowUserReselling": true,
-        "enabledModules": {
-          "streaming": true,
-          "games": false,
-          "giftcards": false,
-          "smm": false,
-          "p2pSharing": true
-        },
-        "paraguayBankDetails": {
-          "bank": "Banco Continental",
-          "accountHolder": "StreamFlow Digital",
-          "rucOrCi": "4455667-8",
-          "accountNumber": "15-998877-2",
-          "aliasSipap": "streamflow.py"
-        },
         "binanceDetails": {
           "payId": "992144551",
+          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x33B10A98F722cE434a6C3f07a757657A82e4b88B",
           "network": "USDT (BEP-20)",
-          "walletAddress": "0x33B10A98F722cE434a6C3f07a757657A82e4b88B",
-          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x33B10A98F722cE434a6C3f07a757657A82e4b88B"
+          "walletAddress": "0x33B10A98F722cE434a6C3f07a757657A82e4b88B"
+        },
+        "enabledModules": {
+          "smm": false,
+          "games": false,
+          "giftcards": false,
+          "streaming": true,
+          "p2pSharing": true
+        },
+        "commissionPercent": 12,
+        "allowUserReselling": true,
+        "paraguayBankDetails": {
+          "bank": "Banco Continental",
+          "rucOrCi": "4455667-8",
+          "aliasSipap": "streamflow.py",
+          "accountHolder": "StreamFlow Digital",
+          "accountNumber": "15-998877-2"
         }
-      }
+      },
+      "customDomain": "streamflow.gamesboy.net"
     },
     {
       "id": "tnt_playzone_demo",
-      "slug": "playzone",
       "name": "PlayZone Digital Store",
-      "customDomain": "playzone.gamesboy.net",
+      "slug": "playzone",
       "planId": "plan_starter",
       "status": "active",
       "branding": {
-        "brandName": "PlayZone",
-        "logoUrl": "/assets/branding/icon.png",
         "iconUrl": "/assets/branding/icon.png",
-        "primaryColor": "#f59e0b",
-        "accentColor": "#fbbf24",
+        "logoUrl": "/assets/branding/icon.png",
         "currency": "PYG",
+        "brandName": "PlayZone",
+        "accentColor": "#fbbf24",
         "exchangeRate": 7500,
+        "primaryColor": "#f59e0b",
         "whatsappSupport": "+595983445566"
       },
       "settings": {
-        "commissionPercent": 10,
-        "allowUserReselling": false,
-        "enabledModules": {
-          "streaming": false,
-          "games": true,
-          "giftcards": true,
-          "smm": false,
-          "p2pSharing": false
-        },
-        "paraguayBankDetails": {
-          "bank": "Banco Itaú Paraguay",
-          "accountHolder": "PlayZone Digital",
-          "rucOrCi": "5566778-1",
-          "accountNumber": "02-112233-4",
-          "aliasSipap": "playzone.py"
-        },
         "binanceDetails": {
           "payId": "778899112",
+          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x55A10A98F722cE434a6C3f07a757657A82e4b11A",
           "network": "USDT (BEP-20)",
-          "walletAddress": "0x55A10A98F722cE434a6C3f07a757657A82e4b11A",
-          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x55A10A98F722cE434a6C3f07a757657A82e4b11A"
+          "walletAddress": "0x55A10A98F722cE434a6C3f07a757657A82e4b11A"
+        },
+        "enabledModules": {
+          "smm": false,
+          "games": true,
+          "giftcards": true,
+          "streaming": false,
+          "p2pSharing": false
+        },
+        "commissionPercent": 10,
+        "allowUserReselling": false,
+        "paraguayBankDetails": {
+          "bank": "Banco Itaú Paraguay",
+          "rucOrCi": "5566778-1",
+          "aliasSipap": "playzone.py",
+          "accountHolder": "PlayZone Digital",
+          "accountNumber": "02-112233-4"
         }
-      }
+      },
+      "customDomain": "playzone.gamesboy.net"
     },
     {
       "id": "tnt_cardshub_demo",
-      "slug": "cardshub",
       "name": "CardsHub LatAm",
-      "customDomain": "cardshub.gamesboy.net",
+      "slug": "cardshub",
       "planId": "plan_starter",
       "status": "active",
       "branding": {
-        "brandName": "CardsHub",
-        "logoUrl": "/assets/branding/icon.png",
         "iconUrl": "/assets/branding/icon.png",
-        "primaryColor": "#ec4899",
-        "accentColor": "#f472b6",
+        "logoUrl": "/assets/branding/icon.png",
         "currency": "PYG",
+        "brandName": "CardsHub",
+        "accentColor": "#f472b6",
         "exchangeRate": 7500,
+        "primaryColor": "#ec4899",
         "whatsappSupport": "+595984778899"
       },
       "settings": {
-        "commissionPercent": 8,
-        "allowUserReselling": false,
-        "enabledModules": {
-          "streaming": false,
-          "games": false,
-          "giftcards": true,
-          "smm": false,
-          "p2pSharing": false
-        },
-        "paraguayBankDetails": {
-          "bank": "Banco GNB Paraguay",
-          "accountHolder": "CardsHub Prepago",
-          "rucOrCi": "6677889-2",
-          "accountNumber": "03-556677-8",
-          "aliasSipap": "cardshub.py"
-        },
         "binanceDetails": {
           "payId": "665544332",
+          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=TYs29x11284a6C3f07a757657A82e4b99",
           "network": "USDT (TRC-20)",
-          "walletAddress": "TYs29x11284a6C3f07a757657A82e4b99",
-          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=TYs29x11284a6C3f07a757657A82e4b99"
+          "walletAddress": "TYs29x11284a6C3f07a757657A82e4b99"
+        },
+        "enabledModules": {
+          "smm": false,
+          "games": false,
+          "giftcards": true,
+          "streaming": false,
+          "p2pSharing": false
+        },
+        "commissionPercent": 8,
+        "allowUserReselling": false,
+        "paraguayBankDetails": {
+          "bank": "Banco GNB Paraguay",
+          "rucOrCi": "6677889-2",
+          "aliasSipap": "cardshub.py",
+          "accountHolder": "CardsHub Prepago",
+          "accountNumber": "03-556677-8"
         }
-      }
+      },
+      "customDomain": "cardshub.gamesboy.net"
     },
     {
       "id": "tnt_nexustream_demo",
-      "slug": "nexustream",
       "name": "Nexus Stream & AI",
-      "customDomain": "nexustream.gamesboy.net",
+      "slug": "nexustream",
       "planId": "plan_enterprise",
       "status": "active",
       "branding": {
-        "brandName": "Nexus Stream",
-        "logoUrl": "/assets/branding/icon.png",
         "iconUrl": "/assets/branding/icon.png",
-        "primaryColor": "#8b5cf6",
-        "accentColor": "#a78bfa",
+        "logoUrl": "/assets/branding/icon.png",
         "currency": "PYG",
+        "brandName": "Nexus Stream",
+        "accentColor": "#a78bfa",
         "exchangeRate": 7500,
+        "primaryColor": "#8b5cf6",
         "whatsappSupport": "+595985112233"
       },
       "settings": {
-        "commissionPercent": 12,
-        "allowUserReselling": true,
-        "enabledModules": {
-          "streaming": true,
-          "games": false,
-          "giftcards": false,
-          "smm": true,
-          "p2pSharing": true
-        },
-        "paraguayBankDetails": {
-          "bank": "Sudameris Bank",
-          "accountHolder": "Nexus Media Group",
-          "rucOrCi": "7788990-3",
-          "accountNumber": "04-998811-2",
-          "aliasSipap": "nexustream.py"
-        },
         "binanceDetails": {
           "payId": "334455667",
+          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x88F10A98F722cE434a6C3f07a757657A82e4b88F",
           "network": "USDT (BEP-20)",
-          "walletAddress": "0x88F10A98F722cE434a6C3f07a757657A82e4b88F",
-          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x88F10A98F722cE434a6C3f07a757657A82e4b88F"
+          "walletAddress": "0x88F10A98F722cE434a6C3f07a757657A82e4b88F"
+        },
+        "enabledModules": {
+          "smm": true,
+          "games": false,
+          "giftcards": false,
+          "streaming": true,
+          "p2pSharing": true
+        },
+        "commissionPercent": 12,
+        "allowUserReselling": true,
+        "paraguayBankDetails": {
+          "bank": "Sudameris Bank",
+          "rucOrCi": "7788990-3",
+          "aliasSipap": "nexustream.py",
+          "accountHolder": "Nexus Media Group",
+          "accountNumber": "04-998811-2"
         }
-      }
+      },
+      "customDomain": "nexustream.gamesboy.net"
     },
     {
       "id": "tnt_pixelstore_demo",
-      "slug": "pixelstore",
       "name": "PixelStore Gamers",
-      "customDomain": "pixelstore.gamesboy.net",
+      "slug": "pixelstore",
       "planId": "plan_pro",
       "status": "active",
       "branding": {
-        "brandName": "PixelStore",
-        "logoUrl": "/assets/branding/icon.png",
         "iconUrl": "/assets/branding/icon.png",
-        "primaryColor": "#06b6d4",
-        "accentColor": "#22d3ee",
+        "logoUrl": "/assets/branding/icon.png",
         "currency": "PYG",
+        "brandName": "PixelStore",
+        "accentColor": "#22d3ee",
         "exchangeRate": 7500,
+        "primaryColor": "#06b6d4",
         "whatsappSupport": "+595986990011"
       },
       "settings": {
-        "commissionPercent": 10,
-        "allowUserReselling": false,
-        "enabledModules": {
-          "streaming": true,
-          "games": true,
-          "giftcards": true,
-          "smm": false,
-          "p2pSharing": false
-        },
-        "paraguayBankDetails": {
-          "bank": "Banco Atlas",
-          "accountHolder": "PixelStore Gamers SRL",
-          "rucOrCi": "8899001-4",
-          "accountNumber": "05-334455-6",
-          "aliasSipap": "pixelstore.py"
-        },
         "binanceDetails": {
           "payId": "112233445",
+          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x44C10A98F722cE434a6C3f07a757657A82e4b44C",
           "network": "USDT (BEP-20)",
-          "walletAddress": "0x44C10A98F722cE434a6C3f07a757657A82e4b44C",
-          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x44C10A98F722cE434a6C3f07a757657A82e4b44C"
+          "walletAddress": "0x44C10A98F722cE434a6C3f07a757657A82e4b44C"
+        },
+        "enabledModules": {
+          "smm": false,
+          "games": true,
+          "giftcards": true,
+          "streaming": true,
+          "p2pSharing": false
+        },
+        "commissionPercent": 10,
+        "allowUserReselling": false,
+        "paraguayBankDetails": {
+          "bank": "Banco Atlas",
+          "rucOrCi": "8899001-4",
+          "aliasSipap": "pixelstore.py",
+          "accountHolder": "PixelStore Gamers SRL",
+          "accountNumber": "05-334455-6"
         }
-      }
+      },
+      "customDomain": "pixelstore.gamesboy.net"
+    },
+    {
+      "id": "tnt_chere_1788980065268",
+      "name": "chere",
+      "slug": "chere",
+      "planId": "plan_starter",
+      "status": "active",
+      "branding": {
+        "iconUrl": "/assets/branding/icon.png",
+        "logoUrl": "/assets/branding/logo.png",
+        "currency": "PYG",
+        "brandName": "chere",
+        "accentColor": "#00c2ff",
+        "exchangeRate": 7500,
+        "primaryColor": "#0284c7",
+        "whatsappSupport": "9865151515"
+      },
+      "settings": {
+        "binanceDetails": {
+          "payId": "85292112265",
+          "network": "USDT (Binance Pay / BEP-20 / TRC-20)"
+        },
+        "enabledModules": {
+          "smm": false,
+          "games": true,
+          "giftcards": true,
+          "streaming": true
+        },
+        "commissionPercent": 5,
+        "paraguayBankDetails": {
+          "bank": "Banco Familiar / Itaú Paraguay",
+          "aliasSipap": "chere",
+          "accountHolder": "chere",
+          "accountNumber": "01-000000-1"
+        }
+      },
+      "createdAt": "2026-09-09T18:54:25.268Z",
+      "updatedAt": "2026-09-09T18:54:25.268Z",
+      "ownerUserId": null,
+      "customDomain": "chere.gamesboy.net"
     }
   ],
   "tenant_plans": [
     {
       "id": "plan_starter",
       "name": "Starter Reseller",
-      "priceMonthlyUsd": 19.99,
-      "maxSlotsAllowed": 50,
-      "maxProductsAllowed": 30,
-      "customDomainEnabled": false,
-      "p2pMarketplaceEnabled": false,
-      "platformFeePercent": 5,
       "features": [
         "Tienda Digital Directa (Venta Propia)",
         "Gestión Streaming con PIN",
         "Subdominio mitienda.gamesboy.net",
         "Pasarela SIPAP y Binance Pay"
-      ]
+      ],
+      "maxSlotsAllowed": 50,
+      "priceMonthlyUsd": 19.99,
+      "maxProductsAllowed": 30,
+      "platformFeePercent": 5,
+      "customDomainEnabled": false,
+      "p2pMarketplaceEnabled": false
     },
     {
       "id": "plan_pro",
       "name": "Pro Marketplace",
-      "priceMonthlyUsd": 49.99,
-      "maxSlotsAllowed": 250,
-      "maxProductsAllowed": 150,
-      "customDomainEnabled": true,
-      "p2pMarketplaceEnabled": true,
-      "platformFeePercent": 3,
       "features": [
         "Marketplace P2P Habilitado (Reventa por Clientes)",
         "Dominio Propio (mitienda.com)",
         "Cero Glare UI & Colores de Marca",
         "Comisiones automáticas (3%)"
-      ]
+      ],
+      "maxSlotsAllowed": 250,
+      "priceMonthlyUsd": 49.99,
+      "maxProductsAllowed": 150,
+      "platformFeePercent": 3,
+      "customDomainEnabled": true,
+      "p2pMarketplaceEnabled": true
     },
     {
       "id": "plan_enterprise",
       "name": "Enterprise White-Label",
-      "priceMonthlyUsd": 99.99,
-      "maxSlotsAllowed": 1000,
-      "maxProductsAllowed": 500,
-      "customDomainEnabled": true,
-      "p2pMarketplaceEnabled": true,
-      "platformFeePercent": 1.5,
       "features": [
         "Marketplace P2P Ilimitado VIP",
         "Marca Blanca Total (100% Sin Marca)",
         "API Exclusiva",
         "Soporte Prioritario 24/7"
-      ]
+      ],
+      "maxSlotsAllowed": 1000,
+      "priceMonthlyUsd": 99.99,
+      "maxProductsAllowed": 500,
+      "platformFeePercent": 1.5,
+      "customDomainEnabled": true,
+      "p2pMarketplaceEnabled": true
     }
   ],
   "users": [

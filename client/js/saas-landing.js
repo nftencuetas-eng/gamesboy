@@ -179,7 +179,7 @@ async function submitOnboarding() {
       renderWizardStep();
       const msg = document.getElementById('success-store-msg');
       if (msg) {
-        msg.innerHTML = `Tu plataforma <strong>${data.tenant.name}</strong> está lista en <code>https://${data.tenant.slug}.gamesboy.net</code>.`;
+        msg.innerHTML = `Tu plataforma <strong>${data.tenant.name}</strong> está lista en <code>https://${data.tenant.slug}.gamsplit.com</code>.`;
       }
       const btnGoto = document.getElementById('btn-goto-store');
       if (btnGoto) {

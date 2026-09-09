@@ -47,7 +47,7 @@ wss.on('connection', (ws) => {
   
   ws.send(JSON.stringify({
     type: 'CONNECTION_ESTABLISHED',
-    message: `Conectado a GamesBoy.net Marketplace Engine`,
+    message: `Conectado a GamSplit SaaS Multi-Tenant Engine`,
     onlineUsers,
     serverTime: new Date().toISOString()
   }));
@@ -162,9 +162,9 @@ app.use(globalErrorHandler);
 // Start Server & Initialize Database
 async function startServer() {
   console.log('==============================================');
-  console.log(`🚀 Starting GamesBoy.net Marketplace Core`);
-  console.log(`🌐 Target Domain: ${config.appDomain}`);
-  console.log(`📦 Environment:   ${config.nodeEnv}`);
+  console.log(`🚀 Starting GamSplit SaaS Multi-Tenant Engine`);
+  console.log(`🌐 Primary SaaS Domain: ${config.appDomain}`);
+  console.log(`📦 Environment:        ${config.nodeEnv}`);
   console.log('==============================================');
 
   await initDatabase();
@@ -177,7 +177,7 @@ async function startServer() {
 }
 
 process.on('SIGINT', () => {
-  console.log('\n🛑 Gracefully shutting down GamesBoy server...');
+  console.log('\n🛑 Gracefully shutting down GamSplit SaaS server...');
   server.close(() => {
     console.log('👋 Server closed.');
     process.exit(0);
