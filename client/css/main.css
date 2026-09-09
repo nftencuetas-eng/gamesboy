@@ -6969,11 +6969,12 @@ body.modal-open #sticky-monetize-pill,
   background: transparent;
   border: none;
   color: #94a3b8;
-  font-size: 1.5rem;
-  font-weight: 400;
+  font-size: 1.55rem;
+  font-weight: 300;
   line-height: 1;
-  padding: 4px 6px;
-  margin-bottom: 6px;
+  padding: 4px 2px;
+  margin-bottom: 8px;
+  margin-right: 0px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;

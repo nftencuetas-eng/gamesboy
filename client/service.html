@@ -548,108 +548,221 @@
   <!-- MODAL 2: POP-UP DE GARANTÍA DE REEMBOLSO GAMESBOY       -->
   <!-- ======================================================= -->
   <div class="modal-overlay" id="modal-escrow-join" style="display: none;">
-    <div class="modal-card modal-escrow-card">
-      <button type="button" class="btn-modal-close" id="btn-close-escrow-modal">✕</button>
+    <div class="modal-dialog-wrapper" style="max-width: 540px;">
+      <button type="button" class="btn-modal-close-naked" id="btn-close-escrow-modal" onclick="closeEscrowModal()" title="Cerrar modal">✕</button>
 
-      <!-- Shield Header -->
-      <div class="escrow-modal-header">
-        <div class="escrow-shield-glow">
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
-        </div>
-        <h3 class="escrow-modal-title">Garantía de Reembolso GamesBoy</h3>
-        <p class="escrow-modal-subtitle">Tu pago y tu membresía están 100% protegidos</p>
-      </div>
-
-      <!-- Target Subscription Summary Box -->
-      <div class="escrow-selected-sub-box">
-        <div class="escrow-sub-info">
-          <span class="escrow-sub-plan-badge" id="modal-escrow-plan-badge">Plan Ultra HD 4K</span>
-          <h4 class="escrow-sub-name" id="modal-escrow-sub-name">Netflix Premium 4K HDR</h4>
-          <div class="escrow-sub-host-line">
-            <span>Anfitrión:</span>
-            <strong id="modal-escrow-host-name" style="color: #ffffff;">Lucas González</strong>
-            <span class="badge-verified-sm">⭐ Verificado</span>
+      <div class="modal-card modal-escrow-card" onclick="event.stopPropagation()">
+        <!-- Shield Header -->
+        <div class="escrow-modal-header">
+          <div class="escrow-shield-glow">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
           </div>
+          <h3 class="escrow-modal-title">Garantía de Reembolso GamesBoy</h3>
+          <p class="escrow-modal-subtitle">Tu pago y tu membresía están 100% protegidos durante 30 días</p>
         </div>
-        <div class="escrow-sub-price-block">
-          <span style="font-size: 0.7rem; color: var(--text-tertiary); text-transform: uppercase;">Monto mensual</span>
-          <div class="escrow-price-gs" id="modal-escrow-price-gs">30.000 Gs.</div>
-          <div class="escrow-price-usd" id="modal-escrow-price-usd">$3.99 USDT / mes</div>
-        </div>
-      </div>
 
-      <!-- 3 Key Safety Guarantees -->
-      <div class="escrow-steps-list">
-        <div class="escrow-step-item">
-          <div class="escrow-step-num">1</div>
-          <div class="escrow-step-text">
-            <strong>Retención Segura en Custodia</strong>
-            <span>El valor de tu membresía no se transfiere inmediatamente al anfitrión. Queda resguardado de forma segura por GamesBoy.</span>
+        <!-- Target Subscription Summary Box -->
+        <div class="escrow-selected-sub-box">
+          <div class="escrow-sub-info">
+            <span class="escrow-sub-plan-badge" id="modal-escrow-plan-badge">Plan Ultra HD 4K</span>
+            <h4 class="escrow-sub-name" id="modal-escrow-sub-name">Netflix Premium 4K HDR</h4>
+            <div class="escrow-sub-host-line">
+              <span>Anfitrión:</span>
+              <strong id="modal-escrow-host-name" style="color: #ffffff;">Lucas González</strong>
+              <span class="badge-verified-sm">⭐ Verificado</span>
+            </div>
+          </div>
+          <div class="escrow-sub-price-block">
+            <span style="font-size: 0.7rem; color: var(--text-tertiary); text-transform: uppercase;">Monto mensual</span>
+            <div class="escrow-price-gs" id="modal-escrow-price-gs">19.500 ₲</div>
+            <div class="escrow-price-usd" id="modal-escrow-price-usd">$2.60 USDT / mes</div>
           </div>
         </div>
 
-        <div class="escrow-step-item">
-          <div class="escrow-step-num">2</div>
-          <div class="escrow-step-text">
-            <strong>Liberación al Finalizar el Mes (30 días)</strong>
-            <span>El dueño de la cuenta recién cobra al completarse satisfactoriamente los 30 días de tu servicio.</span>
+        <!-- 3 Key Safety Guarantees -->
+        <div class="escrow-steps-list">
+          <div class="escrow-step-item">
+            <div class="escrow-step-num">1</div>
+            <div class="escrow-step-text">
+              <strong>Retención Segura en Custodia</strong>
+              <span>El valor de tu membresía no se transfiere inmediatamente al anfitrión. Queda resguardado de forma segura por GamesBoy.</span>
+            </div>
+          </div>
+
+          <div class="escrow-step-item">
+            <div class="escrow-step-num">2</div>
+            <div class="escrow-step-text">
+              <strong>Liberación al Finalizar el Mes (30 días)</strong>
+              <span>El dueño de la cuenta recién cobra al completarse satisfactoriamente los 30 días de tu servicio.</span>
+            </div>
+          </div>
+
+          <div class="escrow-step-item">
+            <div class="escrow-step-num">3</div>
+            <div class="escrow-step-text">
+              <strong>Protección ante Cortes o Reemplazo Inmediato</strong>
+              <span>Si surge cualquier inconveniente de acceso, recibes reemplazo inmediato o el reembolso total de tu dinero.</span>
+            </div>
           </div>
         </div>
 
-        <div class="escrow-step-item">
-          <div class="escrow-step-num">3</div>
-          <div class="escrow-step-text">
-            <strong>Protección ante Cortes o Reembolso Total</strong>
-            <span>Si sufres alguna interrupción de acceso, puedes reportarlo para asignarte un reemplazo inmediato o reembolso total.</span>
+        <!-- Balance Check Notice & Insufficient Balance Warning -->
+        <div class="escrow-wallet-check-row" id="escrow-wallet-row">
+          <span style="font-size: 0.82rem; color: var(--text-secondary);">Tu Saldo Disponible:</span>
+          <strong id="modal-escrow-user-balance" style="color: var(--accent-emerald); font-family: var(--font-mono); font-size: 0.95rem;">0 ₲</strong>
+        </div>
+
+        <div id="escrow-insufficient-balance-alert" style="display: none; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 10px; padding: 10px 12px; margin-bottom: 1.25rem; font-size: 0.8rem; color: #fca5a5;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <span>⚠️ <strong>Saldo insuficiente</strong> para adquirir esta membresía.</span>
+            <button type="button" onclick="openDepositModalFromEscrow()" class="btn-action-sm" style="background: #0284c7; color: #ffffff; padding: 5px 10px; border-radius: 6px; font-weight: 800; border: none; cursor: pointer; white-space: nowrap;">
+              + Recargar Saldo
+            </button>
           </div>
         </div>
-      </div>
 
-      <!-- Balance Check Notice -->
-      <div class="escrow-wallet-check-row">
-        <span style="font-size: 0.82rem; color: var(--text-secondary);">Tu Saldo Disponible:</span>
-        <strong id="modal-escrow-user-balance" style="color: var(--accent-emerald); font-family: var(--font-mono); font-size: 0.95rem;">0 Gs.</strong>
-      </div>
+        <!-- Actions -->
+        <div class="escrow-modal-actions">
+          <button type="button" class="btn-cancel-escrow" id="btn-cancel-escrow" onclick="closeEscrowModal()">Cancelar</button>
+          <button type="button" class="btn-confirm-escrow" id="btn-confirm-escrow-buy" onclick="handleConfirmEscrowBuy()">
+            <span>Aceptar y Activar Perfil ➔</span>
+          </button>
+        </div>
 
-      <!-- Actions -->
-      <div class="escrow-modal-actions">
-        <button type="button" class="btn-cancel-escrow" id="btn-cancel-escrow">Cancelar</button>
-        <button type="button" class="btn-confirm-escrow" id="btn-confirm-escrow-buy">
-          <span>Aceptar y Activar Perfil ➔</span>
-        </button>
       </div>
-
     </div>
   </div>
 
-  <!-- Deposit Modal -->
+  <!-- ======================================================= -->
+  <!-- MODAL 3: RECARGAR SALDO EN CUENTA (SIPAP & BINANCE)     -->
+  <!-- ======================================================= -->
   <div class="modal-overlay" id="modal-deposit" style="display: none;">
-    <div class="modal-card modal-deposit-card">
-      <button type="button" class="btn-modal-close" id="btn-close-deposit-modal">✕</button>
-      <div class="modal-header">
-        <h3 class="modal-title">Recargar Saldo en GamesBoy</h3>
-        <p class="modal-subtitle">Elige tu método de recarga favorito con acreditación en Guaraníes (Gs.)</p>
-      </div>
-      <div class="deposit-methods-tabs">
-        <button type="button" class="deposit-tab-btn active" id="tab-pay-local">🇵🇾 SIPAP Paraguay</button>
-        <button type="button" class="deposit-tab-btn" id="tab-pay-binance">🌐 USDT Cripto</button>
-      </div>
-      <div style="padding: 1.25rem 0;">
-        <div id="box-pay-local">
-          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1rem;">
-            Realiza tu transferencia a través de SIPAP y adjunta el comprobante para acreditación inmediata.
-          </p>
-          <a href="/profile.html" class="btn-primary-block" style="text-align: center; text-decoration: none; padding: 12px;">
-            Ir al Panel de Recargas en Mi Cuenta ➔
-          </a>
+    <div class="modal-dialog-wrapper" style="max-width: 520px;">
+      <button type="button" class="btn-modal-close-naked" id="btn-close-deposit-modal" onclick="closeDepositModal()" title="Cerrar modal">✕</button>
+
+      <div class="modal-card modal-deposit-card" onclick="event.stopPropagation()" style="background: #0a0d18; border: 1px solid rgba(0, 194, 255, 0.25); border-radius: 20px; padding: 1.5rem;">
+        <div class="modal-header" style="margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255, 255, 255, 0.07);">
+          <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px; margin: 0 0 4px 0;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00c2ff" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+            <span>Recargar Saldo en GamesBoy</span>
+          </h3>
+          <p style="font-size: 0.78rem; color: var(--text-tertiary); margin: 0;">Elige tu método de recarga con acreditación en Guaraníes (₲)</p>
         </div>
-        <div id="box-pay-binance" style="display: none;">
-          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1rem;">
-            Envía USDT por Binance Pay o red BEP20 para acreditación automática.
-          </p>
-          <a href="/profile.html" class="btn-primary-block" style="text-align: center; text-decoration: none; padding: 12px;">
-            Ir al Panel de Recargas en Mi Cuenta ➔
-          </a>
+
+        <div class="modal-body">
+          <!-- Payment Tabs -->
+          <div class="payment-tab-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem;">
+            <button type="button" class="payment-tab-btn active" data-method="sipap" id="tab-pay-local" style="padding: 9px 8px; font-weight: 800; font-size: 0.82rem; border-radius: 8px !important; cursor: pointer;">
+              <span id="tab-pay-local-label">🇵🇾 SIPAP (Paraguay)</span>
+            </button>
+            <button type="button" class="payment-tab-btn" data-method="binance" id="tab-pay-binance" style="padding: 9px 8px; font-weight: 800; font-size: 0.82rem; border-radius: 8px !important; cursor: pointer;">
+              🌐 Binance (USDT)
+            </button>
+          </div>
+
+          <!-- 1. SIPAP Box -->
+          <div class="payment-info-box" id="box-pay-local" style="background: rgba(0, 194, 255, 0.04); border: 1px solid rgba(0, 194, 255, 0.2); border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem;">
+            <div style="font-weight: 800; font-size: 0.86rem; color: #38bdf8; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+              <span>Transferencia Bancaria Paraguay (SIPAP)</span>
+            </div>
+            <div id="box-pay-local-fields" style="display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem;">
+              <div class="payment-field-row" style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
+                <span style="color: var(--text-tertiary);">Banco / Entidad:</span>
+                <strong id="deposit-info-bank" style="color: #ffffff;">Banco Familiar / Itaú</strong>
+              </div>
+              <div class="payment-field-row" style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
+                <span style="color: var(--text-tertiary);">Titular:</span>
+                <strong id="deposit-info-holder" style="color: #ffffff;">GamesBoy Paraguay S.A.</strong>
+              </div>
+              <div class="payment-field-row" style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
+                <span style="color: var(--text-tertiary);">RUC / CI:</span>
+                <strong id="deposit-info-doc" style="color: #ffffff;">80091234-5</strong>
+              </div>
+              <div class="payment-field-row" style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
+                <span style="color: var(--text-tertiary);">N° de Cuenta:</span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <strong id="deposit-info-account" style="color: #00c2ff;">01-445566-7</strong>
+                  <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('deposit-info-account').textContent); showToast('success', 'Copiado', 'N° de cuenta copiado');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(0,194,255,0.15); color: #00c2ff; border-radius: 4px; border: none; cursor: pointer;">Copiar</button>
+                </div>
+              </div>
+              <div class="payment-field-row" style="display: flex; justify-content: space-between; padding-top: 2px;">
+                <span style="color: var(--text-tertiary);">Alias SIPAP:</span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <strong id="deposit-info-alias" style="color: #38bdf8;">gamesboy.py</strong>
+                  <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('deposit-info-alias').textContent); showToast('success', 'Copiado', 'Alias copiado');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(0,194,255,0.15); color: #00c2ff; border-radius: 4px; border: none; cursor: pointer;">Copiar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Binance USDT Box -->
+          <div class="payment-info-box" id="box-pay-binance" style="display: none; background: rgba(245, 158, 11, 0.04); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem;">
+            <div style="font-weight: 800; font-size: 0.86rem; color: #f59e0b; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <span>Pago Cripto USDT (Binance Pay)</span>
+            </div>
+            
+            <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 10px;">
+              <div style="background: #ffffff; padding: 4px; border-radius: 6px; flex-shrink: 0;">
+                <img id="pay-info-binance-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F" alt="QR Binance" style="width: 90px; height: 90px; display: block;">
+              </div>
+              <div style="flex: 1; display: flex; flex-direction: column; gap: 5px; font-size: 0.78rem;">
+                <div>
+                  <span style="color: var(--text-tertiary); display: block;">Binance Pay ID:</span>
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <strong id="pay-info-binance-id" style="color: #ffffff; font-size: 0.88rem;">849201934</strong>
+                    <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('pay-info-binance-id').textContent); showToast('success', 'Copiado', 'Pay ID copiado');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(245,158,11,0.15); color: #f59e0b; border-radius: 4px; border: none; cursor: pointer;">Copiar</button>
+                  </div>
+                </div>
+                <div>
+                  <span style="color: var(--text-tertiary); display: block;">Red:</span>
+                  <strong id="pay-info-binance-network" style="color: #ffffff;">USDT (BEP-20 / TRC-20)</strong>
+                </div>
+                <div>
+                  <span style="color: var(--text-tertiary); display: block;">Dirección USDT:</span>
+                  <div style="display: flex; align-items: center; gap: 4px;">
+                    <strong style="font-size: 0.68rem; word-break: break-all; color: #00c2ff;" id="pay-info-binance-wallet">0x71C9414B3b27bA134a6C3f07a757657A82e4b92F</strong>
+                    <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('pay-info-binance-wallet').textContent); showToast('success', 'Copiado', 'Dirección copiada');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(0,194,255,0.15); color: #00c2ff; border-radius: 4px; border: none; cursor: pointer;">Copiar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Deposit Form -->
+          <form id="form-submit-deposit">
+            <input type="hidden" id="deposit-selected-currency" value="PYG">
+            
+            <div class="form-group" id="deposit-amount-group" style="margin-bottom: 10px;">
+              <label class="form-label" id="label-deposit-amount" style="font-size: 0.78rem; font-weight: 700; color: #e2e8f0; display: block; margin-bottom: 4px;">Monto a Transferir en Guaraníes (Gs.):</label>
+              <input type="number" id="deposit-amount-input" class="form-input" placeholder="ej: 100000" min="1" step="1000" required style="width: 100%; padding: 9px 12px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #ffffff; font-size: 0.95rem; font-weight: 700;">
+              
+              <!-- Dynamic Conversion Highlight Box -->
+              <div id="deposit-converted-box" style="margin-top: 8px; background: rgba(0, 194, 255, 0.06); border: 1px solid rgba(0, 194, 255, 0.2); border-radius: 8px; padding: 8px 10px; font-size: 0.78rem; line-height: 1.4;">
+                <div id="deposit-converted-preview" style="color: #38bdf8; font-weight: 700;">
+                  Se acreditarán: <strong id="deposit-accredited-amount">0 Gs.</strong> en tu saldo
+                </div>
+                <div id="deposit-rate-note" style="color: var(--text-tertiary); font-size: 0.7rem; margin-top: 2px;">
+                  Tasa activa: 1 USDT = 7.500 Gs. Acreditación directa en Guaraníes.
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label class="form-label" id="label-deposit-ref" style="font-size: 0.78rem; font-weight: 700; color: #e2e8f0; display: block; margin-bottom: 4px;">N° de Comprobante / Referencia SIPAP:</label>
+              <input type="text" id="deposit-reference-input" class="form-input" placeholder="ej: SIPAP-781923" required style="width: 100%; padding: 9px 12px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: #ffffff; font-size: 0.86rem;">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label class="form-label" style="font-size: 0.78rem; font-weight: 700; color: #e2e8f0; display: block; margin-bottom: 4px;">Adjuntar Captura del Comprobante (Opcional):</label>
+              <input type="file" id="deposit-receipt-file" class="form-input" accept="image/*" style="width: 100%; padding: 6px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; color: #94a3b8; font-size: 0.78rem;">
+            </div>
+
+            <button type="submit" class="btn-primary-block" id="btn-submit-deposit-form" style="width: 100%; background: #0284c7; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border: 1px solid rgba(0, 194, 255, 0.25); color: #ffffff; padding: 11px; border-radius: 10px; font-weight: 800; font-size: 0.92rem; cursor: pointer; transition: all 0.2s ease;">
+              Enviar Comprobante de Recarga
+            </button>
+          </form>
         </div>
       </div>
     </div>

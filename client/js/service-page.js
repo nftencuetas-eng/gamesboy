@@ -31,8 +31,10 @@ async function initHubPage() {
   state.platformKey = getPlatformFromUrl();
   initUserSession();
   initLiveSearch();
+  initDepositModal();
   setupEventListeners();
   await loadHubData();
+  await loadWalletBalanceAndPaymentMethods();
 }
 
 // --- 1. LOAD PLATFORM DATA & GROUPS FROM API ---
@@ -506,14 +508,35 @@ window.openGroupDetailModal = function(groupId) {
 window.closeGroupDetailModal = function() {
   const modal = document.getElementById('modal-group-detail');
   if (modal) modal.style.display = 'none';
-  state.selectedGroup = null;
 };
 
 // --- 6. CONFIRM JOIN FROM 2-COLUMN MODAL WITH ESCROW GUARANTEE ---
 window.confirmGroupDetailJoin = function() {
-  if (!state.selectedGroup) return;
-  closeGroupDetailModal();
-  openEscrowModal(state.selectedGroup.id);
+  const group = state.selectedGroup;
+  if (!group) return;
+
+  // 1. If not authenticated, prompt to log in and redirect back
+  if (!state.currentUser) {
+    showToast('warning', 'Iniciar Sesión', 'Debes iniciar sesión para unirte a un grupo.');
+    const redirectUrl = encodeURIComponent(window.location.pathname + window.location.search);
+    setTimeout(() => {
+      window.location.href = `/login?redirect=${redirectUrl}`;
+    }, 1000);
+    return;
+  }
+
+  // 2. Strict Admin check: Admins cannot purchase client slots
+  if (state.currentUser.role === 'admin') {
+    showToast('warning', 'Rol Administrador', 'Las cuentas de administración actúan como auditores. Utiliza una cuenta de cliente para realizar compras.');
+    return;
+  }
+
+  const groupId = group.id;
+  const modalDetail = document.getElementById('modal-group-detail');
+  if (modalDetail) modalDetail.style.display = 'none';
+
+  // 3. Open Escrow Guarantee Modal
+  openEscrowModal(groupId);
 };
 
 // --- GROUP RULES MODAL CONTROLLER ---
@@ -526,9 +549,9 @@ window.closeRulesModal = function() {
   if (modal) modal.style.display = 'none';
 };
 
-// --- REFUND GUARANTEE MODAL CONTROLLER ---
+// --- REFUND GUARANTEE (ESCROW) MODAL CONTROLLER ---
 window.openEscrowModal = function(groupId) {
-  const group = state.groups.find(g => g.id === groupId);
+  const group = state.groups.find(g => g.id === groupId) || state.selectedGroup;
   if (!group) return;
 
   state.selectedGroup = group;
@@ -540,24 +563,62 @@ window.openEscrowModal = function(groupId) {
   const priceGs = document.getElementById('modal-escrow-price-gs');
   const priceUsd = document.getElementById('modal-escrow-price-usd');
   const userBalance = document.getElementById('modal-escrow-user-balance');
+  const alertInsufficient = document.getElementById('escrow-insufficient-alert');
+  const btnBuy = document.getElementById('btn-confirm-escrow-buy');
 
-  if (planBadge) planBadge.textContent = group.planName;
-  if (subName) subName.textContent = group.serviceName;
+  if (planBadge) planBadge.textContent = group.planName || 'Plan Ultra HD 4K';
+  if (subName) subName.textContent = group.serviceName || state.hub?.name || 'Suscripción';
   if (hostName) hostName.textContent = group.host?.name || 'Anfitrión Verificado';
   if (priceGs) priceGs.textContent = formatPriceGs(group.pricePerSlotUsd);
   if (priceUsd) priceUsd.textContent = `$${parseFloat(group.pricePerSlotUsd).toFixed(2)} USDT / mes`;
 
-  const curBalUsd = state.currentUser?.balanceUsd !== undefined ? state.currentUser.balanceUsd : (state.wallet?.balanceUsd || 0);
-  if (userBalance) userBalance.textContent = formatPriceGs(curBalUsd);
+  const rate = state.exchangeRatePyg || 7500;
+  const curBalUsd = state.currentUser?.balanceUsd !== undefined ? parseFloat(state.currentUser.balanceUsd) : (state.wallet?.balanceUsd || 0);
+  const curBalPyg = Math.round(curBalUsd * rate);
+  const groupPriceUsd = parseFloat(group.pricePerSlotUsd) || 0;
+  const groupPricePyg = Math.round(groupPriceUsd * rate);
+
+  if (userBalance) {
+    userBalance.textContent = `${curBalPyg.toLocaleString('es-PY')} Gs. ($${curBalUsd.toFixed(2)} USD)`;
+  }
+
+  // Check if balance is sufficient
+  if (curBalPyg < groupPricePyg) {
+    if (alertInsufficient) alertInsufficient.style.display = 'block';
+    if (btnBuy) {
+      btnBuy.disabled = true;
+      btnBuy.style.opacity = '0.55';
+      btnBuy.style.cursor = 'not-allowed';
+      btnBuy.innerHTML = '<span>Saldo Insuficiente (Recarga Saldo)</span>';
+    }
+  } else {
+    if (alertInsufficient) alertInsufficient.style.display = 'none';
+    if (btnBuy) {
+      btnBuy.disabled = false;
+      btnBuy.style.opacity = '1';
+      btnBuy.style.cursor = 'pointer';
+      btnBuy.innerHTML = '<span>Aceptar y Activar Perfil ➔</span>';
+    }
+  }
 
   if (modal) modal.style.display = 'grid';
 };
 
-function closeEscrowModal() {
+window.closeEscrowModal = function() {
   const modal = document.getElementById('modal-escrow-join');
   if (modal) modal.style.display = 'none';
-  state.selectedGroup = null;
-}
+};
+
+window.openDepositModalFromEscrow = function() {
+  window.closeEscrowModal();
+  const modalDeposit = document.getElementById('modal-deposit');
+  if (modalDeposit) modalDeposit.style.display = 'grid';
+};
+
+window.closeDepositModal = function() {
+  const modalDeposit = document.getElementById('modal-deposit');
+  if (modalDeposit) modalDeposit.style.display = 'none';
+};
 
 // --- 7. EXECUTE REFUND GUARANTEED SUBSCRIPTION PURCHASE ---
 async function handleConfirmEscrowBuy() {
@@ -566,13 +627,13 @@ async function handleConfirmEscrowBuy() {
 
   if (!state.currentUser) {
     showToast('warning', 'Inicia Sesión', 'Debes iniciar sesión para unirte a un grupo.');
+    const redirectUrl = encodeURIComponent(window.location.pathname + window.location.search);
     setTimeout(() => {
-      window.location.href = '/login';
-    }, 1200);
+      window.location.href = `/login?redirect=${redirectUrl}`;
+    }, 1000);
     return;
   }
 
-  // Strict Admin Isolation: Admin is an auditor, cannot purchase client slots
   if (state.currentUser.role === 'admin') {
     showToast('warning', 'Rol Administrador', 'Las cuentas de administración actúan como auditores. Utiliza una cuenta de cliente para realizar compras.');
     return;
@@ -597,11 +658,11 @@ async function handleConfirmEscrowBuy() {
     const data = await res.json();
 
     if (data.success) {
-      closeEscrowModal();
+      window.closeEscrowModal();
       showToast('success', '¡Membresía Activada!', data.message || `Tu perfil ha sido asignado con éxito bajo la Garantía de Reembolso GamesBoy.`);
       
       // Update local balance
-      updateUserBalance();
+      await updateUserBalance();
 
       // Redirect directly to dedicated purchases page after 1.5s
       setTimeout(() => {
@@ -609,7 +670,7 @@ async function handleConfirmEscrowBuy() {
       }, 1500);
     } else {
       if (data.error && data.error.includes('Saldo insuficiente')) {
-        closeEscrowModal();
+        window.closeEscrowModal();
         showToast('warning', 'Saldo Insuficiente', 'Tu saldo no cubre esta membresía. Abriendo recargas SIPAP...');
         const modalDeposit = document.getElementById('modal-deposit');
         if (modalDeposit) modalDeposit.style.display = 'grid';
@@ -773,14 +834,224 @@ async function updateUserBalance() {
   if (balanceEl) balanceEl.textContent = `${balPyg.toLocaleString('es-PY')} Gs.`;
 }
 
+// --- DEPOSIT MODAL CONTROLLER & FORM SUBMISSION ---
+function initDepositModal() {
+  const tabLocal = document.getElementById('tab-pay-local');
+  const tabBinance = document.getElementById('tab-pay-binance');
+  const boxLocal = document.getElementById('box-pay-local');
+  const boxBinance = document.getElementById('box-pay-binance');
+  const depositCurrencyInput = document.getElementById('deposit-selected-currency');
+  const depositAmountInput = document.getElementById('deposit-amount-input');
+  const labelAmount = document.getElementById('label-deposit-amount');
+  const labelRef = document.getElementById('label-deposit-ref');
+  const previewAccredited = document.getElementById('deposit-accredited-amount');
+  const depositRateNote = document.getElementById('deposit-rate-note');
+  const formDeposit = document.getElementById('form-submit-deposit');
+
+  if (tabLocal && tabBinance) {
+    tabLocal.onclick = () => {
+      tabLocal.classList.add('active');
+      tabBinance.classList.remove('active');
+      if (boxLocal) boxLocal.style.display = 'block';
+      if (boxBinance) boxBinance.style.display = 'none';
+      if (depositCurrencyInput) depositCurrencyInput.value = 'PYG';
+      if (labelAmount) labelAmount.textContent = 'Monto a Transferir en Guaraníes (Gs.):';
+      if (labelRef) labelRef.textContent = 'N° de Comprobante / Referencia SIPAP:';
+      if (depositAmountInput) {
+        depositAmountInput.placeholder = 'ej: 100000';
+        depositAmountInput.step = '1000';
+      }
+      updateDepositPreview();
+    };
+
+    tabBinance.onclick = () => {
+      tabBinance.classList.add('active');
+      tabLocal.classList.remove('active');
+      if (boxBinance) boxBinance.style.display = 'block';
+      if (boxLocal) boxLocal.style.display = 'none';
+      if (depositCurrencyInput) depositCurrencyInput.value = 'USDT';
+      if (labelAmount) labelAmount.textContent = 'Monto a Enviar en USDT:';
+      if (labelRef) labelRef.textContent = 'N° de Referencia / Hash / Binance Pay ID:';
+      if (depositAmountInput) {
+        depositAmountInput.placeholder = 'ej: 15.00';
+        depositAmountInput.step = '0.01';
+      }
+      updateDepositPreview();
+    };
+  }
+
+  function updateDepositPreview() {
+    if (!depositAmountInput || !previewAccredited) return;
+    const rawVal = parseFloat(depositAmountInput.value) || 0;
+    const isUsdt = depositCurrencyInput && depositCurrencyInput.value === 'USDT';
+    const rate = state.exchangeRatePyg || 7500;
+
+    if (rawVal <= 0) {
+      previewAccredited.textContent = isUsdt ? '0 Gs. ($0.00 USDT)' : '0 Gs.';
+      return;
+    }
+
+    if (isUsdt) {
+      const calcPyg = Math.round(rawVal * rate);
+      previewAccredited.textContent = `${calcPyg.toLocaleString('es-PY')} Gs. ($${rawVal.toFixed(2)} USDT)`;
+      if (depositRateNote) depositRateNote.textContent = `Tasa activa: 1 USDT = ${rate.toLocaleString('es-PY')} Gs. Acreditación directa a tu saldo.`;
+    } else {
+      const calcUsd = (rawVal / rate).toFixed(2);
+      previewAccredited.textContent = `${rawVal.toLocaleString('es-PY')} Gs. ($${calcUsd} USD)`;
+      if (depositRateNote) depositRateNote.textContent = `Tasa activa: 1 USDT = ${rate.toLocaleString('es-PY')} Gs. Acreditación directa en Guaraníes.`;
+    }
+  }
+
+  if (depositAmountInput) {
+    depositAmountInput.addEventListener('input', updateDepositPreview);
+  }
+
+  if (formDeposit) {
+    formDeposit.onsubmit = async (e) => {
+      e.preventDefault();
+      if (!state.currentUser) {
+        showToast('warning', 'Inicia Sesión', 'Debes iniciar sesión para recargar saldo.');
+        return;
+      }
+
+      const amountVal = parseFloat(depositAmountInput?.value);
+      const refVal = document.getElementById('deposit-reference-input')?.value?.trim();
+      const fileInput = document.getElementById('deposit-receipt-file');
+      const currency = depositCurrencyInput ? depositCurrencyInput.value : 'PYG';
+      const submitBtn = document.getElementById('btn-submit-deposit-form');
+
+      if (!amountVal || amountVal <= 0) {
+        showToast('warning', 'Monto Requerido', 'Por favor ingresa un monto válido a recargar.');
+        return;
+      }
+      if (!refVal) {
+        showToast('warning', 'Comprobante Requerido', 'Por favor ingresa el número o referencia de la transacción.');
+        return;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando Comprobante...';
+      }
+
+      let receiptBase64 = '';
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        try {
+          receiptBase64 = await readFileAsBase64(fileInput.files[0]);
+        } catch (err) {
+          console.warn('Error reading file:', err);
+        }
+      }
+
+      try {
+        const res = await fetch('/api/wallet/deposit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-user-id': state.currentUser.id
+          },
+          body: JSON.stringify({
+            amount: amountVal,
+            currency: currency,
+            method: currency === 'USDT' ? 'binance_usdt' : 'sipap_paraguay',
+            reference: refVal,
+            receiptData: receiptBase64
+          })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          showToast('success', '¡Recarga Solicitada!', data.message || 'Tu comprobante está en revisión.');
+          window.closeDepositModal();
+          formDeposit.reset();
+          updateDepositPreview();
+          await updateUserBalance();
+        } else {
+          showToast('error', 'Error al Recargar', data.error || 'No se pudo enviar la solicitud de recarga.');
+        }
+      } catch (err) {
+        showToast('error', 'Error de Conexión', 'No se pudo conectar con el servidor.');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Enviar Comprobante de Recarga';
+        }
+      }
+    };
+  }
+}
+
+function readFileAsBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+// --- LOAD WALLET BALANCE & LIVE ADMIN PAYMENT METHODS ---
+async function loadWalletBalanceAndPaymentMethods() {
+  const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
+  try {
+    const res = await fetch('/api/wallet/balance', {
+      headers: { 'x-user-id': userId }
+    });
+    const data = await res.json();
+    if (!data) return;
+
+    if (data.exchangeRatePyg) state.exchangeRatePyg = data.exchangeRatePyg;
+    if (data.wallet) state.wallet = data.wallet;
+
+    if (state.currentUser && data.wallet && data.wallet.balanceUsd !== undefined) {
+      state.currentUser.balanceUsd = data.wallet.balanceUsd;
+      localStorage.setItem('gb_user', JSON.stringify(state.currentUser));
+      updateUserBalance();
+    }
+
+    // Populate live payment methods
+    if (data.paymentMethods) {
+      const py = data.paymentMethods.paraguay;
+      if (py) {
+        const elBank = document.getElementById('deposit-info-bank');
+        const elHolder = document.getElementById('deposit-info-holder');
+        const elDoc = document.getElementById('deposit-info-doc');
+        const elAcc = document.getElementById('deposit-info-account');
+        const elAlias = document.getElementById('deposit-info-alias');
+
+        if (elBank && py.bank) elBank.textContent = py.bank;
+        if (elHolder && py.accountHolder) elHolder.textContent = py.accountHolder;
+        if (elDoc && py.rucOrCi) elDoc.textContent = py.rucOrCi;
+        if (elAcc && py.accountNumber) elAcc.textContent = py.accountNumber;
+        if (elAlias && py.aliasSipap) elAlias.textContent = py.aliasSipap;
+      }
+
+      const bn = data.paymentMethods.binance;
+      if (bn) {
+        const elPayId = document.getElementById('pay-info-binance-id');
+        const elNet = document.getElementById('pay-info-binance-network');
+        const elWallet = document.getElementById('pay-info-binance-wallet');
+        const elQrImg = document.getElementById('pay-info-binance-qr-img');
+
+        if (elPayId && bn.payId) elPayId.textContent = bn.payId;
+        if (elNet && bn.network) elNet.textContent = bn.network;
+        if (elWallet && bn.walletAddress) elWallet.textContent = bn.walletAddress;
+        if (elQrImg && bn.qrUrl) elQrImg.src = bn.qrUrl;
+      }
+    }
+  } catch (err) {
+    console.warn('Could not fetch wallet/payment methods:', err);
+  }
+}
+
 // --- 9. EVENT LISTENERS SETUP ---
 function setupEventListeners() {
   const btnCloseEscrow = document.getElementById('btn-close-escrow-modal');
   const btnCancelEscrow = document.getElementById('btn-cancel-escrow');
   const btnConfirmEscrow = document.getElementById('btn-confirm-escrow-buy');
 
-  if (btnCloseEscrow) btnCloseEscrow.onclick = closeEscrowModal;
-  if (btnCancelEscrow) btnCancelEscrow.onclick = closeEscrowModal;
+  if (btnCloseEscrow) btnCloseEscrow.onclick = window.closeEscrowModal;
+  if (btnCancelEscrow) btnCancelEscrow.onclick = window.closeEscrowModal;
   if (btnConfirmEscrow) btnConfirmEscrow.onclick = handleConfirmEscrowBuy;
 
   const btnCloseRules = document.getElementById('btn-close-rules-modal');
@@ -789,34 +1060,16 @@ function setupEventListeners() {
   if (btnRulesOk) btnRulesOk.onclick = window.closeRulesModal;
 
   const btnOpenDeposit = document.getElementById('btn-open-deposit-modal');
-  const modalDeposit = document.getElementById('modal-deposit');
   const btnCloseDeposit = document.getElementById('btn-close-deposit-modal');
 
-  if (btnOpenDeposit && modalDeposit) {
-    btnOpenDeposit.onclick = () => { modalDeposit.style.display = 'grid'; };
-  }
-  if (btnCloseDeposit && modalDeposit) {
-    btnCloseDeposit.onclick = () => { modalDeposit.style.display = 'none'; };
-  }
-
-  const tabLocal = document.getElementById('tab-pay-local');
-  const tabBinance = document.getElementById('tab-pay-binance');
-  const boxLocal = document.getElementById('box-pay-local');
-  const boxBinance = document.getElementById('box-pay-binance');
-
-  if (tabLocal && tabBinance && boxLocal && boxBinance) {
-    tabLocal.onclick = () => {
-      tabLocal.classList.add('active');
-      tabBinance.classList.remove('active');
-      boxLocal.style.display = 'block';
-      boxBinance.style.display = 'none';
+  if (btnOpenDeposit) {
+    btnOpenDeposit.onclick = () => {
+      const modalDeposit = document.getElementById('modal-deposit');
+      if (modalDeposit) modalDeposit.style.display = 'grid';
     };
-    tabBinance.onclick = () => {
-      tabBinance.classList.add('active');
-      tabLocal.classList.remove('active');
-      boxBinance.style.display = 'block';
-      boxLocal.style.display = 'none';
-    };
+  }
+  if (btnCloseDeposit) {
+    btnCloseDeposit.onclick = window.closeDepositModal;
   }
 
   // Click outside to close any open modal
@@ -824,7 +1077,6 @@ function setupEventListeners() {
     overlay.addEventListener('click', (e) => {
       if (e.target === overlay || e.target.classList.contains('modal-dialog-wrapper')) {
         overlay.style.display = 'none';
-        state.selectedGroup = null;
       }
     });
   });
@@ -835,7 +1087,6 @@ function setupEventListeners() {
       document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.style.display = 'none';
       });
-      state.selectedGroup = null;
     }
   });
 }
