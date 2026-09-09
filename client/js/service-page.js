@@ -274,12 +274,14 @@ function renderGroupsList() {
     const host = g.host || { id: 'usr_admin', name: 'Anfitrión Verificado', avatar: '/assets/branding/icon.png', trustScore: 95, activityText: 'En línea' };
     const totalSlotsCount = Math.max(1, g.totalSlots || hub.maxSlots || 5);
     const availCount = Math.min(totalSlotsCount, Math.max(0, g.availableSlots !== undefined ? g.availableSlots : totalSlotsCount));
+    const occupiedCount = totalSlotsCount - availCount;
     const cleanServiceName = g.serviceName || hub.name || 'Streaming';
 
-    // Build silhouettes: 👤
+    // Build silhouettes: 👤 (Occupied from left to right as slots get filled)
     let silhouettesHtml = '';
     for (let i = 1; i <= totalSlotsCount; i++) {
-      const isSeatFree = i <= availCount;
+      const isSeatOccupied = i <= occupiedCount;
+      const isSeatFree = !isSeatOccupied;
       silhouettesHtml += `
         <span class="hub-seat-sil-icon ${isSeatFree ? 'is-free' : 'is-occupied'}" title="${isSeatFree ? `Asiento ${i}: Disponible` : `Asiento ${i}: Ocupado`}">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">

@@ -5245,8 +5245,9 @@ body.modal-open #sticky-monetize-pill,
 /* 2. Pricing Block */
 .hub-card-pricing-block {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
+  gap: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   padding: 10px 0;
@@ -5254,15 +5255,18 @@ body.modal-open #sticky-monetize-pill,
 
 .hub-card-price-gs {
   font-family: var(--font-mono);
-  font-size: 1.25rem;
+  font-size: 1.22rem;
   font-weight: 900;
   color: #00c2ff;
   letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
 }
 
 .hub-card-period {
   font-family: var(--font-body);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
   color: #94a3b8;
   letter-spacing: normal;
@@ -5270,13 +5274,16 @@ body.modal-open #sticky-monetize-pill,
 
 .hub-card-price-usd {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: #38bdf8;
-  background: rgba(0, 194, 255, 0.08);
-  border: 1px solid rgba(0, 194, 255, 0.2);
+  font-size: 0.70rem;
+  font-weight: 600;
+  color: #8da0ba;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 2px 7px;
   border-radius: 6px;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+  margin-left: auto;
 }
 
 /* 3. Seats / Silhouettes Row */
