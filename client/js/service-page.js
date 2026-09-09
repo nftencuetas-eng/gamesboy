@@ -290,6 +290,49 @@ function renderGroupsList() {
       </div>
     `;
   }).join('');
+
+  initGroupCardTiltEffects();
+}
+
+function initGroupCardTiltEffects() {
+  const container = document.getElementById('hub-groups-list');
+  if (!container) return;
+  const cards = container.querySelectorAll('.hub-mini-group-card');
+  cards.forEach(card => {
+    if (card.dataset.tiltAttached === 'true') return;
+    card.dataset.tiltAttached = 'true';
+    let rafId = null;
+
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'transform 0.08s ease-out, box-shadow 0.15s ease';
+      card.style.zIndex = '10';
+    });
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const normX = (x - rect.width / 2) / (rect.width / 2);
+      const normY = (y - rect.height / 2) / (rect.height / 2);
+
+      const rotX = -normY * 6;
+      const rotY = normX * 6;
+
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-4px) scale3d(1.02, 1.02, 1.02)`;
+        card.style.boxShadow = `${(-rotY * 1.5).toFixed(1)}px ${(12 + Math.abs(rotX)).toFixed(1)}px 24px rgba(0, 0, 0, 0.7), 0 0 16px rgba(0, 194, 255, 0.25)`;
+      });
+    });
+
+    card.addEventListener('mouseleave', () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      card.style.transition = 'transform 0.45s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.45s ease';
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)';
+      card.style.boxShadow = '';
+      card.style.zIndex = '';
+    });
+  });
 }
 
 // --- 5. JOIN WAITING LIST HANDLER ---

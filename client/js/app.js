@@ -937,6 +937,8 @@ function renderStreamingServices() {
       </div>
     `;
   }).join('');
+
+  initStreamingCardTiltEffects();
 }
 
 // --- 3. RENDER DIGITAL GAMES (CLEAN SKELETONS ON LOAD, 0 DUMMY GAMES) ---
@@ -1001,6 +1003,7 @@ function renderDigitalGames() {
     `;
   }).join('');
 
+  initGameCardTiltEffects();
   // Start the wave animation cycle only if multiple games exist
   initGamesWaveEngine(games);
 }
@@ -1100,6 +1103,8 @@ function initGamesWaveEngine(allGamesList) {
 
           setTimeout(() => {
             cardEl.classList.remove('wave-dropping-in');
+            delete cardEl.dataset.tiltAttached;
+            initGameCardTiltEffects();
           }, 600);
 
         }, 260); // 260ms exit duration
@@ -1146,58 +1151,139 @@ function renderRetailGiftCards() {
   initGiftCardTiltEffects();
 }
 
-// 3D Physical Tilt & Glare Engine for Gift Cards
-function initGiftCardTiltEffects() {
-  const container = document.getElementById('retail-giftcards-grid');
-  if (!container) return;
+// ========================================================
+// 3D PHYSICAL TILT & MAGNETIC GLARE ENGINE (UNIVERSAL)
+// ========================================================
+function attachCardTiltPhysics(elements, options = {}) {
+  const {
+    maxTilt = 12,
+    perspective = 1000,
+    scale = 1.04,
+    speed = 450,
+    easing = 'cubic-bezier(0.23, 1, 0.32, 1)',
+    targetSelector = null,
+    elevateY = -5
+  } = options;
 
-  const cards = container.querySelectorAll('.giftcard-clean-png-card');
-  cards.forEach((card, index) => {
-    const factor = parseFloat(card.dataset.tiltFactor) || (1 + (index % 3) * 0.12);
-    const img = card.querySelector('.giftcard-clean-png-img');
+  if (!elements) return;
+  const nodeList = (elements instanceof NodeList || Array.isArray(elements)) ? elements : [elements];
+
+  nodeList.forEach((card, index) => {
+    if (!card) return;
+    // Allow re-attaching if content was re-rendered
+    if (card.dataset.tiltAttached === 'true') return;
+    card.dataset.tiltAttached = 'true';
+
+    const target = targetSelector ? (card.querySelector(targetSelector) || card) : card;
+    const factor = parseFloat(card.dataset.tiltFactor) || (1 + (index % 3) * 0.1);
+    const effectiveTilt = maxTilt * factor;
     let rafId = null;
 
-    card.onmouseenter = () => {
-      if (img) img.style.transition = 'transform 0.08s ease-out, filter 0.2s ease';
-    };
+    card.addEventListener('mouseenter', () => {
+      target.style.transition = 'transform 0.08s ease-out, box-shadow 0.15s ease, filter 0.15s ease';
+      card.style.zIndex = '15';
+    });
 
-    card.onmousemove = (e) => {
+    card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      
+
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      
+
       const normX = (x - centerX) / centerX; // -1 to 1
       const normY = (y - centerY) / centerY; // -1 to 1
-      
-      const maxTilt = 14 * factor;
-      const rotX = -normY * maxTilt;
-      const rotY = normX * maxTilt;
-      const rotZ = -normX * normY * (3.5 * factor); // Natural diagonal flex
-      
+
+      const rotX = -normY * effectiveTilt;
+      const rotY = normX * effectiveTilt;
+      const rotZ = -normX * normY * (2.2 * factor);
+
       card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
       card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
 
       if (rafId) cancelAnimationFrame(rafId);
       rafId = requestAnimationFrame(() => {
-        if (img) {
-          img.style.transform = `perspective(1100px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) rotateZ(${rotZ.toFixed(2)}deg) scale3d(1.06, 1.06, 1.06)`;
-          img.style.filter = `drop-shadow(${-rotY * 1.5}px ${16 + Math.abs(rotX)}px 24px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 16px rgba(0, 194, 255, 0.35))`;
+        target.style.transform = `perspective(${perspective}px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) rotateZ(${rotZ.toFixed(2)}deg) translateY(${elevateY}px) scale3d(${scale}, ${scale}, ${scale})`;
+        
+        if (target === card) {
+          target.style.boxShadow = `${(-rotY * 1.2).toFixed(1)}px ${(14 + Math.abs(rotX) * 1.5).toFixed(1)}px 28px rgba(0, 0, 0, 0.75), 0 0 20px rgba(0, 194, 255, 0.25)`;
+        } else if (target.classList.contains('giftcard-clean-png-img')) {
+          target.style.filter = `drop-shadow(${-rotY * 1.5}px ${16 + Math.abs(rotX)}px 24px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 16px rgba(0, 194, 255, 0.35))`;
         }
       });
-    };
+    });
 
-    card.onmouseleave = () => {
+    card.addEventListener('mouseleave', () => {
       if (rafId) cancelAnimationFrame(rafId);
-      if (img) {
-        img.style.transition = 'transform 0.45s cubic-bezier(0.23, 1, 0.32, 1), filter 0.45s ease';
-        img.style.transform = 'perspective(1100px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale3d(1, 1, 1)';
-        img.style.filter = 'drop-shadow(0 14px 22px rgba(0, 0, 0, 0.65))';
+      target.style.transition = `transform ${speed}ms ${easing}, box-shadow ${speed}ms ease, filter ${speed}ms ease`;
+      target.style.transform = `perspective(${perspective}px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateY(0px) scale3d(1, 1, 1)`;
+      card.style.zIndex = '';
+      if (target === card) {
+        target.style.boxShadow = '';
+      } else if (target.classList.contains('giftcard-clean-png-img')) {
+        target.style.filter = 'drop-shadow(0 14px 22px rgba(0, 0, 0, 0.65))';
       }
-    };
+    });
   });
+}
+
+function initGiftCardTiltEffects() {
+  const container = document.getElementById('retail-giftcards-grid');
+  if (!container) return;
+  attachCardTiltPhysics(container.querySelectorAll('.giftcard-clean-png-card'), {
+    maxTilt: 14,
+    perspective: 1100,
+    scale: 1.06,
+    targetSelector: '.giftcard-clean-png-img',
+    elevateY: -6
+  });
+}
+
+function initGameCardTiltEffects() {
+  const container = document.getElementById('digital-games-grid');
+  if (!container) return;
+  attachCardTiltPhysics(container.querySelectorAll('.game-card'), {
+    maxTilt: 9,
+    perspective: 1000,
+    scale: 1.035,
+    elevateY: -4
+  });
+}
+
+function initStreamingCardTiltEffects() {
+  const container = document.getElementById('streaming-services-grid');
+  if (!container) return;
+  attachCardTiltPhysics(container.querySelectorAll('.stream-thumb-wrapper'), {
+    maxTilt: 11,
+    perspective: 900,
+    scale: 1.05,
+    targetSelector: '.stream-thumb-card',
+    elevateY: -4
+  });
+}
+
+function initSmmCardTiltEffects() {
+  const container = document.getElementById('smm-services-grid');
+  if (!container) return;
+  attachCardTiltPhysics(container.querySelectorAll('.smm-platform-card'), {
+    maxTilt: 7,
+    perspective: 1000,
+    scale: 1.025,
+    elevateY: -3
+  });
+}
+
+function initUniversalCardTiltEffects() {
+  initGiftCardTiltEffects();
+  initGameCardTiltEffects();
+  initStreamingCardTiltEffects();
+  initSmmCardTiltEffects();
+  
+  const extraCards = document.querySelectorAll('.diff-box, .trust-card, .promo-banner-card');
+  if (extraCards.length > 0) {
+    attachCardTiltPhysics(extraCards, { maxTilt: 6, scale: 1.02, elevateY: -3 });
+  }
 }
 
 // Platform SVG Vector Icons (100% SVG, Zero Emojis)
@@ -1272,6 +1358,8 @@ function renderSmmServices() {
       </div>
     `;
   }).join('');
+
+  initSmmCardTiltEffects();
 }
 
 // --- 6. RENDER USER VAULT (CREDENTIALS & GROUP CHAT ACCESS) ---
@@ -3219,6 +3307,7 @@ function initializeMarketplace() {
   initDragToScrollEngine();
   initModalGoogleAuth();
   initModalObserver();
+  initUniversalCardTiltEffects();
 }
 
 if (document.readyState === 'loading') {
