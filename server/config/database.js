@@ -20,7 +20,7 @@ let db = {
       status: 'active',
       branding: {
         brandName: 'GamesBoy',
-        logoUrl: '/assets/branding/logo.png',
+        logoUrl: '/assets/branding/logo-white.png',
         iconUrl: '/assets/branding/icon.png',
         primaryColor: '#0284c7',
         accentColor: '#00c2ff',

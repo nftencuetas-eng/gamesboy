@@ -35,8 +35,12 @@
 
     // 2. Update brand logos and icons
     if (branding.logoUrl) {
-      document.querySelectorAll('.brand-logo-img, .header-brand-logo, #header-logo-img').forEach(el => {
+      document.querySelectorAll('.brand-logo-img, .header-brand-logo, #header-logo-img, #brand-logo img').forEach(el => {
         el.src = branding.logoUrl;
+        el.onerror = function() {
+          this.onerror = null;
+          this.src = '/assets/branding/logo-white.png';
+        };
       });
     }
 
