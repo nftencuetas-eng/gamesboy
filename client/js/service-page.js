@@ -371,7 +371,7 @@ function initGroupCardTiltEffects() {
         if (!isBanner) {
           card.style.boxShadow = `${(-rotY * 1.5).toFixed(1)}px ${(12 + Math.abs(rotX)).toFixed(1)}px 26px rgba(0, 0, 0, 0.75), 0 0 18px rgba(0, 194, 255, 0.22)`;
         } else {
-          card.style.boxShadow = `${(-rotY * 1.2).toFixed(1)}px ${(10 + Math.abs(rotX)).toFixed(1)}px 22px rgba(0, 0, 0, 0.65), 0 0 16px rgba(251, 191, 36, 0.22)`;
+          card.style.boxShadow = `${(-rotY * 1.2).toFixed(1)}px ${(10 + Math.abs(rotX)).toFixed(1)}px 22px rgba(0, 0, 0, 0.65), 0 0 18px rgba(0, 194, 255, 0.25)`;
         }
       });
     });
