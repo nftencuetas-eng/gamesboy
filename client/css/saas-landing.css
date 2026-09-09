@@ -1014,7 +1014,182 @@ body.saas-body {
   margin-left: auto;
 }
 
+/* --- 6 LIVE DEMO STORES SHOWCASE --- */
+.saas-stores-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.saas-store-card {
+  display: flex;
+  flex-direction: column;
+  background: #0d111d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.saas-store-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+  transition: all 0.25s ease;
+}
+
+.saas-store-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 194, 255, 0.4);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  background: #101626;
+}
+
+.saas-store-card.flagship {
+  border-color: rgba(2, 132, 199, 0.4);
+  background: radial-gradient(circle at top right, rgba(2, 132, 199, 0.08), #0d111d 70%);
+}
+
+.saas-store-card.flagship::before {
+  background: linear-gradient(90deg, #0284c7, #00c2ff);
+}
+
+.store-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.store-brand-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.store-dot.live {
+  width: 7px;
+  height: 7px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.store-tier-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.store-tier-badge.enterprise {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.store-tier-badge.pro {
+  background: rgba(0, 194, 255, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(0, 194, 255, 0.3);
+}
+
+.store-tier-badge.starter {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.store-card-body {
+  flex: 1;
+}
+
+.store-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.5rem;
+}
+
+.store-desc {
+  font-size: 0.83rem;
+  color: #94a3b8;
+  line-height: 1.5;
+  margin: 0 0 1rem;
+}
+
+.store-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1.25rem;
+}
+
+.store-module-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.store-module-tag.vip {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #f59e0b;
+  font-weight: 700;
+}
+
+.store-card-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.store-btn-link {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #38bdf8;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s ease;
+}
+
+.saas-store-card:hover .store-btn-link {
+  color: #00c2ff;
+}
+
 /* --- RESPONSIVE MEDIA QUERIES --- */
+@media (max-width: 1024px) {
+  .saas-stores-showcase-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 900px) {
   .saas-nav-links { display: none; }
   .saas-hero-title { font-size: 2.2rem; }
@@ -1022,3 +1197,10 @@ body.saas-body {
   .saas-footer-container { grid-template-columns: 1fr; gap: 2rem; }
   .saas-footer-links { justify-content: flex-start; }
 }
+
+@media (max-width: 640px) {
+  .saas-stores-showcase-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

@@ -70,14 +70,14 @@ CREATE TABLE IF NOT EXISTS gamesboy.gb_tenants (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- Insertar Tenants Semilla de forma inmediata
+-- Insertar Tenants Semilla de forma inmediata (6 Tiendas Demo Operativas)
 INSERT INTO gamesboy.gb_tenants (id, slug, name, custom_domain, plan_id, status, branding, settings)
 VALUES
     (
         'tnt_gamesboy_main',
         'gamesboy',
-        'GamesBoy Oficial',
-        'gamesboy.net',
+        'GamesBoy Store Oficial',
+        'gamesboy.gamesboy.net',
         'plan_enterprise',
         'active',
         '{
@@ -92,6 +92,14 @@ VALUES
         }'::jsonb,
         '{
             "commissionPercent": 15.00,
+            "allowUserReselling": true,
+            "enabledModules": {
+                "streaming": true,
+                "games": true,
+                "giftcards": true,
+                "smm": true,
+                "p2pSharing": true
+            },
             "paraguayBankDetails": {
                 "bank": "Banco Familiar / Itaú Paraguay",
                 "accountHolder": "GamesBoy Paraguay S.A.",
@@ -126,6 +134,14 @@ VALUES
         }'::jsonb,
         '{
             "commissionPercent": 12.00,
+            "allowUserReselling": true,
+            "enabledModules": {
+                "streaming": true,
+                "games": false,
+                "giftcards": false,
+                "smm": false,
+                "p2pSharing": true
+            },
             "paraguayBankDetails": {
                 "bank": "Banco Continental",
                 "accountHolder": "StreamFlow Digital",
@@ -140,8 +156,181 @@ VALUES
                 "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x33B10A98F722cE434a6C3f07a757657A82e4b88B"
             }
         }'::jsonb
+    ),
+    (
+        'tnt_playzone_demo',
+        'playzone',
+        'PlayZone Digital Store',
+        'playzone.gamesboy.net',
+        'plan_starter',
+        'active',
+        '{
+            "brandName": "PlayZone",
+            "logoUrl": "/assets/branding/icon.png",
+            "iconUrl": "/assets/branding/icon.png",
+            "primaryColor": "#f59e0b",
+            "accentColor": "#fbbf24",
+            "currency": "PYG",
+            "exchangeRate": 7500,
+            "whatsappSupport": "+595983445566"
+        }'::jsonb,
+        '{
+            "commissionPercent": 10.00,
+            "allowUserReselling": false,
+            "enabledModules": {
+                "streaming": false,
+                "games": true,
+                "giftcards": true,
+                "smm": false,
+                "p2pSharing": false
+            },
+            "paraguayBankDetails": {
+                "bank": "Banco Itaú Paraguay",
+                "accountHolder": "PlayZone Digital",
+                "rucOrCi": "5566778-1",
+                "accountNumber": "02-112233-4",
+                "aliasSipap": "playzone.py"
+            },
+            "binanceDetails": {
+                "payId": "778899112",
+                "network": "USDT (BEP-20)",
+                "walletAddress": "0x55A10A98F722cE434a6C3f07a757657A82e4b11A",
+                "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x55A10A98F722cE434a6C3f07a757657A82e4b11A"
+            }
+        }'::jsonb
+    ),
+    (
+        'tnt_cardshub_demo',
+        'cardshub',
+        'CardsHub LatAm',
+        'cardshub.gamesboy.net',
+        'plan_starter',
+        'active',
+        '{
+            "brandName": "CardsHub",
+            "logoUrl": "/assets/branding/icon.png",
+            "iconUrl": "/assets/branding/icon.png",
+            "primaryColor": "#ec4899",
+            "accentColor": "#f472b6",
+            "currency": "PYG",
+            "exchangeRate": 7500,
+            "whatsappSupport": "+595984778899"
+        }'::jsonb,
+        '{
+            "commissionPercent": 8.00,
+            "allowUserReselling": false,
+            "enabledModules": {
+                "streaming": false,
+                "games": false,
+                "giftcards": true,
+                "smm": false,
+                "p2pSharing": false
+            },
+            "paraguayBankDetails": {
+                "bank": "Banco GNB Paraguay",
+                "accountHolder": "CardsHub Prepago",
+                "rucOrCi": "6677889-2",
+                "accountNumber": "03-556677-8",
+                "aliasSipap": "cardshub.py"
+            },
+            "binanceDetails": {
+                "payId": "665544332",
+                "network": "USDT (TRC-20)",
+                "walletAddress": "TYs29x11284a6C3f07a757657A82e4b99",
+                "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=TYs29x11284a6C3f07a757657A82e4b99"
+            }
+        }'::jsonb
+    ),
+    (
+        'tnt_nexustream_demo',
+        'nexustream',
+        'Nexus Stream & AI',
+        'nexustream.gamesboy.net',
+        'plan_enterprise',
+        'active',
+        '{
+            "brandName": "Nexus Stream",
+            "logoUrl": "/assets/branding/icon.png",
+            "iconUrl": "/assets/branding/icon.png",
+            "primaryColor": "#8b5cf6",
+            "accentColor": "#a78bfa",
+            "currency": "PYG",
+            "exchangeRate": 7500,
+            "whatsappSupport": "+595985112233"
+        }'::jsonb,
+        '{
+            "commissionPercent": 12.00,
+            "allowUserReselling": true,
+            "enabledModules": {
+                "streaming": true,
+                "games": false,
+                "giftcards": false,
+                "smm": true,
+                "p2pSharing": true
+            },
+            "paraguayBankDetails": {
+                "bank": "Sudameris Bank",
+                "accountHolder": "Nexus Media Group",
+                "rucOrCi": "7788990-3",
+                "accountNumber": "04-998811-2",
+                "aliasSipap": "nexustream.py"
+            },
+            "binanceDetails": {
+                "payId": "334455667",
+                "network": "USDT (BEP-20)",
+                "walletAddress": "0x88F10A98F722cE434a6C3f07a757657A82e4b88F",
+                "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x88F10A98F722cE434a6C3f07a757657A82e4b88F"
+            }
+        }'::jsonb
+    ),
+    (
+        'tnt_pixelstore_demo',
+        'pixelstore',
+        'PixelStore Gamers',
+        'pixelstore.gamesboy.net',
+        'plan_pro',
+        'active',
+        '{
+            "brandName": "PixelStore",
+            "logoUrl": "/assets/branding/icon.png",
+            "iconUrl": "/assets/branding/icon.png",
+            "primaryColor": "#06b6d4",
+            "accentColor": "#22d3ee",
+            "currency": "PYG",
+            "exchangeRate": 7500,
+            "whatsappSupport": "+595986990011"
+        }'::jsonb,
+        '{
+            "commissionPercent": 10.00,
+            "allowUserReselling": false,
+            "enabledModules": {
+                "streaming": true,
+                "games": true,
+                "giftcards": true,
+                "smm": false,
+                "p2pSharing": false
+            },
+            "paraguayBankDetails": {
+                "bank": "Banco Atlas",
+                "accountHolder": "PixelStore Gamers SRL",
+                "rucOrCi": "8899001-4",
+                "accountNumber": "05-334455-6",
+                "aliasSipap": "pixelstore.py"
+            },
+            "binanceDetails": {
+                "payId": "112233445",
+                "network": "USDT (BEP-20)",
+                "walletAddress": "0x44C10A98F722cE434a6C3f07a757657A82e4b44C",
+                "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x44C10A98F722cE434a6C3f07a757657A82e4b44C"
+            }
+        }'::jsonb
     )
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO UPDATE SET
+    name = EXCLUDED.name,
+    custom_domain = EXCLUDED.custom_domain,
+    plan_id = EXCLUDED.plan_id,
+    branding = EXCLUDED.branding,
+    settings = EXCLUDED.settings;
 
 -- 1. TABLA DE USUARIOS DE GAMESBOY (100% aislada de auth.users)
 CREATE TABLE IF NOT EXISTS gamesboy.gb_users (
@@ -357,6 +546,9 @@ CREATE INDEX IF NOT EXISTS idx_tenants_domain ON gamesboy.gb_tenants(custom_doma
 -- ============================================================================
 
 -- 1. Insertar Usuarios
+ALTER TABLE gamesboy.gb_users DROP CONSTRAINT IF EXISTS gb_users_email_key;
+DELETE FROM gamesboy.gb_users WHERE email IN ('admin@gamesboy.net', 'carlos@vendedor.com', 'lucas@cliente.com', 'maria@cliente.com') AND id NOT IN ('usr_admin', 'usr_seller1', 'usr_client1', 'usr_client2');
+
 INSERT INTO gamesboy.gb_users (id, tenant_id, name, email, role, avatar)
 VALUES
     ('usr_admin', 'tnt_gamesboy_main', 'Admin GamesBoy', 'admin@gamesboy.net', 'superadmin', '/assets/branding/icon.png'),
@@ -365,6 +557,7 @@ VALUES
     ('usr_client2', 'tnt_gamesboy_main', 'María López', 'maria@cliente.com', 'client', '/assets/branding/icon.png')
 ON CONFLICT (id) DO UPDATE SET
     name = EXCLUDED.name,
+    email = EXCLUDED.email,
     role = EXCLUDED.role,
     avatar = EXCLUDED.avatar;
 

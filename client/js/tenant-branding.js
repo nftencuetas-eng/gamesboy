@@ -86,6 +86,14 @@
         el.style.display = 'none';
       });
     }
+
+    // 7. P2P Account Sharing / Reventa Comunitaria (Función VIP / Pro)
+    const isP2PEnabled = tenant.settings?.allowUserReselling !== false && modules.p2pSharing !== false;
+    if (!isP2PEnabled) {
+      document.querySelectorAll('#sticky-monetize-pill, #menu-item-publish, .btn-monetize-pill, a[href*="/monetizar"], a[href*="/seller"]').forEach(el => {
+        el.style.display = 'none';
+      });
+    }
   }
 
   // Auto-propagate tenant query parameter across internal links

@@ -123,6 +123,7 @@ async function submitOnboarding() {
   const modGames = document.getElementById('mod-games')?.checked ?? true;
   const modGiftcards = document.getElementById('mod-giftcards')?.checked ?? true;
   const modSmm = document.getElementById('mod-smm')?.checked ?? false;
+  const modP2p = document.getElementById('mod-p2p')?.checked ?? (plan !== 'plan_starter');
 
   const btnNext = document.getElementById('btn-wiz-next');
   if (btnNext) {
@@ -144,6 +145,7 @@ async function submitOnboarding() {
       },
       settings: {
         commissionPercent: plan === 'plan_enterprise' ? 1.5 : (plan === 'plan_pro' ? 3.0 : 5.0),
+        allowUserReselling: modP2p,
         paraguayBankDetails: {
           bank: 'Banco Familiar / Itaú Paraguay',
           accountHolder: brandName,
@@ -158,7 +160,8 @@ async function submitOnboarding() {
           streaming: modStreaming,
           games: modGames,
           giftcards: modGiftcards,
-          smm: modSmm
+          smm: modSmm,
+          p2pSharing: modP2p
         }
       }
     };

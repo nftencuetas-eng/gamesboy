@@ -8,6 +8,9 @@ const router = Router();
 // --- 1. GET CURRENT RESOLVED TENANT (PUBLIC INFO & BRANDING) ---
 router.get('/current', (req, res) => {
   const tenant = req.tenant || DEFAULT_TENANT;
+  const isP2P = tenant.settings?.allowUserReselling !== undefined 
+    ? Boolean(tenant.settings.allowUserReselling) 
+    : (tenant.settings?.enabledModules?.p2pSharing ?? true);
   
   res.json({
     success: true,
@@ -22,9 +25,16 @@ router.get('/current', (req, res) => {
       settings: {
         commissionPercent: tenant.settings?.commissionPercent || 15.00,
         exchangeRate: tenant.branding?.exchangeRate || 7500,
+        allowUserReselling: isP2P,
         paraguayBankDetails: tenant.settings?.paraguayBankDetails || DEFAULT_TENANT.settings.paraguayBankDetails,
         binanceDetails: tenant.settings?.binanceDetails || DEFAULT_TENANT.settings.binanceDetails,
-        enabledModules: tenant.settings?.enabledModules || { streaming: true, games: true, giftcards: true, smm: true }
+        enabledModules: tenant.settings?.enabledModules || {
+          streaming: true,
+          games: true,
+          giftcards: true,
+          smm: true,
+          p2pSharing: isP2P
+        }
       }
     }
   });
@@ -56,8 +66,9 @@ router.get('/plans', (req, res) => {
       maxSlotsAllowed: 50,
       maxProductsAllowed: 30,
       customDomainEnabled: false,
+      p2pMarketplaceEnabled: false,
       platformFeePercent: 5.00,
-      features: ['Catálogo Streaming', 'Soporte SIPAP', 'Subdominio']
+      features: ['Tienda Digital Directa (Venta Propia)', 'Gestión Streaming con PIN', 'Subdominio mitienda.gamesboy.net', 'Pasarela SIPAP y Binance Pay']
     },
     {
       id: 'plan_pro',
@@ -66,8 +77,9 @@ router.get('/plans', (req, res) => {
       maxSlotsAllowed: 250,
       maxProductsAllowed: 150,
       customDomainEnabled: true,
+      p2pMarketplaceEnabled: true,
       platformFeePercent: 3.00,
-      features: ['Catálogo Completo', 'Dominio Propio', 'Cero Glare UI', 'Binance Pay']
+      features: ['Marketplace P2P Habilitado (Reventa por Clientes)', 'Dominio Propio (mitienda.com)', 'Cero Glare UI & Colores de Marca', 'Comisiones automáticas (3%)']
     },
     {
       id: 'plan_enterprise',
@@ -76,8 +88,9 @@ router.get('/plans', (req, res) => {
       maxSlotsAllowed: 1000,
       maxProductsAllowed: 500,
       customDomainEnabled: true,
+      p2pMarketplaceEnabled: true,
       platformFeePercent: 1.50,
-      features: ['White Label Total', 'Soporte VIP 24/7', 'API Exclusiva']
+      features: ['Marketplace P2P Ilimitado VIP', 'Marca Blanca Total (100% Sin Marca)', 'API Exclusiva', 'Soporte Prioritario 24/7']
     }
   ];
 
