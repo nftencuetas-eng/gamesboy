@@ -883,6 +883,13 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
           <span>10. Impulso Digital (API)</span>
         </button>
+
+        <!-- SECCIÓN 5: PERSONALIZACIÓN SAAS -->
+        <div class="sidebar-category-header">Personalización SaaS</div>
+        <button class="admin-menu-btn" data-tab="tab-tenant-settings" title="11. Marca Blanca & Ajustes">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          <span>11. Marca Blanca & Ajustes</span>
+        </button>
       </nav>
 
       <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08);">
@@ -1932,9 +1939,253 @@
             </table>
           </div>
         </div>
+      <!-- ======================================================= -->
+      <!-- TAB 11: PERSONALIZACIÓN SAAS & MARCA BLANCA             -->
+      <!-- ======================================================= -->
+      <section id="tab-tenant-settings" class="admin-section-pane">
+        
+        <!-- HEADER HERO INFO -->
+        <div style="background: linear-gradient(135deg, rgba(0, 194, 255, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%); border: 1px solid rgba(0, 194, 255, 0.2); border-radius: 18px; padding: 1.5rem; margin-bottom: 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+          <div>
+            <div style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.74rem; font-weight: 800; color: var(--accent-cyan); background: rgba(0, 194, 255, 0.12); padding: 3px 10px; border-radius: 20px; margin-bottom: 6px; text-transform: uppercase;">
+              <span>🎨 Identidad Visual & Configuración Multi-Tenant</span>
+            </div>
+            <h2 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 900; color: #ffffff; margin: 0;">
+              Personalización de tu Tienda GamSplit
+            </h2>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0 0 0;">
+              Sube tu logo, favicon, configura tus colores corporativos, dominio propio y pasarelas de pago.
+            </p>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button type="button" class="btn-admin-action cyan" onclick="loadTenantSettings()" style="padding: 10px 18px; font-weight: 800;">
+              <span>🔄 Recargar Ajustes</span>
+            </button>
+          </div>
+        </div>
+
+        <form id="form-tenant-customizer">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+            
+            <!-- BLOQUE 1: IDENTIDAD & LOGOS -->
+            <div class="admin-card">
+              <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px;">
+                <span style="color: var(--accent-cyan);">🖼️</span>
+                <span>Identidad Visual & Logos</span>
+              </h3>
+
+              <div class="admin-form-group">
+                <label class="admin-form-label">Nombre Comercial de la Tienda *</label>
+                <input type="text" id="tenant-brand-name" class="admin-form-input" placeholder="ej: GamesBoy Store" required>
+              </div>
+
+              <!-- LOGO UPLOAD -->
+              <div class="admin-form-group">
+                <label class="admin-form-label">Logo de la Tienda (Subir PNG transparente)</label>
+                <div class="file-upload-zone" id="zone-tenant-logo-upload" style="padding: 12px; margin-bottom: 6px;">
+                  <input type="file" id="file-tenant-logo" accept="image/*">
+                  <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                    <img id="img-preview-tenant-logo" src="/assets/branding/logo.png" style="height: 40px; width: auto; object-fit: contain; background: rgba(0,0,0,0.5); padding: 4px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="text-align: left;">
+                      <div style="font-size: 0.8rem; font-weight: 700; color: #ffffff;">Haz clic para subir nuevo Logo</div>
+                      <div style="font-size: 0.7rem; color: var(--text-tertiary);">Recomendado: PNG sin fondo (200x50px)</div>
+                    </div>
+                  </div>
+                </div>
+                <input type="text" id="tenant-logo-url" class="admin-form-input" placeholder="O pega una URL directa de imagen">
+              </div>
+
+              <!-- FAVICON UPLOAD -->
+              <div class="admin-form-group">
+                <label class="admin-form-label">Ícono / Favicon (Pestaña del Navegador)</label>
+                <div class="file-upload-zone" id="zone-tenant-favicon-upload" style="padding: 12px; margin-bottom: 6px;">
+                  <input type="file" id="file-tenant-favicon" accept="image/*">
+                  <div style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+                    <img id="img-preview-tenant-favicon" src="/assets/branding/icon.png" style="width: 32px; height: 32px; object-fit: contain; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="text-align: left;">
+                      <div style="font-size: 0.8rem; font-weight: 700; color: #ffffff;">Haz clic para subir Favicon</div>
+                      <div style="font-size: 0.7rem; color: var(--text-tertiary);">Formato: PNG / ICO cuadrado (64x64px)</div>
+                    </div>
+                  </div>
+                </div>
+                <input type="text" id="tenant-favicon-url" class="admin-form-input" placeholder="O pega una URL de favicon">
+              </div>
+            </div>
+
+            <!-- BLOQUE 2: PALETA DE COLORES -->
+            <div class="admin-card">
+              <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px;">
+                <span style="color: var(--accent-emerald);">🎨</span>
+                <span>Paleta de Colores Corporativos</span>
+              </h3>
+
+              <div class="admin-form-group">
+                <label class="admin-form-label">Color Principal (Botones & Enlaces Destacados)</label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <input type="color" id="tenant-primary-color-picker" value="#0284c7" style="width: 44px; height: 38px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: transparent; cursor: pointer;">
+                  <input type="text" id="tenant-primary-color" class="admin-form-input" value="#0284c7" style="font-family: var(--font-mono); font-weight: 800;">
+                </div>
+                <div style="display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;">
+                  <button type="button" class="btn-page" onclick="applyPresetColor('#0284c7', '#00c2ff')">Azul GamSplit</button>
+                  <button type="button" class="btn-page" onclick="applyPresetColor('#10b981', '#34d399')">Verde Esmeralda</button>
+                  <button type="button" class="btn-page" onclick="applyPresetColor('#f59e0b', '#fbbf24')">Ámbar Dorado</button>
+                  <button type="button" class="btn-page" onclick="applyPresetColor('#8b5cf6', '#a78bfa')">Púrpura</button>
+                  <button type="button" class="btn-page" onclick="applyPresetColor('#ec4899', '#f472b6')">Magenta</button>
+                </div>
+              </div>
+
+              <div class="admin-form-group" style="margin-top: 1rem;">
+                <label class="admin-form-label">Color Secundario / Acento</label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                  <input type="color" id="tenant-accent-color-picker" value="#00c2ff" style="width: 44px; height: 38px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); background: transparent; cursor: pointer;">
+                  <input type="text" id="tenant-accent-color" class="admin-form-input" value="#00c2ff" style="font-family: var(--font-mono); font-weight: 800;">
+                </div>
+              </div>
+
+              <div class="admin-form-group" style="margin-top: 1rem;">
+                <label class="admin-form-label">Color de Fondo de la Plataforma (Dark Minimal)</label>
+                <select id="tenant-bg-color" class="admin-form-select">
+                  <option value="#07090e" selected>Matte Obsidian (#07090e - Recomendado)</option>
+                  <option value="#0b0f19">Dark Slate (#0b0f19)</option>
+                  <option value="#05070c">Deep Charcoal (#05070c)</option>
+                  <option value="#0f172a">Navy Blue (#0f172a)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- BLOQUE 3: DOMINIOS & ENLACES -->
+            <div class="admin-card">
+              <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px;">
+                <span style="color: var(--accent-cyan);">🌐</span>
+                <span>Dominios & Acceso Web</span>
+              </h3>
+
+              <div class="admin-form-group">
+                <label class="admin-form-label">Subdominio GamSplit Asignado</label>
+                <div style="background: rgba(0,0,0,0.4); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between;">
+                  <code id="tenant-subdomain-url" style="color: var(--accent-cyan); font-weight: 700; font-size: 0.88rem;">https://mitienda.gamsplit.com</code>
+                  <a href="#" id="tenant-live-store-link" target="_blank" class="btn-admin-action cyan" style="padding: 4px 10px; font-size: 0.74rem;">Visitar Tienda ➔</a>
+                </div>
+              </div>
+
+              <div class="admin-form-group" style="margin-top: 1rem;">
+                <label class="admin-form-label">Dominio Propio Personalizado (Plan Pro / Enterprise)</label>
+                <input type="text" id="tenant-custom-domain" class="admin-form-input" placeholder="ej: mitienda.com o mitienda.com.py">
+                <p style="font-size: 0.74rem; color: var(--text-tertiary); margin-top: 6px; line-height: 1.4;">
+                  Para vincular tu dominio, agrega un registro <strong>CNAME</strong> en tu proveedor DNS apuntando a <code>cname.gamsplit.com</code>.
+                </p>
+              </div>
+
+              <div class="admin-form-group" style="margin-top: 1rem;">
+                <label class="admin-form-label">WhatsApp de Soporte Directo</label>
+                <input type="text" id="tenant-whatsapp" class="admin-form-input" placeholder="ej: +595981123456">
+              </div>
+            </div>
+
+            <!-- BLOQUE 4: PASARELAS DE PAGO & MONEDA -->
+            <div class="admin-card">
+              <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px;">
+                <span style="color: var(--accent-amber);">🇵🇾</span>
+                <span>Pasarelas de Cobro & Tasa SIPAP / USDT</span>
+              </h3>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="admin-form-group">
+                  <label class="admin-form-label">Banco en Paraguay</label>
+                  <input type="text" id="tenant-bank-name" class="admin-form-input" placeholder="ej: Banco Familiar / Itaú">
+                </div>
+                <div class="admin-form-group">
+                  <label class="admin-form-label">Titular de la Cuenta</label>
+                  <input type="text" id="tenant-bank-holder" class="admin-form-input" placeholder="ej: Mi Tienda Digital SRL">
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 0.5rem;">
+                <div class="admin-form-group">
+                  <label class="admin-form-label">Número de Cuenta</label>
+                  <input type="text" id="tenant-bank-account" class="admin-form-input" placeholder="ej: 01-000000-1">
+                </div>
+                <div class="admin-form-group">
+                  <label class="admin-form-label">Alias SIPAP para Transferencias</label>
+                  <input type="text" id="tenant-bank-alias" class="admin-form-input" placeholder="ej: mitienda.py" style="color: var(--accent-cyan); font-weight: 800;">
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px; margin-top: 0.5rem;">
+                <div class="admin-form-group">
+                  <label class="admin-form-label">Binance Pay ID (Cripto USDT)</label>
+                  <input type="text" id="tenant-binance-id" class="admin-form-input" placeholder="ej: 849201934">
+                </div>
+                <div class="admin-form-group">
+                  <label class="admin-form-label">Tasa Guaraníes (₲ / USDT)</label>
+                  <input type="number" id="tenant-exchange-rate" class="admin-form-input" placeholder="7500" style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald);">
+                </div>
+              </div>
+            </div>
+
+            <!-- BLOQUE 5: MÓDULOS DEL CATÁLOGO & P2P -->
+            <div class="admin-card" style="grid-column: 1 / -1;">
+              <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px;">
+                <span style="color: var(--accent-purple);">⚡</span>
+                <span>Módulos de Catálogo & Marketplace Comunitario</span>
+              </h3>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+                <label class="module-toggle-item">
+                  <input type="checkbox" id="tenant-mod-streaming" checked>
+                  <div class="toggle-info">
+                    <strong>🎬 Cuentas Streaming con PIN</strong>
+                    <span>Netflix, Disney+, Max, Spotify, YouTube Premium</span>
+                  </div>
+                </label>
+
+                <label class="module-toggle-item">
+                  <input type="checkbox" id="tenant-mod-games" checked>
+                  <div class="toggle-info">
+                    <strong>🎮 Videojuegos Digitales</strong>
+                    <span>PS5, Xbox Series, PC Steam</span>
+                  </div>
+                </label>
+
+                <label class="module-toggle-item">
+                  <input type="checkbox" id="tenant-mod-giftcards" checked>
+                  <div class="toggle-info">
+                    <strong>🎁 Gift Cards & Recargas</strong>
+                    <span>PlayStation Store, Steam, Free Fire</span>
+                  </div>
+                </label>
+
+                <label class="module-toggle-item" style="border: 1px solid rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.05);">
+                  <input type="checkbox" id="tenant-mod-p2p" checked>
+                  <div class="toggle-info">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                      <strong>👥 Reventa Comunitaria P2P</strong>
+                      <span style="background: #f59e0b; color: #000; font-size: 0.62rem; font-weight: 800; padding: 1px 5px; border-radius: 4px;">VIP</span>
+                    </div>
+                    <span>Tus clientes registrados pueden compartir cupos y ganar saldo.</span>
+                  </div>
+                </label>
+              </div>
+
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1.25rem; flex-wrap: wrap; gap: 14px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-size: 0.85rem; color: var(--text-secondary); font-weight: 700;">Comisión de Plataforma por Venta:</span>
+                  <div style="display: flex; align-items: center; gap: 4px;">
+                    <input type="number" id="tenant-commission-percent" class="admin-form-input" value="3.0" step="0.5" min="0" max="30" style="width: 70px; text-align: center; font-weight: 800;">
+                    <span style="color: var(--text-tertiary); font-weight: 800;">%</span>
+                  </div>
+                </div>
+                
+                <button type="submit" id="btn-save-tenant-settings" class="btn-admin-action emerald" style="padding: 12px 28px; font-size: 0.92rem; font-weight: 800;">
+                  <span>💾 Guardar Todos los Cambios de Tienda</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </form>
+
       </section>
-
-
 
     </main>
   </div>
@@ -2579,7 +2830,8 @@
       'tab-streaming-moderation': { title: '7. Servicios de Streaming', subtitle: 'Catálogo oficial de servicios (precios por asiento en Gs., cupos, portadas e íconos) y moderación de cuentas de vendedores en Bóveda Escrow.' },
       'tab-hero-banners': { title: 'Portadas & Banners de Inicio (Hero Accordion)', subtitle: 'Personalización de los 4 banners interactivos de la página de inicio, imágenes horizontales y verticales.' },
       'tab-users': { title: 'Directorio de Usuarios & Billeteras Auditadas', subtitle: 'Auditoría en tiempo real de clientes, vendedores, saldos reales en Gs./USDT y fondos en garantía.' },
-      'tab-smm-api': { title: 'Integración API: Impulso Digital & Redes Sociales', subtitle: 'Conexión con el proveedor mayorista de servicios SMM, testing de saldo y márgenes.' }
+      'tab-smm-api': { title: 'Integración API: Impulso Digital & Redes Sociales', subtitle: 'Conexión con el proveedor mayorista de servicios SMM, testing de saldo y márgenes.' },
+      'tab-tenant-settings': { title: 'Personalización de Marca Blanca & Ajustes SaaS', subtitle: 'Configura el logo, favicon, paleta de colores, subdominio, dominio personalizado y pasarelas de pago de tu tienda.' }
     };
 
     window.switchStreamingSubtab = function(subpaneId) {
@@ -2650,6 +2902,7 @@
       if (tabId === 'tab-hero-banners') loadHeroBannersAdmin();
       if (tabId === 'tab-users') loadUsers();
       if (tabId === 'tab-smm-api') loadSmmConfig();
+      if (tabId === 'tab-tenant-settings') loadTenantSettings();
     };
 
     menuButtons.forEach(btn => {
@@ -4818,6 +5071,238 @@
         alert('Error al conectar con el servidor.');
       }
     };
+
+    // =======================================================
+    // TAB 11: PERSONALIZACIÓN SAAS & MARCA BLANCA ENGINE
+    // =======================================================
+    let currentTenantData = null;
+
+    window.applyPresetColor = function(primary, accent) {
+      const pInput = document.getElementById('tenant-primary-color');
+      const pPicker = document.getElementById('tenant-primary-color-picker');
+      const aInput = document.getElementById('tenant-accent-color');
+      const aPicker = document.getElementById('tenant-accent-color-picker');
+
+      if (pInput) pInput.value = primary;
+      if (pPicker) pPicker.value = primary;
+      if (aInput) aInput.value = accent;
+      if (aPicker) aPicker.value = accent;
+    };
+
+    // Color Pickers input sync
+    document.getElementById('tenant-primary-color-picker')?.addEventListener('input', (e) => {
+      const el = document.getElementById('tenant-primary-color');
+      if (el) el.value = e.target.value;
+    });
+    document.getElementById('tenant-primary-color')?.addEventListener('input', (e) => {
+      const el = document.getElementById('tenant-primary-color-picker');
+      if (el && e.target.value.match(/^#[0-9a-f]{6}$/i)) el.value = e.target.value;
+    });
+
+    document.getElementById('tenant-accent-color-picker')?.addEventListener('input', (e) => {
+      const el = document.getElementById('tenant-accent-color');
+      if (el) el.value = e.target.value;
+    });
+    document.getElementById('tenant-accent-color')?.addEventListener('input', (e) => {
+      const el = document.getElementById('tenant-accent-color-picker');
+      if (el && e.target.value.match(/^#[0-9a-f]{6}$/i)) el.value = e.target.value;
+    });
+
+    // Logo Upload File Handler
+    document.getElementById('file-tenant-logo')?.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        const base64 = await compressImage(file, 600, 0.9);
+        document.getElementById('tenant-logo-url').value = base64;
+        const preview = document.getElementById('img-preview-tenant-logo');
+        if (preview) preview.src = base64;
+      } catch (err) {
+        alert('Error al procesar logo: ' + err.message);
+      }
+    });
+
+    // Favicon Upload File Handler
+    document.getElementById('file-tenant-favicon')?.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        const base64 = await compressImage(file, 128, 0.9);
+        document.getElementById('tenant-favicon-url').value = base64;
+        const preview = document.getElementById('img-preview-tenant-favicon');
+        if (preview) preview.src = base64;
+      } catch (err) {
+        alert('Error al procesar favicon: ' + err.message);
+      }
+    });
+
+    // URL input live previews
+    document.getElementById('tenant-logo-url')?.addEventListener('input', (e) => {
+      const preview = document.getElementById('img-preview-tenant-logo');
+      if (preview && e.target.value) preview.src = e.target.value;
+    });
+
+    document.getElementById('tenant-favicon-url')?.addEventListener('input', (e) => {
+      const preview = document.getElementById('img-preview-tenant-favicon');
+      if (preview && e.target.value) preview.src = e.target.value;
+    });
+
+    async function loadTenantSettings() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const tenantSlug = urlParams.get('tenant') || urlParams.get('t') || '';
+        const headers = tenantSlug ? { 'x-tenant-slug': tenantSlug } : {};
+
+        const res = await fetch('/api/tenant/current', { headers });
+        const data = await res.json();
+
+        if (data && data.success && data.tenant) {
+          currentTenantData = data.tenant;
+          const t = data.tenant;
+          const b = t.branding || {};
+          const s = t.settings || {};
+          const pb = s.paraguayBankDetails || {};
+          const bin = s.binanceDetails || {};
+          const mods = s.enabledModules || {};
+
+          // Populate Form Fields
+          if (document.getElementById('tenant-brand-name')) document.getElementById('tenant-brand-name').value = b.brandName || t.name || '';
+          if (document.getElementById('tenant-logo-url')) document.getElementById('tenant-logo-url').value = b.logoUrl || '';
+          if (document.getElementById('img-preview-tenant-logo')) document.getElementById('img-preview-tenant-logo').src = b.logoUrl || '/assets/branding/logo.png';
+          if (document.getElementById('tenant-favicon-url')) document.getElementById('tenant-favicon-url').value = b.iconUrl || '';
+          if (document.getElementById('img-preview-tenant-favicon')) document.getElementById('img-preview-tenant-favicon').src = b.iconUrl || '/assets/branding/icon.png';
+
+          const pColor = b.primaryColor || '#0284c7';
+          const aColor = b.accentColor || '#00c2ff';
+          if (document.getElementById('tenant-primary-color')) document.getElementById('tenant-primary-color').value = pColor;
+          if (document.getElementById('tenant-primary-color-picker')) document.getElementById('tenant-primary-color-picker').value = pColor;
+          if (document.getElementById('tenant-accent-color')) document.getElementById('tenant-accent-color').value = aColor;
+          if (document.getElementById('tenant-accent-color-picker')) document.getElementById('tenant-accent-color-picker').value = aColor;
+
+          if (document.getElementById('tenant-subdomain-url')) {
+            document.getElementById('tenant-subdomain-url').textContent = `https://${t.slug}.gamsplit.com`;
+          }
+          if (document.getElementById('tenant-live-store-link')) {
+            document.getElementById('tenant-live-store-link').href = `/store?tenant=${t.slug}`;
+          }
+          if (document.getElementById('tenant-custom-domain')) {
+            document.getElementById('tenant-custom-domain').value = t.customDomain && !t.customDomain.includes('.gamsplit.') ? t.customDomain : '';
+          }
+
+          if (document.getElementById('tenant-whatsapp')) document.getElementById('tenant-whatsapp').value = b.whatsappSupport || '+595981000000';
+          if (document.getElementById('tenant-bank-name')) document.getElementById('tenant-bank-name').value = pb.bank || pb.bankName || 'Banco Familiar';
+          if (document.getElementById('tenant-bank-holder')) document.getElementById('tenant-bank-holder').value = pb.accountHolder || pb.holderName || t.name;
+          if (document.getElementById('tenant-bank-account')) document.getElementById('tenant-bank-account').value = pb.accountNumber || '01-000000-1';
+          if (document.getElementById('tenant-bank-alias')) document.getElementById('tenant-bank-alias').value = pb.aliasSipap || `${t.slug}.py`;
+
+          if (document.getElementById('tenant-binance-id')) document.getElementById('tenant-binance-id').value = bin.payId || bin.binancePayId || '849201934';
+          if (document.getElementById('tenant-exchange-rate')) document.getElementById('tenant-exchange-rate').value = b.exchangeRate || 7500;
+
+          if (document.getElementById('tenant-mod-streaming')) document.getElementById('tenant-mod-streaming').checked = mods.streaming !== false;
+          if (document.getElementById('tenant-mod-games')) document.getElementById('tenant-mod-games').checked = mods.games !== false;
+          if (document.getElementById('tenant-mod-giftcards')) document.getElementById('tenant-mod-giftcards').checked = mods.giftcards !== false;
+          if (document.getElementById('tenant-mod-p2p')) document.getElementById('tenant-mod-p2p').checked = s.allowUserReselling !== false && mods.p2pSharing !== false;
+          if (document.getElementById('tenant-commission-percent')) document.getElementById('tenant-commission-percent').value = s.commissionPercent || 3.0;
+        }
+      } catch (err) {
+        console.error('Error loading tenant settings:', err);
+      }
+    }
+
+    document.getElementById('form-tenant-customizer')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!currentTenantData || !currentTenantData.id) {
+        alert('No se pudo identificar la tienda actual.');
+        return;
+      }
+
+      const brandName = document.getElementById('tenant-brand-name').value.trim();
+      const logoUrl = document.getElementById('tenant-logo-url').value.trim();
+      const iconUrl = document.getElementById('tenant-favicon-url').value.trim();
+      const primaryColor = document.getElementById('tenant-primary-color').value.trim();
+      const accentColor = document.getElementById('tenant-accent-color').value.trim();
+      const customDomain = document.getElementById('tenant-custom-domain').value.trim();
+      const whatsapp = document.getElementById('tenant-whatsapp').value.trim();
+
+      const bankName = document.getElementById('tenant-bank-name').value.trim();
+      const bankHolder = document.getElementById('tenant-bank-holder').value.trim();
+      const bankAccount = document.getElementById('tenant-bank-account').value.trim();
+      const bankAlias = document.getElementById('tenant-bank-alias').value.trim();
+
+      const binanceId = document.getElementById('tenant-binance-id').value.trim();
+      const exchangeRate = parseFloat(document.getElementById('tenant-exchange-rate').value) || 7500;
+
+      const modStreaming = document.getElementById('tenant-mod-streaming').checked;
+      const modGames = document.getElementById('tenant-mod-games').checked;
+      const modGiftcards = document.getElementById('tenant-mod-giftcards').checked;
+      const modP2p = document.getElementById('tenant-mod-p2p').checked;
+      const commissionPercent = parseFloat(document.getElementById('tenant-commission-percent').value) || 3.0;
+
+      const btnSave = document.getElementById('btn-save-tenant-settings');
+      if (btnSave) {
+        btnSave.disabled = true;
+        btnSave.textContent = 'Guardando Cambios...';
+      }
+
+      try {
+        const payload = {
+          name: brandName,
+          customDomain: customDomain || null,
+          branding: {
+            brandName: brandName,
+            logoUrl: logoUrl || currentTenantData.branding?.logoUrl || '/assets/branding/logo.png',
+            iconUrl: iconUrl || currentTenantData.branding?.iconUrl || '/assets/branding/icon.png',
+            primaryColor: primaryColor || '#0284c7',
+            accentColor: accentColor || '#00c2ff',
+            whatsappSupport: whatsapp || '+595981000000',
+            exchangeRate: exchangeRate,
+            currency: 'PYG'
+          },
+          settings: {
+            commissionPercent: commissionPercent,
+            allowUserReselling: modP2p,
+            paraguayBankDetails: {
+              bank: bankName,
+              accountHolder: bankHolder,
+              accountNumber: bankAccount,
+              aliasSipap: bankAlias
+            },
+            binanceDetails: {
+              payId: binanceId,
+              network: 'USDT (Binance Pay / BEP-20 / TRC-20)'
+            },
+            enabledModules: {
+              streaming: modStreaming,
+              games: modGames,
+              giftcards: modGiftcards,
+              smm: false,
+              p2pSharing: modP2p
+            }
+          }
+        };
+
+        const res = await fetch(`/api/saas/tenants/${currentTenantData.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          alert('🎉 ¡Configuración de tienda y marca guardada exitosamente!');
+          loadTenantSettings();
+        } else {
+          alert(data.error || 'Error al guardar la configuración.');
+        }
+      } catch (err) {
+        alert('Error de conexión con el servidor.');
+      } finally {
+        if (btnSave) {
+          btnSave.disabled = false;
+          btnSave.textContent = '💾 Guardar Todos los Cambios de Tienda';
+        }
+      }
+    });
 
     // Refresh & Logout
     document.getElementById('btn-refresh-admin')?.addEventListener('click', () => {

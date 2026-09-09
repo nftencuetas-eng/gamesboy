@@ -1,16 +1,19 @@
 /* ==========================================================================
-   GamesBoy.net - SaaS Master Landing Page Styles (saas-landing.css)
+   GamSplit SaaS Master Engine - Landing & Showcase Styles (saas-landing.css)
+   Aesthetic: 100% Matte Charcoal, Dark Slate, Zero Neon Bloom, Armored Security
    ========================================================================== */
 
 :root {
-  --saas-bg-base: #080a11;
-  --saas-bg-surface: #0f131f;
-  --saas-bg-elevated: #161c2d;
+  --saas-bg-base: #07090e;
+  --saas-bg-surface: #0e121d;
+  --saas-bg-elevated: #151b2a;
   --saas-border-subtle: rgba(255, 255, 255, 0.08);
   --saas-border-hover: rgba(0, 194, 255, 0.35);
   --saas-accent-blue: #0284c7;
   --saas-accent-cyan: #00c2ff;
   --saas-accent-emerald: #10b981;
+  --saas-accent-amber: #f59e0b;
+  --saas-accent-purple: #8b5cf6;
 }
 
 body.saas-body {
@@ -21,6 +24,19 @@ body.saas-body {
   padding: 0;
   overflow-x: hidden;
   line-height: 1.6;
+  position: relative;
+}
+
+/* --- INTERACTIVE BACKGROUND CANVAS --- */
+.saas-bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.45;
 }
 
 /* --- HEADER & NAVBAR --- */
@@ -28,9 +44,9 @@ body.saas-body {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(8, 10, 17, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(7, 9, 14, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--saas-border-subtle);
   padding: 0.75rem 1.5rem;
 }
@@ -46,7 +62,7 @@ body.saas-body {
 .saas-brand-wrap {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   text-decoration: none;
 }
 
@@ -55,16 +71,21 @@ body.saas-body {
   width: auto;
   display: block;
   object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.saas-brand-wrap:hover .saas-logo-img {
+  transform: scale(1.02);
 }
 
 .saas-badge-tag {
-  background: rgba(0, 194, 255, 0.12);
+  background: rgba(0, 194, 255, 0.1);
   color: var(--saas-accent-cyan);
   border: 1px solid rgba(0, 194, 255, 0.25);
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: 6px;
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: 0.7rem;
+  font-weight: 800;
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
@@ -72,7 +93,7 @@ body.saas-body {
 .saas-nav-links {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.75rem;
 }
 
 .saas-nav-link {
@@ -84,19 +105,6 @@ body.saas-body {
 }
 
 .saas-nav-link:hover {
-  color: #ffffff;
-}
-
-.saas-nav-link.demo-pill {
-  color: var(--saas-accent-cyan);
-  background: rgba(0, 194, 255, 0.08);
-  padding: 4px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(0, 194, 255, 0.2);
-}
-
-.saas-nav-link.demo-pill:hover {
-  background: rgba(0, 194, 255, 0.18);
   color: #ffffff;
 }
 
@@ -120,6 +128,7 @@ body.saas-body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
 }
 
 .btn-saas-secondary:hover {
@@ -129,7 +138,6 @@ body.saas-body {
 }
 
 .btn-saas-primary {
-  background: var(--saas-accent-blue);
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
   border: 1px solid rgba(0, 194, 255, 0.3);
   color: #ffffff;
@@ -143,37 +151,38 @@ body.saas-body {
   gap: 6px;
   transition: all 0.2s ease;
   text-decoration: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
 }
 
 .btn-saas-primary:hover {
   background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.45);
 }
 
 /* --- HERO SECTION --- */
 .saas-hero-section {
   position: relative;
-  padding: 5rem 1.5rem 3rem;
+  padding: 4.5rem 1.5rem 3rem;
   text-align: center;
   overflow: hidden;
+  z-index: 1;
 }
 
 .saas-hero-glow {
   position: absolute;
-  top: -100px;
+  top: -120px;
   left: 50%;
   transform: translateX(-50%);
-  width: 700px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(0, 194, 255, 0.12) 0%, rgba(2, 132, 199, 0.04) 50%, transparent 75%);
+  width: 800px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 194, 255, 0.1) 0%, rgba(2, 132, 199, 0.03) 50%, transparent 75%);
   pointer-events: none;
   z-index: 0;
 }
 
 .saas-hero-container {
-  max-width: 1040px;
+  max-width: 1100px;
   margin: 0 auto;
   position: relative;
   z-index: 1;
@@ -183,7 +192,7 @@ body.saas-body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(16, 21, 38, 0.85);
+  background: rgba(14, 18, 29, 0.85);
   border: 1px solid rgba(0, 194, 255, 0.25);
   padding: 6px 14px;
   border-radius: 9999px;
@@ -200,6 +209,12 @@ body.saas-body {
   border-radius: 50%;
   box-shadow: 0 0 8px #00c2ff;
   display: inline-block;
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
 }
 
 .saas-hero-title {
@@ -221,7 +236,7 @@ body.saas-body {
 .saas-hero-subtitle {
   font-size: 1.12rem;
   color: #94a3b8;
-  max-width: 760px;
+  max-width: 780px;
   margin: 0 auto 2.25rem;
   line-height: 1.6;
 }
@@ -236,11 +251,10 @@ body.saas-body {
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-bottom: 3.5rem;
+  margin-bottom: 3rem;
 }
 
 .btn-hero-launch {
-  background: var(--saas-accent-blue);
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
   border: 1px solid rgba(0, 194, 255, 0.35);
   color: #ffffff;
@@ -262,7 +276,7 @@ body.saas-body {
 }
 
 .btn-hero-demo {
-  background: rgba(16, 21, 38, 0.9);
+  background: rgba(14, 18, 29, 0.9);
   border: 1px solid var(--saas-border-subtle);
   color: #e2e8f0;
   padding: 14px 24px;
@@ -288,11 +302,11 @@ body.saas-body {
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  background: rgba(15, 19, 31, 0.6);
+  background: rgba(14, 18, 29, 0.6);
   border: 1px solid var(--saas-border-subtle);
   border-radius: 16px;
   padding: 1.25rem 2rem;
-  max-width: 880px;
+  max-width: 900px;
   margin: 0 auto 3.5rem;
   flex-wrap: wrap;
 }
@@ -322,46 +336,122 @@ body.saas-body {
   background: var(--saas-border-subtle);
 }
 
-/* --- HERO MOCKUP --- */
-.saas-mockup-wrapper {
+/* ==========================================================================
+   INTERACTIVE SAAS ENGINE SHOWCASE (TABBED INTERFACE)
+   ========================================================================== */
+
+.saas-showcase-container {
   background: var(--saas-bg-surface);
   border: 1px solid rgba(0, 194, 255, 0.2);
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9);
   text-align: left;
+  margin-top: 1rem;
 }
 
-.saas-mockup-header {
-  background: rgba(6, 8, 14, 0.95);
+.showcase-nav-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: rgba(7, 9, 14, 0.95);
   border-bottom: 1px solid var(--saas-border-subtle);
-  padding: 10px 16px;
+}
+
+.showcase-tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #94a3b8;
+  padding: 14px 18px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.showcase-tab-btn .tab-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.showcase-tab-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.showcase-tab-btn.active {
+  color: #ffffff;
+  border-bottom-color: var(--saas-accent-cyan);
+  background: rgba(0, 194, 255, 0.05);
+}
+
+.showcase-tab-btn.active .tab-num {
+  background: var(--saas-accent-cyan);
+  color: #000000;
+}
+
+.showcase-screen-viewport {
+  position: relative;
+  min-height: 380px;
+}
+
+.showcase-slide {
+  display: none;
+  animation: fadeInSlide 0.3s ease forwards;
+}
+
+.showcase-slide.active {
+  display: block;
+}
+
+@keyframes fadeInSlide {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-browser-bar {
+  background: rgba(10, 13, 21, 0.95);
+  border-bottom: 1px solid var(--saas-border-subtle);
+  padding: 8px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.mockup-dots {
+.browser-dots {
   display: flex;
   gap: 6px;
 }
 
-.mockup-dots .dot {
+.browser-dots span {
   width: 10px;
   height: 10px;
   border-radius: 50%;
 }
 
-.mockup-dots .red { background: #ef4444; }
-.mockup-dots .yellow { background: #f59e0b; }
-.mockup-dots .green { background: #10b981; }
+.browser-dots .d-red { background: #ef4444; }
+.browser-dots .d-yellow { background: #f59e0b; }
+.browser-dots .d-green { background: #10b981; }
 
-.mockup-address-bar {
-  background: rgba(0, 0, 0, 0.4);
+.browser-url {
+  background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 4px 14px;
   border-radius: 6px;
-  font-size: 0.75rem;
+  font-size: 0.76rem;
   color: #94a3b8;
   font-family: 'JetBrains Mono', monospace;
   display: flex;
@@ -369,103 +459,289 @@ body.saas-body {
   gap: 6px;
 }
 
-.mockup-badge {
+.browser-badge {
   font-size: 0.68rem;
   font-weight: 700;
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.15);
-  padding: 2px 6px;
+  color: #38bdf8;
+  background: rgba(0, 194, 255, 0.12);
+  padding: 2px 8px;
   border-radius: 4px;
 }
 
-.saas-mockup-body {
-  padding: 1.5rem;
-}
-
-.mockup-store-hero {
+.slide-content-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  background: rgba(10, 13, 23, 0.8);
-  border: 1px solid var(--saas-border-subtle);
-  border-radius: 14px;
-  padding: 1.5rem;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 2rem;
+  padding: 2.25rem 2rem;
+  align-items: center;
 }
 
-.mockup-mini-tag {
-  font-size: 0.68rem;
+.feature-tag {
+  font-size: 0.72rem;
   font-weight: 800;
   color: var(--saas-accent-cyan);
+  background: rgba(0, 194, 255, 0.1);
+  border: 1px solid rgba(0, 194, 255, 0.25);
+  padding: 3px 10px;
+  border-radius: 6px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  display: inline-block;
+  margin-bottom: 10px;
 }
 
-.mockup-store-title {
-  font-size: 1.35rem;
+.slide-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.55rem;
+  font-weight: 800;
   color: #ffffff;
-  margin: 6px 0;
-  font-weight: 800;
+  margin: 0 0 0.75rem;
 }
 
-.mockup-store-desc {
-  font-size: 0.82rem;
+.slide-desc {
+  font-size: 0.88rem;
   color: #94a3b8;
-  margin: 0 0 12px;
+  line-height: 1.55;
+  margin: 0 0 1.25rem;
 }
 
-.mockup-pill-price {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 1.1rem;
-  font-weight: 800;
+.slide-desc code {
+  background: rgba(0, 0, 0, 0.4);
   color: #38bdf8;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
 }
 
-.mockup-pill-price span {
-  font-size: 0.8rem;
-  color: #64748b;
-  font-weight: 500;
-}
-
-.mockup-service-cards {
+.slide-bullets {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.mockup-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--saas-border-subtle);
-  border-radius: 8px;
-  padding: 10px 14px;
+.slide-bullet-item {
+  font-size: 0.82rem;
+  color: #cbd5e1;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 0.85rem;
+  gap: 6px;
 }
 
-.mockup-card.active {
-  border-color: rgba(0, 194, 255, 0.4);
-  background: rgba(0, 194, 255, 0.06);
+/* Mockup Components */
+.mockup-brand-card,
+.mockup-pin-card,
+.mockup-payment-card {
+  background: rgba(10, 14, 24, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
 }
 
-.mockup-card-title {
-  font-weight: 700;
+.mockup-brand-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.25rem;
+}
+
+.mockup-logo-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.mockup-brand-header strong {
+  display: block;
+  font-size: 1rem;
   color: #ffffff;
 }
 
-.mockup-card-slots {
+.mockup-brand-header span {
+  display: block;
+  font-size: 0.76rem;
+  color: #94a3b8;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.mockup-color-palette {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1.25rem;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+
+.palette-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.15s ease;
+}
+
+.palette-swatch.active {
+  border-color: #ffffff;
+  transform: scale(1.15);
+}
+
+.mockup-stat-preview {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 0.85rem;
+  font-size: 0.8rem;
+}
+
+.mockup-stat-preview .lbl {
+  display: block;
+  color: #64748b;
+  font-size: 0.7rem;
+}
+
+/* PIN Card Mockup */
+.pin-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.pin-service-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.pin-status-pill {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.pin-account-box {
+  background: rgba(0, 0, 0, 0.35);
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pin-account-box .field-label {
+  font-size: 0.68rem;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.pin-account-box .field-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: #ffffff;
+}
+
+.pin-grid-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.pin-box {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+.pin-box .field-label {
+  font-size: 0.65rem;
+  color: #94a3b8;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.pin-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #10b981;
+  letter-spacing: 2px;
+}
+
+/* Payment Card Mockup */
+.payment-tabs-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 1rem;
+}
+
+.p-tab {
   font-size: 0.75rem;
-  color: #38bdf8;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #94a3b8;
+}
+
+.p-tab.active {
+  background: rgba(0, 194, 255, 0.15);
+  color: var(--saas-accent-cyan);
+  border: 1px solid rgba(0, 194, 255, 0.3);
+}
+
+.payment-details-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.pay-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+}
+
+.pay-row span { color: #64748b; }
+.pay-row strong { color: #ffffff; }
+
+.escrow-badge-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: #f59e0b;
+  font-size: 0.76rem;
   font-weight: 700;
 }
 
 /* --- SECTIONS COMMON --- */
 .saas-section {
   padding: 5rem 1.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .saas-bg-dark {
-  background: #06080e;
+  background: #05070c;
 }
 
 .saas-section-container {
@@ -576,7 +852,7 @@ body.saas-body {
 }
 
 .saas-feature-box {
-  background: rgba(15, 19, 31, 0.7);
+  background: rgba(14, 18, 29, 0.7);
   border: 1px solid var(--saas-border-subtle);
   border-radius: 14px;
   padding: 1.5rem;
@@ -585,7 +861,7 @@ body.saas-body {
 
 .saas-feature-box:hover {
   border-color: rgba(255, 255, 255, 0.15);
-  background: rgba(22, 28, 45, 0.8);
+  background: rgba(21, 27, 42, 0.8);
 }
 
 .saas-feature-box .feature-icon {
@@ -605,6 +881,175 @@ body.saas-body {
   color: #94a3b8;
   margin: 0;
   line-height: 1.5;
+}
+
+/* --- 6 LIVE DEMO STORES SHOWCASE --- */
+.saas-stores-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.saas-store-card {
+  display: flex;
+  flex-direction: column;
+  background: #0c101b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.saas-store-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+  transition: all 0.25s ease;
+}
+
+.saas-store-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 194, 255, 0.4);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  background: #101626;
+}
+
+.saas-store-card.flagship {
+  border-color: rgba(2, 132, 199, 0.4);
+  background: radial-gradient(circle at top right, rgba(2, 132, 199, 0.08), #0c101b 70%);
+}
+
+.saas-store-card.flagship::before {
+  background: linear-gradient(90deg, #0284c7, #00c2ff);
+}
+
+.store-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.store-brand-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.store-dot.live {
+  width: 7px;
+  height: 7px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.store-tier-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.store-tier-badge.enterprise {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.store-tier-badge.pro {
+  background: rgba(0, 194, 255, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(0, 194, 255, 0.3);
+}
+
+.store-tier-badge.starter {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.store-card-body {
+  flex: 1;
+}
+
+.store-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 0.5rem;
+}
+
+.store-desc {
+  font-size: 0.83rem;
+  color: #94a3b8;
+  line-height: 1.5;
+  margin: 0 0 1rem;
+}
+
+.store-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 1.25rem;
+}
+
+.store-module-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.store-module-tag.vip {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #f59e0b;
+  font-weight: 700;
+}
+
+.store-card-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.store-btn-link {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #38bdf8;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s ease;
+}
+
+.saas-store-card:hover .store-btn-link {
+  color: #00c2ff;
 }
 
 /* --- PRICING GRID --- */
@@ -749,7 +1194,6 @@ body.saas-body {
 }
 
 .btn-plan-select.primary {
-  background: var(--saas-accent-blue);
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
   border-color: rgba(0, 194, 255, 0.35);
 }
@@ -758,60 +1202,13 @@ body.saas-body {
   box-shadow: 0 6px 18px rgba(2, 132, 199, 0.4);
 }
 
-/* --- CTA BOX --- */
-.saas-cta-box {
-  background: linear-gradient(135deg, rgba(2, 132, 199, 0.12) 0%, rgba(16, 21, 38, 0.9) 100%);
-  border: 1px solid rgba(0, 194, 255, 0.25);
-  border-radius: 20px;
-  padding: 3rem 2rem;
-  text-align: center;
-}
-
-.saas-cta-title {
-  font-size: 1.85rem;
-  color: #ffffff;
-  font-weight: 800;
-  margin: 0 0 0.75rem;
-}
-
-.saas-cta-desc {
-  font-size: 0.95rem;
-  color: #94a3b8;
-  max-width: 600px;
-  margin: 0 auto 1.75rem;
-}
-
-.saas-cta-actions {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.btn-cta-demo {
-  background: var(--saas-accent-blue);
-  color: #ffffff;
-  padding: 12px 22px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s ease;
-}
-
-.btn-cta-demo.secondary {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--saas-border-subtle);
-}
-
 /* --- FOOTER --- */
 .saas-footer {
   background: #04060a;
   border-top: 1px solid var(--saas-border-subtle);
   padding: 3.5rem 1.5rem 2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .saas-footer-container {
@@ -824,14 +1221,15 @@ body.saas-body {
 }
 
 .saas-footer-logo {
-  height: 28px;
-  margin-bottom: 10px;
+  height: 32px;
+  margin-bottom: 12px;
+  display: block;
 }
 
 .saas-footer-text {
   font-size: 0.82rem;
   color: #64748b;
-  max-width: 360px;
+  max-width: 380px;
   line-height: 1.5;
 }
 
@@ -874,14 +1272,59 @@ body.saas-body {
   color: #475569;
 }
 
-/* --- MODAL ONBOARDING WIZARD --- */
+/* ==========================================================================
+   STREAMLINED 2-STEP ONBOARDING WIZARD MODAL
+   ========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 5, 9, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+  padding: 1rem;
+}
+
+.modal-dialog-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+}
+
+.btn-modal-close-naked {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.btn-modal-close-naked:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
 .modal-onboarding-card {
-  background: #0b0e18;
+  background: #0b0f19;
   border: 1px solid rgba(0, 194, 255, 0.25);
   border-radius: 18px;
-  padding: 2rem;
+  padding: 2.25rem 2rem;
   width: 100%;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.95);
+  box-sizing: border-box;
 }
 
 .onboarding-step-badge {
@@ -905,13 +1348,44 @@ body.saas-body {
   margin: 0 0 1.5rem;
 }
 
+.form-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-bottom: 6px;
+}
+
+.form-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-family: inherit;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: var(--saas-accent-cyan);
+}
+
 .subdomain-input-group {
   display: flex;
   align-items: center;
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
   overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.subdomain-input-group:focus-within {
+  border-color: var(--saas-accent-cyan);
 }
 
 .subdomain-input-group .form-input {
@@ -938,11 +1412,56 @@ body.saas-body {
 .slug-status-msg.avail { color: #10b981; }
 .slug-status-msg.taken { color: #ef4444; }
 
+/* Color Palette Picker */
+.palette-picker-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.color-picker-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: #cbd5e1;
+  transition: all 0.15s ease;
+}
+
+.color-picker-pill input[type="radio"] {
+  display: none;
+}
+
+.color-picker-pill .color-circle {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.color-picker-pill:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.color-picker-pill.active {
+  border-color: var(--c, #0284c7);
+  background: rgba(2, 132, 199, 0.1);
+  color: #ffffff;
+  font-weight: 700;
+}
+
 .module-toggle-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 1.5rem;
+  gap: 8px;
+  margin-bottom: 1.25rem;
 }
 
 .module-toggle-item {
@@ -971,14 +1490,14 @@ body.saas-body {
 
 .toggle-info strong {
   display: block;
-  font-size: 0.86rem;
+  font-size: 0.85rem;
   color: #ffffff;
   margin-bottom: 2px;
 }
 
 .toggle-info span {
   display: block;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   color: #94a3b8;
 }
 
@@ -1002,189 +1521,63 @@ body.saas-body {
   cursor: pointer;
 }
 
+.btn-wizard-prev:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
 .btn-wizard-next {
-  background: var(--saas-accent-blue);
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
   border: 1px solid rgba(0, 194, 255, 0.3);
   color: #ffffff;
-  padding: 9px 24px;
+  padding: 10px 24px;
   border-radius: 8px;
   font-size: 0.88rem;
   font-weight: 800;
   cursor: pointer;
   margin-left: auto;
+  transition: all 0.2s ease;
 }
 
-/* --- 6 LIVE DEMO STORES SHOWCASE --- */
-.saas-stores-showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 2rem;
+.btn-wizard-next:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
 }
 
-.saas-store-card {
+/* Toast Container */
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
   display: flex;
   flex-direction: column;
-  background: #0d111d;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  padding: 1.5rem;
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  overflow: hidden;
+  gap: 10px;
 }
 
-.saas-store-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: transparent;
-  transition: all 0.25s ease;
-}
-
-.saas-store-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(0, 194, 255, 0.4);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
-  background: #101626;
-}
-
-.saas-store-card.flagship {
-  border-color: rgba(2, 132, 199, 0.4);
-  background: radial-gradient(circle at top right, rgba(2, 132, 199, 0.08), #0d111d 70%);
-}
-
-.saas-store-card.flagship::before {
-  background: linear-gradient(90deg, #0284c7, #00c2ff);
-}
-
-.store-card-header {
+.toast-item {
+  background: #0d121f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 16px;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
+  gap: 10px;
+  min-width: 280px;
+  animation: slideInToast 0.25s ease forwards;
 }
 
-.store-brand-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.82rem;
-  font-weight: 700;
-  background: rgba(0, 0, 0, 0.35);
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+.toast-item.success { border-left: 4px solid #10b981; }
+.toast-item.error { border-left: 4px solid #ef4444; }
+.toast-item.warning { border-left: 4px solid #f59e0b; }
+
+@keyframes slideInToast {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
-.store-dot.live {
-  width: 7px;
-  height: 7px;
-  background: #10b981;
-  border-radius: 50%;
-  box-shadow: 0 0 6px #10b981;
-}
-
-.store-tier-badge {
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  padding: 3px 8px;
-  border-radius: 4px;
-  text-transform: uppercase;
-}
-
-.store-tier-badge.enterprise {
-  background: rgba(168, 85, 247, 0.15);
-  color: #c084fc;
-  border: 1px solid rgba(168, 85, 247, 0.3);
-}
-
-.store-tier-badge.pro {
-  background: rgba(0, 194, 255, 0.15);
-  color: #38bdf8;
-  border: 1px solid rgba(0, 194, 255, 0.3);
-}
-
-.store-tier-badge.starter {
-  background: rgba(245, 158, 11, 0.15);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-.store-card-body {
-  flex: 1;
-}
-
-.store-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.18rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0 0 0.5rem;
-}
-
-.store-desc {
-  font-size: 0.83rem;
-  color: #94a3b8;
-  line-height: 1.5;
-  margin: 0 0 1rem;
-}
-
-.store-tags-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 1.25rem;
-}
-
-.store-module-tag {
-  font-size: 0.72rem;
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #cbd5e1;
-  padding: 3px 8px;
-  border-radius: 6px;
-}
-
-.store-module-tag.vip {
-  background: rgba(245, 158, 11, 0.12);
-  border-color: rgba(245, 158, 11, 0.35);
-  color: #f59e0b;
-  font-weight: 700;
-}
-
-.store-card-footer {
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding-top: 0.85rem;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.store-btn-link {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #38bdf8;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  transition: color 0.2s ease;
-}
-
-.saas-store-card:hover .store-btn-link {
-  color: #00c2ff;
-}
-
-/* --- RESPONSIVE MEDIA QUERIES --- */
+/* Responsive Queries */
 @media (max-width: 1024px) {
   .saas-stores-showcase-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1194,7 +1587,8 @@ body.saas-body {
 @media (max-width: 900px) {
   .saas-nav-links { display: none; }
   .saas-hero-title { font-size: 2.2rem; }
-  .mockup-store-hero { grid-template-columns: 1fr; }
+  .slide-content-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .showcase-nav-tabs { grid-template-columns: 1fr; }
   .saas-footer-container { grid-template-columns: 1fr; gap: 2rem; }
   .saas-footer-links { justify-content: flex-start; }
 }
@@ -1203,5 +1597,7 @@ body.saas-body {
   .saas-stores-showcase-grid {
     grid-template-columns: 1fr;
   }
+  .palette-picker-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
-

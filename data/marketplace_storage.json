@@ -291,6 +291,51 @@
       "updatedAt": "2026-09-09T18:54:25.268Z",
       "ownerUserId": null,
       "customDomain": "chere.gamesboy.net"
+    },
+    {
+      "id": "tnt_streamhub_1788981439696",
+      "slug": "streamhub",
+      "name": "StreamHub Paraguay",
+      "customDomain": "streamhub.gamsplit.com",
+      "ownerUserId": null,
+      "planId": "plan_pro",
+      "status": "active",
+      "branding": {
+        "brandName": "StreamHub Paraguay",
+        "logoUrl": "/assets/branding/logo.png",
+        "iconUrl": "/assets/branding/icon.png",
+        "primaryColor": "#10b981",
+        "accentColor": "#34d399",
+        "currency": "PYG",
+        "exchangeRate": 7500,
+        "whatsappSupport": "+595981999888"
+      },
+      "settings": {
+        "commissionPercent": 3,
+        "allowUserReselling": true,
+        "paraguayBankDetails": {
+          "bank": "Banco Familiar / Itaú Paraguay",
+          "accountHolder": "GamesBoy Paraguay S.A.",
+          "rucOrCi": "80091234-5",
+          "accountNumber": "01-445566-7",
+          "aliasSipap": "gamesboy.py"
+        },
+        "binanceDetails": {
+          "payId": "849201934",
+          "network": "USDT (Binance Pay / BEP-20 / TRC-20)",
+          "walletAddress": "0x71C9414B3b27bA134a6C3f07a757657A82e4b92F",
+          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F"
+        },
+        "enabledModules": {
+          "streaming": true,
+          "games": true,
+          "giftcards": true,
+          "smm": false,
+          "p2pSharing": true
+        }
+      },
+      "createdAt": "2026-09-09T19:17:19.696Z",
+      "updatedAt": "2026-09-09T19:17:19.696Z"
     }
   ],
   "tenant_plans": [
