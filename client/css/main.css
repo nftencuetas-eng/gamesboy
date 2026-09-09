@@ -4768,210 +4768,263 @@ a.sub-nav-link,
   overflow: hidden;
 }
 
-/* Host Groups List */
+/* ======================================================== */
+/* MINIMALIST STREAMING GROUP CARDS (GOSPLIT LUXE STYLE)    */
+/* ======================================================== */
 .hub-groups-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+@media (min-width: 640px) and (max-width: 1024px) {
+  .hub-groups-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1400px) {
+  .hub-groups-list {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+}
+
+@media (min-width: 1401px) {
+  .hub-groups-list {
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  }
+}
+
+@media (max-width: 540px) {
+  .hub-groups-list {
+    grid-template-columns: 1fr;
+  }
 }
 
 .hub-group-card {
-  background: rgba(8, 12, 24, 0.85);
+  background: linear-gradient(145deg, #111522 0%, #171b2b 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px !important;
-  padding: 1.25rem 1.5rem;
-  display: grid;
-  grid-template-columns: 210px 1fr 180px;
-  gap: 20px;
-  align-items: center;
-  transition: all 0.2s ease;
-}
-.hub-group-card:hover {
-  border-color: rgba(0, 194, 255, 0.35);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-}
-
-.hub-group-host-column {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.hub-group-host-avatar-wrap {
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  border-radius: 50% !important;
-  overflow: hidden;
-  border: 2px solid rgba(0, 194, 255, 0.3);
-}
-.hub-group-host-avatar {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.hub-group-host-name-link {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 800;
-  color: #ffffff;
-  margin-bottom: 2px;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-.hub-group-host-name-link:hover {
-  color: var(--accent-cyan);
-}
-
-.hub-group-host-badge {
-  display: block;
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: var(--accent-emerald);
-  margin-bottom: 2px;
-}
-.hub-group-host-rating {
-  font-size: 0.72rem;
-  color: var(--text-tertiary);
-}
-
-.hub-group-plan-column {
+  border-radius: 18px !important;
+  padding: 1.25rem 1.25rem 1.15rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
 }
-.hub-group-plan-title {
+
+.hub-group-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 194, 255, 0.45);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.65), 0 0 20px rgba(0, 194, 255, 0.15);
+}
+
+.hub-group-card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Card Header: Brand Icon/Circle + Top Badge */
+.hub-mini-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.hub-mini-brand-icon {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  padding: 2px;
+}
+
+.hub-mini-brand-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.hub-mini-brand-letter {
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: 0.82rem;
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+.hub-mini-badge-pill {
+  font-size: 0.64rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+}
+
+.hub-mini-badge-pill.verified {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #34d399;
+}
+
+.hub-mini-badge-pill.incentive {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.22), rgba(236, 72, 153, 0.22));
+  border-color: rgba(168, 85, 247, 0.45);
+  color: #e879f9;
+}
+
+/* Card Middle: Overlapping Avatars & Slot count */
+.hub-mini-avatars-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: -8px;
+  margin-bottom: 2px;
+}
+
+.hub-mini-avatar-stack {
+  display: flex;
+  align-items: center;
+}
+
+.hub-mini-stack-img {
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #111522;
+  margin-left: -7px;
+  background: #080c16;
+}
+.hub-mini-stack-img:first-child {
+  margin-left: 0;
+}
+
+.hub-mini-stack-user {
+  width: 26px;
+  height: 26px;
+  min-width: 26px;
+  border-radius: 50%;
+  border: 2px solid #111522;
+  margin-left: -7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
   font-weight: 800;
   color: #ffffff;
 }
-.hub-group-plan-features {
-  display: flex;
-  gap: 8px;
-  font-size: 0.74rem;
-  color: var(--text-tertiary);
-  flex-wrap: wrap;
-}
 
-/* INVERTED SLOTS SILHOUETTES:
-   - ENCENDIDO / BRILLANTE / GLOW = OCUPADO
-   - APAGADO / TENUE / GRIS = DISPONIBLE */
-.hub-group-slots-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 4px;
-  flex-wrap: wrap;
-}
-.hub-group-slots-icons {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-.slot-sil-wrap {
+.hub-mini-stack-count {
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 9999px;
+  border: 2px solid #111522;
+  margin-left: -7px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #0b0f19;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 900;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* LIBRE / DISPONIBLE: Glowing & bright (Prendido con color verde brillante) */
-.slot-sil-icon.slot-available {
-  color: #10b981 !important;
-  filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.85)) !important;
-  opacity: 1 !important;
-}
-
-/* OCUPADO / TOMADO: Soft muted gray (Apagado / tomado) */
-.slot-sil-icon.slot-occupied {
-  color: rgba(255, 255, 255, 0.22) !important;
-  opacity: 0.35 !important;
-  filter: none !important;
-}
-
-.hub-group-slots-text {
-  font-size: 0.78rem;
-  color: var(--text-secondary);
-}
-.slots-legend {
-  font-size: 0.72rem;
-  color: var(--text-tertiary);
-  margin-left: 4px;
-}
-
-.btn-group-rules-link {
-  background: transparent;
-  border: none;
-  color: var(--accent-cyan);
-  font-size: 0.76rem;
-  font-weight: 700;
-  cursor: pointer;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: all 0.2s ease;
-  width: fit-content;
-}
-.btn-group-rules-link:hover {
-  color: #38bdf8;
-  text-decoration: none;
-}
-
-.hub-group-action-column {
-  text-align: right;
+/* Card Info: Platform Name & Subtitle */
+.hub-mini-info-wrap {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 2px;
 }
-.hub-group-price-label {
-  display: block;
+
+.hub-mini-service-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.25;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hub-mini-plan-subtitle {
+  font-size: 0.74rem;
+  color: var(--text-tertiary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Card Bottom: Pricing Row */
+.hub-mini-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 10px;
+  margin-top: 2px;
+}
+
+.hub-mini-price-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hub-mini-price-lbl {
   font-size: 0.66rem;
   color: var(--text-tertiary);
   text-transform: uppercase;
-}
-.hub-group-price-gs {
-  font-family: var(--font-mono);
-  font-size: 1.25rem;
-  font-weight: 900;
-  color: #ffffff;
-  display: block;
-}
-.hub-group-price-usd {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--accent-cyan);
-  display: block;
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
 
-.btn-hub-join-group {
-  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-  color: #040c1e;
-  font-family: var(--font-heading);
-  font-size: 0.85rem;
+.hub-mini-price-gs {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #fbbf24;
+  line-height: 1;
+}
+
+.hub-mini-price-usd {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
   font-weight: 800;
-  padding: 9px 16px;
-  border-radius: 10px !important;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0, 194, 255, 0.3);
-  transition: all 0.2s ease;
-  width: 100%;
-}
-.btn-hub-join-group:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(0, 194, 255, 0.5);
-}
-.btn-hub-join-group.disabled {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-tertiary);
-  cursor: not-allowed;
-  box-shadow: none;
-  transform: none;
+  color: #38bdf8;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(0, 194, 255, 0.08);
+  border: 1px solid rgba(0, 194, 255, 0.2);
 }
 
 /* 4. Right Sidebar Desktop Blocks */
@@ -6584,6 +6637,32 @@ a.sub-nav-link,
   border: 1px solid rgba(0, 194, 255, 0.28);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.95), 0 0 35px rgba(0, 194, 255, 0.15);
   position: relative;
+}
+
+.modal-group-detail-card .btn-modal-close {
+  position: absolute !important;
+  top: 16px !important;
+  right: 16px !important;
+  left: auto !important;
+  z-index: 50 !important;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-group-detail-card .btn-modal-close:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #ef4444;
+  transform: rotate(90deg);
 }
 
 .group-detail-grid {

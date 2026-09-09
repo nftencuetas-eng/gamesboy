@@ -113,7 +113,6 @@ function renderSellerListings(listings) {
 
   container.innerHTML = listings.map(l => {
     const isAvail = l.availableSlots > 0;
-    const occupiedSlots = l.totalSlots - l.availableSlots;
     const platformSlug = l.serviceName.toLowerCase().includes('netflix') ? 'netflix'
       : l.serviceName.toLowerCase().includes('spotify') ? 'spotify'
       : l.serviceName.toLowerCase().includes('disney') ? 'disney'
@@ -124,71 +123,53 @@ function renderSellerListings(listings) {
       : l.serviceName.toLowerCase().includes('paramount') ? 'paramount'
       : 'netflix';
 
-    // Inverted slot silhouettes (LIBRE = PRENDIDO, OCUPADO = APAGADO / INCLICKEABLE)
-    let slotsSvg = '';
     const totalSlotsCount = Math.max(1, l.totalSlots || 5);
     const availCount = Math.min(totalSlotsCount, Math.max(0, l.availableSlots !== undefined ? l.availableSlots : totalSlotsCount));
-    const occupiedCount = totalSlotsCount - availCount;
+    const shortLogoText = l.serviceName.split(' ')[0].slice(0, 4).toUpperCase();
 
-    if (totalSlotsCount <= 12) {
-      for (let i = 1; i <= totalSlotsCount; i++) {
-        const isOccupied = i > availCount;
-        slotsSvg += `
-          <div class="slot-sil-wrap" title="${isOccupied ? 'Ocupado' : 'Disponible'}" style="${isOccupied ? 'cursor: not-allowed;' : ''}">
-            <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="${isOccupied ? 'pointer-events: none;' : ''}">
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
-          </div>
-        `;
-      }
-    } else {
-      slotsSvg = `
-        <div class="slot-sil-wrap" style="padding: 3px 10px; border-radius: 8px; background: rgba(0, 194, 255, 0.08); border: 1px solid rgba(0, 194, 255, 0.25);">
-          <span style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; color: var(--accent-emerald);">
-            👤 ${availCount} / ${totalSlotsCount} cupos libres
-          </span>
-        </div>
-      `;
-    }
+    const avatarStackHtml = `
+      <div class="hub-mini-avatar-stack">
+        <img src="/assets/branding/icon.png" alt="${l.serviceName}" class="hub-mini-stack-img">
+        <div class="hub-mini-stack-user" style="background: linear-gradient(135deg, #0284c7, #0369a1);">👤</div>
+        <div class="hub-mini-stack-user" style="background: linear-gradient(135deg, #9333ea, #7e22ce);">👤</div>
+        <span class="hub-mini-stack-count" title="${availCount} de ${totalSlotsCount} cupos libres">
+          ${availCount > 0 ? (totalSlotsCount > 6 ? `+${availCount}` : `${availCount} libres`) : 'Lleno'}
+        </span>
+      </div>
+    `;
 
     return `
-      <div class="hub-group-card ${isAvail ? '' : 'disabled'}">
-        <div class="hub-group-host-column">
-          <div class="hub-group-host-avatar-wrap" style="border-color: var(--accent-cyan);">
-            <img src="/assets/branding/icon.png" alt="${l.serviceName}" class="hub-group-host-avatar">
+      <div class="hub-group-card ${isAvail ? '' : 'disabled'}" onclick="window.location.href='/service.html?platform=${platformSlug}'" title="Haz clic para ver disponibilidad y perfiles">
+        <!-- Top Row: Brand Logo + Tag Badge -->
+        <div class="hub-mini-card-top">
+          <div class="hub-mini-brand-icon" style="background: rgba(0, 194, 255, 0.15); border-color: rgba(0, 194, 255, 0.35);">
+            <span class="hub-mini-brand-letter">${shortLogoText}</span>
           </div>
-          <div class="hub-group-host-details">
-            <strong class="hub-group-host-name">${l.serviceName}</strong>
-            <span class="hub-group-host-badge" style="color: var(--accent-cyan);">${l.planName}</span>
-          </div>
+          <span class="hub-mini-badge-pill ${isAvail ? 'verified' : 'incentive'}">
+            ${isAvail ? '⚡ Cupos Inmediatos' : '🔒 Agotado'}
+          </span>
         </div>
 
-        <div class="hub-group-plan-column">
-          <div class="hub-group-plan-features">
-            <span>🛡️ PIN Privado</span>
-            <span>•</span>
-            <span>📱 1 Pantalla</span>
-            <span>•</span>
-            <span>⚡ Entrega Inmediata</span>
-          </div>
-          <div class="hub-group-slots-bar">
-            <div class="hub-group-slots-icons">${slotsSvg}</div>
-            <span class="hub-group-slots-text">
-              <strong style="color: var(--accent-emerald);">${l.availableSlots} libres</strong> de ${l.totalSlots} cupos
-              <span class="slots-legend">(${occupiedSlots} ocupados)</span>
-            </span>
-          </div>
+        <!-- Middle Row: Overlapping Avatars & Slot count -->
+        <div class="hub-mini-avatars-row">
+          ${avatarStackHtml}
         </div>
 
-        <div class="hub-group-action-column">
-          <div class="hub-group-pricing">
-            <span class="hub-group-price-label">Mensual</span>
-            <span class="hub-group-price-gs">${formatPriceGs(l.pricePerSlotUsd)}</span>
-            <span class="hub-group-price-usd">$${parseFloat(l.pricePerSlotUsd).toFixed(2)} USDT</span>
+        <!-- Info: Platform & Plan Name -->
+        <div class="hub-mini-info-wrap">
+          <h3 class="hub-mini-service-title">${l.serviceName}</h3>
+          <p class="hub-mini-plan-subtitle">${l.planName || 'Plan Compartido'}</p>
+        </div>
+
+        <!-- Pricing Row -->
+        <div class="hub-mini-price-row">
+          <div class="hub-mini-price-left">
+            <span class="hub-mini-price-lbl">Mínimo por mes</span>
+            <div class="hub-mini-price-gs">${formatPriceGs(l.pricePerSlotUsd)}</div>
           </div>
-          <button class="btn-hub-join-group ${isAvail ? '' : 'disabled'}" onclick="window.location.href='/service.html?platform=${platformSlug}'">
-            ${isAvail ? 'Ver Grupo ➔' : 'Agotado'}
-          </button>
+          <div class="hub-mini-price-right">
+            <span class="hub-mini-price-usd">$${parseFloat(l.pricePerSlotUsd).toFixed(2)} USD</span>
+          </div>
         </div>
       </div>
     `;

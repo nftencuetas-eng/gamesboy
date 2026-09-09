@@ -216,97 +216,76 @@ function renderGroupsList() {
     return;
   }
 
-  // SCENARIO 2: ACTIVE GROUPS WITH AVAILABLE SEATS EXIST
+  // SCENARIO 2: ACTIVE GROUPS WITH AVAILABLE SEATS EXIST (MINIMALIST GOSPLIT STYLE)
   container.innerHTML = state.groups.map(g => {
     const isAvail = g.availableSlots > 0;
-    const occupiedSlots = g.totalSlots - g.availableSlots;
     const host = g.host || { id: 'usr_admin', name: 'Anfitrión Verificado', avatar: '/assets/branding/icon.png', rating: '4.9 ★', badge: '⭐ Anfitrión Verificado' };
-    const hostId = host.id || g.sellerId || 'usr_seller1';
-
-    // SLOTS SILHOUETTES:
-    // LIBRE = PRENDIDO / VERDE BRILLANTE / GLOW
-    // OCUPADO = APAGADO / TENUE / GRIS (No cliqueable, tooltip "Ocupado")
-    let slotsSvg = '';
     const totalSlotsCount = Math.max(1, g.totalSlots || state.hub?.maxSlots || 5);
     const availCount = Math.min(totalSlotsCount, Math.max(0, g.availableSlots !== undefined ? g.availableSlots : totalSlotsCount));
     const occupiedCount = totalSlotsCount - availCount;
 
-    if (totalSlotsCount <= 12) {
-      for (let i = 1; i <= totalSlotsCount; i++) {
-        const profile = g.profiles ? (g.profiles[i] || g.profiles[String(i)] || g.profiles[i - 1]) : null;
-        const isOccupied = profile ? (profile.isOccupied === true || profile.isAvailable === false) : (i > availCount);
+    // Brand icon & color
+    const hub = state.hub || {};
+    const iconUrl = hub.iconUrl || hub.thumbnailUrl || hub.logoUrl || '';
+    const brandColor = hub.brandColor || '#00c2ff';
+    const cleanServiceName = g.serviceName || hub.name || 'Streaming';
+    const shortLogoText = cleanServiceName.split(' ')[0].slice(0, 4).toUpperCase();
 
-        slotsSvg += `
-          <div class="slot-sil-wrap" title="${isOccupied ? 'Ocupado' : 'Disponible'}" style="${isOccupied ? 'cursor: not-allowed;' : ''}">
-            <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="${isOccupied ? 'pointer-events: none;' : ''}">
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
-          </div>
-        `;
-      }
+    let brandIconHtml = '';
+    if (iconUrl && (iconUrl.startsWith('/') || iconUrl.startsWith('http') || iconUrl.startsWith('data:'))) {
+      brandIconHtml = `<img src="${iconUrl}" alt="${cleanServiceName}" class="hub-mini-brand-img" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\\'hub-mini-brand-letter\\'>${shortLogoText}</span>'">`;
     } else {
-      slotsSvg = `
-        <div class="slot-sil-wrap" style="padding: 3px 10px; border-radius: 8px; background: rgba(0, 194, 255, 0.08); border: 1px solid rgba(0, 194, 255, 0.25);" title="${availCount} de ${totalSlotsCount} cupos disponibles">
-          <span style="font-family: var(--font-mono); font-size: 0.8rem; font-weight: 700; color: var(--accent-emerald);">
-            👤 ${availCount} / ${totalSlotsCount} cupos libres
-          </span>
-        </div>
-      `;
+      brandIconHtml = `<span class="hub-mini-brand-letter">${shortLogoText}</span>`;
     }
 
+    // Overlapping Avatars (Host + simulated/active members + count bubble)
+    const hostAvatar = host.avatar || '/assets/branding/icon.png';
+    const avatarStackHtml = `
+      <div class="hub-mini-avatar-stack">
+        <img src="${hostAvatar}" alt="${host.name}" class="hub-mini-stack-img" title="Anfitrión: ${host.name}">
+        <div class="hub-mini-stack-user" style="background: linear-gradient(135deg, #0284c7, #0369a1);" title="Usuario Activo">👤</div>
+        <div class="hub-mini-stack-user" style="background: linear-gradient(135deg, #9333ea, #7e22ce);" title="Usuario Activo">👤</div>
+        <span class="hub-mini-stack-count" title="${availCount} de ${totalSlotsCount} cupos libres">
+          ${availCount > 0 ? (availCount >= 10 ? '99+' : `${availCount} libres`) : 'Lleno'}
+        </span>
+      </div>
+    `;
+
+    const badgeText = g.isOfficial ? '🛡️ Tienda Oficial' : (availCount > 0 ? '⚡ Compartir para incentivo' : '🔒 Grupo Lleno');
+    const badgeClass = g.isOfficial ? 'verified' : 'incentive';
+
     return `
-      <div class="hub-group-card ${isAvail ? '' : 'disabled'}" onclick="openGroupDetailModal('${g.id}')" style="cursor: pointer;">
-        <!-- Host Profile Info (Linked to Public Seller Profile) -->
-        <div class="hub-group-host-column">
-          <div class="hub-group-host-avatar-wrap">
-            <img src="${host.avatar || '/assets/branding/icon.png'}" alt="${host.name}" class="hub-group-host-avatar">
+      <div class="hub-group-card ${isAvail ? '' : 'disabled'}" onclick="openGroupDetailModal('${g.id}')" title="Haz clic para ver perfiles y unirte a este grupo">
+        <!-- Top Row: Brand Logo + Tag Badge -->
+        <div class="hub-mini-card-top">
+          <div class="hub-mini-brand-icon" style="background: ${brandColor}22; border-color: ${brandColor}55;">
+            ${brandIconHtml}
           </div>
-          <div class="hub-group-host-details">
-            <a href="/seller.html?id=${hostId}" class="hub-group-host-name-link" onclick="event.stopPropagation();" title="Ver perfil público del vendedor y reseñas">
-              ${host.name} ➔
-            </a>
-            <span class="hub-group-host-badge">${host.badge || '⭐ Anfitrión Verificado'}</span>
-            <span class="hub-group-host-rating">Valoración: <strong style="color: #fbbf24;">${host.rating}</strong></span>
-          </div>
+          <span class="hub-mini-badge-pill ${badgeClass}">
+            ${badgeText}
+          </span>
         </div>
 
-        <!-- Plan & Profile Details -->
-        <div class="hub-group-plan-column">
-          <div class="hub-group-plan-title">${g.planName}</div>
-          <div class="hub-group-plan-features">
-            <span>🛡️ PIN Privado</span>
-            <span>•</span>
-            <span>📱 1 Dispositivo Simultáneo</span>
-            <span>•</span>
-            <span>⚡ Entrega Inmediata</span>
-          </div>
-          
-          <!-- Slots Bar with Visual Guide -->
-          <div class="hub-group-slots-bar">
-            <div class="hub-group-slots-icons">${slotsSvg}</div>
-            <span class="hub-group-slots-text">
-              <strong style="color: var(--accent-emerald);">${availCount} libres</strong> de ${totalSlotsCount} cupos
-              <span class="slots-legend">(${occupiedCount} ocupados)</span>
-            </span>
-          </div>
-
-          <!-- Rules & Info Button -->
-          <button type="button" class="btn-group-rules-link" onclick="event.stopPropagation(); openGroupDetailModal('${g.id}')">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            <span>Ver Detalles, Perfiles & Reglas ➔</span>
-          </button>
+        <!-- Middle Row: Overlapping Avatars & Slot count -->
+        <div class="hub-mini-avatars-row">
+          ${avatarStackHtml}
         </div>
 
-        <!-- Pricing & Action -->
-        <div class="hub-group-action-column">
-          <div class="hub-group-pricing">
-            <span class="hub-group-price-label">Mensualidad</span>
-            <span class="hub-group-price-gs">${formatPriceGs(g.pricePerSlotUsd)}</span>
-            <span class="hub-group-price-usd">$${parseFloat(g.pricePerSlotUsd).toFixed(2)} USDT</span>
+        <!-- Info: Platform & Plan Name -->
+        <div class="hub-mini-info-wrap">
+          <h3 class="hub-mini-service-title">${cleanServiceName}</h3>
+          <p class="hub-mini-plan-subtitle">${g.planName || 'Membresía Mensual'}</p>
+        </div>
+
+        <!-- Pricing Row -->
+        <div class="hub-mini-price-row">
+          <div class="hub-mini-price-left">
+            <span class="hub-mini-price-lbl">Mínimo por mes</span>
+            <div class="hub-mini-price-gs">${formatPriceGs(g.pricePerSlotUsd)}</div>
           </div>
-          <button class="btn-hub-join-group ${isAvail ? '' : 'disabled'}" onclick="event.stopPropagation(); openGroupDetailModal('${g.id}')">
-            ${isAvail ? 'Ver Grupo & Perfiles ➔' : 'Agotado'}
-          </button>
+          <div class="hub-mini-price-right">
+            <span class="hub-mini-price-usd">$${parseFloat(g.pricePerSlotUsd).toFixed(2)} USD</span>
+          </div>
         </div>
       </div>
     `;
