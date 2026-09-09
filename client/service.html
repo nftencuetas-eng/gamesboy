@@ -398,92 +398,94 @@
   <!-- MODAL 1: DETALLE DE GRUPO & PERFILES (2 COLUMNAS 1/4 + 3/4) -->
   <!-- ======================================================= -->
   <div class="modal-overlay" id="modal-group-detail" style="display: none;">
-    <div class="modal-card modal-group-detail-card">
-      <button type="button" class="btn-modal-close" onclick="closeGroupDetailModal()">✕</button>
+    <div class="modal-dialog-wrapper">
+      <button type="button" class="btn-modal-close-naked" onclick="closeGroupDetailModal()" title="Cerrar modal">✕</button>
 
-      <div class="group-detail-grid">
-        <!-- Columna 1/4 (25%): Reglas, Normas y Garantía -->
-        <div class="group-detail-col-rules">
-          <div class="rules-sidebar-header">
-            <span class="rules-badge-pill">📋 Normas de Uso</span>
-            <h4>Reglas del Grupo</h4>
+      <div class="modal-card modal-group-detail-card" onclick="event.stopPropagation()">
+        <div class="group-detail-grid">
+          <!-- Columna 1/4 (25-30%): Reglas, Normas y Garantía -->
+          <div class="group-detail-col-rules">
+            <div class="rules-sidebar-header">
+              <span class="rules-badge-pill">📋 Normas de Uso</span>
+              <h4>Reglas del Grupo</h4>
+            </div>
+
+            <div class="rules-compact-list">
+              <div class="rules-compact-item">
+                <span class="rules-icon">📱</span>
+                <div>
+                  <strong>1 Pantalla Simultánea</strong>
+                  <p>Uso individual y exclusivo en 1 solo dispositivo a la vez.</p>
+                </div>
+              </div>
+              <div class="rules-compact-item">
+                <span class="rules-icon">🔒</span>
+                <div>
+                  <strong>PIN Personal Asignado</strong>
+                  <p>Usa solo tu perfil asignado. Prohibido cambiar contraseñas.</p>
+                </div>
+              </div>
+              <div class="rules-compact-item">
+                <span class="rules-icon">🛡️</span>
+                <div>
+                  <strong>Garantía GamesBoy</strong>
+                  <p>Fondos en custodia durante 30 días con reemplazo inmediato.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="rules-host-block">
+              <span class="rules-host-lbl">Instrucciones del Anfitrión:</span>
+              <p id="modal-detail-host-instructions" class="rules-host-txt">Perfil privado exclusivo con PIN personal. Entrega inmediata tras unirse.</p>
+            </div>
           </div>
 
-          <div class="rules-compact-list">
-            <div class="rules-compact-item">
-              <span class="rules-icon">📱</span>
+          <!-- Columna 3/4 (70-75%): Detalles del Producto, Perfiles en 1 Fila y Activación -->
+          <div class="group-detail-col-main">
+            <div class="group-detail-main-header">
               <div>
-                <strong>1 Pantalla Simultánea</strong>
-                <p>Uso individual y exclusivo en 1 solo dispositivo a la vez.</p>
+                <span class="group-detail-plan-badge" id="modal-detail-plan-badge">Plan Ultra HD 4K</span>
+                <h3 class="group-detail-title" id="modal-detail-title">Netflix Premium 4K HDR</h3>
+                <p class="group-detail-subtitle" id="modal-detail-subtitle">Membresía compartida • PIN exclusivo asignado</p>
+              </div>
+              <div class="group-detail-price-box">
+                <span class="group-detail-price-lbl">Mensualidad</span>
+                <span class="group-detail-price-gs" id="modal-detail-price-gs">19.500 ₲</span>
+                <span class="group-detail-price-usd" id="modal-detail-price-usd">$2.60 USDT / mes</span>
               </div>
             </div>
-            <div class="rules-compact-item">
-              <span class="rules-icon">🔒</span>
-              <div>
-                <strong>PIN Personal Asignado</strong>
-                <p>Usa solo tu perfil asignado. Prohibido cambiar contraseñas.</p>
+
+            <!-- Responsible Host Card -->
+            <div class="group-detail-host-card">
+              <img id="modal-detail-host-avatar" src="/assets/branding/icon.png" alt="Host" class="detail-host-avatar">
+              <div class="detail-host-meta">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <strong id="modal-detail-host-name">Lucas González</strong>
+                  <span class="badge-verified-sm">⭐ Verificado</span>
+                </div>
+                <span id="modal-detail-host-rating" style="font-size: 0.76rem; color: #8da0ba;">4.9 ★ • 12 Grupos Activos</span>
               </div>
             </div>
-            <div class="rules-compact-item">
-              <span class="rules-icon">🛡️</span>
-              <div>
-                <strong>Garantía GamesBoy</strong>
-                <p>Fondos en custodia durante 30 días con reemplazo inmediato.</p>
+
+            <!-- Profiles Single Horizontal Strip (Always 1 Single Row) -->
+            <div class="group-detail-profiles-section">
+              <div class="profiles-section-header">
+                <span class="profiles-section-title">Perfiles de la Cuenta</span>
+                <span class="profiles-count-badge" id="modal-detail-slots-summary">5 de 5 Libres</span>
+              </div>
+
+              <div class="group-profiles-strip" id="modal-detail-profiles-grid">
+                <!-- Rendered dynamically in 1 horizontal row -->
               </div>
             </div>
-          </div>
 
-          <div class="rules-host-block">
-            <span class="rules-host-lbl">Instrucciones del Anfitrión:</span>
-            <p id="modal-detail-host-instructions" class="rules-host-txt">Perfil privado exclusivo con PIN personal. Entrega inmediata tras unirse.</p>
-          </div>
-        </div>
-
-        <!-- Columna 3/4 (75%): Detalles del Producto, Perfiles y Activación -->
-        <div class="group-detail-col-main">
-          <div class="group-detail-main-header">
-            <div>
-              <span class="group-detail-plan-badge" id="modal-detail-plan-badge">Plan Ultra HD 4K</span>
-              <h3 class="group-detail-title" id="modal-detail-title">Netflix Premium 4K HDR</h3>
-              <p class="group-detail-subtitle" id="modal-detail-subtitle">Membresía compartida protegida con Garantía de Reembolso</p>
+            <!-- Balance & Actions -->
+            <div class="group-detail-actions">
+              <button type="button" class="btn-group-detail-cancel" onclick="closeGroupDetailModal()">Cancelar</button>
+              <button type="button" class="btn-group-detail-confirm" id="btn-group-detail-buy" onclick="confirmGroupDetailJoin()">
+                <span id="btn-group-detail-buy-text">Unirme a este Grupo • 19.500 ₲ (Garantía 30 Días) ➔</span>
+              </button>
             </div>
-            <div class="group-detail-price-box">
-              <span class="group-detail-price-lbl">Mensualidad</span>
-              <span class="group-detail-price-gs" id="modal-detail-price-gs">30.000 Gs.</span>
-              <span class="group-detail-price-usd" id="modal-detail-price-usd">$3.99 USDT / mes</span>
-            </div>
-          </div>
-
-          <!-- Responsible Host Card -->
-          <div class="group-detail-host-card">
-            <img id="modal-detail-host-avatar" src="/assets/branding/icon.png" alt="Host" class="detail-host-avatar">
-            <div class="detail-host-meta">
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <strong id="modal-detail-host-name">Lucas González</strong>
-                <span class="badge-verified-sm">⭐ Verificado</span>
-              </div>
-              <span id="modal-detail-host-rating" style="font-size: 0.76rem; color: #fbbf24;">4.9 ★ • 12 Grupos Activos</span>
-            </div>
-          </div>
-
-          <!-- Profiles Interactive Matrix (Libre = Prendido / Ocupado = Apagado) -->
-          <div class="group-detail-profiles-section">
-            <div class="profiles-section-header">
-              <span class="profiles-section-title">Perfiles de la Cuenta</span>
-              <span class="profiles-count-badge" id="modal-detail-slots-summary">2 de 4 Libres</span>
-            </div>
-
-            <div class="group-profiles-grid" id="modal-detail-profiles-grid">
-              <!-- Rendered dynamically -->
-            </div>
-          </div>
-
-          <!-- Balance & Actions -->
-          <div class="group-detail-actions">
-            <button type="button" class="btn-group-detail-cancel" onclick="closeGroupDetailModal()">Cancelar</button>
-            <button type="button" class="btn-group-detail-confirm" id="btn-group-detail-buy" onclick="confirmGroupDetailJoin()">
-              <span id="btn-group-detail-buy-text">Unirme a este Grupo • 30.000 Gs. (Garantía 30 Días) ➔</span>
-            </button>
           </div>
         </div>
       </div>

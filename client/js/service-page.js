@@ -471,50 +471,25 @@ window.openGroupDetailModal = function(groupId) {
 
   if (slotsSummary) slotsSummary.textContent = `${availCount} de ${totalCap} Libres`;
 
-  // Render per-profile matrix (LIBRE = PRENDIDO / OCUPADO = APAGADO / INCLICKEABLE)
+  // Render per-profile horizontal strip (LIBRE = PRENDIDO / OCUPADO = APAGADO / INCLICKEABLE)
   if (profilesGrid) {
     let tilesHtml = '';
-    if (totalCap <= 20) {
-      let firstFreeFound = false;
-      for (let i = 1; i <= totalCap; i++) {
-        const profile = group.profiles ? (group.profiles[i] || group.profiles[String(i)] || group.profiles[i - 1]) : null;
-        const isOccupied = profile ? (profile.isOccupied === true || profile.isAvailable === false) : (i > availCount);
-        const profileName = profile?.name ? profile.name : `Cupo ${i}`;
-        
-        let isSelected = false;
-        if (!isOccupied && !firstFreeFound) {
-          isSelected = true;
-          firstFreeFound = true;
-        }
+    for (let i = 1; i <= totalCap; i++) {
+      // Occupied fills from left to right: 1..occupiedSlots are occupied
+      const isOccupied = i <= occupiedSlots;
+      const isFree = !isOccupied;
+      const profileName = `Perfil ${i}`;
 
-        tilesHtml += `
-          <div class="profile-slot-tile ${isOccupied ? 'occupied' : 'available'} ${isSelected ? 'selected' : ''}" 
-               style="${isOccupied ? 'cursor: not-allowed; opacity: 0.6; pointer-events: none;' : 'cursor: pointer;'}"
-               title="${isOccupied ? 'Ocupado' : `Perfil Disponible para ti (${profileName})`}">
-            <svg class="slot-sil-icon ${isOccupied ? 'slot-occupied' : 'slot-available'}" width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
-            <span class="profile-tile-num">${profileName}</span>
-            <span class="profile-tile-status ${isOccupied ? 'occ' : 'lib'}">
-              ${isOccupied ? 'Ocupado' : 'Disponible'}
-            </span>
-          </div>
-        `;
-      }
-    } else {
-      const percentOccupied = Math.round((occupiedSlots / totalCap) * 100);
-      tilesHtml = `
-        <div style="grid-column: 1 / -1; background: rgba(0,0,0,0.35); border: 1px solid rgba(0,194,255,0.2); border-radius: 12px; padding: 1.25rem;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-            <span style="font-size: 0.9rem; font-weight: 700; color: #fff;">Panel Multiusuario (${totalCap} cupos)</span>
-            <span style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald); font-size: 0.95rem;">${availCount} cupos disponibles</span>
-          </div>
-          <div style="width: 100%; height: 10px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; margin-bottom: 0.75rem;">
-            <div style="width: ${percentOccupied}%; height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-emerald)); border-radius: 6px;"></div>
-          </div>
-          <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">
-            ✨ Tu cuenta o invitación privada será asignada automáticamente en el cupo disponible con acceso total e inmediato.
-          </p>
+      tilesHtml += `
+        <div class="profile-slot-chip ${isFree ? 'is-free' : 'is-occupied'}" 
+             title="${isFree ? `Perfil ${i}: Disponible para ti` : `Perfil ${i}: Ocupado`}">
+          <svg class="profile-chip-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+          <span class="profile-chip-title">${profileName}</span>
+          <span class="profile-chip-status ${isFree ? 'lib' : 'occ'}">
+            ${isFree ? 'Libre' : 'Ocupado'}
+          </span>
         </div>
       `;
     }
@@ -531,6 +506,7 @@ window.openGroupDetailModal = function(groupId) {
 window.closeGroupDetailModal = function() {
   const modal = document.getElementById('modal-group-detail');
   if (modal) modal.style.display = 'none';
+  state.selectedGroup = null;
 };
 
 // --- 6. CONFIRM JOIN FROM 2-COLUMN MODAL WITH ESCROW GUARANTEE ---
@@ -842,6 +818,26 @@ function setupEventListeners() {
       boxLocal.style.display = 'none';
     };
   }
+
+  // Click outside to close any open modal
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay || e.target.classList.contains('modal-dialog-wrapper')) {
+        overlay.style.display = 'none';
+        state.selectedGroup = null;
+      }
+    });
+  });
+
+  // ESC key to close open modals
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.style.display = 'none';
+      });
+      state.selectedGroup = null;
+    }
+  });
 }
 
 // --- 10. TOAST NOTIFICATIONS ---
