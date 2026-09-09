@@ -63,6 +63,29 @@
         link.href = `https://wa.me/${cleanPhone}?text=${encodeURIComponent('Hola, necesito asistencia en ' + (branding.brandName || 'la plataforma'))}`;
       });
     }
+
+    // 6. Dynamic Module Toggles (Selective feature disabling for SaaS tenants)
+    const modules = tenant.settings?.enabledModules || {};
+    if (modules.streaming === false) {
+      document.querySelectorAll('#section-streaming, a[href="#section-streaming"]').forEach(el => {
+        el.style.display = 'none';
+      });
+    }
+    if (modules.games === false) {
+      document.querySelectorAll('#section-games, a[href="#section-games"]').forEach(el => {
+        el.style.display = 'none';
+      });
+    }
+    if (modules.giftcards === false) {
+      document.querySelectorAll('#section-giftcards, a[href="#section-giftcards"]').forEach(el => {
+        el.style.display = 'none';
+      });
+    }
+    if (modules.smm === false) {
+      document.querySelectorAll('#section-social, a[href="#section-social"]').forEach(el => {
+        el.style.display = 'none';
+      });
+    }
   }
 
   // Auto-propagate tenant query parameter across internal links

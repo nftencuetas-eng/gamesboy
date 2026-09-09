@@ -107,6 +107,22 @@ app.use('/api/admin/streaming-hubs', streamingHubsRouter);
 app.use('/api/admin/streaming-services', streamingHubsRouter);
 
 // Clean Routes & Admin aliases
+app.get('/', (req, res) => {
+  // If on a specific tenant subdomain, custom domain, or tenant parameter -> render store
+  const isCustomTenant = req.tenant && req.tenant.id !== 'tnt_gamesboy_main';
+  const hasTenantQuery = req.query.tenant || req.query.t || req.query.store;
+  if (isCustomTenant || hasTenantQuery) {
+    return res.sendFile(path.join(clientPath, 'store.html'));
+  }
+  // Otherwise render SaaS Master Landing
+  return res.sendFile(path.join(clientPath, 'index.html'));
+});
+
+app.get('/store', (req, res) => res.sendFile(path.join(clientPath, 'store.html')));
+app.get('/store.html', (req, res) => res.sendFile(path.join(clientPath, 'store.html')));
+app.get('/marketplace', (req, res) => res.sendFile(path.join(clientPath, 'store.html')));
+app.get('/saas', (req, res) => res.sendFile(path.join(clientPath, 'index.html')));
+app.get('/landing', (req, res) => res.sendFile(path.join(clientPath, 'index.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(clientPath, 'login.html')));
 app.get('/admin', (req, res) => res.sendFile(path.join(clientPath, 'admin.html')));
 app.get('/admin.html', (req, res) => res.sendFile(path.join(clientPath, 'admin.html')));
@@ -127,12 +143,14 @@ app.get('/monetizar', (req, res) => res.sendFile(path.join(clientPath, 'monetiza
 app.get('/monetizar.html', (req, res) => res.sendFile(path.join(clientPath, 'monetizar.html')));
 app.get('/generar-ingresos', (req, res) => res.sendFile(path.join(clientPath, 'monetizar.html')));
 
-
-
 // Fallback for SPA routing
 app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api') || req.path.startsWith('/health')) {
     return next();
+  }
+  const isCustomTenant = req.tenant && req.tenant.id !== 'tnt_gamesboy_main';
+  if (isCustomTenant) {
+    return res.sendFile(path.join(clientPath, 'store.html'));
   }
   res.sendFile(path.join(clientPath, 'index.html'));
 });

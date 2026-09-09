@@ -1,4 +1,146 @@
 {
+  "tenants": [
+    {
+      "id": "tnt_gamesboy_main",
+      "slug": "gamesboy",
+      "name": "GamesBoy Oficial",
+      "customDomain": "gamesboy.net",
+      "planId": "plan_enterprise",
+      "status": "active",
+      "branding": {
+        "brandName": "GamesBoy",
+        "logoUrl": "/assets/branding/logo.png",
+        "iconUrl": "/assets/branding/icon.png",
+        "primaryColor": "#0284c7",
+        "accentColor": "#00c2ff",
+        "currency": "PYG",
+        "exchangeRate": 7500,
+        "whatsappSupport": "+595981123456"
+      },
+      "settings": {
+        "commissionPercent": 15,
+        "paraguayBankDetails": {
+          "bank": "Banco Familiar / Itaú Paraguay",
+          "accountHolder": "GamesBoy Paraguay S.A.",
+          "rucOrCi": "80091234-5",
+          "accountNumber": "01-445566-7",
+          "aliasSipap": "gamesboy.py"
+        },
+        "binanceDetails": {
+          "payId": "849201934",
+          "network": "USDT (Binance Pay / BEP-20 / TRC-20)",
+          "walletAddress": "0x71C9414B3b27bA134a6C3f07a757657A82e4b92F",
+          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F"
+        }
+      }
+    },
+    {
+      "id": "tnt_streamflow_demo",
+      "slug": "streamflow",
+      "name": "StreamFlow Paraguay",
+      "customDomain": "streamflow.gamesboy.net",
+      "planId": "plan_pro",
+      "status": "active",
+      "branding": {
+        "brandName": "StreamFlow",
+        "logoUrl": "/assets/branding/icon.png",
+        "iconUrl": "/assets/branding/icon.png",
+        "primaryColor": "#10b981",
+        "accentColor": "#34d399",
+        "currency": "PYG",
+        "exchangeRate": 7500,
+        "whatsappSupport": "+595982000111"
+      },
+      "settings": {
+        "commissionPercent": 12,
+        "paraguayBankDetails": {
+          "bank": "Banco Continental",
+          "accountHolder": "StreamFlow Digital",
+          "rucOrCi": "4455667-8",
+          "accountNumber": "15-998877-2",
+          "aliasSipap": "streamflow.py"
+        },
+        "binanceDetails": {
+          "payId": "992144551",
+          "network": "USDT (BEP-20)",
+          "walletAddress": "0x33B10A98F722cE434a6C3f07a757657A82e4b88B",
+          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x33B10A98F722cE434a6C3f07a757657A82e4b88B"
+        }
+      }
+    },
+    {
+      "id": "tnt_novastore_1788979221419",
+      "slug": "novastore",
+      "name": "Nova Digital Store",
+      "customDomain": "novastore.gamesboy.net",
+      "ownerUserId": null,
+      "planId": "plan_pro",
+      "status": "active",
+      "branding": {
+        "brandName": "Nova Digital Store",
+        "logoUrl": "/assets/branding/logo.png",
+        "iconUrl": "/assets/branding/icon.png",
+        "primaryColor": "#6366f1",
+        "accentColor": "#818cf8",
+        "currency": "PYG",
+        "exchangeRate": 7500,
+        "whatsappSupport": "+595981999888"
+      },
+      "settings": {
+        "commissionPercent": 15,
+        "paraguayBankDetails": {
+          "bank": "Banco Familiar / Itaú Paraguay",
+          "accountHolder": "GamesBoy Paraguay S.A.",
+          "rucOrCi": "80091234-5",
+          "accountNumber": "01-445566-7",
+          "aliasSipap": "gamesboy.py"
+        },
+        "binanceDetails": {
+          "payId": "849201934",
+          "network": "USDT (Binance Pay / BEP-20 / TRC-20)",
+          "walletAddress": "0x71C9414B3b27bA134a6C3f07a757657A82e4b92F",
+          "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F"
+        },
+        "enabledModules": {
+          "streaming": true,
+          "games": true,
+          "giftcards": false,
+          "smm": false
+        }
+      },
+      "createdAt": "2026-09-09T18:40:21.419Z",
+      "updatedAt": "2026-09-09T18:40:21.419Z"
+    }
+  ],
+  "tenant_plans": [
+    {
+      "id": "plan_starter",
+      "name": "Starter Reseller",
+      "priceMonthlyUsd": 19.99,
+      "maxSlotsAllowed": 50,
+      "maxProductsAllowed": 30,
+      "customDomainEnabled": false,
+      "platformFeePercent": 5
+    },
+    {
+      "id": "plan_pro",
+      "name": "Pro Marketplace",
+      "priceMonthlyUsd": 49.99,
+      "maxSlotsAllowed": 250,
+      "maxProductsAllowed": 150,
+      "customDomainEnabled": true,
+      "platformFeePercent": 3
+    },
+    {
+      "id": "plan_enterprise",
+      "name": "Enterprise White-Label",
+      "priceMonthlyUsd": 99.99,
+      "maxSlotsAllowed": 1000,
+      "maxProductsAllowed": 500,
+      "customDomainEnabled": true,
+      "platformFeePercent": 1.5
+    }
+  ],
   "users": [
     {
       "id": "usr_g_1788689482236",

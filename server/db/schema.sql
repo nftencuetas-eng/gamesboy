@@ -21,6 +21,16 @@ CREATE TABLE IF NOT EXISTS gamesboy.gb_tenant_plans (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Insertar planes antes de usarlos como FK
+INSERT INTO gamesboy.gb_tenant_plans (id, name, price_monthly_usd, max_slots_allowed, max_products_allowed, custom_domain_enabled, platform_fee_percent, features)
+VALUES
+    ('plan_starter', 'Starter Reseller', 19.99, 50, 30, false, 5.00, '["Catálogo Streaming", "Soporte SIPAP", "Subdominio"]'::jsonb),
+    ('plan_pro', 'Pro Marketplace', 49.99, 250, 150, true, 3.00, '["Catálogo Completo", "Dominio Propio", "Cero Glare UI", "Binance Pay"]'::jsonb),
+    ('plan_enterprise', 'Enterprise White-Label', 99.99, 1000, 500, true, 1.50, '["White Label Total", "Soporte VIP 24/7", "API Exclusiva"]'::jsonb)
+ON CONFLICT (id) DO UPDATE SET
+    name = EXCLUDED.name,
+    price_monthly_usd = EXCLUDED.price_monthly_usd;
+
 -- 0.1 TABLA MAESTRA DE INQUILINOS / TIENDAS (TENANTS)
 CREATE TABLE IF NOT EXISTS gamesboy.gb_tenants (
     id VARCHAR(64) PRIMARY KEY,
@@ -59,6 +69,79 @@ CREATE TABLE IF NOT EXISTS gamesboy.gb_tenants (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Insertar Tenants Semilla de forma inmediata
+INSERT INTO gamesboy.gb_tenants (id, slug, name, custom_domain, plan_id, status, branding, settings)
+VALUES
+    (
+        'tnt_gamesboy_main',
+        'gamesboy',
+        'GamesBoy Oficial',
+        'gamesboy.net',
+        'plan_enterprise',
+        'active',
+        '{
+            "brandName": "GamesBoy",
+            "logoUrl": "/assets/branding/logo.png",
+            "iconUrl": "/assets/branding/icon.png",
+            "primaryColor": "#0284c7",
+            "accentColor": "#00c2ff",
+            "currency": "PYG",
+            "exchangeRate": 7500,
+            "whatsappSupport": "+595981123456"
+        }'::jsonb,
+        '{
+            "commissionPercent": 15.00,
+            "paraguayBankDetails": {
+                "bank": "Banco Familiar / Itaú Paraguay",
+                "accountHolder": "GamesBoy Paraguay S.A.",
+                "rucOrCi": "80091234-5",
+                "accountNumber": "01-445566-7",
+                "aliasSipap": "gamesboy.py"
+            },
+            "binanceDetails": {
+                "payId": "849201934",
+                "network": "USDT (Binance Pay / BEP-20 / TRC-20)",
+                "walletAddress": "0x71C9414B3b27bA134a6C3f07a757657A82e4b92F",
+                "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F"
+            }
+        }'::jsonb
+    ),
+    (
+        'tnt_streamflow_demo',
+        'streamflow',
+        'StreamFlow Paraguay',
+        'streamflow.gamesboy.net',
+        'plan_pro',
+        'active',
+        '{
+            "brandName": "StreamFlow",
+            "logoUrl": "/assets/branding/icon.png",
+            "iconUrl": "/assets/branding/icon.png",
+            "primaryColor": "#10b981",
+            "accentColor": "#34d399",
+            "currency": "PYG",
+            "exchangeRate": 7500,
+            "whatsappSupport": "+595982000111"
+        }'::jsonb,
+        '{
+            "commissionPercent": 12.00,
+            "paraguayBankDetails": {
+                "bank": "Banco Continental",
+                "accountHolder": "StreamFlow Digital",
+                "rucOrCi": "4455667-8",
+                "accountNumber": "15-998877-2",
+                "aliasSipap": "streamflow.py"
+            },
+            "binanceDetails": {
+                "payId": "992144551",
+                "network": "USDT (BEP-20)",
+                "walletAddress": "0x33B10A98F722cE434a6C3f07a757657A82e4b88B",
+                "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x33B10A98F722cE434a6C3f07a757657A82e4b88B"
+            }
+        }'::jsonb
+    )
+ON CONFLICT (id) DO NOTHING;
 
 -- 1. TABLA DE USUARIOS DE GAMESBOY (100% aislada de auth.users)
 CREATE TABLE IF NOT EXISTS gamesboy.gb_users (
@@ -245,79 +328,6 @@ ALTER TABLE gamesboy.gb_subscriptions ADD COLUMN IF NOT EXISTS group_chat_messag
 
 ALTER TABLE gamesboy.gb_hero_banners ADD COLUMN IF NOT EXISTS sort_order INT DEFAULT 0;
 ALTER TABLE gamesboy.gb_hero_banners ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
-
--- 0. Insertar Tenants Semilla
-INSERT INTO gamesboy.gb_tenants (id, slug, name, custom_domain, plan_id, status, branding, settings)
-VALUES
-    (
-        'tnt_gamesboy_main',
-        'gamesboy',
-        'GamesBoy Oficial',
-        'gamesboy.net',
-        'plan_enterprise',
-        'active',
-        '{
-            "brandName": "GamesBoy",
-            "logoUrl": "/assets/branding/logo.png",
-            "iconUrl": "/assets/branding/icon.png",
-            "primaryColor": "#0284c7",
-            "accentColor": "#00c2ff",
-            "currency": "PYG",
-            "exchangeRate": 7500,
-            "whatsappSupport": "+595981123456"
-        }'::jsonb,
-        '{
-            "commissionPercent": 15.00,
-            "paraguayBankDetails": {
-                "bank": "Banco Familiar / Itaú Paraguay",
-                "accountHolder": "GamesBoy Paraguay S.A.",
-                "rucOrCi": "80091234-5",
-                "accountNumber": "01-445566-7",
-                "aliasSipap": "gamesboy.py"
-            },
-            "binanceDetails": {
-                "payId": "849201934",
-                "network": "USDT (Binance Pay / BEP-20 / TRC-20)",
-                "walletAddress": "0x71C9414B3b27bA134a6C3f07a757657A82e4b92F",
-                "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F"
-            }
-        }'::jsonb
-    ),
-    (
-        'tnt_streamflow_demo',
-        'streamflow',
-        'StreamFlow Paraguay',
-        'streamflow.gamesboy.net',
-        'plan_pro',
-        'active',
-        '{
-            "brandName": "StreamFlow",
-            "logoUrl": "/assets/branding/icon.png",
-            "iconUrl": "/assets/branding/icon.png",
-            "primaryColor": "#10b981",
-            "accentColor": "#34d399",
-            "currency": "PYG",
-            "exchangeRate": 7500,
-            "whatsappSupport": "+595982000111"
-        }'::jsonb,
-        '{
-            "commissionPercent": 12.00,
-            "paraguayBankDetails": {
-                "bank": "Banco Continental",
-                "accountHolder": "StreamFlow Digital",
-                "rucOrCi": "4455667-8",
-                "accountNumber": "15-998877-2",
-                "aliasSipap": "streamflow.py"
-            },
-            "binanceDetails": {
-                "payId": "992144551",
-                "network": "USDT (BEP-20)",
-                "walletAddress": "0x33B10A98F722cE434a6C3f07a757657A82e4b88B",
-                "qrUrl": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x33B10A98F722cE434a6C3f07a757657A82e4b88B"
-            }
-        }'::jsonb
-    )
-ON CONFLICT (id) DO NOTHING;
 
 -- Backfill tenant_id en datos existentes
 UPDATE gamesboy.gb_users SET tenant_id = 'tnt_gamesboy_main' WHERE tenant_id IS NULL;

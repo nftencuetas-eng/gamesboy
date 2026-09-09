@@ -23,7 +23,8 @@ router.get('/current', (req, res) => {
         commissionPercent: tenant.settings?.commissionPercent || 15.00,
         exchangeRate: tenant.branding?.exchangeRate || 7500,
         paraguayBankDetails: tenant.settings?.paraguayBankDetails || DEFAULT_TENANT.settings.paraguayBankDetails,
-        binanceDetails: tenant.settings?.binanceDetails || DEFAULT_TENANT.settings.binanceDetails
+        binanceDetails: tenant.settings?.binanceDetails || DEFAULT_TENANT.settings.binanceDetails,
+        enabledModules: tenant.settings?.enabledModules || { streaming: true, games: true, giftcards: true, smm: true }
       }
     }
   });
@@ -83,6 +84,29 @@ router.get('/plans', (req, res) => {
   res.json({ success: true, plans });
 });
 
+// --- 2.1 CHECK SLUG AVAILABILITY ---
+router.get('/check-slug/:slug', (req, res) => {
+  const db = getDb();
+  const rawSlug = req.params.slug || '';
+  const cleanSlug = rawSlug.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+
+  if (!cleanSlug || cleanSlug.length < 3) {
+    return res.json({ available: false, error: 'El subdominio debe tener al menos 3 caracteres alfanuméricos.' });
+  }
+
+  const reserved = ['www', 'api', 'app', 'admin', 'mail', 'saas', 'store', 'marketplace', 'auth', 'login', 'service'];
+  if (reserved.includes(cleanSlug)) {
+    return res.json({ available: false, error: 'Este subdominio está reservado por el sistema.' });
+  }
+
+  const exists = (db.tenants || []).some(t => t.slug === cleanSlug);
+  res.json({
+    available: !exists,
+    slug: cleanSlug,
+    subdomain: `${cleanSlug}.gamesboy.net`
+  });
+});
+
 // --- 3. LIST ALL TENANTS (SUPERADMIN / PLATFORM DASHBOARD) ---
 router.get('/tenants', (req, res) => {
   const db = getDb();
@@ -109,21 +133,33 @@ router.get('/tenants', (req, res) => {
   res.json({ success: true, tenants: enriched });
 });
 
-// --- 4. CREATE A NEW TENANT / STORE ONBOARDING ---
-router.post('/tenants', (req, res) => {
+// --- 4. CREATE A NEW TENANT / STORE ONBOARDING WIZARD ---
+router.post('/onboarding', (req, res) => {
   try {
     const db = getDb();
     if (!db.tenants) db.tenants = [DEFAULT_TENANT];
 
-    const { slug, name, customDomain, ownerEmail, planId, branding, settings } = req.body;
+    const {
+      slug,
+      name,
+      customDomain,
+      planId,
+      branding,
+      settings,
+      enabledModules
+    } = req.body;
 
     if (!slug || !name) {
       return res.status(400).json({ error: 'El nombre de tienda y el identificador (slug) son requeridos.' });
     }
 
     const cleanSlug = slug.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+    if (cleanSlug.length < 3) {
+      return res.status(400).json({ error: 'El subdominio debe contener al menos 3 caracteres alfanuméricos.' });
+    }
+
     if (db.tenants.some(t => t.slug === cleanSlug)) {
-      return res.status(400).json({ error: `El subdominio / slug "${cleanSlug}" ya está registrado por otra tienda.` });
+      return res.status(400).json({ error: `El subdominio "${cleanSlug}.gamesboy.net" ya está en uso. Por favor elige otro.` });
     }
 
     const tenantId = `tnt_${cleanSlug}_${Date.now()}`;
@@ -148,7 +184,13 @@ router.post('/tenants', (req, res) => {
       settings: {
         commissionPercent: parseFloat(settings?.commissionPercent) || 15.00,
         paraguayBankDetails: settings?.paraguayBankDetails || DEFAULT_TENANT.settings.paraguayBankDetails,
-        binanceDetails: settings?.binanceDetails || DEFAULT_TENANT.settings.binanceDetails
+        binanceDetails: settings?.binanceDetails || DEFAULT_TENANT.settings.binanceDetails,
+        enabledModules: enabledModules || {
+          streaming: true,
+          games: true,
+          giftcards: true,
+          smm: false
+        }
       },
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -159,12 +201,19 @@ router.post('/tenants', (req, res) => {
 
     res.json({
       success: true,
-      message: `¡Tienda "${newTenant.name}" creada con éxito en el ecosistema SaaS!`,
-      tenant: newTenant
+      message: `¡Tu plataforma "${newTenant.name}" ha sido creada con éxito!`,
+      tenant: newTenant,
+      storeUrl: `/store?tenant=${newTenant.slug}`
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// Alias for standard POST /tenants
+router.post('/tenants', (req, res) => {
+  req.url = '/onboarding';
+  router.handle(req, res);
 });
 
 // --- 5. UPDATE TENANT SETTINGS & BRANDING ---
@@ -178,7 +227,7 @@ router.put('/tenants/:id', (req, res) => {
       return res.status(404).json({ error: 'Inquilino / Tienda no encontrada.' });
     }
 
-    const { name, customDomain, planId, status, branding, settings } = req.body;
+    const { name, customDomain, planId, status, branding, settings, enabledModules } = req.body;
 
     if (name) tenant.name = name.trim();
     if (customDomain !== undefined) tenant.customDomain = customDomain ? customDomain.toLowerCase().trim() : null;
@@ -196,6 +245,13 @@ router.put('/tenants/:id', (req, res) => {
       tenant.settings = {
         ...tenant.settings,
         ...settings
+      };
+    }
+
+    if (enabledModules) {
+      tenant.settings.enabledModules = {
+        ...(tenant.settings.enabledModules || {}),
+        ...enabledModules
       };
     }
 
