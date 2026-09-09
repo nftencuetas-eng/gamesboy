@@ -573,10 +573,17 @@ let currentSmmCategory = 'views';
 let currentSmmSelectedPackage = null;
 
 window.openSmmPlatformModal = function(platformKey) {
+  const platform = smmPlatformsData[platformKey];
+  if (!platform || platform.comingSoon || !platform.categories || platform.categories.length === 0) {
+    if (window.showToast) {
+      window.showToast('info', 'Próximamente', `Los servicios para ${platform?.platform || 'esta plataforma'} estarán disponibles muy pronto.`);
+    }
+    return;
+  }
+
   const modal = document.getElementById('modal-smm-platform');
   if (!modal) return;
 
-  const platform = smmPlatformsData[platformKey] || smmPlatformsData['instagram'];
   currentSmmPlatform = platformKey;
 
   // Header Details
@@ -649,7 +656,7 @@ window.selectSmmCategory = function(categoryId) {
   // Render package tiles
   const tilesContainer = document.getElementById('smm-quantity-tiles-grid');
   if (tilesContainer) {
-    tilesContainer.innerHTML = category.packages.map((pkg, idx) => {
+    tilesContainer.innerHTML = (category.packages || []).map((pkg, idx) => {
       const isSelected = idx === 0;
       if (isSelected) currentSmmSelectedPackage = pkg;
 
@@ -1105,7 +1112,7 @@ function initGamesWaveEngine(allGamesList) {
 }
 
 
-// --- 4. RENDER REAL PNG UPLOADED GIFT CARDS (CLEAN SKELETONS ON LOAD, 0 DUMMY CARDS) ---
+// --- 4. RENDER REAL PNG UPLOADED GIFT CARDS WITH 3D TILT PHYSICS ---
 function renderRetailGiftCards() {
   const container = document.getElementById('retail-giftcards-grid');
   if (!container) return;
@@ -1123,17 +1130,74 @@ function renderRetailGiftCards() {
     return;
   }
 
-  container.innerHTML = brandsList.map(gc => {
+  container.innerHTML = brandsList.map((gc, idx) => {
     const cardImg = gc.logoImage || gc.logoUrl || gc.coverImage || gc.coverUrl || '/assets/branding/icon.png';
     const cardTitle = gc.name || gc.title || 'Gift Card';
     const cardId = gc.id || gc.brandId || `gc_${Math.random()}`;
+    const tiltVariance = (0.95 + ((idx % 4) * 0.08)).toFixed(2);
 
     return `
-      <div class="giftcard-clean-png-card" onclick="openGiftCardVariationsModal('${cardId}')" title="${cardTitle}">
+      <div class="giftcard-clean-png-card" data-tilt-factor="${tiltVariance}" onclick="openGiftCardVariationsModal('${cardId}')" title="${cardTitle}">
         <img src="${cardImg}" alt="${cardTitle}" class="giftcard-clean-png-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='/assets/branding/icon.png';">
       </div>
     `;
   }).join('');
+
+  initGiftCardTiltEffects();
+}
+
+// 3D Physical Tilt & Glare Engine for Gift Cards
+function initGiftCardTiltEffects() {
+  const container = document.getElementById('retail-giftcards-grid');
+  if (!container) return;
+
+  const cards = container.querySelectorAll('.giftcard-clean-png-card');
+  cards.forEach((card, index) => {
+    const factor = parseFloat(card.dataset.tiltFactor) || (1 + (index % 3) * 0.12);
+    const img = card.querySelector('.giftcard-clean-png-img');
+    let rafId = null;
+
+    card.onmouseenter = () => {
+      if (img) img.style.transition = 'transform 0.08s ease-out, filter 0.2s ease';
+    };
+
+    card.onmousemove = (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const normX = (x - centerX) / centerX; // -1 to 1
+      const normY = (y - centerY) / centerY; // -1 to 1
+      
+      const maxTilt = 14 * factor;
+      const rotX = -normY * maxTilt;
+      const rotY = normX * maxTilt;
+      const rotZ = -normX * normY * (3.5 * factor); // Natural diagonal flex
+      
+      card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
+      card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
+
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        if (img) {
+          img.style.transform = `perspective(1100px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) rotateZ(${rotZ.toFixed(2)}deg) scale3d(1.06, 1.06, 1.06)`;
+          img.style.filter = `drop-shadow(${-rotY * 1.5}px ${16 + Math.abs(rotX)}px 24px rgba(0, 0, 0, 0.75)) drop-shadow(0 0 16px rgba(0, 194, 255, 0.35))`;
+        }
+      });
+    };
+
+    card.onmouseleave = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      if (img) {
+        img.style.transition = 'transform 0.45s cubic-bezier(0.23, 1, 0.32, 1), filter 0.45s ease';
+        img.style.transform = 'perspective(1100px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale3d(1, 1, 1)';
+        img.style.filter = 'drop-shadow(0 14px 22px rgba(0, 0, 0, 0.65))';
+      }
+    };
+  });
 }
 
 // Platform SVG Vector Icons (100% SVG, Zero Emojis)
@@ -1146,7 +1210,7 @@ const platformSvgIcons = {
   'X (Twitter)': `<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`
 };
 
-// --- 5. RENDER SMM SERVICES (UNIFIED GLASS CARDS WITH 2x2 BENEFITS GRID & RIGHT-ALIGNED EXPLORAR BUTTON) ---
+// --- 5. RENDER SMM SERVICES (UNIFIED GLASS CARDS WITH 2x2 BENEFITS GRID & COMING SOON STATUS) ---
 function renderSmmServices() {
   const container = document.getElementById('smm-services-grid');
   if (!container) return;
@@ -1159,6 +1223,11 @@ function renderSmmServices() {
       .split('•')
       .map(s => s.trim())
       .filter(Boolean);
+
+    // Check if platform has active services configured & is not marked coming soon
+    const hasActiveServices = p.categories && p.categories.length > 0 && 
+                              p.categories.some(c => c.packages && c.packages.length > 0) && 
+                              !p.comingSoon;
 
     // Default 4 benefits for clean 2x2 grid
     const benefits = rawServices.slice(0, 4);
@@ -1175,8 +1244,16 @@ function renderSmmServices() {
       </div>
     `).join('');
 
+    const actionHtml = hasActiveServices
+      ? `<button type="button" class="btn-smm-explore" tabindex="-1">Explorar ➔</button>`
+      : `<span class="smm-badge-coming-soon">Próximamente</span>`;
+
+    const clickHandler = hasActiveServices
+      ? `onclick="openSmmPlatformModal('${p.id}')"`
+      : `onclick="window.showToast ? window.showToast('info', 'Próximamente', 'Los servicios para ${p.platform} estarán disponibles en breve.') : null"`;
+
     return `
-      <div class="smm-platform-card" onclick="openSmmPlatformModal('${p.id}')" title="Ver servicios de ${p.platform}">
+      <div class="smm-platform-card ${hasActiveServices ? '' : 'is-coming-soon'}" ${clickHandler} title="${hasActiveServices ? 'Ver servicios de ' + p.platform : p.platform + ' - Próximamente'}">
         <div class="smm-platform-banner-wrap" style="background: ${p.bannerGradient || 'linear-gradient(90deg, #1e293b, #0ea5e9)'};">
           <div class="smm-banner-brand-left">
             <span class="smm-banner-icon">${iconSvg}</span>
@@ -1189,7 +1266,7 @@ function renderSmmServices() {
             ${benefitsHtml}
           </div>
           <div class="smm-platform-footer-row">
-            <button type="button" class="btn-smm-explore" tabindex="-1">Explorar ➔</button>
+            ${actionHtml}
           </div>
         </div>
       </div>
@@ -1544,27 +1621,106 @@ window.openGiftCardVariationsModal = function(id) {
   document.getElementById('modal-gc-description').textContent = brandDesc;
 
   const rate = state.exchangeRatePyg || 7500;
-  let variations = brand.variations || [];
-  if (!variations || variations.length === 0) {
-    variations = [
-      { id: `var_${brand.id}_10`, name: `${brandName} $10 USD`, denomination: '$10 USD', priceUsd: 10.00, pricePyg: Math.round(10 * rate) },
-      { id: `var_${brand.id}_25`, name: `${brandName} $25 USD`, denomination: '$25 USD', priceUsd: 25.00, pricePyg: Math.round(25 * rate) },
-      { id: `var_${brand.id}_50`, name: `${brandName} $50 USD`, denomination: '$50 USD', priceUsd: 50.00, pricePyg: Math.round(50 * rate) },
-      { id: `var_${brand.id}_100`, name: `${brandName} $100 USD`, denomination: '$100 USD', priceUsd: 100.00, pricePyg: Math.round(100 * rate) }
+  const brandLower = brandName.toLowerCase();
+
+  // Multi-Category Variation Sets
+  let variationTabs = [];
+  let variationCatalog = {};
+
+  if (brandLower.includes('xbox')) {
+    variationTabs = [
+      { id: 'balance', title: 'Saldo Xbox (USA)' },
+      { id: 'pass', title: 'Xbox Game Pass' }
     ];
+    variationCatalog = {
+      'balance': [
+        { id: `var_${brand.id}_10`, name: 'Xbox $10 USD', denomination: '$10 USD', priceUsd: 10.00, pricePyg: Math.round(10 * rate), isMembership: false },
+        { id: `var_${brand.id}_25`, name: 'Xbox $25 USD', denomination: '$25 USD', priceUsd: 25.00, pricePyg: Math.round(25 * rate), isMembership: false },
+        { id: `var_${brand.id}_50`, name: 'Xbox $50 USD', denomination: '$50 USD', priceUsd: 50.00, pricePyg: Math.round(50 * rate), isMembership: false },
+        { id: `var_${brand.id}_100`, name: 'Xbox $100 USD', denomination: '$100 USD', priceUsd: 100.00, pricePyg: Math.round(100 * rate), isMembership: false }
+      ],
+      'pass': [
+        { id: `var_${brand.id}_gpu1`, name: 'Game Pass Ultimate 1 Mes', denomination: 'Ultimate 1 Mes', priceUsd: 17.00, pricePyg: Math.round(17 * rate), isMembership: true },
+        { id: `var_${brand.id}_gpu3`, name: 'Game Pass Ultimate 3 Meses', denomination: 'Ultimate 3 Meses', priceUsd: 45.00, pricePyg: Math.round(45 * rate), isMembership: true },
+        { id: `var_${brand.id}_core3`, name: 'Game Pass Core 3 Meses', denomination: 'Core 3 Meses', priceUsd: 25.00, pricePyg: Math.round(25 * rate), isMembership: true }
+      ]
+    };
+  } else if (brandLower.includes('playstation') || brandLower.includes('psn')) {
+    variationTabs = [
+      { id: 'balance', title: 'Saldo PSN (USA)' },
+      { id: 'psplus', title: 'PlayStation Plus' }
+    ];
+    variationCatalog = {
+      'balance': [
+        { id: `var_${brand.id}_10`, name: 'PSN $10 USD', denomination: '$10 USD', priceUsd: 10.00, pricePyg: Math.round(10 * rate), isMembership: false },
+        { id: `var_${brand.id}_25`, name: 'PSN $25 USD', denomination: '$25 USD', priceUsd: 25.00, pricePyg: Math.round(25 * rate), isMembership: false },
+        { id: `var_${brand.id}_50`, name: 'PSN $50 USD', denomination: '$50 USD', priceUsd: 50.00, pricePyg: Math.round(50 * rate), isMembership: false },
+        { id: `var_${brand.id}_100`, name: 'PSN $100 USD', denomination: '$100 USD', priceUsd: 100.00, pricePyg: Math.round(100 * rate), isMembership: false }
+      ],
+      'psplus': [
+        { id: `var_${brand.id}_plus1`, name: 'PS Plus Essential 1 Mes', denomination: 'Essential 1 Mes', priceUsd: 10.00, pricePyg: Math.round(10 * rate), isMembership: true },
+        { id: `var_${brand.id}_plus3`, name: 'PS Plus Essential 3 Meses', denomination: 'Essential 3 Meses', priceUsd: 25.00, pricePyg: Math.round(25 * rate), isMembership: true },
+        { id: `var_${brand.id}_extra3`, name: 'PS Plus Extra 3 Meses', denomination: 'Extra 3 Meses', priceUsd: 40.00, pricePyg: Math.round(40 * rate), isMembership: true }
+      ]
+    };
+  } else if (brandLower.includes('nintendo')) {
+    variationTabs = [
+      { id: 'balance', title: 'eShop Cards (USA)' },
+      { id: 'nso', title: 'Switch Online' }
+    ];
+    variationCatalog = {
+      'balance': [
+        { id: `var_${brand.id}_10`, name: 'eShop $10 USD', denomination: '$10 USD', priceUsd: 10.00, pricePyg: Math.round(10 * rate), isMembership: false },
+        { id: `var_${brand.id}_20`, name: 'eShop $20 USD', denomination: '$20 USD', priceUsd: 20.00, pricePyg: Math.round(20 * rate), isMembership: false },
+        { id: `var_${brand.id}_35`, name: 'eShop $35 USD', denomination: '$35 USD', priceUsd: 35.00, pricePyg: Math.round(35 * rate), isMembership: false },
+        { id: `var_${brand.id}_50`, name: 'eShop $50 USD', denomination: '$50 USD', priceUsd: 50.00, pricePyg: Math.round(50 * rate), isMembership: false }
+      ],
+      'nso': [
+        { id: `var_${brand.id}_nso12`, name: 'Switch Online Individual 12 Meses', denomination: 'Individual 12 Meses', priceUsd: 20.00, pricePyg: Math.round(20 * rate), isMembership: true },
+        { id: `var_${brand.id}_nsofam`, name: 'Switch Online Familiar 12 Meses', denomination: 'Familiar 12 Meses', priceUsd: 35.00, pricePyg: Math.round(35 * rate), isMembership: true }
+      ]
+    };
+  } else {
+    // Default dynamic or single group
+    let vars = brand.variations || [
+      { id: `var_${brand.id}_10`, name: `${brandName} $10 USD`, denomination: '$10 USD', priceUsd: 10.00, pricePyg: Math.round(10 * rate), isMembership: false },
+      { id: `var_${brand.id}_25`, name: `${brandName} $25 USD`, denomination: '$25 USD', priceUsd: 25.00, pricePyg: Math.round(25 * rate), isMembership: false },
+      { id: `var_${brand.id}_50`, name: `${brandName} $50 USD`, denomination: '$50 USD', priceUsd: 50.00, pricePyg: Math.round(50 * rate), isMembership: false },
+      { id: `var_${brand.id}_100`, name: `${brandName} $100 USD`, denomination: '$100 USD', priceUsd: 100.00, pricePyg: Math.round(100 * rate), isMembership: false }
+    ];
+
+    variationTabs = [{ id: 'default', title: 'Saldo Digital' }];
+    variationCatalog = { 'default': vars };
   }
 
+  let currentTabId = variationTabs[0].id;
   let selectedVarIndex = 0;
+
+  const tabsBar = document.getElementById('modal-gc-tabs-bar');
+  if (tabsBar) {
+    if (variationTabs.length > 1) {
+      tabsBar.style.display = 'flex';
+      tabsBar.innerHTML = variationTabs.map((tab, idx) => `
+        <button type="button" class="gc-variation-tab-btn ${idx === 0 ? 'active' : ''}" onclick="selectGcTab('${tab.id}')">
+          <span>${tab.title}</span>
+        </button>
+      `).join('');
+    } else {
+      tabsBar.style.display = 'none';
+    }
+  }
 
   function renderVariationsGrid() {
     const grid = document.getElementById('modal-gc-variations-grid');
     if (!grid) return;
 
-    grid.innerHTML = variations.map((v, idx) => {
+    const currentVariations = variationCatalog[currentTabId] || [];
+
+    grid.innerHTML = currentVariations.map((v, idx) => {
       const isSelected = idx === selectedVarIndex;
       const vPyg = v.pricePyg || Math.round((v.priceUsd || 10) * rate);
       const vUsd = v.priceUsd || parseFloat((vPyg / rate).toFixed(2));
-      const isMembership = (v.name || '').toLowerCase().includes('mes') || (v.name || '').toLowerCase().includes('plus') || (v.name || '').toLowerCase().includes('pass') || (v.denomination || '').toLowerCase().includes('mes');
+      const isMembership = v.isMembership || (v.name || '').toLowerCase().includes('mes') || (v.name || '').toLowerCase().includes('plus') || (v.name || '').toLowerCase().includes('pass') || (v.denomination || '').toLowerCase().includes('mes');
 
       return `
         <div class="gc-variation-card ${isSelected ? 'selected' : ''}" onclick="selectGcVariation(${idx})">
@@ -1572,7 +1728,7 @@ window.openGiftCardVariationsModal = function(id) {
             <span class="gc-var-denom">${v.denomination || v.name}</span>
             <span class="gc-var-badge ${isMembership ? 'membership' : 'balance'}">${isMembership ? 'Membresía' : 'Saldo'}</span>
           </div>
-          <div class="gc-var-pricing">
+          <div class="gc-var-pricing-stack">
             <span class="gc-var-price-gs">${vPyg.toLocaleString('es-PY')} Gs.</span>
             <span class="gc-var-price-usd">$${vUsd.toFixed(2)} USDT</span>
           </div>
@@ -1580,13 +1736,24 @@ window.openGiftCardVariationsModal = function(id) {
       `;
     }).join('');
 
-    const currentVar = variations[selectedVarIndex] || variations[0];
-    const totalPyg = currentVar.pricePyg || Math.round((currentVar.priceUsd || 10) * rate);
-    const totalUsd = currentVar.priceUsd || parseFloat((totalPyg / rate).toFixed(2));
+    const currentVar = currentVariations[selectedVarIndex] || currentVariations[0];
+    if (currentVar) {
+      const totalPyg = currentVar.pricePyg || Math.round((currentVar.priceUsd || 10) * rate);
+      const totalUsd = currentVar.priceUsd || parseFloat((totalPyg / rate).toFixed(2));
 
-    document.getElementById('modal-gc-total-gs').textContent = `${totalPyg.toLocaleString('es-PY')} Gs.`;
-    document.getElementById('modal-gc-total-usd').textContent = `$${totalUsd.toFixed(2)} USDT`;
+      document.getElementById('modal-gc-total-gs').textContent = `${totalPyg.toLocaleString('es-PY')} Gs.`;
+      document.getElementById('modal-gc-total-usd').textContent = `$${totalUsd.toFixed(2)} USDT`;
+    }
   }
+
+  window.selectGcTab = function(tabId) {
+    currentTabId = tabId;
+    selectedVarIndex = 0;
+    document.querySelectorAll('.gc-variation-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('onclick').includes(`'${tabId}'`));
+    });
+    renderVariationsGrid();
+  };
 
   window.selectGcVariation = function(idx) {
     selectedVarIndex = idx;
@@ -1598,7 +1765,9 @@ window.openGiftCardVariationsModal = function(id) {
   const confirmBtn = document.getElementById('btn-confirm-gc-buy');
   if (confirmBtn) {
     confirmBtn.onclick = () => {
-      const currentVar = variations[selectedVarIndex] || variations[0];
+      const currentVariations = variationCatalog[currentTabId] || [];
+      const currentVar = currentVariations[selectedVarIndex] || currentVariations[0];
+      if (!currentVar) return;
       modal.style.display = 'none';
       const targetPriceUsd = currentVar.priceUsd || parseFloat(((currentVar.pricePyg || 75000) / rate).toFixed(2));
       executePurchase(`/api/store/products/${brand.id || 'gc_custom'}/buy`, {
@@ -2997,6 +3166,49 @@ async function handleModalGoogleSuccess(payload) {
   }
 }
 
+// --- MODAL STATE SYNCHRONIZATION OBSERVER ---
+function initModalObserver() {
+  const syncModalState = () => {
+    const overlays = document.querySelectorAll('.modal-overlay');
+    let anyOpen = false;
+    overlays.forEach(m => {
+      const display = window.getComputedStyle(m).display;
+      if (display !== 'none' || m.classList.contains('active')) {
+        anyOpen = true;
+      }
+    });
+
+    if (anyOpen) {
+      document.body.classList.add('modal-open');
+    } else {
+      document.body.classList.remove('modal-open');
+    }
+  };
+
+  const observer = new MutationObserver(syncModalState);
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    observer.observe(m, { attributes: true, attributeFilter: ['style', 'class'] });
+    m.addEventListener('click', (e) => {
+      if (e.target === m) {
+        m.style.display = 'none';
+        m.classList.remove('active');
+        syncModalState();
+      }
+    });
+  });
+
+  // Global ESC Key Handler
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay').forEach(m => {
+        m.style.display = 'none';
+        m.classList.remove('active');
+      });
+      syncModalState();
+    }
+  });
+}
+
 function initializeMarketplace() {
   initInteractiveDotGrid();
   initUserSession();
@@ -3006,6 +3218,7 @@ function initializeMarketplace() {
   initWebSocketClient();
   initDragToScrollEngine();
   initModalGoogleAuth();
+  initModalObserver();
 }
 
 if (document.readyState === 'loading') {

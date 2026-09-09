@@ -674,7 +674,7 @@
   <!-- MODAL: DETALLES & VARIACIONES DE TARJETA DE REGALO      -->
   <!-- ======================================================= -->
   <div class="modal-overlay" id="modal-giftcard-variations" style="display: none;">
-    <div class="modal-content glass-modal" style="max-width: 680px; padding: 2rem; border-radius: 20px !important;">
+    <div class="modal-content glass-modal" style="max-width: 720px; padding: 2rem; border-radius: 20px !important;">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
         <div style="display: flex; gap: 16px; align-items: center;">
           <img id="modal-gc-cover" src="" style="width: 75px; height: 105px; object-fit: contain; background: transparent; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6));">
@@ -689,12 +689,17 @@
         <button class="btn-modal-close" id="btn-close-gc-modal">✕</button>
       </div>
 
+      <!-- Variation Category Tabs (e.g., Saldo USA vs Membresías) -->
+      <div class="gc-variations-tabs-bar" id="modal-gc-tabs-bar" style="display: none;">
+        <!-- Injected via JS -->
+      </div>
+
       <!-- Denominations & Variations Grid -->
       <div style="margin-bottom: 1.5rem;">
         <label class="form-label" style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-tertiary); font-weight: 800; letter-spacing: 0.05em; margin-bottom: 10px; display: block;">
           Selecciona la Denominación o Membresía:
         </label>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px;" id="modal-gc-variations-grid">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;" id="modal-gc-variations-grid">
           <!-- Rendered via JS -->
         </div>
       </div>
