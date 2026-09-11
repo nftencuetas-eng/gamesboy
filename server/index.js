@@ -34,6 +34,7 @@ process.on('unhandledRejection', (reason) => {
 });
 
 const app = express();
+app.set('trust proxy', true); // Trust Railway / Edge reverse proxy headers (x-forwarded-host, etc.)
 const server = http.createServer(app);
 
 // Initialize WebSocket Server for Realtime notifications (approvals, new orders)
@@ -85,9 +86,9 @@ app.use(morgan(config.nodeEnv === 'production' ? 'combined' : 'dev'));
 // Multi-Tenant Resolution Middleware (Applies tenant context to all incoming requests)
 app.use(tenantResolver);
 
-// Static Client Files
+// Static Client Files (Disable automatic index.html serving so app.get('/') router controls the landing vs store logic)
 const clientPath = path.resolve(__dirname, '../client');
-app.use(express.static(clientPath));
+app.use(express.static(clientPath, { index: false }));
 
 // Mount Modular API Routes
 app.use('/health', healthRouter);

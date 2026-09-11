@@ -53,7 +53,11 @@ export function tenantResolver(req, res, next) {
   try {
     const db = getDb();
     const tenants = db.tenants || [DEFAULT_TENANT];
-    const host = (req.hostname || req.headers.host || '').toLowerCase().split(':')[0];
+
+    // Extract real host from proxy headers (Railway / Cloudflare) or standard host
+    const rawForwarded = req.headers['x-forwarded-host'];
+    const rawHost = (rawForwarded ? String(rawForwarded).split(',')[0].trim() : '') || req.headers.host || req.hostname || '';
+    const host = rawHost.toLowerCase().split(':')[0].trim();
 
     req.isSaasMaster = false;
     req.isStoreRequest = false;
@@ -90,19 +94,17 @@ export function tenantResolver(req, res, next) {
       }
     }
 
-    // 3. Explicit Master SaaS Domains (gamsplit.com, www.gamsplit.com, saas.gamsplit.com)
-    const saasDomains = ['gamsplit.com', 'www.gamsplit.com', 'saas.gamsplit.com', 'app.gamsplit.com'];
-    if (saasDomains.includes(host)) {
-      req.isSaasMaster = true;
-      req.tenant = tenants.find(t => t.id === DEFAULT_TENANT_ID) || DEFAULT_TENANT;
+    // 3. Explicit GamesBoy Official Store Domains (gamesboy.net, www.gamesboy.net, etc.)
+    if (host.includes('gamesboy') || host === 'gamesboy.net' || host === 'www.gamesboy.net') {
+      req.tenant = tenants.find(t => t.slug === 'gamesboy' || t.id === DEFAULT_TENANT_ID) || DEFAULT_TENANT;
+      req.isStoreRequest = true;
       return next();
     }
 
-    // 4. Explicit GamesBoy Official Store Domains (gamesboy.net, www.gamesboy.net, gamesboy.gamsplit.com)
-    const gamesboyDomains = ['gamesboy.net', 'www.gamesboy.net', 'gamesboy.gamsplit.com'];
-    if (gamesboyDomains.includes(host)) {
-      req.tenant = tenants.find(t => t.slug === 'gamesboy' || t.id === DEFAULT_TENANT_ID) || DEFAULT_TENANT;
-      req.isStoreRequest = true;
+    // 4. Explicit Master SaaS Domains (gamsplit.com, www.gamsplit.com, saas.gamsplit.com)
+    if (host === 'gamsplit.com' || host === 'www.gamsplit.com' || host === 'saas.gamsplit.com' || host === 'app.gamsplit.com') {
+      req.isSaasMaster = true;
+      req.tenant = tenants.find(t => t.id === DEFAULT_TENANT_ID) || DEFAULT_TENANT;
       return next();
     }
 
