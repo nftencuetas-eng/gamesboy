@@ -1,7 +1,6 @@
 // GamSplit SaaS Master Landing Engine (saas-landing.js)
 
 let currentStep = 1;
-const totalSteps = 2;
 let selectedPlan = 'plan_pro';
 let checkSlugTimeout = null;
 
@@ -78,7 +77,7 @@ function renderWizardStep() {
 
   if (currentStep === 1) {
     if (title) title.textContent = '1. Identidad de tu Tienda';
-    if (sub) sub.textContent = 'Elige el nombre de tu marca, subdominio y color representativo.';
+    if (sub) sub.textContent = 'Elige el nombre de tu marca y tu subdominio.';
   } else if (currentStep === 2) {
     if (title) title.textContent = '2. Plan SaaS & Módulos a Vender';
     if (sub) sub.textContent = 'Selecciona tu nivel de plataforma y activa tu catálogo de servicios.';
@@ -98,11 +97,11 @@ window.handleWizardNext = async function() {
     const slug = document.getElementById('wiz-slug')?.value?.trim();
 
     if (!brandName) {
-      showToast('warning', 'Nombre Requerido', 'Por favor ingresa el nombre de tu marca o tienda.');
+      alert('Por favor ingresa el nombre de tu marca o tienda.');
       return;
     }
     if (!slug || slug.length < 3) {
-      showToast('warning', 'Subdominio Inválido', 'El subdominio debe contener al menos 3 caracteres alfanuméricos.');
+      alert('El subdominio debe contener al menos 3 caracteres alfanuméricos.');
       return;
     }
 
@@ -111,7 +110,7 @@ window.handleWizardNext = async function() {
       const res = await fetch(`/api/saas/check-slug/${encodeURIComponent(slug)}`);
       const data = await res.json();
       if (!data.available) {
-        showToast('error', 'Subdominio Ocupado', data.error || 'Este subdominio ya está en uso. Por favor elige otro.');
+        alert(data.error || 'Este subdominio ya está en uso. Por favor elige otro.');
         return;
       }
     } catch (err) {
@@ -128,13 +127,13 @@ window.handleWizardNext = async function() {
 async function submitOnboarding() {
   const brandName = document.getElementById('wiz-brand-name')?.value?.trim();
   const slug = document.getElementById('wiz-slug')?.value?.trim();
-  const selectedColor = document.querySelector('input[name="wiz-color"]:checked')?.value || '#0284c7';
+  const primaryColor = document.getElementById('wiz-primary-color')?.value || '#0284c7';
   const plan = document.getElementById('wiz-plan')?.value || 'plan_pro';
+  const whatsapp = document.getElementById('wiz-whatsapp')?.value?.trim() || '+595981000000';
 
   const modStreaming = document.getElementById('mod-streaming')?.checked ?? true;
   const modGames = document.getElementById('mod-games')?.checked ?? true;
   const modGiftcards = document.getElementById('mod-giftcards')?.checked ?? true;
-  const modP2p = document.getElementById('mod-p2p')?.checked ?? (plan !== 'plan_starter');
 
   const btnNext = document.getElementById('btn-wiz-next');
   if (btnNext) {
@@ -150,15 +149,15 @@ async function submitOnboarding() {
       planId: plan,
       branding: {
         brandName: brandName,
-        primaryColor: selectedColor,
-        accentColor: selectedColor === '#10b981' ? '#34d399' : (selectedColor === '#f59e0b' ? '#fbbf24' : '#00c2ff'),
-        whatsappSupport: '+595981000000',
+        primaryColor: primaryColor,
+        accentColor: primaryColor === '#10b981' ? '#34d399' : (primaryColor === '#f59e0b' ? '#fbbf24' : '#00c2ff'),
+        whatsappSupport: whatsapp,
         currency: 'PYG',
         exchangeRate: 7500
       },
       settings: {
         commissionPercent: plan === 'plan_enterprise' ? 1.5 : (plan === 'plan_pro' ? 3.0 : 5.0),
-        allowUserReselling: modP2p,
+        allowUserReselling: plan !== 'plan_starter',
         paraguayBankDetails: {
           bank: 'Banco Familiar / Itaú Paraguay',
           accountHolder: brandName,
@@ -174,7 +173,7 @@ async function submitOnboarding() {
           games: modGames,
           giftcards: modGiftcards,
           smm: false,
-          p2pSharing: modP2p
+          p2pSharing: plan !== 'plan_starter'
         }
       }
     };
@@ -190,24 +189,29 @@ async function submitOnboarding() {
     if (data.success && data.tenant) {
       currentStep = 3;
       renderWizardStep();
-      const msg = document.getElementById('success-store-msg');
+      const msg = document.getElementById('wiz-success-message');
       if (msg) {
-        msg.innerHTML = `Tu plataforma <strong>${data.tenant.name}</strong> ha sido creada exitosamente. Tu subdominio asignado es <code>https://${data.tenant.slug}.gamsplit.com</code>. Podrás configurar tus cuentas bancarias, logo y favicon en cualquier momento desde tu panel de ajustes.`;
+        msg.innerHTML = `Tu plataforma <strong>${data.tenant.name}</strong> ha sido creada exitosamente. Tu subdominio asignado es <code>${data.tenant.slug}.gamsplit.com</code>.`;
       }
-      const btnGoto = document.getElementById('btn-goto-store');
-      if (btnGoto) {
-        btnGoto.href = `/store?tenant=${data.tenant.slug}`;
+      const link = document.getElementById('wiz-success-link');
+      const btnGo = document.getElementById('wiz-btn-go-store');
+      const storeUrl = `/store?tenant=${data.tenant.slug}`;
+      if (link) {
+        link.href = storeUrl;
+        link.textContent = `https://${data.tenant.slug}.gamsplit.com`;
       }
-      showToast('success', '¡Plataforma Operativa!', 'Tu tienda digital ha sido aprovisionada con éxito.');
+      if (btnGo) {
+        btnGo.href = storeUrl;
+      }
     } else {
-      showToast('error', 'Error al Crear', data.error || 'No se pudo crear la tienda.');
+      alert(data.error || 'No se pudo crear la tienda.');
       if (btnNext) {
         btnNext.disabled = false;
         btnNext.textContent = '🚀 Lanzar mi Tienda Ahora';
       }
     }
   } catch (err) {
-    showToast('error', 'Error de Conexión', 'No se pudo comunicar con el servidor.');
+    alert('Error al comunicar con el servidor.');
     if (btnNext) {
       btnNext.disabled = false;
       btnNext.textContent = '🚀 Lanzar mi Tienda Ahora';
@@ -215,184 +219,100 @@ async function submitOnboarding() {
   }
 }
 
-// --- 3. COLOR PILL RADIO SELECTION SYNC ---
-document.addEventListener('DOMContentLoaded', () => {
-  const colorPills = document.querySelectorAll('.color-picker-pill');
-  colorPills.forEach(pill => {
-    pill.addEventListener('click', () => {
-      colorPills.forEach(p => p.classList.remove('active'));
-      pill.classList.add('active');
-    });
-  });
-
-  // Slug auto-suggestion
-  const brandInput = document.getElementById('wiz-brand-name');
+// Helper auto slug generator
+window.autoGenerateSlug = function(val) {
   const slugInput = document.getElementById('wiz-slug');
-  const slugMsg = document.getElementById('slug-availability-msg');
+  if (slugInput && !slugInput.dataset.userEdited) {
+    const clean = val.toLowerCase().replace(/[^a-z0-9]/g, '');
+    slugInput.value = clean;
+    handleSlugInput(clean);
+  }
+};
 
-  if (brandInput && slugInput) {
-    brandInput.addEventListener('input', (e) => {
-      if (!slugInput.dataset.manualEdit) {
-        const autoSlug = e.target.value.toLowerCase().replace(/[^a-z0-9]/g, '');
-        slugInput.value = autoSlug;
-        triggerSlugCheck(autoSlug);
-      }
-    });
+window.handleSlugInput = function(val) {
+  const slugInput = document.getElementById('wiz-slug');
+  if (slugInput) slugInput.dataset.userEdited = 'true';
+  const clean = val.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+  if (slugInput) slugInput.value = clean;
 
-    slugInput.addEventListener('input', (e) => {
-      slugInput.dataset.manualEdit = 'true';
-      const clean = e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, '');
-      slugInput.value = clean;
-      triggerSlugCheck(clean);
-    });
+  const status = document.getElementById('wiz-slug-status');
+  if (!status) return;
+
+  if (checkSlugTimeout) clearTimeout(checkSlugTimeout);
+  if (clean.length < 3) {
+    status.innerHTML = `<span style="color: #94a3b8; font-size: 0.76rem;">Mínimo 3 caracteres alfanuméricos</span>`;
+    return;
   }
 
-  function triggerSlugCheck(slug) {
-    if (!slugMsg) return;
-    if (checkSlugTimeout) clearTimeout(checkSlugTimeout);
-
-    if (!slug || slug.length < 3) {
-      slugMsg.textContent = 'Mínimo 3 caracteres';
-      slugMsg.className = 'slug-status-msg';
-      return;
+  status.innerHTML = `<span style="color: #00c2ff; font-size: 0.76rem;">Comprobando disponibilidad...</span>`;
+  checkSlugTimeout = setTimeout(async () => {
+    try {
+      const res = await fetch(`/api/saas/check-slug/${encodeURIComponent(clean)}`);
+      const data = await res.json();
+      if (data.available) {
+        status.innerHTML = `<span style="color: #10b981; font-size: 0.76rem; font-weight: 700;">✓ Subdominio ${clean}.gamsplit.com disponible</span>`;
+      } else {
+        status.innerHTML = `<span style="color: #ef4444; font-size: 0.76rem; font-weight: 700;">✕ ${data.error || 'Subdominio no disponible'}</span>`;
+      }
+    } catch (e) {
+      status.innerHTML = '';
     }
+  }, 300);
+};
 
-    slugMsg.textContent = 'Verificando disponibilidad...';
-    slugMsg.className = 'slug-status-msg';
-
-    checkSlugTimeout = setTimeout(async () => {
-      try {
-        const res = await fetch(`/api/saas/check-slug/${encodeURIComponent(slug)}`);
-        const data = await res.json();
-        if (data.available) {
-          slugMsg.textContent = `✓ ¡Disponible! ${data.subdomain}`;
-          slugMsg.className = 'slug-status-msg avail';
-        } else {
-          slugMsg.textContent = `✗ ${data.error || 'No disponible'}`;
-          slugMsg.className = 'slug-status-msg taken';
-        }
-      } catch (err) {
-        slugMsg.textContent = '';
-      }
-    }, 300);
-  }
-
-  // Click outside to close modal
-  const modal = document.getElementById('modal-onboarding');
-  if (modal) {
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        closeOnboardingModal();
-      }
+// Color Picker Hex Display sync
+document.addEventListener('DOMContentLoaded', () => {
+  const colorPicker = document.getElementById('wiz-primary-color');
+  const colorHex = document.getElementById('wiz-color-hex');
+  if (colorPicker && colorHex) {
+    colorPicker.addEventListener('input', (e) => {
+      colorHex.textContent = e.target.value.toUpperCase();
     });
   }
 
-  // Initialize Canvas Particle Background
-  initParticleBackground();
+  // Background Interactive Particles Canvas
+  initBackgroundCanvas();
 });
 
-// --- 4. INTERACTIVE BACKGROUND CANVAS (RICH PARTICLES & AMBIENT GLOW) ---
-function initParticleBackground() {
+function initBackgroundCanvas() {
   const canvas = document.getElementById('saas-bg-canvas');
   if (!canvas) return;
-
   const ctx = canvas.getContext('2d');
   let width = canvas.width = window.innerWidth;
   let height = canvas.height = window.innerHeight;
-
-  const particles = [];
-  const particleCount = Math.min(Math.floor((width * height) / 18000), 65);
-
-  class Particle {
-    constructor() {
-      this.x = Math.random() * width;
-      this.y = Math.random() * height;
-      this.vx = (Math.random() - 0.5) * 0.4;
-      this.vy = (Math.random() - 0.5) * 0.4;
-      this.radius = Math.random() * 1.6 + 0.8;
-      this.color = Math.random() > 0.6 ? 'rgba(0, 194, 255, ' : 'rgba(2, 132, 199, ';
-      this.alpha = Math.random() * 0.4 + 0.2;
-    }
-
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
-
-      if (this.x < 0) this.x = width;
-      if (this.x > width) this.x = 0;
-      if (this.y < 0) this.y = height;
-      if (this.y > height) this.y = 0;
-    }
-
-    draw() {
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `${this.color}${this.alpha})`;
-      ctx.fill();
-    }
-  }
-
-  for (let i = 0; i < particleCount; i++) {
-    particles.push(new Particle());
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
-
-    // Draw connecting lines between close particles
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < 110) {
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(0, 194, 255, ${0.12 * (1 - dist / 110)})`;
-          ctx.lineWidth = 0.6;
-          ctx.stroke();
-        }
-      }
-    }
-
-    particles.forEach(p => {
-      p.update();
-      p.draw();
-    });
-
-    requestAnimationFrame(animate);
-  }
-
-  animate();
 
   window.addEventListener('resize', () => {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
   });
-}
 
-// --- 5. TOAST NOTIFICATIONS ---
-function showToast(type = 'info', title = '', message = '') {
-  let container = document.getElementById('toast-container');
-  if (!container) {
-    container = document.createElement('div');
-    container.id = 'toast-container';
-    container.className = 'toast-container';
-    document.body.appendChild(container);
+  const dots = [];
+  const count = Math.min(50, Math.floor(width / 35));
+  for (let i = 0; i < count; i++) {
+    dots.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      r: Math.random() * 1.5 + 0.8
+    });
   }
 
-  const toast = document.createElement('div');
-  toast.className = `toast-item ${type}`;
-  toast.innerHTML = `
-    <div style="flex: 1; min-width: 0;">
-      ${title ? `<div style="font-weight: 800; font-size: 0.85rem; color: #ffffff; margin-bottom: 2px;">${title}</div>` : ''}
-      <div style="font-size: 0.78rem; color: #cbd5e1;">${message}</div>
-    </div>
-  `;
-  container.appendChild(toast);
-  setTimeout(() => {
-    toast.remove();
-  }, 4000);
+  function render() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = 'rgba(0, 194, 255, 0.25)';
+    dots.forEach(d => {
+      d.x += d.vx;
+      d.y += d.vy;
+      if (d.x < 0) d.x = width;
+      if (d.x > width) d.x = 0;
+      if (d.y < 0) d.y = height;
+      if (d.y > height) d.y = 0;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    requestAnimationFrame(render);
+  }
+  render();
 }
