@@ -1,4 +1,4 @@
-// GamesBoy.net Multi-Tenant SaaS - Tenant Resolver Middleware
+// GamSplit SaaS Multi-Tenant Engine - Tenant Resolver Middleware
 import { getDb } from '../config/database.js';
 
 export const DEFAULT_TENANT_ID = 'tnt_gamesboy_main';
@@ -6,7 +6,7 @@ export const DEFAULT_TENANT_ID = 'tnt_gamesboy_main';
 export const DEFAULT_TENANT = {
   id: 'tnt_gamesboy_main',
   slug: 'gamesboy',
-  name: 'GamesBoy Oficial',
+  name: 'GamesBoy Store Oficial',
   customDomain: 'gamesboy.net',
   planId: 'plan_enterprise',
   status: 'active',
@@ -22,6 +22,14 @@ export const DEFAULT_TENANT = {
   },
   settings: {
     commissionPercent: 15.00,
+    allowUserReselling: true,
+    enabledModules: {
+      streaming: true,
+      games: true,
+      giftcards: true,
+      smm: true,
+      p2pSharing: true
+    },
     paraguayBankDetails: {
       bank: 'Banco Familiar / Itaú Paraguay',
       accountHolder: 'GamesBoy Paraguay S.A.',
@@ -39,12 +47,16 @@ export const DEFAULT_TENANT = {
 };
 
 /**
- * Resolve tenant from request headers, query parameters, hostname, or fallback
+ * Resolve tenant and routing context from headers, query parameters, hostname, or fallback
  */
 export function tenantResolver(req, res, next) {
   try {
     const db = getDb();
     const tenants = db.tenants || [DEFAULT_TENANT];
+    const host = (req.hostname || req.headers.host || '').toLowerCase().split(':')[0];
+
+    req.isSaasMaster = false;
+    req.isStoreRequest = false;
 
     // 1. Header resolution (API / Mobile / Frontends)
     const headerTenantId = req.headers['x-tenant-id'];
@@ -53,6 +65,7 @@ export function tenantResolver(req, res, next) {
       const match = tenants.find(t => t.id === headerTenantId);
       if (match) {
         req.tenant = match;
+        req.isStoreRequest = true;
         return next();
       }
     }
@@ -60,46 +73,68 @@ export function tenantResolver(req, res, next) {
       const match = tenants.find(t => t.slug === headerTenantSlug.toLowerCase());
       if (match) {
         req.tenant = match;
+        req.isStoreRequest = true;
         return next();
       }
     }
 
-    // 2. Query param resolution (?tenant=streamflow or ?t=streamflow)
+    // 2. Query param resolution (?tenant=streamflow or ?t=streamflow or ?store=gamesboy)
     const queryTenant = req.query.tenant || req.query.t || req.query.store;
     if (queryTenant) {
       const qLower = String(queryTenant).toLowerCase();
       const match = tenants.find(t => t.slug === qLower || t.id === queryTenant);
       if (match) {
         req.tenant = match;
+        req.isStoreRequest = true;
         return next();
       }
     }
 
-    // 3. Hostname / Subdomain / Custom domain resolution
-    const host = (req.hostname || req.headers.host || '').toLowerCase().split(':')[0];
+    // 3. Explicit Master SaaS Domains (gamsplit.com, www.gamsplit.com, saas.gamsplit.com)
+    const saasDomains = ['gamsplit.com', 'www.gamsplit.com', 'saas.gamsplit.com', 'app.gamsplit.com'];
+    if (saasDomains.includes(host)) {
+      req.isSaasMaster = true;
+      req.tenant = tenants.find(t => t.id === DEFAULT_TENANT_ID) || DEFAULT_TENANT;
+      return next();
+    }
+
+    // 4. Explicit GamesBoy Official Store Domains (gamesboy.net, www.gamesboy.net, gamesboy.gamsplit.com)
+    const gamesboyDomains = ['gamesboy.net', 'www.gamesboy.net', 'gamesboy.gamsplit.com'];
+    if (gamesboyDomains.includes(host)) {
+      req.tenant = tenants.find(t => t.slug === 'gamesboy' || t.id === DEFAULT_TENANT_ID) || DEFAULT_TENANT;
+      req.isStoreRequest = true;
+      return next();
+    }
+
+    // 5. Hostname / Subdomain / Custom domain resolution for all other stores/tenants
     if (host && host !== 'localhost' && host !== '127.0.0.1') {
-      // 3.1 Exact custom domain match
-      const customDomainMatch = tenants.find(t => t.customDomain && t.customDomain.toLowerCase() === host);
+      // 5.1 Exact custom domain match (e.g. streamflow.net, mitienda.com)
+      const customDomainMatch = tenants.find(t => t.customDomain && (
+        t.customDomain.toLowerCase() === host ||
+        `www.${t.customDomain.toLowerCase()}` === host
+      ));
       if (customDomainMatch) {
         req.tenant = customDomainMatch;
+        req.isStoreRequest = true;
         return next();
       }
 
-      // 3.2 Subdomain match (e.g. streamflow.gamesboy.net or streamflow.localhost)
+      // 5.2 Subdomain match (e.g. streamflow.gamsplit.com or streamflow.localhost)
       const parts = host.split('.');
-      if (parts.length >= 3 || (parts.length === 2 && parts[1] === 'localhost')) {
+      if (parts.length >= 3 || (parts.length === 2 && (parts[1] === 'localhost' || parts[1] === 'gamsplit'))) {
         const sub = parts[0];
-        if (sub !== 'www' && sub !== 'api' && sub !== 'app') {
+        if (sub !== 'www' && sub !== 'api' && sub !== 'app' && sub !== 'saas' && sub !== 'admin') {
           const subMatch = tenants.find(t => t.slug === sub);
           if (subMatch) {
             req.tenant = subMatch;
+            req.isStoreRequest = true;
             return next();
           }
         }
       }
     }
 
-    // 4. Fallback to default primary tenant
+    // 6. Default fallback (Localhost or direct server IP)
     const defaultTenant = tenants.find(t => t.id === DEFAULT_TENANT_ID) || DEFAULT_TENANT;
     req.tenant = defaultTenant;
     next();

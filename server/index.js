@@ -108,13 +108,11 @@ app.use('/api/admin/streaming-services', streamingHubsRouter);
 
 // Clean Routes & Admin aliases
 app.get('/', (req, res) => {
-  // If on a specific tenant subdomain, custom domain, or tenant parameter -> render store
-  const isCustomTenant = req.tenant && req.tenant.id !== 'tnt_gamesboy_main';
-  const hasTenantQuery = req.query.tenant || req.query.t || req.query.store;
-  if (isCustomTenant || hasTenantQuery) {
+  // If request is from a store domain (gamesboy.net, *.gamsplit.com, custom domain, or ?tenant=...)
+  if (req.isStoreRequest) {
     return res.sendFile(path.join(clientPath, 'store.html'));
   }
-  // Otherwise render SaaS Master Landing
+  // Otherwise render GamSplit SaaS Master Landing
   return res.sendFile(path.join(clientPath, 'index.html'));
 });
 
@@ -148,8 +146,7 @@ app.get('*', (req, res, next) => {
   if (req.path.startsWith('/api') || req.path.startsWith('/health')) {
     return next();
   }
-  const isCustomTenant = req.tenant && req.tenant.id !== 'tnt_gamesboy_main';
-  if (isCustomTenant) {
+  if (req.isStoreRequest) {
     return res.sendFile(path.join(clientPath, 'store.html'));
   }
   res.sendFile(path.join(clientPath, 'index.html'));

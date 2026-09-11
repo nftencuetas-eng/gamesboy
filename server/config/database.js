@@ -15,7 +15,7 @@ let db = {
       id: 'tnt_gamesboy_main',
       slug: 'gamesboy',
       name: 'GamesBoy Store Oficial',
-      customDomain: 'gamesboy.gamesboy.net',
+      customDomain: 'gamesboy.net',
       planId: 'plan_enterprise',
       status: 'active',
       branding: {
@@ -57,7 +57,7 @@ let db = {
       id: 'tnt_streamflow_demo',
       slug: 'streamflow',
       name: 'StreamFlow Paraguay',
-      customDomain: 'streamflow.gamesboy.net',
+      customDomain: 'streamflow.gamsplit.com',
       planId: 'plan_pro',
       status: 'active',
       branding: {
@@ -91,7 +91,7 @@ let db = {
           payId: '992144551',
           network: 'USDT (BEP-20)',
           walletAddress: '0x33B10A98F722cE434a6C3f07a757657A82e4b88B',
-          qrUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x33B10A98F722cE434a6C3f07a757657A82e4b88B'
+          qrUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=0x33B10A98F722cE434a6C3f07a757657A82e4b88F'
         }
       }
     },
@@ -99,7 +99,7 @@ let db = {
       id: 'tnt_playzone_demo',
       slug: 'playzone',
       name: 'PlayZone Digital Store',
-      customDomain: 'playzone.gamesboy.net',
+      customDomain: 'playzone.gamsplit.com',
       planId: 'plan_starter',
       status: 'active',
       branding: {
@@ -141,7 +141,7 @@ let db = {
       id: 'tnt_cardshub_demo',
       slug: 'cardshub',
       name: 'CardsHub LatAm',
-      customDomain: 'cardshub.gamesboy.net',
+      customDomain: 'cardshub.gamsplit.com',
       planId: 'plan_starter',
       status: 'active',
       branding: {
@@ -183,7 +183,7 @@ let db = {
       id: 'tnt_nexustream_demo',
       slug: 'nexustream',
       name: 'Nexus Stream & AI',
-      customDomain: 'nexustream.gamesboy.net',
+      customDomain: 'nexustream.gamsplit.com',
       planId: 'plan_enterprise',
       status: 'active',
       branding: {
@@ -225,7 +225,7 @@ let db = {
       id: 'tnt_pixelstore_demo',
       slug: 'pixelstore',
       name: 'PixelStore Gamers',
-      customDomain: 'pixelstore.gamesboy.net',
+      customDomain: 'pixelstore.gamsplit.com',
       planId: 'plan_pro',
       status: 'active',
       branding: {

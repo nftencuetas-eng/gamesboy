@@ -12,9 +12,9 @@ export const config = {
   port: parseInt(process.env.PORT || '3000', 10),
   nodeEnv: process.env.NODE_ENV || 'development',
   host: process.env.HOST || '0.0.0.0',
-  appName: process.env.APP_NAME || 'GamesBoy',
-  appDomain: process.env.APP_DOMAIN || 'gamesboy.net',
-  appUrl: process.env.APP_URL || 'http://localhost:3000',
+  appName: process.env.APP_NAME || 'GamSplit',
+  appDomain: process.env.APP_DOMAIN || 'gamsplit.com',
+  appUrl: process.env.APP_URL || 'https://www.gamsplit.com',
   corsOrigin: process.env.CORS_ORIGIN || '*',
   
   db: {

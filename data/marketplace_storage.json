@@ -40,7 +40,7 @@
           "accountNumber": "01-445566-7"
         }
       },
-      "customDomain": "gamesboy.gamesboy.net"
+      "customDomain": "gamesboy.net"
     },
     {
       "id": "tnt_streamflow_demo",
@@ -82,7 +82,7 @@
           "accountNumber": "15-998877-2"
         }
       },
-      "customDomain": "streamflow.gamesboy.net"
+      "customDomain": "streamflow.gamsplit.com"
     },
     {
       "id": "tnt_playzone_demo",
@@ -124,7 +124,7 @@
           "accountNumber": "02-112233-4"
         }
       },
-      "customDomain": "playzone.gamesboy.net"
+      "customDomain": "playzone.gamsplit.com"
     },
     {
       "id": "tnt_cardshub_demo",
@@ -166,7 +166,7 @@
           "accountNumber": "03-556677-8"
         }
       },
-      "customDomain": "cardshub.gamesboy.net"
+      "customDomain": "cardshub.gamsplit.com"
     },
     {
       "id": "tnt_nexustream_demo",
@@ -208,7 +208,7 @@
           "accountNumber": "04-998811-2"
         }
       },
-      "customDomain": "nexustream.gamesboy.net"
+      "customDomain": "nexustream.gamsplit.com"
     },
     {
       "id": "tnt_pixelstore_demo",
@@ -250,7 +250,7 @@
           "accountNumber": "05-334455-6"
         }
       },
-      "customDomain": "pixelstore.gamesboy.net"
+      "customDomain": "pixelstore.gamsplit.com"
     },
     {
       "id": "tnt_chere_1788980065268",
@@ -290,7 +290,7 @@
       "createdAt": "2026-09-09T18:54:25.268Z",
       "updatedAt": "2026-09-09T18:54:25.268Z",
       "ownerUserId": null,
-      "customDomain": "chere.gamesboy.net"
+      "customDomain": "chere.gamsplit.com"
     },
     {
       "id": "tnt_streamhub_1788981439696",
@@ -345,7 +345,7 @@
       "features": [
         "Tienda Digital Directa (Venta Propia)",
         "Gestión Streaming con PIN",
-        "Subdominio mitienda.gamesboy.net",
+        "Subdominio mitienda.gamsplit.com",
         "Pasarela SIPAP y Binance Pay"
       ],
       "maxSlotsAllowed": 50,
