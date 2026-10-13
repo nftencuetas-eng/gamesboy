@@ -456,13 +456,13 @@ CREATE TABLE IF NOT EXISTS gamesboy.gb_platform_settings (
 -- 10. BANNERS DINÁMICOS ESTILO ENEBA (ACORDEÓN EXPANDIBLE HERO)
 CREATE TABLE IF NOT EXISTS gamesboy.gb_hero_banners (
     id VARCHAR(64) PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    tagline VARCHAR(255),
-    badge VARCHAR(64) DEFAULT 'PS5',
-    img_horizontal TEXT NOT NULL,
-    img_vertical TEXT NOT NULL,
-    cta_text VARCHAR(64) DEFAULT 'Comprar ahora',
-    cta_url TEXT DEFAULT '#',
+    title VARCHAR(255) DEFAULT '',
+    tagline VARCHAR(255) DEFAULT '',
+    badge VARCHAR(64) DEFAULT '',
+    img_horizontal TEXT DEFAULT '',
+    img_vertical TEXT DEFAULT '',
+    cta_text VARCHAR(64) DEFAULT '',
+    cta_url TEXT DEFAULT '#section-games',
     sort_order INT DEFAULT 0,
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -590,21 +590,14 @@ ON CONFLICT (id) DO UPDATE SET
     paraguay_bank_details = EXCLUDED.paraguay_bank_details,
     binance_details = EXCLUDED.binance_details;
 
--- 4. Insertar Portadas Hero Acordeón Estilo ENEBA
+-- 4. Inicializar Portadas Hero Acordeón Estilo ENEBA (Solo si no existen; no sobreescribir banners subidos)
 INSERT INTO gamesboy.gb_hero_banners (id, tenant_id, title, tagline, badge, img_horizontal, img_vertical, cta_text, cta_url, sort_order, is_active)
 VALUES
-    ('banner_fc25', 'tnt_gamesboy_main', 'EA SPORTS FC 25', 'CLUBES, ULTIMATE TEAM & MODO CARRERA', 'PS5 • XBOX • PC', '', '', 'Ver Ediciones', '#section-games', 0, true),
-    ('banner_spiderman2', 'tnt_gamesboy_main', 'Marvel Spider-Man 2', 'BE GREATER. TOGETHER.', 'PS5 EXCLUSIVE', '', '', 'Comprar ahora', '#section-games', 1, true),
-    ('banner_cod_bo6', 'tnt_gamesboy_main', 'Call of Duty: Black Ops 6', 'LA VERDAD MIENTE. VUELVE EL REY DEL SHOOTER', 'CROSS-GEN BUNDLE', '', '', 'Comprar Código', '#section-games', 2, true),
-    ('banner_gta6', 'tnt_gamesboy_main', 'Grand Theft Auto VI', 'BIENVENIDO A LEONIDA & VICE CITY', 'NEXT-GEN PRE-ORDER', '', '', 'Reservar Ahora', '#section-games', 3, true)
-ON CONFLICT (id) DO UPDATE SET
-    title = EXCLUDED.title,
-    img_horizontal = EXCLUDED.img_horizontal,
-    img_vertical = EXCLUDED.img_vertical,
-    cta_text = EXCLUDED.cta_text,
-    cta_url = EXCLUDED.cta_url,
-    sort_order = EXCLUDED.sort_order,
-    is_active = EXCLUDED.is_active;
+    ('banner_1', 'tnt_gamesboy_main', '', '', '', '', '', '', '#section-games', 0, true),
+    ('banner_2', 'tnt_gamesboy_main', '', '', '', '', '', '', '#section-games', 1, true),
+    ('banner_3', 'tnt_gamesboy_main', '', '', '', '', '', '', '#section-games', 2, true),
+    ('banner_4', 'tnt_gamesboy_main', '', '', '', '', '', '', '#section-games', 3, true)
+ON CONFLICT (id) DO NOTHING;
 
 -- 5. Insertar Cuentas de Streaming Oficiales y de Vendedor
 INSERT INTO gamesboy.gb_subscriptions (id, tenant_id, seller_id, seller_name, is_official, service_name, category, plan_name, total_slots, available_slots, price_per_slot_usd, credentials_encrypted, pins_encrypted, instructions, status)

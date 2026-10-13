@@ -105,13 +105,13 @@ function autoDetectUserCountry() {
 }
 
 // Instant Cache Hydration with Versioning & Legacy Unsplash Purge
-const GB_CATALOG_CACHE_VERSION = 'gb_v5_authentic_user_data';
+const GB_CATALOG_CACHE_VERSION = 'gb_v6_clean_hero_banners';
 const cachedCatalog = (() => {
   try {
     const v = localStorage.getItem('gb_catalog_cache_v');
     const raw = localStorage.getItem('gb_catalog_cache');
     // If cache is from an old version or contains generic unsplash URLs, purge immediately
-    if (v !== GB_CATALOG_CACHE_VERSION || (raw && raw.includes('unsplash.com'))) {
+    if (v !== GB_CATALOG_CACHE_VERSION || (raw && (raw.includes('unsplash.com') || raw.includes('banner_fc25')))) {
       localStorage.removeItem('gb_catalog_cache');
       localStorage.setItem('gb_catalog_cache_v', GB_CATALOG_CACHE_VERSION);
       return {};
@@ -712,8 +712,7 @@ function initHeroAccordion() {
 
   if (!container) return;
 
-  // Anti-Flicker: Only render banners if loaded from API, otherwise show clean neutral state
-  const banners = (state.heroBanners && state.heroBanners.length >= 4) ? state.heroBanners : null;
+  const banners = (state.heroBanners && Array.isArray(state.heroBanners) && state.heroBanners.length > 0) ? state.heroBanners : null;
   if (!banners) {
     container.innerHTML = `
       <div class="eneba-slide active" style="background: linear-gradient(135deg, #091222 0%, #0d1a38 100%);">
@@ -723,25 +722,37 @@ function initHeroAccordion() {
     return;
   }
 
-  // Render Slides: if image exists render artwork, if empty render clean dark minimalist card without generic photos
+  // Ensure active index is within range
+  if (state.activeSlideIndex >= banners.length) {
+    state.activeSlideIndex = 0;
+  }
+
+  // Render Slides: active slide expands horizontally, inactive slides show vertically/narrow
   container.innerHTML = banners.slice(0, 4).map((b, idx) => {
     const isActive = idx === state.activeSlideIndex;
     const targetUrl = b.ctaUrl || '#section-games';
-    const hasImg = b.imgHorizontal && !b.imgHorizontal.includes('unsplash');
+    const hasImg = Boolean((b.imgHorizontal && !b.imgHorizontal.includes('unsplash')) || (b.imgVertical && !b.imgVertical.includes('unsplash')));
+    const hImg = b.imgHorizontal || b.imgVertical || '';
+    const vImg = b.imgVertical || b.imgHorizontal || '';
+    const hasCustomText = Boolean((b.title && b.title.trim()) || (b.tagline && b.tagline.trim()) || (b.badge && b.badge.trim()));
 
     return `
-      <div class="eneba-slide ${isActive ? 'active' : ''}" data-slide-index="${idx}" data-target-url="${targetUrl}" style="${!hasImg ? 'background: linear-gradient(135deg, #0a0d14 0%, #121722 50%, #0a0c10 100%); display: flex; align-items: flex-end; padding: 2.5rem;' : ''}">
+      <div class="eneba-slide ${isActive ? 'active' : ''}" data-slide-index="${idx}" data-target-url="${targetUrl}" style="${!hasImg ? 'background: linear-gradient(135deg, #0a0d14 0%, #121722 50%, #0a0c10 100%);' : ''}">
         ${hasImg ? `
-          <div class="eneba-slide-bg horizontal-bg" style="background-image: url('${b.imgHorizontal}');"></div>
-          <div class="eneba-slide-bg vertical-bg" style="background-image: url('${b.imgVertical || b.imgHorizontal}');"></div>
+          <div class="eneba-slide-bg horizontal-bg" style="background-image: url('${hImg}');"></div>
+          <div class="eneba-slide-bg vertical-bg" style="background-image: url('${vImg}');"></div>
         ` : `
-          <div class="eneba-slide-content-minimal" style="position: relative; z-index: 2; max-width: 600px;">
-            ${b.badge ? `<span style="display: inline-block; padding: 4px 10px; background: rgba(0, 194, 255, 0.12); border: 1px solid rgba(0, 194, 255, 0.25); border-radius: 6px; font-size: 0.75rem; font-weight: 700; color: #00c2ff; margin-bottom: 0.75rem; letter-spacing: 0.05em;">${b.badge}</span>` : ''}
-            <h2 style="font-size: 2rem; font-weight: 800; color: #f8fafc; margin: 0 0 0.5rem 0; line-height: 1.15; letter-spacing: -0.02em;">${b.title || 'GamesBoy Store'}</h2>
-            <p style="font-size: 0.95rem; color: #94a3b8; margin: 0 0 1.25rem 0; font-weight: 500;">${b.tagline || 'Tu mundo digital en un solo lugar'}</p>
-            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: #00c2ff; color: #0a0c10; font-weight: 700; font-size: 0.85rem; border-radius: 8px;">${b.ctaText || 'Explorar'} ➔</span>
-          </div>
+          <div class="eneba-slide-bg horizontal-bg" style="background: linear-gradient(135deg, #091222 0%, #0d1a38 100%);"></div>
+          <div class="eneba-slide-bg vertical-bg" style="background: linear-gradient(135deg, #091222 0%, #0d1a38 100%);"></div>
         `}
+        ${hasCustomText ? `
+          <div class="eneba-slide-content-overlay ${isActive ? 'visible' : ''}" style="position: absolute; bottom: 2rem; left: 2.5rem; z-index: 5; max-width: 600px; pointer-events: none; transition: opacity 0.35s ease; opacity: ${isActive ? '1' : '0'};">
+            ${b.badge ? `<span style="display: inline-block; padding: 4px 10px; background: rgba(0, 194, 255, 0.18); border: 1px solid rgba(0, 194, 255, 0.35); border-radius: 6px; font-size: 0.72rem; font-weight: 800; color: #00c2ff; margin-bottom: 0.5rem; letter-spacing: 0.05em; backdrop-filter: blur(8px);">${b.badge}</span>` : ''}
+            ${b.title ? `<h2 style="font-size: 1.85rem; font-weight: 800; color: #ffffff; margin: 0 0 0.35rem 0; line-height: 1.15; text-shadow: 0 2px 12px rgba(0,0,0,0.9);">${b.title}</h2>` : ''}
+            ${b.tagline ? `<p style="font-size: 0.9rem; color: #cbd5e1; margin: 0 0 0.85rem 0; font-weight: 500; text-shadow: 0 1px 8px rgba(0,0,0,0.9);">${b.tagline}</p>` : ''}
+            ${b.ctaText ? `<span style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; background: #00c2ff; color: #0a0c10; font-weight: 800; font-size: 0.82rem; border-radius: 8px; box-shadow: 0 4px 14px rgba(0,194,255,0.4); pointer-events: auto;">${b.ctaText} ➔</span>` : ''}
+          </div>
+        ` : ''}
       </div>
     `;
   }).join('');
@@ -760,7 +771,12 @@ function initHeroAccordion() {
     slide.addEventListener('click', () => {
       if (slide.classList.contains('active')) {
         const url = slide.dataset.targetUrl;
-        if (url && url !== '#') window.location.href = url;
+        if (url && url !== '#' && url !== '#section-games') {
+          window.location.href = url;
+        } else if (url === '#section-games') {
+          const targetEl = document.getElementById('section-games');
+          if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
+        }
       } else {
         setActiveSlide(idx);
       }
@@ -837,8 +853,15 @@ function setActiveSlide(index) {
   const dots = document.querySelectorAll('.hero-dot');
 
   slides.forEach((s, i) => {
-    if (i === index) s.classList.add('active');
+    const isAct = (i === index);
+    if (isAct) s.classList.add('active');
     else s.classList.remove('active');
+
+    const overlay = s.querySelector('.eneba-slide-content-overlay');
+    if (overlay) {
+      overlay.style.opacity = isAct ? '1' : '0';
+      overlay.style.pointerEvents = isAct ? 'auto' : 'none';
+    }
   });
 
   dots.forEach((d, i) => {
@@ -849,7 +872,7 @@ function setActiveSlide(index) {
 
 function startHeroAutoplay() {
   stopHeroAutoplay();
-  const banners = (state.heroBanners && state.heroBanners.length >= 4) ? state.heroBanners : null;
+  const banners = (state.heroBanners && Array.isArray(state.heroBanners) && state.heroBanners.length > 1) ? state.heroBanners : null;
   if (!banners) return;
 
   state.heroInterval = setInterval(() => {

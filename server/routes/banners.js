@@ -6,49 +6,49 @@ const router = express.Router();
 
 const defaultHeroBanners = [
   {
-    id: 'banner_fc25',
-    title: 'EA SPORTS FC 25',
-    tagline: 'CLUBES, ULTIMATE TEAM & MODO CARRERA',
-    badge: 'PS5 • XBOX • PC',
+    id: 'banner_1',
+    title: '',
+    tagline: '',
+    badge: '',
     imgHorizontal: '',
     imgVertical: '',
-    ctaText: 'Ver Ediciones',
+    ctaText: '',
     ctaUrl: '#section-games',
     sortOrder: 0,
     isActive: true
   },
   {
-    id: 'banner_spiderman2',
-    title: 'MARVEL SPIDER-MAN 2',
-    tagline: 'BE GREATER. TOGETHER.',
-    badge: 'PS5 EXCLUSIVE',
+    id: 'banner_2',
+    title: '',
+    tagline: '',
+    badge: '',
     imgHorizontal: '',
     imgVertical: '',
-    ctaText: 'Comprar ahora',
+    ctaText: '',
     ctaUrl: '#section-games',
     sortOrder: 1,
     isActive: true
   },
   {
-    id: 'banner_cod_bo6',
-    title: 'CALL OF DUTY: BLACK OPS 6',
-    tagline: 'LA VERDAD MIENTE. VUELVE EL REY DEL SHOOTER',
-    badge: 'CROSS-GEN BUNDLE',
+    id: 'banner_3',
+    title: '',
+    tagline: '',
+    badge: '',
     imgHorizontal: '',
     imgVertical: '',
-    ctaText: 'Comprar Código',
+    ctaText: '',
     ctaUrl: '#section-games',
     sortOrder: 2,
     isActive: true
   },
   {
-    id: 'banner_gta6',
-    title: 'GRAND THEFT AUTO VI',
-    tagline: 'BIENVENIDO A LEONIDA & VICE CITY',
-    badge: 'NEXT-GEN PRE-ORDER',
+    id: 'banner_4',
+    title: '',
+    tagline: '',
+    badge: '',
     imgHorizontal: '',
     imgVertical: '',
-    ctaText: 'Reservar Ahora',
+    ctaText: '',
     ctaUrl: '#section-games',
     sortOrder: 3,
     isActive: true
@@ -76,7 +76,7 @@ router.get('/', (req, res) => {
     const db = getDb();
     const all = ensureDefaultBanners(db);
     const banners = all.filter(b => b.isActive !== false).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
-    return res.json({ success: true, banners: banners.length >= 4 ? banners : defaultHeroBanners });
+    return res.json({ success: true, banners: banners.length > 0 ? banners : all });
   } catch (err) {
     console.error('Error fetching hero banners:', err);
     res.json({ success: true, banners: defaultHeroBanners });
@@ -104,14 +104,14 @@ router.post('/admin', async (req, res) => {
 
     const db = getDb();
     db.hero_banners = banners.map((b, idx) => ({
-      id: b.id || `banner_${Date.now()}_${idx}`,
+      id: b.id || `banner_${idx + 1}`,
       title: (b.title !== undefined && b.title !== null) ? b.title.trim() : '',
       tagline: (b.tagline !== undefined && b.tagline !== null) ? b.tagline.trim() : '',
       badge: (b.badge !== undefined && b.badge !== null) ? b.badge.trim() : '',
       imgHorizontal: b.imgHorizontal || '',
       imgVertical: b.imgVertical || '',
       ctaText: (b.ctaText !== undefined && b.ctaText !== null) ? b.ctaText.trim() : '',
-      ctaUrl: (b.ctaUrl !== undefined && b.ctaUrl !== null) ? b.ctaUrl.trim() : '',
+      ctaUrl: (b.ctaUrl !== undefined && b.ctaUrl !== null) ? b.ctaUrl.trim() : '#section-games',
       sortOrder: idx,
       isActive: b.isActive !== false
     }));
@@ -120,11 +120,11 @@ router.post('/admin', async (req, res) => {
     // If PostgreSQL is connected, sync to table
     if (postgresAdapter.isConnected()) {
       try {
-        await postgresAdapter.query(`DELETE FROM gamesboy.gb_hero_banners`);
+        await postgresAdapter.query(`DELETE FROM gamesboy.gb_hero_banners WHERE tenant_id = 'tnt_gamesboy_main' OR tenant_id IS NULL`);
         for (const b of db.hero_banners) {
           await postgresAdapter.query(
-            `INSERT INTO gamesboy.gb_hero_banners (id, title, tagline, badge, img_horizontal, img_vertical, cta_text, cta_url, sort_order, is_active)
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+            `INSERT INTO gamesboy.gb_hero_banners (id, tenant_id, title, tagline, badge, img_horizontal, img_vertical, cta_text, cta_url, sort_order, is_active)
+             VALUES ($1, 'tnt_gamesboy_main', $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
             [b.id, b.title, b.tagline, b.badge, b.imgHorizontal, b.imgVertical, b.ctaText, b.ctaUrl, b.sortOrder, b.isActive]
           );
         }

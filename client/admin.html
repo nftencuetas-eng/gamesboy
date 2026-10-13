@@ -4752,6 +4752,44 @@
     // ========================================================
     // 🎨 HERO ACCORDION BANNERS ENGINE (ADMIN - 100% OPCIONAL)
     // ========================================================
+    function compressHeroBanner(file, orientation) {
+      return new Promise((resolve, reject) => {
+        if (!file || !file.type.startsWith('image/')) {
+          return reject(new Error('El archivo no es una imagen válida.'));
+        }
+        const maxW = orientation === 'horizontal' ? 1600 : 700;
+        const maxH = orientation === 'horizontal' ? 700 : 1000;
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          const img = new Image();
+          img.src = e.target.result;
+          img.onload = () => {
+            let width = img.width;
+            let height = img.height;
+            if (width > maxW) {
+              height = Math.round((height * maxW) / width);
+              width = maxW;
+            }
+            if (height > maxH) {
+              width = Math.round((width * maxH) / height);
+              height = maxH;
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            // High quality, fast compressed JPEG: ~120KB
+            const compressed = canvas.toDataURL('image/jpeg', 0.82);
+            resolve(compressed);
+          };
+          img.onerror = () => reject(new Error('Error al cargar la imagen seleccionada.'));
+        };
+        reader.onerror = () => reject(new Error('Error al leer el archivo.'));
+      });
+    }
+
     async function loadHeroBannersAdmin() {
       try {
         const res = await fetch('/api/banners/admin');
@@ -4760,7 +4798,7 @@
           allHeroBannersList = data.banners;
           while (allHeroBannersList.length < 4) {
             allHeroBannersList.push({
-              id: `banner_${Date.now()}_${allHeroBannersList.length}`,
+              id: `banner_${allHeroBannersList.length + 1}`,
               title: '',
               tagline: '',
               badge: '',
@@ -4819,7 +4857,7 @@
                   <img id="hero-thumb-h-${idx}" class="hero-preview-thumb-h" src="${b.imgHorizontal || ''}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); margin-bottom: 6px;">
                   <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
                     <span style="font-size: 0.74rem; color: var(--accent-emerald); font-weight: 800;">✓ Imagen horizontal cargada</span>
-                    <span style="font-size: 0.72rem; color: var(--text-tertiary);">Clic para cambiar</span>
+                    <button type="button" onclick="event.stopPropagation(); removeHeroBannerImage(${idx}, 'horizontal')" style="background: none; border: none; color: #ef4444; font-size: 0.72rem; cursor: pointer; text-decoration: underline;">Quitar</button>
                   </div>
                 </div>
 
@@ -4842,18 +4880,21 @@
               <div class="file-upload-zone" style="padding: 12px; position: relative; border-radius: 12px; min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(5,7,14,0.7);">
                 <input type="file" accept="image/*" onchange="handleHeroBannerUpload(event, ${idx}, 'vertical')" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 2;">
                 
-                <div id="hero-preview-container-v-${idx}" style="${hasV ? 'display: flex;' : 'display: none;'} align-items: center; gap: 14px; width: 100%;">
-                  <img id="hero-thumb-v-${idx}" class="hero-preview-thumb-v" src="${b.imgVertical || ''}" style="width: 75px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15);">
-                  <div style="text-align: left;">
-                    <div style="font-size: 0.76rem; color: var(--accent-emerald); font-weight: 800;">✓ Imagen vertical cargada</div>
-                    <div style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 4px;">Clic en el cuadro para cambiarla</div>
+                <div id="hero-preview-container-v-${idx}" style="${hasV ? 'display: flex;' : 'display: none;'} align-items: center; justify-content: space-between; width: 100%;">
+                  <div style="display: flex; align-items: center; gap: 14px;">
+                    <img id="hero-thumb-v-${idx}" class="hero-preview-thumb-v" src="${b.imgVertical || ''}" style="width: 75px; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15);">
+                    <div style="text-align: left;">
+                      <div style="font-size: 0.76rem; color: var(--accent-emerald); font-weight: 800;">✓ Imagen vertical cargada</div>
+                      <div style="font-size: 0.72rem; color: var(--text-tertiary); margin-top: 4px;">Clic para cambiarla</div>
+                    </div>
                   </div>
+                  <button type="button" onclick="event.stopPropagation(); removeHeroBannerImage(${idx}, 'vertical')" style="background: none; border: none; color: #ef4444; font-size: 0.72rem; cursor: pointer; text-decoration: underline;">Quitar</button>
                 </div>
 
                 <div id="hero-placeholder-v-${idx}" style="${hasV ? 'display: none;' : 'display: flex;'} flex-direction: column; align-items: center; text-align: center;">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2" style="margin-bottom: 6px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
                   <div style="font-size: 0.8rem; font-weight: 700; color: #ffffff;">Haz clic o arrastra la imagen vertical aquí</div>
-                  <div style="font-size: 0.7rem; color: var(--text-tertiary);">Formato recomendado: 600x900 px</div>
+                  <div style="font-size: 0.7rem; color: var(--text-tertiary);">Formato recomendado: 600x900 px (o se usará la horizontal)</div>
                 </div>
               </div>
             </div>
@@ -4868,23 +4909,23 @@
 
             <div class="admin-form-group" style="margin-bottom: 10px;">
               <label class="admin-form-label" style="font-size: 0.72rem; color: var(--text-secondary);">Título (Opcional)</label>
-              <input type="text" id="hero-banner-title-${idx}" class="admin-form-input" value="${b.title || ''}" placeholder="ej: EA SPORTS FC 25 (o dejar en blanco)" style="padding: 8px 12px; font-size: 0.84rem;">
+              <input type="text" id="hero-banner-title-${idx}" class="admin-form-input" value="${b.title || ''}" placeholder="ej: Mi Banner de Temporada (o dejar vacío)" style="padding: 8px 12px; font-size: 0.84rem;">
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
               <div class="admin-form-group" style="margin-bottom: 0;">
                 <label class="admin-form-label" style="font-size: 0.72rem; color: var(--text-secondary);">Badge Superior (Opcional)</label>
-                <input type="text" id="hero-banner-badge-${idx}" class="admin-form-input" value="${b.badge || ''}" placeholder="ej: PS5 • XBOX • PC" style="padding: 8px 12px; font-size: 0.84rem;">
+                <input type="text" id="hero-banner-badge-${idx}" class="admin-form-input" value="${b.badge || ''}" placeholder="ej: NOVEDAD (o dejar vacío)" style="padding: 8px 12px; font-size: 0.84rem;">
               </div>
               <div class="admin-form-group" style="margin-bottom: 0;">
                 <label class="admin-form-label" style="font-size: 0.72rem; color: var(--text-secondary);">Texto Botón CTA (Opcional)</label>
-                <input type="text" id="hero-banner-cta-${idx}" class="admin-form-input" value="${b.ctaText || ''}" placeholder="ej: Ver Ediciones" style="padding: 8px 12px; font-size: 0.84rem;">
+                <input type="text" id="hero-banner-cta-${idx}" class="admin-form-input" value="${b.ctaText || ''}" placeholder="ej: Ver Catálogo (o dejar vacío)" style="padding: 8px 12px; font-size: 0.84rem;">
               </div>
             </div>
 
             <div class="admin-form-group" style="margin-bottom: 10px;">
               <label class="admin-form-label" style="font-size: 0.72rem; color: var(--text-secondary);">Lema / Subtítulo (Opcional)</label>
-              <input type="text" id="hero-banner-tagline-${idx}" class="admin-form-input" value="${b.tagline || ''}" placeholder="ej: Clubes, Ultimate Team y Modo Carrera..." style="padding: 8px 12px; font-size: 0.84rem;">
+              <input type="text" id="hero-banner-tagline-${idx}" class="admin-form-input" value="${b.tagline || ''}" placeholder="ej: Descubre las mejores ofertas (o dejar vacío)" style="padding: 8px 12px; font-size: 0.84rem;">
             </div>
 
             <div class="admin-form-group" style="margin-bottom: 0;">
@@ -4897,12 +4938,36 @@
       }).join('');
     }
 
+    window.removeHeroBannerImage = function(idx, orientation) {
+      const inputId = orientation === 'horizontal' ? `hero-input-h-${idx}` : `hero-input-v-${idx}`;
+      const input = document.getElementById(inputId);
+      if (input) input.value = '';
+      if (allHeroBannersList[idx]) {
+        if (orientation === 'horizontal') allHeroBannersList[idx].imgHorizontal = '';
+        else allHeroBannersList[idx].imgVertical = '';
+      }
+      if (orientation === 'horizontal') {
+        const thumb = document.getElementById(`hero-thumb-h-${idx}`);
+        const previewBox = document.getElementById(`hero-preview-container-h-${idx}`);
+        const placeholder = document.getElementById(`hero-placeholder-h-${idx}`);
+        if (thumb) thumb.src = '';
+        if (previewBox) previewBox.style.display = 'none';
+        if (placeholder) placeholder.style.display = 'flex';
+      } else {
+        const thumb = document.getElementById(`hero-thumb-v-${idx}`);
+        const previewBox = document.getElementById(`hero-preview-container-v-${idx}`);
+        const placeholder = document.getElementById(`hero-placeholder-v-${idx}`);
+        if (thumb) thumb.src = '';
+        if (previewBox) previewBox.style.display = 'none';
+        if (placeholder) placeholder.style.display = 'flex';
+      }
+    };
+
     window.handleHeroBannerUpload = async function(event, idx, orientation) {
       const file = event.target.files[0];
       if (!file) return;
       try {
-        const maxDim = orientation === 'horizontal' ? 1600 : 900;
-        const compressed = await compressImage(file, maxDim, 0.85);
+        const compressed = await compressHeroBanner(file, orientation);
         
         // Save base64 internally in hidden input and memory
         const inputId = orientation === 'horizontal' ? `hero-input-h-${idx}` : `hero-input-v-${idx}`;
@@ -4922,6 +4987,19 @@
           if (thumb) thumb.src = compressed;
           if (previewBox) previewBox.style.display = 'flex';
           if (placeholder) placeholder.style.display = 'none';
+
+          // If vertical input is currently empty, also auto-fill vertical preview so both orientations have artwork
+          const inputV = document.getElementById(`hero-input-v-${idx}`);
+          if (inputV && !inputV.value) {
+            inputV.value = compressed;
+            if (allHeroBannersList[idx]) allHeroBannersList[idx].imgVertical = compressed;
+            const thumbV = document.getElementById(`hero-thumb-v-${idx}`);
+            const previewBoxV = document.getElementById(`hero-preview-container-v-${idx}`);
+            const placeholderV = document.getElementById(`hero-placeholder-v-${idx}`);
+            if (thumbV) thumbV.src = compressed;
+            if (previewBoxV) previewBoxV.style.display = 'flex';
+            if (placeholderV) placeholderV.style.display = 'none';
+          }
         } else {
           const thumb = document.getElementById(`hero-thumb-v-${idx}`);
           const previewBox = document.getElementById(`hero-preview-container-v-${idx}`);
@@ -4939,7 +5017,7 @@
       const saveBtn = document.getElementById('btn-save-all-hero-banners');
       if (saveBtn) {
         saveBtn.disabled = true;
-        saveBtn.innerHTML = '<span>⏳ Guardando...</span>';
+        saveBtn.innerHTML = '<span>⏳ Guardando y publicando...</span>';
       }
 
       const bannersToSave = [];
@@ -4949,14 +5027,14 @@
         const inputV = document.getElementById(`hero-input-v-${i}`);
 
         bannersToSave.push({
-          id: existing.id || `banner_${Date.now()}_${i}`,
+          id: existing.id || `banner_${i + 1}`,
           title: document.getElementById(`hero-banner-title-${i}`)?.value?.trim() || '',
           tagline: document.getElementById(`hero-banner-tagline-${i}`)?.value?.trim() || '',
           badge: document.getElementById(`hero-banner-badge-${i}`)?.value?.trim() || '',
           ctaText: document.getElementById(`hero-banner-cta-${i}`)?.value?.trim() || '',
           ctaUrl: document.getElementById(`hero-banner-url-${i}`)?.value?.trim() || '#section-games',
-          imgHorizontal: inputH?.value || existing.imgHorizontal || '',
-          imgVertical: inputV?.value || existing.imgVertical || '',
+          imgHorizontal: (inputH?.value) || existing.imgHorizontal || '',
+          imgVertical: (inputV?.value) || existing.imgVertical || (inputH?.value) || existing.imgHorizontal || '',
           isActive: document.getElementById(`hero-banner-active-${i}`)?.checked !== false,
           sortOrder: i
         });
@@ -4965,19 +5043,22 @@
       try {
         const res = await fetch('/api/banners/admin', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            'x-user-id': 'usr_admin'
+          },
           body: JSON.stringify({ banners: bannersToSave })
         });
         const data = await res.json();
         if (data.success) {
-          alert('🎉 ¡Las imágenes y portadas han sido guardadas con éxito!');
+          alert('🎉 ¡Las imágenes y portadas han sido guardadas y publicadas con éxito en la tienda!');
           allHeroBannersList = data.banners;
           renderHeroBannersEditor();
         } else {
           alert(data.error || 'No se pudieron guardar los banners');
         }
       } catch (err) {
-        alert('Error de conexión al guardar los banners.');
+        alert('Error de conexión al guardar los banners: ' + err.message);
       } finally {
         if (saveBtn) {
           saveBtn.disabled = false;

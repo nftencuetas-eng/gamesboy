@@ -203,8 +203,8 @@ ON CONFLICT (id) DO NOTHING;
 -- Portadas Banners Hero ENEBA
 INSERT INTO gamesboy.gb_hero_banners (id, title, tagline, badge, img_horizontal, img_vertical, cta_text, cta_url, sort_order, is_active)
 VALUES
-    ('banner_fc25', 'EA SPORTS FC 25', 'CLUBES, ULTIMATE TEAM & MODO CARRERA', 'PS5 • XBOX • PC', '', '', 'Ver Ediciones', '#section-games', 0, true),
-    ('banner_spiderman2', 'Marvel Spider-Man 2', 'BE GREATER. TOGETHER.', 'PS5 EXCLUSIVE', '', '', 'Comprar ahora', '#section-games', 1, true),
-    ('banner_cod_bo6', 'Call of Duty: Black Ops 6', 'LA VERDAD MIENTE. VUELVE EL REY DEL SHOOTER', 'CROSS-GEN BUNDLE', '', '', 'Comprar Código', '#section-games', 2, true),
-    ('banner_gta6', 'Grand Theft Auto VI', 'BIENVENIDO A LEONIDA & VICE CITY', 'NEXT-GEN PRE-ORDER', '', '', 'Reservar Ahora', '#section-games', 3, true)
+    ('banner_1', '', '', '', '', '', '', '#section-games', 0, true),
+    ('banner_2', '', '', '', '', '', '', '#section-games', 1, true),
+    ('banner_3', '', '', '', '', '', '', '#section-games', 2, true),
+    ('banner_4', '', '', '', '', '', '', '#section-games', 3, true)
 ON CONFLICT (id) DO NOTHING;
