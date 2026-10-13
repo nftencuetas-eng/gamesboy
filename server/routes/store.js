@@ -32,12 +32,9 @@ router.get('/products', (req, res) => {
         secondaryPricePyg: secondaryPyg,
         badge: p.badge || (isAvail ? 'DISPONIBLE' : 'SIN STOCK'),
         icon: p.icon,
-        coverUrl: p.coverUrl || p.coverImage || p.imageUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
-        coverImage: p.coverImage || p.coverUrl || p.imageUrl,
-        screenshots: Array.isArray(p.screenshots) && p.screenshots.length > 0 ? p.screenshots : [
-          'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
-          'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
-        ],
+        coverUrl: p.coverUrl || p.coverImage || p.imageUrl || '',
+        coverImage: p.coverImage || p.coverUrl || p.imageUrl || '',
+        screenshots: Array.isArray(p.screenshots) ? p.screenshots : [],
         brand: p.brand,
         brandTheme: p.brandTheme,
         description: p.description || '',

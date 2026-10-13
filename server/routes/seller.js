@@ -15,7 +15,7 @@ function ensureSeedReviews(db) {
         sellerId: 'usr_seller1',
         buyerId: 'usr_client1',
         buyerName: 'Lucas González',
-        buyerAvatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80',
+        buyerAvatar: '',
         rating: 5,
         comment: 'Excelente servicio con Netflix 4K. Mi perfil tiene su propio PIN y funciona perfecto en mi Smart TV sin caídas. Recomendado al 100% 🔥',
         createdAt: new Date(Date.now() - 172800000).toISOString()
@@ -25,7 +25,7 @@ function ensureSeedReviews(db) {
         sellerId: 'usr_seller1',
         buyerId: 'usr_client2',
         buyerName: 'María López',
-        buyerAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80',
+        buyerAvatar: '',
         rating: 5,
         comment: 'Activación inmediata y muy buena atención en el chat del grupo. Renuevo mes a mes sin problemas.',
         createdAt: new Date(Date.now() - 86400000).toISOString()
@@ -35,7 +35,7 @@ function ensureSeedReviews(db) {
         sellerId: 'usr_admin',
         buyerId: 'usr_client1',
         buyerName: 'Lucas González',
-        buyerAvatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80',
+        buyerAvatar: '',
         rating: 5,
         comment: 'Cuentas oficiales de GamesBoy con garantía total de 30 días. La mejor plataforma de Paraguay.',
         createdAt: new Date(Date.now() - 43200000).toISOString()
@@ -178,7 +178,7 @@ router.post('/public/:id/reviews', (req, res) => {
       sellerId,
       buyerId,
       buyerName: buyer.name,
-      buyerAvatar: buyer.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=120&q=80',
+      buyerAvatar: buyer.avatar || '',
       rating: numRating,
       comment: comment.trim(),
       createdAt: new Date().toISOString()

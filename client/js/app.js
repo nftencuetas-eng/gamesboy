@@ -104,10 +104,19 @@ function autoDetectUserCountry() {
   return 'PY';
 }
 
-// Instant Cache Hydration (0ms, Zero-Flicker)
+// Instant Cache Hydration with Versioning & Legacy Unsplash Purge
+const GB_CATALOG_CACHE_VERSION = 'gb_v5_authentic_user_data';
 const cachedCatalog = (() => {
   try {
-    return JSON.parse(localStorage.getItem('gb_catalog_cache') || '{}');
+    const v = localStorage.getItem('gb_catalog_cache_v');
+    const raw = localStorage.getItem('gb_catalog_cache');
+    // If cache is from an old version or contains generic unsplash URLs, purge immediately
+    if (v !== GB_CATALOG_CACHE_VERSION || (raw && raw.includes('unsplash.com'))) {
+      localStorage.removeItem('gb_catalog_cache');
+      localStorage.setItem('gb_catalog_cache_v', GB_CATALOG_CACHE_VERSION);
+      return {};
+    }
+    return JSON.parse(raw || '{}');
   } catch (e) {
     return {};
   }
@@ -714,14 +723,25 @@ function initHeroAccordion() {
     return;
   }
 
-  // Render Slides with pure artwork without dark text overlay
+  // Render Slides: if image exists render artwork, if empty render clean dark minimalist card without generic photos
   container.innerHTML = banners.slice(0, 4).map((b, idx) => {
     const isActive = idx === state.activeSlideIndex;
     const targetUrl = b.ctaUrl || '#section-games';
+    const hasImg = b.imgHorizontal && !b.imgHorizontal.includes('unsplash');
+
     return `
-      <div class="eneba-slide ${isActive ? 'active' : ''}" data-slide-index="${idx}" data-target-url="${targetUrl}">
-        <div class="eneba-slide-bg horizontal-bg" style="background-image: url('${b.imgHorizontal || ''}');"></div>
-        <div class="eneba-slide-bg vertical-bg" style="background-image: url('${b.imgVertical || ''}');"></div>
+      <div class="eneba-slide ${isActive ? 'active' : ''}" data-slide-index="${idx}" data-target-url="${targetUrl}" style="${!hasImg ? 'background: linear-gradient(135deg, #0a0d14 0%, #121722 50%, #0a0c10 100%); display: flex; align-items: flex-end; padding: 2.5rem;' : ''}">
+        ${hasImg ? `
+          <div class="eneba-slide-bg horizontal-bg" style="background-image: url('${b.imgHorizontal}');"></div>
+          <div class="eneba-slide-bg vertical-bg" style="background-image: url('${b.imgVertical || b.imgHorizontal}');"></div>
+        ` : `
+          <div class="eneba-slide-content-minimal" style="position: relative; z-index: 2; max-width: 600px;">
+            ${b.badge ? `<span style="display: inline-block; padding: 4px 10px; background: rgba(0, 194, 255, 0.12); border: 1px solid rgba(0, 194, 255, 0.25); border-radius: 6px; font-size: 0.75rem; font-weight: 700; color: #00c2ff; margin-bottom: 0.75rem; letter-spacing: 0.05em;">${b.badge}</span>` : ''}
+            <h2 style="font-size: 2rem; font-weight: 800; color: #f8fafc; margin: 0 0 0.5rem 0; line-height: 1.15; letter-spacing: -0.02em;">${b.title || 'GamesBoy Store'}</h2>
+            <p style="font-size: 0.95rem; color: #94a3b8; margin: 0 0 1.25rem 0; font-weight: 500;">${b.tagline || 'Tu mundo digital en un solo lugar'}</p>
+            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: #00c2ff; color: #0a0c10; font-weight: 700; font-size: 0.85rem; border-radius: 8px;">${b.ctaText || 'Explorar'} ➔</span>
+          </div>
+        `}
       </div>
     `;
   }).join('');
@@ -923,14 +943,20 @@ function renderStreamingServices() {
     const hasActiveSlots = matching.some(s => (s.availableSlots || 0) > 0);
     const inStock = (p.hasStock !== undefined) ? p.hasStock : (hasActiveSlots || matching.length > 0);
     const serviceName = p.name || (platformKey.charAt(0).toUpperCase() + platformKey.slice(1));
-    const thumbImg = p.iconUrl || p.icon || p.thumbnailUrl || p.coverUrl || '/assets/branding/icon.png';
+    const rawThumb = p.iconUrl || p.icon || p.thumbnailUrl || p.coverUrl || '';
+    const hasThumb = rawThumb && !rawThumb.includes('unsplash');
 
     return `
       <div class="stream-thumb-wrapper ${inStock ? '' : 'out-of-stock'}" 
            onclick="window.location.href='/service?platform=${platformKey}'" 
            title="${serviceName} - ${inStock ? 'Disponible' : 'Sin Stock'}">
         <div class="stream-thumb-card">
-          <img src="${thumbImg}" alt="${serviceName}" class="stream-thumb-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='/assets/branding/icon.png';">
+          ${hasThumb ? `
+            <img src="${rawThumb}" alt="${serviceName}" class="stream-thumb-img" draggable="false" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div style="display:none; width:100%; height:100%; background: #161b24; align-items:center; justify-content:center;"><span style="font-size:1.4rem; opacity:0.3;">📺</span></div>
+          ` : `
+            <div style="width:100%; height:100%; background: #161b24; display:flex; align-items:center; justify-content:center;"><span style="font-size:1.4rem; opacity:0.3;">📺</span></div>
+          `}
           ${!inStock ? '<span class="stream-thumb-badge-stock">SIN STOCK</span>' : ''}
         </div>
         <span class="stream-thumb-title-below">${serviceName}</span>
@@ -987,11 +1013,18 @@ function renderDigitalGames() {
     const rate = state.exchangeRatePyg || 7500;
     const primaryPyg = g.primaryPricePyg || g.pricePyg || Math.round((g.primaryPriceUsd || g.priceUsd || 39.99) * rate);
     const secondaryPyg = g.secondaryPricePyg !== undefined ? g.secondaryPricePyg : (g.secondaryPriceUsd ? Math.round(g.secondaryPriceUsd * rate) : Math.round(primaryPyg * 0.65));
+    const rawCover = g.coverUrl || g.coverImage || '';
+    const hasCover = rawCover && !rawCover.includes('unsplash');
 
     return `
       <div class="game-card ${isAvail ? '' : 'disabled out-of-stock'}" data-slot-index="${slotIdx}" onclick="openBuyGameModal('${g.id}')" title="${g.title} - ${isAvail ? 'Disponible' : 'Sin Stock'}">
         <div class="game-cover-container">
-          <img src="${g.coverUrl || g.coverImage || '/assets/branding/icon.png'}" alt="${g.title || 'Videojuego'}" class="game-cover-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='/assets/branding/icon.png';">
+          ${hasCover ? `
+            <img src="${rawCover}" alt="${g.title || 'Videojuego'}" class="game-cover-img" draggable="false" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div style="display:none; width:100%; height:100%; background: #161b24; align-items:center; justify-content:center;"><span style="font-size:1.6rem; opacity:0.3;">🎮</span></div>
+          ` : `
+            <div style="width:100%; height:100%; background: #161b24; display:flex; align-items:center; justify-content:center;"><span style="font-size:1.6rem; opacity:0.3;">🎮</span></div>
+          `}
           ${!isAvail ? '<span class="game-stock-badge">SIN STOCK</span>' : ''}
         </div>
         <div class="game-card-body">
@@ -1147,14 +1180,20 @@ function renderRetailGiftCards() {
   }
 
   container.innerHTML = brandsList.map((gc, idx) => {
-    const cardImg = gc.logoImage || gc.logoUrl || gc.coverImage || gc.coverUrl || '/assets/branding/icon.png';
+    const rawImg = gc.logoImage || gc.logoUrl || gc.coverImage || gc.coverUrl || '';
+    const hasImg = rawImg && !rawImg.includes('unsplash');
     const cardTitle = gc.name || gc.title || 'Gift Card';
     const cardId = gc.id || gc.brandId || `gc_${Math.random()}`;
     const tiltVariance = (0.95 + ((idx % 4) * 0.08)).toFixed(2);
 
     return `
       <div class="giftcard-clean-png-card" data-tilt-factor="${tiltVariance}" onclick="openGiftCardVariationsModal('${cardId}')" title="${cardTitle}">
-        <img src="${cardImg}" alt="${cardTitle}" class="giftcard-clean-png-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='/assets/branding/icon.png';">
+        ${hasImg ? `
+          <img src="${rawImg}" alt="${cardTitle}" class="giftcard-clean-png-img" draggable="false" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div style="display:none; width:100%; height:100%; background: #161b24; border-radius: 12px; align-items: center; justify-content: center;"><span style="font-size: 1.2rem; opacity: 0.3;">💳</span></div>
+        ` : `
+          <div style="width:100%; height:100%; background: #161b24; border-radius: 12px; display: flex; align-items: center; justify-content: center;"><span style="font-size: 1.2rem; opacity: 0.3;">💳</span></div>
+        `}
       </div>
     `;
   }).join('');
@@ -1433,93 +1472,92 @@ async function renderMyVault() {
   }).join('');
 }
 
-// --- 7. FETCH INITIAL DATA FROM API (LIVE DYNAMIC RECONCILIATION) ---
-async function fetchStoreData() {
+function saveCatalogCache() {
   try {
-    const [subRes, storeRes, bannersRes, smmRes, giftcardsRes, servicesCfgRes, gamesRes, hubsRes, storeGiftcardsRes] = await Promise.all([
-      fetch('/api/subscriptions').then(r => r.json()).catch(() => null),
-      fetch('/api/store/products').then(r => r.json()).catch(() => null),
-      fetch('/api/banners').then(r => r.json()).catch(() => null),
-      fetch('/api/smm/services').then(r => r.json()).catch(() => null),
-      fetch('/api/admin/giftcards/brands').then(r => r.json()).catch(() => null),
-      fetch('/api/subscriptions/services-config').then(r => r.json()).catch(() => null),
-      fetch('/api/admin/games').then(r => r.json()).catch(() => null),
-      fetch('/api/streaming-hubs').then(r => r.json()).catch(() => null),
-      fetch('/api/store/giftcards/brands').then(r => r.json()).catch(() => null)
-    ]);
+    localStorage.setItem('gb_catalog_cache', JSON.stringify({
+      storeProducts: state.storeProducts,
+      streamingPlatforms: state.streamingPlatforms,
+      giftcardBrands: state.giftcardBrands,
+      heroBanners: state.heroBanners
+    }));
+  } catch (e) {}
+}
 
-    if (hubsRes && hubsRes.platforms && Array.isArray(hubsRes.platforms)) {
-      state.streamingPlatforms = hubsRes.platforms;
-    } else if (hubsRes && hubsRes.services && Array.isArray(hubsRes.services)) {
-      state.streamingPlatforms = hubsRes.services;
-    }
-
-    if (Array.isArray(subRes) && subRes.length > 0) {
-      state.subscriptions = subRes;
-    } else if (subRes && subRes.subscriptions && subRes.subscriptions.length > 0) {
-      state.subscriptions = subRes.subscriptions;
-    }
-
-    // Merge store products and admin games robustly so digital games and giftcards always load
-    const storeList = Array.isArray(storeRes) ? storeRes : (storeRes?.products || []);
-    const gamesList = Array.isArray(gamesRes?.games) ? gamesRes.games : [];
-    const mergedProducts = [...storeList];
-    gamesList.forEach(g => {
-      if (!mergedProducts.some(p => p.id === g.id)) {
-        mergedProducts.push({
-          ...g,
-          category: g.category || 'digital_game'
-        });
+// --- 7. FAST PARALLEL HYDRATION (IMMEDIATE INDIVIDUAL RENDERS WITHOUT 5S DELAY) ---
+async function fetchStoreData() {
+  // 1. Digital Games Catalog (Immediate render upon response)
+  fetch('/api/store/products')
+    .then(r => r.json())
+    .then(prods => {
+      const list = Array.isArray(prods) ? prods : (prods?.products || []);
+      if (list.length > 0) {
+        state.storeProducts = list;
+        renderDigitalGames();
+        saveCatalogCache();
       }
-    });
-    if (mergedProducts.length > 0) {
-      state.storeProducts = mergedProducts;
-    }
+    })
+    .catch(() => {});
 
-    const loadedGcBrands = (giftcardsRes && giftcardsRes.brands && Array.isArray(giftcardsRes.brands) && giftcardsRes.brands.length > 0)
-      ? giftcardsRes.brands
-      : ((storeGiftcardsRes && storeGiftcardsRes.brands && Array.isArray(storeGiftcardsRes.brands) && storeGiftcardsRes.brands.length > 0) ? storeGiftcardsRes.brands : null);
-
-    if (loadedGcBrands) {
-      state.giftcardBrands = loadedGcBrands;
-    }
-
-    if (servicesCfgRes && servicesCfgRes.config) {
-      state.servicesConfig = servicesCfgRes.config;
-      if (typeof initPublishStreamModalPricing === 'function') {
-        initPublishStreamModalPricing();
+  // 2. Streaming Hubs & Platforms (Immediate render upon response)
+  fetch('/api/streaming-hubs')
+    .then(r => r.json())
+    .then(hubs => {
+      const list = hubs.platforms || hubs.services || [];
+      if (Array.isArray(list) && list.length > 0) {
+        state.streamingPlatforms = list;
+        renderStreamingServices();
+        saveCatalogCache();
       }
-    }
+    })
+    .catch(() => {});
 
-    if (bannersRes && bannersRes.banners && bannersRes.banners.length >= 4) {
-      state.heroBanners = bannersRes.banners;
-    }
+  // 3. Gift Card Brands (Immediate render upon response)
+  fetch('/api/store/giftcards/brands')
+    .then(r => r.json())
+    .then(gc => {
+      const list = gc.brands || [];
+      if (Array.isArray(list) && list.length > 0) {
+        state.giftcardBrands = list;
+        renderRetailGiftCards();
+        saveCatalogCache();
+      }
+    })
+    .catch(() => {});
 
-    if (smmRes && smmRes.services && Array.isArray(smmRes.services) && smmRes.services.length > 0) {
-      state.smmServices = smmRes.services;
-    }
+  // 4. Subscriptions stock & active accounts (Updates streaming cards stock)
+  fetch('/api/subscriptions')
+    .then(r => r.json())
+    .then(subs => {
+      const list = Array.isArray(subs) ? subs : (subs?.subscriptions || []);
+      if (list.length > 0) {
+        state.subscriptions = list;
+        renderStreamingServices();
+      }
+    })
+    .catch(() => {});
 
-    // Cache live catalog for 0ms next instant load without example flickers
-    try {
-      localStorage.setItem('gb_catalog_cache', JSON.stringify({
-        storeProducts: state.storeProducts,
-        streamingPlatforms: state.streamingPlatforms,
-        giftcardBrands: state.giftcardBrands,
-        heroBanners: state.heroBanners
-      }));
-    } catch (e) {}
+  // 5. Hero Banners
+  fetch('/api/banners')
+    .then(r => r.json())
+    .then(bRes => {
+      if (bRes && Array.isArray(bRes.banners) && bRes.banners.length > 0) {
+        state.heroBanners = bRes.banners;
+        initHeroAccordion();
+        saveCatalogCache();
+      }
+    })
+    .catch(() => {});
 
-    // Re-render only to update dynamic prices or active seller stock
-    initHeroAccordion();
-    renderStreamingServices();
-    renderDigitalGames();
-    renderRetailGiftCards();
-    renderSmmServices();
-    renderMyVault();
-    initDragToScrollEngine();
-  } catch (err) {
-    console.error('Error loading marketplace data:', err);
-  }
+  // 6. SMM Growth Services
+  fetch('/api/smm/services')
+    .then(r => r.json())
+    .then(smmRes => {
+      if (smmRes && Array.isArray(smmRes.services)) {
+        state.smmServices = smmRes.services;
+        renderSmmServices();
+      }
+    })
+    .catch(() => {});
 }
 
 

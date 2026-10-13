@@ -125,12 +125,12 @@ router.get('/:platform', (req, res) => {
 
   // Seed sample verified community hosts if only 1 exists so the 3-column GoSplit grid looks active & realistic
   const sampleHosts = [
-    { name: 'Henry G.', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80', trustScore: 98, activity: 'En línea', priceMult: 0.95, plan: 'Plan Premium 4K HDR', avail: 3 },
-    { name: 'Esteban M.', avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=150&q=80', trustScore: 95, activity: 'Hace 1 hora', priceMult: 1.05, plan: 'Plan Ultra HD + Dolby Atmos', avail: 1 },
-    { name: 'Kendru P.', avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=150&q=80', trustScore: 90, activity: 'Hace 3 horas', priceMult: 1.0, plan: 'Plan Familiar Premium', avail: 2 },
-    { name: 'Omar D.', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80', trustScore: 92, activity: 'Hace 5 horas', priceMult: 0.92, plan: 'Plan Premium 4K', avail: 1 },
-    { name: 'Victor Jhony', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80', trustScore: 88, activity: 'Hace 9 horas', priceMult: 1.0, plan: 'Plan Premium con ESPN', avail: 3 },
-    { name: 'Eduardo R.', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80', trustScore: 96, activity: 'Hace 1 día', priceMult: 0.98, plan: 'Plan Platino 4K', avail: 2 }
+    { name: 'Henry G.', avatar: '', trustScore: 98, activity: 'En línea', priceMult: 0.95, plan: 'Plan Premium 4K HDR', avail: 3 },
+    { name: 'Esteban M.', avatar: '', trustScore: 95, activity: 'Hace 1 hora', priceMult: 1.05, plan: 'Plan Ultra HD + Dolby Atmos', avail: 1 },
+    { name: 'Kendru P.', avatar: '', trustScore: 90, activity: 'Hace 3 horas', priceMult: 1.0, plan: 'Plan Familiar Premium', avail: 2 },
+    { name: 'Omar D.', avatar: '', trustScore: 92, activity: 'Hace 5 horas', priceMult: 0.92, plan: 'Plan Premium 4K', avail: 1 },
+    { name: 'Victor Jhony', avatar: '', trustScore: 88, activity: 'Hace 9 horas', priceMult: 1.0, plan: 'Plan Premium con ESPN', avail: 3 },
+    { name: 'Eduardo R.', avatar: '', trustScore: 96, activity: 'Hace 1 día', priceMult: 0.98, plan: 'Plan Platino 4K', avail: 2 }
   ];
 
   // Strict Host/Seller Privacy: Only expose public name, avatar, verified badges, rating, pricing & slot counts
@@ -214,7 +214,7 @@ router.get('/:platform', (req, res) => {
       host: {
         id: 'usr_host_henry',
         name: 'Henry G.',
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
+        avatar: '',
         isVerified: true,
         trustScore: 98,
         activityText: 'En línea',
@@ -239,7 +239,7 @@ router.get('/:platform', (req, res) => {
       host: {
         id: 'usr_host_esteban',
         name: 'Esteban M.',
-        avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=150&q=80',
+        avatar: '',
         isVerified: true,
         trustScore: 95,
         activityText: 'Hace 1 hora',
@@ -475,22 +475,22 @@ router.post('/:platform/sync-ai', async (req, res) => {
     // Template real-time releases per platform
     const aiReleasesDatabase = {
       'netflix': [
-        { id: `rel_${Date.now()}_1`, title: 'Stranger Things 5: El Final', type: 'Estreno Exclusivo', year: '2025/2026', genre: 'Ciencia Ficción', posterUrl: 'https://images.unsplash.com/photo-1618336753974-aae8e04506aa?auto=format&fit=crop&w=600&q=80', synopsis: 'El desenlace final de Hawkins con producción cinematográfica.' },
-        { id: `rel_${Date.now()}_2`, title: 'Squid Game: Temporada 2', type: 'Tendencia #1', year: '2025', genre: 'Thriller / Drama', posterUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=600&q=80', synopsis: 'Nuevos juegos mortales y el retorno de Gi-hun.' }
+        { id: `rel_${Date.now()}_1`, title: 'Stranger Things 5: El Final', type: 'Estreno Exclusivo', year: '2025/2026', genre: 'Ciencia Ficción', posterUrl: '', synopsis: 'El desenlace final de Hawkins con producción cinematográfica.' },
+        { id: `rel_${Date.now()}_2`, title: 'Squid Game: Temporada 2', type: 'Tendencia #1', year: '2025', genre: 'Thriller / Drama', posterUrl: '', synopsis: 'Nuevos juegos mortales y el retorno de Gi-hun.' }
       ],
       'spotify': [
-        { id: `rel_${Date.now()}_1`, title: 'Top Hits Latinos 2025', type: 'Playlist Oficial', year: '2025', genre: 'Urbano / Reggaetón', posterUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80', synopsis: 'Los hits más escuchados en audio Hi-Fi sin cortes.' }
+        { id: `rel_${Date.now()}_1`, title: 'Top Hits Latinos 2025', type: 'Playlist Oficial', year: '2025', genre: 'Urbano / Reggaetón', posterUrl: '', synopsis: 'Los hits más escuchados en audio Hi-Fi sin cortes.' }
       ],
       'disney': [
-        { id: `rel_${Date.now()}_1`, title: 'Daredevil: Born Again', type: 'Marvel Studios', year: '2025', genre: 'Acción / Suspenso', posterUrl: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80', synopsis: 'El regreso definitivo del Hombre sin Miedo.' }
+        { id: `rel_${Date.now()}_1`, title: 'Daredevil: Born Again', type: 'Marvel Studios', year: '2025', genre: 'Acción / Suspenso', posterUrl: '', synopsis: 'El regreso definitivo del Hombre sin Miedo.' }
       ],
       'max': [
-        { id: `rel_${Date.now()}_1`, title: 'The Last of Us: Parte 2', type: 'HBO Original', year: '2025', genre: 'Drama', posterUrl: 'https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=600&q=80', synopsis: 'La continuación de la aclamada saga adaptada por HBO.' }
+        { id: `rel_${Date.now()}_1`, title: 'The Last of Us: Parte 2', type: 'HBO Original', year: '2025', genre: 'Drama', posterUrl: '', synopsis: 'La continuación de la aclamada saga adaptada por HBO.' }
       ]
     };
 
     const syncedReleases = aiReleasesDatabase[platformKey] || [
-      { id: `rel_${Date.now()}_1`, title: `${service.name} Estrenos 2025`, type: 'Novedad en Vivo', year: '2025', genre: 'Streaming Premium', posterUrl: service.bannerHorizontal || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=600&q=80', synopsis: 'Contenido actualizado en vivo con la última cartelera oficial.' }
+      { id: `rel_${Date.now()}_1`, title: `${service.name} Estrenos 2025`, type: 'Novedad en Vivo', year: '2025', genre: 'Streaming Premium', posterUrl: service.bannerHorizontal || '', synopsis: 'Contenido actualizado en vivo con la última cartelera oficial.' }
     ];
 
     service.releases = syncedReleases;

@@ -105,11 +105,11 @@ router.get('/games', (req, res) => {
           secondaryPriceUsd: secondaryUsd,
           pricePyg: primaryPyg,
           priceUsd: primaryUsd,
-          coverUrl: g.coverUrl || g.coverImage || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
-          coverImage: g.coverImage || g.coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
+          coverUrl: g.coverUrl || g.coverImage || '',
+          coverImage: g.coverImage || g.coverUrl || '',
           screenshots: Array.isArray(g.screenshots) && g.screenshots.length > 0 ? g.screenshots : [
-            'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
+            '',
+            ''
           ],
           description: g.description || 'Juego digital completo para tu consola o PC.',
           isAvailable: g.isAvailable !== false,
@@ -162,7 +162,7 @@ router.post('/games', (req, res) => {
       screenshotsList = screenshots.split('\n').map(s => s.trim()).filter(Boolean).slice(0, 10);
     }
 
-    const finalCover = coverImage || coverUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80';
+    const finalCover = coverImage || coverUrl || '';
     if (screenshotsList.length === 0) {
       screenshotsList = [finalCover];
     }
@@ -309,7 +309,7 @@ const DEFAULT_GIFT_CARD_BRANDS = [
     id: 'brand_playstation',
     name: 'PlayStation Network',
     category: 'Gaming',
-    logoUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80',
+    logoUrl: '',
     description: 'Tarjetas oficiales de saldo y membresías PlayStation Plus.',
     variations: [
       { id: 'var_psn_10', name: 'PSN $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
@@ -324,7 +324,7 @@ const DEFAULT_GIFT_CARD_BRANDS = [
     id: 'brand_steam',
     name: 'Steam Wallet',
     category: 'PC Gaming',
-    logoUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80',
+    logoUrl: '',
     description: 'Saldo para la tienda de Steam en PC y Steam Deck.',
     variations: [
       { id: 'var_steam_5', name: 'Steam $5 USD', denomination: '$5 USD', pricePyg: 42000, priceUsd: 5.00 },
@@ -337,7 +337,7 @@ const DEFAULT_GIFT_CARD_BRANDS = [
     id: 'brand_xbox',
     name: 'Xbox & Game Pass',
     category: 'Gaming',
-    logoUrl: 'https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?auto=format&fit=crop&w=400&q=80',
+    logoUrl: '',
     description: 'Tarjetas de regalo Xbox y suscripciones Game Pass Ultimate.',
     variations: [
       { id: 'var_xbox_10', name: 'Xbox $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
@@ -350,7 +350,7 @@ const DEFAULT_GIFT_CARD_BRANDS = [
     id: 'brand_nintendo',
     name: 'Nintendo eShop',
     category: 'Gaming',
-    logoUrl: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80',
+    logoUrl: '',
     description: 'Saldo para comprar juegos en Nintendo Switch.',
     variations: [
       { id: 'var_nin_10', name: 'Nintendo $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
@@ -363,7 +363,7 @@ const DEFAULT_GIFT_CARD_BRANDS = [
     id: 'brand_spotify',
     name: 'Spotify Premium',
     category: 'Música',
-    logoUrl: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=400&q=80',
+    logoUrl: '',
     description: 'Música sin anuncios y descargas offline en Spotify.',
     variations: [
       { id: 'var_spot_1m', name: 'Spotify 1 Mes Individual', denomination: '1 Mes', pricePyg: 45000, priceUsd: 5.99 },
@@ -375,7 +375,7 @@ const DEFAULT_GIFT_CARD_BRANDS = [
     id: 'brand_netflix',
     name: 'Netflix Gift Card',
     category: 'Streaming',
-    logoUrl: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80',
+    logoUrl: '',
     description: 'Saldo oficial de regalo para canjear en cuentas Netflix.',
     variations: [
       { id: 'var_net_15', name: 'Netflix $15 USD', denomination: '$15 USD', pricePyg: 125000, priceUsd: 15.00 },
@@ -387,7 +387,7 @@ const DEFAULT_GIFT_CARD_BRANDS = [
     id: 'brand_deezer',
     name: 'Deezer Premium',
     category: 'Música',
-    logoUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80',
+    logoUrl: '',
     description: 'Música en calidad Hi-Fi y sonido de alta fidelidad.',
     variations: [
       { id: 'var_deezer_1m', name: 'Deezer 1 Mes', denomination: '1 Mes', pricePyg: 40000, priceUsd: 5.00 },
@@ -398,7 +398,7 @@ const DEFAULT_GIFT_CARD_BRANDS = [
     id: 'brand_googleplay',
     name: 'Google Play Store',
     category: 'Móvil',
-    logoUrl: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=400&q=80',
+    logoUrl: '',
     description: 'Saldo para apps, juegos y diamantes en Android.',
     variations: [
       { id: 'var_gp_10', name: 'Google Play $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
@@ -410,7 +410,7 @@ const DEFAULT_GIFT_CARD_BRANDS = [
     id: 'brand_apple',
     name: 'Apple Gift Card & iTunes',
     category: 'Apple',
-    logoUrl: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80',
+    logoUrl: '',
     description: 'Saldo para compras en App Store, Apple Arcade y suscripciones.',
     variations: [
       { id: 'var_apple_10', name: 'Apple $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
@@ -422,7 +422,7 @@ const DEFAULT_GIFT_CARD_BRANDS = [
     id: 'brand_roblox',
     name: 'Roblox Robux Card',
     category: 'Gaming',
-    logoUrl: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=400&q=80',
+    logoUrl: '',
     description: 'Robux y objetos virtuales para tu avatar en Roblox.',
     variations: [
       { id: 'var_rob_10', name: 'Roblox $10 (800 Robux)', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
@@ -488,7 +488,7 @@ router.post('/giftcards/brands', (req, res) => {
 
     if (!name) return res.status(400).json({ error: 'Nombre de la marca requerido' });
 
-    const finalLogo = logoImage || logoUrl || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80';
+    const finalLogo = logoImage || logoUrl || '';
 
     const newBrand = {
       id: `brand_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
@@ -797,9 +797,9 @@ router.post('/streaming/services', (req, res) => {
 
     const finalPricePyg = pricePerSlotPyg ? parseInt(pricePerSlotPyg, 10) : (pricePerSlotUsd ? Math.round(parseFloat(pricePerSlotUsd) * rate) : 25000);
     const finalPriceUsd = parseFloat((finalPricePyg / rate).toFixed(2));
-    const finalIcon = iconUrl || thumbnailUrl || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80';
-    const finalBannerH = bannerHorizontal || 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=1600&q=80';
-    const finalBannerV = bannerVertical || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80';
+    const finalIcon = iconUrl || thumbnailUrl || '';
+    const finalBannerH = bannerHorizontal || '';
+    const finalBannerV = bannerVertical || '';
 
     const newService = {
       id,
@@ -1502,7 +1502,7 @@ const DEFAULT_STREAMING_SERVICES_CONFIG = [
     pricePerSlotPyg: 25000,
     pricePerSlotUsd: 3.33,
     commissionPercent: 10,
-    icon: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80',
+    icon: '',
     description: 'Cuentas oficiales 4K HDR con perfiles individuales y PIN privado.'
   },
   {
@@ -1513,7 +1513,7 @@ const DEFAULT_STREAMING_SERVICES_CONFIG = [
     pricePerSlotPyg: 18000,
     pricePerSlotUsd: 2.40,
     commissionPercent: 10,
-    icon: 'https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=400&q=80',
+    icon: '',
     description: 'Invitaciones a planes familiares oficiales sin anuncios.'
   },
   {
@@ -1524,7 +1524,7 @@ const DEFAULT_STREAMING_SERVICES_CONFIG = [
     pricePerSlotPyg: 25000,
     pricePerSlotUsd: 3.33,
     commissionPercent: 10,
-    icon: 'https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=400&q=80',
+    icon: '',
     description: 'Disney, Marvel, Star Wars, Pixar y deportes de ESPN en vivo.'
   },
   {
@@ -1535,7 +1535,7 @@ const DEFAULT_STREAMING_SERVICES_CONFIG = [
     pricePerSlotPyg: 22000,
     pricePerSlotUsd: 2.93,
     commissionPercent: 10,
-    icon: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80',
+    icon: '',
     description: 'Películas de Warner Bros, HBO Originales y Champions League.'
   },
   {
@@ -1546,7 +1546,7 @@ const DEFAULT_STREAMING_SERVICES_CONFIG = [
     pricePerSlotPyg: 20000,
     pricePerSlotUsd: 2.67,
     commissionPercent: 10,
-    icon: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=400&q=80',
+    icon: '',
     description: 'YouTube sin anuncios, descargas y YouTube Music en tu cuenta personal.'
   },
   {
@@ -1557,7 +1557,7 @@ const DEFAULT_STREAMING_SERVICES_CONFIG = [
     pricePerSlotPyg: 35000,
     pricePerSlotUsd: 4.67,
     commissionPercent: 10,
-    icon: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=400&q=80',
+    icon: '',
     description: 'Acceso prioritario a modelos de IA GPT-4o, DALL-E 3 y Canvas.'
   },
   {
@@ -1568,7 +1568,7 @@ const DEFAULT_STREAMING_SERVICES_CONFIG = [
     pricePerSlotPyg: 18000,
     pricePerSlotUsd: 2.40,
     commissionPercent: 10,
-    icon: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80',
+    icon: '',
     description: 'Anime en estreno simultáneo con Japón sin publicidad en 1080p.'
   },
   {
@@ -1579,7 +1579,7 @@ const DEFAULT_STREAMING_SERVICES_CONFIG = [
     pricePerSlotPyg: 18000,
     pricePerSlotUsd: 2.40,
     commissionPercent: 10,
-    icon: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80',
+    icon: '',
     description: 'Series exclusivas, estrenos cinematográficos y eventos en vivo.'
   }
 ];
