@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 175" width="280" height="175">
+  <defs>
+    <linearGradient id="net-card-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E50914"/>
+      <stop offset="50%" stop-color="#800000"/>
+      <stop offset="100%" stop-color="#260000"/>
+    </linearGradient>
+  </defs>
+  <rect width="280" height="175" rx="16" fill="url(#net-card-grad)"/>
+  <rect x="1" y="1" width="278" height="173" rx="15" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"/>
+  <text x="40" y="78" font-family="'Outfit', sans-serif" font-size="32" font-weight="900" fill="#ffffff" letter-spacing="-1">NETFLIX</text>
+  <text x="40" y="98" font-family="'Inter', sans-serif" font-size="12" font-weight="800" fill="#fecaca" letter-spacing="3">GIFT CARD</text>
+  <text x="24" y="148" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="800" fill="#ffffff">SALDO PREPAGO OFICIAL</text>
+  <text x="256" y="148" font-family="'Outfit', sans-serif" font-size="16" font-weight="900" fill="#ffffff" text-anchor="end">4K ULTRA HD</text>
+</svg>

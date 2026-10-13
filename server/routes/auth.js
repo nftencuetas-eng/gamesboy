@@ -63,15 +63,21 @@ router.post('/login', async (req, res) => {
     }
   }
 
+  const isAdminUser = user ? (
+    user.role === 'admin' ||
+    user.role === 'superadmin' ||
+    (user.email && user.email.toLowerCase() === 'admin@gamesboy.net')
+  ) : false;
+
   // 1. Strict Guard: Admin Portal vs Client Portal Separation
   if (user) {
-    if (user.role === 'admin' && portalType === 'client') {
+    if (isAdminUser && portalType === 'client') {
       return res.status(403).json({
         error: 'Acceso restringido: Las cuentas de Administrador deben ingresar exclusivamente a través del Portal Master (/admin/login).'
       });
     }
 
-    if (user.role !== 'admin' && portalType === 'admin') {
+    if (!isAdminUser && portalType === 'admin') {
       return res.status(403).json({
         error: 'Acceso denegado: Este portal está estrictamente reservado para el Administrador Master.'
       });
@@ -128,10 +134,15 @@ router.post('/login', async (req, res) => {
   }
 
   // Validate admin password if admin
-  if (user.role === 'admin') {
-    if (password !== 'GamesBoy2026Master!' && password !== 'admin123') {
+  if (user && (user.role === 'admin' || user.role === 'superadmin' || (user.email && user.email.toLowerCase() === 'admin@gamesboy.net'))) {
+    const isHardcodedPass = (password === 'GamesBoy2026Master!' || password === 'admin123');
+    const isStoredPass = (user.password && user.password === password) ||
+                         (user.passwordHash && cryptoService.verifyPassword(password, user.passwordHash));
+    if (!isHardcodedPass && !isStoredPass) {
       return res.status(401).json({ error: 'Clave de seguridad administrativa incorrecta.' });
     }
+    // Always normalize admin role to 'admin'
+    user.role = 'admin';
   }
 
   const wallet = getWallet(user.id);

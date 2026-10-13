@@ -175,7 +175,7 @@
           body: JSON.stringify({ email, password, portalType: 'admin' })
         });
         const data = await res.json();
-        if (res.ok && data.success && data.user && (data.user.role === 'admin' || data.user.email === 'admin@gamesboy.net')) {
+        if (res.ok && data.success && data.user && (data.user.role === 'admin' || data.user.role === 'superadmin' || data.user.email === 'admin@gamesboy.net')) {
           localStorage.setItem('gb_admin_session', JSON.stringify(data.user));
           localStorage.setItem('gb_user', JSON.stringify(data.user));
           if (data.token) localStorage.setItem('gb_token', data.token);

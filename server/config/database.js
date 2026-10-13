@@ -306,7 +306,7 @@ let db = {
     }
   ],
   users: [
-    { id: 'usr_admin', tenantId: 'tnt_gamesboy_main', name: 'Admin GamesBoy', email: 'admin@gamesboy.net', role: 'superadmin', avatar: '/assets/branding/icon.png' },
+    { id: 'usr_admin', tenantId: 'tnt_gamesboy_main', name: 'Admin GamesBoy', email: 'admin@gamesboy.net', role: 'admin', avatar: '/assets/branding/icon.png' },
     { id: 'usr_seller1', tenantId: 'tnt_gamesboy_main', name: 'Carlos_Streams', email: 'carlos@vendedor.com', role: 'seller', avatar: '/assets/branding/icon.png' },
     { id: 'usr_client1', tenantId: 'tnt_gamesboy_main', name: 'Lucas_Py', email: 'lucas@cliente.com', role: 'client', avatar: '/assets/branding/icon.png' },
     { id: 'usr_client2', tenantId: 'tnt_gamesboy_main', name: 'María López', email: 'maria@cliente.com', role: 'client', avatar: '/assets/branding/icon.png' }

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 175" width="280" height="175">
+  <defs>
+    <linearGradient id="xbox-card-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#107C10"/>
+      <stop offset="50%" stop-color="#0b460a"/>
+      <stop offset="100%" stop-color="#062206"/>
+    </linearGradient>
+  </defs>
+  <rect width="280" height="175" rx="16" fill="url(#xbox-card-grad)"/>
+  <rect x="1" y="1" width="278" height="173" rx="15" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+  <circle cx="60" cy="70" r="26" fill="#ffffff"/>
+  <path d="M48 56c5 6 12 14 12 14s7-8 12-14c4 4 6 9 6 14 0 14-11 26-26 26S26 84 26 70c0-5 2-10 6-14 3 6 10 14 10 14s3-7 6-14z" fill="#107C10"/>
+  <text x="105" y="75" font-family="'Outfit', sans-serif" font-size="24" font-weight="900" fill="#ffffff" letter-spacing="1">XBOX</text>
+  <text x="105" y="94" font-family="'Inter', sans-serif" font-size="11" font-weight="800" fill="#52ff52" letter-spacing="2">GAME PASS & CARD</text>
+  <text x="24" y="148" font-family="'JetBrains Mono', monospace" font-size="12" font-weight="800" fill="#52ff52">SERIES X|S / PC</text>
+  <text x="256" y="148" font-family="'Outfit', sans-serif" font-size="16" font-weight="900" fill="#ffffff" text-anchor="end">GIFT CARD</text>
+</svg>

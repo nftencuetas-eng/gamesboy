@@ -300,7 +300,7 @@
       "tenantId": "tnt_gamesboy_main",
       "name": "Admin GamesBoy",
       "email": "admin@gamesboy.net",
-      "role": "superadmin",
+      "role": "admin",
       "avatar": "/assets/branding/icon.png"
     },
     {
@@ -488,182 +488,156 @@
   ],
   "subscriptions": [
     {
-      "id": "sub_official_youtube_1791856569340_xg9s",
-      "serviceId": "youtube",
-      "serviceKey": "youtube",
-      "serviceName": "YouTube Premium & Music",
-      "category": "streaming",
-      "planName": "Familiar Sin Anuncios",
-      "sellerId": "usr_admin",
-      "sellerName": "GamesBoy Oficial",
-      "isOfficial": true,
-      "totalSlots": 5,
-      "availableSlots": 5,
-      "pricePerSlotPyg": 20000,
-      "pricePerSlotUsd": 2.65,
-      "credentialsEncrypted": "201533cf9fb46fde0011d119d9dea0bb:afdec48cf26503f19263a80e428341e4afb65f0e43cd843ac954ad7d3dd617ecb1e26e6330b88448d60d420187e69209",
-      "pinsEncrypted": "afceee6a95c62ba5f51c6943cfc8ab61:b3c084d4275b4a0777a84f3b222bb3b4a3ec004a0b3cf769691555dfbd92fe7bf4c23f5ec0bc3a40fcde8c6298815a478b5797fb09697381503630f07ab8e5273b3481083f6a0c7ce0969289708a60fe44763362409460bf723562ec6432b845cc330af797668e3de7a0eac7534d489f4c0b600467f24789871007d04fe097c74e6f56cac0f2bfdd69b15016c5a65ead3c7e59156d986e9203cf7fb2df6a01c09a3a38625fa638a682c8db2141555c4df4ea82fea99ed1c2cc4885f31f581287f2cac2148df89787ebe7e5c7e132e20f1607df1c2065002c757b759719f3565d933bbe948ecc860921d06cabd2cd289fd97b60f0f8d0661514bc6c88bb7788f3ae51028ba70c6ecd3189779b142bebc3597bcc1798ec4fb3f98d82ef7689879d51dd1cc2cbf6b6ef2c4375cd16199fab125e91ab8a262ecd271e1232bd3f4a643fea08c190e7413001693c824646e35ecd39a8a36c5001cf3b291f27b77823de06a67bcb9106d3e9921b0d7267b82930921084bb392d608f3c76b1c3ae4e4e6ef7d62e2a24ec7213889bf3e6bf92f3bc06f04d424f67091697aecd9440edc1db00bebbe880f2d497981922cdff4b94c93bc243616e3e16fbb671f14d34d27467",
-      "accountExpirationDate": "2026-11-30",
-      "instructions": "Invitación a grupo familiar enviada por correo. Acepta con tu cuenta.",
-      "status": "active",
-      "createdAt": "2026-10-13T01:56:09.340Z"
-    },
-    {
-      "id": "sub_official_netflix_1791856215542",
-      "serviceId": "netflix",
-      "serviceKey": "netflix",
-      "serviceName": "Netflix Premium 4K HDR",
-      "category": "streaming",
-      "planName": "Ultra HD 4K (4 Pantallas)",
-      "sellerId": "usr_admin",
-      "sellerName": "GamesBoy Oficial",
-      "isOfficial": true,
-      "totalSlots": 5,
-      "availableSlots": 5,
-      "pricePerSlotPyg": 25000,
-      "pricePerSlotUsd": 4.67,
-      "credentialsEncrypted": "a0a9808e78c3247be50df4a24f555ac8:19e893d32d6652d3b1659905afd52813e70ee5e3e772882bf152f35a1b6dd424a96498d8da8411f0725750863546ef25",
-      "pinsEncrypted": "2d556678539793b7ba0e0a55d04d0a6a:0e3d936ca0a6ec0061ff68bc8375cb61d625f02593d788b41403962afe99336b7200f951eed5cdb7a143d08e423620809ac279175dcc16e553190db454d7aa7035ac1ea9bc55f84a0b5dd452bdd3d6f5921985fbcb23fbb1098d25315ddf0bd1a19a75a7137e4cfdf183312d9fb5e36b00b7e1a01f26f12f02f3943467697ac0c77d3490de20c330e7b3860e9451da228d7cd41dbffb7a51ce09e2d60930c0548127524247be6a4f0a616854199cbc878840e6e859a6b521d1b4efd8a4e71ecfe5242897904262d9afa0946200c763b4589633309ea96f81f9399baa4257c4d6b303321e1de5f08e35dc4a7d34cf45ba6b3c31925c8e8d9ad2cbf91f3a7cc8114cd3a45c489dbfd28f76da7a73b566fd0bbd933392b97da02939723c451388aec16d9918299ac90eec2e908866e02eec07e03ab0634c47272ba88772fb5a5b3034098c227057a23f57d9364e042304a8f923e625c508e2a4784077b1a97c389fd3cb29c34a5e97225c2e215d36aa9e9184e5a5c02fa81ac80abb6d2cd3f438e4311b88ef80a5ecd991563328b34c6a1d63f73f7104e2414f46ba3518875a58a8a77723fbb8ca69017d635100dba17d2f2ebb1191ae6cef749204a3e18d5ebf4a5ab8b4fd43f0dc3e2103cabc2550ae00",
-      "accountExpirationDate": "2026-12-31",
-      "instructions": "Ingresa con el correo y contraseña. Usa exclusivamente tu Perfil y PIN asignado.",
-      "status": "active",
-      "createdAt": "2026-10-13T01:50:15.543Z"
-    },
-    {
       "id": "sub_netflix_official",
+      "tenantId": "tnt_gamesboy_main",
       "sellerId": "usr_admin",
       "sellerName": "GamesBoy Oficial",
       "isOfficial": true,
       "serviceName": "Netflix Premium 4K",
+      "serviceKey": "netflix",
       "category": "streaming",
-      "planName": "Ultra HD 4K (4 Pantallas)",
-      "totalSlots": 5,
-      "availableSlots": 4,
-      "pricePerSlotUsd": 4.99,
-      "credentialsEncrypted": "5f0ae9cd82c021570563568c2f26936b:c59f43846e198dc1261f1eee535d70b34b0e5c7a72a24ddebdb9e9268889da3f36c4b648a1a42cbd5ef3bcdec5dc4b71",
-      "pinsEncrypted": "f25c1af28fa9d6a12083678d9383f787:a81160a422340a72d933e8a175b4d7aa66bc1676a2ca3866539c558e90028c1eed4c2c513882aac7dd2071d7a219e3621871589157c0dfd7c8888f83cd9f7029",
-      "instructions": "Ingresa con el correo y contraseña provistos. Usa exclusivamente tu Perfil y PIN asignado. Prohibido cambiar credenciales.",
+      "planName": "Ultra HD 4K (Perfil Individual)",
+      "totalSlots": 4,
+      "availableSlots": 3,
+      "pricePerSlotUsd": 4,
+      "credentialsEncrypted": "netflix.vip@gamesboy.net:::StreamPass2026!",
+      "pinsEncrypted": "{\"1\": \"1244\", \"2\": \"5821\", \"3\": \"9032\", \"4\": \"7110\"}",
+      "instructions": "Ingresa en la app de Netflix con el correo y contraseña provistos. Utiliza exclusivamente el Perfil asignado y tu PIN de seguridad de 4 dígitos.",
       "status": "active",
-      "createdAt": "2026-10-11T00:50:04.616Z"
+      "createdAt": "2026-10-13T21:51:18.454Z"
     },
     {
       "id": "sub_spotify_official",
+      "tenantId": "tnt_gamesboy_main",
       "sellerId": "usr_admin",
       "sellerName": "GamesBoy Oficial",
       "isOfficial": true,
       "serviceName": "Spotify Premium Familiar",
-      "category": "streaming",
+      "serviceKey": "spotify",
+      "category": "music",
       "planName": "Plan Familiar 6 Cuentas",
       "totalSlots": 5,
       "availableSlots": 4,
-      "pricePerSlotUsd": 3.99,
-      "credentialsEncrypted": "bae4b66d34c09186e9a6dd95951e28d4:f26660281612c1fcc446d2526ccdd20dcfeb310837339f7261120977fdfe1fd0a3499aa6cd2df2ce0c448243d22ba03834d7d0f197bbe2936f93295f509a6947f1208cde170b8f372cc15aae88f1e930",
-      "pinsEncrypted": "87d7a4f7a7fec63a40f3ef6645d79fee:557d99f6013ac626150892e56cd5e6c5",
-      "instructions": "Recibirás un enlace de invitación oficial para activar Spotify Premium en tu propia cuenta personal.",
+      "pricePerSlotUsd": 2.67,
+      "credentialsEncrypted": "https://spotify.com/family/join/invite/gb2026official:::Invitar a tu cuenta propia",
+      "pinsEncrypted": "{}",
+      "instructions": "Recibirás un enlace de invitación oficial para activar Spotify Premium directamente en tu propia cuenta personal.",
       "status": "active",
-      "createdAt": "2026-10-12T00:50:04.616Z"
+      "createdAt": "2026-10-13T21:51:18.454Z"
     },
     {
       "id": "sub_disney_official",
+      "tenantId": "tnt_gamesboy_main",
       "sellerId": "usr_admin",
       "sellerName": "GamesBoy Oficial",
       "isOfficial": true,
       "serviceName": "Disney+ Premium & Star+",
+      "serviceKey": "disney",
       "category": "streaming",
-      "planName": "Plan Premium 4K HDR",
+      "planName": "Plan Premium 4K HDR con ESPN",
       "totalSlots": 4,
       "availableSlots": 2,
-      "pricePerSlotUsd": 4.99,
-      "credentialsEncrypted": "c767dd565cb57d8a7240d8c4d1e9809f:e236e6dfa7ac0031b2679015a8ae59a6e097d87fb06b8891fa8132dbfa846c66cb8aec229703ac2253f73e962b135ae0",
-      "pinsEncrypted": "6a88340dc267636911e25605296a9152:a0ff2d4bab8c460002df26f39d40609d61efc8bc82857314c11c91b88d1ece7d979f687778d397b721560d52d97b05bc",
-      "instructions": "Acceso al catálogo completo de Disney, Marvel, Star Wars y deportes de ESPN.",
+      "pricePerSlotUsd": 3.33,
+      "credentialsEncrypted": "disney.master@gamesboy.net:::MagicKingdom2026!",
+      "pinsEncrypted": "{\"1\": \"4091\", \"2\": \"8832\", \"3\": \"1944\", \"4\": \"6211\"}",
+      "instructions": "Acceso completo al catálogo unificado de Disney+, Marvel, Star Wars y todos los eventos en vivo de ESPN.",
       "status": "active",
-      "createdAt": "2026-10-12T12:50:04.617Z"
+      "createdAt": "2026-10-13T21:51:18.454Z"
     },
     {
       "id": "sub_max_official",
+      "tenantId": "tnt_gamesboy_main",
       "sellerId": "usr_admin",
       "sellerName": "GamesBoy Oficial",
       "isOfficial": true,
       "serviceName": "Max (HBO Max) 4K",
+      "serviceKey": "max",
       "category": "streaming",
       "planName": "Platino 4K Dolby Atmos",
       "totalSlots": 3,
       "availableSlots": 2,
-      "pricePerSlotUsd": 4.99,
-      "credentialsEncrypted": "4ed57ba31f71743ee69211f4da14bb5e:b7b4febf3bc2c6565860bf64c6287574ca829197d346eb93d327119d6acddf3b33444529ab4622f17ec863d1e47c82b0",
-      "pinsEncrypted": "687ace5ff9abd69c5cefe616a837c9f0:989474ae1f6b09758539e65e45fda0386a7879339c4ca83e48e4263b0552920a7ef0e88c281bc91436743a91318500a1",
-      "instructions": "Disfruta de películas de Warner Bros, HBO Originales y Champions League.",
+      "pricePerSlotUsd": 3.33,
+      "credentialsEncrypted": "max.vip@gamesboy.net:::HboMaxMaster2026!",
+      "pinsEncrypted": "{\"1\": \"3311\", \"2\": \"4422\", \"3\": \"5533\"}",
+      "instructions": "Ingresa con las credenciales oficiales y selecciona tu perfil asignado. Disfruta de la Champions League y series de HBO.",
       "status": "active",
-      "createdAt": "2026-10-12T14:50:04.617Z"
+      "createdAt": "2026-10-13T21:51:18.454Z"
     },
     {
       "id": "sub_youtube_official",
+      "tenantId": "tnt_gamesboy_main",
       "sellerId": "usr_admin",
       "sellerName": "GamesBoy Oficial",
       "isOfficial": true,
       "serviceName": "YouTube Premium & Music",
+      "serviceKey": "youtube",
       "category": "streaming",
-      "planName": "Familiar Sin Anuncios",
+      "planName": "Plan Premium Sin Anuncios",
       "totalSlots": 5,
       "availableSlots": 3,
-      "pricePerSlotUsd": 3.99,
-      "credentialsEncrypted": "770ca6b2264758a3ffc550aa77a762aa:b0f9a366f40dded6a5ea0ec9b65b6b95fcc69fb4a0ae3270909b4770c2f79f14d15e424a406a551ba1e8ed8cdc168f79764b2e18b41137a57c3aa1f5f387ee87a3f0d39b804406f62fca6334f3f7f4c1",
-      "pinsEncrypted": "45d733979b65e9bcf82766f9bffaf2f8:55dd40e26fbe045a28a00e4fddf15cf5",
-      "instructions": "YouTube sin anuncios, descargas offline y YouTube Music en tu propia cuenta de Google.",
+      "pricePerSlotUsd": 2.93,
+      "credentialsEncrypted": "yt.family@gamesboy.net:::ZeroAds2026!",
+      "pinsEncrypted": "{}",
+      "instructions": "Activación inmediata para disfrutar de videos sin anuncios, reproducción en segundo plano y YouTube Music.",
       "status": "active",
-      "createdAt": "2026-10-12T18:50:04.617Z"
+      "createdAt": "2026-10-13T21:51:18.454Z"
     },
     {
       "id": "sub_crunchyroll_official",
+      "tenantId": "tnt_gamesboy_main",
       "sellerId": "usr_admin",
       "sellerName": "GamesBoy Oficial",
       "isOfficial": true,
       "serviceName": "Crunchyroll Mega Fan",
-      "category": "streaming",
-      "planName": "Mega Fan 4 Pantallas",
+      "serviceKey": "crunchyroll",
+      "category": "anime",
+      "planName": "Mega Fan 4 Pantallas Sin Anuncios",
       "totalSlots": 4,
       "availableSlots": 3,
-      "pricePerSlotUsd": 3.99,
-      "credentialsEncrypted": "0462314920f282b5c8a104a1a999e088:b31c50dcc2049357b5e645f9c283c638a0e33cdac77cc6d3be5e36409e5dd067be7020b2231c32429f9f6ec3e850f923",
-      "pinsEncrypted": "8f94c613a9e425017c43583101d6e513:ba016d05142ae4aa1939ded6b7a07fe35ddb2adc2ba4c7a3993948134d95b2a1ebbc6e81f17554711dbd9a1b5d76ed4d",
-      "instructions": "Anime en simulcast desde Japón sin anuncios en calidad 1080p/4K.",
+      "pricePerSlotUsd": 2.67,
+      "credentialsEncrypted": "anime.mega@gamesboy.net:::CrunchyPass2026!",
+      "pinsEncrypted": "{}",
+      "instructions": "Disfruta de anime en simultáneo 1080p sin anuncios y estrenos simulcast directos desde Japón.",
       "status": "active",
-      "createdAt": "2026-10-12T19:50:04.617Z"
+      "createdAt": "2026-10-13T21:51:18.454Z"
     },
     {
-      "id": "sub_appletv_official",
+      "id": "sub_prime_official",
+      "tenantId": "tnt_gamesboy_main",
       "sellerId": "usr_admin",
       "sellerName": "GamesBoy Oficial",
       "isOfficial": true,
-      "serviceName": "Apple TV+ 4K",
+      "serviceName": "Amazon Prime Video 4K",
+      "serviceKey": "prime",
       "category": "streaming",
-      "planName": "Suscripción Compartida 4K",
-      "totalSlots": 3,
-      "availableSlots": 1,
-      "pricePerSlotUsd": 4.99,
-      "credentialsEncrypted": "8858ef15913adca756a164ef874756d2:2e9b6b7dbf2a6c88d86095ec8bafa7e70b87fffc4e394807e39ed4c1bb4ad5901832cba2625c5fbef06f163abae04111",
-      "pinsEncrypted": "9d35f085cd002358a644393fc3774104:402ad88fb8b4fbe5b79a735de533b2cb519d5eb7ad1b71997ce970f4dc8f1e617d2df8300acc92561b61148008cad0a9",
-      "instructions": "Acceso a series galardonadas de Apple Original en todos tus dispositivos.",
-      "status": "active",
-      "createdAt": "2026-10-12T20:56:44.618Z"
-    },
-    {
-      "id": "sub_paramount_official",
-      "sellerId": "usr_admin",
-      "sellerName": "GamesBoy Oficial",
-      "isOfficial": true,
-      "serviceName": "Paramount+ Premium",
-      "category": "streaming",
-      "planName": "Plan Estándar 3 Pantallas",
+      "planName": "Prime Video Ultra HD",
       "totalSlots": 3,
       "availableSlots": 2,
-      "pricePerSlotUsd": 3.99,
-      "credentialsEncrypted": "cc59744df5bc89e1881a829fa44977be:9bf18018dd1172ffb72920a4b943b9fea34b271da74e5cd2efd6fef3d88e6823f8b0885cda252482d18074d4468488074a579efb5b96d7b155e9cc5ae088aa8d",
-      "pinsEncrypted": "633d7bab4065f8c8aceb568f4f985b13:706287a95041fbdae58964bb72ebb326d23b28985b234ed9dd40960fa0606bfede4fcb402af35530fde8d57688d8676c",
-      "instructions": "Películas de estreno, deportes en vivo y series exclusivas de Paramount.",
+      "pricePerSlotUsd": 2.67,
+      "credentialsEncrypted": "prime.vip@gamesboy.net:::PrimePass2026!",
+      "pinsEncrypted": "{\"1\": \"2233\", \"2\": \"4455\", \"3\": \"6677\"}",
+      "instructions": "Ingresa con las credenciales provistas y selecciona tu perfil asignado.",
       "status": "active",
-      "createdAt": "2026-10-12T22:03:24.618Z"
+      "createdAt": "2026-10-13T21:51:18.454Z"
+    },
+    {
+      "id": "sub_chatgpt_official",
+      "tenantId": "tnt_gamesboy_main",
+      "sellerId": "usr_admin",
+      "sellerName": "GamesBoy Oficial",
+      "isOfficial": true,
+      "serviceName": "ChatGPT Plus & AI",
+      "serviceKey": "chatgpt",
+      "category": "work_tools",
+      "planName": "Plus GPT-4o & Canvas",
+      "totalSlots": 2,
+      "availableSlots": 1,
+      "pricePerSlotUsd": 4.67,
+      "credentialsEncrypted": "gpt.plus@gamesboy.net:::OpenAiMaster2026!",
+      "pinsEncrypted": "{}",
+      "instructions": "Acceso compartido seguro a ChatGPT Plus con GPT-4o, Canvas y generación DALL-E 3.",
+      "status": "active",
+      "createdAt": "2026-10-13T21:51:18.454Z"
     }
   ],
   "user_slots": [
@@ -683,313 +657,325 @@
   ],
   "store_products": [
     {
-      "id": "prod_game_cyberpunk",
-      "title": "Cyberpunk 2077: Phantom Liberty",
+      "id": "prod_game_fc25",
+      "tenantId": "tnt_gamesboy_main",
+      "title": "EA SPORTS FC 25",
       "category": "digital_game",
-      "platform": "PS5 • Xbox Series X • PC",
-      "genre": "RPG / Cyberpunk",
-      "primaryPricePyg": 210000,
-      "secondaryPricePyg": 135000,
-      "primaryPriceUsd": 28,
-      "secondaryPriceUsd": 18,
-      "pricePyg": 210000,
-      "priceUsd": 28,
-      "badge": "SIN STOCK",
-      "coverUrl": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80",
-      "coverImage": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80",
-      "screenshots": [
-        "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "description": "Adéntrate en Dogtown en un thriller de espionaje de alta tecnología para salvar a la presidenta de los NUSA.",
-      "isAvailable": false,
-      "stockCount": 0
-    },
-    {
-      "id": "prod_game_elden_ring",
-      "title": "Elden Ring: Shadow of the Erdtree",
-      "category": "digital_game",
-      "platform": "PS5 • Xbox • PC",
-      "genre": "Action RPG / Souls",
-      "primaryPricePyg": 280000,
-      "secondaryPricePyg": 175000,
-      "primaryPriceUsd": 37.33,
-      "secondaryPriceUsd": 23.33,
-      "pricePyg": 280000,
-      "priceUsd": 37.33,
-      "badge": "OBRA MAESTRA",
-      "coverUrl": "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80",
-      "coverImage": "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80",
-      "screenshots": [
-        "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "description": "Explora la Tierra Sombría en la aclamada expansión del GOTY Elden Ring con nuevos jefes y armas.",
+      "platform": "PS5 / PS4",
+      "genre": "Deportes / Fútbol",
+      "priceUsd": 38.67,
+      "pricePyg": 290000,
+      "primaryPriceUsd": 38.67,
+      "primaryPricePyg": 290000,
+      "secondaryPriceUsd": 25.33,
+      "secondaryPricePyg": 190000,
+      "badge": "ENTREGA INMEDIATA",
+      "icon": "⚽",
+      "brandTheme": "psn",
+      "description": "La experiencia futbolística más avanzada con FC IQ y modo Rush 5v5. Incluye versiones de PlayStation 4 y PlayStation 5.",
+      "coverUrl": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80",
+      "coverImage": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80",
       "isAvailable": true,
-      "stockCount": 14
-    },
-    {
-      "id": "prod_game_gow_rag",
-      "title": "God of War Ragnarök",
-      "category": "digital_game",
-      "platform": "PS5 • PS4 • PC",
-      "genre": "Acción / Aventura",
-      "primaryPricePyg": 235000,
-      "secondaryPricePyg": 150000,
-      "primaryPriceUsd": 31.33,
-      "secondaryPriceUsd": 20,
-      "pricePyg": 235000,
-      "priceUsd": 31.33,
-      "badge": "CALIDAD OFICIAL",
-      "coverUrl": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
-      "coverImage": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80",
-      "screenshots": [
-        "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "description": "Únete a Kratos y Atreus en un viaje mítico a través de los Nueve Reinos antes del temido Ragnarök.",
-      "isAvailable": true,
-      "stockCount": 10
-    },
-    {
-      "id": "prod_game_wukong",
-      "title": "Black Myth: Wukong",
-      "category": "digital_game",
-      "platform": "PS5 • PC Steam",
-      "genre": "Action RPG / Souls",
-      "primaryPricePyg": 275000,
-      "secondaryPricePyg": 175000,
-      "primaryPriceUsd": 36.67,
-      "secondaryPriceUsd": 23.33,
-      "pricePyg": 275000,
-      "priceUsd": 36.67,
-      "badge": "ÉXITO MUNDIAL",
-      "coverUrl": "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80",
-      "coverImage": "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80",
-      "screenshots": [
-        "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "description": "Encarna al Predestinado en un viaje colosal por la mitología china, dominando las artes del bastón mágico y transformaciones legendarias.",
-      "isAvailable": true,
-      "stockCount": 18
-    },
-    {
-      "id": "prod_game_gta6",
-      "title": "Grand Theft Auto VI",
-      "category": "digital_game",
-      "platform": "PS5 • Xbox Series X",
-      "genre": "Mundo Abierto",
-      "primaryPricePyg": 390000,
-      "secondaryPricePyg": 245000,
-      "primaryPriceUsd": 52,
-      "secondaryPriceUsd": 32.67,
-      "pricePyg": 390000,
-      "priceUsd": 52,
-      "badge": "PRE-VENTA EXCLUSIVA",
-      "coverUrl": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
-      "coverImage": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
-      "screenshots": [
-        "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "description": "Reserva ya tu clave o cuenta oficial para la mayor experiencia de la historia del videojuego en el estado de Leonida y Vice City.",
-      "isAvailable": true,
-      "stockCount": 50
+      "stockCount": 15,
+      "codes": [
+        "FC25-PS5-9988-7744-1122",
+        "FC25-PS5-3344-5566-7788"
+      ]
     },
     {
       "id": "prod_game_cod_bo6",
+      "tenantId": "tnt_gamesboy_main",
       "title": "Call of Duty: Black Ops 6",
       "category": "digital_game",
-      "platform": "PS5 • Xbox • PC",
+      "platform": "PS5 / PC",
       "genre": "Shooter / Acción",
-      "primaryPricePyg": 340000,
-      "secondaryPricePyg": 215000,
-      "primaryPriceUsd": 45.33,
-      "secondaryPriceUsd": 28.67,
-      "pricePyg": 340000,
-      "priceUsd": 45.33,
-      "badge": "NUEVO LANZAMIENTO",
+      "priceUsd": 42.67,
+      "pricePyg": 320000,
+      "primaryPriceUsd": 42.67,
+      "primaryPricePyg": 320000,
+      "secondaryPriceUsd": 28,
+      "secondaryPricePyg": 210000,
+      "badge": "TOP VENTAS",
+      "icon": "🎯",
+      "brandTheme": "steam",
+      "description": "Campaña de espionaje alucinante ambientada en los años 90, multijugador frenético con Omnimovement y el regreso de Zombies por rondas.",
       "coverUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
       "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
-      "screenshots": [
-        "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "description": "La verdad miente. Una apasionante campaña de espionaje, la mejor experiencia multijugador y el regreso de Zombis por rondas.",
       "isAvailable": true,
-      "stockCount": 20
+      "stockCount": 12,
+      "codes": [
+        "BO6-PS5-1122-3344-5566"
+      ]
+    },
+    {
+      "id": "prod_game_gta6",
+      "tenantId": "tnt_gamesboy_main",
+      "title": "Grand Theft Auto VI (Pre-Order)",
+      "category": "digital_game",
+      "platform": "PS5 / Xbox Series",
+      "genre": "Mundo Abierto",
+      "priceUsd": 46.67,
+      "pricePyg": 350000,
+      "primaryPriceUsd": 46.67,
+      "primaryPricePyg": 350000,
+      "secondaryPriceUsd": 32,
+      "secondaryPricePyg": 240000,
+      "badge": "RESERVA OFICIAL",
+      "icon": "🌴",
+      "brandTheme": "psn",
+      "description": "Reserva anticipada con entrega garantizada el día 1 de lanzamiento oficial. Bienvenido al estado de Leonida y Vice City.",
+      "coverUrl": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
+      "coverImage": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
+      "isAvailable": true,
+      "stockCount": 20,
+      "codes": [
+        "GTA6-PRE-7788-9900-1122"
+      ]
     },
     {
       "id": "prod_game_spiderman2",
+      "tenantId": "tnt_gamesboy_main",
       "title": "Marvel's Spider-Man 2",
       "category": "digital_game",
-      "platform": "PlayStation 5",
-      "genre": "Acción / Aventura",
-      "primaryPricePyg": 260000,
-      "secondaryPricePyg": 165000,
-      "primaryPriceUsd": 34.67,
-      "secondaryPriceUsd": 22,
-      "pricePyg": 260000,
-      "priceUsd": 34.67,
-      "badge": "EXCLUSIVO PS5",
+      "platform": "PS5 Exclusivo",
+      "genre": "Aventura / Acción",
+      "priceUsd": 33.33,
+      "pricePyg": 250000,
+      "primaryPriceUsd": 33.33,
+      "primaryPricePyg": 250000,
+      "secondaryPriceUsd": 21.33,
+      "secondaryPricePyg": 160000,
+      "badge": "PS5 EXCLUSIVE",
+      "icon": "🕷️",
+      "brandTheme": "psn",
+      "description": "Peter Parker y Miles Morales se enfrentan a la prueba definitiva con la llegada de Venom y Kraven el Cazador a Nueva York.",
       "coverUrl": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
       "coverImage": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
-      "screenshots": [
-        "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "description": "Los Spider-Men Peter Parker y Miles Morales regresan para una aventura aclamada en PS5.",
       "isAvailable": true,
-      "stockCount": 12
+      "stockCount": 10,
+      "codes": [
+        "SP2-PS5-4455-6677-8899"
+      ]
     },
     {
-      "id": "prod_game_fc25",
-      "title": "EA SPORTS FC 25",
+      "id": "prod_game_gow_rag",
+      "tenantId": "tnt_gamesboy_main",
+      "title": "God of War Ragnarök",
       "category": "digital_game",
-      "platform": "PS5 / PS4 / PC",
-      "genre": "Deportes / Fútbol",
-      "primaryPricePyg": 295000,
-      "secondaryPricePyg": 185000,
-      "primaryPriceUsd": 39.33,
-      "secondaryPriceUsd": 24.67,
-      "pricePyg": 295000,
-      "priceUsd": 39.33,
-      "badge": "MÁS VENDIDO",
+      "platform": "PS5 / PS4",
+      "genre": "Acción Épica",
+      "priceUsd": 30.67,
+      "pricePyg": 230000,
+      "primaryPriceUsd": 30.67,
+      "primaryPricePyg": 230000,
+      "secondaryPriceUsd": 20,
+      "secondaryPricePyg": 150000,
+      "badge": "OBRA MAESTRA",
+      "icon": "🪓",
+      "brandTheme": "psn",
+      "description": "Kratos y Atreus deben viajar a través de los Nueve Reinos para encontrar respuestas mientras las fuerzas asgardianas se preparan para la guerra.",
+      "coverUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+      "isAvailable": true,
+      "stockCount": 14,
+      "codes": [
+        "GOWR-PS5-9988-1122-3344"
+      ]
+    },
+    {
+      "id": "prod_game_wukong",
+      "tenantId": "tnt_gamesboy_main",
+      "title": "Black Myth: Wukong",
+      "category": "digital_game",
+      "platform": "PS5 / PC",
+      "genre": "Action RPG",
+      "priceUsd": 36,
+      "pricePyg": 270000,
+      "primaryPriceUsd": 36,
+      "primaryPricePyg": 270000,
+      "secondaryPriceUsd": 23.33,
+      "secondaryPricePyg": 175000,
+      "badge": "GOTY NOMINEE",
+      "icon": "🐒",
+      "brandTheme": "steam",
+      "description": "Un RPG de acción basado en la mitología china y la clásica novela Viaje al Oeste. Gráficos de última generación en Unreal Engine 5.",
+      "coverUrl": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
+      "coverImage": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80",
+      "isAvailable": true,
+      "stockCount": 8,
+      "codes": [
+        "WUK-PS5-5566-7788-9900"
+      ]
+    },
+    {
+      "id": "prod_game_elden_ring",
+      "tenantId": "tnt_gamesboy_main",
+      "title": "Elden Ring: Shadow of the Erdtree",
+      "category": "digital_game",
+      "platform": "PS5 / PC",
+      "genre": "Soulslike",
+      "priceUsd": 34.67,
+      "pricePyg": 260000,
+      "primaryPriceUsd": 34.67,
+      "primaryPricePyg": 260000,
+      "secondaryPriceUsd": 22.67,
+      "secondaryPricePyg": 170000,
+      "badge": "JUEGO DEL AÑO",
+      "icon": "⚔️",
+      "brandTheme": "psn",
+      "description": "La expansión definitiva del aclamado juego de FromSoftware. Nuevos jefes, magias, armas y la oscura historia de Miquella.",
+      "coverUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+      "coverImage": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
+      "isAvailable": true,
+      "stockCount": 11,
+      "codes": [
+        "ELDER-PS5-3344-5566-7788"
+      ]
+    },
+    {
+      "id": "prod_game_rdr2",
+      "tenantId": "tnt_gamesboy_main",
+      "title": "Red Dead Redemption 2",
+      "category": "digital_game",
+      "platform": "PS4 / PS5 / PC",
+      "genre": "Mundo Abierto",
+      "priceUsd": 24,
+      "pricePyg": 180000,
+      "primaryPriceUsd": 24,
+      "primaryPricePyg": 180000,
+      "secondaryPriceUsd": 16,
+      "secondaryPricePyg": 120000,
+      "badge": "IMPERDIBLE",
+      "icon": "🤠",
+      "brandTheme": "psn",
+      "description": "La épica aventura de Arthur Morgan y la banda de Van der Linde a través del salvaje oeste americano.",
       "coverUrl": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80",
       "coverImage": "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80",
-      "screenshots": [
-        "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80"
-      ],
-      "description": "EA SPORTS FC 25 te ofrece las mejores competiciones, clubes y futbolistas del mundo. Cuenta digital primaria y secundaria con entrega rápida.",
       "isAvailable": true,
-      "stockCount": 15
+      "stockCount": 16,
+      "codes": [
+        "RDR2-PS5-8899-0011-2233"
+      ]
     },
     {
       "id": "gc_psn_10",
-      "title": "PlayStation Store Gift Card",
+      "tenantId": "tnt_gamesboy_main",
+      "title": "PlayStation Store Gift Card $10 USD",
       "category": "gift_card",
       "platform": "PlayStation",
       "priceUsd": 10,
-      "badge": "OFICIAL PSN",
-      "icon": "🟦",
+      "pricePyg": 80000,
+      "badge": "CANJE INMEDIATO",
+      "icon": "🎮",
       "brandTheme": "psn",
-      "description": "Tarjeta oficial de PlayStation Network con entrega digital de código PIN.",
+      "description": "Código oficial de $10 USD para canjear saldo en cualquier cuenta de PlayStation Store región USA o LatAm.",
+      "coverUrl": "/assets/giftcards/playstation.svg",
+      "coverImage": "/assets/giftcards/playstation.svg",
+      "isAvailable": true,
       "stockCount": 25,
       "codes": [
-        "PSN-10-8844-3312-8841",
-        "PSN-10-1123-5599-2244"
+        "PSN-10-AABB-CCDD-EEFF",
+        "PSN-10-1122-3344-5566"
+      ]
+    },
+    {
+      "id": "gc_steam_10",
+      "tenantId": "tnt_gamesboy_main",
+      "title": "Steam Wallet Card $10 USD",
+      "category": "gift_card",
+      "platform": "Steam",
+      "priceUsd": 10,
+      "pricePyg": 80000,
+      "badge": "GLOBAL PC",
+      "icon": "🕹️",
+      "brandTheme": "steam",
+      "description": "Código de recarga de $10 USD para tu cartera de Steam en PC o Steam Deck. Sin fecha de vencimiento.",
+      "coverUrl": "/assets/giftcards/steam.svg",
+      "coverImage": "/assets/giftcards/steam.svg",
+      "isAvailable": true,
+      "stockCount": 30,
+      "codes": [
+        "STM-10-ABCD-EFGH-IJKL"
       ]
     },
     {
       "id": "gc_xbox_10",
-      "title": "Xbox Gift Card",
+      "tenantId": "tnt_gamesboy_main",
+      "title": "Xbox Gift Card $10 USD",
       "category": "gift_card",
       "platform": "Xbox",
       "priceUsd": 10,
-      "badge": "OFICIAL XBOX",
-      "icon": "🟩",
+      "pricePyg": 80000,
+      "badge": "MICROSOFT XBOX",
+      "icon": "💚",
       "brandTheme": "xbox",
-      "description": "Saldo oficial para compras de juegos, pases y complementos en Microsoft Store y Xbox.",
+      "description": "Tarjeta prepaga oficial de $10 USD para la tienda Microsoft Xbox Series X|S, One y PC Windows.",
+      "coverUrl": "/assets/giftcards/xbox.svg",
+      "coverImage": "/assets/giftcards/xbox.svg",
+      "isAvailable": true,
       "stockCount": 20,
       "codes": [
-        "XBOX-10-GPU1-9988-2233",
-        "XBOX-10-GPU1-5544-7766"
+        "XBOX-10-1122-3344-5566"
       ]
     },
     {
       "id": "gc_nintendo_20",
-      "title": "Nintendo eShop Card",
+      "tenantId": "tnt_gamesboy_main",
+      "title": "Nintendo eShop Card $20 USD",
       "category": "gift_card",
       "platform": "Nintendo",
       "priceUsd": 20,
-      "badge": "OFICIAL SWITCH",
-      "icon": "🔴",
+      "pricePyg": 160000,
+      "badge": "NINTENDO SWITCH",
+      "icon": "🍄",
       "brandTheme": "nintendo",
-      "description": "Canjea juegos digitales y DLCs en la Nintendo eShop para Nintendo Switch.",
-      "stockCount": 15,
+      "description": "Saldo de $20 USD para adquirir títulos en la eShop de Nintendo Switch, Switch Lite y OLED.",
+      "coverUrl": "/assets/giftcards/nintendo.svg",
+      "coverImage": "/assets/giftcards/nintendo.svg",
+      "isAvailable": true,
+      "stockCount": 18,
       "codes": [
-        "NIN-20-8899-2211-4433",
-        "NIN-20-5577-1133-9988"
-      ]
-    },
-    {
-      "id": "gc_steam_5",
-      "title": "Steam Wallet Card",
-      "category": "gift_card",
-      "platform": "Steam",
-      "priceUsd": 5,
-      "badge": "ENTREGA INMEDIATA",
-      "icon": "🎮",
-      "brandTheme": "steam",
-      "description": "Añade fondos a tu billetera de Steam para comprar juegos de PC y cosméticos.",
-      "stockCount": 30,
-      "codes": [
-        "STEAM-5-9821-KLA9-9921",
-        "STEAM-5-4412-ZZMA-7712"
+        "NIN-20-9988-7766-5544"
       ]
     },
     {
       "id": "gc_googleplay_10",
-      "title": "Google Play Gift Card",
+      "tenantId": "tnt_gamesboy_main",
+      "title": "Google Play Gift Card $10 USD",
       "category": "gift_card",
       "platform": "Google Play",
       "priceUsd": 10,
-      "badge": "ANDROID & APPS",
+      "pricePyg": 80000,
+      "badge": "ANDROID APPS",
       "icon": "📱",
       "brandTheme": "googleplay",
-      "description": "Saldo para juegos móviles, suscripciones y compras dentro de apps en Google Play.",
-      "stockCount": 25,
+      "description": "Recarga inmediata para comprar diamantes, pases de batalla y suscripciones en Google Play.",
+      "coverUrl": "/assets/giftcards/googleplay.svg",
+      "coverImage": "/assets/giftcards/googleplay.svg",
+      "isAvailable": true,
+      "stockCount": 22,
       "codes": [
-        "GPLAY-10-8899-2233-4455",
-        "GPLAY-10-1122-3344-5566"
+        "GPLAY-10-5566-7788-9900"
       ]
     },
     {
       "id": "gc_apple_25",
-      "title": "Apple Gift Card",
+      "tenantId": "tnt_gamesboy_main",
+      "title": "Apple Gift Card $25 USD",
       "category": "gift_card",
       "platform": "Apple",
       "priceUsd": 25,
-      "badge": "APP STORE & ICLOUD",
+      "pricePyg": 200000,
+      "badge": "APP STORE",
       "icon": "🍎",
       "brandTheme": "apple",
-      "description": "Todo lo relacionado con Apple: apps, juegos, música, iCloud y suscripciones.",
-      "stockCount": 12,
+      "description": "Válido para aplicaciones, juegos, almacenamiento iCloud y compras en la App Store USA.",
+      "coverUrl": "/assets/giftcards/apple.svg",
+      "coverImage": "/assets/giftcards/apple.svg",
+      "isAvailable": true,
+      "stockCount": 15,
       "codes": [
-        "APPLE-25-8833-2299-1144",
-        "APPLE-25-5566-7788-9900"
-      ]
-    },
-    {
-      "id": "gc_riot_10",
-      "title": "Riot Games Prepaid Card",
-      "category": "gift_card",
-      "platform": "Riot Games",
-      "priceUsd": 10,
-      "badge": "VALORANT & LOL",
-      "icon": "👊",
-      "brandTheme": "riot",
-      "description": "Canjea Valorant Points (VP) o Riot Points (RP) para skins y pases de batalla.",
-      "stockCount": 18,
-      "codes": [
-        "RIOT-10-8811-3322-7744",
-        "RIOT-10-5599-1144-8833"
-      ]
-    },
-    {
-      "id": "gc_blizzard_20",
-      "title": "Blizzard Battle.net Card",
-      "category": "gift_card",
-      "platform": "Blizzard",
-      "priceUsd": 20,
-      "badge": "BATTLE.NET",
-      "icon": "❄️",
-      "brandTheme": "blizzard",
-      "description": "Saldo oficial para World of Warcraft, Overwatch 2, Diablo IV y Hearthstone.",
-      "stockCount": 14,
-      "codes": [
-        "BLIZZ-20-9944-1133-7722",
-        "BLIZZ-20-4488-3311-6655"
+        "APL-25-1122-3344-5566"
       ]
     }
   ],
@@ -1082,35 +1068,35 @@
       "id": "brand_playstation",
       "name": "PlayStation Network",
       "category": "Gaming",
-      "logoUrl": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80",
-      "description": "Tarjetas oficiales de saldo y membresías PlayStation Plus.",
+      "logoUrl": "/assets/giftcards/playstation.svg",
+      "description": "Tarjetas oficiales de saldo prepago y suscripciones para PlayStation Store PS4 y PS5.",
       "variations": [
         {
           "id": "var_psn_10",
           "name": "PSN $10 USD",
           "denomination": "$10 USD",
-          "pricePyg": 85000,
+          "pricePyg": 80000,
           "priceUsd": 10
         },
         {
           "id": "var_psn_25",
           "name": "PSN $25 USD",
           "denomination": "$25 USD",
-          "pricePyg": 210000,
+          "pricePyg": 200000,
           "priceUsd": 25
         },
         {
           "id": "var_psn_50",
           "name": "PSN $50 USD",
           "denomination": "$50 USD",
-          "pricePyg": 410000,
+          "pricePyg": 395000,
           "priceUsd": 50
         },
         {
           "id": "var_psn_100",
           "name": "PSN $100 USD",
           "denomination": "$100 USD",
-          "pricePyg": 810000,
+          "pricePyg": 780000,
           "priceUsd": 100
         },
         {
@@ -1124,7 +1110,7 @@
           "id": "var_psn_plus_12m",
           "name": "PS Plus Essential 12 Meses",
           "denomination": "12 Meses",
-          "pricePyg": 620000,
+          "pricePyg": 600000,
           "priceUsd": 79.99
         }
       ]
@@ -1133,36 +1119,43 @@
       "id": "brand_steam",
       "name": "Steam Wallet",
       "category": "PC Gaming",
-      "logoUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80",
-      "description": "Saldo para la tienda de Steam en PC y Steam Deck.",
+      "logoUrl": "/assets/giftcards/steam.svg",
+      "description": "Saldo oficial para comprar videojuegos, DLCs y skins en la tienda de Steam PC y Steam Deck.",
       "variations": [
         {
           "id": "var_steam_5",
           "name": "Steam $5 USD",
           "denomination": "$5 USD",
-          "pricePyg": 42000,
+          "pricePyg": 40000,
           "priceUsd": 5
         },
         {
           "id": "var_steam_10",
           "name": "Steam $10 USD",
           "denomination": "$10 USD",
-          "pricePyg": 85000,
+          "pricePyg": 80000,
           "priceUsd": 10
         },
         {
           "id": "var_steam_20",
           "name": "Steam $20 USD",
           "denomination": "$20 USD",
-          "pricePyg": 168000,
+          "pricePyg": 160000,
           "priceUsd": 20
         },
         {
           "id": "var_steam_50",
           "name": "Steam $50 USD",
           "denomination": "$50 USD",
-          "pricePyg": 415000,
+          "pricePyg": 395000,
           "priceUsd": 50
+        },
+        {
+          "id": "var_steam_100",
+          "name": "Steam $100 USD",
+          "denomination": "$100 USD",
+          "pricePyg": 780000,
+          "priceUsd": 100
         }
       ]
     },
@@ -1170,36 +1163,43 @@
       "id": "brand_xbox",
       "name": "Xbox & Game Pass",
       "category": "Gaming",
-      "logoUrl": "https://images.unsplash.com/photo-1600080972464-8e5f35f63d08?auto=format&fit=crop&w=400&q=80",
-      "description": "Tarjetas de regalo Xbox y suscripciones Game Pass Ultimate.",
+      "logoUrl": "/assets/giftcards/xbox.svg",
+      "description": "Tarjetas de regalo para juegos digitales en Xbox Series X|S, Xbox One y Game Pass Ultimate.",
       "variations": [
         {
           "id": "var_xbox_10",
           "name": "Xbox $10 USD",
           "denomination": "$10 USD",
-          "pricePyg": 85000,
+          "pricePyg": 80000,
           "priceUsd": 10
         },
         {
           "id": "var_xbox_25",
           "name": "Xbox $25 USD",
           "denomination": "$25 USD",
-          "pricePyg": 210000,
+          "pricePyg": 200000,
           "priceUsd": 25
+        },
+        {
+          "id": "var_xbox_50",
+          "name": "Xbox $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 395000,
+          "priceUsd": 50
         },
         {
           "id": "var_xbox_gpu_1m",
           "name": "Game Pass Ultimate 1 Mes",
           "denomination": "1 Mes",
-          "pricePyg": 125000,
-          "priceUsd": 16.99
+          "pricePyg": 120000,
+          "priceUsd": 15
         },
         {
           "id": "var_xbox_gpu_3m",
           "name": "Game Pass Ultimate 3 Meses",
           "denomination": "3 Meses",
-          "pricePyg": 350000,
-          "priceUsd": 49.99
+          "pricePyg": 340000,
+          "priceUsd": 45
         }
       ]
     },
@@ -1207,45 +1207,105 @@
       "id": "brand_nintendo",
       "name": "Nintendo eShop",
       "category": "Gaming",
-      "logoUrl": "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80",
-      "description": "Saldo para comprar juegos en Nintendo Switch.",
+      "logoUrl": "/assets/giftcards/nintendo.svg",
+      "description": "Saldo para la tienda digital de Nintendo Switch. Compra Mario, Zelda, Pokémon y más.",
       "variations": [
         {
           "id": "var_nin_10",
           "name": "Nintendo $10 USD",
           "denomination": "$10 USD",
-          "pricePyg": 85000,
+          "pricePyg": 80000,
           "priceUsd": 10
         },
         {
           "id": "var_nin_20",
           "name": "Nintendo $20 USD",
           "denomination": "$20 USD",
-          "pricePyg": 170000,
+          "pricePyg": 160000,
           "priceUsd": 20
         },
         {
           "id": "var_nin_35",
           "name": "Nintendo $35 USD",
           "denomination": "$35 USD",
-          "pricePyg": 295000,
+          "pricePyg": 280000,
           "priceUsd": 35
         },
         {
           "id": "var_nin_50",
           "name": "Nintendo $50 USD",
           "denomination": "$50 USD",
-          "pricePyg": 420000,
+          "pricePyg": 395000,
+          "priceUsd": 50
+        }
+      ]
+    },
+    {
+      "id": "brand_googleplay",
+      "name": "Google Play Store",
+      "category": "Móvil",
+      "logoUrl": "/assets/giftcards/googleplay.svg",
+      "description": "Saldo para recarga de diamantes en Free Fire, Roblox, Brawl Stars y aplicaciones Android.",
+      "variations": [
+        {
+          "id": "var_gp_10",
+          "name": "Google Play $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 80000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_gp_25",
+          "name": "Google Play $25 USD",
+          "denomination": "$25 USD",
+          "pricePyg": 200000,
+          "priceUsd": 25
+        },
+        {
+          "id": "var_gp_50",
+          "name": "Google Play $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 395000,
+          "priceUsd": 50
+        }
+      ]
+    },
+    {
+      "id": "brand_apple",
+      "name": "Apple Gift Card",
+      "category": "Apple",
+      "logoUrl": "/assets/giftcards/apple.svg",
+      "description": "Saldo prepago para App Store, iCloud, Apple Music, juegos y compras dentro de apps en iOS.",
+      "variations": [
+        {
+          "id": "var_apple_10",
+          "name": "Apple $10 USD",
+          "denomination": "$10 USD",
+          "pricePyg": 80000,
+          "priceUsd": 10
+        },
+        {
+          "id": "var_apple_25",
+          "name": "Apple $25 USD",
+          "denomination": "$25 USD",
+          "pricePyg": 200000,
+          "priceUsd": 25
+        },
+        {
+          "id": "var_apple_50",
+          "name": "Apple $50 USD",
+          "denomination": "$50 USD",
+          "pricePyg": 395000,
           "priceUsd": 50
         }
       ]
     },
     {
       "id": "brand_spotify",
-      "name": "Spotify Premium",
+      "name": "Spotify Premium Card",
       "category": "Música",
-      "logoUrl": "https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=400&q=80",
-      "description": "Música sin anuncios y descargas offline en Spotify.",
+      "logoUrl": "/assets/giftcards/spotify.svg",
+      "description": "Meses prepagos de música en alta calidad sin anuncios ni cortes para cualquier cuenta.",
       "variations": [
         {
           "id": "var_spot_1m",
@@ -1258,15 +1318,15 @@
           "id": "var_spot_3m",
           "name": "Spotify 3 Meses",
           "denomination": "3 Meses",
-          "pricePyg": 125000,
-          "priceUsd": 16.5
+          "pricePyg": 120000,
+          "priceUsd": 16
         },
         {
           "id": "var_spot_6m",
           "name": "Spotify 6 Meses",
           "denomination": "6 Meses",
-          "pricePyg": 240000,
-          "priceUsd": 32
+          "pricePyg": 230000,
+          "priceUsd": 30
         }
       ]
     },
@@ -1274,88 +1334,28 @@
       "id": "brand_netflix",
       "name": "Netflix Gift Card",
       "category": "Streaming",
-      "logoUrl": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80",
-      "description": "Saldo oficial de regalo para canjear en cuentas Netflix.",
+      "logoUrl": "/assets/giftcards/netflix.svg",
+      "description": "Código de saldo oficial para canjear directamente en el saldo de facturación de tu cuenta Netflix.",
       "variations": [
         {
           "id": "var_net_15",
           "name": "Netflix $15 USD",
           "denomination": "$15 USD",
-          "pricePyg": 125000,
+          "pricePyg": 120000,
           "priceUsd": 15
         },
         {
           "id": "var_net_25",
           "name": "Netflix $25 USD",
           "denomination": "$25 USD",
-          "pricePyg": 205000,
+          "pricePyg": 200000,
           "priceUsd": 25
         },
         {
           "id": "var_net_50",
           "name": "Netflix $50 USD",
           "denomination": "$50 USD",
-          "pricePyg": 405000,
-          "priceUsd": 50
-        }
-      ]
-    },
-    {
-      "id": "brand_googleplay",
-      "name": "Google Play Store",
-      "category": "Móvil",
-      "logoUrl": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=400&q=80",
-      "description": "Saldo para apps, juegos y diamantes en Android.",
-      "variations": [
-        {
-          "id": "var_gp_10",
-          "name": "Google Play $10 USD",
-          "denomination": "$10 USD",
-          "pricePyg": 85000,
-          "priceUsd": 10
-        },
-        {
-          "id": "var_gp_25",
-          "name": "Google Play $25 USD",
-          "denomination": "$25 USD",
-          "pricePyg": 210000,
-          "priceUsd": 25
-        },
-        {
-          "id": "var_gp_50",
-          "name": "Google Play $50 USD",
-          "denomination": "$50 USD",
-          "pricePyg": 415000,
-          "priceUsd": 50
-        }
-      ]
-    },
-    {
-      "id": "brand_apple",
-      "name": "Apple Gift Card & iTunes",
-      "category": "Apple",
-      "logoUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80",
-      "description": "Saldo para compras en App Store, Apple Arcade y suscripciones.",
-      "variations": [
-        {
-          "id": "var_apple_10",
-          "name": "Apple $10 USD",
-          "denomination": "$10 USD",
-          "pricePyg": 85000,
-          "priceUsd": 10
-        },
-        {
-          "id": "var_apple_25",
-          "name": "Apple $25 USD",
-          "denomination": "$25 USD",
-          "pricePyg": 210000,
-          "priceUsd": 25
-        },
-        {
-          "id": "var_apple_50",
-          "name": "Apple $50 USD",
-          "denomination": "$50 USD",
-          "pricePyg": 415000,
+          "pricePyg": 395000,
           "priceUsd": 50
         }
       ]
@@ -1512,62 +1512,53 @@
       "name": "Netflix Premium 4K HDR",
       "category": "streaming",
       "planName": "Ultra HD 4K (4 Pantallas)",
-      "tagline": "Películas, series y documentales ilimitados en Ultra HD",
-      "badgeText": "ULTRA HD 4K • DOLBY ATMOS",
-      "description": "Disfruta de Netflix con tu propio perfil privado y PIN personal. Comparte el costo de la cuenta de forma 100% segura con Bóveda Escrow.",
-      "iconUrl": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=300&q=80",
+      "tagline": "Acceso exclusivo con perfil individual protegido por PIN",
+      "badgeText": "4K ULTRA HD • PIN PRIVADO",
+      "description": "Disfruta de series, películas y documentales originales en resolución 4K HDR y audio espacial Dolby Atmos. Incluye tu propio perfil personalizado.",
+      "iconUrl": "/assets/services/netflix.svg",
+      "thumbnailUrl": "/assets/services/netflix.svg",
       "bannerHorizontal": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=1600&q=80",
-      "bannerVertical": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80",
-      "pricePerSlotPyg": 25000,
-      "pricePerSlotUsd": 3.33,
-      "maxSlots": 5,
+      "bannerVertical": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=600&q=80",
+      "pricePerSlotPyg": 30000,
+      "pricePerSlotUsd": 4,
+      "maxSlots": 4,
       "commissionPercent": 10,
       "waitingCount": 14,
       "waitingList": [],
       "hasStock": true,
       "isActive": true,
       "metrics": {
-        "activeAccounts": 48,
-        "activeUsersMonth": 184,
+        "activeAccounts": 32,
+        "activeUsersMonth": 128,
         "avgSavingsPercent": 75,
-        "rating": "4.95 / 5.0"
+        "rating": "4.98 / 5.0"
       },
       "releases": [
         {
-          "id": "rel_stranger_things_5",
-          "title": "Stranger Things 5: El Final",
-          "type": "Estreno 4K",
-          "releaseDate": "Estreno 2025/2026",
+          "id": "rel_stranger_5",
+          "title": "Stranger Things: Temporada Final",
+          "type": "Netflix Original",
+          "releaseDate": "Próximamente",
           "genre": "Ciencia Ficción",
-          "posterUrl": "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?auto=format&fit=crop&w=400&q=80",
-          "synopsis": "El desenlace decisivo de Hawkins."
-        },
-        {
-          "id": "rel_squid_game_2",
-          "title": "Squid Game 2",
-          "type": "Tendencia #1",
-          "releaseDate": "Disponible",
-          "genre": "Thriller",
-          "posterUrl": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=400&q=80",
-          "synopsis": "Nuevos desafíos mortales."
+          "posterUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80",
+          "synopsis": "La batalla decisiva por Hawkins comienza."
         }
       ]
     },
     {
       "id": "spotify",
       "name": "Spotify Premium Familiar",
-      "category": "streaming",
-      "planName": "Plan Familiar (6 Cuentas)",
-      "tagline": "Música y podcasts sin anuncios, descargas ilimitadas y audio Hi-Fi",
-      "badgeText": "HI-FI AUDIO • MÚSICA SIN LÍMITES",
-      "description": "Acceso a millones de canciones con tu propia cuenta individual conectada a un plan familiar protegido con Bóveda Escrow.",
-      "iconUrl": "https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=300&q=80",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=300&q=80",
+      "category": "music",
+      "planName": "Premium Individual / Familiar",
+      "tagline": "Música sin límites, sin anuncios y con descargas offline",
+      "badgeText": "AUDIO HI-FI • SIN ANUNCIOS",
+      "description": "Activa Spotify Premium en tu propia cuenta personal o recibe acceso directo. Escucha más de 100 millones de canciones sin cortes comerciales.",
+      "iconUrl": "/assets/services/spotify.svg",
+      "thumbnailUrl": "/assets/services/spotify.svg",
       "bannerHorizontal": "https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=1600&q=80",
-      "bannerVertical": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=600&q=80",
-      "pricePerSlotPyg": 18000,
-      "pricePerSlotUsd": 2.4,
+      "bannerVertical": "https://images.unsplash.com/photo-1614680376593-902f749f7ffc?auto=format&fit=crop&w=600&q=80",
+      "pricePerSlotPyg": 20000,
+      "pricePerSlotUsd": 2.67,
       "maxSlots": 5,
       "commissionPercent": 10,
       "waitingCount": 9,
@@ -1575,20 +1566,20 @@
       "hasStock": true,
       "isActive": true,
       "metrics": {
-        "activeAccounts": 35,
-        "activeUsersMonth": 142,
-        "avgSavingsPercent": 70,
+        "activeAccounts": 25,
+        "activeUsersMonth": 110,
+        "avgSavingsPercent": 78,
         "rating": "4.95 / 5.0"
       },
       "releases": [
         {
-          "id": "rel_sp_latam",
-          "title": "Top 50 Global & Latinos",
-          "type": "Billboard #1",
-          "releaseDate": "Semanal",
-          "genre": "Urbano / Pop",
-          "posterUrl": "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80",
-          "synopsis": "Los hits más escuchados sin interrupciones."
+          "id": "rel_spot_lossless",
+          "title": "Spotify Hi-Fi Lossless Audio",
+          "type": "Lanzamiento Especial",
+          "releaseDate": "Activo",
+          "genre": "Música",
+          "posterUrl": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80",
+          "synopsis": "Calidad de estudio directo a tus audífonos."
         }
       ]
     },
@@ -1596,13 +1587,13 @@
       "id": "disney",
       "name": "Disney+ & Star+ Premium",
       "category": "streaming",
-      "planName": "Plan Premium 4K HDR",
-      "tagline": "Marvel, Star Wars, Pixar, Disney y deportes en vivo de ESPN",
-      "badgeText": "IMAX ENHANCED • ESPN EN VIVO",
-      "description": "Todo el entretenimiento de Disney, Star Wars y Marvel con partidos en vivo de ESPN y perfiles privados.",
-      "iconUrl": "https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=300&q=80",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=300&q=80",
-      "bannerHorizontal": "https://images.unsplash.com/photo-1560169897-fc0cdbdfa4d5?auto=format&fit=crop&w=1600&q=80",
+      "planName": "Premium 4K HDR con ESPN",
+      "tagline": "Marvel, Star Wars, Pixar, Disney y deportes de ESPN en vivo",
+      "badgeText": "4K HDR • ESPN EN VIVO",
+      "description": "Accede a la plataforma unificada de Disney+ y Star+. Disfruta de la Champions League, Premier League, F1 en vivo y todos los estrenos de cine.",
+      "iconUrl": "/assets/services/disney.svg",
+      "thumbnailUrl": "/assets/services/disney.svg",
+      "bannerHorizontal": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1600&q=80",
       "bannerVertical": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80",
       "pricePerSlotPyg": 25000,
       "pricePerSlotUsd": 3.33,
@@ -1613,20 +1604,20 @@
       "hasStock": true,
       "isActive": true,
       "metrics": {
-        "activeAccounts": 29,
-        "activeUsersMonth": 110,
-        "avgSavingsPercent": 78,
-        "rating": "4.88 / 5.0"
+        "activeAccounts": 22,
+        "activeUsersMonth": 88,
+        "avgSavingsPercent": 72,
+        "rating": "4.92 / 5.0"
       },
       "releases": [
         {
-          "id": "rel_dis_daredevil",
-          "title": "Daredevil: Born Again",
+          "id": "rel_dis_marvel",
+          "title": "Deadpool & Wolverine",
           "type": "Marvel Studios",
-          "releaseDate": "Estreno 2025",
-          "genre": "Acción",
-          "posterUrl": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80",
-          "synopsis": "Matt Murdock regresa a Hell’s Kitchen."
+          "releaseDate": "Disponible",
+          "genre": "Acción / Comedia",
+          "posterUrl": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=400&q=80",
+          "synopsis": "El choque definitivo de los mutantes en Disney+."
         }
       ]
     },
@@ -1635,91 +1626,15 @@
       "name": "Max (HBO Max) Platino 4K",
       "category": "streaming",
       "planName": "Platino 4K Dolby Atmos",
-      "tagline": "El hogar de HBO, Warner Bros, DC Comics y Discovery en 4K",
-      "badgeText": "PLATINO 4K • DOLBY VISION",
-      "description": "Accede a producciones ganadoras de Emmys, estrenos de cine y clásicos universales con PIN exclusivo.",
-      "iconUrl": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=300&q=80",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=300&q=80",
-      "bannerHorizontal": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=1600&q=80",
-      "bannerVertical": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80",
-      "pricePerSlotPyg": 22000,
-      "pricePerSlotUsd": 2.93,
-      "maxSlots": 3,
-      "commissionPercent": 10,
-      "waitingCount": 7,
-      "waitingList": [],
-      "hasStock": true,
-      "isActive": true,
-      "metrics": {
-        "activeAccounts": 22,
-        "activeUsersMonth": 95,
-        "avgSavingsPercent": 72,
-        "rating": "4.91 / 5.0"
-      },
-      "releases": [
-        {
-          "id": "rel_max_tlou2",
-          "title": "The Last of Us T2",
-          "type": "HBO Original",
-          "releaseDate": "Estreno 2025",
-          "genre": "Drama",
-          "posterUrl": "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?auto=format&fit=crop&w=400&q=80",
-          "synopsis": "Ellie busca justicia en Seattle."
-        }
-      ]
-    },
-    {
-      "id": "youtube",
-      "name": "YouTube Premium & Music",
-      "category": "streaming",
-      "planName": "Familiar Sin Anuncios",
-      "tagline": "Videos sin publicidad, reproducción en segundo plano y YouTube Music",
-      "badgeText": "SIN ANUNCIOS • FONDO & DESCARGAS",
-      "description": "Navega en YouTube en todos tus dispositivos sin anuncios con tu propia cuenta Google.",
-      "iconUrl": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=300&q=80",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=300&q=80",
-      "bannerHorizontal": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1600&q=80",
-      "bannerVertical": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80",
-      "pricePerSlotPyg": 20000,
-      "pricePerSlotUsd": 2.67,
-      "maxSlots": 5,
-      "commissionPercent": 10,
-      "waitingCount": 16,
-      "waitingList": [],
-      "hasStock": true,
-      "isActive": true,
-      "metrics": {
-        "activeAccounts": 31,
-        "activeUsersMonth": 125,
-        "avgSavingsPercent": 74,
-        "rating": "4.93 / 5.0"
-      },
-      "releases": [
-        {
-          "id": "rel_yt_features",
-          "title": "YouTube Music Premium",
-          "type": "Google Oficial",
-          "releaseDate": "Disponible 24/7",
-          "genre": "Música",
-          "posterUrl": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80",
-          "synopsis": "Música sin anuncios y descargas inteligentes."
-        }
-      ]
-    },
-    {
-      "id": "crunchyroll",
-      "name": "Crunchyroll Mega Fan",
-      "category": "streaming",
-      "planName": "Mega Fan 4 Pantallas",
-      "tagline": "El mayor catálogo de anime en simulcast directo desde Japón sin publicidad",
-      "badgeText": "SIMULCAST • FULL HD SIN CENSURA",
-      "description": "Episodios de anime 1 hora después de su emisión en Japón con doblajes y subtítulos oficiales.",
-      "iconUrl": "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=300&q=80",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=300&q=80",
-      "bannerHorizontal": "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1600&q=80",
-      "bannerVertical": "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80",
-      "pricePerSlotPyg": 18000,
-      "pricePerSlotUsd": 2.4,
+      "tagline": "HBO Originales, Warner Bros, Champions League y DC Universe",
+      "badgeText": "4K DOLBY ATMOS • HBO",
+      "description": "Acceso a Max Platino en 4K UHD con 4 pantallas simultáneas y audio Dolby Atmos. Series legendarias como House of the Dragon y The Last of Us.",
+      "iconUrl": "/assets/services/max.svg",
+      "thumbnailUrl": "/assets/services/max.svg",
+      "bannerHorizontal": "https://images.unsplash.com/photo-1585647347483-22b66260dfff?auto=format&fit=crop&w=1600&q=80",
+      "bannerVertical": "https://images.unsplash.com/photo-1585647347483-22b66260dfff?auto=format&fit=crop&w=600&q=80",
+      "pricePerSlotPyg": 25000,
+      "pricePerSlotUsd": 3.33,
       "maxSlots": 4,
       "commissionPercent": 10,
       "waitingCount": 8,
@@ -1728,19 +1643,133 @@
       "isActive": true,
       "metrics": {
         "activeAccounts": 20,
-        "activeUsersMonth": 86,
-        "avgSavingsPercent": 70,
-        "rating": "4.89 / 5.0"
+        "activeUsersMonth": 75,
+        "avgSavingsPercent": 74,
+        "rating": "4.94 / 5.0"
       },
       "releases": [
         {
-          "id": "rel_cr_demon_slayer",
+          "id": "rel_max_hotd",
+          "title": "House of the Dragon: Temporada 3",
+          "type": "HBO Original",
+          "releaseDate": "Próximamente",
+          "genre": "Fantasía Épica",
+          "posterUrl": "https://images.unsplash.com/photo-1585647347483-22b66260dfff?auto=format&fit=crop&w=400&q=80",
+          "synopsis": "La Danza de Dragones entra en su fase más brutal."
+        }
+      ]
+    },
+    {
+      "id": "youtube",
+      "name": "YouTube Premium & Music",
+      "category": "streaming",
+      "planName": "Plan Premium Sin Anuncios",
+      "tagline": "Reproducción en segundo plano, sin anuncios y YouTube Music incluido",
+      "badgeText": "ZERO ANUNCIOS • BACKGROUND",
+      "description": "Disfruta de YouTube en tu Smart TV, móvil o PC completamente libre de anuncios, con descarga de videos offline y YouTube Music de alta fidelidad.",
+      "iconUrl": "/assets/services/youtube.svg",
+      "thumbnailUrl": "/assets/services/youtube.svg",
+      "bannerHorizontal": "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1600&q=80",
+      "bannerVertical": "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=600&q=80",
+      "pricePerSlotPyg": 22000,
+      "pricePerSlotUsd": 2.93,
+      "maxSlots": 5,
+      "commissionPercent": 10,
+      "waitingCount": 16,
+      "waitingList": [],
+      "hasStock": true,
+      "isActive": true,
+      "metrics": {
+        "activeAccounts": 28,
+        "activeUsersMonth": 120,
+        "avgSavingsPercent": 70,
+        "rating": "4.99 / 5.0"
+      },
+      "releases": [
+        {
+          "id": "rel_yt_4k",
+          "title": "YouTube 4K 60FPS Enhanced Bitrate",
+          "type": "Google Premium",
+          "releaseDate": "Activo",
+          "genre": "Video Streaming",
+          "posterUrl": "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=400&q=80",
+          "synopsis": "Máxima tasa de bits para pantallas OLED."
+        }
+      ]
+    },
+    {
+      "id": "prime",
+      "name": "Amazon Prime Video 4K",
+      "category": "streaming",
+      "planName": "Prime Video Ultra HD",
+      "tagline": "Amazon Originals, The Boys, Invincible y películas de estreno",
+      "badgeText": "PRIME 4K • THE BOYS",
+      "description": "Acceso a Prime Video en 4K Ultra HD con soporte X-Ray. Mira The Boys, El Señor de los Anillos y miles de producciones taquilleras.",
+      "iconUrl": "/assets/services/prime.svg",
+      "thumbnailUrl": "/assets/services/prime.svg",
+      "bannerHorizontal": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=1600&q=80",
+      "bannerVertical": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=600&q=80",
+      "pricePerSlotPyg": 20000,
+      "pricePerSlotUsd": 2.67,
+      "maxSlots": 3,
+      "commissionPercent": 10,
+      "waitingCount": 7,
+      "waitingList": [],
+      "hasStock": true,
+      "isActive": true,
+      "metrics": {
+        "activeAccounts": 18,
+        "activeUsersMonth": 65,
+        "avgSavingsPercent": 75,
+        "rating": "4.90 / 5.0"
+      },
+      "releases": [
+        {
+          "id": "rel_prime_boys",
+          "title": "The Boys: Temporada Final",
+          "type": "Amazon Original",
+          "releaseDate": "Próximamente",
+          "genre": "Superhéroes",
+          "posterUrl": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=400&q=80",
+          "synopsis": "El enfrentamiento final de Butcher contra Homelander."
+        }
+      ]
+    },
+    {
+      "id": "crunchyroll",
+      "name": "Crunchyroll Mega Fan",
+      "category": "anime",
+      "planName": "Mega Fan 4 Pantallas Sin Anuncios",
+      "tagline": "Anime en simulcast 1 hora después de Japón y descargas offline",
+      "badgeText": "SIMULCAST • MEGA FAN",
+      "description": "La biblioteca de anime más grande del planeta. Disfruta de Demon Slayer, Jujutsu Kaisen, One Piece y Attack on Titan en 1080p sin anuncios.",
+      "iconUrl": "/assets/services/crunchyroll.svg",
+      "thumbnailUrl": "/assets/services/crunchyroll.svg",
+      "bannerHorizontal": "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1600&q=80",
+      "bannerVertical": "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80",
+      "pricePerSlotPyg": 20000,
+      "pricePerSlotUsd": 2.67,
+      "maxSlots": 4,
+      "commissionPercent": 10,
+      "waitingCount": 12,
+      "waitingList": [],
+      "hasStock": true,
+      "isActive": true,
+      "metrics": {
+        "activeAccounts": 19,
+        "activeUsersMonth": 78,
+        "avgSavingsPercent": 77,
+        "rating": "4.96 / 5.0"
+      },
+      "releases": [
+        {
+          "id": "rel_cru_ds",
           "title": "Demon Slayer: Castillo Infinito",
-          "type": "Película",
-          "releaseDate": "Estreno 2025",
-          "genre": "Anime",
+          "type": "Anime Simulcast",
+          "releaseDate": "Estreno",
+          "genre": "Shonen",
           "posterUrl": "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=400&q=80",
-          "synopsis": "La batalla final contra Muzan Kibutsuji."
+          "synopsis": "La trilogía final de Kimetsu no Yaiba."
         }
       ]
     },
@@ -1748,16 +1777,16 @@
       "id": "paramount",
       "name": "Paramount+ Premium",
       "category": "streaming",
-      "planName": "Plan Estándar 3 Pantallas",
-      "tagline": "Películas de Paramount Pictures, Halo, Yellowstone y producciones exclusivas",
-      "badgeText": "PREMIUM HD • SERIES ORIGINALES",
-      "description": "Acceso a estrenos de cine, series exclusivas de Paramount y deportes en vivo.",
-      "iconUrl": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=300&q=80",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=300&q=80",
+      "planName": "Premium 4K Ultra HD",
+      "tagline": "Yellowstone, Halo, películas de Paramount y Copa Libertadores",
+      "badgeText": "PARAMOUNT+ • LIBERTADORES",
+      "description": "Accede a producciones exclusivas de Showtime, series del universo Yellowstone y transmisiones en vivo de la Copa Conmebol Libertadores.",
+      "iconUrl": "/assets/services/paramount.svg",
+      "thumbnailUrl": "/assets/services/paramount.svg",
       "bannerHorizontal": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1600&q=80",
-      "bannerVertical": "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80",
-      "pricePerSlotPyg": 18000,
-      "pricePerSlotUsd": 2.4,
+      "bannerVertical": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80",
+      "pricePerSlotPyg": 20000,
+      "pricePerSlotUsd": 2.67,
       "maxSlots": 3,
       "commissionPercent": 10,
       "waitingCount": 5,
@@ -1783,27 +1812,63 @@
       ]
     },
     {
+      "id": "apple",
+      "name": "Apple TV+ 4K HDR",
+      "category": "streaming",
+      "planName": "Apple Original 4K Dolby Vision",
+      "tagline": "Ted Lasso, Severance, Silo y producciones ganadoras de Premios Oscar",
+      "badgeText": "DOLBY VISION • 4K HDR",
+      "description": "La máxima calidad de imagen y sonido del mercado. Producciones cinematográficas originales de Apple en 4K Dolby Vision y audio espacial.",
+      "iconUrl": "/assets/services/apple.svg",
+      "thumbnailUrl": "/assets/services/apple.svg",
+      "bannerHorizontal": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1600&q=80",
+      "bannerVertical": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80",
+      "pricePerSlotPyg": 22000,
+      "pricePerSlotUsd": 2.93,
+      "maxSlots": 4,
+      "commissionPercent": 10,
+      "waitingCount": 6,
+      "waitingList": [],
+      "hasStock": true,
+      "isActive": true,
+      "metrics": {
+        "activeAccounts": 15,
+        "activeUsersMonth": 60,
+        "avgSavingsPercent": 75,
+        "rating": "4.91 / 5.0"
+      },
+      "releases": [
+        {
+          "id": "rel_app_severance",
+          "title": "Severance: Temporada 2",
+          "type": "Apple Original",
+          "releaseDate": "Disponible",
+          "genre": "Thriller Sci-Fi",
+          "posterUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=400&q=80",
+          "synopsis": "Los misterios de Lumon Industries salen a la luz."
+        }
+      ]
+    },
+    {
       "id": "chatgpt",
       "name": "ChatGPT Plus & AI",
       "category": "work_tools",
       "planName": "Plus GPT-4o & Canvas",
       "tagline": "Acceso prioritario a GPT-4o, Canvas, generación DALL-E 3 y modo de voz avanzado",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=300&q=80",
-      "bannerUrl": "https://images.unsplash.com/photo-1677442136019-21780efad99a?w=1200&auto=format&fit=crop&q=80",
-      "accentColor": "#10a37f",
-      "maxSlots": 2,
-      "pricePerSlotPyg": 35000,
-      "pricePerSlotUsd": 4.67,
-      "description": "Potencia tu productividad con la suscripción compartida a ChatGPT Plus.",
-      "isActive": true,
       "badgeText": "GPT-4o PRO • CANVAS & VOICE",
-      "iconUrl": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=300&q=80",
+      "description": "Potencia tu productividad al máximo nivel con ChatGPT Plus. Acceso prioritario sin límites, creación de GPTs personalizados y análisis de código.",
+      "iconUrl": "/assets/services/chatgpt.svg",
+      "thumbnailUrl": "/assets/services/chatgpt.svg",
       "bannerHorizontal": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1600&q=80",
       "bannerVertical": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+      "pricePerSlotPyg": 35000,
+      "pricePerSlotUsd": 4.67,
+      "maxSlots": 2,
       "commissionPercent": 10,
       "waitingCount": 19,
       "waitingList": [],
       "hasStock": true,
+      "isActive": true,
       "metrics": {
         "activeAccounts": 18,
         "activeUsersMonth": 72,
@@ -1826,76 +1891,115 @@
       "id": "claude",
       "name": "Claude Pro (Sonnet 3.5)",
       "category": "work_tools",
-      "planName": "Claude Pro Anthropic",
-      "tagline": "La IA más inteligente para programación, redacción y análisis profundo",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
-      "bannerUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=80",
-      "accentColor": "#d97706",
-      "maxSlots": 2,
+      "planName": "Pro Claude 3.5 Sonnet & Artifacts",
+      "tagline": "El modelo de IA más potente del mundo para programación y redacción",
+      "badgeText": "SONNET 3.5 • ARTIFACTS PRO",
+      "description": "Acceso a Claude 3.5 Sonnet con 5x más mensajes que el plan gratuito, Artifacts interactivos, visión computacional y análisis masivo de documentos.",
+      "iconUrl": "/assets/services/claude.svg",
+      "thumbnailUrl": "/assets/services/claude.svg",
+      "bannerHorizontal": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1600&q=80",
+      "bannerVertical": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=600&q=80",
       "pricePerSlotPyg": 35000,
       "pricePerSlotUsd": 4.67,
-      "description": "Acceso oficial a Claude 3.5 Sonnet con Projects, Artifacts y 5x más uso que la versión gratuita.",
-      "isActive": true
-    },
-    {
-      "id": "gemini",
-      "name": "Gemini Advanced Ultra",
-      "category": "work_tools",
-      "planName": "Google One AI Premium (2TB)",
-      "tagline": "Modelo 1.5 Pro con ventana de contexto de 1 millón de tokens",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&auto=format&fit=crop&q=80",
-      "bannerUrl": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1200&auto=format&fit=crop&q=80",
-      "accentColor": "#3b82f6",
-      "maxSlots": 3,
-      "pricePerSlotPyg": 30000,
-      "pricePerSlotUsd": 4,
-      "description": "Acceso a Gemini Advanced integrado con Google Workspace y almacenamiento en la nube.",
-      "isActive": true
-    },
-    {
-      "id": "minea",
-      "name": "Minea Dropshipping Spy Tool",
-      "category": "work_tools",
-      "planName": "Minea Starter / Premium",
-      "tagline": "Espía los anuncios ganadores de TikTok, Facebook y Pinterest",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80",
-      "bannerUrl": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80",
-      "accentColor": "#8b5cf6",
-      "maxSlots": 3,
-      "pricePerSlotPyg": 45000,
-      "pricePerSlotUsd": 6,
-      "description": "La herramienta #1 para encontrar productos ganadores de e-commerce y dropshipping en segundos.",
-      "isActive": true
+      "maxSlots": 2,
+      "commissionPercent": 10,
+      "waitingCount": 12,
+      "waitingList": [],
+      "hasStock": true,
+      "isActive": true,
+      "metrics": {
+        "activeAccounts": 14,
+        "activeUsersMonth": 48,
+        "avgSavingsPercent": 78,
+        "rating": "4.97 / 5.0"
+      },
+      "releases": [
+        {
+          "id": "rel_claude_sonnet",
+          "title": "Sonnet 3.5 New Architecture",
+          "type": "Anthropic AI",
+          "releaseDate": "Actualizado",
+          "genre": "Inteligencia Artificial",
+          "posterUrl": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=400&q=80",
+          "synopsis": "El referente número 1 en desarrollo y lógica computacional."
+        }
+      ]
     },
     {
       "id": "canva",
       "name": "Canva Pro Diseños & Brand",
       "category": "work_tools",
-      "planName": "Canva Pro Equipo",
-      "tagline": "Plantillas premium, kit de marcas y herramientas mágicas de IA",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1542744094-24638eff58bb?w=800&auto=format&fit=crop&q=80",
-      "bannerUrl": "https://images.unsplash.com/photo-1542744094-24638eff58bb?w=1200&auto=format&fit=crop&q=80",
-      "accentColor": "#06b6d4",
+      "planName": "Canva Pro Equipo & Magic Studio",
+      "tagline": "Kit de marcas, Magic Studio IA y más de 100M de plantillas premium",
+      "badgeText": "MAGIC STUDIO • 100M ASSETS",
+      "description": "Crea diseños profesionales sin límites. Quita fondos con 1 clic, redimensiona para cualquier red social y accede a todo el banco premium.",
+      "iconUrl": "/assets/services/canva.svg",
+      "thumbnailUrl": "/assets/services/canva.svg",
+      "bannerHorizontal": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=80",
+      "bannerVertical": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+      "pricePerSlotPyg": 25000,
+      "pricePerSlotUsd": 3.33,
       "maxSlots": 5,
-      "pricePerSlotPyg": 20000,
-      "pricePerSlotUsd": 2.67,
-      "description": "Diseño gráfico profesional ilimitado con exportaciones transparentes y redimensionado mágico.",
-      "isActive": true
+      "commissionPercent": 10,
+      "waitingCount": 15,
+      "waitingList": [],
+      "hasStock": true,
+      "isActive": true,
+      "metrics": {
+        "activeAccounts": 20,
+        "activeUsersMonth": 95,
+        "avgSavingsPercent": 82,
+        "rating": "4.95 / 5.0"
+      },
+      "releases": [
+        {
+          "id": "rel_canva_magic",
+          "title": "Magic Studio 2026",
+          "type": "Canva IA Suite",
+          "releaseDate": "Activo",
+          "genre": "Diseño Gráfico",
+          "posterUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80",
+          "synopsis": "Edición mágica de video y generación instantánea."
+        }
+      ]
     },
     {
       "id": "midjourney",
       "name": "Midjourney v6 AI Pro",
       "category": "work_tools",
-      "planName": "Midjourney Fast Hours",
-      "tagline": "Generación hiperrealista de arte, fotografía y mockups comerciales",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&auto=format&fit=crop&q=80",
-      "bannerUrl": "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=1200&auto=format&fit=crop&q=80",
-      "accentColor": "#ec4899",
+      "planName": "Standard Plan Fast GPU Hours",
+      "tagline": "Generación de imágenes fotorrealistas de máxima resolución",
+      "badgeText": "V6.1 ENGINE • FAST GPU",
+      "description": "Accede a la IA de arte y renderizado fotorrealista más aclamada del mundo. Horas Fast GPU incluidas para generar arte conceptual y publicidad.",
+      "iconUrl": "/assets/services/midjourney.svg",
+      "thumbnailUrl": "/assets/services/midjourney.svg",
+      "bannerHorizontal": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=80",
+      "bannerVertical": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
+      "pricePerSlotPyg": 35000,
+      "pricePerSlotUsd": 4.67,
       "maxSlots": 2,
-      "pricePerSlotPyg": 40000,
-      "pricePerSlotUsd": 5.33,
-      "description": "Generación de imágenes con el motor v6 más avanzado del mundo para renders y diseño.",
-      "isActive": true
+      "commissionPercent": 10,
+      "waitingCount": 8,
+      "waitingList": [],
+      "hasStock": true,
+      "isActive": true,
+      "metrics": {
+        "activeAccounts": 12,
+        "activeUsersMonth": 40,
+        "avgSavingsPercent": 75,
+        "rating": "4.90 / 5.0"
+      },
+      "releases": [
+        {
+          "id": "rel_mj_v6",
+          "title": "Midjourney v6.1 Ultra Res",
+          "type": "Arte Generativo",
+          "releaseDate": "Activo",
+          "genre": "IA",
+          "posterUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80",
+          "synopsis": "Texturas de piel, ojos y tipografía perfecta."
+        }
+      ]
     }
   ],
   "smm_orders": [
