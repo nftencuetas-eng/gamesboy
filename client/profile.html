@@ -778,8 +778,12 @@
             <span>Seguridad & Contraseña</span>
           </a>
           <a class="profile-tab-item" data-tab="tab-purchases">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="2"></rect></svg>
             <span>Mis Compras Digitales</span>
+          </a>
+          <a class="profile-tab-item" data-tab="tab-services">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="3"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            <span>Mis Servicios & Membresías</span>
           </a>
           <a class="profile-tab-item" data-tab="tab-seller">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
@@ -891,17 +895,37 @@
           </div>
         </div>
 
-        <!-- Tab 3: Mis Compras & Suscripciones Activas -->
+        <!-- Tab 3: Mis Compras Digitales (Juegos, Licencias & Gift Cards) -->
         <div id="pane-tab-purchases" class="profile-surface-card" style="display: none;">
           <div class="profile-pane-header">
             <h2 class="profile-pane-title">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              <span>Mis Compras & Suscripciones Activas</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="2"></rect></svg>
+              <span>Mis Compras Digitales (Juegos & Licencias)</span>
             </h2>
+            <a href="/purchases?tab=games" class="btn-action-sm" style="background: rgba(0, 194, 255, 0.12); color: var(--accent-cyan); border: 1px solid rgba(0, 194, 255, 0.3); padding: 7px 14px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+              <span>Ver en Bóveda Completa ➔</span>
+            </a>
           </div>
           
-          <div id="user-purchases-container">
-            <p style="text-align: center; color: var(--text-tertiary); padding: 2.5rem;">Cargando tus compras y suscripciones activas...</p>
+          <div id="user-orders-container">
+            <p style="text-align: center; color: var(--text-tertiary); padding: 2.5rem;">Cargando tus compras de videojuegos y licencias...</p>
+          </div>
+        </div>
+
+        <!-- Tab 3b: Mis Servicios & Membresías de Streaming -->
+        <div id="pane-tab-services" class="profile-surface-card" style="display: none;">
+          <div class="profile-pane-header">
+            <h2 class="profile-pane-title">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="3"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              <span>Mis Servicios & Membresías de Streaming</span>
+            </h2>
+            <a href="/purchases?tab=services" class="btn-action-sm" style="background: rgba(168, 85, 247, 0.12); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); padding: 7px 14px; border-radius: 8px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+              <span>Ver en Bóveda Completa ➔</span>
+            </a>
+          </div>
+          
+          <div id="user-services-container">
+            <p style="text-align: center; color: var(--text-tertiary); padding: 2.5rem;">Cargando tus servicios y cupos activos...</p>
           </div>
         </div>
 
@@ -1091,23 +1115,38 @@
       'tab-personal': document.getElementById('pane-tab-personal'),
       'tab-security': document.getElementById('pane-tab-security'),
       'tab-purchases': document.getElementById('pane-tab-purchases'),
+      'tab-services': document.getElementById('pane-tab-services'),
       'tab-seller': document.getElementById('pane-tab-seller'),
       'tab-transactions': document.getElementById('pane-tab-transactions')
     };
 
+    function activateTab(target) {
+      tabLinks.forEach(l => {
+        if (l.dataset.tab === target) l.classList.add('active');
+        else l.classList.remove('active');
+      });
+      Object.keys(tabPanes).forEach(paneKey => {
+        if (tabPanes[paneKey]) {
+          tabPanes[paneKey].style.display = (paneKey === target) ? 'block' : 'none';
+        }
+      });
+    }
+
     tabLinks.forEach(link => {
       link.addEventListener('click', () => {
-        tabLinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-        const target = link.dataset.tab;
-        
-        Object.keys(tabPanes).forEach(paneKey => {
-          if (tabPanes[paneKey]) {
-            tabPanes[paneKey].style.display = (paneKey === target) ? 'block' : 'none';
-          }
-        });
+        activateTab(link.dataset.tab);
       });
     });
+
+    // Check URL parameter for tab (e.g., /profile?tab=purchases or /profile?tab=services)
+    const profileUrlParams = new URLSearchParams(window.location.search);
+    const requestedTab = profileUrlParams.get('tab');
+    if (requestedTab) {
+      const targetPane = requestedTab.startsWith('tab-') ? requestedTab : `tab-${requestedTab}`;
+      if (tabPanes[targetPane]) {
+        activateTab(targetPane);
+      }
+    }
 
     // Logout Handler
     const btnLogout = document.getElementById('btn-profile-logout');
@@ -1214,7 +1253,8 @@
           btnLinkGoogle.style.display = 'inline-block';
         }
 
-        renderPurchasesList(data.mySlots || [], data.myOrders || []);
+        renderDigitalOrders(data.myOrders || []);
+        renderStreamingSlots(data.mySlots || []);
         renderTransactionsList(data.transactions || []);
         _allSellerPublications = data.myPublications || [];
         updateSellerKpisAndFilterOptions(_allSellerPublications);
@@ -1224,21 +1264,21 @@
       }
     }
 
-    // Render Purchases
-    function renderPurchasesList(slots, orders) {
-      const container = document.getElementById('user-purchases-container');
+    // Render Digital Orders (Games, Gift Cards, Licenses)
+    function renderDigitalOrders(orders) {
+      const container = document.getElementById('user-orders-container');
       if (!container) return;
 
-      if (slots.length === 0 && orders.length === 0) {
+      if (!orders || orders.length === 0) {
         container.innerHTML = `
           <div style="text-align: center; padding: 3rem 1.5rem; color: var(--text-tertiary);">
             <div style="margin-bottom: 12px; color: var(--accent-cyan);">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="2"></rect></svg>
             </div>
-            <h3 style="font-size: 1.1rem; color: #ffffff; font-weight: 800; margin-bottom: 4px;">Aún no tienes suscripciones o compras activas</h3>
-            <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1.25rem;">Explora nuestras cuentas de streaming compartidas y videojuegos digitales con entrega inmediata.</p>
-            <a href="/" class="btn-primary-block" style="display: inline-flex; width: auto; padding: 10px 22px; font-weight: 800; border-radius: 10px; text-decoration: none;">
-              Explorar Catálogo
+            <h3 style="font-size: 1.1rem; color: #ffffff; font-weight: 800; margin-bottom: 4px;">Aún no tienes compras de videojuegos o licencias</h3>
+            <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1.25rem;">Explora los mejores títulos de PlayStation, PC y códigos de activación con entrega garantizada.</p>
+            <a href="/#section-games" class="btn-primary-block" style="display: inline-flex; width: auto; padding: 10px 22px; font-weight: 800; border-radius: 10px; text-decoration: none;">
+              Explorar Catálogo de Videojuegos
             </a>
           </div>
         `;
@@ -1246,99 +1286,174 @@
       }
 
       let html = '';
-      if (slots.length > 0) {
-        html += `<h4 style="font-size: 0.95rem; font-weight: 800; color: var(--accent-cyan); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg><span>Cuentas de Streaming Compartidas Activas</span></h4>`;
-        
-        slots.forEach(s => {
-          const isUrgent = s.daysRemaining <= 3;
-          const voucherPayload = JSON.stringify({
-            invoiceNum: `#GB-STR-${(s.id || s.subscriptionId || 'STR').slice(-6)}`,
-            title: s.serviceName,
-            description: `Cupo Oficial Streaming Perfil #${s.slotNumber}`,
-            code: `PIN: ${s.assignedPin || '1234'}`,
-            amountGs: Math.round((s.pricePerSlotUsd || 3.50) * 7500),
-            amountUsd: s.pricePerSlotUsd || 3.50,
-            paymentMethod: 'Saldo Billetera GamesBoy',
-            dateTime: new Date(s.createdAt || Date.now()).toLocaleString('es-PY')
-          }).replace(/"/g, '&quot;');
+      orders.forEach(o => {
+        const isDelivered = o.status === 'delivered' || !!(o.deliveredEmail && o.deliveredPassword) || (!!o.deliveredCode && !o.deliveredCode.includes('preparación')) || (!!o.code && !o.code.includes('preparación'));
+        const emailVal = o.deliveredEmail || (o.credentials && o.credentials.email) || '';
+        const pwdVal = o.deliveredPassword || (o.credentials && o.credentials.password) || '';
+        const codeVal = (o.deliveredCode && !o.deliveredCode.includes('preparación')) ? o.deliveredCode : ((o.code && !o.code.includes('preparación')) ? o.code : '');
+        const instructionsVal = o.instructions || (o.credentials && o.credentials.instructions) || '';
 
-          html += `
-            <div class="purchase-item-card">
-              <div class="purchase-card-top">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                  <span class="purchase-brand-title">${s.serviceName}</span>
-                  <span class="badge-status-active">Activo</span>
-                  ${isUrgent ? '<span style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.35); color: #f87171; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px;">⚡ Renovar Anticipado (-5%)</span>' : ''}
-                </div>
-                <span style="font-size: 0.76rem; color: var(--text-tertiary); font-weight: 700;">Vence: ${new Date(s.expiresAt).toLocaleDateString('es-PY')}</span>
+        const voucherPayload = JSON.stringify({
+          invoiceNum: `#GB-ORD-${(o.id || o._id || 'ORD').slice(-6)}`,
+          title: o.title || o.productTitle || 'Juego / Gift Card Digital',
+          description: o.option || 'Licencia Digital Oficial GamesBoy',
+          code: codeVal || (isDelivered ? 'ENTREGADO' : 'EN_PREPARACION'),
+          amountGs: o.pricePaidPyg || (o.pricePaidUsd ? Math.round(o.pricePaidUsd * 7500) : 150000),
+          amountUsd: o.pricePaidUsd || 20.00,
+          paymentMethod: 'Saldo Billetera GamesBoy',
+          dateTime: new Date(o.createdAt || Date.now()).toLocaleString('es-PY')
+        }).replace(/"/g, '&quot;');
+
+        html += `
+          <div class="purchase-item-card" style="border-left: 4px solid ${isDelivered ? '#10b981' : '#f59e0b'};">
+            <div class="purchase-card-top">
+              <div>
+                <strong style="color: #ffffff; font-size: 1.05rem; display: block;">${o.title || o.productTitle || 'Videojuego / Licencia'}</strong>
+                <span style="font-size: 0.74rem; color: var(--text-tertiary); font-family: var(--font-mono);">Orden: #${(o.id || o._id || '').slice(-8)} • ${new Date(o.createdAt || Date.now()).toLocaleDateString('es-PY')}</span>
               </div>
-
-              <div class="purchase-meta-row">
-                <span>Perfil Asignado: <strong style="color: #ffffff;">#${s.slotNumber}</strong></span>
-                <span>PIN de Perfil: <span class="purchase-pin-pill">${s.assignedPin || '1234'} <button type="button" class="btn-copy-sm" onclick="navigator.clipboard.writeText('${s.assignedPin || '1234'}'); alert('PIN copiado al portapapeles');">Copiar</button></span></span>
-              </div>
-
-              <div class="purchase-creds-box">
-                <div>
-                  <span style="color: var(--text-tertiary); font-size: 0.72rem; display: block;">Credenciales de Acceso:</span>
-                  <span>${s.credentials || 'netflix.vip@gamesboy.net:::StreamPass2026!'}</span>
-                </div>
-                <button type="button" class="btn-copy-sm" onclick="navigator.clipboard.writeText('${s.credentials || 'netflix.vip@gamesboy.net:::StreamPass2026!'}'); alert('Credenciales copiadas');">Copiar</button>
-              </div>
-
-              <div class="purchase-actions-row" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                <a href="/purchases.html" class="btn-open-group-chat">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                  <span>Abrir Chat del Grupo en Mis Compras</span>
-                </a>
-                <button type="button" class="btn-action-sm" onclick="openReceiptModal(${voucherPayload})" style="background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.12); padding: 7px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer;">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                  <span>Ver Comprobante</span>
-                </button>
+              <div>
+                ${isDelivered 
+                  ? '<span class="badge-status-active" style="background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.35); color: #34d399; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 9999px;">✓ Entregado</span>' 
+                  : '<span style="background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.35); color: #fbbf24; font-size: 0.74rem; font-weight: 800; padding: 4px 10px; border-radius: 9999px;">⏳ En preparación</span>'}
               </div>
             </div>
-          `;
-        });
-      }
 
-      if (orders.length > 0) {
-        html += `<h4 style="font-size: 0.95rem; font-weight: 800; color: var(--accent-purple); margin-top: 2rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="2"></rect></svg><span>Juegos Digitales & Tarjetas de Regalo</span></h4>`;
-        
-        orders.forEach(o => {
-          const voucherPayload = JSON.stringify({
-            invoiceNum: `#GB-ORD-${(o.id || o._id || 'ORD').slice(-6)}`,
-            title: o.title || o.productTitle || 'Juego / Gift Card Digital',
-            description: o.option || 'Código Digital Oficial',
-            code: o.code || 'ACTIVADO',
-            amountGs: o.pricePaidPyg || (o.pricePaidUsd ? Math.round(o.pricePaidUsd * 7500) : 150000),
-            amountUsd: o.pricePaidUsd || 20.00,
-            paymentMethod: 'Saldo Billetera GamesBoy',
-            dateTime: new Date(o.createdAt || Date.now()).toLocaleString('es-PY')
-          }).replace(/"/g, '&quot;');
-
-          html += `
-            <div class="purchase-item-card">
-              <div class="purchase-card-top">
-                <strong style="color: #ffffff; font-size: 1rem;">${o.title || o.productTitle}</strong>
-                <span style="font-size: 0.76rem; color: var(--text-tertiary);">${new Date(o.createdAt || Date.now()).toLocaleDateString('es-PY')}</span>
-              </div>
-              <div class="purchase-creds-box">
-                <div>
-                  <span style="color: var(--text-tertiary); font-size: 0.72rem; display: block;">Clave Digital / Código de Activación:</span>
-                  <strong style="color: var(--accent-cyan); font-family: var(--font-mono);">${o.code}</strong>
+            ${isDelivered ? `
+              <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 12px; padding: 14px; margin: 12px 0;">
+                <div style="font-size: 0.76rem; font-weight: 800; color: #34d399; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.04em;">
+                  🔐 Datos de Acceso Entregados:
                 </div>
-                <button type="button" class="btn-copy-sm" onclick="navigator.clipboard.writeText('${o.code}'); alert('Código copiado');">Copiar Clave</button>
+                ${emailVal ? `
+                  <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                    <div>
+                      <span style="font-size: 0.7rem; color: var(--text-tertiary); display: block;">Correo / Cuenta:</span>
+                      <strong style="color: #ffffff; font-family: var(--font-mono); font-size: 0.85rem;">${emailVal}</strong>
+                    </div>
+                    <button type="button" class="btn-copy-sm" onclick="navigator.clipboard.writeText('${emailVal}'); alert('Correo copiado');">Copiar</button>
+                  </div>
+                ` : ''}
+                ${pwdVal ? `
+                  <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.06);">
+                    <div>
+                      <span style="font-size: 0.7rem; color: var(--text-tertiary); display: block;">Contraseña:</span>
+                      <strong style="color: #38bdf8; font-family: var(--font-mono); font-size: 0.85rem;">${pwdVal}</strong>
+                    </div>
+                    <button type="button" class="btn-copy-sm" onclick="navigator.clipboard.writeText('${pwdVal}'); alert('Contraseña copiada');">Copiar</button>
+                  </div>
+                ` : ''}
+                ${codeVal ? `
+                  <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0, 194, 255, 0.08); padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; border: 1px solid rgba(0, 194, 255, 0.25);">
+                    <div>
+                      <span style="font-size: 0.7rem; color: #38bdf8; display: block;">Código de Activación / Canje:</span>
+                      <strong style="color: var(--accent-cyan); font-family: var(--font-mono); font-size: 0.95rem; letter-spacing: 0.05em;">${codeVal}</strong>
+                    </div>
+                    <button type="button" class="btn-copy-sm" onclick="navigator.clipboard.writeText('${codeVal}'); alert('Código copiado');">Copiar Código</button>
+                  </div>
+                ` : ''}
+                ${instructionsVal ? `
+                  <div style="background: rgba(255,255,255,0.02); border-left: 3px solid var(--accent-cyan); padding: 8px 12px; border-radius: 6px; font-size: 0.78rem; color: #cbd5e1; margin-top: 8px; line-height: 1.4;">
+                    <strong style="color: #ffffff; display: block; margin-bottom: 2px;">Instrucciones:</strong>
+                    ${instructionsVal}
+                  </div>
+                ` : ''}
               </div>
-              <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
-                <button type="button" class="btn-action-sm" onclick="openReceiptModal(${voucherPayload})" style="background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.12); padding: 6px 12px; border-radius: 8px; font-size: 0.76rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer;">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                  <span>Ver Comprobante</span>
-                </button>
+            ` : `
+              <div style="background: rgba(245, 158, 11, 0.06); border: 1px dashed rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 14px; margin: 12px 0;">
+                <p style="margin: 0; font-size: 0.82rem; color: #fbbf24; line-height: 1.45;">
+                  ⏳ <strong>Tu orden está en preparación.</strong> Nuestro equipo administrativo está gestionando tu licencia/cuenta. Recibirás las credenciales y el código directamente aquí y en tu Bóveda en minutos.
+                </p>
               </div>
+            `}
+
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 10px;">
+              <a href="/purchases?tab=games" class="btn-open-group-chat" style="font-size: 0.78rem; padding: 6px 12px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="2"></rect></svg>
+                <span>Ver en Mis Compras</span>
+              </a>
+              <button type="button" class="btn-action-sm" onclick="openReceiptModal(${voucherPayload})" style="background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.12); padding: 6px 12px; border-radius: 8px; font-size: 0.76rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                <span>Ver Comprobante</span>
+              </button>
             </div>
-          `;
-        });
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // Render Streaming Subscriptions & Slots
+    function renderStreamingSlots(slots) {
+      const container = document.getElementById('user-services-container');
+      if (!container) return;
+
+      if (!slots || slots.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 3rem 1.5rem; color: var(--text-tertiary);">
+            <div style="margin-bottom: 12px; color: var(--accent-purple);">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="3"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            </div>
+            <h3 style="font-size: 1.1rem; color: #ffffff; font-weight: 800; margin-bottom: 4px;">Aún no tienes suscripciones de streaming activas</h3>
+            <p style="font-size: 0.84rem; color: var(--text-secondary); margin-bottom: 1.25rem;">Disfruta de Netflix, Disney+, HBO Max, YouTube Premium y más con perfiles oficiales y chat grupal.</p>
+            <a href="/#section-streaming" class="btn-primary-block" style="display: inline-flex; width: auto; padding: 10px 22px; font-weight: 800; border-radius: 10px; text-decoration: none;">
+              Explorar Suscripciones de Streaming
+            </a>
+          </div>
+        `;
+        return;
       }
+
+      let html = '';
+      slots.forEach(s => {
+        const isUrgent = s.daysRemaining <= 3;
+        const voucherPayload = JSON.stringify({
+          invoiceNum: `#GB-STR-${(s.id || s.subscriptionId || 'STR').slice(-6)}`,
+          title: s.serviceName,
+          description: `Cupo Oficial Streaming Perfil #${s.slotNumber}`,
+          code: `PIN: ${s.assignedPin || '1234'}`,
+          amountGs: Math.round((s.pricePerSlotUsd || 3.50) * 7500),
+          amountUsd: s.pricePerSlotUsd || 3.50,
+          paymentMethod: 'Saldo Billetera GamesBoy',
+          dateTime: new Date(s.createdAt || Date.now()).toLocaleString('es-PY')
+        }).replace(/"/g, '&quot;');
+
+        html += `
+          <div class="purchase-item-card">
+            <div class="purchase-card-top">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="purchase-brand-title">${s.serviceName}</span>
+                <span class="badge-status-active">Activo</span>
+                ${isUrgent ? '<span style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.35); color: #f87171; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px;">⚡ Renovar Anticipado (-5%)</span>' : ''}
+              </div>
+              <span style="font-size: 0.76rem; color: var(--text-tertiary); font-weight: 700;">Vence: ${new Date(s.expiresAt).toLocaleDateString('es-PY')}</span>
+            </div>
+
+            <div class="purchase-meta-row">
+              <span>Perfil Asignado: <strong style="color: #ffffff;">#${s.slotNumber}</strong></span>
+              <span>PIN de Perfil: <span class="purchase-pin-pill">${s.assignedPin || '1234'} <button type="button" class="btn-copy-sm" onclick="navigator.clipboard.writeText('${s.assignedPin || '1234'}'); alert('PIN copiado al portapapeles');">Copiar</button></span></span>
+            </div>
+
+            <div class="purchase-creds-box">
+              <div>
+                <span style="color: var(--text-tertiary); font-size: 0.72rem; display: block;">Credenciales de Acceso:</span>
+                <span>${s.credentials || 'netflix.vip@gamesboy.net:::StreamPass2026!'}</span>
+              </div>
+              <button type="button" class="btn-copy-sm" onclick="navigator.clipboard.writeText('${s.credentials || 'netflix.vip@gamesboy.net:::StreamPass2026!'}'); alert('Credenciales copiadas');">Copiar</button>
+            </div>
+
+            <div class="purchase-actions-row" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+              <a href="/purchases?tab=services" class="btn-open-group-chat">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                <span>Abrir Chat del Grupo en Mis Compras</span>
+              </a>
+              <button type="button" class="btn-action-sm" onclick="openReceiptModal(${voucherPayload})" style="background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.12); padding: 7px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; cursor: pointer;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                <span>Ver Comprobante</span>
+              </button>
+            </div>
+          </div>
+        `;
+      });
 
       container.innerHTML = html;
     }

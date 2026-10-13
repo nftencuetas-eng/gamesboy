@@ -538,6 +538,189 @@ let db = {
     }
   ],
   store_products: [
+    // --- VIDEOJUEGOS DIGITALES (PS4 / PS5 / PC) ---
+    {
+      id: 'prod_game_fc25',
+      title: 'EA SPORTS FC 25',
+      category: 'digital_game',
+      platform: 'PS5 / PS4 / PC',
+      genre: 'Deportes / Fútbol',
+      primaryPricePyg: 295000,
+      secondaryPricePyg: 185000,
+      primaryPriceUsd: 39.33,
+      secondaryPriceUsd: 24.67,
+      pricePyg: 295000,
+      priceUsd: 39.33,
+      badge: 'MÁS VENDIDO',
+      coverUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80',
+      coverImage: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80',
+      screenshots: [
+        'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1200&q=80'
+      ],
+      description: 'EA SPORTS FC 25 te ofrece las mejores competiciones, clubes y futbolistas del mundo. Cuenta digital primaria y secundaria con entrega rápida.',
+      isAvailable: true,
+      stockCount: 15
+    },
+    {
+      id: 'prod_game_spiderman2',
+      title: 'Marvel\'s Spider-Man 2',
+      category: 'digital_game',
+      platform: 'PlayStation 5',
+      genre: 'Acción / Aventura',
+      primaryPricePyg: 260000,
+      secondaryPricePyg: 165000,
+      primaryPriceUsd: 34.67,
+      secondaryPriceUsd: 22.00,
+      pricePyg: 260000,
+      priceUsd: 34.67,
+      badge: 'EXCLUSIVO PS5',
+      coverUrl: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80',
+      coverImage: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=600&q=80',
+      screenshots: [
+        'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?auto=format&fit=crop&w=1200&q=80'
+      ],
+      description: 'Los Spider-Men Peter Parker y Miles Morales regresan para una aventura aclamada en PS5.',
+      isAvailable: true,
+      stockCount: 12
+    },
+    {
+      id: 'prod_game_cod_bo6',
+      title: 'Call of Duty: Black Ops 6',
+      category: 'digital_game',
+      platform: 'PS5 • Xbox • PC',
+      genre: 'Shooter / Acción',
+      primaryPricePyg: 340000,
+      secondaryPricePyg: 215000,
+      primaryPriceUsd: 45.33,
+      secondaryPriceUsd: 28.67,
+      pricePyg: 340000,
+      priceUsd: 45.33,
+      badge: 'NUEVO LANZAMIENTO',
+      coverUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
+      coverImage: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
+      screenshots: [
+        'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80'
+      ],
+      description: 'La verdad miente. Una apasionante campaña de espionaje, la mejor experiencia multijugador y el regreso de Zombis por rondas.',
+      isAvailable: true,
+      stockCount: 20
+    },
+    {
+      id: 'prod_game_gta6',
+      title: 'Grand Theft Auto VI',
+      category: 'digital_game',
+      platform: 'PS5 • Xbox Series X',
+      genre: 'Mundo Abierto',
+      primaryPricePyg: 390000,
+      secondaryPricePyg: 245000,
+      primaryPriceUsd: 52.00,
+      secondaryPriceUsd: 32.67,
+      pricePyg: 390000,
+      priceUsd: 52.00,
+      badge: 'PRE-VENTA EXCLUSIVA',
+      coverUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80',
+      coverImage: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80',
+      screenshots: [
+        'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80'
+      ],
+      description: 'Reserva ya tu clave o cuenta oficial para la mayor experiencia de la historia del videojuego en el estado de Leonida y Vice City.',
+      isAvailable: true,
+      stockCount: 50
+    },
+    {
+      id: 'prod_game_wukong',
+      title: 'Black Myth: Wukong',
+      category: 'digital_game',
+      platform: 'PS5 • PC Steam',
+      genre: 'Action RPG / Souls',
+      primaryPricePyg: 275000,
+      secondaryPricePyg: 175000,
+      primaryPriceUsd: 36.67,
+      secondaryPriceUsd: 23.33,
+      pricePyg: 275000,
+      priceUsd: 36.67,
+      badge: 'ÉXITO MUNDIAL',
+      coverUrl: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80',
+      coverImage: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80',
+      screenshots: [
+        'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80'
+      ],
+      description: 'Encarna al Predestinado en un viaje colosal por la mitología china, dominando las artes del bastón mágico y transformaciones legendarias.',
+      isAvailable: true,
+      stockCount: 18
+    },
+    {
+      id: 'prod_game_gow_rag',
+      title: 'God of War Ragnarök',
+      category: 'digital_game',
+      platform: 'PS5 • PS4 • PC',
+      genre: 'Acción / Aventura',
+      primaryPricePyg: 235000,
+      secondaryPricePyg: 150000,
+      primaryPriceUsd: 31.33,
+      secondaryPriceUsd: 20.00,
+      pricePyg: 235000,
+      priceUsd: 31.33,
+      badge: 'CALIDAD OFICIAL',
+      coverUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80',
+      coverImage: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=600&q=80',
+      screenshots: [
+        'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80'
+      ],
+      description: 'Únete a Kratos y Atreus en un viaje mítico a través de los Nueve Reinos antes del temido Ragnarök.',
+      isAvailable: true,
+      stockCount: 10
+    },
+    {
+      id: 'prod_game_elden_ring',
+      title: 'Elden Ring: Shadow of the Erdtree',
+      category: 'digital_game',
+      platform: 'PS5 • Xbox • PC',
+      genre: 'Action RPG / Souls',
+      primaryPricePyg: 280000,
+      secondaryPricePyg: 175000,
+      primaryPriceUsd: 37.33,
+      secondaryPriceUsd: 23.33,
+      pricePyg: 280000,
+      priceUsd: 37.33,
+      badge: 'OBRA MAESTRA',
+      coverUrl: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80',
+      coverImage: 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80',
+      screenshots: [
+        'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=1200&q=80'
+      ],
+      description: 'Explora la Tierra Sombría en la aclamada expansión del GOTY Elden Ring con nuevos jefes y armas.',
+      isAvailable: true,
+      stockCount: 14
+    },
+    {
+      id: 'prod_game_cyberpunk',
+      title: 'Cyberpunk 2077: Phantom Liberty',
+      category: 'digital_game',
+      platform: 'PS5 • Xbox Series X • PC',
+      genre: 'RPG / Cyberpunk',
+      primaryPricePyg: 210000,
+      secondaryPricePyg: 135000,
+      primaryPriceUsd: 28.00,
+      secondaryPriceUsd: 18.00,
+      pricePyg: 210000,
+      priceUsd: 28.00,
+      badge: 'SIN STOCK',
+      coverUrl: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
+      coverImage: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
+      screenshots: [
+        'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80'
+      ],
+      description: 'Adéntrate en Dogtown en un thriller de espionaje de alta tecnología para salvar a la presidenta de los NUSA.',
+      isAvailable: false,
+      stockCount: 0
+    },
     // --- TARJETAS DE REGALO (RETAIL HANG-TAB REALISTAS) ---
     {
       id: 'gc_psn_10',

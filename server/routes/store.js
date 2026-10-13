@@ -5,17 +5,18 @@ import { convertFromUsd } from '../services/currencyService.js';
 
 const router = Router();
 
-// Get digital store products
+// Get digital store products (digital games, gift cards, licenses)
 router.get('/products', (req, res) => {
   const db = getDb();
   const rate = db.platform_settings?.exchangeRatePyg || 7500;
   const products = (db.store_products || [])
-    .filter(p => p && p.isAvailable !== false && (p.category === 'game_key' || p.category === 'digital_game' || p.category === 'gift_card'))
+    .filter(p => p && (p.category === 'game_key' || p.category === 'digital_game' || p.category === 'gift_card' || !p.category || (p.category && p.category.includes('game'))))
     .map(p => {
       const primaryPyg = p.primaryPricePyg || (p.pricePyg ? p.pricePyg : (p.priceUsd ? Math.round(p.priceUsd * rate) : (p.primaryPriceUsd ? Math.round(p.primaryPriceUsd * rate) : 0)));
       const primaryUsd = p.primaryPriceUsd || (p.priceUsd ? parseFloat(p.priceUsd) : parseFloat((primaryPyg / rate).toFixed(2)));
       const secondaryPyg = p.secondaryPricePyg !== undefined ? p.secondaryPricePyg : (p.secondaryPriceUsd ? Math.round(p.secondaryPriceUsd * rate) : Math.round(primaryPyg * 0.65));
       const secondaryUsd = p.secondaryPriceUsd || parseFloat((secondaryPyg / rate).toFixed(2));
+      const isAvail = p.isAvailable !== false;
 
       return {
         id: p.id,
@@ -29,7 +30,7 @@ router.get('/products', (req, res) => {
         primaryPricePyg: primaryPyg,
         secondaryPriceUsd: secondaryUsd,
         secondaryPricePyg: secondaryPyg,
-        badge: p.badge || 'DISPONIBLE',
+        badge: p.badge || (isAvail ? 'DISPONIBLE' : 'SIN STOCK'),
         icon: p.icon,
         coverUrl: p.coverUrl || p.coverImage || p.imageUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80',
         coverImage: p.coverImage || p.coverUrl || p.imageUrl,
@@ -40,8 +41,8 @@ router.get('/products', (req, res) => {
         brand: p.brand,
         brandTheme: p.brandTheme,
         description: p.description || '',
-        isAvailable: p.isAvailable !== false,
-        stockCount: Array.isArray(p.codes) ? p.codes.length : (p.stock || 0)
+        isAvailable: isAvail,
+        stockCount: Array.isArray(p.codes) ? p.codes.length : (p.stock || (isAvail ? 5 : 0))
       };
     });
 
@@ -91,11 +92,16 @@ router.post('/products/:id/buy', (req, res) => {
       status = 'delivered';
     }
 
+    const buyerUser = (db.users || []).find(u => u.id === userId);
+
     // 3. Save order in user orders
     const order = {
       id: `order_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       buyerId: userId,
+      buyerName: (buyerUser && buyerUser.name) ? `${buyerUser.name}${buyerUser.surname ? ' ' + buyerUser.surname : ''}` : 'Cliente GamesBoy',
+      buyerEmail: (buyerUser && buyerUser.email) ? buyerUser.email : 'cliente@gamesboy.net',
       productId: product.id,
+      title: product.title,
       productTitle: product.title,
       type: product.category === 'gift_card' ? 'giftcard' : 'game',
       option: option || 'Cuenta Primaria',
@@ -103,8 +109,11 @@ router.post('/products/:id/buy', (req, res) => {
       pricePaidUsd: finalPriceUsd,
       pricePaidPyg: finalPricePyg,
       status, // 'pending_delivery' or 'delivered'
-      code: deliveredCode || 'En preparación (Entrega en minutos)',
+      code: deliveredCode || '',
       credentials: '',
+      deliveredEmail: '',
+      deliveredPassword: '',
+      deliveredCode: deliveredCode || '',
       instructions: '',
       createdAt: new Date().toISOString(),
       deliveredAt: status === 'delivered' ? new Date().toISOString() : null

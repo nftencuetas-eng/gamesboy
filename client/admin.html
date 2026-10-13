@@ -5639,7 +5639,7 @@
                 <button type="button" class="btn-admin-action amber" onclick="openEditServiceModal('${s.id}')" title="Editar parámetros, imágenes y precios" style="padding: 5px 10px; font-size: 0.74rem; font-weight: 800;">
                   <span>✏️ Editar</span>
                 </button>
-                <a href="/service.html?platform=${s.id}" target="_blank" class="btn-admin-action cyan" title="Ver Hub en vivo" style="padding: 5px 8px; font-size: 0.74rem;">
+                <a href="/service?platform=${s.id}" target="_blank" class="btn-admin-action cyan" title="Ver Hub en vivo" style="padding: 5px 8px; font-size: 0.74rem;">
                   <span>👁️</span>
                 </a>
                 <button type="button" class="btn-admin-action red" onclick="deleteStreamingService('${s.id}', '${s.name.replace(/'/g, "\\'")}')" title="Eliminar servicio" style="padding: 5px 8px; font-size: 0.74rem;">

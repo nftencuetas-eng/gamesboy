@@ -655,17 +655,24 @@ router.post('/orders/:id/deliver', (req, res) => {
       return res.status(404).json({ error: 'Orden no encontrada' });
     }
 
-    const { deliveredCode, deliveredEmail, deliveredPassword, deliveredInstructions, notes } = req.body;
+    const { deliveredCode, deliveredEmail, deliveredPassword, deliveredInstructions, instructions, notes } = req.body;
 
-    if (!deliveredCode && !deliveredEmail && !deliveredPassword && !deliveredInstructions) {
+    if (!deliveredCode && !deliveredEmail && !deliveredPassword && !deliveredInstructions && !instructions) {
       return res.status(400).json({ error: 'Debes ingresar al menos el código digital o las credenciales de acceso.' });
     }
 
     order.status = 'delivered';
     order.deliveredAt = new Date().toISOString();
-    order.code = deliveredCode ? deliveredCode.trim() : (order.code || 'ENTREGADO');
-    order.credentials = deliveredEmail && deliveredPassword ? `${deliveredEmail}:::${deliveredPassword}` : (deliveredEmail || deliveredPassword || '');
-    order.instructions = deliveredInstructions || order.instructions || '';
+    order.deliveredCode = deliveredCode ? deliveredCode.trim() : '';
+    order.deliveredEmail = deliveredEmail ? deliveredEmail.trim() : '';
+    order.deliveredPassword = deliveredPassword ? deliveredPassword.trim() : '';
+    order.code = deliveredCode ? deliveredCode.trim() : (deliveredEmail ? deliveredEmail.trim() : 'ENTREGADO');
+    order.credentials = deliveredEmail && deliveredPassword 
+      ? `${deliveredEmail.trim()}:::${deliveredPassword.trim()}` 
+      : (deliveredEmail ? deliveredEmail.trim() : (deliveredPassword ? deliveredPassword.trim() : (deliveredCode ? deliveredCode.trim() : '')));
+    order.instructions = (deliveredInstructions || instructions || order.instructions || '').trim();
+    order.title = order.productTitle || order.title || 'Videojuego / Licencia';
+    order.productTitle = order.productTitle || order.title || 'Videojuego / Licencia';
     order.adminNotes = notes || '';
 
     saveStorage();
@@ -681,7 +688,8 @@ router.post('/orders/:id/deliver', (req, res) => {
               orderId: order.id,
               userId: order.buyerId,
               productTitle: order.productTitle || order.title,
-              deliveredAt: order.deliveredAt
+              deliveredAt: order.deliveredAt,
+              order
             }
           }));
         }

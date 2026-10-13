@@ -245,7 +245,7 @@
 
       // Footer Copyright & Tagline
       document.querySelectorAll('.footer-bottom-bar div:first-child').forEach(el => {
-        el.innerHTML = `© 2026 <strong>${brandName}</strong>. Todos los derechos reservados. • <a href="/admin-login.html" style="color: var(--text-tertiary); text-decoration: none; font-size: 0.75rem;">Acceso Administrativo</a>`;
+        el.innerHTML = `© 2026 <strong>${brandName}</strong>. Todos los derechos reservados. • <a href="/admin-login" style="color: var(--text-tertiary); text-decoration: none; font-size: 0.75rem;">Acceso Administrativo</a>`;
       });
       document.querySelectorAll('.footer-tagline').forEach(el => {
         el.textContent = `Tu mundo digital con la garantía y seguridad de ${brandName}.`;

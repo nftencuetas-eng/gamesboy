@@ -87,6 +87,17 @@ app.use(morgan(config.nodeEnv === 'production' ? 'combined' : 'dev'));
 // Multi-Tenant Resolution Middleware (Applies tenant context to all incoming requests)
 app.use(tenantResolver);
 
+// Clean URL Redirection: permanently redirect all requests ending with .html to clean paths
+app.use((req, res, next) => {
+  if (req.method === 'GET' && req.path.endsWith('.html')) {
+    const cleanPath = req.path.slice(0, -5);
+    const queryString = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+    const target = (cleanPath === '/store' || cleanPath === '/index') ? '/' : cleanPath;
+    return res.redirect(301, target + queryString);
+  }
+  next();
+});
+
 // Static Client Files (Disable automatic index.html serving so app.get('/') router controls the landing vs store logic)
 const clientPath = path.resolve(__dirname, '../client');
 app.use(express.static(clientPath, { index: false }));
@@ -116,28 +127,20 @@ app.get('/', (req, res) => {
 });
 
 app.get('/store', (req, res) => res.sendFile(path.join(clientPath, 'store.html')));
-app.get('/store.html', (req, res) => res.sendFile(path.join(clientPath, 'store.html')));
 app.get('/marketplace', (req, res) => res.sendFile(path.join(clientPath, 'store.html')));
 app.get('/saas', (req, res) => res.sendFile(path.join(clientPath, 'index.html')));
 app.get('/landing', (req, res) => res.sendFile(path.join(clientPath, 'index.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(clientPath, 'login.html')));
 app.get('/admin', (req, res) => res.sendFile(path.join(clientPath, 'admin.html')));
-app.get('/admin.html', (req, res) => res.sendFile(path.join(clientPath, 'admin.html')));
 app.get('/admin/login', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
 app.get('/admin-login', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
-app.get('/admin-login.html', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
 app.get('/admid', (req, res) => res.redirect('/admin'));
 app.get('/admid/login', (req, res) => res.redirect('/admin/login'));
 app.get('/profile', (req, res) => res.sendFile(path.join(clientPath, 'profile.html')));
-app.get('/profile.html', (req, res) => res.sendFile(path.join(clientPath, 'profile.html')));
 app.get('/service', (req, res) => res.sendFile(path.join(clientPath, 'service.html')));
-app.get('/service.html', (req, res) => res.sendFile(path.join(clientPath, 'service.html')));
 app.get('/seller', (req, res) => res.sendFile(path.join(clientPath, 'seller.html')));
-app.get('/seller.html', (req, res) => res.sendFile(path.join(clientPath, 'seller.html')));
 app.get('/purchases', (req, res) => res.sendFile(path.join(clientPath, 'purchases.html')));
-app.get('/purchases.html', (req, res) => res.sendFile(path.join(clientPath, 'purchases.html')));
 app.get('/monetizar', (req, res) => res.sendFile(path.join(clientPath, 'monetizar.html')));
-app.get('/monetizar.html', (req, res) => res.sendFile(path.join(clientPath, 'monetizar.html')));
 app.get('/generar-ingresos', (req, res) => res.sendFile(path.join(clientPath, 'monetizar.html')));
 
 // Fallback for SPA routing

@@ -423,7 +423,7 @@ function initPublishModal() {
           );
           if (modalPublish) modalPublish.style.display = 'none';
           publishForm.reset();
-          window.location.href = '/purchases.html';
+          window.location.href = '/purchases?tab=services';
         } else {
           alert(`Aviso: ${data.error || 'No se pudo publicar la cuenta.'}`);
         }

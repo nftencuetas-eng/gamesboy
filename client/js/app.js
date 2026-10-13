@@ -927,7 +927,7 @@ function renderStreamingServices() {
 
     return `
       <div class="stream-thumb-wrapper ${inStock ? '' : 'out-of-stock'}" 
-           onclick="window.location.href='/service.html?platform=${platformKey}'" 
+           onclick="window.location.href='/service?platform=${platformKey}'" 
            title="${serviceName} - ${inStock ? 'Disponible' : 'Sin Stock'}">
         <div class="stream-thumb-card">
           <img src="${thumbImg}" alt="${serviceName}" class="stream-thumb-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='/assets/branding/icon.png';">
@@ -971,8 +971,16 @@ function renderDigitalGames() {
     return;
   }
 
-  // Display initial 8 games
-  const initialGames = games.slice(0, 8);
+  // Sort games: In-stock first, out of stock (disabled) dimmed at the end
+  const sortedGames = [...games].sort((a, b) => {
+    const availA = a.isAvailable !== false;
+    const availB = b.isAvailable !== false;
+    if (availA !== availB) return availB ? 1 : -1;
+    return 0;
+  });
+
+  // Display initial games up to 12
+  const initialGames = sortedGames.slice(0, 12);
 
   container.innerHTML = initialGames.map((g, slotIdx) => {
     const isAvail = g.isAvailable !== false;
@@ -981,9 +989,10 @@ function renderDigitalGames() {
     const secondaryPyg = g.secondaryPricePyg !== undefined ? g.secondaryPricePyg : (g.secondaryPriceUsd ? Math.round(g.secondaryPriceUsd * rate) : Math.round(primaryPyg * 0.65));
 
     return `
-      <div class="game-card ${isAvail ? '' : 'disabled'}" data-slot-index="${slotIdx}" onclick="openBuyGameModal('${g.id}')">
+      <div class="game-card ${isAvail ? '' : 'disabled out-of-stock'}" data-slot-index="${slotIdx}" onclick="openBuyGameModal('${g.id}')" title="${g.title} - ${isAvail ? 'Disponible' : 'Sin Stock'}">
         <div class="game-cover-container">
           <img src="${g.coverUrl || g.coverImage || '/assets/branding/icon.png'}" alt="${g.title || 'Videojuego'}" class="game-cover-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='/assets/branding/icon.png';">
+          ${!isAvail ? '<span class="game-stock-badge">SIN STOCK</span>' : ''}
         </div>
         <div class="game-card-body">
           <h3 class="game-title" title="${g.title || ''}">${g.title || 'Juego Digital'}</h3>
@@ -1006,7 +1015,7 @@ function renderDigitalGames() {
 
   initGameCardTiltEffects();
   // Start the wave animation cycle only if multiple games exist
-  initGamesWaveEngine(games);
+  initGamesWaveEngine(sortedGames);
 }
 
 // --- DIGITAL GAMES STADIUM WAVE ENGINE (LEFT-TO-RIGHT WAVE DROP & GROUND REBOUND) ---
@@ -1451,12 +1460,20 @@ async function fetchStoreData() {
       state.subscriptions = subRes.subscriptions;
     }
 
-    if (Array.isArray(storeRes) && storeRes.length > 0) {
-      state.storeProducts = storeRes;
-    } else if (gamesRes && gamesRes.games && Array.isArray(gamesRes.games) && gamesRes.games.length > 0) {
-      state.storeProducts = gamesRes.games;
-    } else if (storeRes && storeRes.products && storeRes.products.length > 0) {
-      state.storeProducts = storeRes.products;
+    // Merge store products and admin games robustly so digital games and giftcards always load
+    const storeList = Array.isArray(storeRes) ? storeRes : (storeRes?.products || []);
+    const gamesList = Array.isArray(gamesRes?.games) ? gamesRes.games : [];
+    const mergedProducts = [...storeList];
+    gamesList.forEach(g => {
+      if (!mergedProducts.some(p => p.id === g.id)) {
+        mergedProducts.push({
+          ...g,
+          category: g.category || 'digital_game'
+        });
+      }
+    });
+    if (mergedProducts.length > 0) {
+      state.storeProducts = mergedProducts;
     }
 
     const loadedGcBrands = (giftcardsRes && giftcardsRes.brands && Array.isArray(giftcardsRes.brands) && giftcardsRes.brands.length > 0)
@@ -1507,7 +1524,7 @@ async function fetchStoreData() {
 
 
 // --- TOAST NOTIFICATION ENGINE (DARK LUXE FINTECH TOASTS) ---
-window.showToast = function(type = 'info', title = '', message = '', duration = 4000) {
+window.showToast = function(type = 'info', title = '', message = '', duration = 4000, action = null) {
   let container = document.getElementById('toast-container');
   if (!container) {
     container = document.createElement('div');
@@ -1526,11 +1543,21 @@ window.showToast = function(type = 'info', title = '', message = '', duration = 
     info: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`
   };
 
+  const actionHtml = action ? `
+    <div style="margin-top: 8px;">
+      <a href="${action.url}" class="btn-toast-action" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #00c2ff 0%, #0070f3 100%); color: #ffffff; text-decoration: none; padding: 6px 14px; border-radius: 8px; font-size: 0.76rem; font-weight: 800; box-shadow: 0 4px 12px rgba(0, 194, 255, 0.35); transition: transform 0.15s ease;">
+        <span>${action.label || 'Ver compra'}</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+    </div>
+  ` : '';
+
   toast.innerHTML = `
     <div class="toast-icon">${icons[type] || icons.info}</div>
     <div style="flex: 1; min-width: 0;">
       ${title ? `<div class="toast-title">${title}</div>` : ''}
       <div class="toast-msg">${message}</div>
+      ${actionHtml}
     </div>
     <button type="button" class="toast-close" aria-label="Cerrar">✕</button>
   `;
@@ -1889,7 +1916,15 @@ async function executePurchase(url, body, productName, subId = null) {
     });
     const data = await res.json();
     if (data.success) {
-      window.showToast('success', '¡Compra Exitosa!', `Has adquirido "${productName}". Entrega y activación en tu Bóveda / Perfil.`);
+      const isSub = !!subId;
+      const targetUrl = isSub ? '/purchases?tab=services' : '/purchases?tab=games';
+      window.showToast(
+        'success',
+        '¡Compra Exitosa!',
+        `Has adquirido "${productName}". Tu orden está disponible en tus compras.`,
+        8000,
+        { label: 'Ver compra', url: targetUrl }
+      );
       await fetchStoreData();
       updateUserBalanceDisplay();
       if (subId) {

@@ -7,7 +7,8 @@ const state = {
   smmOrders: [],
   activeChatSubId: null,
   chatPollInterval: null,
-  exchangeRatePyg: 7500
+  exchangeRatePyg: 7500,
+  activeTab: 'games' // 'games', 'services', 'smm'
 };
 
 // Format currency
@@ -24,6 +25,42 @@ function formatRelativeTime(isoString) {
   return date.toLocaleTimeString('es-PY', { hour: '2-digit', minute: '2-digit' });
 }
 
+
+// Switch Category View (Separating Digital Games/Licenses from Streaming Services)
+window.switchPurchasesView = function(tabName) {
+  state.activeTab = tabName;
+
+  document.querySelectorAll('.purchase-tab-pill').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  const activeBtn = document.getElementById('tab-btn-' + tabName);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  // Clean URL without page reload
+  try {
+    const cleanUrl = '/purchases?tab=' + tabName;
+    window.history.replaceState(null, '', cleanUrl);
+  } catch (e) {}
+
+  // Update Page Header Titles
+  const titleEl = document.getElementById('purchases-page-title');
+  const subEl = document.getElementById('purchases-page-subtitle');
+  if (titleEl && subEl) {
+    if (tabName === 'games') {
+      titleEl.textContent = 'Mis Compras Digitales & Licencias';
+      subEl.textContent = 'Tus claves originales de videojuegos, gift cards y cuentas asignadas con entrega garantizada.';
+    } else if (tabName === 'services') {
+      titleEl.textContent = 'Mis Servicios & Membresías Activas';
+      subEl.textContent = 'Tus perfiles privados de streaming (Netflix, Spotify, Max), PINs asignados y chat grupal.';
+    } else if (tabName === 'smm') {
+      titleEl.textContent = 'Mis Órdenes de Redes Sociales (SMM)';
+      subEl.textContent = 'Seguimiento en tiempo real de tus pedidos de seguidores, vistas y likes con plazo 24-48 hs.';
+    }
+  }
+
+  renderPurchasesList();
+};
+
 // Initialize Page
 async function initPurchasesPage() {
   initUserSession();
@@ -33,9 +70,49 @@ async function initPurchasesPage() {
     return;
   }
 
+  // Detect URL parameter tab (games vs services vs smm)
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const requestedTab = urlParams.get('tab') || urlParams.get('type');
+    if (requestedTab === 'services' || requestedTab === 'streaming') {
+      state.activeTab = 'services';
+    } else if (requestedTab === 'smm') {
+      state.activeTab = 'smm';
+    } else if (requestedTab === 'games' || requestedTab === 'compras') {
+      state.activeTab = 'games';
+    }
+  } catch (e) {}
+
   setupEventListeners();
   initPurchasesWebSocket();
   await loadPurchasesVault();
+
+  // Background quiet refresh every 10 seconds to detect delivery immediately
+  setInterval(() => {
+    if (state.currentUser && document.visibilityState === 'visible') {
+      loadPurchasesVaultQuiet();
+    }
+  }, 10000);
+}
+
+
+async function loadPurchasesVaultQuiet() {
+  if (!state.currentUser) return;
+  try {
+    const headers = { 'x-user-id': state.currentUser.id };
+    const [slotsRes, ordersRes, smmRes] = await Promise.all([
+      fetch('/api/subscriptions/my-vault', { headers }),
+      fetch('/api/store/my-orders', { headers }),
+      fetch('/api/smm/my-orders', { headers })
+    ]);
+    const slots = await slotsRes.json();
+    const orders = await ordersRes.json();
+    const smmOrders = await smmRes.json();
+    state.vaultSlots = Array.isArray(slots) ? slots : [];
+    state.storeOrders = Array.isArray(orders) ? orders : [];
+    state.smmOrders = Array.isArray(smmOrders) ? smmOrders : (smmOrders.orders || []);
+    renderPurchasesList();
+  } catch (e) {}
 }
 
 // Load Purchases from API
@@ -808,6 +885,13 @@ function initPurchasesWebSocket() {
     socket.onmessage = (event) => {
       try {
         const msg = JSON.parse(event.data);
+        if (msg.type === 'ORDER_DELIVERED') {
+          const payload = msg.payload;
+          if (payload && state.currentUser && (payload.userId === state.currentUser.id || payload.order?.buyerId === state.currentUser.id)) {
+            showToast('success', '🎮 ¡Entrega Realizada!', `Tu juego/licencia "${payload.productTitle}" ha sido entregada. ¡Ya puedes ver tus datos!`);
+            loadPurchasesVault();
+          }
+        }
         if (msg.type === 'SMM_ORDER_COMPLETED') {
           const order = msg.payload?.order;
           if (order && state.currentUser && order.userId === state.currentUser.id) {

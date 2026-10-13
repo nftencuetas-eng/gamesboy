@@ -139,7 +139,7 @@ function renderSellerListings(listings) {
     `;
 
     return `
-      <div class="hub-group-card ${isAvail ? '' : 'disabled'}" onclick="window.location.href='/service.html?platform=${platformSlug}'" title="Haz clic para ver disponibilidad y perfiles">
+      <div class="hub-group-card ${isAvail ? '' : 'disabled'}" onclick="window.location.href='/service?platform=${platformSlug}'" title="Haz clic para ver disponibilidad y perfiles">
         <!-- Top Row: Brand Logo + Tag Badge -->
         <div class="hub-mini-card-top">
           <div class="hub-mini-brand-icon" style="background: rgba(0, 194, 255, 0.15); border-color: rgba(0, 194, 255, 0.35);">

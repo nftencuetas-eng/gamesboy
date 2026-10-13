@@ -126,7 +126,7 @@ function renderShareIncentiveBanner() {
   const maxEarningsUsd = parseFloat((maxEarningsPyg / rate).toFixed(2));
 
   container.innerHTML = `
-    <div class="hub-share-banner-card" onclick="window.location.href='/monetizar.html?platform=${encodeURIComponent(state.platformKey)}'">
+    <div class="hub-share-banner-card" onclick="window.location.href='/monetizar?platform=${encodeURIComponent(state.platformKey)}'">
       <div class="hub-share-banner-left">
         <div class="hub-share-banner-icon-box">👑</div>
         <div class="hub-share-banner-text">
@@ -136,7 +136,7 @@ function renderShareIncentiveBanner() {
           </p>
         </div>
       </div>
-      <button type="button" class="btn-hub-share-action" onclick="event.stopPropagation(); window.location.href='/monetizar.html?platform=${encodeURIComponent(state.platformKey)}'">
+      <button type="button" class="btn-hub-share-action" onclick="event.stopPropagation(); window.location.href='/monetizar?platform=${encodeURIComponent(state.platformKey)}'">
         <span>Publicar Cuenta</span>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
       </button>
@@ -667,7 +667,7 @@ async function handleConfirmEscrowBuy() {
 
       // Redirect directly to dedicated purchases page after 1.5s
       setTimeout(() => {
-        window.location.href = '/purchases.html';
+        window.location.href = '/purchases?tab=services';
       }, 1500);
     } else {
       if (data.error && data.error.includes('Saldo insuficiente')) {
@@ -1229,7 +1229,7 @@ window.handleServiceSearchResultClick = function(category, id) {
   const dropdown = document.getElementById('search-dropdown-results');
   if (dropdown) dropdown.style.display = 'none';
   if (category === 'streaming') {
-    window.location.href = `/service.html?platform=${id}`;
+    window.location.href = `/service?platform=${id}`;
   } else {
     window.location.href = `/?buyProd=${id}`;
   }
