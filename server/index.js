@@ -20,6 +20,7 @@ import bannersRouter from './routes/banners.js';
 import smmRouter from './routes/smm.js';
 import streamingHubsRouter from './routes/streamingHubs.js';
 import saasRouter from './routes/saas.js';
+import aiSupportRouter from './routes/aiSupport.js';
 import tenantResolver from './middleware/tenantResolver.js';
 import { notFoundHandler, globalErrorHandler } from './middleware/errorHandler.js';
 
@@ -106,6 +107,7 @@ app.use('/api/smm', smmRouter);
 app.use('/api/streaming-hubs', streamingHubsRouter);
 app.use('/api/admin/streaming-hubs', streamingHubsRouter);
 app.use('/api/admin/streaming-services', streamingHubsRouter);
+app.use('/api/ai-support', aiSupportRouter);
 
 // Clean Routes & Admin aliases
 app.get('/', (req, res) => {
