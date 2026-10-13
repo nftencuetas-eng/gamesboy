@@ -66,6 +66,10 @@ router.post('/deposit', (req, res) => {
       amountUsd = parseFloat((parsedAmt / rate).toFixed(2));
     }
 
+    if (!receiptData && (!reference || reference.trim() === '')) {
+      return res.status(400).json({ error: 'Por favor adjunta la foto o captura de tu transferencia bancaria.' });
+    }
+
     const tx = createDepositRequest(
       userId,
       user.name || 'Cliente',
@@ -73,7 +77,7 @@ router.post('/deposit', (req, res) => {
       currency === 'USDT' ? 'USDT' : 'PYG',
       localAmount,
       method || (currency === 'USDT' ? 'binance_usdt' : 'sipap_paraguay'),
-      reference || 'Comprobante subido',
+      (reference && reference.trim()) ? reference.trim() : 'Foto Comprobante SIPAP',
       receiptData || ''
     );
 

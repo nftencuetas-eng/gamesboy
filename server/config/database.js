@@ -266,51 +266,42 @@ let db = {
   ],
   tenant_plans: [
     {
-      id: 'plan_starter',
-      name: 'Starter Reseller',
-      priceMonthlyUsd: 19.99,
-      maxSlotsAllowed: 50,
-      maxProductsAllowed: 30,
+      id: 'plan_control',
+      name: 'Plan Control (Gestión de Streaming)',
+      priceMonthlyUsd: 9.99,
+      priceMonthlyPyg: 75000,
+      maxSlotsAllowed: 100,
+      maxProductsAllowed: 0,
+      storeEnabled: false,
       customDomainEnabled: false,
       p2pMarketplaceEnabled: false,
-      platformFeePercent: 5.00,
+      platformFeePercent: 0,
       features: [
-        'Tienda Digital Directa (Venta Propia)',
-        'Gestión de Streaming con PIN individual',
-        'Subdominio mitienda.gamesboy.net',
-        'Cobros SIPAP Paraguay y Binance Pay'
+        'Panel de Control y Bóveda de Cuentas de Streaming',
+        'Gestión de hasta 100 perfiles/slots con PIN individual',
+        'Control de clientes y fechas de vencimiento/corte',
+        'Plantillas de recordatorios de cobro por WhatsApp',
+        'Registro financiero de pagos SIPAP y Binance Pay'
       ]
     },
     {
       id: 'plan_pro',
-      name: 'Pro Marketplace',
-      priceMonthlyUsd: 49.99,
-      maxSlotsAllowed: 250,
-      maxProductsAllowed: 150,
+      name: 'Plan Pro (Tienda Digital Liberada)',
+      priceMonthlyUsd: 19.99,
+      priceMonthlyPyg: 150000,
+      maxSlotsAllowed: 500,
+      maxProductsAllowed: 200,
+      storeEnabled: true,
       customDomainEnabled: true,
       p2pMarketplaceEnabled: true,
       platformFeePercent: 3.00,
       features: [
-        'Marketplace P2P Habilitado (Reventa por Clientes)',
-        'Dominio Propio Personalizado (mitienda.com)',
-        'Cero Glare UI & Colores de marca propios',
-        'Comisiones automáticas de plataforma (3%)'
-      ]
-    },
-    {
-      id: 'plan_enterprise',
-      name: 'Enterprise White-Label',
-      priceMonthlyUsd: 99.99,
-      maxSlotsAllowed: 1000,
-      maxProductsAllowed: 500,
-      customDomainEnabled: true,
-      p2pMarketplaceEnabled: true,
-      platformFeePercent: 1.50,
-      features: [
-        'Marketplace P2P Ilimitado VIP',
-        'Marca Blanca Total (Cero mención de GamesBoy)',
-        'API Exclusiva de Integración',
-        'Soporte Dedicado Prioritario 24/7'
+        'Todo lo del Plan Control incluido',
+        'Tienda Online Pública Liberada (Subdominio propio)',
+        'Bóveda de entrega automatizada con PIN para clientes',
+        'Venta de Streaming, Videojuegos y Gift Cards',
+        'Pasarelas SIPAP Paraguay y Binance Pay con comprobante',
+        'Personalización total de marca (logo, colores, soporte)'
       ]
     }
   ],

@@ -64,7 +64,9 @@ router.get('/overview', (req, res) => {
       totalEscrowUsd: parseFloat(totalEscrowUsd.toFixed(2)),
       totalEscrowPyg: Math.round(totalEscrowUsd * rate),
       pendingDepositsCount: pendingDeposits.length,
-      pendingPayoutsCount: pendingPayouts.length
+      pendingPayoutsCount: pendingPayouts.length,
+      pendingSmmCount: (db.smm_orders || []).filter(o => o.status === 'in_progress' || o.status === 'pending').length,
+      totalSmmOrders: (db.smm_orders || []).length
     },
     pendingDeposits,
     pendingPayouts,
@@ -1033,70 +1035,192 @@ router.get('/streaming/active-groups', (req, res) => {
 });
 
 // =======================================================
-// 5. IMPULSO DIGITAL & REDES SOCIALES API CONFIG (SMM)
+// ADMIN DIRECT: CREAR CUENTA OFICIAL DE STREAMING (STOCK)
 // =======================================================
-router.get('/smm/config', (req, res) => {
+router.post('/streaming/create-account', (req, res) => {
   try {
     const db = getDb();
-    const config = db.smm_config || {
-      providerUrl: 'https://api.justanotherpanel.com/v2',
-      apiKey: 'smm_key_masked_****_8921',
-      markupPercent: 30,
-      status: 'ready',
-      lastBalanceUsd: 184.20,
-      lastSyncAt: new Date().toISOString()
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+    const {
+      serviceId,
+      accountEmail,
+      accountPassword,
+      expirationDate,
+      totalSlots,
+      availableSlots,
+      pricePerSlotPyg,
+      profiles,
+      instructions
+    } = req.body;
+
+    if (!serviceId) {
+      return res.status(400).json({ error: 'Debes seleccionar un servicio de streaming.' });
+    }
+    if (!accountEmail || !accountPassword) {
+      return res.status(400).json({ error: 'Debes ingresar el correo y la contraseña de la cuenta.' });
+    }
+
+    const services = db.streaming_services || [];
+    const service = services.find(s => s.id === serviceId || (s.id && s.id.toLowerCase() === serviceId.toLowerCase())) || {
+      id: serviceId,
+      name: serviceId.toUpperCase(),
+      planName: 'Plan Oficial'
     };
-    res.json({ success: true, config });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
 
-router.post('/smm/config', (req, res) => {
-  try {
-    const db = getDb();
-    const { providerUrl, apiKey, markupPercent = 30 } = req.body;
+    const slotsTotal = Math.max(1, parseInt(totalSlots, 10) || service.maxSlots || 5);
+    const slotsAvail = availableSlots !== undefined ? Math.max(0, Math.min(slotsTotal, parseInt(availableSlots, 10))) : slotsTotal;
+    const slotPricePyg = Math.round(parseFloat(pricePerSlotPyg) || service.pricePerSlotPyg || 25000);
+    const slotPriceUsd = parseFloat((slotPricePyg / rate).toFixed(2));
 
-    if (!providerUrl) return res.status(400).json({ error: 'URL del proveedor requerida' });
+    // Build profiles structure
+    const pinsObj = {};
+    if (Array.isArray(profiles) && profiles.length > 0) {
+      profiles.forEach((p, idx) => {
+        const num = p.slotNumber || (idx + 1);
+        pinsObj[num] = {
+          slotNumber: num,
+          name: (p.name || `Perfil ${num}`).trim(),
+          pin: (p.pin || '').trim(),
+          isAvailable: p.isAvailable !== false,
+          isOccupied: p.isAvailable === false
+        };
+      });
+    } else {
+      for (let i = 1; i <= slotsTotal; i++) {
+        pinsObj[i] = {
+          slotNumber: i,
+          name: `Perfil ${i}`,
+          pin: '',
+          isAvailable: i <= slotsAvail,
+          isOccupied: i > slotsAvail
+        };
+      }
+    }
 
-    db.smm_config = {
-      providerUrl: providerUrl.trim(),
-      apiKey: apiKey && apiKey.trim() ? apiKey.trim() : (db.smm_config?.apiKey || 'smm_key_secret'),
-      markupPercent: parseFloat(markupPercent) || 30,
-      status: 'connected',
-      lastBalanceUsd: db.smm_config?.lastBalanceUsd || 184.20,
-      lastSyncAt: new Date().toISOString()
+    const credsString = `${accountEmail.trim()}:::${accountPassword.trim()}`;
+    const credentialsEncrypted = cryptoService.encrypt(credsString);
+    const pinsEncrypted = cryptoService.encrypt(JSON.stringify(pinsObj));
+
+    const newSub = {
+      id: `sub_official_${service.id}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      serviceId: service.id,
+      serviceKey: service.id,
+      serviceName: service.name,
+      category: service.category || 'streaming',
+      planName: service.planName || `Plan ${slotsTotal} Pantallas`,
+      sellerId: 'usr_admin',
+      sellerName: 'GamesBoy Oficial',
+      isOfficial: true,
+      totalSlots: slotsTotal,
+      availableSlots: slotsAvail,
+      pricePerSlotPyg: slotPricePyg,
+      pricePerSlotUsd: slotPriceUsd,
+      credentialsEncrypted,
+      pinsEncrypted,
+      accountExpirationDate: expirationDate || null,
+      instructions: (instructions || 'Ingresa con el correo y contraseña provistos. Usa exclusivamente tu Perfil y PIN asignado. Prohibido cambiar credenciales.').trim(),
+      status: 'active',
+      createdAt: new Date().toISOString()
     };
+
+    if (!Array.isArray(db.subscriptions)) db.subscriptions = [];
+    db.subscriptions.unshift(newSub);
     saveStorage();
 
     res.json({
       success: true,
-      message: '¡Configuración de API de Impulso Digital guardada con éxito!',
-      config: db.smm_config
+      message: `¡Cuenta oficial de "${service.name}" creada y publicada con éxito en GamesBoy.net con ${slotsAvail} cupos disponibles!`,
+      subscription: {
+        ...newSub,
+        credentialsDecrypted: credsString,
+        pinsDecrypted: pinsObj
+      }
+    });
+  } catch (err) {
+    console.error('Error creating official streaming account:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+router.post('/streaming-accounts', (req, res, next) => {
+  // Alias
+  req.url = '/streaming/create-account';
+  router.handle(req, res, next);
+});
+
+
+// =======================================================
+// 5. BANDEJA DE CRECIMIENTO EN REDES SOCIALES (SMM ORDERS)
+// =======================================================
+
+// Get all Social Media growth orders for Admin fulfillment
+router.get('/smm/orders', (req, res) => {
+  try {
+    const db = getDb();
+    const rate = db.platform_settings?.exchangeRatePyg || 7500;
+
+    const orders = (db.smm_orders || []).map(o => {
+      const user = (db.users || []).find(u => u.id === o.userId);
+      return {
+        ...o,
+        userName: o.userName || user?.name || user?.email || 'Cliente',
+        userEmail: user?.email || '',
+        pricePaidPyg: o.pricePaidPyg || Math.round((o.pricePaidUsd || 0) * rate)
+      };
+    });
+
+    const inProgressCount = orders.filter(o => o.status === 'in_progress' || o.status === 'pending').length;
+    const completedCount = orders.filter(o => o.status === 'completed').length;
+    const totalVolumePyg = orders.reduce((sum, o) => sum + (o.pricePaidPyg || 0), 0);
+    const totalVolumeUsd = parseFloat(orders.reduce((sum, o) => sum + (o.pricePaidUsd || 0), 0).toFixed(2));
+
+    res.json({
+      success: true,
+      count: orders.length,
+      stats: {
+        totalOrders: orders.length,
+        inProgressCount,
+        completedCount,
+        totalVolumePyg,
+        totalVolumeUsd
+      },
+      orders
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-router.post('/smm/test-connection', (req, res) => {
+// Mark SMM order as completed (notifies customer)
+router.post('/smm/orders/:id/complete', (req, res) => {
   try {
     const db = getDb();
-    const config = db.smm_config || {};
-    
-    // Simulate real API ping & balance check
-    const simulatedBalance = 245.80;
-    config.lastBalanceUsd = simulatedBalance;
-    config.status = 'connected';
-    config.lastSyncAt = new Date().toISOString();
-    db.smm_config = config;
+    const order = (db.smm_orders || []).find(o => o.id === req.params.id);
+    if (!order) {
+      return res.status(404).json({ error: 'Orden de redes sociales no encontrada.' });
+    }
+
+    order.status = 'completed';
+    order.completedAt = new Date().toISOString();
+    order.notes = 'Servicio cargado y verificado con éxito por el administrador.';
     saveStorage();
+
+    // Broadcast WebSocket event
+    const wss = req.app.get('wss');
+    if (wss) {
+      wss.clients.forEach(client => {
+        if (client.readyState === 1) {
+          client.send(JSON.stringify({
+            type: 'SMM_ORDER_COMPLETED',
+            payload: { order }
+          }));
+        }
+      });
+    }
 
     res.json({
       success: true,
-      message: '🟢 Conexión con el proveedor API establecida con éxito.',
-      providerBalanceUsd: simulatedBalance,
-      status: 'connected'
+      message: `¡Orden "${order.id}" de ${order.platform} marcada como COMPLETADA exitosamente!`,
+      order
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -1297,10 +1421,23 @@ router.post('/settings', (req, res) => {
       setExchangeRate('PYG', rate);
     }
     if (paraguayBankDetails) {
-      db.platform_settings.paraguayBankDetails = {
-        ...db.platform_settings.paraguayBankDetails,
-        ...paraguayBankDetails
+      const normalizedBank = {
+        bank: (paraguayBankDetails.bank || paraguayBankDetails.bankName || db.platform_settings.paraguayBankDetails?.bank || 'Banco Familiar / Itaú Paraguay').trim(),
+        accountHolder: (paraguayBankDetails.accountHolder || paraguayBankDetails.holderName || db.platform_settings.paraguayBankDetails?.accountHolder || 'GamesBoy Paraguay S.A.').trim(),
+        rucOrCi: (paraguayBankDetails.rucOrCi || paraguayBankDetails.docNumber || db.platform_settings.paraguayBankDetails?.rucOrCi || '80091234-5').trim(),
+        accountNumber: (paraguayBankDetails.accountNumber || db.platform_settings.paraguayBankDetails?.accountNumber || '01-445566-7').trim(),
+        aliasSipap: (paraguayBankDetails.aliasSipap || db.platform_settings.paraguayBankDetails?.aliasSipap || 'gamesboy.py').trim()
       };
+
+      db.platform_settings.paraguayBankDetails = normalizedBank;
+
+      // Sync across all tenant profiles so the storefront resolver always gets the active account
+      if (Array.isArray(db.tenants)) {
+        db.tenants.forEach(t => {
+          if (!t.settings) t.settings = {};
+          t.settings.paraguayBankDetails = { ...normalizedBank };
+        });
+      }
     }
     if (binanceDetails) {
       if (binanceDetails.walletAddress && !binanceDetails.qrUrl) {
@@ -1316,7 +1453,7 @@ router.post('/settings', (req, res) => {
 
     res.json({
       success: true,
-      message: '¡Configuración de cobros, bancos y billetera guardada con éxito!',
+      message: '¡Datos bancarios SIPAP y configuración financiera guardados con éxito!',
       settings: db.platform_settings
     });
   } catch (err) {

@@ -5,7 +5,7 @@ import { convertFromUsd } from '../services/currencyService.js';
 
 const router = Router();
 
-const DEFAULT_SMM_SERVICES = [
+export const DEFAULT_SMM_SERVICES = [
   {
     id: 'smm_ig_followers_hq',
     platform: 'Instagram',
@@ -74,20 +74,19 @@ const DEFAULT_SMM_SERVICES = [
   }
 ];
 
-// 1. Get SMM Services Catalog with Markup Calculation
+// 1. Get SMM Services Catalog
 router.get('/services', (req, res) => {
   try {
     const db = getDb();
     const rate = db.platform_settings?.exchangeRatePyg || 7500;
-    const markup = db.smm_config?.markupPercent || 30;
 
     const services = DEFAULT_SMM_SERVICES.map(s => {
-      const finalPricePer1kUsd = parseFloat((s.basePricePer1kUsd * (1 + markup / 100)).toFixed(2));
-      const finalPricePer1kPyg = Math.round(finalPricePer1kUsd * rate);
+      const priceUsd = s.basePricePer1kUsd;
+      const pricePyg = Math.round(priceUsd * rate);
       return {
         ...s,
-        pricePer1kUsd: finalPricePer1kUsd,
-        pricePer1kPyg: finalPricePer1kPyg,
+        pricePer1kUsd: priceUsd,
+        pricePer1kPyg: pricePyg,
         ratePyg: rate
       };
     });
@@ -98,50 +97,79 @@ router.get('/services', (req, res) => {
   }
 });
 
-// 2. Place an SMM Order
+// 2. Place an SMM Order (Direct Digital Store Product with Manual Fulfillment)
 router.post('/order', async (req, res) => {
   try {
     const userId = req.headers['x-user-id'] || 'usr_client1';
-    const { serviceId, link, quantity } = req.body;
+    const { serviceId, serviceTitle, link, quantity, pricePyg, priceUsd } = req.body;
 
-    if (!serviceId || !link || !quantity || parseInt(quantity) <= 0) {
-      return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+    if (!link || !link.trim()) {
+      return res.status(400).json({ error: 'Por favor ingresa el enlace o nombre de usuario de tu perfil o publicación.' });
     }
 
-    const service = DEFAULT_SMM_SERVICES.find(s => s.id === serviceId);
-    if (!service) {
-      return res.status(404).json({ error: 'Servicio no encontrado.' });
-    }
-
-    const qty = parseInt(quantity);
-    if (qty < service.minQuantity || qty > service.maxQuantity) {
-      return res.status(400).json({
-        error: `La cantidad debe estar entre ${service.minQuantity.toLocaleString()} y ${service.maxQuantity.toLocaleString()}.`
-      });
+    const qty = parseInt(quantity, 10);
+    if (!qty || isNaN(qty) || qty <= 0) {
+      return res.status(400).json({ error: 'Por favor selecciona una cantidad válida.' });
     }
 
     const db = getDb();
     const rate = db.platform_settings?.exchangeRatePyg || 7500;
-    const markup = db.smm_config?.markupPercent || 30;
-    const pricePer1kUsd = parseFloat((service.basePricePer1kUsd * (1 + markup / 100)).toFixed(2));
-    const totalUsd = parseFloat(((pricePer1kUsd * qty) / 1000).toFixed(2));
-    const totalPyg = Math.round(totalUsd * rate);
 
-    // 1. Deduct wallet balance
-    deductBalance(userId, totalUsd, `Impulso Digital: ${service.name} (${qty.toLocaleString()} unidades)`);
+    // Detect platform and formatted title
+    let sTitle = serviceTitle || '';
+    let platform = 'Instagram';
+    const sIdLower = (serviceId || '').toLowerCase();
+
+    if (sIdLower.includes('tiktok')) platform = 'TikTok';
+    else if (sIdLower.includes('youtube') || sIdLower.includes('yt')) platform = 'YouTube';
+    else if (sIdLower.includes('telegram') || sIdLower.includes('tg')) platform = 'Telegram';
+    else if (sIdLower.includes('x') || sIdLower.includes('twitter')) platform = 'X (Twitter)';
+    else if (sIdLower.includes('facebook') || sIdLower.includes('fb')) platform = 'Facebook';
+    else platform = 'Instagram';
+
+    if (!sTitle) {
+      const matched = DEFAULT_SMM_SERVICES.find(s => s.id === serviceId);
+      sTitle = matched ? `${matched.platform} - ${matched.name}` : `${platform} - Crecimiento Digital`;
+    }
+
+    // Determine final prices in Gs. and USD
+    let totalPyg = parseInt(pricePyg, 10);
+    let totalUsd = parseFloat(priceUsd);
+
+    if (!totalPyg || isNaN(totalPyg) || totalPyg <= 0) {
+      if (totalUsd && !isNaN(totalUsd) && totalUsd > 0) {
+        totalPyg = Math.round(totalUsd * rate);
+      } else {
+        totalPyg = 15000;
+        totalUsd = parseFloat((totalPyg / rate).toFixed(2));
+      }
+    }
+    if (!totalUsd || isNaN(totalUsd) || totalUsd <= 0) {
+      totalUsd = parseFloat((totalPyg / rate).toFixed(2));
+    }
+
+    // Check user & wallet
+    const user = (db.users || []).find(u => u.id === userId) || { name: 'Cliente GamesBoy' };
+
+    // 1. Deduct balance from user wallet
+    deductBalance(userId, totalUsd, `Crecimiento: ${sTitle} (${qty.toLocaleString()} unidades)`);
 
     // 2. Create Order in database
     const order = {
       id: `smm_ord_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
       userId,
-      serviceId: service.id,
-      serviceName: service.name,
-      platform: service.platform,
+      userName: user.name || user.email || 'Cliente',
+      serviceId: serviceId || 'smm_custom',
+      serviceName: sTitle,
+      serviceTitle: sTitle,
+      platform,
       link: link.trim(),
       quantity: qty,
       pricePaidUsd: totalUsd,
       pricePaidPyg: totalPyg,
-      status: 'in_progress', // 'in_progress', 'completed'
+      status: 'in_progress', // 'in_progress' (En preparación), 'completed' (Completado)
+      estimatedDelivery: '24 a 48 horas',
+      notes: 'Tu servicio está en preparación. El plazo de entrega es de 24 a 48 horas.',
       createdAt: new Date().toISOString()
     };
 
@@ -149,13 +177,13 @@ router.post('/order', async (req, res) => {
     db.smm_orders.unshift(order);
     saveStorage();
 
-    // 3. Broadcast WebSocket event
+    // 3. Broadcast WebSocket event to real-time Admin and Client listeners
     const wss = req.app.get('wss');
     if (wss) {
       wss.clients.forEach(client => {
         if (client.readyState === 1) {
           client.send(JSON.stringify({
-            type: 'SMM_ORDER_CREATED',
+            type: 'NEW_SMM_ORDER',
             payload: { order, userWallet: getWallet(userId) }
           }));
         }
@@ -164,7 +192,7 @@ router.post('/order', async (req, res) => {
 
     res.json({
       success: true,
-      message: `¡Orden de ${service.name} procesada con éxito! Se iniciará la entrega en breve hacia tu enlace.`,
+      message: `¡Orden procesada con éxito! Tu servicio está en preparación con un plazo de entrega de 24 a 48 horas.`,
       order,
       totalUsd,
       totalPyg
@@ -174,13 +202,13 @@ router.post('/order', async (req, res) => {
   }
 });
 
-// 3. Get User's SMM Orders
+// 3. Get User's SMM Orders (Purchases Vault)
 router.get('/my-orders', (req, res) => {
   try {
     const userId = req.headers['x-user-id'] || 'usr_client1';
     const db = getDb();
     const myOrders = (db.smm_orders || []).filter(o => o.userId === userId);
-    res.json({ success: true, count: myOrders.length, orders: myOrders });
+    res.json(myOrders);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

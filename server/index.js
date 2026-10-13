@@ -48,7 +48,7 @@ wss.on('connection', (ws) => {
   
   ws.send(JSON.stringify({
     type: 'CONNECTION_ESTABLISHED',
-    message: `Conectado a GamSplit SaaS Multi-Tenant Engine`,
+    message: `Conectado a GamesBoy.net Engine`,
     onlineUsers,
     serverTime: new Date().toISOString()
   }));
@@ -109,12 +109,8 @@ app.use('/api/admin/streaming-services', streamingHubsRouter);
 
 // Clean Routes & Admin aliases
 app.get('/', (req, res) => {
-  // If request is from a store domain (gamesboy.net, *.gamsplit.com, custom domain, or ?tenant=...)
-  if (req.isStoreRequest) {
-    return res.sendFile(path.join(clientPath, 'store.html'));
-  }
-  // Otherwise render GamSplit SaaS Master Landing
-  return res.sendFile(path.join(clientPath, 'index.html'));
+  // GamesBoy Official Store is the primary application
+  return res.sendFile(path.join(clientPath, 'store.html'));
 });
 
 app.get('/store', (req, res) => res.sendFile(path.join(clientPath, 'store.html')));

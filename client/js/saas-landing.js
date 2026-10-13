@@ -1,10 +1,9 @@
 // GamSplit SaaS Master Landing Engine (saas-landing.js)
 
-let currentStep = 1;
-let selectedPlan = 'plan_pro';
+let selectedPlan = 'plan_control';
 let checkSlugTimeout = null;
 
-// --- 1. SHOWCASE TAB SWITCHER ---
+// --- 1. SHOWCASE TAB SWITCHER (CONTROL VS TIENDA) ---
 window.switchShowcaseTab = function(tabIndex) {
   const tabs = document.querySelectorAll('.showcase-tab-btn');
   const slides = document.querySelectorAll('.showcase-slide');
@@ -26,17 +25,26 @@ window.switchShowcaseTab = function(tabIndex) {
   });
 };
 
-// --- 2. ONBOARDING WIZARD MODAL CONTROLS ---
+// --- 2. ONBOARDING & REGISTRATION MODAL ---
 window.openOnboardingModal = function(planId) {
   if (planId) {
     selectedPlan = planId;
     const planSelect = document.getElementById('wiz-plan');
-    if (planSelect) planSelect.value = planId;
+    if (planSelect) {
+      planSelect.value = planId;
+      handlePlanChange(planId);
+    }
   }
   const modal = document.getElementById('modal-onboarding');
   if (modal) modal.style.display = 'grid';
-  currentStep = 1;
-  renderWizardStep();
+
+  const step1 = document.getElementById('step-1-content');
+  const stepSuccess = document.getElementById('step-success-content');
+  const footerRow = document.getElementById('wizard-buttons-row');
+
+  if (step1) step1.style.display = 'block';
+  if (stepSuccess) stepSuccess.style.display = 'none';
+  if (footerRow) footerRow.style.display = 'flex';
 };
 
 window.closeOnboardingModal = function() {
@@ -44,136 +52,88 @@ window.closeOnboardingModal = function() {
   if (modal) modal.style.display = 'none';
 };
 
-function renderWizardStep() {
-  const step1 = document.getElementById('step-1-content');
-  const step2 = document.getElementById('step-2-content');
-  const stepSuccess = document.getElementById('step-success-content');
-  const stepNum = document.getElementById('wizard-step-num');
-  const title = document.getElementById('wizard-title');
-  const sub = document.getElementById('wizard-sub');
-  const btnPrev = document.getElementById('btn-wiz-prev');
+window.handlePlanChange = function(planId) {
+  selectedPlan = planId;
+  const wrapSub = document.getElementById('wrap-subdomain-field');
   const btnNext = document.getElementById('btn-wiz-next');
-  const footerRow = document.getElementById('wizard-buttons-row');
 
-  if (step1) step1.style.display = currentStep === 1 ? 'block' : 'none';
-  if (step2) step2.style.display = currentStep === 2 ? 'block' : 'none';
-  if (stepSuccess) stepSuccess.style.display = currentStep === 3 ? 'block' : 'none';
+  if (planId === 'plan_control') {
+    if (wrapSub) wrapSub.style.display = 'none';
+    if (btnNext) btnNext.innerHTML = `<span>Activar Plan Control ($9.99 / ₲ 75.000) ➔</span>`;
+  } else {
+    if (wrapSub) wrapSub.style.display = 'block';
+    if (btnNext) btnNext.innerHTML = `<span>Lanzar Plan Pro con Tienda ($19.99) ➔</span>`;
+  }
+};
 
-  if (currentStep === 3) {
-    if (footerRow) footerRow.style.display = 'none';
+window.submitRegistration = async function() {
+  const plan = document.getElementById('wiz-plan')?.value || 'plan_control';
+  const brandName = document.getElementById('wiz-brand-name')?.value?.trim();
+  const slug = document.getElementById('wiz-slug')?.value?.trim();
+  const whatsapp = document.getElementById('wiz-whatsapp')?.value?.trim() || '+595981000000';
+
+  if (!brandName) {
+    alert('Por favor ingresa tu nombre o nombre de negocio.');
     return;
   }
 
-  if (footerRow) footerRow.style.display = 'flex';
-  if (stepNum) stepNum.textContent = currentStep;
-
-  if (btnPrev) {
-    btnPrev.style.display = currentStep > 1 ? 'inline-block' : 'none';
-  }
-
-  if (btnNext) {
-    btnNext.textContent = currentStep === 2 ? '🚀 Lanzar mi Tienda Ahora' : 'Siguiente: Plan & Módulos ➔';
-  }
-
-  if (currentStep === 1) {
-    if (title) title.textContent = '1. Identidad de tu Tienda';
-    if (sub) sub.textContent = 'Elige el nombre de tu marca y tu subdominio.';
-  } else if (currentStep === 2) {
-    if (title) title.textContent = '2. Plan SaaS & Módulos a Vender';
-    if (sub) sub.textContent = 'Selecciona tu nivel de plataforma y activa tu catálogo de servicios.';
-  }
-}
-
-window.handleWizardPrev = function() {
-  if (currentStep > 1) {
-    currentStep--;
-    renderWizardStep();
-  }
-};
-
-window.handleWizardNext = async function() {
-  if (currentStep === 1) {
-    const brandName = document.getElementById('wiz-brand-name')?.value?.trim();
-    const slug = document.getElementById('wiz-slug')?.value?.trim();
-
-    if (!brandName) {
-      alert('Por favor ingresa el nombre de tu marca o tienda.');
-      return;
-    }
+  if (plan === 'plan_pro') {
     if (!slug || slug.length < 3) {
-      alert('El subdominio debe contener al menos 3 caracteres alfanuméricos.');
+      alert('Por favor define el subdominio de tu tienda (mínimo 3 caracteres).');
       return;
     }
 
-    // Verify slug availability
     try {
-      const res = await fetch(`/api/saas/check-slug/${encodeURIComponent(slug)}`);
-      const data = await res.json();
-      if (!data.available) {
-        alert(data.error || 'Este subdominio ya está en uso. Por favor elige otro.');
+      const checkRes = await fetch(`/api/saas/check-slug/${encodeURIComponent(slug)}`);
+      const checkData = await checkRes.json();
+      if (!checkData.available) {
+        alert(checkData.error || 'Este subdominio ya está en uso. Por favor elige otro.');
         return;
       }
-    } catch (err) {
-      console.warn('Could not verify slug:', err);
-    }
-
-    currentStep = 2;
-    renderWizardStep();
-  } else if (currentStep === 2) {
-    await submitOnboarding();
+    } catch (e) {}
   }
-};
 
-async function submitOnboarding() {
-  const brandName = document.getElementById('wiz-brand-name')?.value?.trim();
-  const slug = document.getElementById('wiz-slug')?.value?.trim();
-  const primaryColor = document.getElementById('wiz-primary-color')?.value || '#0284c7';
-  const plan = document.getElementById('wiz-plan')?.value || 'plan_pro';
-  const whatsapp = document.getElementById('wiz-whatsapp')?.value?.trim() || '+595981000000';
-
-  const modStreaming = document.getElementById('mod-streaming')?.checked ?? true;
-  const modGames = document.getElementById('mod-games')?.checked ?? true;
-  const modGiftcards = document.getElementById('mod-giftcards')?.checked ?? true;
+  const cleanSlug = plan === 'plan_pro' ? slug : `ctrl_${brandName.toLowerCase().replace(/[^a-z0-9]/g, '')}_${Date.now().toString().slice(-4)}`;
 
   const btnNext = document.getElementById('btn-wiz-next');
   if (btnNext) {
     btnNext.disabled = true;
-    btnNext.textContent = 'Aprovisionando Tienda...';
+    btnNext.textContent = 'Activando tu cuenta...';
   }
 
   try {
     const payload = {
       name: brandName,
-      slug: slug,
+      slug: cleanSlug,
       customDomain: null,
       planId: plan,
       branding: {
         brandName: brandName,
-        primaryColor: primaryColor,
-        accentColor: primaryColor === '#10b981' ? '#34d399' : (primaryColor === '#f59e0b' ? '#fbbf24' : '#00c2ff'),
+        primaryColor: '#0284c7',
+        accentColor: '#00c2ff',
         whatsappSupport: whatsapp,
         currency: 'PYG',
         exchangeRate: 7500
       },
       settings: {
-        commissionPercent: plan === 'plan_enterprise' ? 1.5 : (plan === 'plan_pro' ? 3.0 : 5.0),
-        allowUserReselling: plan !== 'plan_starter',
+        commissionPercent: plan === 'plan_pro' ? 3.0 : 0,
+        allowUserReselling: plan === 'plan_pro',
         paraguayBankDetails: {
           bank: 'Banco Familiar / Itaú Paraguay',
           accountHolder: brandName,
           accountNumber: '01-000000-1',
-          aliasSipap: `${slug}.py`
+          aliasSipap: `${cleanSlug}.py`
         },
         binanceDetails: {
           payId: '849201934',
           network: 'USDT (Binance Pay / BEP-20 / TRC-20)'
         },
         enabledModules: {
-          streaming: modStreaming,
-          games: modGames,
-          giftcards: modGiftcards,
+          streaming: true,
+          games: plan === 'plan_pro',
+          giftcards: plan === 'plan_pro',
           smm: false,
-          p2pSharing: plan !== 'plan_starter'
+          p2pSharing: plan === 'plan_pro'
         }
       }
     };
@@ -187,37 +147,53 @@ async function submitOnboarding() {
     const data = await res.json();
 
     if (data.success && data.tenant) {
-      currentStep = 3;
-      renderWizardStep();
+      const step1 = document.getElementById('step-1-content');
+      const stepSuccess = document.getElementById('step-success-content');
+      const footerRow = document.getElementById('wizard-buttons-row');
+
+      if (step1) step1.style.display = 'none';
+      if (stepSuccess) stepSuccess.style.display = 'block';
+      if (footerRow) footerRow.style.display = 'none';
+
+      const title = document.getElementById('wiz-success-title');
       const msg = document.getElementById('wiz-success-message');
-      if (msg) {
-        msg.innerHTML = `Tu plataforma <strong>${data.tenant.name}</strong> ha sido creada exitosamente. Tu subdominio asignado es <code>${data.tenant.slug}.gamsplit.com</code>.`;
-      }
+      const urlBox = document.getElementById('wiz-store-url-box');
       const link = document.getElementById('wiz-success-link');
       const btnGo = document.getElementById('wiz-btn-go-store');
-      const storeUrl = `/store?tenant=${data.tenant.slug}`;
-      if (link) {
-        link.href = storeUrl;
-        link.textContent = `https://${data.tenant.slug}.gamsplit.com`;
-      }
-      if (btnGo) {
-        btnGo.href = storeUrl;
+      const btnLabel = document.getElementById('wiz-btn-label');
+
+      if (plan === 'plan_control') {
+        if (title) title.textContent = '¡Plan Control Activado con Éxito!';
+        if (msg) msg.innerHTML = `Tu panel de gestión privada para <strong>${data.tenant.name}</strong> está listo. Ya puedes ingresar a registrar tus cuentas de streaming, PINs y clientes.`;
+        if (urlBox) urlBox.style.display = 'none';
+        if (btnGo) btnGo.href = '/seller';
+        if (btnLabel) btnLabel.textContent = '📋 Ingresar a mi Panel de Control';
+      } else {
+        if (title) title.textContent = '¡Tu Tienda Digital ha sido Creada!';
+        if (msg) msg.innerHTML = `Tu plataforma <strong>${data.tenant.name}</strong> está en vivo. Tu subdominio asignado es <code>${data.tenant.slug}.gamsplit.com</code>.`;
+        if (urlBox) urlBox.style.display = 'block';
+        if (link) {
+          link.href = `/store?tenant=${data.tenant.slug}`;
+          link.textContent = `https://${data.tenant.slug}.gamsplit.com`;
+        }
+        if (btnGo) btnGo.href = `/store?tenant=${data.tenant.slug}`;
+        if (btnLabel) btnLabel.textContent = '🚀 Abrir mi Tienda en Vivo';
       }
     } else {
-      alert(data.error || 'No se pudo crear la tienda.');
+      alert(data.error || 'No se pudo activar la cuenta.');
       if (btnNext) {
         btnNext.disabled = false;
-        btnNext.textContent = '🚀 Lanzar mi Tienda Ahora';
+        btnNext.textContent = 'Activar mi Cuenta Ahora ➔';
       }
     }
   } catch (err) {
     alert('Error al comunicar con el servidor.');
     if (btnNext) {
       btnNext.disabled = false;
-      btnNext.textContent = '🚀 Lanzar mi Tienda Ahora';
+      btnNext.textContent = 'Activar mi Cuenta Ahora ➔';
     }
   }
-}
+};
 
 // Helper auto slug generator
 window.autoGenerateSlug = function(val) {
@@ -260,18 +236,10 @@ window.handleSlugInput = function(val) {
   }, 300);
 };
 
-// Color Picker Hex Display sync
+// Initialize Background Particles
 document.addEventListener('DOMContentLoaded', () => {
-  const colorPicker = document.getElementById('wiz-primary-color');
-  const colorHex = document.getElementById('wiz-color-hex');
-  if (colorPicker && colorHex) {
-    colorPicker.addEventListener('input', (e) => {
-      colorHex.textContent = e.target.value.toUpperCase();
-    });
-  }
-
-  // Background Interactive Particles Canvas
   initBackgroundCanvas();
+  handlePlanChange('plan_control');
 });
 
 function initBackgroundCanvas() {

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GamSplit - Crea tu propia Plataforma de Streaming, Videojuegos y Gift Cards</title>
-  <meta name="description" content="GamSplit es la plataforma SaaS para crear tu propia tienda de cuentas streaming con PIN, videojuegos digitales y gift cards con marca blanca, subdominio propio y cobros en Guaraníes (SIPAP) y USDT.">
+  <title>GamSplit - Software de Control de Streaming y Tienda Digital</title>
+  <meta name="description" content="GamSplit es el software integral para administrar cuentas de streaming con PIN, controlar vencimientos de clientes y lanzar tu propia tienda digital en Guaraníes (SIPAP) y USDT.">
   
   <!-- Branding Favicon -->
   <link rel="icon" type="image/png" href="/assets/branding/GamsPlit.png">
@@ -16,7 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="stylesheet" href="/css/saas-landing.css?v=4.0">
+  <link rel="stylesheet" href="/css/saas-landing.css?v=5.0">
 </head>
 <body class="saas-body">
 
@@ -36,16 +36,16 @@
 
       <!-- Navigation Links -->
       <nav class="saas-nav-links">
-        <a href="#modulos" class="saas-nav-link">Módulos</a>
-        <a href="#como-funciona" class="saas-nav-link">Cómo Funciona</a>
-        <a href="#planes" class="saas-nav-link">Planes</a>
+        <a href="#control-vs-tienda" class="saas-nav-link">¿Qué es GamSplit?</a>
+        <a href="#beneficios" class="saas-nav-link">Beneficios</a>
+        <a href="#planes" class="saas-nav-link">Planes & Precios</a>
         <a href="#faq" class="saas-nav-link">Preguntas</a>
       </nav>
 
-      <!-- Primary Action Button (Single Action) -->
+      <!-- Primary Action Button -->
       <div class="saas-header-actions">
-        <button type="button" class="btn-saas-primary" onclick="openOnboardingModal()">
-          <span>⚡ Crear mi Tienda</span>
+        <button type="button" class="btn-saas-primary" onclick="openOnboardingModal('plan_control')">
+          <span>⚡ Comenzar Ahora</span>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
       </div>
@@ -62,108 +62,156 @@
       <!-- Top Badge -->
       <div class="saas-hero-badge">
         <span class="hero-badge-pulse"></span>
-        <span>Infraestructura SaaS de Comercio Digital</span>
+        <span>Software de Gestión de Streaming & Plataforma Digital</span>
       </div>
 
       <!-- Main Heading -->
       <h1 class="saas-hero-title">
-        Lanza tu Propia Plataforma de <br>
-        <span class="saas-text-gradient">Streaming, Videojuegos & Gift Cards</span> <br>
-        en Minutos
+        Controla tus Cuentas de Streaming y <br>
+        <span class="saas-text-gradient">Vende en Piloto Automático</span>
       </h1>
 
       <!-- Description -->
       <p class="saas-hero-subtitle">
-        <strong>GamSplit</strong> te entrega una tienda digital completa y lista para operar: <strong>subdominio propio</strong>, cobros en <strong>Guaraníes (SIPAP)</strong> y <strong>Cripto (Binance Pay)</strong>, bóveda con PIN individual cifrado y panel administrativo autónomo.
+        El software definitivo para revendedores y administradores: <strong>gestiona perfiles y PINs individuales</strong>, automatiza avisos de vencimiento por WhatsApp y <strong>activa tu propia tienda digital</strong> cuando estés listo para escalar.
       </p>
 
-      <!-- Hero Actions -->
+      <!-- Hero Actions (Dual Value CTA) -->
       <div class="saas-hero-cta-row">
-        <button type="button" class="btn-hero-launch" onclick="openOnboardingModal()">
-          <span>🚀 Lanzar mi Tienda Ahora</span>
+        <button type="button" class="btn-hero-launch" onclick="openOnboardingModal('plan_control')">
+          <span>📋 Probar Plan Control ($9.99 / ₲ 75.000)</span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
         </button>
-        <a href="#planes" class="btn-hero-demo">
-          <span>Ver Planes y Precios</span>
+        <button type="button" class="btn-hero-demo" onclick="openOnboardingModal('plan_pro')">
+          <span>🏬 Plan Pro con Tienda Liberada</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </a>
+        </button>
       </div>
 
-      <!-- Metrics Strip -->
+      <!-- Live Highlights Strip -->
       <div class="saas-metrics-strip">
         <div class="saas-metric-item">
           <strong class="saas-metric-val">100%</strong>
-          <span class="saas-metric-lbl">Marca Blanca Personalizable</span>
+          <span class="saas-metric-lbl">Control de PINs & Perfiles</span>
         </div>
         <div class="saas-metric-divider"></div>
         <div class="saas-metric-item">
-          <strong class="saas-metric-val">AES-256</strong>
-          <span class="saas-metric-lbl">Cifrado de Credenciales & PINs</span>
-        </div>
-        <div class="saas-metric-divider"></div>
-        <div class="saas-metric-item">
-          <strong class="saas-metric-val">0 Seg</strong>
-          <span class="saas-metric-lbl">Entrega Automatizada en Bóveda</span>
+          <strong class="saas-metric-val">WhatsApp</strong>
+          <span class="saas-metric-lbl">Recordatorios de Vencimiento</span>
         </div>
         <div class="saas-metric-divider"></div>
         <div class="saas-metric-item">
           <strong class="saas-metric-val">₲ & USDT</strong>
-          <span class="saas-metric-lbl">SIPAP Paraguay & Binance Pay</span>
+          <span class="saas-metric-lbl">Registro Financiero SIPAP</span>
+        </div>
+        <div class="saas-metric-divider"></div>
+        <div class="saas-metric-item">
+          <strong class="saas-metric-val">Tienda Web</strong>
+          <span class="saas-metric-lbl">Liberada en Plan Pro</span>
         </div>
       </div>
 
       <!-- ======================================================= -->
-      <!-- 3. INTERACTIVE PREVIEW VIEWPORT                         -->
+      <!-- 3. INTERACTIVE SOFTWARE SHOWCASE (CONTROL VS TIENDA)    -->
       <!-- ======================================================= -->
-      <div class="saas-showcase-container" id="interactive-preview">
+      <div class="saas-showcase-container" id="control-vs-tienda">
         <!-- Showcase Navigation Tabs -->
         <div class="showcase-nav-tabs">
           <button type="button" class="showcase-tab-btn active" onclick="switchShowcaseTab(0)">
             <span class="tab-num">1</span>
-            <span>Identidad & Subdominio</span>
+            <span>Panel de Control (Plan Básico $9.99)</span>
           </button>
           <button type="button" class="showcase-tab-btn" onclick="switchShowcaseTab(1)">
             <span class="tab-num">2</span>
-            <span>Streaming con PIN & Bóveda</span>
-          </button>
-          <button type="button" class="showcase-tab-btn" onclick="switchShowcaseTab(2)">
-            <span class="tab-num">3</span>
-            <span>Cobros SIPAP & Binance Pay</span>
+            <span>Tienda Online Liberada (Plan Pro $19.99)</span>
           </button>
         </div>
 
         <!-- Dynamic Screen Viewport -->
         <div class="showcase-screen-viewport">
-          <!-- Slide 1: Brand & Domain Setup -->
+          
+          <!-- Slide 1: Control Panel (Basic Benefit) -->
           <div class="showcase-slide active" id="slide-0">
+            <div class="slide-browser-bar">
+              <div class="browser-dots"><span class="d-red"></span><span class="d-yellow"></span><span class="d-green"></span></div>
+              <div class="browser-url">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                <span>app.gamsplit.com/control-panel</span>
+              </div>
+              <span class="browser-badge cyan">Gestión Privada</span>
+            </div>
+            <div class="slide-content-grid">
+              <div class="slide-feature-card">
+                <div class="feature-tag cyan">BENEFICIO BÁSICO • $9.99 / MES</div>
+                <h3>Control Total de Cuentas y Clientes</h3>
+                <p>Olvídate del desorden en hojas de cálculo. Registra tus cuentas maestras de Netflix, Disney+, Max o Spotify, asigna cada perfil con su PIN y controla qué cliente tiene cada pantalla y cuándo vence su pago.</p>
+                <div class="live-brand-pill">
+                  <span class="dot-live cyan"></span>
+                  <span>Avisos de cobro por WhatsApp con 1 clic</span>
+                </div>
+              </div>
+              <div class="slide-preview-box">
+                <!-- Mock Control Table -->
+                <div class="mock-control-table">
+                  <div class="mock-table-header">
+                    <span>Cuenta / Servicio</span>
+                    <span>Perfil & PIN</span>
+                    <span>Cliente</span>
+                    <span>Vencimiento</span>
+                  </div>
+                  <div class="mock-table-row">
+                    <div class="mock-svc-name">🍿 Netflix 4K #01</div>
+                    <div class="mock-pin-badge">Perfil 1 • PIN 8492</div>
+                    <div class="mock-client-name">Carlos Ruiz</div>
+                    <div class="mock-status-pill green">Vence en 18 días</div>
+                  </div>
+                  <div class="mock-table-row">
+                    <div class="mock-svc-name">🍿 Netflix 4K #01</div>
+                    <div class="mock-pin-badge">Perfil 2 • PIN 1204</div>
+                    <div class="mock-client-name">María Gómez</div>
+                    <div class="mock-status-pill yellow">Vence en 2 días</div>
+                  </div>
+                  <div class="mock-table-row">
+                    <div class="mock-svc-name">🏰 Disney+ Premium</div>
+                    <div class="mock-pin-badge">Perfil 1 • PIN 7712</div>
+                    <div class="mock-client-name">Lucas Benítez</div>
+                    <div class="mock-status-pill green">Vence en 25 días</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Slide 2: Digital Store (Pro Benefit) -->
+          <div class="showcase-slide" id="slide-1">
             <div class="slide-browser-bar">
               <div class="browser-dots"><span class="d-red"></span><span class="d-yellow"></span><span class="d-green"></span></div>
               <div class="browser-url">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                 <span>https://mitienda.gamsplit.com</span>
               </div>
-              <span class="browser-badge">Subdominio Activo</span>
+              <span class="browser-badge green">Tienda Online Activa</span>
             </div>
             <div class="slide-content-grid">
               <div class="slide-feature-card">
-                <div class="feature-tag">TU TIENDA DIGITAL</div>
-                <h3>Personalización Visual Completa</h3>
-                <p>Configura tu propio nombre de marca, logotipo, color primario y catálogo sin escribir una sola línea de código.</p>
+                <div class="feature-tag green">BENEFICIO PRO • $19.99 / MES</div>
+                <h3>Tu Propia Tienda Web Liberada</h3>
+                <p>Tus clientes entran a tu propia página web, eligen su pantalla o juego, pagan vía transferencia SIPAP o Binance y reciben su PIN al instante en su bóveda digital sin que tengas que atenderlos manualmente.</p>
                 <div class="live-brand-pill">
-                  <span class="dot-live"></span>
-                  <span>SSL Seguro Incluido • Subdominio Propio</span>
+                  <span class="dot-live green"></span>
+                  <span>Subdominio propio + Catálogo de Juegos y Gift Cards</span>
                 </div>
               </div>
               <div class="slide-preview-box">
                 <div class="preview-mini-store">
                   <div class="mini-store-header">
                     <div class="mini-logo-box">🎮 MiTienda Digital</div>
-                    <div class="mini-balance-chip">₲ 150.000 / $20.00</div>
+                    <div class="mini-balance-chip">SIPAP & Binance Pay</div>
                   </div>
                   <div class="mini-catalog-grid">
                     <div class="mini-card active-card">
                       <div class="mini-card-icon">🍿</div>
-                      <div class="mini-card-title">Netflix 4K PIN</div>
+                      <div class="mini-card-title">Netflix 4K (PIN)</div>
                       <div class="mini-card-price">₲ 25.000 / mes</div>
                     </div>
                     <div class="mini-card">
@@ -182,84 +230,6 @@
             </div>
           </div>
 
-          <!-- Slide 2: Streaming with PIN Vault -->
-          <div class="showcase-slide" id="slide-1">
-            <div class="slide-browser-bar">
-              <div class="browser-dots"><span class="d-red"></span><span class="d-yellow"></span><span class="d-green"></span></div>
-              <div class="browser-url">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                <span>https://mitienda.gamsplit.com/purchases</span>
-              </div>
-              <span class="browser-badge green">Bóveda Cifrada</span>
-            </div>
-            <div class="slide-content-grid">
-              <div class="slide-feature-card">
-                <div class="feature-tag cyan">BÓVEDA DE CLIENTE</div>
-                <h3>Entrega de Cuentas con PIN Individual</h3>
-                <p>Tus clientes reciben su pantalla asignada con PIN personal protegido con cifrado AES-256 de forma automática tras el pago.</p>
-                <div class="live-brand-pill">
-                  <span class="dot-live green"></span>
-                  <span>Sin compartir contraseñas maestras</span>
-                </div>
-              </div>
-              <div class="slide-preview-box">
-                <div class="preview-vault-card">
-                  <div class="vault-top-row">
-                    <span class="vault-service">Netflix Premium 4K</span>
-                    <span class="vault-slot-badge">Perfil #3 Asignado</span>
-                  </div>
-                  <div class="vault-pin-display">
-                    <span class="pin-lbl">PIN Personal:</span>
-                    <strong class="pin-val">8492</strong>
-                  </div>
-                  <div class="vault-creds-line">
-                    <code>usuario@vip.com ••••••••</code>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Slide 3: Payments & SIPAP -->
-          <div class="showcase-slide" id="slide-2">
-            <div class="slide-browser-bar">
-              <div class="browser-dots"><span class="d-red"></span><span class="d-yellow"></span><span class="d-green"></span></div>
-              <div class="browser-url">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                <span>https://mitienda.gamsplit.com/profile</span>
-              </div>
-              <span class="browser-badge amber">Pasarelas de Cobro</span>
-            </div>
-            <div class="slide-content-grid">
-              <div class="slide-feature-card">
-                <div class="feature-tag amber">COBROS EN PARAGUAY & CRIPTO</div>
-                <h3>SIPAP Local y Binance Pay</h3>
-                <p>Cobra directamente en tu cuenta bancaria paraguaya o en USDT con aprobación ágil de comprobantes desde tu panel.</p>
-                <div class="live-brand-pill">
-                  <span class="dot-live amber"></span>
-                  <span>100% del dinero va a tus cuentas</span>
-                </div>
-              </div>
-              <div class="slide-preview-box">
-                <div class="preview-payment-methods">
-                  <div class="payment-method-chip active">
-                    <span class="pm-icon">🏦</span>
-                    <div class="pm-details">
-                      <strong>Transferencia Bancaria SIPAP</strong>
-                      <span>Banco Familiar / Itaú / Continental</span>
-                    </div>
-                  </div>
-                  <div class="payment-method-chip">
-                    <span class="pm-icon">🟡</span>
-                    <div class="pm-details">
-                      <strong>Binance Pay / USDT</strong>
-                      <span>Pay ID y Redes BEP-20 / TRC-20</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -267,227 +237,149 @@
   </section>
 
   <!-- ======================================================= -->
-  <!-- 4. MODULOS / CARACTERÍSTICAS PRINCIPALES                -->
+  <!-- 4. BENEFICIOS DETALLADOS                                -->
   <!-- ======================================================= -->
-  <section class="saas-section" id="modulos">
+  <section class="saas-section" id="beneficios">
     <div class="saas-section-container">
       <div class="saas-section-header">
-        <span class="saas-section-tag">TODO EN UNO</span>
-        <h2 class="saas-section-title">Los 4 Motores de Negocio Integrados</h2>
-        <p class="saas-section-sub">GamSplit incluye todas las herramientas que necesitas para vender productos digitales desde el primer día.</p>
+        <span class="saas-section-tag">CARACTERÍSTICAS</span>
+        <h2 class="saas-section-title">Diseñado para la Realidad del Vendedor</h2>
+        <p class="saas-section-sub">Todo lo que necesitas para profesionalizar tu negocio de streaming y productos digitales.</p>
       </div>
 
       <div class="saas-pillars-grid">
-        <!-- Pilar 1 -->
         <div class="saas-pillar-card">
-          <div class="pillar-icon-box cyan">🎬</div>
-          <h3 class="pillar-title">Streaming con PIN & Bóveda</h3>
-          <p class="pillar-desc">Vende slots individuales de Netflix, Disney+, Max, Spotify y más. Cada comprador recibe su PIN y perfil exclusivo con credenciales cifradas.</p>
-          <ul class="pillar-check-list">
-            <li>Asignación de perfiles (slots 1 al 5)</li>
-            <li>Cifrado AES-256 en base de datos</li>
-            <li>Instrucciones personalizadas por servicio</li>
-          </ul>
+          <div class="pillar-icon-box cyan">🔒</div>
+          <h3 class="pillar-title">Gestión de PINs y Perfiles</h3>
+          <p class="pillar-desc">Asigna a cada comprador su número de perfil exacto (1 al 5) y su PIN de 4 dígitos. Las contraseñas maestras quedan protegidas con cifrado AES-256.</p>
         </div>
 
-        <!-- Pilar 2 -->
         <div class="saas-pillar-card">
-          <div class="pillar-icon-box purple">🎮</div>
-          <h3 class="pillar-title">Videojuegos Digitales</h3>
-          <p class="pillar-desc">Catálogo completo de consolas y PC con soporte para Cuentas Primarias, Cuentas Secundarias y Códigos de canje.</p>
-          <ul class="pillar-check-list">
-            <li>Doble esquema de precios (Primaria/Secundaria)</li>
-            <li>Conversión viva USD / Guaraníes (₲)</li>
-            <li>Galería de capturas y portadas HD</li>
-          </ul>
+          <div class="pillar-icon-box emerald">📱</div>
+          <h3 class="pillar-title">Avisos de Cobro por WhatsApp</h3>
+          <p class="pillar-desc">GamSplit te avisa qué clientes están por vencer. Con un solo clic abres WhatsApp con un mensaje pre-armado para cobrar la renovación.</p>
         </div>
 
-        <!-- Pilar 3 -->
         <div class="saas-pillar-card">
-          <div class="pillar-icon-box amber">🎁</div>
-          <h3 class="pillar-title">Tarjetas de Regalo (Gift Cards)</h3>
-          <p class="pillar-desc">PlayStation Store, Xbox Game Pass, Nintendo eShop, Steam Wallet, Google Play y Apple con entrega instantánea.</p>
-          <ul class="pillar-check-list">
-            <li>Tarjetas de presentación estilo retail</li>
-            <li>Selector dinámico de denominaciones ($10 a $100)</li>
-            <li>Gestión de stock con entrega automatizada</li>
-          </ul>
+          <div class="pillar-icon-box purple">💰</div>
+          <h3 class="pillar-title">Finanzas en Guaraníes & Cripto</h3>
+          <p class="pillar-desc">Lleva el registro exacto de cuánto cobraste por transferencias bancarias de Paraguay (SIPAP) y pagos en USDT vía Binance Pay.</p>
         </div>
 
-        <!-- Pilar 4 -->
         <div class="saas-pillar-card">
-          <div class="pillar-icon-box emerald">💳</div>
-          <h3 class="pillar-title">Billetera, SIPAP & Binance</h3>
-          <p class="pillar-desc">Sistema de saldo y recargas manuales con comprobantes SIPAP para Paraguay y pagos cripto vía Binance Pay.</p>
-          <ul class="pillar-check-list">
-            <li>Ledger contable inmutable bimoneda</li>
-            <li>Aprobación de depósitos en 1 clic</li>
-            <li>Sistema de custodia (Escrow) integrado</li>
-          </ul>
+          <div class="pillar-icon-box amber">⚡</div>
+          <h3 class="pillar-title">Venta Automática con Tienda (Pro)</h3>
+          <p class="pillar-desc">Al subir al Plan Pro, liberas tu propia tienda web con subdominio para que tus clientes compren 24/7 y reciban su PIN automáticamente.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ======================================================= -->
-  <!-- 5. CÓMO FUNCIONA                                        -->
+  <!-- 5. TABLA DE PLANES & PRECIOS (2 NIVELES CLAROS)         -->
   <!-- ======================================================= -->
-  <section class="saas-section bg-elevated" id="como-funciona">
+  <section class="saas-section bg-elevated" id="planes">
     <div class="saas-section-container">
       <div class="saas-section-header">
-        <span class="saas-section-tag">PASO A PASO</span>
-        <h2 class="saas-section-title">Lanza tu Plataforma en 3 Pasos</h2>
-        <p class="saas-section-sub">Sin configuraciones técnicas complejas. En 2 minutos tu tienda estará lista para recibir clientes.</p>
+        <span class="saas-section-tag">PRECIOS TRANSPARENTES</span>
+        <h2 class="saas-section-title">Elige el Nivel para tu Negocio</h2>
+        <p class="saas-section-sub">Comienza ordenando tus cuentas con el Plan Control o escala a ventas automáticas con el Plan Pro.</p>
       </div>
 
-      <div class="saas-steps-row">
-        <!-- Paso 1 -->
-        <div class="saas-step-item">
-          <div class="step-num-badge">1</div>
-          <h3 class="step-title">Crea tu Tienda</h3>
-          <p class="step-desc">Elige tu nombre comercial y tu subdominio (ej: <code>mitienda.gamsplit.com</code>) o vincula tu dominio propio.</p>
-        </div>
-
-        <!-- Paso 2 -->
-        <div class="saas-step-item">
-          <div class="step-num-badge">2</div>
-          <h3 class="step-title">Configura tus Cobros</h3>
-          <p class="step-desc">Ingresa tus datos bancarios de Paraguay (SIPAP / Alias) y tu Binance Pay ID para recibir el 100% de tus ventas.</p>
-        </div>
-
-        <!-- Paso 3 -->
-        <div class="saas-step-item">
-          <div class="step-num-badge">3</div>
-          <h3 class="step-title">Vende en Piloto Automático</h3>
-          <p class="step-desc">Tus clientes exploran el catálogo, recargan saldo y reciben sus cuentas con PIN instantáneamente en su bóveda.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================================================= -->
-  <!-- 6. PLANES & PRECIOS                                     -->
-  <!-- ======================================================= -->
-  <section class="saas-section" id="planes">
-    <div class="saas-section-container">
-      <div class="saas-section-header">
-        <span class="saas-section-tag">PLANES SAAS</span>
-        <h2 class="saas-section-title">Elige el Plan que Mejor se Adapte a tu Negocio</h2>
-        <p class="saas-section-sub">Escala desde revendedor individual hasta una plataforma de marca blanca completa.</p>
-      </div>
-
-      <div class="saas-pricing-grid">
-        <!-- Plan Starter -->
+      <div class="saas-pricing-grid dual-plans">
+        
+        <!-- PLAN 1: CONTROL (BÁSICO) -->
         <div class="pricing-card">
           <div class="pricing-header">
-            <span class="pricing-badge">STARTER</span>
-            <h3 class="pricing-plan-name">Starter Reseller</h3>
-            <p class="pricing-plan-desc">Ideal para comenzar a vender streaming y juegos con tu propia marca.</p>
+            <span class="pricing-badge">PLAN BÁSICO</span>
+            <h3 class="pricing-plan-name">Plan Control</h3>
+            <p class="pricing-plan-desc">Para revendedores que desean organizar sus cuentas, PINs, clientes y cobranzas.</p>
+          </div>
+          <div class="pricing-price-box">
+            <span class="currency">$</span>
+            <strong class="price-val">9.99</strong>
+            <span class="period">/ mes</span>
+            <div class="price-pyg-conversion">o ₲ 75.000 Guaraníes / mes</div>
+          </div>
+          <ul class="pricing-features-list">
+            <li>✅ <strong>Panel de Control Privado de Cuentas</strong></li>
+            <li>✅ Gestión de hasta 100 perfiles de streaming con PIN</li>
+            <li>✅ Bóveda cifrada AES-256 para contraseñas</li>
+            <li>✅ Control de clientes y fechas de corte/vencimiento</li>
+            <li>✅ Recordatorios de cobro y renovación por WhatsApp</li>
+            <li>✅ Registro de ingresos en Guaraníes (SIPAP) y USDT</li>
+            <li class="disabled-feat">❌ Sin tienda web pública propia</li>
+          </ul>
+          <button type="button" class="btn-pricing-select" onclick="openOnboardingModal('plan_control')">
+            Elegir Plan Control ($9.99) ➔
+          </button>
+        </div>
+
+        <!-- PLAN 2: PRO (CON TIENDA LIBERADA) -->
+        <div class="pricing-card featured">
+          <div class="pricing-popular-tag">MÁS POPULAR</div>
+          <div class="pricing-header">
+            <span class="pricing-badge cyan">PLAN PRO</span>
+            <h3 class="pricing-plan-name">Plan Pro (Tienda Liberada)</h3>
+            <p class="pricing-plan-desc">Para vendedores que quieren su propia tienda web para vender en piloto automático.</p>
           </div>
           <div class="pricing-price-box">
             <span class="currency">$</span>
             <strong class="price-val">19.99</strong>
             <span class="period">/ mes</span>
+            <div class="price-pyg-conversion">o ₲ 150.000 Guaraníes / mes</div>
           </div>
           <ul class="pricing-features-list">
-            <li>✅ Hasta 50 Slots de Streaming con PIN</li>
-            <li>✅ Hasta 30 Productos de Catálogo</li>
-            <li>✅ Subdominio <code>.gamsplit.com</code></li>
-            <li>✅ Cobros SIPAP Paraguay y Binance Pay</li>
-            <li>✅ Panel de Control de Tienda</li>
-          </ul>
-          <button type="button" class="btn-pricing-select" onclick="openOnboardingModal('plan_starter')">
-            Comenzar con Starter ➔
-          </button>
-        </div>
-
-        <!-- Plan Pro (Destacado) -->
-        <div class="pricing-card featured">
-          <div class="pricing-popular-tag">RECOMENDADO</div>
-          <div class="pricing-header">
-            <span class="pricing-badge cyan">PRO MARKETPLACE</span>
-            <h3 class="pricing-plan-name">Pro Store</h3>
-            <p class="pricing-plan-desc">Para vendedores con volumen que buscan su propio dominio y soporte completo.</p>
-          </div>
-          <div class="pricing-price-box">
-            <span class="currency">$</span>
-            <strong class="price-val">49.99</strong>
-            <span class="period">/ mes</span>
-          </div>
-          <ul class="pricing-features-list">
-            <li>✅ Hasta 250 Slots de Streaming con PIN</li>
-            <li>✅ Hasta 150 Productos de Catálogo</li>
-            <li>✅ <strong>Dominio Propio</strong> (ej. <code>mitienda.com</code>)</li>
-            <li>✅ Marketplace P2P Habilitado</li>
-            <li>✅ Personalización de Colores & Logotipo</li>
-            <li>✅ Soporte Prioritario WhatsApp</li>
+            <li>✅ <strong>TODO lo del Plan Control incluido</strong></li>
+            <li>✅ <strong>Tienda Online Pública Liberada</strong> (<code>mitienda.gamsplit.com</code>)</li>
+            <li>✅ <strong>Bóveda de entrega automática con PIN</strong> para compradores</li>
+            <li>✅ Venta de Videojuegos Digitales y Gift Cards</li>
+            <li>✅ Cobros automatizados SIPAP y Binance Pay con comprobante</li>
+            <li>✅ Capacidad ampliada hasta 500 perfiles/slots</li>
+            <li>✅ Personalización de logotipo, colores y WhatsApp</li>
           </ul>
           <button type="button" class="btn-pricing-select primary" onclick="openOnboardingModal('plan_pro')">
-            🚀 Elegir Plan Pro ➔
+            🚀 Elegir Plan Pro con Tienda ($19.99) ➔
           </button>
         </div>
 
-        <!-- Plan Enterprise -->
-        <div class="pricing-card">
-          <div class="pricing-header">
-            <span class="pricing-badge purple">ENTERPRISE</span>
-            <h3 class="pricing-plan-name">Marca Blanca Total</h3>
-            <p class="pricing-plan-desc">Infraestructura dedicada sin mención de GamSplit y capacidad masiva.</p>
-          </div>
-          <div class="pricing-price-box">
-            <span class="currency">$</span>
-            <strong class="price-val">99.99</strong>
-            <span class="period">/ mes</span>
-          </div>
-          <ul class="pricing-features-list">
-            <li>✅ Hasta 1,000 Slots de Streaming</li>
-            <li>✅ Productos y Catálogo Ilimitado</li>
-            <li>✅ <strong>100% Marca Blanca</strong> (Cero mención de SaaS)</li>
-            <li>✅ API Exclusiva de Integración</li>
-            <li>✅ Comisiones de plataforma mínimas (1.5%)</li>
-            <li>✅ Soporte Dedicado 24/7</li>
-          </ul>
-          <button type="button" class="btn-pricing-select" onclick="openOnboardingModal('plan_enterprise')">
-            Elegir Enterprise ➔
-          </button>
-        </div>
       </div>
     </div>
   </section>
 
   <!-- ======================================================= -->
-  <!-- 7. FAQ / PREGUNTAS FRECUENTES                           -->
+  <!-- 6. FAQ                                                  -->
   <!-- ======================================================= -->
-  <section class="saas-section bg-elevated" id="faq">
+  <section class="saas-section" id="faq">
     <div class="saas-section-container">
       <div class="saas-section-header">
-        <span class="saas-section-tag">DUDAS COMUNES</span>
+        <span class="saas-section-tag">DUDAS FRECUENTES</span>
         <h2 class="saas-section-title">Preguntas Frecuentes</h2>
       </div>
 
       <div class="saas-faq-grid">
         <div class="faq-item">
-          <h4 class="faq-q">¿Cómo recibo el dinero de mis ventas?</h4>
-          <p class="faq-a">El dinero va directamente a tus cuentas. Configuras tus datos de transferencia bancaria de Paraguay (SIPAP) o tu Binance Pay ID, y tus clientes te transfieren directamente a ti.</p>
+          <h4 class="faq-q">¿Cuál es la diferencia entre el Plan Control y el Plan Pro?</h4>
+          <p class="faq-a">El <strong>Plan Control ($9.99)</strong> es para tu administración interna: organizas tus cuentas de streaming, asignas PINs a tus clientes y llevas el control de vencimientos y cobranzas por WhatsApp. El <strong>Plan Pro ($19.99)</strong> además te entrega tu propia página web (`mitienda.gamsplit.com`) para que tus clientes compren por internet y reciban su PIN automáticamente.</p>
         </div>
         <div class="faq-item">
-          <h4 class="faq-q">¿Cómo funciona la entrega con PIN de Streaming?</h4>
-          <p class="faq-a">Cargas tus cuentas maestras divididas en perfiles. GamSplit encripta las credenciales con AES-256 y le entrega a cada comprador únicamente su PIN y perfil asignado.</p>
+          <h4 class="faq-q">¿Cómo cobro a mis clientes?</h4>
+          <p class="faq-a">Tanto en transferencias bancarias de Paraguay (SIPAP) como en criptomonedas (Binance Pay), el dinero va directamente a tus cuentas bancarias o billeteras.</p>
         </div>
         <div class="faq-item">
-          <h4 class="faq-q">¿Puedo usar mi propio dominio (.com, .net, etc.)?</h4>
-          <p class="faq-a">Sí. En los planes Pro y Enterprise puedes vincular tu propio dominio personalizado mediante registros DNS simples.</p>
+          <h4 class="faq-q">¿Mis contraseñas maestras están seguras?</h4>
+          <p class="faq-a">Totalmente. El sistema utiliza cifrado AES-256 en la base de datos. Ningún cliente ve la contraseña maestra de tus cuentas compartidas; cada uno solo ve su PIN y su perfil asignado.</p>
         </div>
         <div class="faq-item">
-          <h4 class="faq-q">¿Necesito saber programar?</h4>
-          <p class="faq-a">Para nada. GamSplit es una solución 100% llave en mano que gestiona el hosting, base de datos, seguridad, SSL y la interfaz de forma autónoma.</p>
+          <h4 class="faq-q">¿Puedo cambiar de plan más adelante?</h4>
+          <p class="faq-a">Sí, puedes comenzar con el Plan Control para organizar tu stock y subir al Plan Pro cuando quieras activar tu tienda pública.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ======================================================= -->
-  <!-- 8. FOOTER                                               -->
+  <!-- 7. FOOTER                                               -->
   <!-- ======================================================= -->
   <footer class="saas-footer">
     <div class="saas-footer-container">
@@ -496,53 +388,61 @@
           <img src="/assets/branding/GamsPlit.png" alt="GamSplit" class="footer-logo-img">
           <span class="saas-badge-tag">SaaS Engine</span>
         </div>
-        <p class="footer-copy-text">Infraestructura de comercio digital para tiendas de streaming, videojuegos y tarjetas de regalo.</p>
+        <p class="footer-copy-text">Software de control y monetización de cuentas de streaming y productos digitales.</p>
         <div class="footer-copyright">© 2026 GamSplit.com • Todos los derechos reservados.</div>
       </div>
 
       <div class="footer-links-col">
         <h5 class="footer-heading">Navegación</h5>
-        <a href="#modulos" class="footer-link">Módulos</a>
-        <a href="#como-funciona" class="footer-link">Cómo Funciona</a>
+        <a href="#control-vs-tienda" class="footer-link">¿Qué es GamSplit?</a>
+        <a href="#beneficios" class="footer-link">Beneficios</a>
         <a href="#planes" class="footer-link">Planes & Precios</a>
         <a href="#faq" class="footer-link">Preguntas Frecuentes</a>
       </div>
 
       <div class="footer-links-col">
-        <h5 class="footer-heading">Soporte & Contacto</h5>
-        <a href="https://wa.me/595981123456" target="_blank" class="footer-link">💬 Soporte WhatsApp</a>
+        <h5 class="footer-heading">Contacto</h5>
+        <a href="https://wa.me/595981123456" target="_blank" class="footer-link">💬 WhatsApp de Soporte</a>
         <a href="mailto:soporte@gamsplit.com" class="footer-link">✉️ soporte@gamsplit.com</a>
-        <a href="/login" class="footer-link">🔐 Acceso a mi Cuenta</a>
+        <a href="/login" class="footer-link">🔐 Iniciar Sesión</a>
       </div>
     </div>
   </footer>
 
   <!-- ======================================================= -->
-  <!-- 9. ONBOARDING WIZARD MODAL (CREAR MI TIENDA)            -->
+  <!-- 8. MODAL DE REGISTRO & ONBOARDING                       -->
   <!-- ======================================================= -->
   <div class="saas-modal-overlay" id="modal-onboarding" style="display: none;">
     <div class="saas-modal-card">
-      <!-- Modal Header -->
       <div class="saas-modal-header">
         <div>
-          <span class="modal-step-badge">Paso <span id="wizard-step-num">1</span> de 2</span>
-          <h3 class="saas-modal-title" id="wizard-title">1. Identidad de tu Tienda</h3>
-          <p class="saas-modal-sub" id="wizard-sub">Elige el nombre de tu marca y tu subdominio.</p>
+          <span class="modal-step-badge" id="modal-step-badge">Paso 1 de 2</span>
+          <h3 class="saas-modal-title" id="wizard-title">Configuración de tu Cuenta</h3>
+          <p class="saas-modal-sub" id="wizard-sub">Completa tus datos para activar tu software GamSplit.</p>
         </div>
         <button type="button" class="btn-modal-close" onclick="closeOnboardingModal()">✕</button>
       </div>
 
-      <!-- Modal Body -->
       <div class="saas-modal-body">
-        <!-- Step 1: Identity & Subdomain -->
+        
+        <!-- Step 1: User & Plan Details -->
         <div class="wizard-step-pane" id="step-1-content">
           <div class="form-group-saas">
-            <label class="form-lbl-saas">Nombre de tu Tienda / Marca *</label>
-            <input type="text" id="wiz-brand-name" class="form-input-saas" placeholder="Ej: StreamZone Py, PlayZone Store..." oninput="autoGenerateSlug(this.value)">
+            <label class="form-lbl-saas">Selecciona tu Plan *</label>
+            <select id="wiz-plan" class="form-select-saas" onchange="handlePlanChange(this.value)">
+              <option value="plan_control">Plan Control ($9.99 / ₲ 75.000 mes) - Gestión de Streaming</option>
+              <option value="plan_pro" selected>Plan Pro ($19.99 / ₲ 150.000 mes) - Tienda Digital Liberada</option>
+            </select>
           </div>
 
           <div class="form-group-saas">
-            <label class="form-lbl-saas">Subdominio GamSplit Gratuito *</label>
+            <label class="form-lbl-saas">Tu Nombre o Nombre de Negocio *</label>
+            <input type="text" id="wiz-brand-name" class="form-input-saas" placeholder="Ej: StreamZone, Carlos Streams..." oninput="autoGenerateSlug(this.value)">
+          </div>
+
+          <!-- Dynamic Subdomain (Shown only if Pro Plan is active) -->
+          <div class="form-group-saas" id="wrap-subdomain-field">
+            <label class="form-lbl-saas">Subdominio de tu Tienda Web *</label>
             <div class="input-subdomain-wrap">
               <input type="text" id="wiz-slug" class="form-input-saas sub-input" placeholder="mitienda" oninput="handleSlugInput(this.value)">
               <span class="sub-domain-suffix">.gamsplit.com</span>
@@ -551,80 +451,40 @@
           </div>
 
           <div class="form-group-saas">
-            <label class="form-lbl-saas">Color de Marca Principal</label>
-            <div class="color-picker-row">
-              <input type="color" id="wiz-primary-color" class="form-color-picker" value="#0284c7">
-              <span class="color-hex-val" id="wiz-color-hex">#0284c7</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Step 2: Plan & Confirmation -->
-        <div class="wizard-step-pane" id="step-2-content" style="display: none;">
-          <div class="form-group-saas">
-            <label class="form-lbl-saas">Plan SaaS Seleccionado</label>
-            <select id="wiz-plan" class="form-select-saas">
-              <option value="plan_starter">Starter Reseller ($19.99/mes)</option>
-              <option value="plan_pro" selected>Pro Marketplace ($49.99/mes) - Recomendado</option>
-              <option value="plan_enterprise">Enterprise White-Label ($99.99/mes)</option>
-            </select>
-          </div>
-
-          <div class="form-group-saas">
-            <label class="form-lbl-saas">Módulos a Activar</label>
-            <div class="modules-checkbox-grid">
-              <label class="module-check-item">
-                <input type="checkbox" id="mod-streaming" checked>
-                <span>🎬 Streaming con PIN</span>
-              </label>
-              <label class="module-check-item">
-                <input type="checkbox" id="mod-games" checked>
-                <span>🎮 Videojuegos Digitales</span>
-              </label>
-              <label class="module-check-item">
-                <input type="checkbox" id="mod-giftcards" checked>
-                <span>🎁 Tarjetas de Regalo</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group-saas">
-            <label class="form-lbl-saas">WhatsApp de Soporte de tu Tienda</label>
+            <label class="form-lbl-saas">WhatsApp de Contacto / Soporte *</label>
             <input type="text" id="wiz-whatsapp" class="form-input-saas" placeholder="+595 981 000 000">
           </div>
         </div>
 
-        <!-- Success Pane -->
+        <!-- Step 2: Confirmation / Success -->
         <div class="wizard-step-pane" id="step-success-content" style="display: none;">
           <div class="onboarding-success-card">
             <div class="success-icon-large">🎉</div>
-            <h3>¡Tu Tienda ha sido Creada con Éxito!</h3>
-            <p id="wiz-success-message">Ya puedes ingresar a tu plataforma y comenzar a configurar tu catálogo.</p>
-            <div class="success-store-url-box">
-              <span class="url-label">Enlace de tu tienda:</span>
+            <h3 id="wiz-success-title">¡Tu Cuenta ha sido Creada!</h3>
+            <p id="wiz-success-message">Tu acceso a GamSplit ha sido habilitado con éxito.</p>
+            <div class="success-store-url-box" id="wiz-store-url-box">
+              <span class="url-label">Enlace de tu tienda web:</span>
               <a href="#" id="wiz-success-link" target="_blank" class="url-link">https://mitienda.gamsplit.com</a>
             </div>
             <div class="success-actions-row">
               <a href="#" id="wiz-btn-go-store" class="btn-saas-primary">
-                <span>🚀 Abrir mi Tienda Ahora</span>
+                <span id="wiz-btn-label">🚀 Ingresar a mi Panel</span>
               </a>
             </div>
           </div>
         </div>
+
       </div>
 
       <!-- Modal Footer Buttons -->
       <div class="saas-modal-footer" id="wizard-buttons-row">
-        <button type="button" class="btn-wiz-secondary" id="btn-wiz-prev" onclick="handleWizardPrev()" style="display: none;">
-          <span>← Atrás</span>
-        </button>
-        <button type="button" class="btn-wiz-primary" id="btn-wiz-next" onclick="handleWizardNext()">
-          <span>Siguiente: Plan & Módulos ➔</span>
+        <button type="button" class="btn-wiz-primary" id="btn-wiz-next" onclick="submitRegistration()">
+          <span>Activar mi Cuenta Ahora ➔</span>
         </button>
       </div>
     </div>
   </div>
 
-  <script src="/js/saas-landing.js?v=4.0"></script>
+  <script src="/js/saas-landing.js?v=5.0"></script>
 </body>
 </html>

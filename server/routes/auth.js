@@ -602,4 +602,342 @@ router.post('/link-google', (req, res) => {
   }
 });
 
+// =========================================================================
+// SAAS MULTI-TENANT AUTH & 7-DAY TRIAL SYSTEM (OLA 1)
+// =========================================================================
+
+// 12. Register New SaaS Tenant & Admin User with 7-Day Trial + Anti-Abuse
+router.post('/saas-register', async (req, res) => {
+  try {
+    const {
+      email,
+      password,
+      name,
+      whatsapp,
+      planId = 'plan_control', // 'plan_control' ($9.99) or 'plan_pro' ($29.90)
+      storeName,
+      storeSlug,
+      fingerprint
+    } = req.body;
+
+    if (!email || !password || !name || !whatsapp) {
+      return res.status(400).json({
+        error: 'Todos los campos son obligatorios: Nombre, Email, WhatsApp y Contraseña.'
+      });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const cleanWhatsapp = String(whatsapp).replace(/[^0-9+]/g, '');
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        error: 'La contraseña debe tener al menos 6 caracteres.'
+      });
+    }
+
+    const db = getDb();
+    if (!db.tenants) db.tenants = [];
+    if (!db.users) db.users = [];
+    if (!db.wallets) db.wallets = {};
+
+    // 1. Check existing user by email
+    const existingUser = db.users.find(u => u.email && u.email.toLowerCase() === normalizedEmail);
+    if (existingUser) {
+      return res.status(400).json({
+        error: 'Ya existe una cuenta registrada con este correo electrónico. Por favor inicia sesión.'
+      });
+    }
+
+    // 2. Anti-Abuse Shield: Check duplicate active trials by WhatsApp or IP
+    const clientIp = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip || '';
+    const now = Date.now();
+    const thirtyDaysAgo = now - (30 * 24 * 60 * 60 * 1000);
+
+    const duplicateTrial = db.tenants.find(t => {
+      const isRecent = t.createdAt && new Date(t.createdAt).getTime() > thirtyDaysAgo;
+      const matchWhatsapp = t.ownerWhatsapp && t.ownerWhatsapp.replace(/[^0-9]/g, '') === cleanWhatsapp.replace(/[^0-9]/g, '');
+      const matchIp = t.antiAbuseIp && t.antiAbuseIp === clientIp && clientIp !== '127.0.0.1' && clientIp !== '::1';
+      return isRecent && (matchWhatsapp || matchIp);
+    });
+
+    if (duplicateTrial) {
+      return res.status(400).json({
+        error: 'Ya existe una prueba gratuita asociada a este número o dispositivo en los últimos 30 días. Por favor inicia sesión con tu cuenta existente.'
+      });
+    }
+
+    // 3. Subdomain Validation for Plan Pro ($29.90)
+    let cleanSlug = '';
+    if (planId === 'plan_pro') {
+      if (!storeSlug) {
+        return res.status(400).json({ error: 'Para el Plan Pro debes ingresar el subdominio deseado de tu tienda.' });
+      }
+      cleanSlug = storeSlug.toLowerCase().replace(/[^a-z0-9_-]/g, '');
+      if (cleanSlug.length < 3) {
+        return res.status(400).json({ error: 'El subdominio debe tener al menos 3 caracteres alfanuméricos.' });
+      }
+      const reserved = ['www', 'api', 'app', 'admin', 'mail', 'saas', 'store', 'marketplace', 'auth', 'login', 'service'];
+      if (reserved.includes(cleanSlug) || db.tenants.some(t => t.slug === cleanSlug)) {
+        return res.status(400).json({ error: `El subdominio "${cleanSlug}.gamsplit.com" ya está en uso o reservado.` });
+      }
+    } else {
+      // Control plan generates an internal slug
+      cleanSlug = `ctrl_${normalizedEmail.split('@')[0].replace(/[^a-z0-9]/g, '')}_${Date.now().toString().slice(-4)}`;
+    }
+
+    // 4. Generate Unique IDs & 7-Day Trial Timestamps
+    const userId = `usr_${Date.now()}`;
+    const tenantId = `tnt_${cleanSlug}_${Date.now().toString().slice(-4)}`;
+    const trialStartsAt = new Date().toISOString();
+    const trialEndsAt = new Date(now + 7 * 24 * 60 * 60 * 1000).toISOString();
+
+    const passwordHash = cryptoService.hashPassword(password);
+
+    // 5. Create Tenant Record
+    const newTenant = {
+      id: tenantId,
+      slug: cleanSlug,
+      name: (storeName || name).trim(),
+      customDomain: null,
+      ownerUserId: userId,
+      ownerEmail: normalizedEmail,
+      ownerWhatsapp: cleanWhatsapp,
+      planId: planId, // 'plan_control' ($9.99) or 'plan_pro' ($29.90)
+      status: 'trial_active',
+      trialStartsAt,
+      trialEndsAt,
+      subscriptionPaidUntil: null,
+      antiAbuseIp: clientIp,
+      antiAbuseFingerprint: fingerprint || '',
+      branding: {
+        brandName: (storeName || name).trim(),
+        logoUrl: '/assets/branding/icon.png',
+        iconUrl: '/assets/branding/icon.png',
+        primaryColor: '#0284c7',
+        accentColor: '#00c2ff',
+        currency: 'PYG',
+        exchangeRate: 7500,
+        whatsappSupport: cleanWhatsapp
+      },
+      settings: {
+        commissionPercent: planId === 'plan_pro' ? 3.0 : 0,
+        allowUserReselling: planId === 'plan_pro',
+        enabledModules: {
+          streaming: true,
+          games: planId === 'plan_pro',
+          giftcards: planId === 'plan_pro',
+          smm: false,
+          p2pSharing: planId === 'plan_pro'
+        },
+        paraguayBankDetails: {
+          bank: 'Banco Familiar / Itaú Paraguay',
+          accountHolder: name.trim(),
+          accountNumber: '01-000000-1',
+          aliasSipap: `${cleanSlug}.py`
+        },
+        binanceDetails: {
+          payId: '',
+          network: 'USDT (Binance Pay / BEP-20 / TRC-20)'
+        }
+      },
+      createdAt: trialStartsAt,
+      updatedAt: trialStartsAt
+    };
+
+    // 6. Create User Record
+    const newUser = {
+      id: userId,
+      tenantId: tenantId,
+      name: name.trim(),
+      email: normalizedEmail,
+      whatsapp: cleanWhatsapp,
+      passwordHash: passwordHash,
+      role: 'tenant_admin',
+      avatar: '/assets/branding/icon.png',
+      createdAt: trialStartsAt
+    };
+
+    // 7. Initialize Wallet
+    db.wallets[userId] = { balanceUsd: 0.00, pendingEscrowUsd: 0.00 };
+
+    db.tenants.push(newTenant);
+    db.users.push(newUser);
+    saveStorage();
+
+    // 8. Generate Session Token
+    const sessionToken = cryptoService.generateToken({
+      userId: newUser.id,
+      tenantId: newTenant.id,
+      role: newUser.role,
+      email: newUser.email
+    });
+
+    res.json({
+      success: true,
+      message: `¡Bienvenido a GamSplit! Tu prueba gratuita de 7 días ha sido activada con éxito.`,
+      token: sessionToken,
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        whatsapp: newUser.whatsapp,
+        role: newUser.role
+      },
+      tenant: newTenant,
+      subscription: {
+        status: 'trial_active',
+        isLocked: false,
+        daysLeft: 7,
+        planId: newTenant.planId,
+        trialEndsAt: newTenant.trialEndsAt
+      },
+      redirectUrl: '/dashboard'
+    });
+  } catch (err) {
+    console.error('Registration error:', err);
+    res.status(500).json({ error: 'Error al registrar la cuenta: ' + err.message });
+  }
+});
+
+// 13. Login for SaaS Tenants / Resellers
+router.post('/saas-login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Por favor ingresa tu correo y contraseña.' });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const db = getDb();
+
+    let user = db.users.find(u => u.email && u.email.toLowerCase() === normalizedEmail);
+
+    if (!user) {
+      return res.status(401).json({ error: 'No existe una cuenta registrada con este correo electrónico.' });
+    }
+
+    // Verify Password
+    const isValid = cryptoService.verifyPassword(password, user.passwordHash || user.password);
+    if (!isValid) {
+      return res.status(401).json({ error: 'Contraseña incorrecta. Por favor intenta de nuevo.' });
+    }
+
+    // Find User's Tenant
+    const tenant = (db.tenants || []).find(t => t.id === user.tenantId || t.ownerUserId === user.id) || db.tenants[0];
+    
+    // Calculate live subscription status
+    const now = Date.now();
+    const trialEnds = tenant?.trialEndsAt ? new Date(tenant.trialEndsAt).getTime() : 0;
+    const paidUntil = tenant?.subscriptionPaidUntil ? new Date(tenant.subscriptionPaidUntil).getTime() : 0;
+    
+    let subStatus = {
+      status: 'trial_active',
+      isLocked: false,
+      daysLeft: 7,
+      planId: tenant?.planId || 'plan_control'
+    };
+
+    if (tenant?.id === 'tnt_gamesboy_main') {
+      subStatus = { status: 'paid_active', isLocked: false, daysLeft: 9999, planId: 'plan_pro' };
+    } else if (paidUntil > now) {
+      subStatus = { status: 'paid_active', isLocked: false, daysLeft: Math.ceil((paidUntil - now) / 86400000), planId: tenant.planId };
+    } else if (trialEnds > now) {
+      subStatus = { status: 'trial_active', isLocked: false, daysLeft: Math.ceil((trialEnds - now) / 86400000), planId: tenant.planId };
+    } else {
+      subStatus = { status: 'locked', isLocked: true, daysLeft: 0, planId: tenant.planId, reason: 'TRIAL_EXPIRED' };
+    }
+
+    const sessionToken = cryptoService.generateToken({
+      userId: user.id,
+      tenantId: tenant ? tenant.id : 'tnt_gamesboy_main',
+      role: user.role,
+      email: user.email
+    });
+
+    res.json({
+      success: true,
+      message: 'Inicio de sesión exitoso.',
+      token: sessionToken,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        whatsapp: user.whatsapp,
+        role: user.role,
+        avatar: user.avatar
+      },
+      tenant,
+      subscription: subStatus,
+      redirectUrl: '/dashboard'
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al iniciar sesión: ' + err.message });
+  }
+});
+
+// 14. Get Current SaaS Session & Subscription Status
+router.get('/saas-session', (req, res) => {
+  try {
+    const authHeader = req.headers['authorization'] || req.headers['x-session-token'];
+    let payload = null;
+
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '').trim();
+      payload = cryptoService.verifyToken(token);
+    }
+
+    const db = getDb();
+    const userId = payload?.userId || req.headers['x-user-id'];
+
+    if (!userId) {
+      return res.status(401).json({ authenticated: false, error: 'No hay sesión activa' });
+    }
+
+    const user = (db.users || []).find(u => u.id === userId);
+    if (!user) {
+      return res.status(401).json({ authenticated: false, error: 'Usuario no encontrado' });
+    }
+
+    const tenant = (db.tenants || []).find(t => t.id === user.tenantId || t.ownerUserId === user.id) || (db.tenants && db.tenants[0]);
+    
+    // Calculate live subscription status
+    const now = Date.now();
+    const trialEnds = tenant?.trialEndsAt ? new Date(tenant.trialEndsAt).getTime() : 0;
+    const paidUntil = tenant?.subscriptionPaidUntil ? new Date(tenant.subscriptionPaidUntil).getTime() : 0;
+    
+    let subStatus = {
+      status: 'trial_active',
+      isLocked: false,
+      daysLeft: 7,
+      planId: tenant?.planId || 'plan_control'
+    };
+
+    if (tenant?.id === 'tnt_gamesboy_main') {
+      subStatus = { status: 'paid_active', isLocked: false, daysLeft: 9999, planId: 'plan_pro' };
+    } else if (paidUntil > now) {
+      subStatus = { status: 'paid_active', isLocked: false, daysLeft: Math.ceil((paidUntil - now) / 86400000), planId: tenant.planId };
+    } else if (trialEnds > now) {
+      subStatus = { status: 'trial_active', isLocked: false, daysLeft: Math.ceil((trialEnds - now) / 86400000), planId: tenant.planId };
+    } else {
+      subStatus = { status: 'locked', isLocked: true, daysLeft: 0, planId: tenant?.planId || 'plan_control', reason: 'TRIAL_EXPIRED' };
+    }
+
+    res.json({
+      authenticated: true,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        whatsapp: user.whatsapp,
+        role: user.role,
+        avatar: user.avatar
+      },
+      tenant,
+      subscription: subStatus
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default router;

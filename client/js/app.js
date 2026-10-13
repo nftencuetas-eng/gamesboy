@@ -2225,28 +2225,20 @@ function populatePaymentMethodsData() {
   }
 }
 
-function updateDepositCalculator() {
+function updateDepositCalculator(forcedNum = null) {
   const amountInput = document.getElementById('deposit-amount-input');
-  const currencyInput = document.getElementById('deposit-selected-currency');
   const previewDiv = document.getElementById('deposit-converted-preview');
-  const rate = state.exchangeRatePyg || 7500;
 
   if (!amountInput || !previewDiv) return;
 
-  const val = parseFloat(amountInput.value);
-  const currency = currencyInput ? currencyInput.value : 'PYG';
+  let val = forcedNum !== null ? forcedNum : parseInt(amountInput.value.replace(/\D/g, ''), 10);
 
   if (isNaN(val) || val <= 0) {
-    previewDiv.innerHTML = `⚡ Se acreditarán: <strong>0 Gs.</strong> en tu saldo`;
+    previewDiv.innerHTML = `⚡ Se acreditarán: <strong style="color: #34d399; font-family: var(--font-mono);">0 Gs.</strong> en tu saldo`;
     return;
   }
 
-  if (currency === 'USDT') {
-    const gs = Math.round(val * rate);
-    previewDiv.innerHTML = `⚡ <strong>${val.toFixed(2)} USDT</strong> = <strong style="color: var(--accent-emerald); font-size: 0.95rem;">${gs.toLocaleString('es-PY')} Gs.</strong> (Se acreditarán en tu cuenta)`;
-  } else {
-    previewDiv.innerHTML = `⚡ Se acreditarán: <strong style="color: var(--accent-emerald); font-size: 0.95rem;">${Math.round(val).toLocaleString('es-PY')} Gs.</strong> en tu saldo`;
-  }
+  previewDiv.innerHTML = `⚡ Se acreditarán: <strong style="color: #34d399; font-family: var(--font-mono); font-size: 0.95rem;">${val.toLocaleString('es-PY')} Gs.</strong> en tu saldo`;
 }
 
 function initDepositModal() {
@@ -2259,41 +2251,65 @@ function initDepositModal() {
   const boxLocal = document.getElementById('box-pay-local');
   const boxBinance = document.getElementById('box-pay-binance');
   const currencyInput = document.getElementById('deposit-selected-currency');
-  const labelAmount = document.getElementById('label-deposit-amount');
   const amountInput = document.getElementById('deposit-amount-input');
-  const labelRef = document.getElementById('label-deposit-ref');
-  const refInput = document.getElementById('deposit-reference-input');
 
-  if (tabLocal && tabBinance && boxLocal && boxBinance) {
+  // Voucher preview elements
+  const fileInput = document.getElementById('deposit-receipt-file');
+  const emptyState = document.getElementById('voucher-empty-state');
+  const previewState = document.getElementById('voucher-preview-state');
+  const previewImg = document.getElementById('voucher-preview-img');
+  const fileNameEl = document.getElementById('voucher-file-name');
+
+  if (tabLocal) {
     tabLocal.onclick = () => {
       tabLocal.classList.add('active');
-      tabBinance.classList.remove('active');
-      boxLocal.style.display = 'block';
-      boxBinance.style.display = 'none';
+      if (boxLocal) boxLocal.style.display = 'block';
       if (currencyInput) currencyInput.value = 'PYG';
-      if (labelAmount) labelAmount.textContent = 'Monto a Transferir en Guaraníes (Gs.):';
-      if (amountInput) { amountInput.placeholder = 'ej: 100000'; amountInput.step = '1000'; }
-      if (labelRef) labelRef.textContent = 'N° de Transferencia / Comprobante SIPAP:';
-      if (refInput) refInput.placeholder = 'ej: SIPAP-781923';
-      updateDepositCalculator();
-    };
-
-    tabBinance.onclick = () => {
-      tabBinance.classList.add('active');
-      tabLocal.classList.remove('active');
-      boxBinance.style.display = 'block';
-      boxLocal.style.display = 'none';
-      if (currencyInput) currencyInput.value = 'USDT';
-      if (labelAmount) labelAmount.textContent = 'Monto a Transferir en USDT (Cripto):';
-      if (amountInput) { amountInput.placeholder = 'ej: 10'; amountInput.step = 'any'; }
-      if (labelRef) labelRef.textContent = 'Binance Pay Order ID o TXID / Hash:';
-      if (refInput) refInput.placeholder = 'ej: 289102910 o Hash Binance';
       updateDepositCalculator();
     };
   }
 
+  // Binance is locked with 'PRONTO'
+  if (tabBinance) {
+    tabBinance.onclick = (e) => {
+      e.preventDefault();
+      alert('El método de recarga con Cripto USDT (Binance Pay) estará disponible muy pronto. Por favor utiliza Transferencia Bancaria SIPAP.');
+    };
+  }
+
+  // Live Thousand Separator Formatting in Guaraníes (e.g. 100000 -> 100.000)
   if (amountInput) {
-    amountInput.oninput = updateDepositCalculator;
+    amountInput.addEventListener('input', (e) => {
+      const raw = e.target.value.replace(/\D/g, '');
+      if (!raw) {
+        e.target.value = '';
+        updateDepositCalculator(0);
+        return;
+      }
+      const num = parseInt(raw, 10);
+      e.target.value = num.toLocaleString('es-PY');
+      updateDepositCalculator(num);
+    });
+  }
+
+  // Instant receipt image preview
+  if (fileInput) {
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        if (fileNameEl) fileNameEl.textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = (re) => {
+          if (previewImg) previewImg.src = re.target.result;
+          if (emptyState) emptyState.style.display = 'none';
+          if (previewState) previewState.style.display = 'flex';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        if (emptyState) emptyState.style.display = 'block';
+        if (previewState) previewState.style.display = 'none';
+      }
+    });
   }
 
   if (btnOpenDeposit && modalDeposit) {
@@ -2303,7 +2319,9 @@ function initDepositModal() {
     };
   }
   if (btnCloseDeposit && modalDeposit) {
-    btnCloseDeposit.onclick = () => modalDeposit.style.display = 'none';
+    btnCloseDeposit.onclick = () => {
+      modalDeposit.style.display = 'none';
+    };
   }
 
   const depositForm = document.getElementById('form-submit-deposit');
@@ -2311,14 +2329,26 @@ function initDepositModal() {
     depositForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const userId = state.currentUser ? state.currentUser.id : 'usr_client1';
-      const amount = parseFloat(amountInput.value);
+      
+      const rawDigits = amountInput ? amountInput.value.replace(/\D/g, '') : '';
+      const amount = parseInt(rawDigits, 10);
       const currency = currencyInput ? currencyInput.value : 'PYG';
-      const reference = refInput.value.trim();
-      const fileInput = document.getElementById('deposit-receipt-file');
 
       if (!amount || amount <= 0) {
-        alert('Por favor ingresa un monto válido a recargar.');
+        alert('Por favor ingresa un monto válido a recargar (ej: 100.000 Gs.).');
+        if (amountInput) amountInput.focus();
         return;
+      }
+
+      if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+        alert('⚠️ Por favor adjunta la foto o captura del comprobante bancario para validar tu recarga.');
+        return;
+      }
+
+      const submitBtn = document.getElementById('btn-submit-deposit-form');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Enviando comprobante...</span>';
       }
 
       // Helper to submit deposit request
@@ -2333,8 +2363,8 @@ function initDepositModal() {
             body: JSON.stringify({
               amount,
               currency,
-              method: currency === 'USDT' ? 'binance_usdt' : 'sipap_paraguay',
-              reference,
+              method: 'sipap_paraguay',
+              reference: fileInput.files[0] ? fileInput.files[0].name : 'Foto Comprobante SIPAP',
               receiptData
             })
           });
@@ -2342,7 +2372,9 @@ function initDepositModal() {
           if (data.success) {
             alert(`🎉 ${data.message}`);
             depositForm.reset();
-            updateDepositCalculator();
+            if (emptyState) emptyState.style.display = 'block';
+            if (previewState) previewState.style.display = 'none';
+            updateDepositCalculator(0);
             if (modalDeposit) modalDeposit.style.display = 'none';
             updateUserBalanceDisplay();
           } else {
@@ -2350,17 +2382,22 @@ function initDepositModal() {
           }
         } catch (err) {
           alert('Error de conexión al enviar comprobante.');
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Enviar Comprobante para Acreditación</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
+          }
         }
       };
 
-      if (fileInput && fileInput.files && fileInput.files[0]) {
-        const file = fileInput.files[0];
-        const reader = new FileReader();
-        reader.onload = () => sendDeposit(reader.result);
-        reader.readAsDataURL(file);
-      } else {
-        sendDeposit(reference);
-      }
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      reader.onload = () => sendDeposit(reader.result);
+      reader.onerror = () => {
+        alert('Error al leer la imagen seleccionada. Intenta con otra imagen.');
+        if (submitBtn) submitBtn.disabled = false;
+      };
+      reader.readAsDataURL(file);
     });
   }
 }

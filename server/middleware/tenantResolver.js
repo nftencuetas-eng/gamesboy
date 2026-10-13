@@ -139,6 +139,7 @@ export function tenantResolver(req, res, next) {
     // 6. Default fallback (Localhost or direct server IP)
     const defaultTenant = tenants.find(t => t.id === DEFAULT_TENANT_ID) || DEFAULT_TENANT;
     req.tenant = defaultTenant;
+    req.isStoreRequest = true;
     next();
   } catch (err) {
     console.error('Tenant resolution error:', err);

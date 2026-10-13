@@ -124,7 +124,7 @@
                     <span>Recargar Saldo</span>
                   </a>
                 </li>
-                <li>
+                <li style="display: none !important;">
                   <a href="javascript:void(0)" class="dropdown-menu-item" id="menu-item-publish">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                     <span>Compartir Cuenta</span>
@@ -302,7 +302,7 @@
       <section class="dual-callout-section" id="section-dual-callouts">
         <div class="dual-callout-grid">
           <!-- Card 1: Compact Subtle Seller Escrow -->
-          <div class="seller-compact-card" id="section-seller-info">
+          <div class="seller-compact-card" id="section-seller-info" style="display: none !important;">
             <div class="seller-compact-top">
               <span class="badge-escrow-subtle">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
@@ -721,137 +721,146 @@
   </div>
 
   <!-- ======================================================= -->
-  <!-- MODAL: RECARGA DE SALDO (DEPOSIT MODAL - Gs. & USDT)    -->
+    <!-- ======================================================= -->
+  <!-- MODAL: RECARGA DE SALDO (DEPOSIT MODAL - SIPAP PARAGUAY) -->
   <!-- ======================================================= -->
   <div class="modal-overlay" id="modal-deposit">
-    <div class="modal-content" style="max-width: 520px;">
-      <div class="modal-header">
-        <h3 style="font-size: 1.15rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-          <span>Recargar Saldo en Cuenta</span>
-        </h3>
-        <button class="btn-modal-close" id="btn-close-deposit-modal">✕</button>
+    <div class="modal-content modal-deposit-modern" style="max-width: 500px; width: 95%; margin: 1.25rem auto;">
+      
+      <!-- Responsive Structured Header (Zero overlapping) -->
+      <div class="modal-deposit-header" style="display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 1.2rem; padding-bottom: 0.85rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+        <div class="modal-deposit-header-info" style="flex: 1 1 auto; min-width: 0;">
+          <div class="deposit-badge-sipap" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.14); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399; font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 6px; margin-bottom: 6px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Billetera Oficial • SIPAP Paraguay</span>
+          </div>
+          <h3 class="deposit-modal-title" style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 900; color: #ffffff; margin: 0 0 4px 0; line-height: 1.25; word-break: break-word;">Recargar Saldo en GamesBoy</h3>
+          <p class="deposit-modal-subtitle" style="font-size: 0.8rem; color: var(--text-tertiary); margin: 0; line-height: 1.35; word-break: break-word;">Transfiere desde cualquier banco de Paraguay y acredita tu saldo en minutos.</p>
+        </div>
+        <button type="button" class="btn-deposit-close" id="btn-close-deposit-modal" aria-label="Cerrar modal" style="flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); color: #94a3b8; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.95rem; transition: all 0.2s ease;">✕</button>
       </div>
-      <div class="modal-body">
+
+      <div class="modal-body" style="padding-top: 0.25rem;">
         
-        <!-- Payment Tabs -->
-        <div class="payment-tab-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem;">
-          <button type="button" class="payment-tab-btn active" data-method="sipap" id="tab-pay-local" style="padding: 10px 8px; font-weight: 700; font-size: 0.82rem; border-radius: 8px !important;">
-            <span id="tab-pay-local-label">SIPAP (Paraguay)</span>
+        <!-- Payment Tabs: SIPAP Active & Binance Soon -->
+        <div class="deposit-methods-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem;">
+          <button type="button" class="payment-tab-btn active" data-method="sipap" id="tab-pay-local" style="padding: 10px 8px; font-weight: 800; font-size: 0.82rem; border-radius: 8px !important; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            <span id="tab-pay-local-label">SIPAP (Bancos PY)</span>
           </button>
-          <button type="button" class="payment-tab-btn" data-method="binance" id="tab-pay-binance" style="padding: 10px 8px; font-weight: 700; font-size: 0.82rem; border-radius: 8px !important;">
-            Binance (USDT)
+          <button type="button" class="payment-tab-btn disabled-btn" data-method="binance" id="tab-pay-binance" disabled style="padding: 10px 8px; font-weight: 700; font-size: 0.82rem; border-radius: 8px !important; opacity: 0.55; cursor: not-allowed; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.15); display: flex; align-items: center; justify-content: center; gap: 6px;" title="Método Cripto Binance Pay estará habilitado próximamente">
+            <span>Binance Pay</span>
+            <span style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); font-size: 0.65rem; font-weight: 800; padding: 1px 6px; border-radius: 4px; text-transform: uppercase;">Pronto</span>
           </button>
         </div>
 
-        <!-- 1. SIPAP Box -->
-        <div class="payment-info-box" id="box-pay-local" style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 10px !important; padding: 1rem; margin-bottom: 1.25rem;">
-          <div style="font-weight: 800; font-size: 0.88rem; color: var(--accent-emerald); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-            <span>Transferencia Bancaria Paraguay (SIPAP)</span>
-          </div>
-          <div id="box-pay-local-fields" style="display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem;">
-            <div class="payment-field-row" style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
-              <span style="color: var(--text-tertiary);">Banco / Entidad:</span>
-              <strong id="deposit-info-bank" style="color: #ffffff;">Banco Familiar / Itaú</strong>
+        <!-- 1. SIPAP Bank Info Box -->
+        <div class="payment-info-box" id="box-pay-local" style="background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px !important; padding: 1.1rem; margin-bottom: 1.25rem;">
+          <div style="font-weight: 800; font-size: 0.88rem; color: #34d399; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 7px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v4M12 14v4M16 14v4"/></svg>
+              <span>Datos Oficiales de Transferencia</span>
             </div>
-            <div class="payment-field-row" style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
-              <span style="color: var(--text-tertiary);">Titular:</span>
-              <strong id="deposit-info-holder" style="color: #ffffff;">GamesBoy Paraguay S.A.</strong>
-            </div>
-            <div class="payment-field-row" style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
-              <span style="color: var(--text-tertiary);">RUC / CI:</span>
-              <strong id="deposit-info-doc" style="color: #ffffff;">80091234-5</strong>
-            </div>
-            <div class="payment-field-row" style="display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px;">
-              <span style="color: var(--text-tertiary);">N° de Cuenta:</span>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <strong id="deposit-info-account" style="color: var(--accent-cyan);">01-445566-7</strong>
-                <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('deposit-info-account').textContent); alert('N° de cuenta copiado');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(0,194,255,0.15); color: var(--accent-cyan); border-radius: 4px !important;">Copiar</button>
-              </div>
-            </div>
-            <div class="payment-field-row" style="display: flex; justify-content: space-between; padding-top: 2px;">
-              <span style="color: var(--text-tertiary);">Alias SIPAP:</span>
-              <div style="display: flex; align-items: center; gap: 6px;">
-                <strong id="deposit-info-alias" style="color: var(--accent-emerald);">gamesboy.py</strong>
-                <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('deposit-info-alias').textContent); alert('Alias copiado');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(16,185,129,0.15); color: var(--accent-emerald); border-radius: 4px !important;">Copiar</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. Binance USDT Box -->
-        <div class="payment-info-box" id="box-pay-binance" style="display: none; background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 10px !important; padding: 1rem; margin-bottom: 1.25rem;">
-          <div style="font-weight: 800; font-size: 0.88rem; color: #f59e0b; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            <span>Pago Cripto USDT (Binance Pay)</span>
+            <span style="font-size: 0.68rem; font-weight: 800; background: rgba(16,185,129,0.18); color: #34d399; padding: 2px 7px; border-radius: 6px;">24/7 ACTIVO</span>
           </div>
           
-          <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 10px;">
-            <div style="background: #ffffff; padding: 4px; border-radius: 6px !important; flex-shrink: 0;">
-              <img id="pay-info-binance-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=0x71C9414B3b27bA134a6C3f07a757657A82e4b92F" alt="QR Binance" style="width: 100px; height: 100px; display: block;">
+          <div id="box-pay-local-fields" style="display: flex; flex-direction: column; gap: 7px; font-size: 0.82rem;">
+            <div class="payment-field-row" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 5px;">
+              <span style="color: var(--text-tertiary);">Banco / Entidad:</span>
+              <strong id="deposit-info-bank" style="color: #ffffff; text-align: right;">Banco Familiar / Itaú</strong>
             </div>
-            <div style="flex: 1; display: flex; flex-direction: column; gap: 5px; font-size: 0.78rem;">
-              <div>
-                <span style="color: var(--text-tertiary); display: block;">Binance Pay ID:</span>
-                <div style="display: flex; align-items: center; gap: 6px;">
-                  <strong id="pay-info-binance-id" style="color: #ffffff; font-size: 0.88rem;">849201934</strong>
-                  <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('pay-info-binance-id').textContent); alert('Pay ID copiado');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(245,158,11,0.15); color: #f59e0b; border-radius: 4px !important;">Copiar</button>
-                </div>
+            <div class="payment-field-row" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 5px;">
+              <span style="color: var(--text-tertiary);">Titular / Destinatario:</span>
+              <strong id="deposit-info-holder" style="color: #ffffff; text-align: right;">GamesBoy Paraguay S.A.</strong>
+            </div>
+            <div class="payment-field-row" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 5px;">
+              <span style="color: var(--text-tertiary);">RUC / C.I.:</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <strong id="deposit-info-doc" style="color: #ffffff; font-family: var(--font-mono);">80091234-5</strong>
+                <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('deposit-info-doc').textContent.trim()); alert('RUC copiado');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(255,255,255,0.1); color: #ffffff; border-radius: 4px !important; border: none; cursor: pointer;">Copiar</button>
               </div>
-              <div>
-                <span style="color: var(--text-tertiary); display: block;">Red:</span>
-                <strong id="pay-info-binance-network" style="color: #ffffff;">USDT (BEP-20 / TRC-20)</strong>
+            </div>
+            <div class="payment-field-row" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 5px;">
+              <span style="color: var(--text-tertiary);">N° de Cuenta:</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <strong id="deposit-info-account" style="color: var(--accent-cyan); font-family: var(--font-mono); font-weight: 800;">01-445566-7</strong>
+                <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('deposit-info-account').textContent.trim()); alert('N° de cuenta copiado');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(0,194,255,0.15); color: var(--accent-cyan); border-radius: 4px !important; border: none; cursor: pointer;">Copiar</button>
               </div>
-              <div>
-                <span style="color: var(--text-tertiary); display: block;">Dirección USDT:</span>
-                <div style="display: flex; align-items: center; gap: 4px;">
-                  <strong style="font-size: 0.7rem; word-break: break-all; color: var(--accent-cyan);" id="pay-info-binance-wallet">0x71C9414B3b27bA134a6C3f07a757657A82e4b92F</strong>
-                  <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('pay-info-binance-wallet').textContent); alert('Dirección copiada');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(0,194,255,0.15); color: var(--accent-cyan); border-radius: 4px !important;">Copiar</button>
-                </div>
+            </div>
+            <div class="payment-field-row" style="display: flex; justify-content: space-between; align-items: center; padding-top: 3px;">
+              <span style="color: var(--text-tertiary);">Alias SIPAP:</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <strong id="deposit-info-alias" style="color: #34d399; font-family: var(--font-mono); font-weight: 800;">gamesboy.py</strong>
+                <button type="button" class="btn-action-sm" onclick="navigator.clipboard.writeText(document.getElementById('deposit-info-alias').textContent.trim()); alert('Alias SIPAP copiado');" style="padding: 2px 6px; font-size: 0.68rem; background: rgba(16,185,129,0.15); color: #34d399; border-radius: 4px !important; border: none; cursor: pointer;">Copiar</button>
               </div>
             </div>
           </div>
         </div>
+
+        <!-- 2. Binance USDT Box (Hidden / Inactive for now) -->
+        <div class="payment-info-box" id="box-pay-binance" style="display: none;"></div>
 
         <!-- Deposit Form -->
         <form id="form-submit-deposit">
           <input type="hidden" id="deposit-selected-currency" value="PYG">
           
-          <div class="form-group" id="deposit-amount-group">
-            <label class="form-label" id="label-deposit-amount">Monto a Transferir en Guaraníes (Gs.):</label>
-            <input type="number" id="deposit-amount-input" class="form-input" placeholder="ej: 100000" min="1" step="any" required style="border-radius: 8px !important; font-size: 1rem; font-weight: 700;">
+          <!-- Input Monto en Guaraníes con Puntos de Miles Automáticos -->
+          <div class="form-group" id="deposit-amount-group" style="margin-bottom: 1.15rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label class="form-label" id="label-deposit-amount" style="margin: 0; font-weight: 700; color: #ffffff;">Monto transferido:</label>
+              <span style="font-size: 0.72rem; color: #34d399; font-weight: 800;">Moneda: Guaraníes (Gs.)</span>
+            </div>
             
-            <!-- Dynamic Conversion Highlight Box -->
-            <div id="deposit-converted-box" style="margin-top: 8px; background: rgba(0, 194, 255, 0.08); border: 1px solid rgba(0, 194, 255, 0.25); border-radius: 8px !important; padding: 10px 12px; font-size: 0.82rem; line-height: 1.45;">
+            <div style="position: relative; display: flex; align-items: center;">
+              <input type="text" id="deposit-amount-input" class="form-input" placeholder="ej: 100.000" inputmode="numeric" required autocomplete="off" style="border-radius: 10px !important; font-size: 1.2rem; font-weight: 800; padding: 12px 60px 12px 14px; font-family: var(--font-mono); letter-spacing: 0.02em;">
+              <span style="position: absolute; right: 14px; font-family: var(--font-mono); font-weight: 800; color: var(--text-tertiary); font-size: 0.85rem; pointer-events: none;">Gs.</span>
+            </div>
+            
+            <!-- Dynamic Conversion Preview Box -->
+            <div id="deposit-converted-box" style="margin-top: 8px; background: rgba(0, 194, 255, 0.06); border: 1px solid rgba(0, 194, 255, 0.22); border-radius: 8px !important; padding: 9px 12px; font-size: 0.82rem;">
               <div id="deposit-converted-preview" style="color: var(--accent-cyan); font-weight: 700;">
-                Se acreditarán: <strong>0 Gs.</strong> en tu saldo
-              </div>
-              <div id="deposit-rate-note" style="color: var(--text-tertiary); font-size: 0.72rem; margin-top: 2px;">
-                Tasa de cambio activa: 1 USDT = 7.500 Gs. Tu saldo se acreditará directamente en Guaraníes.
+                ⚡ Se acreditarán: <strong style="color: #34d399; font-family: var(--font-mono);">0 Gs.</strong> en tu saldo
               </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label" id="label-deposit-ref">N° de Comprobante / Referencia / TXID:</label>
-            <input type="text" id="deposit-reference-input" class="form-input" placeholder="ej: SIPAP-781923 o ID de Orden Binance" required style="border-radius: 8px !important;">
+          <!-- Comprobante en Foto / Captura (Obligatorio) con Preview Instantáneo -->
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label class="form-label" style="font-weight: 700; color: #ffffff; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <span>Foto o Captura del Comprobante:</span>
+              <span style="color: #f59e0b; font-size: 0.72rem; font-weight: 800;">OBLIGATORIO</span>
+            </label>
+            
+            <div class="upload-voucher-zone" id="upload-voucher-zone" onclick="document.getElementById('deposit-receipt-file').click();" style="border: 2px dashed rgba(0, 194, 255, 0.35); border-radius: 12px; padding: 1.1rem; text-align: center; background: rgba(8, 14, 28, 0.6); cursor: pointer; transition: all 0.2s ease;">
+              <input type="file" id="deposit-receipt-file" accept="image/*" required style="display: none;">
+              
+              <div id="voucher-empty-state">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-cyan); margin-bottom: 6px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <div style="font-weight: 700; font-size: 0.86rem; color: #ffffff;">Toca aquí para adjuntar foto o captura de la boleta</div>
+                <div style="font-size: 0.73rem; color: var(--text-tertiary); margin-top: 3px;">JPG, PNG o WEBP de tu comprobante SIPAP</div>
+              </div>
+
+              <!-- Preview State (Shown when an image is selected) -->
+              <div id="voucher-preview-state" style="display: none; align-items: center; gap: 12px; width: 100%;">
+                <img id="voucher-preview-img" src="" alt="Comprobante" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
+                <div style="flex: 1; text-align: left; min-width: 0;">
+                  <div id="voucher-file-name" style="font-size: 0.82rem; font-weight: 700; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">comprobante.jpg</div>
+                  <div style="font-size: 0.72rem; color: #34d399; font-weight: 700;">✓ Foto adjunta lista para enviar</div>
+                </div>
+                <button type="button" class="btn-action-sm" onclick="event.stopPropagation(); document.getElementById('deposit-receipt-file').click();" style="padding: 5px 10px; background: rgba(0, 194, 255, 0.2); color: var(--accent-cyan); border: none; border-radius: 6px; cursor: pointer;">Cambiar</button>
+              </div>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Adjuntar Captura del Comprobante (Opcional):</label>
-            <input type="file" id="deposit-receipt-file" class="form-input" accept="image/*" style="border-radius: 8px !important; font-size: 0.82rem;">
-          </div>
-
-          <button type="submit" class="btn-primary-block" id="btn-submit-deposit-form" style="border-radius: 10px !important; padding: 13px; font-weight: 800; font-size: 0.95rem; margin-top: 1rem;">
-            Enviar Comprobante de Recarga
+          <button type="submit" class="btn-primary-block" id="btn-submit-deposit-form" style="border-radius: 12px !important; padding: 14px; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 18px rgba(0, 194, 255, 0.35);">
+            <span>Enviar Comprobante para Acreditación</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </button>
         </form>
       </div>
     </div>
   </div>
 
-  <!-- ======================================================= -->
   <!-- MODAL: SOLICITUD DE RETIRO DE SALDO (PAYOUT MODAL)      -->
   <!-- ======================================================= -->
   <div class="modal-overlay" id="modal-payout">
@@ -1297,7 +1306,7 @@
   <!-- ======================================================= -->
   <!-- STICKY RIGHT LATERAL OFFER TAG: GENERAR INGRESOS        -->
   <!-- ======================================================= -->
-  <a href="/monetizar" class="sticky-lateral-monetize-tag" id="sticky-monetize-pill" title="Gana dinero compartiendo los cupos libres de tus cuentas de streaming">
+  <a href="/monetizar" class="sticky-lateral-monetize-tag" id="sticky-monetize-pill" style="display: none !important;" title="Gana dinero compartiendo los cupos libres de tus cuentas de streaming">
     <div class="lateral-tag-inner">
       <div class="lateral-tag-coin">
         <span class="coin-symbol">$</span>

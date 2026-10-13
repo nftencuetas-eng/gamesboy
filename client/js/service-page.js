@@ -113,7 +113,8 @@ function renderHubView() {
 // --- RENDER TOP CROWN INCENTIVE BANNER ---
 function renderShareIncentiveBanner() {
   const container = document.getElementById('hub-share-incentive-banner');
-  if (!container) return;
+  if (container) container.style.display = 'none';
+  return;
   const hub = state.hub;
   if (!hub) return;
 
