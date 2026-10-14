@@ -2,520 +2,152 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <script>
-    if (window.location.hostname === 'gamesboy.net') {
-      window.location.replace('https://www.gamesboy.net' + window.location.pathname + window.location.search + window.location.hash);
-    }
-  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Acceso y Registro - GamesBoy.net</title>
-  <meta name="description" content="Accede a tu cuenta de GamesBoy.net para comprar videojuegos digitales, compartir suscripciones y gestionar tus fondos.">
-  
-  <link rel="icon" type="image/png" href="/assets/branding/icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/css/main.css?v=6.0">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  
+  <title>Acceso Seguro | GamesBoy.net</title>
+  <link rel="stylesheet" href="/css/theme.css">
   <style>
-    .auth-page-container {
+    .auth-wrapper {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2.5rem 1.25rem;
-      background-color: #080a10;
-      background-image: 
-        radial-gradient(circle at 15% 15%, rgba(0, 194, 255, 0.08) 0%, transparent 45%),
-        radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.06) 0%, transparent 45%);
+      padding: 24px;
+      background: radial-gradient(circle at 50% 20%, var(--bg-surface) 0%, var(--bg-base) 100%);
     }
-    .auth-page-card {
+    .auth-card {
       width: 100%;
-      max-width: 960px;
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      background: linear-gradient(145deg, #10131d 0%, #151825 100%);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.85);
-      border-radius: 20px !important;
-      overflow: hidden;
-      position: relative;
-    }
-    .auth-left-col {
-      padding: 3rem 2.75rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .auth-right-col {
-      background: linear-gradient(145deg, #070913 0%, #0d1222 100%);
-      border-left: 1px solid rgba(255, 255, 255, 0.06);
-      padding: 3rem 2.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-    }
-    .auth-close-btn {
-      position: absolute;
-      top: 18px;
-      right: 18px;
-      width: 36px;
-      height: 36px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 50% !important;
-      color: #94a3b8;
-      display: grid;
-      place-items: center;
-      text-decoration: none;
-      cursor: pointer;
-      z-index: 10;
-      transition: all 0.2s ease;
-    }
-    .auth-close-btn:hover {
-      background: rgba(239, 68, 68, 0.15);
-      border-color: rgba(239, 68, 68, 0.4);
-      color: #f87171;
-      transform: scale(1.05);
-    }
-    .auth-showcase-art-static {
-      width: 100%;
-      max-height: 270px;
-      object-fit: contain;
-      margin: 1.5rem auto;
-      display: block;
-      filter: drop-shadow(0 12px 25px rgba(0, 194, 255, 0.18));
-    }
-    .auth-value-props {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .auth-prop-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 10px 14px;
-      border-radius: 12px !important;
-      font-size: 0.82rem;
-      color: var(--text-secondary);
-    }
-    .auth-prop-icon {
-      color: var(--accent-cyan);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .form-group-auth {
-      margin-bottom: 1.15rem;
-      text-align: left;
-    }
-    .form-label-auth {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text-secondary);
-      margin-bottom: 6px;
-    }
-    .form-input-auth {
-      width: 100%;
-      background: rgba(5, 7, 14, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-      padding: 12px 14px;
-      border-radius: 10px !important;
-      font-size: 0.88rem;
-      font-family: var(--font-sans);
-      outline: none;
-      box-sizing: border-box;
-      transition: all 0.2s ease;
-    }
-    .form-input-auth:focus {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 14px rgba(0, 194, 255, 0.2);
-      background: rgba(8, 11, 20, 0.95);
-    }
-    .btn-auth-submit {
-      width: 100%;
-      background: linear-gradient(135deg, #00c2ff 0%, #0070f3 100%);
-      color: #ffffff;
-      border: none;
-      padding: 13px 20px;
-      font-size: 0.92rem;
-      font-weight: 800;
-      border-radius: 10px !important;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 18px rgba(0, 194, 255, 0.35);
-    }
-    .btn-auth-submit:hover {
-      background: linear-gradient(135deg, #38d6ff 0%, #0080ff 100%);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 24px rgba(0, 194, 255, 0.5);
-    }
-    .btn-google-auth {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #f1f5f9;
-      padding: 11px 16px;
-      border-radius: 10px !important;
-      font-size: 0.88rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .btn-google-auth:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.2);
+      max-width: 420px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-normal);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     }
     .auth-tabs {
       display: flex;
-      background: rgba(5, 7, 14, 0.6);
-      padding: 4px;
-      border-radius: 10px !important;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 24px;
     }
-    .auth-tab-btn {
+    .auth-tab {
       flex: 1;
-      padding: 8px 12px;
-      font-size: 0.84rem;
-      font-weight: 700;
-      color: var(--text-tertiary);
-      background: transparent;
-      border: none;
-      border-radius: 7px !important;
+      padding: 12px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dim);
+      border-bottom: 2px solid transparent;
       cursor: pointer;
-      transition: all 0.2s ease;
     }
-    .auth-tab-btn.active {
-      background: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    }
-    @media (max-width: 840px) {
-      .auth-page-card { grid-template-columns: 1fr; border-radius: 16px !important; }
-      .auth-right-col { display: none; }
-      .auth-left-col { padding: 2.25rem 1.5rem; }
+    .auth-tab.active {
+      color: var(--text-main);
+      border-color: var(--accent-blue);
     }
   </style>
 </head>
 <body>
-
-  <div class="auth-page-container">
-    <div class="auth-page-card">
-      
-      <!-- Close (✕) Button Top Right -->
-      <a href="/" class="auth-close-btn" title="Volver a la tienda">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      </a>
-
-      <!-- Left Column: Unified Login/Register Form -->
-      <div class="auth-left-col">
-        <div style="margin-bottom: 1.5rem;">
-          <a href="/" title="GamesBoy.net">
-            <img src="/assets/branding/logo-white.png?v=7.0" alt="GamesBoy.net" style="height: 38px; width: auto; filter: none;">
-          </a>
-        </div>
-
-        <div class="auth-tabs">
-          <button type="button" class="auth-tab-btn active" id="tab-login-btn">Iniciar Sesión</button>
-          <button type="button" class="auth-tab-btn" id="tab-register-btn">Crear Cuenta</button>
-        </div>
-
-        <div style="margin-bottom: 1.25rem;">
-          <h1 id="auth-form-title" style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
-            ¡Bienvenido de nuevo!
-          </h1>
-          <p id="auth-form-subtitle" style="font-size: 0.84rem; color: var(--text-secondary);">
-            Ingresa a tu cuenta para gestionar tus suscripciones, juegos y saldo.
-          </p>
-        </div>
-
-        <!-- Google OAuth Button -->
-        <button type="button" class="btn-google-auth" id="btn-google-login" style="margin-bottom: 1.25rem;">
-          <svg class="google-icon" viewBox="0 0 24 24" width="18" height="18">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-          </svg>
-          <span>Continuar con Google</span>
-        </button>
-
-        <div class="auth-divider" style="display: flex; align-items: center; text-align: center; color: var(--text-tertiary); font-size: 0.78rem; margin-bottom: 1.25rem;">
-          <span style="flex: 1; height: 1px; background: rgba(255,255,255,0.08);"></span>
-          <span style="padding: 0 10px;">o con correo electrónico</span>
-          <span style="flex: 1; height: 1px; background: rgba(255,255,255,0.08);"></span>
-        </div>
-
-        <form id="form-auth-page">
-          <div class="form-group-auth" id="field-name" style="display: none;">
-            <label class="form-label-auth">Nombre Completo</label>
-            <input type="text" id="auth-input-name" class="form-input-auth" placeholder="Tu nombre">
-          </div>
-
-          <div class="form-group-auth">
-            <label class="form-label-auth">Correo Electrónico</label>
-            <input type="email" id="auth-input-email" class="form-input-auth" placeholder="tu-correo@ejemplo.com" required autocomplete="email">
-          </div>
-
-          <div class="form-group-auth">
-            <label class="form-label-auth">Contraseña</label>
-            <input type="password" id="auth-input-password" class="form-input-auth" placeholder="••••••••••••" required autocomplete="current-password">
-          </div>
-
-          <button type="submit" class="btn-auth-submit" id="btn-auth-submit">
-            <span id="label-auth-submit">Iniciar Sesión</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </button>
-        </form>
-
-        <div style="margin-top: 1.5rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1rem;">
-          <a href="/" style="font-size: 0.8rem; color: var(--text-tertiary); text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-            <span>Volver a la tienda principal</span>
-          </a>
-        </div>
-
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div style="text-align: center; margin-bottom: 28px;">
+        <div style="font-size: 36px; margin-bottom: 8px;">🎮</div>
+        <h1 style="font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">GamesBoy</h1>
+        <p style="font-size: 13px; color: var(--text-muted);">Acceso a tu cuenta y billetera</p>
       </div>
 
-      <!-- Right Column: Minimalist Value Props & Showcase -->
-      <div class="auth-right-col">
-        <div>
-          <span style="font-size: 0.72rem; color: var(--accent-cyan); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;">MERCADO DIGITAL PARAGUAY</span>
-          <h2 style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 900; color: #ffffff; line-height: 1.25; margin-top: 8px;">
-            TODO TU ENTRETENIMIENTO <span style="color: var(--accent-cyan);">EN UN SOLO LUGAR</span>
-          </h2>
-        </div>
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tabLogin">Iniciar Sesión</div>
+        <div class="auth-tab" id="tabRegister">Registrarse</div>
+      </div>
 
-        <img src="/assets/branding/hero-showcase.png" alt="GamesBoy Showcase" class="auth-showcase-art-static">
-
-        <div class="auth-value-props">
-          <div class="auth-prop-item">
-            <span class="auth-prop-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-            </span>
-            <span>Videojuegos digitales con entrega de claves y cuentas</span>
-          </div>
-          <div class="auth-prop-item">
-            <span class="auth-prop-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
-            </span>
-            <span>Streaming compartido con chat privado y cupos seguros</span>
-          </div>
-          <div class="auth-prop-item">
-            <span class="auth-prop-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-            </span>
-            <span>Monetiza tus cupos y retira en Guaraníes o Binance USDT</span>
-          </div>
+      <!-- Login Form -->
+      <form id="formLogin">
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Correo Electrónico</label>
+          <input type="email" class="input" id="loginEmail" placeholder="usuario@correo.com" required value="admin@gamesboy.net">
         </div>
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;">Contraseña</label>
+          <input type="password" class="input" id="loginPassword" placeholder="••••••••" required value="GamesBoy2026!">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 16px;">Ingresar a la Plataforma</button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="formRegister" style="display: none;">
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 13px; margin-bottom: 6px;">Nombre Completo</label>
+          <input type="text" class="input" id="regName" placeholder="Tu Nombre">
+        </div>
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 13px; margin-bottom: 6px;">Correo Electrónico</label>
+          <input type="email" class="input" id="regEmail" placeholder="correo@ejemplo.com" required>
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 13px; margin-bottom: 6px;">Contraseña</label>
+          <input type="password" class="input" id="regPassword" placeholder="Mínimo 8 caracteres" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 16px;">Crear Mi Cuenta</button>
+      </form>
+
+      <div style="text-align: center; margin-top: 16px;">
+        <a href="/" style="font-size: 13px; color: var(--text-dim); text-decoration: underline;">← Volver a la Tienda</a>
       </div>
     </div>
   </div>
 
-  <!-- Tenant Branding & Login Engine -->
-  <script src="/js/tenant-branding.js"></script>
-  <script>
-    // 0. Auto-redirect if already logged in
-    (function checkAlreadyLoggedIn() {
-      try {
-        const user = JSON.parse(localStorage.getItem('gb_user') || 'null');
-        if (user && user.id) {
-          window.location.replace('/');
-        }
-      } catch (e) {}
-    })();
+  <script type="module">
+    import { API } from '/js/api.js';
 
-    let isRegisterMode = false;
-    const titleEl = document.getElementById('auth-form-title');
-    const subTitleEl = document.getElementById('auth-form-subtitle');
-    const fieldName = document.getElementById('field-name');
-    const submitLabel = document.getElementById('label-auth-submit');
-    const tabLoginBtn = document.getElementById('tab-login-btn');
-    const tabRegisterBtn = document.getElementById('tab-register-btn');
+    const tabLogin = document.getElementById('tabLogin');
+    const tabRegister = document.getElementById('tabRegister');
+    const formLogin = document.getElementById('formLogin');
+    const formRegister = document.getElementById('formRegister');
 
-    function setAuthMode(register) {
-      isRegisterMode = register;
-      if (isRegisterMode) {
-        tabRegisterBtn.classList.add('active');
-        tabLoginBtn.classList.remove('active');
-        titleEl.textContent = 'Crear Cuenta en GamesBoy';
-        subTitleEl.textContent = 'Regístrate para comprar videojuegos, compartir streaming y gestionar saldo.';
-        fieldName.style.display = 'block';
-        submitLabel.textContent = 'Crear Cuenta';
-      } else {
-        tabLoginBtn.classList.add('active');
-        tabRegisterBtn.classList.remove('active');
-        titleEl.textContent = '¡Bienvenido de nuevo!';
-        subTitleEl.textContent = 'Ingresa a tu cuenta para gestionar tus suscripciones, juegos y saldo.';
-        fieldName.style.display = 'none';
-        submitLabel.textContent = 'Iniciar Sesión';
-      }
-    }
+    tabLogin.addEventListener('click', () => {
+      tabLogin.classList.add('active');
+      tabRegister.classList.remove('active');
+      formLogin.style.display = 'block';
+      formRegister.style.display = 'none';
+    });
 
-    tabLoginBtn.addEventListener('click', () => setAuthMode(false));
-    tabRegisterBtn.addEventListener('click', () => setAuthMode(true));
+    tabRegister.addEventListener('click', () => {
+      tabRegister.classList.add('active');
+      tabLogin.classList.remove('active');
+      formRegister.style.display = 'block';
+      formLogin.style.display = 'none';
+    });
 
-    document.getElementById('form-auth-page').addEventListener('submit', async (e) => {
+    formLogin.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('auth-input-email').value.trim();
-      const password = document.getElementById('auth-input-password').value;
-      const name = document.getElementById('auth-input-name').value.trim();
-
-      const endpoint = isRegisterMode ? '/api/auth/register' : '/api/auth/login';
-      const bodyPayload = isRegisterMode ? { name, email, password } : { email, password, portalType: 'client' };
+      const email = document.getElementById('loginEmail').value;
+      const pass = document.getElementById('loginPassword').value;
 
       try {
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(bodyPayload)
-        });
-        const data = await res.json();
-        if (data.success && data.user) {
-          localStorage.setItem('gb_user', JSON.stringify(data.user));
-          if (data.token) localStorage.setItem('gb_token', data.token);
-          window.location.replace('/');
+        const res = await API.login(email, pass);
+        if (res.user && res.user.role === 'ADMIN') {
+          window.location.href = '/admin';
         } else {
-          alert(data.error || 'No se pudo completar la autenticación.');
+          window.location.href = '/';
         }
       } catch (err) {
-        alert('Error al conectar con el servidor.');
+        alert(err.message || 'Error al iniciar sesión');
       }
     });
 
-    // --- GOOGLE OAUTH 2.0 / GOOGLE IDENTITY SERVICES INTEGRATION ---
-    let googleTokenClient = null;
-    let googleClientIdConfigured = '1056486263995-t692uq5j62i7esq32v3tmut0t151n9kd.apps.googleusercontent.com';
-
-    async function initGoogleAuth() {
-      try {
-        const res = await fetch('/api/auth/config');
-        if (res.ok) {
-          const cfg = await res.json();
-          if (cfg.googleClientId) {
-            googleClientIdConfigured = cfg.googleClientId;
-          }
-        }
-      } catch (e) {
-        console.warn('⚠️ No se pudo consultar /api/auth/config:', e);
-      }
-
-      function setupGsiClients() {
-        if (!window.google || !window.google.accounts) return;
-        if (!googleClientIdConfigured) return;
-
-        try {
-          // 1. Google OAuth2 Token Client (Custom button popup flow)
-          googleTokenClient = google.accounts.oauth2.initTokenClient({
-            client_id: googleClientIdConfigured,
-            scope: 'email profile openid',
-            callback: async (tokenResponse) => {
-              if (tokenResponse.error) {
-                console.error('Google OAuth error:', tokenResponse);
-                alert('No se pudo autenticar con Google: ' + (tokenResponse.error_description || tokenResponse.error));
-                return;
-              }
-              if (tokenResponse.access_token) {
-                await handleGoogleAuthSuccess({ accessToken: tokenResponse.access_token });
-              }
-            }
-          });
-
-          // 2. Google Identity Services ID Token (One-Tap / Credential flow)
-          google.accounts.id.initialize({
-            client_id: googleClientIdConfigured,
-            callback: async (credentialResponse) => {
-              if (credentialResponse.credential) {
-                await handleGoogleAuthSuccess({ credential: credentialResponse.credential });
-              }
-            }
-          });
-        } catch (err) {
-          console.warn('Google GSI init warning:', err);
-        }
-      }
-
-      if (window.google && window.google.accounts) {
-        setupGsiClients();
-      } else {
-        window.addEventListener('load', () => {
-          setTimeout(setupGsiClients, 500);
-        });
-      }
-    }
-
-    async function handleGoogleAuthSuccess(payload) {
-      const googleBtn = document.getElementById('btn-google-login');
-      const originalText = googleBtn ? googleBtn.innerHTML : '';
-      if (googleBtn) {
-        googleBtn.style.opacity = '0.7';
-        googleBtn.innerHTML = '<span>Verificando con Google...</span>';
-      }
-
-      try {
-        const res = await fetch('/api/auth/google', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        if (data.success && data.user) {
-          localStorage.setItem('gb_user', JSON.stringify(data.user));
-          if (data.token) localStorage.setItem('gb_token', data.token);
-          window.location.replace('/');
-        } else {
-          alert(data.error || 'Error al autenticar cuenta de Google.');
-          if (googleBtn) {
-            googleBtn.style.opacity = '1';
-            googleBtn.innerHTML = originalText;
-          }
-        }
-      } catch (err) {
-        console.error('Error Google fetch:', err);
-        alert('Error de conexión al procesar la autenticación de Google.');
-        if (googleBtn) {
-          googleBtn.style.opacity = '1';
-          googleBtn.innerHTML = originalText;
-        }
-      }
-    }
-
-    document.getElementById('btn-google-login')?.addEventListener('click', (e) => {
+    formRegister.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const fullName = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
 
-      if (!googleClientIdConfigured) {
-        alert('⚠️ GOOGLE_CLIENT_ID aún no está configurado en las variables de entorno de Railway / .env.\n\nPara activar Google Sign-In con tu proyecto existente (Tienfy/Almitro), agrega la variable GOOGLE_CLIENT_ID en Railway.');
-        return;
-      }
-
-      if (googleTokenClient) {
-        googleTokenClient.requestAccessToken({ prompt: 'select_account' });
-      } else if (window.google && window.google.accounts && window.google.accounts.id) {
-        google.accounts.id.prompt();
-      } else {
-        alert('Cargando servicios de autenticación de Google, intenta en un momento...');
+      try {
+        await API.register({ email, password, fullName });
+        alert('Cuenta creada exitosamente. Iniciando sesión...');
+        await API.login(email, password);
+        window.location.href = '/';
+      } catch (err) {
+        alert(err.message || 'Error al registrar');
       }
     });
-
-    // Run initialization
-    initGoogleAuth();
   </script>
 </body>
 </html>

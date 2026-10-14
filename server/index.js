@@ -1,201 +1,111 @@
 import express from 'express';
-import http from 'http';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import cors from 'cors';
 import helmet from 'helmet';
-import morgan from 'morgan';
-import { WebSocketServer } from 'ws';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
 
-import config from './config/env.js';
-import { initDatabase } from './config/database.js';
-import healthRouter from './routes/health.js';
-import authRouter from './routes/auth.js';
-import walletRouter from './routes/wallet.js';
-import subscriptionsRouter from './routes/subscriptions.js';
-import storeRouter from './routes/store.js';
-import sellerRouter from './routes/seller.js';
-import adminRouter from './routes/admin.js';
-import bannersRouter from './routes/banners.js';
-import smmRouter from './routes/smm.js';
-import streamingHubsRouter from './routes/streamingHubs.js';
-import saasRouter from './routes/saas.js';
-import aiSupportRouter from './routes/aiSupport.js';
-import tenantResolver from './middleware/tenantResolver.js';
-import { notFoundHandler, globalErrorHandler } from './middleware/errorHandler.js';
+import { initDb, testConnectionAndMigrate, isDbConnected } from './config/db.js';
+import { ensureDefaultAdmin } from './services/auth.service.js';
+
+import authRoutes from './routes/auth.routes.js';
+import catalogRoutes from './routes/catalog.routes.js';
+import walletRoutes from './routes/wallet.routes.js';
+import adminRoutes from './routes/admin.routes.js';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-process.on('uncaughtException', (err) => {
-  console.warn('⚠️ [Process] Handled uncaughtException:', err.message);
-});
-process.on('unhandledRejection', (reason) => {
-  console.warn('⚠️ [Process] Handled unhandledRejection:', reason);
-});
+const clientDir = path.resolve(__dirname, '..', 'client');
 
 const app = express();
-app.set('trust proxy', true); // Trust Railway / Edge reverse proxy headers (x-forwarded-host, etc.)
-const server = http.createServer(app);
+const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
 
-// Initialize WebSocket Server for Realtime notifications (approvals, new orders)
-const wss = new WebSocketServer({ server, path: '/ws' });
-app.set('wss', wss);
-
-let onlineUsers = 0;
-
-wss.on('connection', (ws) => {
-  onlineUsers++;
-  
-  ws.send(JSON.stringify({
-    type: 'CONNECTION_ESTABLISHED',
-    message: `Conectado a GamesBoy.net Engine`,
-    onlineUsers,
-    serverTime: new Date().toISOString()
-  }));
-
-  ws.on('message', (message) => {
-    try {
-      const data = JSON.parse(message);
-      if (data.action === 'PING') {
-        ws.send(JSON.stringify({ type: 'PONG', timestamp: Date.now() }));
-      }
-    } catch (e) {}
-  });
-
-  ws.on('close', () => {
-    onlineUsers = Math.max(0, onlineUsers - 1);
-  });
-});
-
-// Security & Parsing Middleware
+// Security Headers & CORS
 app.use(helmet({
-  contentSecurityPolicy: false,
-  crossOriginEmbedderPolicy: false,
-  crossOriginOpenerPolicy: false
+  contentSecurityPolicy: false, // Allows inline fonts/styles for maximum UI flexibility
+  crossOriginEmbedderPolicy: false
 }));
 
 app.use(cors({
   origin: '*',
-  credentials: true
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-app.use(express.json({ limit: '35mb' })); // Support direct image file uploads and base64 screenshots
-app.use(express.urlencoded({ extended: true, limit: '35mb' }));
-app.use(morgan(config.nodeEnv === 'production' ? 'combined' : 'dev'));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Canonical Apex Domain Redirection: enforce www.gamesboy.net for full CDN & API connectivity
-app.use((req, res, next) => {
-  const rawHost = (req.headers['x-forwarded-host'] ? String(req.headers['x-forwarded-host']).split(',')[0].trim() : '') || req.headers.host || '';
-  const host = rawHost.toLowerCase().split(':')[0].trim();
-  if (host === 'gamesboy.net') {
-    return res.redirect(301, `https://www.gamesboy.net${req.originalUrl}`);
-  }
-  next();
+// Health Check Endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'online',
+    platform: 'GamesBoy.net Core Engine v2.0',
+    database_connected: isDbConnected(),
+    timestamp: new Date().toISOString()
+  });
 });
-
-// Multi-Tenant Resolution Middleware (Applies tenant context to all incoming requests)
-app.use(tenantResolver);
-
-// Clean URL Redirection: permanently redirect all requests ending with .html to clean paths
-app.use((req, res, next) => {
-  if (req.method === 'GET' && req.path.endsWith('.html')) {
-    const cleanPath = req.path.slice(0, -5);
-    const queryString = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
-    const target = (cleanPath === '/store' || cleanPath === '/index') ? '/' : cleanPath;
-    return res.redirect(301, target + queryString);
-  }
-  next();
-});
-
-// Static Client Files (Disable automatic index.html serving so app.get('/') router controls the landing vs store logic)
-const clientPath = path.resolve(__dirname, '../client');
-app.use(express.static(clientPath, { index: false }));
 
 // Mount Modular API Routes
-app.use('/health', healthRouter);
-app.use('/api/tenant', saasRouter);
-app.use('/api/saas', saasRouter);
-app.use('/api/auth', authRouter);
-app.use('/api/wallet', walletRouter);
-app.use('/api/subscriptions', subscriptionsRouter);
-app.use('/api/store', storeRouter);
-app.use('/api/seller', sellerRouter);
-app.use('/api/sellers', sellerRouter);
-app.use('/api/admin', adminRouter);
-app.use('/api/banners', bannersRouter);
-app.use('/api/smm', smmRouter);
-app.use('/api/streaming-hubs', streamingHubsRouter);
-app.use('/api/admin/streaming-hubs', streamingHubsRouter);
-app.use('/api/admin/streaming-services', streamingHubsRouter);
-app.use('/api/ai-support', aiSupportRouter);
+app.use('/api/auth', authRoutes);
+app.use('/api', catalogRoutes); // Provides /api/categories and /api/products
+app.use('/api/wallet', walletRoutes);
+app.use('/api/admin', adminRoutes);
 
-// Clean Routes & Admin aliases
-app.get('/', (req, res) => {
-  // GamesBoy Official Store is the primary application
-  return res.sendFile(path.join(clientPath, 'store.html'));
-});
+// Static Client Files
+app.use(express.static(clientDir));
 
-app.get('/store', (req, res) => res.sendFile(path.join(clientPath, 'store.html')));
-app.get('/marketplace', (req, res) => res.sendFile(path.join(clientPath, 'store.html')));
-app.get('/saas', (req, res) => res.sendFile(path.join(clientPath, 'index.html')));
-app.get('/landing', (req, res) => res.sendFile(path.join(clientPath, 'index.html')));
-app.get('/login', (req, res) => res.sendFile(path.join(clientPath, 'login.html')));
+// Clean Navigation Routes
 app.get('/admin', (req, res) => {
-  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.set('Pragma', 'no-cache');
-  res.set('Expires', '0');
-  res.sendFile(path.join(clientPath, 'admin.html'));
-});
-app.get('/admin/login', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
-app.get('/admin-login', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
-app.get('/admid', (req, res) => res.redirect('/admin'));
-app.get('/admid/login', (req, res) => res.redirect('/admin/login'));
-app.get('/profile', (req, res) => res.sendFile(path.join(clientPath, 'profile.html')));
-app.get('/service', (req, res) => res.sendFile(path.join(clientPath, 'service.html')));
-app.get('/seller', (req, res) => res.sendFile(path.join(clientPath, 'seller.html')));
-app.get('/purchases', (req, res) => res.sendFile(path.join(clientPath, 'purchases.html')));
-app.get('/monetizar', (req, res) => res.sendFile(path.join(clientPath, 'monetizar.html')));
-app.get('/generar-ingresos', (req, res) => res.sendFile(path.join(clientPath, 'monetizar.html')));
-
-// Fallback for SPA routing
-app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api') || req.path.startsWith('/health')) {
-    return next();
-  }
-  if (req.isStoreRequest) {
-    return res.sendFile(path.join(clientPath, 'store.html'));
-  }
-  res.sendFile(path.join(clientPath, 'index.html'));
+  res.sendFile(path.join(clientDir, 'admin.html'));
 });
 
-// Error handling
-app.use(notFoundHandler);
-app.use(globalErrorHandler);
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(clientDir, 'login.html'));
+});
 
-// Start Server & Initialize Database
+// Fallback for Single Page App / Marketplace
+app.get('*', (req, res) => {
+  res.sendFile(path.join(clientDir, 'index.html'));
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('❌ [Server Error]:', err);
+  res.status(500).json({
+    success: false,
+    error: process.env.NODE_ENV === 'production' ? 'Error interno del servidor.' : err.message
+  });
+});
+
+// Server Initialization
 async function startServer() {
-  console.log('==============================================');
-  console.log(`🚀 Starting GamSplit SaaS Multi-Tenant Engine`);
-  console.log(`🌐 Primary SaaS Domain: ${config.appDomain}`);
-  console.log(`📦 Environment:        ${config.nodeEnv}`);
-  console.log('==============================================');
+  console.log('🚀 Initializing GamesBoy.net Platform Engine...');
 
-  await initDatabase();
+  // Database setup
+  initDb();
+  await testConnectionAndMigrate();
+  await ensureDefaultAdmin();
 
-  server.listen(config.port, config.host, () => {
-    console.log(`✨ Server running at: http://${config.host === '0.0.0.0' ? 'localhost' : config.host}:${config.port}`);
-    console.log(`📡 WebSocket ready at: ws://${config.host === '0.0.0.0' ? 'localhost' : config.host}:${config.port}/ws`);
-    console.log('==============================================');
+  const server = app.listen(PORT, HOST, () => {
+    console.log(`🎮 [GamesBoy Engine] Listening on http://${HOST}:${PORT}`);
+    console.log(`⚡ [Environment] ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🛡️ [Admin Panel] Accessible at http://${HOST}:${PORT}/admin`);
   });
+
+  // Graceful shutdown
+  const shutdown = () => {
+    console.log('🛑 Shutting down gracefully...');
+    server.close(() => {
+      console.log('Server closed.');
+      process.exit(0);
+    });
+  };
+
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
 }
-
-process.on('SIGINT', () => {
-  console.log('\n🛑 Gracefully shutting down GamSplit SaaS server...');
-  server.close(() => {
-    console.log('👋 Server closed.');
-    process.exit(0);
-  });
-});
 
 startServer();
