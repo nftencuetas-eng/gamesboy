@@ -35,3 +35,14 @@ This document establishes the architectural standards, security policies, and en
 - **Matte Charcoal & Dark Slate**: Base `#0a0c10`, surface elevated `#11141c`, `#181c26`.
 - **Clean Typography**: Inter / Outfit for headings and body, JetBrains Mono for monetary values, PINs, and codes.
 - **Multi-Currency Clarity**: Always display base currency (USDT / USD) alongside converted local currency (₲ Guaraníes) with a clear exchange rate indicator.
+
+---
+
+## 4. Obligación de Despliegue Continuo (Deploy on Complete)
+- **Despliegue Mandatorio Inmediato**: Al concluir cualquier tarea, corrección de errores, refactorización o fase operativa, el agente TIENE LA OBLIGACIÓN ESTRICTA de ejecutar el despliegue automático hacia producción.
+- **Ciclo Incompleto sin Deploy**: Ninguna tarea o requerimiento se considerará finalizado si los cambios no han sido confirmados en Git y enviados (`git push`) al repositorio remoto (`origin/main`), garantizando la activación automática del build en **Railway**.
+- **Protocolo de Ejecución de Deploy**:
+  1. Verificar la integridad y pruebas locales pertinentes.
+  2. Ejecutar `node scripts/deploy_git.js` para registrar (`stage`), hacer commit descriptivo y realizar el `push` inmediato a la rama `main` en GitHub (`https://github.com/nftencuetas-eng/gamesboy.git`).
+  3. Confirmar que el trigger de despliegue en Railway se haya disparado satisfactoriamente antes de dar por cerrada la intervención.
+

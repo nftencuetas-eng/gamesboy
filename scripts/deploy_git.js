@@ -1,12 +1,29 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const dir = path.resolve(__dirname, '..');
+
+function resolveToken() {
+  if (process.env.GITHUB_TOKEN) return process.env.GITHUB_TOKEN.trim();
+  if (process.argv[2] && !process.argv[2].startsWith('-')) return process.argv[2].trim();
+  
+  if (process.platform === 'win32') {
+    try {
+      const psScript = path.resolve(dir, 'scratch', 'get_cred.ps1');
+      if (fs.existsSync(psScript)) {
+        const out = execSync(`powershell -ExecutionPolicy Bypass -File "${psScript}"`, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] });
+        if (out && out.trim()) return out.trim();
+      }
+    } catch (_) {}
+  }
+  return null;
+}
 
 async function deploy() {
   console.log('📦 Starting Git Status & Deploy Workflow for GamesBoy.net...');
@@ -39,7 +56,7 @@ async function deploy() {
     }
 
     // 3. Commit
-    const commitMsg = process.argv[3] || 'feat: complete audio overhaul - panoramic streaming hubs, inverted slot states, verified seller reviews, dedicated purchases page, real group chat & strict admin security';
+    const commitMsg = process.argv[3] || 'feat: automated commit and deploy - master rules and platform updates';
     const sha = await git.commit({
       fs,
       dir,
@@ -56,11 +73,16 @@ async function deploy() {
   const remotes = await git.listRemotes({ fs, dir });
   console.log('🌐 Configured Remotes:', remotes);
 
-  // 5. Try push if token/remote is configured
-  const token = process.env.GITHUB_TOKEN || process.argv[2];
+  // 5. Push to remote
+  const token = resolveToken();
   try {
     const currentBranch = await git.currentBranch({ fs, dir, fullname: false });
     console.log(`🌿 Current Branch: ${currentBranch}`);
+
+    if (!token) {
+      console.warn('⚠️ Push notice: No GitHub token resolved. Commit created locally but not pushed.');
+      return;
+    }
 
     const pushResult = await git.push({
       fs,
