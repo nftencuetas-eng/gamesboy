@@ -1145,10 +1145,10 @@
           <span>07. Cuentas Streaming</span>
           <span class="badge-count red" id="badge-pending-subs" style="display: none;">0</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-work-tools" title="08. Herramientas de Trabajo & IA (ChatGPT, Claude, Minea)">
+        <button class="admin-menu-btn" data-tab="tab-work-tools" title="08. Apps Pro & Cuentas IA (ChatGPT, Claude, Canva, Minea)">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 2a10 10 0 0 1 10 10h-10V2z"></path><path d="M12 12L2.1 12.5"></path></svg>
-          <span>08. Herramientas & IA</span>
-          <span class="badge-count purple" id="badge-tools-count">6</span>
+          <span>08. Apps Pro & Cuentas IA</span>
+          <span class="badge-count purple" id="badge-tools-count">1</span>
         </button>
 
         <!-- ======================================================= -->
@@ -1441,18 +1441,18 @@
                 </div>
               </div>
 
-              <!-- Módulo 8: Herramientas de Trabajo & IA -->
+              <!-- Módulo 8: Apps Pro & Cuentas IA -->
               <div class="admin-module-card" onclick="switchAdminTab('tab-work-tools')" style="border-color: rgba(168, 85, 247, 0.3);">
                 <div>
                   <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div class="admin-module-icon-wrap" style="color: #c084fc; background: rgba(168, 85, 247, 0.12);">🤖</div>
                     <span class="btn-admin-action purple" style="padding: 2px 8px; font-size: 0.7rem;">Productividad & IA</span>
                   </div>
-                  <h4><span>08. Herramientas & IA</span></h4>
-                  <p>Cuentas compartidas oficiales de ChatGPT Plus (GPT-4o), Claude Pro, Gemini, Minea Dropshipping, Canva y Midjourney.</p>
+                  <h4><span>08. Apps Pro & Cuentas IA</span></h4>
+                  <p>Cuentas oficiales y suscripciones compartidas de ChatGPT Plus (GPT-4o), Claude Pro, Gemini, Minea Dropshipping, Canva y Midjourney.</p>
                 </div>
                 <div class="admin-module-footer">
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Cuentas de IA</span>
+                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Apps Pro & IA</span>
                   <span class="admin-module-btn">Entrar al Módulo ➔</span>
                 </div>
               </div>
@@ -2613,99 +2613,145 @@
 
     
       <!-- ======================================================= -->
-      <!-- TAB 8: HERRAMIENTAS DE TRABAJO & INTELIGENCIA ARTIFICIAL-->
+      <!-- ======================================================= -->
+      <!-- TAB 8: APPS PRO & CUENTAS IA (CATÁLOGO & BÓVEDA)        -->
       <!-- ======================================================= -->
       <section id="tab-work-tools" class="admin-section-pane">
         
-        <!-- Action & Subtitle Banner -->
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 14px; background: rgba(16, 20, 32, 0.85); border: 1px solid rgba(168, 85, 247, 0.25); padding: 1.25rem 1.5rem; border-radius: 16px;">
-          <div>
-            <h3 style="font-size: 1.2rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-              <span style="background: rgba(168, 85, 247, 0.2); color: #c084fc; padding: 3px 8px; border-radius: 6px; font-size: 0.82rem;">PRODUCCIÓN & IA</span>
-              <span>Herramientas de Trabajo & Software de IA</span>
-            </h3>
-            <p style="font-size: 0.82rem; color: var(--text-tertiary); margin: 0;">
-              Administra cuentas oficiales compartidas de <strong>ChatGPT Plus (GPT-4o), Claude Pro, Gemini Advanced, Minea Dropshipping, Canva Pro y Midjourney</strong>.
-            </p>
+        <!-- SUB-TABS NAVIGATION BAR: 2 SUBTABS -->
+        <div class="stream-subtabs-nav" style="display: flex; gap: 8px; margin-bottom: 1.5rem; background: rgba(14, 20, 36, 0.95); padding: 8px; border-radius: 14px; border: 1px solid rgba(168, 85, 247, 0.25); flex-wrap: wrap; align-items: center;">
+          <button type="button" class="btn-admin-action purple" onclick="openCreateServiceModal('ai_tools')" id="btn-create-ai-tool-service" style="padding: 10px 22px; border-radius: 10px; font-family: var(--font-heading); font-size: 0.92rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease; background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); color: #ffffff; box-shadow: 0 4px 14px rgba(168, 85, 247, 0.4); margin-right: 6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>➕ Crear App Pro / Servicio IA</span>
+          </button>
+          <button type="button" class="btn-admin-action emerald" onclick="openAdminCreateAccountModal()" id="btn-create-ai-tool-account" style="padding: 10px 20px; border-radius: 10px; font-family: var(--font-heading); font-size: 0.9rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; margin-right: 6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"></rect></svg>
+            <span>🔐 + Cargar Cuenta a Bóveda</span>
+          </button>
+          <button type="button" class="stream-subtab-pill active" onclick="switchAiToolsSubtab('subpane-ai-services-crud')" id="btn-subtab-ai-services" style="padding: 10px 20px; border-radius: 10px; border: none; font-family: var(--font-heading); font-size: 0.9rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease; background: linear-gradient(135deg, #a855f7 0%, #0070f3 100%); color: #ffffff; box-shadow: 0 4px 14px rgba(168, 85, 247, 0.35);">
+            <span>🤖 1. Servicios en Tienda (Catálogo & Portada Horizontal)</span>
+          </button>
+          <button type="button" class="stream-subtab-pill" onclick="switchAiToolsSubtab('subpane-ai-accounts-vault')" id="btn-subtab-ai-vault" style="padding: 10px 20px; border-radius: 10px; border: none; font-family: var(--font-heading); font-size: 0.9rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease; background: rgba(255, 255, 255, 0.04); color: #94a3b8;">
+            <span>🛡️ 2. Bóveda de Cuentas & Asientos</span>
+          </button>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- SUBPANE 1: SERVICIOS CRUD (APPS PRO & CUENTAS IA)       -->
+        <!-- ======================================================= -->
+        <div id="subpane-ai-services-crud" class="ai-tools-subpane" style="display: block;">
+          <!-- Action & Summary Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 14px; background: rgba(16, 20, 32, 0.85); border: 1px solid rgba(168, 85, 247, 0.25); padding: 1.25rem 1.5rem; border-radius: 16px;">
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <span style="background: rgba(168, 85, 247, 0.2); color: #c084fc; padding: 3px 8px; border-radius: 6px; font-size: 0.82rem;">PANORÁMICO 2:1</span>
+                <span>Catálogo Oficial: Apps Pro & Cuentas IA</span>
+              </h3>
+              <p style="font-size: 0.82rem; color: var(--text-tertiary); margin: 0;">
+                Servicios con <strong>portada horizontal panorámica</strong> para ChatGPT Plus (GPT-4o), Claude Pro, Canva, Minea, Gemini y Midjourney.
+              </p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <button type="button" class="btn-admin-action purple" onclick="openCreateServiceModal('ai_tools')" style="padding: 10px 18px; font-size: 0.88rem; font-weight: 800; box-shadow: 0 0 15px rgba(168, 85, 247, 0.35);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>+ Crear App Pro / Servicio IA</span>
+              </button>
+              <button type="button" class="btn-admin-action cyan" onclick="loadWorkToolsData()" style="padding: 10px 14px; font-size: 0.84rem;">
+                <span>🔄 Recargar Catálogo</span>
+              </button>
+            </div>
           </div>
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <button type="button" class="btn-admin-action emerald" onclick="openAdminCreateAccountModal('chatgpt')" style="padding: 10px 18px; font-size: 0.88rem; font-weight: 800; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              <span>+ Cargar Cuenta de Herramienta IA</span>
-            </button>
-            <button type="button" class="btn-admin-action cyan" onclick="loadWorkToolsData()" style="padding: 10px 14px; font-size: 0.84rem;">
-              <span>🔄 Actualizar</span>
-            </button>
+
+          <div class="admin-card">
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Portada Horizontal</th>
+                    <th>Servicio & Badge</th>
+                    <th>Plan Oficial & Tagline</th>
+                    <th>Precio Asiento (Gs.)</th>
+                    <th>Asientos</th>
+                    <th>Comisión GB</th>
+                    <th>Ganancia Neta</th>
+                    <th>Estado</th>
+                    <th style="text-align: right;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="table-ai-services-crud">
+                  <!-- Rendered dynamically by loadWorkToolsData -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        <!-- 4 KPI Cards for Work Tools -->
-        <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 1.5rem;">
-          <div class="kpi-card purple">
-            <div class="kpi-header">
-              <span class="kpi-title">Herramientas en Catálogo</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path></svg>
+        <!-- ======================================================= -->
+        <!-- SUBPANE 2: BÓVEDA DE CUENTAS & ASIENTOS                 -->
+        <!-- ======================================================= -->
+        <div id="subpane-ai-accounts-vault" class="ai-tools-subpane" style="display: none;">
+          <!-- 4 KPI Cards for Work Tools -->
+          <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 1.5rem;">
+            <div class="kpi-card purple">
+              <div class="kpi-header">
+                <span class="kpi-title">Herramientas en Catálogo</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path></svg>
+              </div>
+              <div class="kpi-value-gs" id="tools-kpi-total-catalog">0 Servicios</div>
+              <div class="kpi-value-usd" style="font-size: 0.74rem;">ChatGPT, Claude, Canva, Minea...</div>
             </div>
-            <div class="kpi-value-gs" id="tools-kpi-total-catalog">6 Servicios</div>
-            <div class="kpi-value-usd" style="font-size: 0.74rem;">ChatGPT, Claude, Gemini, Minea, Canva, Midjourney</div>
-          </div>
-          <div class="kpi-card cyan">
-            <div class="kpi-header">
-              <span class="kpi-title">Cuentas Cargadas en Bóveda</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"></rect></svg>
+            <div class="kpi-card cyan">
+              <div class="kpi-header">
+                <span class="kpi-title">Cuentas Cargadas en Bóveda</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"></rect></svg>
+              </div>
+              <div class="kpi-value-gs" id="tools-kpi-total-accounts">0 Cuentas</div>
+              <div class="kpi-value-usd" id="tools-kpi-accounts-sub">0 Asientos Ocupados</div>
             </div>
-            <div class="kpi-value-gs" id="tools-kpi-total-accounts">0 Cuentas</div>
-            <div class="kpi-value-usd" id="tools-kpi-accounts-sub">0 Asientos Ocupados</div>
-          </div>
-          <div class="kpi-card emerald">
-            <div class="kpi-header">
-              <span class="kpi-title">Asientos Libres para Venta</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <div class="kpi-card emerald">
+              <div class="kpi-header">
+                <span class="kpi-title">Asientos Libres para Venta</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              </div>
+              <div class="kpi-value-gs" id="tools-kpi-available-slots" style="color: #34d399;">0 Libres</div>
+              <div class="kpi-value-usd" style="font-size: 0.74rem;">Stock Inmediato para Tienda</div>
             </div>
-            <div class="kpi-value-gs" id="tools-kpi-available-slots" style="color: #34d399;">0 Libres</div>
-            <div class="kpi-value-usd" style="font-size: 0.74rem;">Stock Inmediato para Tienda</div>
-          </div>
-          <div class="kpi-card amber">
-            <div class="kpi-header">
-              <span class="kpi-title">Precio Promedio por Asiento</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-            </div>
-            <div class="kpi-value-gs" id="tools-kpi-avg-price">34.000 Gs.</div>
-            <div class="kpi-value-usd" style="font-size: 0.74rem;">$4.50 USDT mensual</div>
-          </div>
-        </div>
-
-        <!-- Filter & Search Toolbar -->
-        <div class="admin-card">
-          <div class="filter-toolbar">
-            <input type="text" id="tools-search-input" class="filter-input-search" placeholder="🔍 Buscar por herramienta, cuenta, email o usuario asignado..." oninput="applyWorkToolsFilters()">
-            
-            <div style="display: flex; gap: 8px; align-items: center;">
-              <label style="font-size: 0.74rem; font-weight: 800; color: var(--text-tertiary); text-transform: uppercase;">Herramienta:</label>
-              <select id="tools-filter-select" class="admin-form-select" style="width: auto; padding: 7px 12px; font-size: 0.82rem;" onchange="applyWorkToolsFilters()">
-                <option value="all">Todas las Herramientas</option>
-                <option value="chatgpt">ChatGPT Plus & GPT-4o</option>
-                <option value="claude">Claude Pro (Sonnet 3.5)</option>
-                <option value="gemini">Gemini Advanced Ultra</option>
-                <option value="minea">Minea Dropshipping Spy</option>
-                <option value="canva">Canva Pro Equipo</option>
-                <option value="midjourney">Midjourney AI Pro</option>
-              </select>
-            </div>
-
-            <div style="display: flex; gap: 8px; align-items: center;">
-              <label style="font-size: 0.74rem; font-weight: 800; color: var(--text-tertiary); text-transform: uppercase;">Disponibilidad:</label>
-              <select id="tools-filter-status" class="admin-form-select" style="width: auto; padding: 7px 12px; font-size: 0.82rem;" onchange="applyWorkToolsFilters()">
-                <option value="all">Todos los Estados</option>
-                <option value="available">Con Asientos Libres</option>
-                <option value="full">Cuentas Llenas</option>
-              </select>
+            <div class="kpi-card amber">
+              <div class="kpi-header">
+                <span class="kpi-title">Precio Promedio por Asiento</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div class="kpi-value-gs" id="tools-kpi-avg-price">0 Gs.</div>
+              <div class="kpi-value-usd" style="font-size: 0.74rem;">Mensual por Asiento</div>
             </div>
           </div>
 
-          <!-- Accounts & Work Tools List Grid -->
-          <div id="work-tools-accounts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 1rem;">
-            <!-- Rendered dynamically by loadWorkToolsData -->
+          <!-- Filter & Search Toolbar -->
+          <div class="admin-card">
+            <div class="filter-toolbar">
+              <input type="text" id="tools-search-input" class="filter-input-search" placeholder="🔍 Buscar por herramienta, cuenta, email o usuario asignado..." oninput="applyWorkToolsFilters()">
+              
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <label style="font-size: 0.74rem; font-weight: 800; color: var(--text-tertiary); text-transform: uppercase;">Herramienta:</label>
+                <select id="tools-filter-select" class="admin-form-select" style="width: auto; padding: 7px 12px; font-size: 0.82rem;" onchange="applyWorkToolsFilters()">
+                  <option value="all">Todas las Herramientas</option>
+                </select>
+              </div>
+
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <label style="font-size: 0.74rem; font-weight: 800; color: var(--text-tertiary); text-transform: uppercase;">Disponibilidad:</label>
+                <select id="tools-filter-status" class="admin-form-select" style="width: auto; padding: 7px 12px; font-size: 0.82rem;" onchange="applyWorkToolsFilters()">
+                  <option value="all">Todos los Estados</option>
+                  <option value="available">Con Asientos Libres</option>
+                  <option value="full">Cuentas Llenas</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Accounts & Work Tools List Grid -->
+            <div id="work-tools-accounts-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-top: 1rem;">
+              <!-- Rendered dynamically by loadWorkToolsData -->
+            </div>
           </div>
         </div>
       </section>
@@ -2913,21 +2959,29 @@
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 12px;">
         <h3 style="font-size: 1.25rem; font-weight: 800; color: #ffffff; display: flex; align-items: center; gap: 8px;">
           <span style="color: var(--accent-emerald);">✨</span>
-          <span>Crear Nuevo Servicio de Streaming</span>
+          <span id="create-srv-modal-title">Crear Nuevo Servicio</span>
         </h3>
         <button type="button" class="btn-modal-close" onclick="closeCreateServiceModal()" style="background: transparent; border: none; color: #94a3b8; font-size: 1.3rem; cursor: pointer;">✕</button>
       </div>
 
       <form id="form-create-streaming-service">
-        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0.75rem;">
           <div class="admin-form-group">
-            <label class="admin-form-label">Nombre del Servicio de Streaming *</label>
-            <input type="text" id="create-srv-name" class="admin-form-input" placeholder="ej: Netflix Premium 4K HDR, Disney+ Ultra..." required>
+            <label class="admin-form-label">Categoría del Servicio *</label>
+            <select id="create-srv-category" class="admin-form-select" style="font-weight: 700;">
+              <option value="streaming">📺 Streaming & Entretenimiento (Ícono Cuadrado 1:1)</option>
+              <option value="ai_tools">🤖 Apps Pro & Cuentas IA (Portada Horizontal 2:1)</option>
+            </select>
           </div>
           <div class="admin-form-group">
             <label class="admin-form-label">Identificador / Slug (opcional)</label>
-            <input type="text" id="create-srv-id" class="admin-form-input" placeholder="ej: netflix, spotify, crunchymax">
+            <input type="text" id="create-srv-id" class="admin-form-input" placeholder="ej: netflix, chatgpt, claude, minea">
           </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label class="admin-form-label">Nombre del Servicio / Plataforma *</label>
+          <input type="text" id="create-srv-name" class="admin-form-input" placeholder="ej: Netflix Premium 4K, ChatGPT Plus (GPT-4o), Claude Pro..." required>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
@@ -3039,10 +3093,17 @@
       <form id="form-edit-streaming-service">
         <input type="hidden" id="edit-srv-id">
 
-        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1rem;">
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 1rem;">
           <div class="admin-form-group">
-            <label class="admin-form-label">Nombre del Servicio de Streaming *</label>
+            <label class="admin-form-label">Nombre del Servicio *</label>
             <input type="text" id="edit-srv-name" class="admin-form-input" required>
+          </div>
+          <div class="admin-form-group">
+            <label class="admin-form-label">Categoría</label>
+            <select id="edit-srv-category" class="admin-form-select" style="font-weight: 700;">
+              <option value="streaming">📺 Streaming & Entretenimiento</option>
+              <option value="ai_tools">🤖 Apps Pro & Cuentas IA</option>
+            </select>
           </div>
           <div class="admin-form-group">
             <label class="admin-form-label">Estado del Servicio</label>
@@ -3543,7 +3604,7 @@
       'tab-games-management': { title: '05. Gestión de Videojuegos Digitales', subtitle: 'Catálogo por consolas, precios en Guaraníes, stock de claves y subida de capturas.' },
       'tab-giftcards-management': { title: '06. Tarjetas de Regalo & Licencias', subtitle: 'Marcas oficiales (PlayStation, Xbox, Steam, Google Play) y administración de variaciones de saldo.' },
       'tab-streaming-moderation': { title: '07. Cuentas Streaming & Asientos Oficiales', subtitle: 'Catálogo de servicios de entretenimiento (Netflix, Spotify, Disney+, Max) y moderación de cuentas.' },
-      'tab-work-tools': { title: '08. Herramientas de Trabajo & Inteligencia Artificial', subtitle: 'Cuentas de productividad: ChatGPT Plus (GPT-4o), Claude Pro, Gemini Advanced, Minea, Canva y Midjourney.' },
+      'tab-work-tools': { title: '08. Apps Pro & Cuentas IA', subtitle: 'Catálogo de software pro, membresías de productividad y modelos de IA (ChatGPT Plus, Claude Pro, Canva, Minea, Midjourney).' },
       'tab-ai-whatsapp': { title: '09. Agente WhatsApp IA & Muro de Notas', subtitle: 'Entrenamiento del asistente virtual oficial, enrutamiento telefónico y notas de leads de clientes.' },
       'tab-users': { title: '10. Directorio de Usuarios & Billeteras', subtitle: 'Auditoría de clientes, vendedores, saldos reales en Gs./USDT y fondos en garantía.' },
       'tab-hero-banners': { title: '11. Banners de Inicio (Hero Accordion)', subtitle: 'Personalización de los 4 banners interactivos de la portada, imágenes panorámicas y móviles.' },
@@ -3576,6 +3637,29 @@
       } else if (subpaneId === 'subpane-accounts-moderation') {
         loadStreamingData();
       }
+    };
+
+    window.switchAiToolsSubtab = function(subpaneId) {
+      document.querySelectorAll('.ai-tools-subpane').forEach(p => p.style.display = 'none');
+      document.querySelectorAll('#tab-work-tools .stream-subtab-pill').forEach(b => {
+        b.classList.remove('active');
+        b.style.background = 'rgba(255, 255, 255, 0.04)';
+        b.style.color = '#94a3b8';
+        b.style.boxShadow = 'none';
+      });
+
+      const pane = document.getElementById(subpaneId);
+      if (pane) pane.style.display = 'block';
+
+      const btn = document.getElementById('btn-' + subpaneId.replace('subpane-ai-', 'subtab-ai-'));
+      if (btn) {
+        btn.classList.add('active');
+        btn.style.background = 'linear-gradient(135deg, #a855f7 0%, #0070f3 100%)';
+        btn.style.color = '#ffffff';
+        btn.style.boxShadow = '0 4px 14px rgba(168, 85, 247, 0.35)';
+      }
+
+      loadWorkToolsData();
     };
 
     window.switchAdminTab = function(tabId) {
@@ -5887,9 +5971,17 @@
     };
 
     // --- MODAL: CREAR SERVICIO ---
-    window.openCreateServiceModal = function() {
+    window.openCreateServiceModal = function(defaultCategory = 'streaming') {
       const modal = document.getElementById('modal-create-streaming-service');
       resetCreateServiceForm();
+      const catSelect = document.getElementById('create-srv-category');
+      if (catSelect) {
+        catSelect.value = defaultCategory;
+      }
+      const titleEl = document.getElementById('create-srv-modal-title');
+      if (titleEl) {
+        titleEl.textContent = defaultCategory === 'ai_tools' ? 'Crear Nueva App Pro / Cuenta IA' : 'Crear Nuevo Servicio de Streaming';
+      }
       if (modal) modal.style.display = 'grid';
     };
 
@@ -5952,16 +6044,20 @@
       e.preventDefault();
       const srvName = document.getElementById('create-srv-name').value.trim();
       const srvId = document.getElementById('create-srv-id').value.trim() || srvName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      const category = document.getElementById('create-srv-category')?.value || 'streaming';
+      const iconVal = document.getElementById('create-srv-icon-url').value.trim();
+      const bannerVal = document.getElementById('create-srv-banner-url').value.trim();
 
       const payload = {
         name: srvName,
         id: srvId,
+        category: category,
         planName: document.getElementById('create-srv-plan').value.trim(),
         badgeText: document.getElementById('create-srv-badge').value.trim(),
         tagline: document.getElementById('create-srv-tagline').value.trim(),
         description: document.getElementById('create-srv-desc').value.trim(),
-        iconUrl: document.getElementById('create-srv-icon-url').value.trim(),
-        bannerHorizontal: document.getElementById('create-srv-banner-url').value.trim(),
+        iconUrl: iconVal || bannerVal || '',
+        bannerHorizontal: bannerVal || iconVal || '',
         pricePerSlotPyg: Math.round(parseFloat(document.getElementById('create-srv-price').value) || 25000),
         maxSlots: parseInt(document.getElementById('create-srv-slots').value, 10) || 5,
         commissionPercent: parseFloat(document.getElementById('create-srv-comm').value) || 10,
@@ -5982,6 +6078,7 @@
           // 2. Resetear inmediatamente todo el formulario y TODAS las imágenes para que quede completamente limpio
           resetCreateServiceForm();
           loadServicesConfig();
+          loadWorkToolsData();
 
           // 3. Mostrar estado Verificado que se cierra solo en 1.5s y mantiene la pantalla lista para subir el siguiente servicio
           showStreamingPopupStatus(
@@ -6012,6 +6109,12 @@
       document.getElementById('edit-srv-id').value = s.id;
       document.getElementById('edit-srv-name').value = s.name || '';
       document.getElementById('edit-srv-status').value = s.isActive !== false ? 'true' : 'false';
+
+      const catSelect = document.getElementById('edit-srv-category');
+      if (catSelect) {
+        catSelect.value = (s.category === 'ai_tools' || s.category === 'work_tools' || ['chatgpt', 'claude', 'gemini', 'minea', 'canva', 'midjourney', 'dise-o-premium-plantillas'].includes(s.id)) ? 'ai_tools' : 'streaming';
+      }
+
       document.getElementById('edit-srv-plan').value = s.planName || '';
       document.getElementById('edit-srv-badge').value = s.badgeText || '';
       document.getElementById('edit-srv-tagline').value = s.tagline || '';
@@ -6086,15 +6189,20 @@
     document.getElementById('form-edit-streaming-service')?.addEventListener('submit', async function(e) {
       e.preventDefault();
       const serviceId = document.getElementById('edit-srv-id').value;
+      const category = document.getElementById('edit-srv-category')?.value || 'streaming';
+      const iconVal = document.getElementById('edit-srv-icon-url').value.trim();
+      const bannerVal = document.getElementById('edit-srv-banner-url').value.trim();
+
       const payload = {
         name: document.getElementById('edit-srv-name').value.trim(),
+        category: category,
         isActive: document.getElementById('edit-srv-status').value === 'true',
         planName: document.getElementById('edit-srv-plan').value.trim(),
         badgeText: document.getElementById('edit-srv-badge').value.trim(),
         tagline: document.getElementById('edit-srv-tagline').value.trim(),
         description: document.getElementById('edit-srv-desc').value.trim(),
-        iconUrl: document.getElementById('edit-srv-icon-url').value.trim(),
-        bannerHorizontal: document.getElementById('edit-srv-banner-url').value.trim(),
+        iconUrl: iconVal || bannerVal || '',
+        bannerHorizontal: bannerVal || iconVal || '',
         pricePerSlotPyg: Math.round(parseFloat(document.getElementById('edit-srv-price').value) || 25000),
         maxSlots: parseInt(document.getElementById('edit-srv-slots').value, 10) || 5,
         commissionPercent: parseFloat(document.getElementById('edit-srv-comm').value) || 10,
@@ -6113,6 +6221,7 @@
         if (data.success) {
           closeEditServiceModal();
           loadServicesConfig();
+          loadWorkToolsData();
           showStreamingPopupStatus('success', '¡Cambios Guardados!', data.message || 'Servicio actualizado con éxito.', 1400);
         } else {
           showStreamingPopupStatus('error', 'Error al actualizar', data.error || 'No se pudo actualizar el servicio.');
@@ -6134,6 +6243,7 @@
         if (data.success) {
           alert(`🗑️ ${data.message}`);
           loadServicesConfig();
+          loadWorkToolsData();
         } else {
           alert(data.error || 'No se pudo eliminar el servicio.');
         }
@@ -6605,7 +6715,8 @@
         const activeSubsData = await activeSubsRes.json();
 
         const allServices = servicesData.services || [];
-        allWorkToolsCatalog = allServices.filter(s => s.category === 'work_tools' || ['chatgpt', 'claude', 'gemini', 'minea', 'canva', 'midjourney'].includes(s.id));
+        currentStreamingServices = allServices;
+        allWorkToolsCatalog = allServices.filter(s => s.category === 'ai_tools' || s.category === 'work_tools' || ['chatgpt', 'claude', 'gemini', 'minea', 'canva', 'midjourney', 'dise-o-premium-plantillas'].includes(s.id));
 
         const activeSubs = activeSubsData.subscriptions || [];
         allWorkToolsAccounts = activeSubs.filter(sub => {
@@ -6619,6 +6730,7 @@
         const totalAccountsEl = document.getElementById('tools-kpi-total-accounts');
         const accountsSubEl = document.getElementById('tools-kpi-accounts-sub');
         const availableSlotsEl = document.getElementById('tools-kpi-available-slots');
+        const avgPriceEl = document.getElementById('tools-kpi-avg-price');
         const badgeCountEl = document.getElementById('badge-tools-count');
 
         let totalOccupiedSlots = 0;
@@ -6637,10 +6749,109 @@
         if (availableSlotsEl) availableSlotsEl.textContent = `${totalAvailSlots} Libres`;
         if (badgeCountEl) badgeCountEl.textContent = allWorkToolsCatalog.length;
 
+        if (avgPriceEl) {
+          const prices = allWorkToolsCatalog.map(s => s.pricePerSlotPyg || 0).filter(p => p > 0);
+          const avg = prices.length ? Math.round(prices.reduce((a, b) => a + b, 0) / prices.length) : 0;
+          avgPriceEl.textContent = `${avg.toLocaleString('es-PY')} Gs.`;
+        }
+
+        // Populate tool dropdown filter
+        const filterSelect = document.getElementById('tools-filter-select');
+        if (filterSelect) {
+          const prevVal = filterSelect.value;
+          filterSelect.innerHTML = '<option value="all">Todas las Apps / IAs</option>' + 
+            allWorkToolsCatalog.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+          if (prevVal) filterSelect.value = prevVal;
+        }
+
+        // Render Subpane 1 CRUD Table
+        renderAiToolsServicesCrudTable(allWorkToolsCatalog);
+
+        // Render Subpane 2 Accounts Grid
         applyWorkToolsFilters();
       } catch (err) {
         console.error('Error loading work tools data:', err);
       }
+    }
+
+    function renderAiToolsServicesCrudTable(catalog) {
+      const tbody = document.getElementById('table-ai-services-crud');
+      if (!tbody) return;
+
+      if (!catalog || catalog.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: var(--text-tertiary); padding: 2.5rem;">No hay servicios de Apps Pro & Cuentas IA registrados. Haz clic en <strong>"+ Crear App Pro / Servicio IA"</strong> para agregar el primero con su portada horizontal.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = catalog.map(s => {
+        const pricePyg = s.pricePerSlotPyg || 25000;
+        const comm = s.commissionPercent !== undefined ? s.commissionPercent : 10;
+        const netSlot = Math.round(pricePyg * (1 - comm / 100));
+        const maxSlots = s.maxSlots || 5;
+        const bannerUrl = s.bannerHorizontal || s.iconUrl || s.thumbnailUrl || '/assets/branding/icon.png';
+        const iconUrl = s.iconUrl || s.thumbnailUrl || '/assets/branding/icon.png';
+        const isActive = s.isActive !== false;
+        const usdPrice = (s.pricePerSlotUsd || (pricePyg / 7500)).toFixed(2);
+
+        return `
+          <tr>
+            <td style="white-space: nowrap;">
+              <div style="width: 106px; height: 50px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.12); background: #07090e; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                <img src="${bannerUrl}" alt="${s.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='/assets/branding/icon.png'">
+              </div>
+            </td>
+            <td style="white-space: nowrap;">
+              <div style="display: inline-flex; align-items: center; gap: 8px;">
+                <img src="${iconUrl}" alt="${s.name}" style="width: 26px; height: 26px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);" onerror="this.src='/assets/branding/icon.png'">
+                <div>
+                  <strong style="color: #ffffff; font-size: 0.88rem; display: block;">${s.name}</strong>
+                  ${s.badgeText ? `<span style="display: inline-block; font-size: 0.68rem; color: #c084fc; background: rgba(168,85,247,0.12); padding: 1px 6px; border-radius: 4px; border: 1px solid rgba(168,85,247,0.25);">${s.badgeText}</span>` : ''}
+                  <span style="display: inline-block; font-size: 0.65rem; background: rgba(255,255,255,0.05); padding: 1px 5px; border-radius: 4px; color: var(--text-tertiary); margin-left: 3px;">ID: ${s.id}</span>
+                </div>
+              </div>
+            </td>
+            <td style="white-space: nowrap;">
+              <div style="font-weight: 700; color: #ffffff; font-size: 0.82rem;">${s.planName || 'Plan Pro / Plus'}</div>
+              <div style="font-size: 0.72rem; color: var(--text-tertiary); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${s.tagline || s.description || 'Acceso directo'}</div>
+            </td>
+            <td style="white-space: nowrap;">
+              <span style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-cyan); font-size: 0.9rem;">${pricePyg.toLocaleString('es-PY')} Gs.</span>
+              <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-tertiary); margin-left: 4px;">($${usdPrice})</span>
+            </td>
+            <td style="white-space: nowrap; text-align: center;">
+              <span style="font-weight: 800; color: #ffffff; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); padding: 3px 9px; border-radius: 7px; font-size: 0.82rem;">
+                ${maxSlots} asientos
+              </span>
+            </td>
+            <td style="white-space: nowrap;">
+              <span style="font-weight: 800; color: var(--accent-amber); font-size: 0.88rem;">${comm}%</span>
+              <span style="font-size: 0.74rem; color: var(--text-tertiary); margin-left: 4px;">(${Math.round(pricePyg * (comm / 100)).toLocaleString('es-PY')} Gs.)</span>
+            </td>
+            <td style="white-space: nowrap;">
+              <span style="font-family: var(--font-mono); font-weight: 800; color: var(--accent-emerald); font-size: 0.9rem;">${netSlot.toLocaleString('es-PY')} Gs.</span>
+              <span style="font-size: 0.72rem; color: var(--text-tertiary);">/mes</span>
+            </td>
+            <td style="white-space: nowrap;">
+              <span style="padding: 3px 8px; font-size: 0.74rem; font-weight: 800; border-radius: 6px; ${isActive ? 'background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);' : 'background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);'}">
+                ${isActive ? '🟢 Activo' : '🔴 Oculto'}
+              </span>
+            </td>
+            <td style="white-space: nowrap; text-align: right;">
+              <div style="display: inline-flex; gap: 6px; align-items: center;">
+                <button type="button" class="btn-admin-action amber" onclick="openEditServiceModal('${s.id}')" title="Editar parámetros, imágenes y precios" style="padding: 5px 10px; font-size: 0.74rem; font-weight: 800;">
+                  <span>✏️ Editar</span>
+                </button>
+                <a href="/service?platform=${s.id}" target="_blank" class="btn-admin-action cyan" title="Ver Hub en vivo" style="padding: 5px 8px; font-size: 0.74rem;">
+                  <span>👁️</span>
+                </a>
+                <button type="button" class="btn-admin-action red" onclick="deleteStreamingService('${s.id}', '${s.name.replace(/'/g, "\\'")}')" title="Eliminar servicio" style="padding: 5px 8px; font-size: 0.74rem;">
+                  <span>🗑️</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
     }
 
     function applyWorkToolsFilters() {

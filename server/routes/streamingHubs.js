@@ -70,7 +70,7 @@ router.get('/', (req, res) => {
     return {
       id: s.id,
       name: s.name,
-      category: s.category || 'streaming',
+      category: s.category || (['chatgpt', 'claude', 'gemini', 'minea', 'midjourney', 'dise-o-premium-plantillas', 'canva'].includes(s.id) ? 'ai_tools' : 'streaming'),
       planName: s.planName,
       tagline: s.tagline,
       brandColor: s.brandColor || '#00c2ff',
@@ -345,7 +345,7 @@ router.post('/', (req, res) => {
     const {
       id, name, planName, badgeText, tagline, description,
       iconUrl, bannerHorizontal, pricePerSlotPyg, maxSlots,
-      commissionPercent, isActive
+      commissionPercent, isActive, category
     } = req.body;
 
     const cleanId = (id || name || '').toLowerCase().trim().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
@@ -360,9 +360,12 @@ router.post('/', (req, res) => {
       return res.status(409).json({ error: `Ya existe un servicio con el ID "${cleanId}". Por favor usa otro nombre o ID.` });
     }
 
+    const resolvedCategory = category || req.body.category || (['chatgpt', 'claude', 'gemini', 'minea', 'midjourney', 'dise-o-premium-plantillas', 'canva'].includes(cleanId) ? 'ai_tools' : 'streaming');
+
     const newService = {
       id: cleanId,
       name,
+      category: resolvedCategory,
       planName: planName || `Plan ${maxSlots || 5} Pantallas`,
       badgeText: badgeText || '',
       tagline: tagline || '',
@@ -409,10 +412,11 @@ router.put('/:serviceId', (req, res) => {
       name, isActive, planName, badgeText, tagline, description,
       iconUrl, bannerHorizontal, pricePerSlotPyg, maxSlots,
       commissionPercent, waitingCount, brandColor,
-      thumbnailUrl, logoUrl, bannerVertical, hasStock, metrics, releases
+      thumbnailUrl, logoUrl, bannerVertical, hasStock, metrics, releases, category
     } = req.body;
 
     if (name !== undefined) service.name = name;
+    if (category !== undefined) service.category = category;
     if (isActive !== undefined) service.isActive = Boolean(isActive);
     if (planName !== undefined) service.planName = planName;
     if (badgeText !== undefined) service.badgeText = badgeText;

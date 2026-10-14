@@ -110,7 +110,7 @@ function autoDetectUserCountry() {
 }
 
 // Instant Cache Hydration with Versioning & Legacy Purge
-const GB_CATALOG_CACHE_VERSION = 'gb_v8_user_authentic_catalog_media';
+const GB_CATALOG_CACHE_VERSION = 'gb_v9_apps_pro_and_ai_accounts';
 const cachedCatalog = (() => {
   try {
     const v = localStorage.getItem('gb_catalog_cache_v');
@@ -942,14 +942,28 @@ function stopHeroAutoplay() {
 }
 
 // --- 2. RENDER STREAMING SERVICES (SORTED BY MOST ACTIVE ACCOUNTS / STOCK FIRST) ---
+// Helper to identify AI / Work Tool platforms
+function isAiToolPlatform(p) {
+  if (!p) return false;
+  const cat = (p.category || '').toLowerCase();
+  const id = (p.id || '').toLowerCase();
+  const name = (p.name || '').toLowerCase();
+  return cat === 'ai_tools' || cat === 'work_tools' || cat === 'tools' ||
+         ['chatgpt', 'claude', 'gemini', 'minea', 'midjourney', 'dise-o-premium-plantillas', 'canva'].includes(id) ||
+         name.includes('chatgpt') || name.includes('claude') || name.includes('minea') || name.includes('canva') || name.includes('midjourney');
+}
+
+// --- 2. RENDER STREAMING SERVICES (SORTED BY MOST ACTIVE ACCOUNTS / STOCK FIRST) ---
 function renderStreamingServices() {
   const container = document.getElementById('streaming-services-grid');
   if (!container) return;
 
-  // Render platforms from state
-  const platformList = (Array.isArray(state.streamingPlatforms) && state.streamingPlatforms.length > 0)
+  // Render platforms from state (strictly streaming & entertainment platforms)
+  const rawList = (Array.isArray(state.streamingPlatforms) && state.streamingPlatforms.length > 0)
     ? state.streamingPlatforms
     : [];
+
+  const platformList = rawList.filter(p => !isAiToolPlatform(p));
 
   if (platformList.length === 0) {
     container.innerHTML = Array(8).fill(0).map(() => `
@@ -1037,6 +1051,113 @@ function renderStreamingServices() {
   }).join('');
 
   initStreamingCardTiltEffects();
+}
+
+// --- 2.1 RENDER APPS PRO & CUENTAS IA (HORIZONTAL 2:1 PANORAMIC CARDS) ---
+function renderAiToolsServices() {
+  const container = document.getElementById('ai-tools-services-grid');
+  if (!container) return;
+
+  const rawList = (Array.isArray(state.streamingPlatforms) && state.streamingPlatforms.length > 0)
+    ? state.streamingPlatforms
+    : [];
+
+  const aiToolsList = rawList.filter(isAiToolPlatform);
+
+  if (aiToolsList.length === 0) {
+    container.innerHTML = Array(4).fill(0).map(() => `
+      <div class="ai-tool-skeleton-card">
+        <div class="ai-tool-skeleton-box"></div>
+        <div class="ai-tool-skeleton-text"></div>
+      </div>
+    `).join('');
+    return;
+  }
+
+  const activeSubs = Array.isArray(state.subscriptions) ? state.subscriptions : [];
+
+  // Sort: In-stock and active accounts first
+  const sortedTools = [...aiToolsList].sort((a, b) => {
+    const keyA = (a.id || a.platformKey || a.name || '').toLowerCase();
+    const keyB = (b.id || b.platformKey || b.name || '').toLowerCase();
+
+    const matchingA = activeSubs.filter(s => {
+      if (s.status !== 'active') return false;
+      const sName = (s.serviceName || '').toLowerCase();
+      return sName.includes(keyA) || keyA.includes(sName);
+    });
+    const matchingB = activeSubs.filter(s => {
+      if (s.status !== 'active') return false;
+      const sName = (s.serviceName || '').toLowerCase();
+      return sName.includes(keyB) || keyB.includes(sName);
+    });
+
+    const activeCountA = matchingA.length;
+    const activeCountB = matchingB.length;
+    const slotsA = matchingA.reduce((sum, s) => sum + (s.availableSlots || 0), 0);
+    const slotsB = matchingB.reduce((sum, s) => sum + (s.availableSlots || 0), 0);
+
+    const hasRealStockA = slotsA > 0 || (a.hasStock === true && (a.availableAccounts > 0 || a.totalAvailSlots > 0 || activeCountA > 0));
+    const hasRealStockB = slotsB > 0 || (b.hasStock === true && (b.availableAccounts > 0 || b.totalAvailSlots > 0 || activeCountB > 0));
+
+    if (hasRealStockA !== hasRealStockB) return hasRealStockB ? 1 : -1;
+    if (slotsB !== slotsA) return slotsB - slotsA;
+    if (activeCountB !== activeCountA) return activeCountB - activeCountA;
+    return 0;
+  });
+
+  container.innerHTML = sortedTools.map(p => {
+    const platformKey = (p.id || p.platformKey || p.name || 'canva').toLowerCase();
+    const matching = activeSubs.filter(s => {
+      if (s.status !== 'active') return false;
+      const sName = (s.serviceName || '').toLowerCase();
+      return sName.includes(platformKey) || platformKey.includes(sName);
+    });
+
+    const hasActiveSlots = matching.some(s => (s.availableSlots || 0) > 0);
+    const inStock = (p.hasStock !== undefined) ? p.hasStock : (hasActiveSlots || matching.length > 0);
+    const serviceName = p.name || (platformKey.charAt(0).toUpperCase() + platformKey.slice(1));
+    const badgeText = p.badgeText || (p.planName ? p.planName.split('(')[0].trim() : 'PRO & IA');
+    
+    // Priority: User's authentic horizontal banner
+    const rawCover = p.bannerHorizontal || p.coverUrl || p.thumbnailUrl || p.iconUrl || p.icon || '';
+    const finalCover = (rawCover && !rawCover.includes('unsplash')) ? rawCover : '';
+
+    return `
+      <div class="ai-tool-card-wrapper ${inStock ? '' : 'out-of-stock'}" 
+           onclick="window.location.href='/service?platform=${platformKey}'" 
+           title="${serviceName} - ${inStock ? 'Disponible' : 'Sin Stock'}">
+        <div class="ai-tool-card">
+          ${finalCover ? `
+            <img src="${finalCover}" alt="${serviceName}" class="ai-tool-card-img" draggable="false" loading="lazy">
+          ` : `
+            <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, #15102a 0%, #241442 50%, #0d1222 100%); padding: 12px; text-align: center;">
+              <span style="font-size: 1.4rem; margin-bottom: 4px;">🤖</span>
+              <span style="font-size: 0.82rem; font-weight: 800; color: #ffffff; line-height: 1.2;">${serviceName}</span>
+              ${p.planName ? `<span style="font-size: 0.68rem; color: #c084fc; margin-top: 2px;">${p.planName}</span>` : ''}
+            </div>
+          `}
+          ${badgeText ? `<span class="ai-tool-card-badge">${badgeText}</span>` : ''}
+          ${!inStock ? '<span class="stream-thumb-badge-stock">SIN STOCK</span>' : ''}
+        </div>
+        <span class="ai-tool-card-title-below">${serviceName}</span>
+      </div>
+    `;
+  }).join('');
+
+  initAiToolCardTiltEffects();
+}
+
+function initAiToolCardTiltEffects() {
+  const container = document.getElementById('ai-tools-services-grid');
+  if (!container) return;
+  attachCardTiltPhysics(container.querySelectorAll('.ai-tool-card-wrapper'), {
+    maxTilt: 10,
+    perspective: 950,
+    scale: 1.04,
+    targetSelector: '.ai-tool-card',
+    elevateY: -4
+  });
 }
 
 // --- 3. RENDER DIGITAL GAMES (CLEAN SKELETONS ON LOAD, 0 DUMMY GAMES) ---
@@ -1392,6 +1513,7 @@ function initUniversalCardTiltEffects() {
   initGiftCardTiltEffects();
   initGameCardTiltEffects();
   initStreamingCardTiltEffects();
+  initAiToolCardTiltEffects();
   initSmmCardTiltEffects();
   
   const extraCards = document.querySelectorAll('.diff-box, .trust-card, .promo-banner-card');
@@ -1570,6 +1692,7 @@ async function fetchStoreData() {
       if (Array.isArray(list) && list.length > 0) {
         state.streamingPlatforms = list;
         renderStreamingServices();
+        renderAiToolsServices();
         saveCatalogCache();
       }
     })
@@ -1596,6 +1719,7 @@ async function fetchStoreData() {
       if (list.length > 0) {
         state.subscriptions = list;
         renderStreamingServices();
+        renderAiToolsServices();
       }
     })
     .catch(() => {});
@@ -3252,6 +3376,7 @@ function instantRenderCatalog() {
   try {
     initHeroAccordion();
     renderStreamingServices();
+    renderAiToolsServices();
     renderDigitalGames();
     renderRetailGiftCards();
     renderSmmServices();
