@@ -44,7 +44,7 @@ router.get('/products', (req, res) => {
       const secondaryPyg = p.secondaryPricePyg !== undefined ? p.secondaryPricePyg : (p.secondaryPriceUsd ? Math.round(p.secondaryPriceUsd * rate) : Math.round(primaryPyg * 0.65));
       const secondaryUsd = p.secondaryPriceUsd || parseFloat((secondaryPyg / rate).toFixed(2));
       const isAvail = p.isAvailable !== false;
-      const resolvedCover = p.coverUrl || p.coverImage || p.imageUrl || getGameCover(p.id, p.title);
+      const resolvedCover = p.coverUrl || p.coverImage || p.imageUrl || p.cover || p.image || getGameCover(p.id, p.title);
 
       return {
         id: p.id,
@@ -80,8 +80,8 @@ router.get('/giftcards/brands', (req, res) => {
   const rawBrands = db.giftcard_brands || [];
   const brands = rawBrands.map(b => ({
     ...b,
-    logoUrl: b.logoUrl || getGiftcardLogo(b.id, b.name),
-    coverUrl: b.coverUrl || b.logoUrl || getGiftcardLogo(b.id, b.name)
+    logoUrl: b.logoUrl || b.logoImage || b.coverUrl || b.image_url || getGiftcardLogo(b.id, b.name),
+    coverUrl: b.coverUrl || b.logoUrl || b.logoImage || b.image_url || getGiftcardLogo(b.id, b.name)
   }));
   res.json({ success: true, count: brands.length, brands });
 });

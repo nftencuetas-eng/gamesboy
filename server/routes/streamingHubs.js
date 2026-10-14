@@ -63,9 +63,9 @@ router.get('/', (req, res) => {
     const hasStock = totalAvailSlots > 0;
     const pricePyg = s.pricePerSlotPyg || Math.round((s.pricePerSlotUsd || 3.33) * rate);
 
-    const resolvedIcon = s.iconUrl || s.thumbnailUrl || `/assets/services/${s.id}.svg`;
-    const resolvedBannerH = s.bannerHorizontal || '/assets/banners/banner_stream_h.jpg';
-    const resolvedBannerV = s.bannerVertical || '/assets/banners/banner_stream_v.jpg';
+    const resolvedIcon = s.iconUrl || s.thumbnailUrl || s.icon || s.logoUrl || s.bannerHorizontal || `/assets/services/${s.id}.svg`;
+    const resolvedBannerH = s.bannerHorizontal || s.banner_horizontal || s.banner || resolvedIcon;
+    const resolvedBannerV = s.bannerVertical || s.banner_vertical || s.banner || resolvedIcon;
 
     return {
       id: s.id,

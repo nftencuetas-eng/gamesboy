@@ -109,8 +109,8 @@ function autoDetectUserCountry() {
   return 'PY';
 }
 
-// Instant Cache Hydration with Versioning & Legacy Unsplash Purge
-const GB_CATALOG_CACHE_VERSION = 'gb_v7_real_assets_and_covers';
+// Instant Cache Hydration with Versioning & Legacy Purge
+const GB_CATALOG_CACHE_VERSION = 'gb_v8_user_authentic_catalog_media';
 const cachedCatalog = (() => {
   try {
     const v = localStorage.getItem('gb_catalog_cache_v');
@@ -784,10 +784,8 @@ function initHeroAccordion() {
   container.innerHTML = banners.slice(0, 4).map((b, idx) => {
     const isActive = idx === state.activeSlideIndex;
     const targetUrl = b.ctaUrl || '#section-games';
-    const fallbackH = idx === 0 ? '/assets/banners/banner_fc25_h.jpg' : (idx === 1 ? '/assets/banners/banner_gta6_h.jpg' : (idx === 2 ? '/assets/banners/banner_wukong_h.jpg' : '/assets/banners/banner_stream_h.jpg'));
-    const fallbackV = idx === 0 ? '/assets/banners/banner_fc25_v.jpg' : (idx === 1 ? '/assets/banners/banner_gta6_v.jpg' : (idx === 2 ? '/assets/banners/banner_wukong_v.jpg' : '/assets/banners/banner_stream_v.jpg'));
-    const hImg = (b.imgHorizontal && !b.imgHorizontal.includes('unsplash')) ? b.imgHorizontal : fallbackH;
-    const vImg = (b.imgVertical && !b.imgVertical.includes('unsplash')) ? b.imgVertical : fallbackV;
+    const hImg = (b.imgHorizontal && !b.imgHorizontal.includes('unsplash')) ? b.imgHorizontal : (b.imgVertical || '');
+    const vImg = (b.imgVertical && !b.imgVertical.includes('unsplash')) ? b.imgVertical : (b.imgHorizontal || '');
     const hasImg = Boolean(hImg || vImg);
     const hasCustomText = Boolean((b.title && b.title.trim()) || (b.tagline && b.tagline.trim()) || (b.badge && b.badge.trim()));
 
@@ -1022,7 +1020,7 @@ function renderStreamingServices() {
     const inStock = (p.hasStock !== undefined) ? p.hasStock : (hasActiveSlots || matching.length > 0);
     const serviceName = p.name || (platformKey.charAt(0).toUpperCase() + platformKey.slice(1));
     const fallbackThumb = getPlatformIcon(platformKey);
-    const rawThumb = p.iconUrl || p.icon || p.thumbnailUrl || p.coverUrl || fallbackThumb;
+    const rawThumb = p.iconUrl || p.icon || p.bannerHorizontal || p.thumbnailUrl || p.logoUrl || p.coverUrl || fallbackThumb;
     const finalThumb = (rawThumb && !rawThumb.includes('unsplash')) ? rawThumb : fallbackThumb;
 
     return `
@@ -1088,7 +1086,7 @@ function renderDigitalGames() {
     const primaryPyg = g.primaryPricePyg || g.pricePyg || Math.round((g.primaryPriceUsd || g.priceUsd || 39.99) * rate);
     const secondaryPyg = g.secondaryPricePyg !== undefined ? g.secondaryPricePyg : (g.secondaryPriceUsd ? Math.round(g.secondaryPriceUsd * rate) : Math.round(primaryPyg * 0.65));
     const fallbackCover = getGameCover(g.id, g.title);
-    const rawCover = g.coverUrl || g.coverImage || fallbackCover;
+    const rawCover = g.coverUrl || g.coverImage || g.imageUrl || g.image || g.cover || fallbackCover;
     const finalCover = (rawCover && !rawCover.includes('unsplash')) ? rawCover : fallbackCover;
 
     return `
@@ -1253,7 +1251,7 @@ function renderRetailGiftCards() {
     const cardTitle = gc.name || gc.title || 'Gift Card';
     const cardId = gc.id || gc.brandId || `gc_${Math.random()}`;
     const fallbackGiftcard = getGiftcardAsset(cardId, cardTitle);
-    const rawImg = gc.logoImage || gc.logoUrl || gc.coverImage || gc.coverUrl || fallbackGiftcard;
+    const rawImg = gc.logoImage || gc.logoUrl || gc.coverImage || gc.coverUrl || gc.icon || fallbackGiftcard;
     const finalImg = (rawImg && !rawImg.includes('unsplash')) ? rawImg : fallbackGiftcard;
     const tiltVariance = (0.95 + ((idx % 4) * 0.08)).toFixed(2);
 
