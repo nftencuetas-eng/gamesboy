@@ -15,27 +15,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/main.css?v=6.0">
-  <link rel="stylesheet" href="/css/admin-studio.css?v=2.0">
+  <link rel="stylesheet" href="/css/admin-studio.css?v=3.0">
 </head>
 <body>
-
   <div class="admin-layout" id="admin-layout-container">
     
-    <!-- LEFT EXECUTIVE SIDEBAR -->
+    <!-- MOBILE BACKDROP OVERLAY -->
+    <div id="admin-mobile-backdrop" class="admin-mobile-backdrop" onclick="toggleMobileSidebar(false)"></div>
+
+    <!-- LEFT EXECUTIVE SIDEBAR (270px SPATIOUS SAAS ARCHITECTURE) -->
     <aside class="admin-sidebar" id="admin-sidebar-el">
       <div class="sidebar-header-box">
         <div class="sidebar-full-brand">
           <a href="/" title="GamesBoy.net" style="display: inline-block; text-decoration: none;">
-            <img src="/assets/branding/logo-white.png?v=7.0" alt="GamesBoy.net" style="height: 30px; width: auto; vertical-align: middle;">
+            <img src="/assets/branding/logo-white.png?v=7.0" alt="GamesBoy.net" style="height: 32px; width: auto; vertical-align: middle;">
           </a>
-          <div style="display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.35); padding: 2px 8px; border-radius: 12px !important;">
-            <span style="width: 6px; height: 6px; border-radius: 50%; background: #f59e0b;"></span>
-            <span style="font-size: 0.65rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.05em;">ADMIN MASTER</span>
+          <div class="sidebar-brand-pill">
+            <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
+            <span>ADMIN MASTER</span>
           </div>
         </div>
         <div class="sidebar-mini-brand" style="display: none; text-align: center; margin-bottom: 4px;">
           <a href="/" title="GamesBoy.net">
-            <img src="/assets/branding/icon.png" alt="GamesBoy.net" style="height: 28px; width: 28px; border-radius: 6px; vertical-align: middle;">
+            <img src="/assets/branding/icon.png" alt="GamesBoy.net" style="height: 32px; width: 32px; border-radius: 8px; vertical-align: middle;">
           </a>
         </div>
         <button id="btn-toggle-sidebar" class="btn-toggle-sidebar" title="Ocultar o Expandir menú lateral" type="button" onclick="toggleAdminSidebar()">
@@ -45,119 +47,119 @@
         </button>
       </div>
 
-      <nav id="admin-sidebar-nav" style="display: flex; flex-direction: column; gap: 3px; flex-grow: 1;">
+      <nav id="admin-sidebar-nav" style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1;">
         
         <!-- ======================================================= -->
-        <!-- GRUPO 1: OPERACIONES DIARIAS                            -->
+        <!-- CLUSTER 1: OPERACIONES EN VIVO                          -->
         <!-- ======================================================= -->
         <div class="sidebar-category-header">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-          <span>1. Operaciones Diarias</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          <span>1. Operaciones en Vivo</span>
         </div>
         <button class="admin-menu-btn active" data-tab="tab-overview" title="01. Dashboard Ejecutivo & Métricas">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
           <span>01. Dashboard Ejecutivo</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-orders-delivery" title="02. Despacho de Pedidos (Videojuegos & Gift Cards)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
           <span>02. Pedidos & Entregas</span>
           <span class="badge-count red" id="badge-pending-orders" style="display: none;">0</span>
         </button>
         <button class="admin-menu-btn" data-tab="tab-smm-orders" title="03. Órdenes de Crecimiento en Redes Sociales (SMM)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
           <span>03. Órdenes SMM</span>
           <span class="badge-count amber" id="badge-pending-smm" style="display: none;">0</span>
         </button>
+        <button class="admin-menu-btn" data-tab="tab-custody-payouts" title="04. Liquidación a Vendedores & Fondos en Garantía Escrow">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <span>04. Liquidaciones & Escrow</span>
+          <span class="badge-count emerald" id="badge-ready-payouts" style="display: none;">0</span>
+        </button>
 
         <!-- ======================================================= -->
-        <!-- GRUPO 2: INVENTARIO & CATÁLOGO                          -->
+        <!-- CLUSTER 2: INVENTARIO & CATÁLOGO                        -->
         <!-- ======================================================= -->
         <div class="sidebar-category-header">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
           <span>2. Inventario & Catálogo</span>
         </div>
-        <button class="admin-menu-btn" data-tab="tab-games-management" title="04. Videojuegos Digitales (PS5, Xbox, PC)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-          <span>04. Juegos Digitales</span>
-          <span class="badge-count" id="badge-games-count">0</span>
+        <button class="admin-menu-btn" data-tab="tab-games-management" title="05. Videojuegos Digitales (PS5, Xbox, PC)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          <span>05. Juegos Digitales</span>
+          <span class="badge-count cyan" id="badge-games-count">0</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-giftcards-management" title="05. Tarjetas de Regalo & Recargas">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="12" rx="2"></rect><path d="M12 8v12"></path><path d="M12 8h4.5a2.5 2.5 0 0 0 0-5C13 3 12 8 12 8z"></path><path d="M12 8H7.5a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8z"></path></svg>
-          <span>05. Gift Cards & Recargas</span>
+        <button class="admin-menu-btn" data-tab="tab-giftcards-management" title="06. Tarjetas de Regalo & Recargas Oficiales">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="12" rx="2"></rect><path d="M12 8v12"></path><path d="M12 8h4.5a2.5 2.5 0 0 0 0-5C13 3 12 8 12 8z"></path><path d="M12 8H7.5a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8z"></path></svg>
+          <span>06. Gift Cards & Licencias</span>
           <span class="badge-count cyan" id="badge-gc-count">0</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-streaming-moderation" title="06. Cuentas Streaming & Asientos Compartidos">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
-          <span>06. Streaming Hubs</span>
+        <button class="admin-menu-btn" data-tab="tab-streaming-moderation" title="07. Cuentas Streaming & Asientos Compartidos">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect><polyline points="17 2 12 7 7 2"></polyline></svg>
+          <span>07. Streaming Hubs</span>
           <span class="badge-count red" id="badge-pending-subs" style="display: none;">0</span>
         </button>
-
-        <!-- ======================================================= -->
-        <!-- GRUPO 3: ATENCIÓN & CLIENTES                            -->
-        <!-- ======================================================= -->
-        <div class="sidebar-category-header">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-          <span>3. Atención & Clientes</span>
-        </div>
-        <button class="admin-menu-btn" data-tab="tab-users" title="07. Directorio de Usuarios & Clientes">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-          <span>07. Usuarios & Clientes</span>
-        </button>
-        <button class="admin-menu-btn" data-tab="tab-ai-whatsapp" title="08. Agente Soporte IA & Muro de Consultas WhatsApp">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-          <span>08. Soporte IA & WhatsApp</span>
-          <span class="badge-count emerald" id="badge-ai-notes-count" style="display: none;">0</span>
-        </button>
-
-        <!-- ======================================================= -->
-        <!-- GRUPO 4: MARKETING & CONTENIDO                          -->
-        <!-- ======================================================= -->
-        <div class="sidebar-category-header">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-          <span>4. Marketing & Contenido</span>
-        </div>
-        <button class="admin-menu-btn" data-tab="tab-hero-banners" title="09. Banners Hero de Inicio (Portada)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-          <span>09. Banners Hero</span>
-        </button>
-        <button class="admin-menu-btn" data-tab="tab-work-tools" title="10. Herramientas de Trabajo & Apps Pro">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 2a10 10 0 0 1 10 10h-10V2z"></path><path d="M12 12L2.1 12.5"></path></svg>
-          <span>10. Herramientas Pro & IA</span>
+        <button class="admin-menu-btn" data-tab="tab-work-tools" title="08. Herramientas de Trabajo & Apps Pro">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"></path><path d="M12 2a10 10 0 0 1 10 10h-10V2z"></path><path d="M12 12L2.1 12.5"></path></svg>
+          <span>08. Herramientas Pro & IA</span>
           <span class="badge-count purple" id="badge-tools-count">1</span>
         </button>
 
         <!-- ======================================================= -->
-        <!-- GRUPO 5: AJUSTES & FINANZAS                             -->
+        <!-- CLUSTER 3: ATENCIÓN & CLIENTES                          -->
         <!-- ======================================================= -->
         <div class="sidebar-category-header">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-          <span>5. Ajustes & Finanzas</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+          <span>3. Atención & Clientes</span>
         </div>
-        <button class="admin-menu-btn" data-tab="tab-finance" title="11. Finanzas & Depósitos Bancarios SIPAP">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="12" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-          <span>11. Finanzas & SIPAP</span>
+        <button class="admin-menu-btn" data-tab="tab-ai-whatsapp" title="09. Agente Soporte IA & Muro de Consultas WhatsApp">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          <span>09. Soporte IA & WhatsApp</span>
+          <span class="badge-count emerald" id="badge-ai-notes-count" style="display: none;">0</span>
+        </button>
+        <button class="admin-menu-btn" data-tab="tab-users" title="10. Directorio de Usuarios & Clientes">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+          <span>10. Usuarios & Clientes</span>
+        </button>
+
+        <!-- ======================================================= -->
+        <!-- CLUSTER 4: MARKETING & CONTENIDO                        -->
+        <!-- ======================================================= -->
+        <div class="sidebar-category-header">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          <span>4. Marketing & Contenido</span>
+        </div>
+        <button class="admin-menu-btn" data-tab="tab-hero-banners" title="11. Banners Hero de Inicio (Portada)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          <span>11. Banners Hero</span>
+        </button>
+
+        <!-- ======================================================= -->
+        <!-- CLUSTER 5: FINANZAS & SAAS                              -->
+        <!-- ======================================================= -->
+        <div class="sidebar-category-header">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          <span>5. Finanzas & SaaS</span>
+        </div>
+        <button class="admin-menu-btn" data-tab="tab-finance" title="12. Finanzas & Depósitos Bancarios SIPAP">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="12" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          <span>12. Finanzas & SIPAP</span>
           <span class="badge-count red" id="badge-pending-deposits" style="display: none;">0</span>
         </button>
-        <button class="admin-menu-btn" data-tab="tab-custody-payouts" title="12. Custodia & Payouts a Vendedores">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-          <span>12. Custodia & Payouts</span>
-          <span class="badge-count emerald" id="badge-ready-payouts" style="display: none;">0</span>
-        </button>
         <button class="admin-menu-btn" data-tab="tab-tenant-settings" title="13. Marca Blanca & Ajustes SaaS">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
           <span>13. Marca Blanca & Ajustes</span>
         </button>
       </nav>
 
-      <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08);">
-        <div class="sidebar-footer-session" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-          <div style="font-size: 0.74rem; color: var(--text-tertiary);">
+      <div style="margin-top: auto; padding-top: 1.25rem; border-top: 1px solid var(--obsidian-border-subtle);">
+        <div class="sidebar-footer-session" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+          <div style="font-size: 0.78rem; color: var(--obsidian-text-secondary);">
             Sesión: <strong style="color: #ffffff;">Auditor Master</strong>
           </div>
-          <span style="font-size: 0.68rem; background: rgba(0, 194, 255, 0.15); color: var(--accent-cyan); padding: 2px 6px; border-radius: 6px; font-weight: 800;">ADMIN</span>
+          <span style="font-size: 0.68rem; font-family: var(--font-obsidian-mono); background: var(--obsidian-cyan-bg); color: var(--obsidian-cyan); border: 1px solid var(--obsidian-cyan-border); padding: 2px 8px; border-radius: 9999px; font-weight: 800;">ADMIN</span>
         </div>
-        <button id="btn-admin-logout" class="btn-admin-action red" title="Cerrar Sesión Master" style="width: 100%; justify-content: center; padding: 9px 12px; font-size: 0.8rem; font-weight: 800;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        <button id="btn-admin-logout" class="btn-admin-action red" title="Cerrar Sesión Master" style="width: 100%; justify-content: center; padding: 10px 14px; font-size: 0.82rem; font-weight: 800;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
           <span>Cerrar Sesión Master</span>
         </button>
       </div>
@@ -166,79 +168,85 @@
     <!-- MAIN EXECUTIVE CONTENT -->
     <main class="admin-content">
       
-      <!-- Top Title Bar -->
       <!-- MASTER TOP COMMAND BAR -->
       <header class="admin-top-command-bar">
-        <div class="admin-top-heading-box">
-          <div class="admin-breadcrumbs">
-            <span>GamesBoy Control</span>
-            <span>/</span>
-            <span class="active-bread" id="admin-bread-active">Dashboard Ejecutivo</span>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <!-- Mobile Sidebar Toggle Hamburger Button -->
+          <button id="btn-mobile-sidebar-toggle" class="btn-toggle-sidebar mobile-toggle-btn" type="button" onclick="toggleMobileSidebar()" title="Abrir Menú de Navegación">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+
+          <div class="admin-top-heading-box">
+            <div class="admin-breadcrumbs">
+              <span>GamesBoy Control</span>
+              <span>/</span>
+              <span class="active-bread" id="admin-bread-active">Dashboard Ejecutivo</span>
+            </div>
+            <h1 id="admin-view-heading" style="font-family: var(--font-obsidian-heading); font-size: 1.5rem; font-weight: 800; color: #ffffff; margin: 2px 0 0 0; letter-spacing: -0.02em;">
+              Métricas & Panel de Control General
+            </h1>
+            <p id="admin-view-subtitle" style="font-size: 0.84rem; color: var(--obsidian-text-secondary); margin: 3px 0 0 0;">
+              Auditoría en tiempo real, volumen transaccionado, saldos y operaciones en Paraguay.
+            </p>
           </div>
-          <h1 id="admin-view-heading" style="font-family: var(--font-heading); font-size: 1.45rem; font-weight: 900; color: #ffffff; margin: 2px 0 0 0;">
-            Métricas & Panel de Control General
-          </h1>
-          <p id="admin-view-subtitle" style="font-size: 0.8rem; color: var(--admin-text-muted); margin: 2px 0 0 0;">
-            Auditoría en tiempo real, volumen transaccionado, saldos y operaciones en Paraguay.
-          </p>
         </div>
 
         <div class="admin-top-actions">
           <!-- Live Rate Indicator -->
           <div class="admin-rate-pill">
-            <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10b981;"></span>
-            <span>Tasa:</span>
-            <strong id="header-rate-display">1 USDT = 7.550 Gs.</strong>
+            <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
+            <span style="color: var(--obsidian-text-muted); font-size: 0.76rem; font-weight: 700; text-transform: uppercase;">Tasa:</span>
+            <strong id="header-rate-display" style="font-family: var(--font-obsidian-mono); font-size: 0.84rem; color: #ffffff;">1 USDT = 7.550 Gs.</strong>
           </div>
 
           <!-- Quick Action Buttons -->
-          <button type="button" class="btn-admin-action emerald" onclick="openAdminCreateAccountModal()" style="padding: 7px 14px; font-size: 0.78rem; font-weight: 800;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <button type="button" class="btn-admin-action emerald" onclick="openAdminCreateAccountModal()" style="padding: 8px 16px; font-size: 0.82rem; font-weight: 700;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             <span>+ Cargar Cuenta (Streaming / IA)</span>
           </button>
 
-          <a href="/" target="_blank" class="btn-admin-action cyan" style="padding: 7px 12px; font-size: 0.78rem;" title="Abrir Tienda Oficial">
+          <a href="/" target="_blank" class="btn-admin-action cyan" style="padding: 8px 14px; font-size: 0.82rem; text-decoration: none;" title="Abrir Tienda Oficial de GamesBoy">
             <span>👁️ Ver Tienda</span>
           </a>
 
-          <button id="btn-refresh-admin" class="btn-admin-action" style="padding: 7px 12px; font-size: 0.78rem; background: rgba(255,255,255,0.05); color: #fff;" onclick="loadAdminData()">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+          <button id="btn-refresh-admin" class="btn-admin-action" style="padding: 8px 12px; font-size: 0.82rem;" onclick="loadAdminData()" title="Recargar Datos de la Plataforma">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
           </button>
         </div>
       </header>
 
       <!-- ======================================================= -->
-      <!-- TAB 1: OVERVIEW & GENERAL BALANCE (RESTRUCTURED STUDIO) -->
+      <!-- TAB 1: EXECUTIVE CONTROL CENTER (TAB-OVERVIEW)          -->
       <!-- ======================================================= -->
       <section id="tab-overview" class="admin-section-pane active">
         
-        <!-- EXECUTIVE GREETING & STATUS BANNER -->
-        <div style="background: linear-gradient(135deg, rgba(0, 194, 255, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%); border: 1px solid rgba(0, 194, 255, 0.2); border-radius: 18px; padding: 1.5rem; margin-bottom: 1.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+        <!-- 1. EXECUTIVE WELCOME BANNER WITH REAL-TIME PULSE -->
+        <div style="background: var(--obsidian-surface-card); border: 1px solid var(--obsidian-border-medium); border-radius: var(--obsidian-radius-lg); padding: 1.5rem 1.75rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; box-shadow: var(--obsidian-shadow-sm);">
           <div>
-            <div style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.74rem; font-weight: 800; color: var(--accent-cyan); background: rgba(0, 194, 255, 0.12); padding: 3px 10px; border-radius: 20px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em;">
-              <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>
-              <span>Sistema Operativo en Tiempo Real • Mercado Paraguay</span>
+            <div style="display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-obsidian-mono); font-size: 0.72rem; font-weight: 700; color: var(--obsidian-cyan); background: var(--obsidian-cyan-bg); border: 1px solid var(--obsidian-cyan-border); padding: 3px 12px; border-radius: 9999px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;">
+              <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px #10b981;"></span>
+              <span>SISTEMA OPERATIVO • MERCADO PARAGUAY EN TIEMPO REAL</span>
             </div>
-            <h2 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 900; color: #ffffff; margin: 0;">
-              Centro de Mando General & Métricas de GamesBoy.net
+            <h2 style="font-family: var(--font-obsidian-heading); font-size: 1.5rem; font-weight: 800; color: #ffffff; margin: 0; letter-spacing: -0.02em;">
+              Centro de Mando General & Operaciones
             </h2>
-            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0 0 0;">
-              Supervisa el flujo financiero, gestiona catálogos y accede directamente a cualquiera de los módulos administrativos organizados por bloques.
+            <p style="font-size: 0.88rem; color: var(--obsidian-text-secondary); margin: 4px 0 0 0; max-width: 780px;">
+              Supervisa la liquidez de la billetera master, volumen transaccionado, auditoría de depósitos SIPAP y despacho de pedidos en curso.
             </p>
           </div>
           <div style="display: flex; gap: 10px; align-items: center;">
-            <button type="button" class="btn-admin-action cyan" onclick="loadAdminData()" style="padding: 10px 18px; font-size: 0.85rem; font-weight: 800;">
-              <span>🔄 Actualizar Métricas</span>
+            <button type="button" class="btn-admin-action cyan" onclick="loadAdminData()" style="padding: 10px 18px; font-size: 0.84rem; font-weight: 700;">
+              <span>🔄 Actualizar Indicadores</span>
             </button>
           </div>
         </div>
 
-        <!-- 1. TOP METRICS GRID (KPIS) -->
+        <!-- 2. FOUR HERO KPI CARDS (28px TYPOGRAPHY & DUAL CURRENCY) -->
         <div class="kpi-grid" style="margin-bottom: 2rem;">
           <div class="kpi-card emerald" style="cursor: pointer;" onclick="switchAdminTab('tab-finance')">
             <div class="kpi-header">
               <span class="kpi-title">Billetera Master (Admin)</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
             </div>
             <div class="kpi-value-gs" id="kpi-admin-balance-gs">0 Gs.</div>
             <div class="kpi-value-usd" id="kpi-admin-balance-usd">$0.00 USDT</div>
@@ -246,7 +254,7 @@
           <div class="kpi-card cyan">
             <div class="kpi-header">
               <span class="kpi-title">Volumen Total Operado</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
             </div>
             <div class="kpi-value-gs" id="kpi-volume-gs">0 Gs.</div>
             <div class="kpi-value-usd" id="kpi-volume-usd">$0.00 USDT</div>
@@ -254,7 +262,7 @@
           <div class="kpi-card purple" style="cursor: pointer;" onclick="switchAdminTab('tab-custody-payouts')">
             <div class="kpi-header">
               <span class="kpi-title">Saldos en Garantía (Escrow)</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
             </div>
             <div class="kpi-value-gs" id="kpi-escrow-gs">0 Gs.</div>
             <div class="kpi-value-usd" id="kpi-escrow-usd">$0.00 USDT</div>
@@ -262,300 +270,202 @@
           <div class="kpi-card amber">
             <div class="kpi-header">
               <span class="kpi-title">Comisiones Generadas (15%)</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
             </div>
             <div class="kpi-value-gs" id="kpi-commissions-gs">0 Gs.</div>
             <div class="kpi-value-usd" id="kpi-commissions-usd">$0.00 USDT</div>
           </div>
         </div>
 
-        <!-- 2. ORGANIZED MODULE BLOCKS (5 CLUSTERS HARMONIZED WITH SIDEBAR) -->
-        <div class="admin-blocks-container">
+        <!-- 3. OPERATIONAL TRIAGE & REAL-TIME ALERTS STRIP (4 CARDS) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 2rem;">
           
-          <!-- CLUSTER 1: OPERACIONES DIARIAS -->
-          <div class="admin-block-category">
-            <div class="admin-block-header">
-              <div class="admin-block-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                <span>1. Operaciones Diarias</span>
+          <!-- Card 1: Pedidos por despachar -->
+          <div class="admin-card" style="padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; border-left: 3px solid #f59e0b; cursor: pointer;" onclick="switchAdminTab('tab-orders-delivery')">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.76rem; font-weight: 700; color: var(--obsidian-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Despacho de Pedidos</span>
+                <span class="badge-count red" id="overview-badge-pending-orders" style="display: none;">0 pendientes</span>
               </div>
-              <span class="admin-block-badge cyan">Despacho & Pedidos</span>
+              <h4 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0 0 4px 0;">Videojuegos & Gift Cards</h4>
+              <p style="font-size: 0.82rem; color: var(--obsidian-text-secondary); margin: 0;">Entregas pendientes de credenciales digitales y códigos de recarga.</p>
             </div>
-            
-            <div class="admin-modules-grid">
-              <!-- Módulo 02: Pedidos & Entregas -->
-              <div class="admin-module-card" onclick="switchAdminTab('tab-orders-delivery')">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div class="admin-module-icon-wrap" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">📦</div>
-                    <span class="badge-count red" id="overview-badge-pending-orders" style="display: none;">0 pendientes</span>
-                  </div>
-                  <h4><span>Pedidos & Entregas</span></h4>
-                  <p>Bandeja de despacho para entregar credenciales de videojuegos y códigos de gift cards a los compradores.</p>
-                </div>
-                <div class="admin-module-footer">
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Módulo 02</span>
-                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
-                </div>
-              </div>
-
-              <!-- Módulo 03: Órdenes SMM -->
-              <div class="admin-module-card" onclick="switchAdminTab('tab-smm-orders')">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div class="admin-module-icon-wrap" style="color: #a855f7; background: rgba(168, 85, 247, 0.1);">🚀</div>
-                    <span class="btn-admin-action emerald" style="padding: 2px 8px; font-size: 0.7rem;">API Conectada</span>
-                  </div>
-                  <h4><span>Órdenes SMM</span></h4>
-                  <p>Seguimiento de pedidos de crecimiento en redes sociales (Instagram, TikTok, YouTube) con plazo de 24-48h.</p>
-                </div>
-                <div class="admin-module-footer">
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Módulo 03</span>
-                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
-                </div>
-              </div>
+            <div style="margin-top: 14px; font-size: 0.82rem; font-weight: 700; color: #f59e0b; display: flex; align-items: center; gap: 6px;">
+              <span>Abrir Bandeja de Entregas ➔</span>
             </div>
           </div>
 
-          <!-- CLUSTER 2: INVENTARIO & CATÁLOGO -->
-          <div class="admin-block-category">
-            <div class="admin-block-header">
-              <div class="admin-block-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-                <span>2. Inventario & Catálogo</span>
+          <!-- Card 2: Órdenes SMM -->
+          <div class="admin-card" style="padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; border-left: 3px solid #a855f7; cursor: pointer;" onclick="switchAdminTab('tab-smm-orders')">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.76rem; font-weight: 700; color: var(--obsidian-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Redes Sociales</span>
+                <span class="badge-count amber" id="overview-badge-smm-count">0 pedidos</span>
               </div>
-              <span class="admin-block-badge emerald">Productos & Cuentas</span>
+              <h4 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0 0 4px 0;">Crecimiento Digital SMM</h4>
+              <p style="font-size: 0.82rem; color: var(--obsidian-text-secondary); margin: 0;">Seguimiento de pedidos de Instagram, TikTok, YouTube con plazo de 24-48h.</p>
             </div>
-            
-            <div class="admin-modules-grid">
-              <!-- Módulo 04: Videojuegos Digitales -->
-              <div class="admin-module-card" onclick="switchAdminTab('tab-games-management')">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div class="admin-module-icon-wrap" style="color: #00c2ff; background: rgba(0, 194, 255, 0.1);">🎮</div>
-                    <span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.7rem;" id="overview-badge-games-count">0 juegos</span>
-                  </div>
-                  <h4><span>Juegos Digitales</span></h4>
-                  <p>Catálogo por consolas (PS5, PS4, Xbox, PC), precios en Guaraníes para cuenta primaria/secundaria y capturas.</p>
-                </div>
-                <div class="admin-module-footer">
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Módulo 04</span>
-                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
-                </div>
-              </div>
-
-              <!-- Módulo 05: Tarjetas de Regalo -->
-              <div class="admin-module-card" onclick="switchAdminTab('tab-giftcards-management')">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div class="admin-module-icon-wrap" style="color: #a855f7; background: rgba(168, 85, 247, 0.1);">🎁</div>
-                    <span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.7rem;" id="overview-badge-gc-count">0 marcas</span>
-                  </div>
-                  <h4><span>Gift Cards & Recargas</span></h4>
-                  <p>Marcas oficiales (PlayStation, Xbox, Steam, Nintendo) y gestión de variaciones de saldo en Gs.</p>
-                </div>
-                <div class="admin-module-footer">
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Módulo 05</span>
-                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
-                </div>
-              </div>
-
-              <!-- Módulo 06: Streaming Hubs -->
-              <div class="admin-module-card" onclick="switchAdminTab('tab-streaming-moderation')">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div class="admin-module-icon-wrap" style="color: #ef4444; background: rgba(239, 68, 68, 0.1);">📺</div>
-                    <span class="btn-admin-action emerald" style="padding: 2px 8px; font-size: 0.7rem;">Streaming</span>
-                  </div>
-                  <h4><span>Streaming Hubs</span></h4>
-                  <p>Catálogo oficial de servicios (precios por asiento en Gs., cupos, portadas) y moderación de cuentas comunitarias.</p>
-                </div>
-                <div class="admin-module-footer">
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Módulo 06</span>
-                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
-                </div>
-              </div>
+            <div style="margin-top: 14px; font-size: 0.82rem; font-weight: 700; color: #c084fc; display: flex; align-items: center; gap: 6px;">
+              <span>Gestionar Órdenes SMM ➔</span>
             </div>
           </div>
 
-          <!-- CLUSTER 3: ATENCIÓN & CLIENTES -->
-          <div class="admin-block-category">
-            <div class="admin-block-header">
-              <div class="admin-block-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-purple)" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-                <span>3. Atención & Clientes</span>
+          <!-- Card 3: Depósitos SIPAP -->
+          <div class="admin-card" style="padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; border-left: 3px solid #10b981; cursor: pointer;" onclick="switchAdminTab('tab-finance')">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.76rem; font-weight: 700; color: var(--obsidian-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Finanzas & Pagos</span>
+                <span class="badge-count red" id="overview-badge-pending-deposits" style="display: none;">0 por auditar</span>
               </div>
-              <span class="admin-block-badge purple">Usuarios & Asistente</span>
+              <h4 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0 0 4px 0;">Transferencias Bancarias SIPAP</h4>
+              <p style="font-size: 0.82rem; color: var(--obsidian-text-secondary); margin: 0;">Comprobantes bancarios de Paraguay y depósitos USDT para aprobación.</p>
             </div>
-            
-            <div class="admin-modules-grid">
-              <!-- Módulo 07: Usuarios & Clientes -->
-              <div class="admin-module-card" onclick="switchAdminTab('tab-users')">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div class="admin-module-icon-wrap" style="color: #10b981; background: rgba(168, 85, 247, 0.1);">👥</div>
-                    <span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.7rem;" id="overview-badge-users-count">Directorio</span>
-                  </div>
-                  <h4><span>Usuarios & Clientes</span></h4>
-                  <p>Auditoría de clientes, vendedores, saldos reales en Gs./USDT, fondos en garantía y ajuste de billeteras.</p>
-                </div>
-                <div class="admin-module-footer">
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Módulo 07</span>
-                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
-                </div>
-              </div>
-
-              <!-- Módulo 08: Soporte IA & WhatsApp -->
-              <div class="admin-module-card" onclick="switchAdminTab('tab-ai-whatsapp')">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div class="admin-module-icon-wrap" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">💬</div>
-                    <span class="btn-admin-action emerald" style="padding: 2px 8px; font-size: 0.7rem;">IA Live</span>
-                  </div>
-                  <h4><span>Soporte IA & WhatsApp</span></h4>
-                  <p>Configuración del bot de WhatsApp, derivación por departamentos y muro de notas de prospectos.</p>
-                </div>
-                <div class="admin-module-footer">
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Módulo 08</span>
-                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
-                </div>
-              </div>
+            <div style="margin-top: 14px; font-size: 0.82rem; font-weight: 700; color: #34d399; display: flex; align-items: center; gap: 6px;">
+              <span>Auditar Comprobantes ➔</span>
             </div>
           </div>
 
-          <!-- CLUSTER 4: MARKETING & CONTENIDO -->
-          <div class="admin-block-category">
-            <div class="admin-block-header">
-              <div class="admin-block-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-                <span>4. Marketing & Contenido</span>
+          <!-- Card 4: Liquidación a Vendedores -->
+          <div class="admin-card" style="padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; border-left: 3px solid #38bdf8; cursor: pointer;" onclick="switchAdminTab('tab-custody-payouts')">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.76rem; font-weight: 700; color: var(--obsidian-text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Custodia Escrow</span>
+                <span class="badge-count emerald" id="overview-badge-ready-payouts" style="display: none;">0 listos</span>
               </div>
-              <span class="admin-block-badge cyan">Portadas & Apps</span>
+              <h4 style="font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0 0 4px 0;">Liquidación a Vendedores</h4>
+              <p style="font-size: 0.82rem; color: var(--obsidian-text-secondary); margin: 0;">Fondos protegidos listos para liberación a las billeteras de anfitriones.</p>
             </div>
-            
-            <div class="admin-modules-grid">
-              <!-- Módulo 09: Banners Hero -->
-              <div class="admin-module-card" onclick="switchAdminTab('tab-hero-banners')">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div class="admin-module-icon-wrap" style="color: #00c2ff; background: rgba(0, 194, 255, 0.1);">🖼️</div>
-                    <span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.7rem;">4 Portadas</span>
-                  </div>
-                  <h4><span>Banners Hero</span></h4>
-                  <p>Personalización de los 4 banners interactivos de inicio con imágenes panorámicas y móviles optimizadas.</p>
-                </div>
-                <div class="admin-module-footer">
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Módulo 09</span>
-                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
-                </div>
-              </div>
-
-              <!-- Módulo 10: Herramientas Pro & IA -->
-              <div class="admin-module-card" onclick="switchAdminTab('tab-work-tools')">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div class="admin-module-icon-wrap" style="color: #c084fc; background: rgba(168, 85, 247, 0.12);">🤖</div>
-                    <span class="btn-admin-action purple" style="padding: 2px 8px; font-size: 0.7rem;">Productividad</span>
-                  </div>
-                  <h4><span>Herramientas Pro & IA</span></h4>
-                  <p>Cuentas oficiales de ChatGPT Plus, Claude Pro, Gemini Advanced, Canva Pro, Minea y Midjourney.</p>
-                </div>
-                <div class="admin-module-footer">
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Módulo 10</span>
-                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- CLUSTER 5: AJUSTES & FINANZAS -->
-          <div class="admin-block-category">
-            <div class="admin-block-header">
-              <div class="admin-block-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                <span>5. Ajustes & Finanzas</span>
-              </div>
-              <span class="admin-block-badge amber">Bancos & Liquidación</span>
-            </div>
-            
-            <div class="admin-modules-grid">
-              <!-- Módulo 11: Finanzas & SIPAP -->
-              <div class="admin-module-card" onclick="switchAdminTab('tab-finance')">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div class="admin-module-icon-wrap" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">💳</div>
-                    <span class="badge-count red" id="overview-badge-pending-deposits" style="display: none;">0 por auditar</span>
-                  </div>
-                  <h4><span>Finanzas & SIPAP</span></h4>
-                  <p>Aprobación de transferencias bancarias SIPAP en Paraguay, depósitos USDT y retiros a cuentas bancarias.</p>
-                </div>
-                <div class="admin-module-footer">
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Módulo 11</span>
-                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
-                </div>
-              </div>
-
-              <!-- Módulo 12: Custodia & Payouts -->
-              <div class="admin-module-card" onclick="switchAdminTab('tab-custody-payouts')">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div class="admin-module-icon-wrap" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">⏳</div>
-                    <span class="badge-count emerald" id="overview-badge-ready-payouts" style="display: none;">0 listos</span>
-                  </div>
-                  <h4><span>Custodia & Payouts</span></h4>
-                  <p>Garantía de fondos a 30 días con liberación directa y segura a las billeteras de los anfitriones.</p>
-                </div>
-                <div class="admin-module-footer">
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Módulo 12</span>
-                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
-                </div>
-              </div>
-
-              <!-- Módulo 13: Marca Blanca & Ajustes SaaS -->
-              <div class="admin-module-card" onclick="switchAdminTab('tab-tenant-settings')">
-                <div>
-                  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div class="admin-module-icon-wrap" style="color: #00c2ff; background: rgba(0, 194, 255, 0.1);">⚙️</div>
-                    <span class="btn-admin-action cyan" style="padding: 2px 8px; font-size: 0.7rem;">SaaS Config</span>
-                  </div>
-                  <h4><span>Marca Blanca & Ajustes</span></h4>
-                  <p>Ajuste de tasas de cambio (USDT/PYG), comisiones de plataforma, cuentas bancarias SIPAP y personalización de marca.</p>
-                </div>
-                <div class="admin-module-footer">
-                  <span style="font-size: 0.74rem; color: var(--text-tertiary);">Módulo 13</span>
-                  <span class="admin-module-btn">Entrar al Módulo ➔</span>
-                </div>
-              </div>
+            <div style="margin-top: 14px; font-size: 0.82rem; font-weight: 700; color: var(--obsidian-cyan); display: flex; align-items: center; gap: 6px;">
+              <span>Liberar Liquidaciones ➔</span>
             </div>
           </div>
 
         </div>
 
-        <!-- 3. TABLA DE ACTIVIDAD RECIENTE -->
-        <div class="admin-card">
-          <h3 style="font-size: 1.1rem; font-weight: 800; color: #ffffff; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            <span>Últimos Movimientos Financieros en la Plataforma</span>
-          </h3>
-          <div style="overflow-x: auto;">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>ID / Fecha</th>
-                  <th>Usuario</th>
-                  <th>Tipo</th>
-                  <th>Monto (Gs.)</th>
-                  <th>Monto (USDT)</th>
-                  <th>Método</th>
-                  <th>Estado</th>
-                </tr>
-              </thead>
-              <tbody id="table-recent-transactions">
-                <tr><td colspan="7" style="text-align: center; color: var(--text-tertiary);">Cargando movimientos...</td></tr>
-              </tbody>
-            </table>
+        <!-- 4. TWO-COLUMN OPERATIONAL SPLIT (65% / 35%) -->
+        <div style="display: grid; grid-template-columns: minmax(0, 1.8fr) minmax(300px, 1fr); gap: 24px; align-items: start;">
+          
+          <!-- LEFT COLUMN: LIVE FINANCIAL TRANSACTIONS LEDGER -->
+          <div class="admin-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <h3 style="font-family: var(--font-obsidian-heading); font-size: 1.15rem; font-weight: 800; color: #ffffff; margin: 0; display: flex; align-items: center; gap: 8px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--obsidian-cyan)" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  <span>Últimos Movimientos Financieros & Auditoría en Vivo</span>
+                </h3>
+                <p style="font-size: 0.82rem; color: var(--obsidian-text-secondary); margin: 3px 0 0 0;">
+                  Transacciones registradas con conversión oficial de guaraníes y USDT.
+                </p>
+              </div>
+              <button type="button" class="btn-admin-action" style="padding: 6px 12px; font-size: 0.78rem;" onclick="loadAdminData()">
+                <span>🔄 Refrescar</span>
+              </button>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>ID / Fecha</th>
+                    <th>Usuario</th>
+                    <th>Tipo</th>
+                    <th>Monto (Gs.)</th>
+                    <th>Monto (USDT)</th>
+                    <th>Método</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody id="table-recent-transactions">
+                  <tr><td colspan="7" style="text-align: center; color: var(--obsidian-text-muted); padding: 2rem;">Cargando movimientos...</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
+
+          <!-- RIGHT COLUMN: CATALOG SUMMARY & DIRECT SHORTCUTS -->
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            
+            <!-- Quick Catalog Health Card -->
+            <div class="admin-card">
+              <h4 style="font-family: var(--font-obsidian-heading); font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0 0 1rem 0; display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--obsidian-positive)" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                <span>Inventario Activo en Plataforma</span>
+              </h4>
+
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--obsidian-surface-elevated); border-radius: var(--obsidian-radius-md); border: 1px solid var(--obsidian-border-subtle); cursor: pointer;" onclick="switchAdminTab('tab-games-management')">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.2rem;">🎮</span>
+                    <div>
+                      <strong style="color: #ffffff; font-size: 0.88rem; display: block;">Videojuegos Digitales</strong>
+                      <span style="font-size: 0.74rem; color: var(--obsidian-text-muted);">PS5, Xbox, PC</span>
+                    </div>
+                  </div>
+                  <span class="badge-count cyan" id="overview-badge-games-count">0 juegos</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--obsidian-surface-elevated); border-radius: var(--obsidian-radius-md); border: 1px solid var(--obsidian-border-subtle); cursor: pointer;" onclick="switchAdminTab('tab-giftcards-management')">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.2rem;">🎁</span>
+                    <div>
+                      <strong style="color: #ffffff; font-size: 0.88rem; display: block;">Gift Cards & Licencias</strong>
+                      <span style="font-size: 0.74rem; color: var(--obsidian-text-muted);">PlayStation, Steam, Xbox</span>
+                    </div>
+                  </div>
+                  <span class="badge-count cyan" id="overview-badge-gc-count">0 marcas</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--obsidian-surface-elevated); border-radius: var(--obsidian-radius-md); border: 1px solid var(--obsidian-border-subtle); cursor: pointer;" onclick="switchAdminTab('tab-work-tools')">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.2rem;">🤖</span>
+                    <div>
+                      <strong style="color: #ffffff; font-size: 0.88rem; display: block;">Herramientas Pro & IA</strong>
+                      <span style="font-size: 0.74rem; color: var(--obsidian-text-muted);">ChatGPT, Claude, Canva</span>
+                    </div>
+                  </div>
+                  <span class="badge-count purple">Activas</span>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: var(--obsidian-surface-elevated); border-radius: var(--obsidian-radius-md); border: 1px solid var(--obsidian-border-subtle); cursor: pointer;" onclick="switchAdminTab('tab-users')">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.2rem;">👥</span>
+                    <div>
+                      <strong style="color: #ffffff; font-size: 0.88rem; display: block;">Usuarios & Billeteras</strong>
+                      <span style="font-size: 0.74rem; color: var(--obsidian-text-muted);">Clientes y vendedores</span>
+                    </div>
+                  </div>
+                  <span class="badge-count amber" id="overview-badge-users-count">Directorio</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Action Direct Buttons -->
+            <div class="admin-card">
+              <h4 style="font-family: var(--font-obsidian-heading); font-size: 1.05rem; font-weight: 800; color: #ffffff; margin: 0 0 1rem 0; display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--obsidian-cyan)" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                <span>Accesos Directos Frecuentes</span>
+              </h4>
+
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button type="button" class="btn-admin-action emerald" onclick="openAdminCreateAccountModal()" style="width: 100%; justify-content: flex-start; padding: 10px 14px; font-weight: 700;">
+                  <span>➕ Cargar Cuenta Streaming / IA</span>
+                </button>
+                <button type="button" class="btn-admin-action cyan" onclick="switchAdminTab('tab-games-management'); document.getElementById('btn-open-modal-add-game')?.click();" style="width: 100%; justify-content: flex-start; padding: 10px 14px; font-weight: 700;">
+                  <span>🎮 Agregar Nuevo Videojuego</span>
+                </button>
+                <button type="button" class="btn-admin-action purple" onclick="switchAdminTab('tab-giftcards-management'); document.getElementById('btn-open-modal-add-gc')?.click();" style="width: 100%; justify-content: flex-start; padding: 10px 14px; font-weight: 700;">
+                  <span>🎁 Agregar Marca de Gift Card</span>
+                </button>
+                <button type="button" class="btn-admin-action" onclick="switchAdminTab('tab-tenant-settings')" style="width: 100%; justify-content: flex-start; padding: 10px 14px; font-weight: 700; background: var(--obsidian-surface-elevated); color: #ffffff;">
+                  <span>⚙️ Configurar Tasa USDT & Comisiones</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
         </div>
+
       </section>
 
       <!-- ======================================================= -->
@@ -2633,6 +2543,20 @@
       }
     };
 
+    window.toggleMobileSidebar = function(forceState) {
+      const sidebar = document.getElementById('admin-sidebar-el');
+      const backdrop = document.getElementById('admin-mobile-backdrop');
+      if (!sidebar) return;
+      const isOpen = typeof forceState === 'boolean' ? forceState : !sidebar.classList.contains('mobile-open');
+      if (isOpen) {
+        sidebar.classList.add('mobile-open');
+        if (backdrop) backdrop.classList.add('active');
+      } else {
+        sidebar.classList.remove('mobile-open');
+        if (backdrop) backdrop.classList.remove('active');
+      }
+    };
+
     window.initAdminSidebar = function() {
       const savedState = localStorage.getItem('gamesboy_admin_sidebar_collapsed');
       if (savedState === '1') {
@@ -2747,10 +2671,12 @@
 
       const contentEl = document.querySelector('.admin-content');
       if (contentEl) {
-        contentEl.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        contentEl.scrollTo({ top: 0, behavior: 'instant' });
+        contentEl.scrollTop = 0;
       }
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
 
       if (tabDescriptions[tabId]) {
         if (headingEl) headingEl.textContent = tabDescriptions[tabId].title;
@@ -2778,7 +2704,12 @@
     menuButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const tabId = btn.getAttribute('data-tab');
-        if (tabId) window.switchAdminTab(tabId);
+        if (tabId) {
+          window.switchAdminTab(tabId);
+          if (window.innerWidth <= 900) {
+            window.toggleMobileSidebar(false);
+          }
+        }
       });
     });
 

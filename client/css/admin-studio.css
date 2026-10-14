@@ -1,8 +1,8 @@
 /**
  * ==============================================================================
- * GAMESBOY STUDIO — MASTER DESIGN SYSTEM: DARK OBSIDIAN (admin-studio.css)
- * Version: 2.0 (Phase 2 Full Visual Redesign)
- * Aesthetic: Matte Charcoal & Dark Slate, Svelte Minimalist SaaS, Zero Neon
+ * GAMESBOY STUDIO — MASTER STRUCTURAL DESIGN SYSTEM (admin-studio.css)
+ * Version: 3.0 (Phase 3 Full Structural & Visual SaaS Overhaul)
+ * Direction: Spacious, High-End SaaS Dashboard, Editorial Hierarchy, Zero Neon
  * Target: Complete Administrative Interface (client/admin.html & descendants)
  * ==============================================================================
  */
@@ -10,26 +10,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap');
 
 :root {
-  /* --- 1. CORE DARK OBSIDIAN PALETTE --- */
+  /* --- 1. CORE DARK OBSIDIAN PALETTE (DEEP, CLEAN & MATTE) --- */
   --obsidian-bg: #07090e;
   --obsidian-surface: #0c1017;
   --obsidian-surface-card: #111622;
   --obsidian-surface-elevated: #151c2a;
   --obsidian-surface-hover: #1b2334;
-  --obsidian-surface-subtle: rgba(255, 255, 255, 0.02);
+  --obsidian-surface-active: #202a3d;
+  --obsidian-surface-subtle: rgba(255, 255, 255, 0.025);
 
-  /* --- 2. TYPOGRAPHY COLORS --- */
+  /* --- 2. TYPOGRAPHY SIZING & COLORS (SPACIOUS & HIGH CONTRAST) --- */
   --obsidian-text-primary: #f8fafc;
   --obsidian-text-secondary: #94a3b8;
   --obsidian-text-muted: #64748b;
   --obsidian-text-dim: #475569;
 
-  /* --- 3. SUBTLE BORDERS (ZERO NEON) --- */
+  /* Font Families */
+  --font-obsidian-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-obsidian-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-obsidian-mono: 'JetBrains Mono', monospace;
+
+  /* --- 3. BORDERS & SEPARATORS (DISCREET & CRISP) --- */
   --obsidian-border-subtle: rgba(255, 255, 255, 0.07);
   --obsidian-border-medium: rgba(255, 255, 255, 0.12);
   --obsidian-border-strong: rgba(255, 255, 255, 0.18);
 
-  /* --- 4. ACCENTS & FUNCTIONAL STATUSES (SOBER & SATURATED PROPORTIONATELY) --- */
+  /* --- 4. ACCENTS & STATUSES (NO NEON GLOW) --- */
   --obsidian-action: #0284c7;
   --obsidian-action-hover: #0369a1;
   --obsidian-cyan: #38bdf8;
@@ -52,24 +58,19 @@
   --obsidian-purple-bg: rgba(168, 85, 247, 0.08);
   --obsidian-purple-border: rgba(168, 85, 247, 0.25);
 
-  /* --- 5. TYPOGRAPHY TOKENS --- */
-  --font-obsidian-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-obsidian-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-obsidian-mono: 'JetBrains Mono', monospace;
-
-  /* --- 6. SHADOWS (DISCREET & MATTE - ZERO GLOW) --- */
-  --obsidian-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --obsidian-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.45);
-  --obsidian-shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.6);
+  /* --- 5. SHADOWS (MATTE DEPTH, ZERO GLOW BLOOM) --- */
+  --obsidian-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --obsidian-shadow-md: 0 4px 18px rgba(0, 0, 0, 0.45);
+  --obsidian-shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.60);
   --obsidian-shadow-modal: 0 25px 65px rgba(0, 0, 0, 0.85);
 
-  /* --- 7. RADII --- */
+  /* --- 6. RADII --- */
   --obsidian-radius-sm: 6px;
   --obsidian-radius-md: 10px;
   --obsidian-radius-lg: 14px;
   --obsidian-radius-xl: 18px;
 
-  /* --- 8. BACKWARD COMPATIBILITY VARIABLES --- */
+  /* --- 7. BACKWARD COMPATIBILITY VARIABLES --- */
   --admin-bg-base: var(--obsidian-bg);
   --admin-bg-surface: var(--obsidian-surface);
   --admin-bg-card: var(--obsidian-surface-card);
@@ -97,19 +98,25 @@ html, body {
   background-color: var(--obsidian-bg) !important;
   color: var(--obsidian-text-primary);
   font-family: var(--font-obsidian-sans);
+  font-size: 14px;
+  line-height: 1.5;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 /* ==============================================================================
- * MASTER ADMIN LAYOUT & SIDEBAR
+ * MASTER ADMIN LAYOUT & SPATIAL ARCHITECTURE
  * ============================================================================== */
 
 .admin-layout {
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: 270px minmax(0, 1fr);
   min-height: 100vh;
   width: 100%;
   box-sizing: border-box;
@@ -121,11 +128,14 @@ html, body {
   grid-template-columns: 78px minmax(0, 1fr);
 }
 
-/* Sidebar Container */
+/* ==============================================================================
+ * 1. SIDEBAR RECONSTRUCTED (270px COMFORTABLE & LEGIBLE)
+ * ============================================================================== */
+
 .admin-sidebar {
   background-color: var(--obsidian-surface) !important;
   border-right: 1px solid var(--obsidian-border-subtle) !important;
-  padding: 1.25rem 0.85rem !important;
+  padding: 1.5rem 1rem !important;
   display: flex !important;
   flex-direction: column !important;
   position: sticky !important;
@@ -135,24 +145,33 @@ html, body {
   z-index: 50 !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent !important;
   box-shadow: none !important;
 }
 
 .admin-sidebar::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
+  width: 4px !important;
+}
+.admin-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 4px !important;
 }
 
-/* Sidebar Header & Brand */
+/* Brand Box in Sidebar */
 .sidebar-header-box {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.85rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.15rem;
   border-bottom: 1px solid var(--obsidian-border-subtle);
+}
+
+.sidebar-full-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .sidebar-full-brand a {
@@ -164,17 +183,17 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 6px;
-  background: var(--obsidian-pending-bg);
-  border: 1px solid var(--obsidian-pending-border);
-  padding: 2px 8px;
+  background: var(--obsidian-surface-elevated);
+  border: 1px solid var(--obsidian-border-medium);
+  padding: 3px 10px;
   border-radius: 9999px;
   font-family: var(--font-obsidian-mono);
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  color: var(--obsidian-pending);
+  color: var(--obsidian-cyan);
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  width: fit-content;
 }
 
 .btn-toggle-sidebar {
@@ -182,7 +201,7 @@ html, body {
   border: 1px solid var(--obsidian-border-subtle);
   color: var(--obsidian-text-secondary);
   border-radius: var(--obsidian-radius-sm);
-  padding: 6px;
+  padding: 7px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -199,22 +218,24 @@ html, body {
 /* Sidebar Cluster Categories */
 .sidebar-category-header {
   font-family: var(--font-obsidian-heading) !important;
-  font-size: 0.66rem !important;
+  font-size: 0.70rem !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.08em !important;
-  color: var(--obsidian-text-dim) !important;
-  padding: 14px 10px 6px 10px !important;
+  color: var(--obsidian-text-muted) !important;
+  padding: 16px 12px 6px 12px !important;
+  margin-top: 4px !important;
   display: flex !important;
   align-items: center !important;
   gap: 8px !important;
   user-select: none !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.03) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.04) !important;
 }
 
 .sidebar-category-header:first-of-type {
   border-top: none !important;
-  padding-top: 4px !important;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
 
 .sidebar-category-header::after {
@@ -224,21 +245,22 @@ html, body {
   background: rgba(255, 255, 255, 0.04);
 }
 
-/* Sidebar Nav Buttons */
+/* Sidebar Navigation Buttons (Generous 44px Height & 14px Typography) */
 .admin-menu-btn {
   font-family: var(--font-obsidian-sans) !important;
-  font-size: 0.82rem !important;
-  font-weight: 600 !important;
+  font-size: 0.88rem !important; /* 14px */
+  font-weight: 500 !important;
   color: var(--obsidian-text-secondary) !important;
   background: transparent !important;
   border: 1px solid transparent !important;
-  border-left: 2px solid transparent !important;
+  border-left: 3px solid transparent !important;
   border-radius: var(--obsidian-radius-md) !important;
-  padding: 9px 12px !important;
-  margin-bottom: 2px !important;
+  padding: 10px 14px !important;
+  margin-bottom: 3px !important;
+  min-height: 44px !important;
   display: flex !important;
   align-items: center !important;
-  gap: 10px !important;
+  gap: 12px !important;
   width: 100% !important;
   text-align: left !important;
   cursor: pointer !important;
@@ -247,18 +269,32 @@ html, body {
   box-sizing: border-box !important;
 }
 
+.admin-menu-btn svg {
+  width: 18px !important;
+  height: 18px !important;
+  flex-shrink: 0 !important;
+  stroke-width: 2 !important;
+  color: var(--obsidian-text-muted) !important;
+  transition: color 0.15s ease !important;
+}
+
 .admin-menu-btn:hover {
   background: var(--obsidian-surface-elevated) !important;
   color: #ffffff !important;
   border-color: var(--obsidian-border-subtle) !important;
 }
 
+.admin-menu-btn:hover svg {
+  color: #ffffff !important;
+}
+
 .admin-menu-btn.active {
   background: var(--obsidian-surface-elevated) !important;
   color: #ffffff !important;
   border-color: var(--obsidian-border-medium) !important;
-  border-left: 2px solid var(--obsidian-cyan) !important;
+  border-left: 3px solid var(--obsidian-cyan) !important;
   font-weight: 700 !important;
+  box-shadow: var(--obsidian-shadow-sm) !important;
 }
 
 .admin-menu-btn.active svg {
@@ -270,11 +306,11 @@ html, body {
 .badge-count {
   margin-left: auto;
   font-family: var(--font-obsidian-mono) !important;
-  font-size: 0.68rem !important;
+  font-size: 0.70rem !important;
   font-weight: 700 !important;
-  padding: 2px 7px !important;
+  padding: 2px 8px !important;
   border-radius: 9999px !important;
-  line-height: 1 !important;
+  line-height: 1.2 !important;
   border: none !important;
   box-shadow: none !important;
 }
@@ -309,95 +345,69 @@ html, body {
   border: 1px solid var(--obsidian-purple-border) !important;
 }
 
-/* Collapsed Sidebar Styles */
-.admin-layout.collapsed .sidebar-full-brand {
-  display: none !important;
-}
-.admin-layout.collapsed .sidebar-mini-brand {
-  display: block !important;
-}
-.admin-layout.collapsed .sidebar-category-header span,
-.admin-layout.collapsed .sidebar-category-header::after {
-  display: none !important;
-}
-.admin-layout.collapsed .sidebar-category-header {
-  justify-content: center !important;
-  padding: 10px 0 !important;
-}
-.admin-layout.collapsed .admin-menu-btn {
-  justify-content: center !important;
-  padding: 10px 0 !important;
-  position: relative !important;
-}
-.admin-layout.collapsed .admin-menu-btn span:not(.badge-count) {
-  display: none !important;
-}
-.admin-layout.collapsed .admin-menu-btn .badge-count {
-  position: absolute !important;
-  top: 4px !important;
-  right: 4px !important;
-  font-size: 0.58rem !important;
-  padding: 1px 4px !important;
-  margin: 0 !important;
-}
-.admin-layout.collapsed .sidebar-footer-session {
-  display: none !important;
-}
-
-/* Sidebar Footer Session */
+/* Sidebar Footer Session Card */
 .sidebar-footer-box {
   margin-top: auto;
-  padding-top: 1rem;
+  padding-top: 1.25rem;
   border-top: 1px solid var(--obsidian-border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .sidebar-footer-session {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 0.74rem;
+  padding: 8px 12px;
+  background: var(--obsidian-surface-elevated);
+  border: 1px solid var(--obsidian-border-subtle);
+  border-radius: var(--obsidian-radius-md);
+  font-size: 0.76rem;
   color: var(--obsidian-text-muted);
 }
 
 .sidebar-footer-session strong {
   color: var(--obsidian-text-primary);
+  font-weight: 700;
 }
 
 /* ==============================================================================
- * TOP COMMAND BAR (STICKY SVELTE BAR)
+ * 2. TOP COMMAND BAR (INDEPENDENT 72px EXECUTIVE HEADER)
  * ============================================================================== */
 
 .admin-top-command-bar {
   position: sticky !important;
   top: 0 !important;
-  background-color: rgba(12, 16, 23, 0.94) !important;
+  background-color: rgba(12, 16, 23, 0.95) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
   border-bottom: 1px solid var(--obsidian-border-subtle) !important;
-  padding: 1rem 2.25rem !important;
+  padding: 1rem 2.5rem !important;
+  min-height: 72px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  gap: 16px !important;
+  gap: 20px !important;
   z-index: 40 !important;
-  margin-bottom: 1.75rem !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
 }
 
 .admin-top-heading-box {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
 .admin-breadcrumbs {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 700;
-  color: var(--obsidian-text-dim);
+  color: var(--obsidian-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
 }
 
 .admin-breadcrumbs span.active-bread {
@@ -406,37 +416,37 @@ html, body {
 
 #admin-view-heading {
   font-family: var(--font-obsidian-heading) !important;
-  font-size: 1.45rem !important;
+  font-size: 1.55rem !important; /* 24px */
   font-weight: 800 !important;
   color: var(--obsidian-text-primary) !important;
   letter-spacing: -0.02em !important;
-  margin: 3px 0 0 0 !important;
+  margin: 0 !important;
 }
 
 #admin-view-subtitle {
-  font-size: 0.80rem !important;
+  font-size: 0.82rem !important;
   color: var(--obsidian-text-secondary) !important;
-  margin: 3px 0 0 0 !important;
+  margin: 0 !important;
 }
 
 .admin-top-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .admin-rate-pill {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  font-size: 0.76rem;
+  gap: 8px;
+  font-size: 0.80rem;
   font-weight: 700;
   font-family: var(--font-obsidian-mono);
   background: var(--obsidian-surface-elevated);
-  border: 1px solid var(--obsidian-border-subtle);
+  border: 1px solid var(--obsidian-border-medium);
   color: var(--obsidian-text-secondary);
-  padding: 6px 12px;
-  border-radius: var(--obsidian-radius-sm);
+  padding: 8px 14px;
+  border-radius: var(--obsidian-radius-md);
 }
 
 .admin-rate-pill strong {
@@ -446,26 +456,37 @@ html, body {
 
 .pulse-dot-emerald {
   display: inline-block;
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--obsidian-positive);
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
 }
 
 /* ==============================================================================
- * MAIN CONTENT & PANE TRANSITIONS
+ * 3. MAIN CONTENT CONTAINER & PANE TRANSITIONS
  * ============================================================================== */
 
 .admin-content {
-  padding: 1.75rem 2.5rem 3rem 2.5rem !important;
+  padding: 0 !important;
+  max-width: 100%;
+  margin: 0;
   min-width: 0 !important;
   width: 100% !important;
   box-sizing: border-box !important;
   text-align: left !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 100vh !important;
 }
 
 .admin-section-pane {
   display: none;
+  padding: 2rem 2.5rem 4rem 2.5rem !important;
+  max-width: 1680px;
+  width: 100%;
+  box-sizing: border-box !important;
+  scroll-margin-top: 90px !important;
 }
 
 .admin-section-pane.active {
@@ -474,30 +495,33 @@ html, body {
 }
 
 @keyframes obsidianFadeIn {
-  from { opacity: 0; transform: translateY(3px); }
+  from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 /* ==============================================================================
- * EXECUTIVE CARDS & KPI GRID
+ * 4. EXECUTIVE HERO KPI CARDS (DASHBOARD & METRICS)
  * ============================================================================== */
 
 .kpi-grid {
   display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important;
-  gap: 1.25rem !important;
-  margin-bottom: 2rem !important;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+  gap: 1.5rem !important;
+  margin-bottom: 2.25rem !important;
 }
 
 .kpi-card {
   background: var(--obsidian-surface-card) !important;
   border: 1px solid var(--obsidian-border-subtle) !important;
   border-radius: var(--obsidian-radius-lg) !important;
-  padding: 1.25rem 1.4rem !important;
+  padding: 1.5rem 1.75rem !important;
   position: relative !important;
   overflow: hidden !important;
   box-shadow: var(--obsidian-shadow-sm) !important;
   transition: all 0.16s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
 }
 
 .kpi-card:hover {
@@ -513,7 +537,7 @@ html, body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 2px;
+  height: 3px;
 }
 
 .kpi-card.cyan::after { background: var(--obsidian-cyan) !important; }
@@ -525,186 +549,119 @@ html, body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
 }
 
 .kpi-title {
   font-family: var(--font-obsidian-heading) !important;
-  font-size: 0.72rem !important;
+  font-size: 0.76rem !important;
   color: var(--obsidian-text-muted) !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.06em !important;
+  letter-spacing: 0.08em !important;
 }
 
 .kpi-value-gs {
   font-family: var(--font-obsidian-mono) !important;
-  font-size: 1.5rem !important;
+  font-size: 1.75rem !important; /* 28px */
   font-weight: 800 !important;
   color: var(--obsidian-text-primary) !important;
-  line-height: 1.2 !important;
+  line-height: 1.15 !important;
   letter-spacing: -0.02em !important;
 }
 
 .kpi-value-usd {
   font-family: var(--font-obsidian-mono) !important;
-  font-size: 0.80rem !important;
-  color: var(--obsidian-text-secondary) !important;
-  margin-top: 4px !important;
-  font-weight: 600 !important;
+  font-size: 0.88rem !important;
+  color: var(--obsidian-cyan) !important;
+  font-weight: 700 !important;
 }
 
-/* Standard Administrative Card */
-.admin-card {
-  background: var(--obsidian-surface-card) !important;
-  border: 1px solid var(--obsidian-border-subtle) !important;
-  border-radius: var(--obsidian-radius-lg) !important;
-  padding: 1.75rem !important;
-  margin-bottom: 1.75rem !important;
-  box-shadow: var(--obsidian-shadow-sm) !important;
-}
-
-.admin-card:hover {
-  border-color: var(--obsidian-border-medium);
-}
-
-/* Overview Module Navigation Cards */
-.admin-modules-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.25rem;
+/* Executive Welcome Banner */
+.admin-welcome-banner {
+  background: linear-gradient(135deg, rgba(21, 28, 42, 0.9) 0%, rgba(12, 16, 23, 0.95) 100%);
+  border: 1px solid var(--obsidian-border-medium);
+  border-radius: var(--obsidian-radius-lg);
+  padding: 1.75rem 2rem;
   margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-.admin-module-card {
-  background-color: var(--obsidian-surface-card) !important;
-  border: 1px solid var(--obsidian-border-subtle) !important;
-  border-radius: var(--obsidian-radius-lg) !important;
-  padding: 1.4rem !important;
-  transition: all 0.16s ease !important;
-  cursor: pointer !important;
-  display: flex !important;
-  flex-direction: column !important;
+.admin-welcome-text h2 {
+  font-family: var(--font-obsidian-heading);
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 4px 0;
 }
 
-.admin-module-card:hover {
-  background-color: var(--obsidian-surface-elevated) !important;
-  border-color: var(--obsidian-border-medium) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: var(--obsidian-shadow-md) !important;
+.admin-welcome-text p {
+  font-size: 0.86rem;
+  color: var(--obsidian-text-secondary);
+  margin: 0;
 }
 
-.admin-module-icon-wrap {
-  width: 38px;
-  height: 38px;
+/* Quick Actions Cards Grid */
+.admin-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.25rem;
+}
+
+.admin-quick-card {
+  background: var(--obsidian-surface-card);
+  border: 1px solid var(--obsidian-border-subtle);
+  border-radius: var(--obsidian-radius-lg);
+  padding: 1.25rem 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.admin-quick-card:hover {
+  background: var(--obsidian-surface-elevated);
+  border-color: var(--obsidian-border-medium);
+  transform: translateY(-2px);
+  box-shadow: var(--obsidian-shadow-md);
+}
+
+.admin-quick-icon {
+  width: 44px;
+  height: 44px;
   border-radius: var(--obsidian-radius-md);
   background: var(--obsidian-surface-elevated);
   border: 1px solid var(--obsidian-border-subtle);
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
 }
 
-.admin-module-card h4 {
-  font-family: var(--font-obsidian-heading) !important;
-  font-size: 1.02rem !important;
-  font-weight: 800 !important;
-  color: var(--obsidian-text-primary) !important;
-  margin-top: 12px !important;
-  margin-bottom: 6px !important;
+.admin-quick-info h4 {
+  font-family: var(--font-obsidian-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 2px 0;
 }
 
-.admin-module-card p {
-  font-size: 0.80rem !important;
-  line-height: 1.45 !important;
-  color: var(--obsidian-text-secondary) !important;
-  margin: 0 !important;
-  flex-grow: 1 !important;
-}
-
-.admin-module-footer {
-  border-top: 1px solid var(--obsidian-border-subtle) !important;
-  padding-top: 12px !important;
-  margin-top: 16px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-}
-
-.admin-module-btn {
-  font-size: 0.78rem !important;
-  font-weight: 700 !important;
-  color: var(--obsidian-cyan) !important;
-}
-
-/* Category Blocks */
-.admin-blocks-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.75rem;
-  margin-bottom: 2rem;
-}
-
-.admin-block-category {
-  background: var(--obsidian-surface-card) !important;
-  border: 1px solid var(--obsidian-border-subtle) !important;
-  border-radius: var(--obsidian-radius-lg) !important;
-  padding: 1.5rem !important;
-  box-shadow: var(--obsidian-shadow-sm) !important;
-}
-
-.admin-block-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.85rem;
-  border-bottom: 1px solid var(--obsidian-border-subtle);
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.admin-block-title {
-  font-size: 1.05rem !important;
-  font-weight: 800 !important;
-  color: var(--obsidian-text-primary) !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 10px !important;
-  font-family: var(--font-obsidian-heading) !important;
-  margin: 0 !important;
-}
-
-.admin-block-badge {
-  font-size: 0.70rem !important;
-  font-weight: 700 !important;
-  padding: 3px 10px !important;
-  border-radius: 9999px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-  font-family: var(--font-obsidian-mono) !important;
-}
-
-.admin-block-badge.cyan {
-  background: var(--obsidian-cyan-bg) !important;
-  color: var(--obsidian-cyan) !important;
-  border: 1px solid var(--obsidian-cyan-border) !important;
-}
-
-.admin-block-badge.emerald {
-  background: var(--obsidian-positive-bg) !important;
-  color: var(--obsidian-positive) !important;
-  border: 1px solid var(--obsidian-positive-border) !important;
-}
-
-.admin-block-badge.amber {
-  background: var(--obsidian-pending-bg) !important;
-  color: var(--obsidian-pending) !important;
-  border: 1px solid var(--obsidian-pending-border) !important;
+.admin-quick-info p {
+  font-size: 0.78rem;
+  color: var(--obsidian-text-secondary);
+  margin: 0;
 }
 
 /* ==============================================================================
- * DATA TABLES & SVELTE RESPONSIVE CONTAINER
+ * 5. DATA TABLES (SPACIOUS 54px ROW HEIGHT, 14px TYPOGRAPHY)
  * ============================================================================== */
 
 .table-responsive {
@@ -712,16 +669,17 @@ html, body {
   overflow-x: auto !important;
   -webkit-overflow-scrolling: touch !important;
   border: 1px solid var(--obsidian-border-subtle) !important;
-  border-radius: var(--obsidian-radius-md) !important;
-  background: var(--obsidian-surface) !important;
-  margin-bottom: 1.25rem !important;
+  border-radius: var(--obsidian-radius-lg) !important;
+  background: var(--obsidian-surface-card) !important;
+  margin-bottom: 1.5rem !important;
+  box-shadow: var(--obsidian-shadow-sm) !important;
 }
 
 .admin-table {
   width: 100% !important;
   border-collapse: separate !important;
   border-spacing: 0 !important;
-  font-size: 0.83rem !important;
+  font-size: 0.88rem !important; /* 14px legible */
   text-align: left !important;
 }
 
@@ -732,17 +690,19 @@ html, body {
   font-weight: 700 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.06em !important;
-  font-size: 0.70rem !important;
-  border-bottom: 1px solid var(--obsidian-border-subtle) !important;
-  padding: 12px 16px !important;
+  font-size: 0.74rem !important;
+  border-bottom: 1px solid var(--obsidian-border-medium) !important;
+  padding: 14px 20px !important;
   white-space: nowrap !important;
+  min-height: 48px !important;
 }
 
 .admin-table td {
   border-bottom: 1px solid var(--obsidian-border-subtle) !important;
   color: var(--obsidian-text-primary) !important;
-  padding: 13px 16px !important;
+  padding: 15px 20px !important;
   vertical-align: middle !important;
+  min-height: 54px !important;
 }
 
 .admin-table tr:last-child td {
@@ -753,7 +713,7 @@ html, body {
   background: var(--obsidian-surface-hover) !important;
 }
 
-/* Numerical Cells */
+/* Numerical Cells & Codes */
 .col-mono,
 .price-gs,
 .price-usd,
@@ -765,12 +725,13 @@ html, body {
 .price-gs {
   font-weight: 700 !important;
   color: var(--obsidian-text-primary) !important;
+  font-size: 0.92rem !important;
 }
 
 .price-usd {
   font-weight: 600 !important;
   color: var(--obsidian-cyan) !important;
-  font-size: 0.78rem !important;
+  font-size: 0.82rem !important;
 }
 
 /* Pagination Bar */
@@ -778,17 +739,17 @@ html, body {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  padding: 10px 4px !important;
-  font-size: 0.78rem !important;
+  padding: 12px 6px !important;
+  font-size: 0.82rem !important;
   color: var(--obsidian-text-muted) !important;
   flex-wrap: wrap !important;
-  gap: 10px !important;
+  gap: 12px !important;
 }
 
 .pagination-buttons {
   display: flex !important;
   align-items: center !important;
-  gap: 6px !important;
+  gap: 8px !important;
 }
 
 .btn-page {
@@ -796,8 +757,9 @@ html, body {
   border: 1px solid var(--obsidian-border-subtle) !important;
   color: var(--obsidian-text-primary) !important;
   font-family: var(--font-obsidian-mono) !important;
-  font-size: 0.76rem !important;
-  padding: 5px 12px !important;
+  font-size: 0.80rem !important;
+  font-weight: 600 !important;
+  padding: 6px 14px !important;
   border-radius: var(--obsidian-radius-sm) !important;
   cursor: pointer !important;
   transition: all 0.15s ease !important;
@@ -814,15 +776,15 @@ html, body {
 }
 
 /* ==============================================================================
- * FILTER TOOLBARS & CONTROLS
+ * 6. TOOLBARS, SEARCH & SUBTAB CONTROLS
  * ============================================================================== */
 
 .filter-toolbar {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
-  gap: 12px !important;
-  margin-bottom: 1.25rem !important;
+  gap: 14px !important;
+  margin-bottom: 1.5rem !important;
   flex-wrap: wrap !important;
 }
 
@@ -831,16 +793,17 @@ html, body {
   border: 1px solid var(--obsidian-border-medium) !important;
   color: var(--obsidian-text-primary) !important;
   font-family: var(--font-obsidian-sans) !important;
-  font-size: 0.83rem !important;
-  padding: 9px 14px !important;
+  font-size: 0.88rem !important;
+  padding: 10px 16px !important;
   border-radius: var(--obsidian-radius-md) !important;
   outline: none !important;
-  min-width: 260px !important;
+  min-width: 280px !important;
   transition: border-color 0.15s ease !important;
 }
 
 .filter-input-search:focus {
   border-color: var(--obsidian-cyan) !important;
+  box-shadow: 0 0 0 1px var(--obsidian-cyan) !important;
 }
 
 .filter-input-search::placeholder {
@@ -850,10 +813,10 @@ html, body {
 /* Sub-Tab Navigation Bar */
 .sub-tabs-nav {
   display: flex !important;
-  gap: 8px !important;
-  margin-bottom: 1.5rem !important;
+  gap: 10px !important;
+  margin-bottom: 1.75rem !important;
   border-bottom: 1px solid var(--obsidian-border-subtle) !important;
-  padding-bottom: 8px !important;
+  padding-bottom: 10px !important;
   overflow-x: auto !important;
 }
 
@@ -863,9 +826,9 @@ html, body {
   border: 1px solid var(--obsidian-border-subtle) !important;
   color: var(--obsidian-text-secondary) !important;
   font-family: var(--font-obsidian-sans) !important;
-  font-size: 0.80rem !important;
+  font-size: 0.84rem !important;
   font-weight: 600 !important;
-  padding: 8px 16px !important;
+  padding: 9px 18px !important;
   border-radius: var(--obsidian-radius-md) !important;
   cursor: pointer !important;
   transition: all 0.15s ease !important;
@@ -885,20 +848,20 @@ html, body {
   background: var(--obsidian-surface-elevated) !important;
   color: #ffffff !important;
   border-color: var(--obsidian-cyan) !important;
+  border-bottom: 2px solid var(--obsidian-cyan) !important;
   font-weight: 700 !important;
-  box-shadow: none !important;
 }
 
 /* ==============================================================================
- * ACTION BUTTONS (CLEAN, ZERO NEON)
+ * 7. ACTION BUTTONS & FORM CONTROLS
  * ============================================================================== */
 
 .btn-admin-action {
   font-family: var(--font-obsidian-sans) !important;
-  font-size: 0.82rem !important;
+  font-size: 0.86rem !important;
   font-weight: 700 !important;
-  padding: 8px 14px !important;
-  border-radius: var(--obsidian-radius-sm) !important;
+  padding: 9px 16px !important;
+  border-radius: var(--obsidian-radius-md) !important;
   border: 1px solid transparent !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -966,12 +929,9 @@ html, body {
   border-color: var(--obsidian-border-medium) !important;
 }
 
-/* ==============================================================================
- * FORM CONTROLS & INPUTS
- * ============================================================================== */
-
+/* Forms */
 .admin-form-group {
-  margin-bottom: 1.15rem !important;
+  margin-bottom: 1.25rem !important;
   display: flex !important;
   flex-direction: column !important;
   gap: 6px !important;
@@ -979,7 +939,7 @@ html, body {
 
 .admin-form-label {
   font-family: var(--font-obsidian-heading) !important;
-  font-size: 0.74rem !important;
+  font-size: 0.78rem !important;
   font-weight: 700 !important;
   color: var(--obsidian-text-secondary) !important;
   text-transform: uppercase !important;
@@ -992,10 +952,10 @@ html, body {
   background: var(--obsidian-surface) !important;
   border: 1px solid var(--obsidian-border-medium) !important;
   color: var(--obsidian-text-primary) !important;
-  border-radius: var(--obsidian-radius-sm) !important;
-  padding: 10px 14px !important;
+  border-radius: var(--obsidian-radius-md) !important;
+  padding: 11px 16px !important;
   font-family: var(--font-obsidian-sans) !important;
-  font-size: 0.84rem !important;
+  font-size: 0.88rem !important;
   outline: none !important;
   box-sizing: border-box !important;
   width: 100% !important;
@@ -1014,24 +974,8 @@ html, body {
   color: var(--obsidian-text-dim) !important;
 }
 
-/* File Upload Zone */
-.file-upload-zone {
-  background: var(--obsidian-surface-subtle) !important;
-  border: 2px dashed var(--obsidian-border-medium) !important;
-  border-radius: var(--obsidian-radius-md) !important;
-  padding: 1.5rem !important;
-  text-align: center !important;
-  cursor: pointer !important;
-  transition: all 0.15s ease !important;
-}
-
-.file-upload-zone:hover {
-  border-color: var(--obsidian-cyan) !important;
-  background: var(--obsidian-surface-hover) !important;
-}
-
 /* ==============================================================================
- * MODAL OVERLAYS & GLASS CONTAINERS
+ * 8. MODALS & OVERLAYS (STRICT SAFETY HIERARCHY)
  * ============================================================================== */
 
 .modal-overlay {
@@ -1044,7 +988,7 @@ html, body {
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 1.25rem;
+  padding: 1.5rem;
   box-sizing: border-box;
 }
 
@@ -1072,7 +1016,7 @@ html, body {
   border-radius: var(--obsidian-radius-xl) !important;
   box-shadow: var(--obsidian-shadow-modal) !important;
   color: var(--obsidian-text-primary) !important;
-  padding: 2rem !important;
+  padding: 2.25rem !important;
   box-sizing: border-box !important;
   max-height: 90vh !important;
   overflow-y: auto !important;
@@ -1082,7 +1026,7 @@ html, body {
   background: transparent !important;
   border: none !important;
   color: var(--obsidian-text-muted) !important;
-  font-size: 1.25rem !important;
+  font-size: 1.35rem !important;
   cursor: pointer !important;
   padding: 4px 8px !important;
   border-radius: var(--obsidian-radius-sm) !important;
@@ -1095,51 +1039,38 @@ html, body {
 }
 
 /* ==============================================================================
- * SPECIALIZED MODULE COMPONENTS
+ * 9. MODULE SPECIALIZED COMPONENTS
  * ============================================================================== */
 
-/* Banners Hero Cards */
-.hero-banner-admin-grid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)) !important;
-  gap: 1.5rem !important;
+/* Game Product Cards */
+.game-product-card {
+  background: var(--obsidian-surface-card);
+  border: 1px solid var(--obsidian-border-subtle);
+  border-radius: var(--obsidian-radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.16s ease;
 }
 
-.hero-banner-admin-card {
-  background: var(--obsidian-surface-card) !important;
-  border: 1px solid var(--obsidian-border-subtle) !important;
-  border-radius: var(--obsidian-radius-lg) !important;
-  padding: 1.5rem !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 1rem !important;
-  box-shadow: var(--obsidian-shadow-sm) !important;
-  position: relative !important;
-  transition: all 0.16s ease !important;
+.game-product-card:hover {
+  border-color: var(--obsidian-border-medium);
+  transform: translateY(-2px);
+  box-shadow: var(--obsidian-shadow-md);
 }
 
-.hero-banner-admin-card:hover {
-  border-color: var(--obsidian-border-medium) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: var(--obsidian-shadow-md) !important;
+.game-cover-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  position: relative;
+  overflow: hidden;
 }
 
-.hero-preview-thumb-h {
-  width: 100% !important;
-  height: 120px !important;
-  object-fit: cover !important;
-  border-radius: var(--obsidian-radius-md) !important;
-  border: 1px solid var(--obsidian-border-medium) !important;
-  background: #000000 !important;
-}
-
-.hero-preview-thumb-v {
-  width: 85px !important;
-  height: 120px !important;
-  object-fit: cover !important;
-  border-radius: var(--obsidian-radius-md) !important;
-  border: 1px solid var(--obsidian-border-medium) !important;
-  background: #000000 !important;
+.game-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* AI Note Cards */
@@ -1147,12 +1078,11 @@ html, body {
   background: var(--obsidian-surface-card) !important;
   border: 1px solid var(--obsidian-border-subtle) !important;
   border-radius: var(--obsidian-radius-md) !important;
-  padding: 1.25rem !important;
+  padding: 1.35rem !important;
   transition: all 0.15s ease !important;
   display: flex !important;
   flex-direction: column !important;
   gap: 10px !important;
-  position: relative !important;
 }
 
 .ai-note-card:hover {
@@ -1166,18 +1096,89 @@ html, body {
 .ai-note-card.stock_inquiry { border-left: 3px solid var(--obsidian-cyan) !important; }
 .ai-note-card.technical_issue { border-left: 3px solid var(--obsidian-error) !important; }
 
+/* AI Tool Products */
+.tool-product-card {
+  background: var(--obsidian-surface-card) !important;
+  border: 1px solid var(--obsidian-border-subtle) !important;
+  border-radius: var(--obsidian-radius-lg) !important;
+  padding: 1.4rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  transition: all 0.16s ease !important;
+  box-shadow: var(--obsidian-shadow-sm) !important;
+}
+
+.tool-product-card:hover {
+  background: var(--obsidian-surface-elevated) !important;
+  border-color: var(--obsidian-border-medium) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: var(--obsidian-shadow-md) !important;
+}
+
+/* Users KPI Grid */
+.users-kpi-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+  gap: 1.25rem !important;
+  margin-bottom: 1.75rem !important;
+}
+
+/* Banners Hero Cards */
+.hero-banner-admin-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)) !important;
+  gap: 1.75rem !important;
+}
+
+.hero-banner-admin-card {
+  background: var(--obsidian-surface-card) !important;
+  border: 1px solid var(--obsidian-border-subtle) !important;
+  border-radius: var(--obsidian-radius-lg) !important;
+  padding: 1.5rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.25rem !important;
+  box-shadow: var(--obsidian-shadow-sm) !important;
+  transition: all 0.16s ease !important;
+}
+
+.hero-banner-admin-card:hover {
+  border-color: var(--obsidian-border-medium) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: var(--obsidian-shadow-md) !important;
+}
+
+.hero-preview-thumb-h {
+  width: 100% !important;
+  height: 130px !important;
+  object-fit: cover !important;
+  border-radius: var(--obsidian-radius-md) !important;
+  border: 1px solid var(--obsidian-border-medium) !important;
+  background: #000000 !important;
+}
+
+.hero-preview-thumb-v {
+  width: 90px !important;
+  height: 130px !important;
+  object-fit: cover !important;
+  border-radius: var(--obsidian-radius-md) !important;
+  border: 1px solid var(--obsidian-border-medium) !important;
+  background: #000000 !important;
+}
+
 /* Screenshots Preview */
 .screenshots-preview-grid {
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)) !important;
-  gap: 10px !important;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+  gap: 12px !important;
   margin-top: 10px !important;
 }
 
 .screenshot-thumb-item {
   position: relative !important;
   width: 100% !important;
-  height: 75px !important;
+  height: 80px !important;
   border-radius: var(--obsidian-radius-sm) !important;
   overflow: hidden !important;
   border: 1px solid var(--obsidian-border-medium) !important;
@@ -1198,49 +1199,21 @@ html, body {
   border: none !important;
   color: #ffffff !important;
   border-radius: 50% !important;
-  width: 20px !important;
-  height: 20px !important;
-  font-size: 0.7rem !important;
+  width: 22px !important;
+  height: 22px !important;
+  font-size: 0.75rem !important;
   cursor: pointer !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
 }
 
-/* Work Tools / AI Cards */
-.tool-product-card {
-  background: var(--obsidian-surface-card) !important;
-  border: 1px solid var(--obsidian-border-subtle) !important;
-  border-radius: var(--obsidian-radius-lg) !important;
-  padding: 1.25rem !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 12px !important;
-  transition: all 0.16s ease !important;
-  box-shadow: var(--obsidian-shadow-sm) !important;
-}
-
-.tool-product-card:hover {
-  background: var(--obsidian-surface-elevated) !important;
-  border-color: var(--obsidian-border-medium) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: var(--obsidian-shadow-md) !important;
-}
-
-/* Users KPI Grid */
-.users-kpi-grid {
-  display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)) !important;
-  gap: 1rem !important;
-  margin-bottom: 1.5rem !important;
-}
-
 /* Logout Button */
 #btn-admin-logout {
   width: 100% !important;
   justify-content: center !important;
-  padding: 9px 12px !important;
-  font-size: 0.8rem !important;
+  padding: 10px 14px !important;
+  font-size: 0.84rem !important;
   font-weight: 700 !important;
 }
 
@@ -1253,58 +1226,98 @@ html, body {
 }
 
 /* ==============================================================================
- * RESPONSIVENESS (DESKTOP, TABLET, MOBILE)
+ * 10. RESPONSIVENESS (DESKTOP, NOTEBOOK, TABLET, MOBILE)
  * ============================================================================== */
 
+@media (max-width: 1200px) {
+  .admin-layout {
+    grid-template-columns: 250px minmax(0, 1fr) !important;
+  }
+  .admin-section-pane {
+    padding: 1.75rem 2rem 3rem 2rem !important;
+  }
+  .admin-top-command-bar {
+    padding: 0.85rem 2rem !important;
+  }
+}
+
+.admin-mobile-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 45;
+  transition: opacity 0.2s ease;
+}
+
+.admin-mobile-backdrop.active {
+  display: block;
+}
+
+.mobile-toggle-btn {
+  display: none !important;
+}
 
 @media (max-width: 1024px) {
   .admin-layout {
     grid-template-columns: 240px minmax(0, 1fr) !important;
   }
-  .admin-top-command-bar {
-    padding: 0.85rem 1.5rem !important;
-  }
-  .admin-content {
-    padding: 1.25rem 1.5rem 2rem 1.5rem !important;
+  .admin-section-pane {
+    padding: 1.5rem 1.5rem 3rem 1.5rem !important;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .mobile-toggle-btn {
+    display: inline-flex !important;
+  }
   .admin-layout {
     grid-template-columns: 1fr !important;
   }
   .admin-sidebar {
     position: fixed !important;
-    left: -280px !important;
-    width: 280px !important;
+    left: -290px !important;
+    width: 290px !important;
     transition: left 0.25s ease-in-out !important;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8) !important;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8) !important;
   }
   .admin-sidebar.mobile-open {
     left: 0 !important;
   }
   .admin-top-command-bar {
-    padding: 0.75rem 1rem !important;
+    padding: 0.85rem 1.25rem !important;
     flex-direction: column !important;
     align-items: flex-start !important;
+    gap: 12px !important;
   }
   .admin-top-actions {
     width: 100% !important;
     justify-content: space-between !important;
     flex-wrap: wrap !important;
   }
-  .admin-content {
-    padding: 1rem 1rem 2rem 1rem !important;
+  .admin-section-pane {
+    padding: 1.25rem 1.25rem 2.5rem 1.25rem !important;
   }
   .kpi-grid {
     grid-template-columns: 1fr !important;
   }
-  .hero-banner-admin-grid {
+}
+
+@media (max-width: 768px) {
+  .admin-top-command-bar {
+    padding: 0.75rem 1rem !important;
+  }
+  .admin-section-pane {
+    padding: 1rem 1rem 2rem 1rem !important;
+  }
+  .kpi-grid {
     grid-template-columns: 1fr !important;
+    gap: 12px !important;
   }
 }
 
+/* Animations */
 @keyframes spinPublish { to { transform: rotate(360deg); } }
 @keyframes popScale { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 @keyframes fadeInScale { 0% { transform: scale(0.92); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-
