@@ -5604,26 +5604,57 @@
     // =======================================================
     // ADMIN DIRECT "CREAR CUENTA" (STOCK OFICIAL PARA TIENDA)
     // =======================================================
-    window.openAdminCreateAccountModal = async function() {
+    window.openAdminCreateAccountModal = async function(preselectedServiceId) {
       const modal = document.getElementById('modal-admin-create-account');
       if (!modal) return;
 
-      // Ensure services config is loaded
+      // Ensure services config is loaded (try admin route, fallback to public hubs)
       if (!currentStreamingServices || currentStreamingServices.length === 0) {
         try {
           const res = await fetch('/api/admin/streaming-services');
           const data = await res.json();
-          if (data.services) currentStreamingServices = data.services;
+          if (data && data.services && data.services.length > 0) {
+            currentStreamingServices = data.services;
+          }
         } catch (e) {}
+
+        if (!currentStreamingServices || currentStreamingServices.length === 0) {
+          try {
+            const res2 = await fetch('/api/streaming-hubs');
+            const data2 = await res2.json();
+            if (data2 && data2.services && data2.services.length > 0) {
+              currentStreamingServices = data2.services;
+            }
+          } catch (e2) {}
+        }
+      }
+
+      // If still empty, supply standard catalog fallback
+      if (!currentStreamingServices || currentStreamingServices.length === 0) {
+        currentStreamingServices = [
+          { id: 'youtube-premium', name: 'YouTube Premium', maxSlots: 5, pricePerSlotPyg: 28900, iconUrl: '/assets/services/youtube.svg', planName: 'Familiar 5 Pantallas' },
+          { id: 'netflix', name: 'Netflix Premium 4K', maxSlots: 5, pricePerSlotPyg: 35000, iconUrl: '/assets/services/netflix.svg', planName: 'Ultra HD 4K' },
+          { id: 'spotify', name: 'Spotify Premium', maxSlots: 6, pricePerSlotPyg: 25000, iconUrl: '/assets/services/spotify.svg', planName: 'Familiar 6 Cuentas' },
+          { id: 'disney', name: 'Disney+ Premium', maxSlots: 4, pricePerSlotPyg: 32000, iconUrl: '/assets/services/disney.svg', planName: 'Plan Premium 4K HDR' },
+          { id: 'max', name: 'Max (HBO) 4K', maxSlots: 4, pricePerSlotPyg: 32000, iconUrl: '/assets/services/max.svg', planName: 'Platino 4K Dolby Atmos' },
+          { id: 'chatgpt', name: 'ChatGPT Plus & Team', maxSlots: 4, pricePerSlotPyg: 45000, iconUrl: '/assets/services/chatgpt.svg', planName: 'GPT-4o & Canvas Pro' },
+          { id: 'claude', name: 'Claude Pro (Anthropic)', maxSlots: 4, pricePerSlotPyg: 48000, iconUrl: '/assets/services/claude.svg', planName: 'Claude 3.5 Sonnet' },
+          { id: 'canva', name: 'Canva Pro Enterprise', maxSlots: 50, pricePerSlotPyg: 15000, iconUrl: '/assets/services/canva.svg', planName: 'Pro Designer' }
+        ];
       }
 
       const select = document.getElementById('admin-acc-service-select');
       if (select && Array.isArray(currentStreamingServices) && currentStreamingServices.length > 0) {
         select.innerHTML = currentStreamingServices.map(s => `
-          <option value="${s.id}" data-max-slots="${s.maxSlots || 5}" data-price="${s.pricePerSlotPyg || 25000}" data-icon="${s.iconUrl || s.thumbnailUrl || '/assets/branding/icon.png'}" data-plan="${s.planName || ''}">
+          <option value="${s.id}" data-max-slots="${s.maxSlots || 5}" data-price="${s.pricePerSlotPyg || 25000}" data-icon="${s.iconUrl || s.thumbnailUrl || '/assets/branding/icon.png'}" data-plan="${s.planName || 'Plan Oficial'}">
             ${s.name} - ${(s.pricePerSlotPyg || 25000).toLocaleString('es-PY')} Gs. / asiento
           </option>
         `).join('');
+
+        if (preselectedServiceId) {
+          select.value = preselectedServiceId;
+        }
+
         onAdminAccountServiceSelectChange();
       }
 
@@ -5633,12 +5664,18 @@
       const expInput = document.getElementById('admin-acc-exp-date');
       if (expInput) expInput.value = d.toISOString().split('T')[0];
 
+      // Ensure profile inputs are rendered
+      renderAdminAccountProfilesInputs();
+
       modal.style.display = 'flex';
     };
 
     window.closeAdminCreateAccountModal = function() {
       const modal = document.getElementById('modal-admin-create-account');
-      if (modal) modal.style.display = 'none';
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('active');
+      }
     };
 
     window.onAdminAccountServiceSelectChange = function() {

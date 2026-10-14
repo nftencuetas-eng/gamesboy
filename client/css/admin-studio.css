@@ -1041,11 +1041,28 @@ html, body {
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
   z-index: 1000 !important;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  box-sizing: border-box;
+}
+
+.modal-overlay[style*="display: none"] {
+  display: none !important;
+}
+
+.modal-overlay[style*="display: flex"],
+.modal-overlay.active {
   display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 1.25rem !important;
-  box-sizing: border-box !important;
+}
+
+.modal-overlay[style*="display: grid"] {
+  display: grid !important;
+}
+
+.modal-overlay[style*="display: block"] {
+  display: block !important;
 }
 
 .modal-content,
