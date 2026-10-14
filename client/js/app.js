@@ -1,5 +1,10 @@
 // GamesBoy.net - Master ENEBA Marketplace Core Engine
 
+// Canonical Host Redirection: Ensure full SSL and API connectivity via www.gamesboy.net
+if (typeof window !== 'undefined' && window.location.hostname === 'gamesboy.net') {
+  window.location.replace('https://www.gamesboy.net' + window.location.pathname + window.location.search + window.location.hash);
+}
+
 // Multi-Country & Multi-Currency Universal Configuration
 const countryConfig = {
   'PY': {

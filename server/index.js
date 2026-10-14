@@ -84,6 +84,16 @@ app.use(express.json({ limit: '35mb' })); // Support direct image file uploads a
 app.use(express.urlencoded({ extended: true, limit: '35mb' }));
 app.use(morgan(config.nodeEnv === 'production' ? 'combined' : 'dev'));
 
+// Canonical Apex Domain Redirection: enforce www.gamesboy.net for full CDN & API connectivity
+app.use((req, res, next) => {
+  const rawHost = (req.headers['x-forwarded-host'] ? String(req.headers['x-forwarded-host']).split(',')[0].trim() : '') || req.headers.host || '';
+  const host = rawHost.toLowerCase().split(':')[0].trim();
+  if (host === 'gamesboy.net') {
+    return res.redirect(301, `https://www.gamesboy.net${req.originalUrl}`);
+  }
+  next();
+});
+
 // Multi-Tenant Resolution Middleware (Applies tenant context to all incoming requests)
 app.use(tenantResolver);
 
