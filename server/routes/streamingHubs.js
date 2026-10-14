@@ -63,6 +63,10 @@ router.get('/', (req, res) => {
     const hasStock = totalAvailSlots > 0;
     const pricePyg = s.pricePerSlotPyg || Math.round((s.pricePerSlotUsd || 3.33) * rate);
 
+    const resolvedIcon = s.iconUrl || s.thumbnailUrl || `/assets/services/${s.id}.svg`;
+    const resolvedBannerH = s.bannerHorizontal || '/assets/banners/banner_stream_h.jpg';
+    const resolvedBannerV = s.bannerVertical || '/assets/banners/banner_stream_v.jpg';
+
     return {
       id: s.id,
       name: s.name,
@@ -70,11 +74,11 @@ router.get('/', (req, res) => {
       planName: s.planName,
       tagline: s.tagline,
       brandColor: s.brandColor || '#00c2ff',
-      logoUrl: s.iconUrl || s.thumbnailUrl,
-      thumbnailUrl: s.thumbnailUrl || s.iconUrl,
-      iconUrl: s.iconUrl || s.thumbnailUrl,
-      bannerHorizontal: s.bannerHorizontal,
-      bannerVertical: s.bannerVertical,
+      logoUrl: resolvedIcon,
+      thumbnailUrl: resolvedIcon,
+      iconUrl: resolvedIcon,
+      bannerHorizontal: resolvedBannerH,
+      bannerVertical: resolvedBannerV,
       badgeText: s.badgeText,
       pricePerSlotPyg: pricePyg,
       pricePerSlotUsd: parseFloat((pricePyg / rate).toFixed(2)),
@@ -256,6 +260,10 @@ router.get('/:platform', (req, res) => {
     success: true,
     hub: {
       ...hub,
+      iconUrl: hub.iconUrl || hub.thumbnailUrl || `/assets/services/${hub.id}.svg`,
+      thumbnailUrl: hub.thumbnailUrl || hub.iconUrl || `/assets/services/${hub.id}.svg`,
+      bannerHorizontal: hub.bannerHorizontal || '/assets/banners/banner_stream_h.jpg',
+      bannerVertical: hub.bannerVertical || '/assets/banners/banner_stream_v.jpg',
       pricePerSlotPyg: fixedPricePyg,
       pricePerSlotUsd: fixedPriceUsd,
       minPricePyg,

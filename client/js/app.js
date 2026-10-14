@@ -110,13 +110,13 @@ function autoDetectUserCountry() {
 }
 
 // Instant Cache Hydration with Versioning & Legacy Unsplash Purge
-const GB_CATALOG_CACHE_VERSION = 'gb_v6_clean_hero_banners';
+const GB_CATALOG_CACHE_VERSION = 'gb_v7_real_assets_and_covers';
 const cachedCatalog = (() => {
   try {
     const v = localStorage.getItem('gb_catalog_cache_v');
     const raw = localStorage.getItem('gb_catalog_cache');
     // If cache is from an old version or contains generic unsplash URLs, purge immediately
-    if (v !== GB_CATALOG_CACHE_VERSION || (raw && (raw.includes('unsplash.com') || raw.includes('banner_fc25')))) {
+    if (v !== GB_CATALOG_CACHE_VERSION || (raw && raw.includes('unsplash.com'))) {
       localStorage.removeItem('gb_catalog_cache');
       localStorage.setItem('gb_catalog_cache_v', GB_CATALOG_CACHE_VERSION);
       return {};
@@ -126,6 +126,54 @@ const cachedCatalog = (() => {
     return {};
   }
 })();
+
+// --- INTELLIGENT ASSET RESOLVER FUNCTIONS (NO PLACEHOLDERS OR BROKEN IMAGES) ---
+function getPlatformIcon(key) {
+  const clean = (key || '').toLowerCase().trim();
+  if (clean.includes('netflix')) return '/assets/services/netflix.svg';
+  if (clean.includes('spotify')) return '/assets/services/spotify.svg';
+  if (clean.includes('disney') || clean.includes('star')) return '/assets/services/disney.svg';
+  if (clean.includes('max') || clean.includes('hbo')) return '/assets/services/max.svg';
+  if (clean.includes('youtube')) return '/assets/services/youtube.svg';
+  if (clean.includes('crunchyroll')) return '/assets/services/crunchyroll.svg';
+  if (clean.includes('paramount')) return '/assets/services/paramount.svg';
+  if (clean.includes('chatgpt') || clean.includes('openai') || clean.includes('gpt')) return '/assets/services/chatgpt.svg';
+  if (clean.includes('apple')) return '/assets/services/apple.svg';
+  if (clean.includes('prime') || clean.includes('amazon')) return '/assets/services/prime.svg';
+  if (clean.includes('canva')) return '/assets/services/canva.svg';
+  if (clean.includes('claude')) return '/assets/services/claude.svg';
+  if (clean.includes('gemini')) return '/assets/services/gemini.svg';
+  if (clean.includes('midjourney')) return '/assets/services/midjourney.svg';
+  return '/assets/branding/icon.png';
+}
+
+function getGameCover(id, title) {
+  const cleanId = (id || '').toLowerCase();
+  const cleanTitle = (title || '').toLowerCase();
+  if (cleanId.includes('fc25') || cleanTitle.includes('fc 25') || cleanTitle.includes('fifa')) return '/assets/games/cover_fc25.jpg';
+  if (cleanId.includes('spiderman') || cleanTitle.includes('spider-man') || cleanTitle.includes('spider man')) return '/assets/games/cover_spiderman2.jpg';
+  if (cleanId.includes('cod') || cleanTitle.includes('black ops') || cleanTitle.includes('call of duty')) return '/assets/games/cover_cod_bo6.jpg';
+  if (cleanId.includes('gta') || cleanTitle.includes('grand theft auto')) return '/assets/games/cover_gta6.jpg';
+  if (cleanId.includes('wukong') || cleanTitle.includes('wukong')) return '/assets/games/cover_wukong.jpg';
+  if (cleanId.includes('gow') || cleanTitle.includes('god of war') || cleanTitle.includes('ragnarok')) return '/assets/games/cover_gow_rag.jpg';
+  if (cleanId.includes('elden') || cleanTitle.includes('elden ring')) return '/assets/games/cover_elden_ring.jpg';
+  if (cleanId.includes('cyberpunk') || cleanTitle.includes('cyberpunk')) return '/assets/games/cover_cyberpunk.jpg';
+  return '/assets/branding/hero-showcase.png';
+}
+
+function getGiftcardAsset(id, name) {
+  const clean = ((id || '') + ' ' + (name || '')).toLowerCase();
+  if (clean.includes('psn') || clean.includes('playstation')) return '/assets/giftcards/playstation.svg';
+  if (clean.includes('steam')) return '/assets/giftcards/steam.svg';
+  if (clean.includes('xbox')) return '/assets/giftcards/xbox.svg';
+  if (clean.includes('nin') || clean.includes('nintendo') || clean.includes('switch')) return '/assets/giftcards/nintendo.svg';
+  if (clean.includes('spot') || clean.includes('spotify')) return '/assets/giftcards/spotify.svg';
+  if (clean.includes('net') || clean.includes('netflix')) return '/assets/giftcards/netflix.svg';
+  if (clean.includes('google') || clean.includes('play')) return '/assets/giftcards/googleplay.svg';
+  if (clean.includes('apple') || clean.includes('itunes')) return '/assets/giftcards/apple.svg';
+  return '/assets/branding/icon.png';
+}
+
 
 // SMM Social Media Platforms & Services Config (2-Column Architecture)
 const smmPlatformsData = {
@@ -736,9 +784,11 @@ function initHeroAccordion() {
   container.innerHTML = banners.slice(0, 4).map((b, idx) => {
     const isActive = idx === state.activeSlideIndex;
     const targetUrl = b.ctaUrl || '#section-games';
-    const hasImg = Boolean((b.imgHorizontal && !b.imgHorizontal.includes('unsplash')) || (b.imgVertical && !b.imgVertical.includes('unsplash')));
-    const hImg = b.imgHorizontal || b.imgVertical || '';
-    const vImg = b.imgVertical || b.imgHorizontal || '';
+    const fallbackH = idx === 0 ? '/assets/banners/banner_fc25_h.jpg' : (idx === 1 ? '/assets/banners/banner_gta6_h.jpg' : (idx === 2 ? '/assets/banners/banner_wukong_h.jpg' : '/assets/banners/banner_stream_h.jpg'));
+    const fallbackV = idx === 0 ? '/assets/banners/banner_fc25_v.jpg' : (idx === 1 ? '/assets/banners/banner_gta6_v.jpg' : (idx === 2 ? '/assets/banners/banner_wukong_v.jpg' : '/assets/banners/banner_stream_v.jpg'));
+    const hImg = (b.imgHorizontal && !b.imgHorizontal.includes('unsplash')) ? b.imgHorizontal : fallbackH;
+    const vImg = (b.imgVertical && !b.imgVertical.includes('unsplash')) ? b.imgVertical : fallbackV;
+    const hasImg = Boolean(hImg || vImg);
     const hasCustomText = Boolean((b.title && b.title.trim()) || (b.tagline && b.tagline.trim()) || (b.badge && b.badge.trim()));
 
     return `
@@ -971,20 +1021,16 @@ function renderStreamingServices() {
     const hasActiveSlots = matching.some(s => (s.availableSlots || 0) > 0);
     const inStock = (p.hasStock !== undefined) ? p.hasStock : (hasActiveSlots || matching.length > 0);
     const serviceName = p.name || (platformKey.charAt(0).toUpperCase() + platformKey.slice(1));
-    const rawThumb = p.iconUrl || p.icon || p.thumbnailUrl || p.coverUrl || '';
-    const hasThumb = rawThumb && !rawThumb.includes('unsplash');
+    const fallbackThumb = getPlatformIcon(platformKey);
+    const rawThumb = p.iconUrl || p.icon || p.thumbnailUrl || p.coverUrl || fallbackThumb;
+    const finalThumb = (rawThumb && !rawThumb.includes('unsplash')) ? rawThumb : fallbackThumb;
 
     return `
       <div class="stream-thumb-wrapper ${inStock ? '' : 'out-of-stock'}" 
            onclick="window.location.href='/service?platform=${platformKey}'" 
            title="${serviceName} - ${inStock ? 'Disponible' : 'Sin Stock'}">
         <div class="stream-thumb-card">
-          ${hasThumb ? `
-            <img src="${rawThumb}" alt="${serviceName}" class="stream-thumb-img" draggable="false" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div style="display:none; width:100%; height:100%; background: #161b24; align-items:center; justify-content:center;"><span style="font-size:1.4rem; opacity:0.3;">📺</span></div>
-          ` : `
-            <div style="width:100%; height:100%; background: #161b24; display:flex; align-items:center; justify-content:center;"><span style="font-size:1.4rem; opacity:0.3;">📺</span></div>
-          `}
+          <img src="${finalThumb}" alt="${serviceName}" class="stream-thumb-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='${fallbackThumb}';">
           ${!inStock ? '<span class="stream-thumb-badge-stock">SIN STOCK</span>' : ''}
         </div>
         <span class="stream-thumb-title-below">${serviceName}</span>
@@ -1041,18 +1087,14 @@ function renderDigitalGames() {
     const rate = state.exchangeRatePyg || 7500;
     const primaryPyg = g.primaryPricePyg || g.pricePyg || Math.round((g.primaryPriceUsd || g.priceUsd || 39.99) * rate);
     const secondaryPyg = g.secondaryPricePyg !== undefined ? g.secondaryPricePyg : (g.secondaryPriceUsd ? Math.round(g.secondaryPriceUsd * rate) : Math.round(primaryPyg * 0.65));
-    const rawCover = g.coverUrl || g.coverImage || '';
-    const hasCover = rawCover && !rawCover.includes('unsplash');
+    const fallbackCover = getGameCover(g.id, g.title);
+    const rawCover = g.coverUrl || g.coverImage || fallbackCover;
+    const finalCover = (rawCover && !rawCover.includes('unsplash')) ? rawCover : fallbackCover;
 
     return `
       <div class="game-card ${isAvail ? '' : 'disabled out-of-stock'}" data-slot-index="${slotIdx}" onclick="openBuyGameModal('${g.id}')" title="${g.title} - ${isAvail ? 'Disponible' : 'Sin Stock'}">
         <div class="game-cover-container">
-          ${hasCover ? `
-            <img src="${rawCover}" alt="${g.title || 'Videojuego'}" class="game-cover-img" draggable="false" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div style="display:none; width:100%; height:100%; background: #161b24; align-items:center; justify-content:center;"><span style="font-size:1.6rem; opacity:0.3;">🎮</span></div>
-          ` : `
-            <div style="width:100%; height:100%; background: #161b24; display:flex; align-items:center; justify-content:center;"><span style="font-size:1.6rem; opacity:0.3;">🎮</span></div>
-          `}
+          <img src="${finalCover}" alt="${g.title || 'Videojuego'}" class="game-cover-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='${fallbackCover}';">
           ${!isAvail ? '<span class="game-stock-badge">SIN STOCK</span>' : ''}
         </div>
         <div class="game-card-body">
@@ -1208,20 +1250,16 @@ function renderRetailGiftCards() {
   }
 
   container.innerHTML = brandsList.map((gc, idx) => {
-    const rawImg = gc.logoImage || gc.logoUrl || gc.coverImage || gc.coverUrl || '';
-    const hasImg = rawImg && !rawImg.includes('unsplash');
     const cardTitle = gc.name || gc.title || 'Gift Card';
     const cardId = gc.id || gc.brandId || `gc_${Math.random()}`;
+    const fallbackGiftcard = getGiftcardAsset(cardId, cardTitle);
+    const rawImg = gc.logoImage || gc.logoUrl || gc.coverImage || gc.coverUrl || fallbackGiftcard;
+    const finalImg = (rawImg && !rawImg.includes('unsplash')) ? rawImg : fallbackGiftcard;
     const tiltVariance = (0.95 + ((idx % 4) * 0.08)).toFixed(2);
 
     return `
       <div class="giftcard-clean-png-card" data-tilt-factor="${tiltVariance}" onclick="openGiftCardVariationsModal('${cardId}')" title="${cardTitle}">
-        ${hasImg ? `
-          <img src="${rawImg}" alt="${cardTitle}" class="giftcard-clean-png-img" draggable="false" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div style="display:none; width:100%; height:100%; background: #161b24; border-radius: 12px; align-items: center; justify-content: center;"><span style="font-size: 1.2rem; opacity: 0.3;">💳</span></div>
-        ` : `
-          <div style="width:100%; height:100%; background: #161b24; border-radius: 12px; display: flex; align-items: center; justify-content: center;"><span style="font-size: 1.2rem; opacity: 0.3;">💳</span></div>
-        `}
+        <img src="${finalImg}" alt="${cardTitle}" class="giftcard-clean-png-img" draggable="false" loading="lazy" onerror="this.onerror=null; this.src='${fallbackGiftcard}';">
       </div>
     `;
   }).join('');

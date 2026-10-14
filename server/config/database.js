@@ -552,11 +552,10 @@ let db = {
       pricePyg: 295000,
       priceUsd: 39.33,
       badge: 'MÁS VENDIDO',
-      coverUrl: '',
-      coverImage: '',
+      coverUrl: '/assets/games/cover_fc25.jpg',
+      coverImage: '/assets/games/cover_fc25.jpg',
       screenshots: [
-        '',
-        ''
+        '/assets/banners/banner_fc25_h.jpg'
       ],
       description: 'EA SPORTS FC 25 te ofrece las mejores competiciones, clubes y futbolistas del mundo. Cuenta digital primaria y secundaria con entrega rápida.',
       isAvailable: true,
@@ -575,11 +574,10 @@ let db = {
       pricePyg: 260000,
       priceUsd: 34.67,
       badge: 'EXCLUSIVO PS5',
-      coverUrl: '',
-      coverImage: '',
+      coverUrl: '/assets/games/cover_spiderman2.jpg',
+      coverImage: '/assets/games/cover_spiderman2.jpg',
       screenshots: [
-        '',
-        ''
+        '/assets/games/cover_spiderman2.jpg'
       ],
       description: 'Los Spider-Men Peter Parker y Miles Morales regresan para una aventura aclamada en PS5.',
       isAvailable: true,
@@ -598,11 +596,10 @@ let db = {
       pricePyg: 340000,
       priceUsd: 45.33,
       badge: 'NUEVO LANZAMIENTO',
-      coverUrl: '',
-      coverImage: '',
+      coverUrl: '/assets/games/cover_cod_bo6.jpg',
+      coverImage: '/assets/games/cover_cod_bo6.jpg',
       screenshots: [
-        '',
-        ''
+        '/assets/games/cover_cod_bo6.jpg'
       ],
       description: 'La verdad miente. Una apasionante campaña de espionaje, la mejor experiencia multijugador y el regreso de Zombis por rondas.',
       isAvailable: true,
@@ -621,11 +618,10 @@ let db = {
       pricePyg: 390000,
       priceUsd: 52.00,
       badge: 'PRE-VENTA EXCLUSIVA',
-      coverUrl: '',
-      coverImage: '',
+      coverUrl: '/assets/games/cover_gta6.jpg',
+      coverImage: '/assets/games/cover_gta6.jpg',
       screenshots: [
-        '',
-        ''
+        '/assets/banners/banner_gta6_h.jpg'
       ],
       description: 'Reserva ya tu clave o cuenta oficial para la mayor experiencia de la historia del videojuego en el estado de Leonida y Vice City.',
       isAvailable: true,
@@ -644,11 +640,10 @@ let db = {
       pricePyg: 275000,
       priceUsd: 36.67,
       badge: 'ÉXITO MUNDIAL',
-      coverUrl: '',
-      coverImage: '',
+      coverUrl: '/assets/games/cover_wukong.jpg',
+      coverImage: '/assets/games/cover_wukong.jpg',
       screenshots: [
-        '',
-        ''
+        '/assets/banners/banner_wukong_h.jpg'
       ],
       description: 'Encarna al Predestinado en un viaje colosal por la mitología china, dominando las artes del bastón mágico y transformaciones legendarias.',
       isAvailable: true,
@@ -667,11 +662,10 @@ let db = {
       pricePyg: 235000,
       priceUsd: 31.33,
       badge: 'CALIDAD OFICIAL',
-      coverUrl: '',
-      coverImage: '',
+      coverUrl: '/assets/games/cover_gow_rag.jpg',
+      coverImage: '/assets/games/cover_gow_rag.jpg',
       screenshots: [
-        '',
-        ''
+        '/assets/games/cover_gow_rag.jpg'
       ],
       description: 'Únete a Kratos y Atreus en un viaje mítico a través de los Nueve Reinos antes del temido Ragnarök.',
       isAvailable: true,
@@ -690,10 +684,10 @@ let db = {
       pricePyg: 280000,
       priceUsd: 37.33,
       badge: 'OBRA MAESTRA',
-      coverUrl: '',
-      coverImage: '',
+      coverUrl: '/assets/games/cover_elden_ring.jpg',
+      coverImage: '/assets/games/cover_elden_ring.jpg',
       screenshots: [
-        ''
+        '/assets/games/cover_elden_ring.jpg'
       ],
       description: 'Explora la Tierra Sombría en la aclamada expansión del GOTY Elden Ring con nuevos jefes y armas.',
       isAvailable: true,
@@ -712,10 +706,10 @@ let db = {
       pricePyg: 210000,
       priceUsd: 28.00,
       badge: 'SIN STOCK',
-      coverUrl: '',
-      coverImage: '',
+      coverUrl: '/assets/games/cover_cyberpunk.jpg',
+      coverImage: '/assets/games/cover_cyberpunk.jpg',
       screenshots: [
-        ''
+        '/assets/games/cover_cyberpunk.jpg'
       ],
       description: 'Adéntrate en Dogtown en un thriller de espionaje de alta tecnología para salvar a la presidenta de los NUSA.',
       isAvailable: false,
@@ -868,7 +862,7 @@ let db = {
       id: 'brand_playstation',
       name: 'PlayStation Network',
       category: 'Gaming',
-      logoUrl: '',
+      logoUrl: '/assets/giftcards/playstation.svg',
       description: 'Tarjetas oficiales de saldo y membresías PlayStation Plus.',
       variations: [
         { id: 'var_psn_10', name: 'PSN $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
@@ -883,7 +877,7 @@ let db = {
       id: 'brand_steam',
       name: 'Steam Wallet',
       category: 'PC Gaming',
-      logoUrl: '',
+      logoUrl: '/assets/giftcards/steam.svg',
       description: 'Saldo para la tienda de Steam en PC y Steam Deck.',
       variations: [
         { id: 'var_steam_5', name: 'Steam $5 USD', denomination: '$5 USD', pricePyg: 42000, priceUsd: 5.00 },
@@ -896,7 +890,7 @@ let db = {
       id: 'brand_xbox',
       name: 'Xbox & Game Pass',
       category: 'Gaming',
-      logoUrl: '',
+      logoUrl: '/assets/giftcards/xbox.svg',
       description: 'Tarjetas de regalo Xbox y suscripciones Game Pass Ultimate.',
       variations: [
         { id: 'var_xbox_10', name: 'Xbox $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
@@ -909,7 +903,7 @@ let db = {
       id: 'brand_nintendo',
       name: 'Nintendo eShop',
       category: 'Gaming',
-      logoUrl: '',
+      logoUrl: '/assets/giftcards/nintendo.svg',
       description: 'Saldo para comprar juegos en Nintendo Switch.',
       variations: [
         { id: 'var_nin_10', name: 'Nintendo $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
@@ -922,7 +916,7 @@ let db = {
       id: 'brand_spotify',
       name: 'Spotify Premium',
       category: 'Música',
-      logoUrl: '',
+      logoUrl: '/assets/giftcards/spotify.svg',
       description: 'Música sin anuncios y descargas offline en Spotify.',
       variations: [
         { id: 'var_spot_1m', name: 'Spotify 1 Mes Individual', denomination: '1 Mes', pricePyg: 45000, priceUsd: 5.99 },
@@ -934,7 +928,7 @@ let db = {
       id: 'brand_netflix',
       name: 'Netflix Gift Card',
       category: 'Streaming',
-      logoUrl: '',
+      logoUrl: '/assets/giftcards/netflix.svg',
       description: 'Saldo oficial de regalo para canjear en cuentas Netflix.',
       variations: [
         { id: 'var_net_15', name: 'Netflix $15 USD', denomination: '$15 USD', pricePyg: 125000, priceUsd: 15.00 },
@@ -946,7 +940,7 @@ let db = {
       id: 'brand_googleplay',
       name: 'Google Play Store',
       category: 'Móvil',
-      logoUrl: '',
+      logoUrl: '/assets/giftcards/googleplay.svg',
       description: 'Saldo para apps, juegos y diamantes en Android.',
       variations: [
         { id: 'var_gp_10', name: 'Google Play $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
@@ -958,7 +952,7 @@ let db = {
       id: 'brand_apple',
       name: 'Apple Gift Card & iTunes',
       category: 'Apple',
-      logoUrl: '',
+      logoUrl: '/assets/giftcards/apple.svg',
       description: 'Saldo para compras en App Store, Apple Arcade y suscripciones.',
       variations: [
         { id: 'var_apple_10', name: 'Apple $10 USD', denomination: '$10 USD', pricePyg: 85000, priceUsd: 10.00 },
@@ -986,10 +980,10 @@ let db = {
       tagline: 'Películas, series y documentales ilimitados en Ultra HD',
       badgeText: 'ULTRA HD 4K • DOLBY ATMOS',
       description: 'Disfruta de Netflix con tu propio perfil privado y PIN personal. Comparte el costo de la cuenta de forma 100% segura con Bóveda Escrow.',
-      iconUrl: '',
-      thumbnailUrl: '',
-      bannerHorizontal: '',
-      bannerVertical: '',
+      iconUrl: '/assets/services/netflix.svg',
+      thumbnailUrl: '/assets/services/netflix.svg',
+      bannerHorizontal: '/assets/banners/banner_stream_h.jpg',
+      bannerVertical: '/assets/banners/banner_stream_v.jpg',
       pricePerSlotPyg: 25000,
       pricePerSlotUsd: 3.33,
       maxSlots: 5,
@@ -1000,8 +994,8 @@ let db = {
       isActive: true,
       metrics: { activeAccounts: 48, activeUsersMonth: 184, avgSavingsPercent: 75, rating: '4.95 / 5.0' },
       releases: [
-        { id: 'rel_stranger_things_5', title: 'Stranger Things 5: El Final', type: 'Estreno 4K', releaseDate: 'Estreno 2025/2026', genre: 'Ciencia Ficción', posterUrl: '', synopsis: 'El desenlace decisivo de Hawkins.' },
-        { id: 'rel_squid_game_2', title: 'Squid Game 2', type: 'Tendencia #1', releaseDate: 'Disponible', genre: 'Thriller', posterUrl: '', synopsis: 'Nuevos desafíos mortales.' }
+        { id: 'rel_stranger_things_5', title: 'Stranger Things 5: El Final', type: 'Estreno 4K', releaseDate: 'Estreno 2025/2026', genre: 'Ciencia Ficción', posterUrl: '/assets/banners/banner_stream_v.jpg', synopsis: 'El desenlace decisivo de Hawkins.' },
+        { id: 'rel_squid_game_2', title: 'Squid Game 2', type: 'Tendencia #1', releaseDate: 'Disponible', genre: 'Thriller', posterUrl: '/assets/banners/banner_stream_v.jpg', synopsis: 'Nuevos desafíos mortales.' }
       ]
     },
     {
@@ -1012,10 +1006,10 @@ let db = {
       tagline: 'Música y podcasts sin anuncios, descargas ilimitadas y audio Hi-Fi',
       badgeText: 'HI-FI AUDIO • MÚSICA SIN LÍMITES',
       description: 'Acceso a millones de canciones con tu propia cuenta individual conectada a un plan familiar protegido con Bóveda Escrow.',
-      iconUrl: '',
-      thumbnailUrl: '',
-      bannerHorizontal: '',
-      bannerVertical: '',
+      iconUrl: '/assets/services/spotify.svg',
+      thumbnailUrl: '/assets/services/spotify.svg',
+      bannerHorizontal: '/assets/banners/banner_stream_h.jpg',
+      bannerVertical: '/assets/banners/banner_stream_v.jpg',
       pricePerSlotPyg: 18000,
       pricePerSlotUsd: 2.40,
       maxSlots: 5,
@@ -1026,7 +1020,7 @@ let db = {
       isActive: true,
       metrics: { activeAccounts: 35, activeUsersMonth: 142, avgSavingsPercent: 70, rating: '4.95 / 5.0' },
       releases: [
-        { id: 'rel_sp_latam', title: 'Top 50 Global & Latinos', type: 'Billboard #1', releaseDate: 'Semanal', genre: 'Urbano / Pop', posterUrl: '', synopsis: 'Los hits más escuchados sin interrupciones.' }
+        { id: 'rel_sp_latam', title: 'Top 50 Global & Latinos', type: 'Billboard #1', releaseDate: 'Semanal', genre: 'Urbano / Pop', posterUrl: '/assets/banners/banner_stream_v.jpg', synopsis: 'Los hits más escuchados sin interrupciones.' }
       ]
     },
     {
@@ -1037,10 +1031,10 @@ let db = {
       tagline: 'Marvel, Star Wars, Pixar, Disney y deportes en vivo de ESPN',
       badgeText: 'IMAX ENHANCED • ESPN EN VIVO',
       description: 'Todo el entretenimiento de Disney, Star Wars y Marvel con partidos en vivo de ESPN y perfiles privados.',
-      iconUrl: '',
-      thumbnailUrl: '',
-      bannerHorizontal: '',
-      bannerVertical: '',
+      iconUrl: '/assets/services/disney.svg',
+      thumbnailUrl: '/assets/services/disney.svg',
+      bannerHorizontal: '/assets/banners/banner_stream_h.jpg',
+      bannerVertical: '/assets/banners/banner_stream_v.jpg',
       pricePerSlotPyg: 25000,
       pricePerSlotUsd: 3.33,
       maxSlots: 4,
@@ -1051,7 +1045,7 @@ let db = {
       isActive: true,
       metrics: { activeAccounts: 29, activeUsersMonth: 110, avgSavingsPercent: 78, rating: '4.88 / 5.0' },
       releases: [
-        { id: 'rel_dis_daredevil', title: 'Daredevil: Born Again', type: 'Marvel Studios', releaseDate: 'Estreno 2025', genre: 'Acción', posterUrl: '', synopsis: 'Matt Murdock regresa a Hell’s Kitchen.' }
+        { id: 'rel_dis_daredevil', title: 'Daredevil: Born Again', type: 'Marvel Studios', releaseDate: 'Estreno 2025', genre: 'Acción', posterUrl: '/assets/banners/banner_stream_v.jpg', synopsis: 'Matt Murdock regresa a Hell’s Kitchen.' }
       ]
     },
     {
@@ -1062,10 +1056,10 @@ let db = {
       tagline: 'El hogar de HBO, Warner Bros, DC Comics y Discovery en 4K',
       badgeText: 'PLATINO 4K • DOLBY VISION',
       description: 'Accede a producciones ganadoras de Emmys, estrenos de cine y clásicos universales con PIN exclusivo.',
-      iconUrl: '',
-      thumbnailUrl: '',
-      bannerHorizontal: '',
-      bannerVertical: '',
+      iconUrl: '/assets/services/max.svg',
+      thumbnailUrl: '/assets/services/max.svg',
+      bannerHorizontal: '/assets/banners/banner_stream_h.jpg',
+      bannerVertical: '/assets/banners/banner_stream_v.jpg',
       pricePerSlotPyg: 22000,
       pricePerSlotUsd: 2.93,
       maxSlots: 3,
@@ -1076,7 +1070,7 @@ let db = {
       isActive: true,
       metrics: { activeAccounts: 22, activeUsersMonth: 95, avgSavingsPercent: 72, rating: '4.91 / 5.0' },
       releases: [
-        { id: 'rel_max_tlou2', title: 'The Last of Us T2', type: 'HBO Original', releaseDate: 'Estreno 2025', genre: 'Drama', posterUrl: '', synopsis: 'Ellie busca justicia en Seattle.' }
+        { id: 'rel_max_tlou2', title: 'The Last of Us T2', type: 'HBO Original', releaseDate: 'Estreno 2025', genre: 'Drama', posterUrl: '/assets/banners/banner_stream_v.jpg', synopsis: 'Ellie busca justicia en Seattle.' }
       ]
     },
     {
@@ -1087,10 +1081,10 @@ let db = {
       tagline: 'Videos sin publicidad, reproducción en segundo plano y YouTube Music',
       badgeText: 'SIN ANUNCIOS • FONDO & DESCARGAS',
       description: 'Navega en YouTube en todos tus dispositivos sin anuncios con tu propia cuenta Google.',
-      iconUrl: '',
-      thumbnailUrl: '',
-      bannerHorizontal: '',
-      bannerVertical: '',
+      iconUrl: '/assets/services/youtube.svg',
+      thumbnailUrl: '/assets/services/youtube.svg',
+      bannerHorizontal: '/assets/banners/banner_stream_h.jpg',
+      bannerVertical: '/assets/banners/banner_stream_v.jpg',
       pricePerSlotPyg: 20000,
       pricePerSlotUsd: 2.67,
       maxSlots: 5,
@@ -1101,7 +1095,7 @@ let db = {
       isActive: true,
       metrics: { activeAccounts: 31, activeUsersMonth: 125, avgSavingsPercent: 74, rating: '4.93 / 5.0' },
       releases: [
-        { id: 'rel_yt_features', title: 'YouTube Music Premium', type: 'Google Oficial', releaseDate: 'Disponible 24/7', genre: 'Música', posterUrl: '', synopsis: 'Música sin anuncios y descargas inteligentes.' }
+        { id: 'rel_yt_features', title: 'YouTube Music Premium', type: 'Google Oficial', releaseDate: 'Disponible 24/7', genre: 'Música', posterUrl: '/assets/banners/banner_stream_v.jpg', synopsis: 'Música sin anuncios y descargas inteligentes.' }
       ]
     },
     {
@@ -1112,10 +1106,10 @@ let db = {
       tagline: 'El mayor catálogo de anime en simulcast directo desde Japón sin publicidad',
       badgeText: 'SIMULCAST • FULL HD SIN CENSURA',
       description: 'Episodios de anime 1 hora después de su emisión en Japón con doblajes y subtítulos oficiales.',
-      iconUrl: '',
-      thumbnailUrl: '',
-      bannerHorizontal: '',
-      bannerVertical: '',
+      iconUrl: '/assets/services/crunchyroll.svg',
+      thumbnailUrl: '/assets/services/crunchyroll.svg',
+      bannerHorizontal: '/assets/banners/banner_stream_h.jpg',
+      bannerVertical: '/assets/banners/banner_stream_v.jpg',
       pricePerSlotPyg: 18000,
       pricePerSlotUsd: 2.40,
       maxSlots: 4,
@@ -1126,7 +1120,7 @@ let db = {
       isActive: true,
       metrics: { activeAccounts: 20, activeUsersMonth: 86, avgSavingsPercent: 70, rating: '4.89 / 5.0' },
       releases: [
-        { id: 'rel_cr_demon_slayer', title: 'Demon Slayer: Castillo Infinito', type: 'Película', releaseDate: 'Estreno 2025', genre: 'Anime', posterUrl: '', synopsis: 'La batalla final contra Muzan Kibutsuji.' }
+        { id: 'rel_cr_demon_slayer', title: 'Demon Slayer: Castillo Infinito', type: 'Película', releaseDate: 'Estreno 2025', genre: 'Anime', posterUrl: '/assets/banners/banner_stream_v.jpg', synopsis: 'La batalla final contra Muzan Kibutsuji.' }
       ]
     },
     {
@@ -1137,10 +1131,10 @@ let db = {
       tagline: 'Películas de Paramount Pictures, Halo, Yellowstone y producciones exclusivas',
       badgeText: 'PREMIUM HD • SERIES ORIGINALES',
       description: 'Acceso a estrenos de cine, series exclusivas de Paramount y deportes en vivo.',
-      iconUrl: '',
-      thumbnailUrl: '',
-      bannerHorizontal: '',
-      bannerVertical: '',
+      iconUrl: '/assets/services/paramount.svg',
+      thumbnailUrl: '/assets/services/paramount.svg',
+      bannerHorizontal: '/assets/banners/banner_stream_h.jpg',
+      bannerVertical: '/assets/banners/banner_stream_v.jpg',
       pricePerSlotPyg: 18000,
       pricePerSlotUsd: 2.40,
       maxSlots: 3,
@@ -1151,7 +1145,7 @@ let db = {
       isActive: true,
       metrics: { activeAccounts: 14, activeUsersMonth: 55, avgSavingsPercent: 73, rating: '4.85 / 5.0' },
       releases: [
-        { id: 'rel_par_yellowstone', title: 'Yellowstone: Temporada Final', type: 'Paramount Original', releaseDate: 'Episodios Finales', genre: 'Drama', posterUrl: '', synopsis: 'El desenlace de la familia Dutton.' }
+        { id: 'rel_par_yellowstone', title: 'Yellowstone: Temporada Final', type: 'Paramount Original', releaseDate: 'Episodios Finales', genre: 'Drama', posterUrl: '/assets/banners/banner_stream_v.jpg', synopsis: 'El desenlace de la familia Dutton.' }
       ]
     },
     {
@@ -1162,10 +1156,10 @@ let db = {
       tagline: 'Acceso prioritario a GPT-4o, Canvas, generación DALL-E 3 y modo de voz avanzado',
       badgeText: 'GPT-4o PRO • CANVAS & VOICE',
       description: 'Potencia tu productividad con la suscripción compartida a ChatGPT Plus.',
-      iconUrl: '',
-      thumbnailUrl: '',
-      bannerHorizontal: '',
-      bannerVertical: '',
+      iconUrl: '/assets/services/chatgpt.svg',
+      thumbnailUrl: '/assets/services/chatgpt.svg',
+      bannerHorizontal: '/assets/banners/banner_stream_h.jpg',
+      bannerVertical: '/assets/banners/banner_stream_v.jpg',
       pricePerSlotPyg: 35000,
       pricePerSlotUsd: 4.67,
       maxSlots: 2,
@@ -1176,7 +1170,7 @@ let db = {
       isActive: true,
       metrics: { activeAccounts: 18, activeUsersMonth: 72, avgSavingsPercent: 80, rating: '4.98 / 5.0' },
       releases: [
-        { id: 'rel_gpt_voice', title: 'Advanced Voice Mode & Canvas', type: 'OpenAI GPT-4o', releaseDate: 'Actualizado', genre: 'IA Generativa', posterUrl: '', synopsis: 'Conversaciones de voz avanzadas y edición visual.' }
+        { id: 'rel_gpt_voice', title: 'Advanced Voice Mode & Canvas', type: 'OpenAI GPT-4o', releaseDate: 'Actualizado', genre: 'IA Generativa', posterUrl: '/assets/banners/banner_stream_v.jpg', synopsis: 'Conversaciones de voz avanzadas y edición visual.' }
       ]
     }
   ]

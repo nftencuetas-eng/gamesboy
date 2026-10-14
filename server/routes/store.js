@@ -5,6 +5,33 @@ import { convertFromUsd } from '../services/currencyService.js';
 
 const router = Router();
 
+function getGameCover(id, title) {
+  const cleanId = (id || '').toLowerCase();
+  const cleanTitle = (title || '').toLowerCase();
+  if (cleanId.includes('fc25') || cleanTitle.includes('fc 25')) return '/assets/games/cover_fc25.jpg';
+  if (cleanId.includes('spiderman') || cleanTitle.includes('spider-man')) return '/assets/games/cover_spiderman2.jpg';
+  if (cleanId.includes('cod') || cleanTitle.includes('black ops')) return '/assets/games/cover_cod_bo6.jpg';
+  if (cleanId.includes('gta') || cleanTitle.includes('grand theft auto')) return '/assets/games/cover_gta6.jpg';
+  if (cleanId.includes('wukong') || cleanTitle.includes('wukong')) return '/assets/games/cover_wukong.jpg';
+  if (cleanId.includes('gow') || cleanTitle.includes('god of war')) return '/assets/games/cover_gow_rag.jpg';
+  if (cleanId.includes('elden') || cleanTitle.includes('elden ring')) return '/assets/games/cover_elden_ring.jpg';
+  if (cleanId.includes('cyberpunk') || cleanTitle.includes('cyberpunk')) return '/assets/games/cover_cyberpunk.jpg';
+  return '/assets/branding/hero-showcase.png';
+}
+
+function getGiftcardLogo(id, name) {
+  const clean = ((id || '') + ' ' + (name || '')).toLowerCase();
+  if (clean.includes('psn') || clean.includes('playstation')) return '/assets/giftcards/playstation.svg';
+  if (clean.includes('steam')) return '/assets/giftcards/steam.svg';
+  if (clean.includes('xbox')) return '/assets/giftcards/xbox.svg';
+  if (clean.includes('nin') || clean.includes('nintendo') || clean.includes('switch')) return '/assets/giftcards/nintendo.svg';
+  if (clean.includes('spot') || clean.includes('spotify')) return '/assets/giftcards/spotify.svg';
+  if (clean.includes('net') || clean.includes('netflix')) return '/assets/giftcards/netflix.svg';
+  if (clean.includes('google') || clean.includes('play')) return '/assets/giftcards/googleplay.svg';
+  if (clean.includes('apple') || clean.includes('itunes')) return '/assets/giftcards/apple.svg';
+  return '/assets/branding/icon.png';
+}
+
 // Get digital store products (digital games, gift cards, licenses)
 router.get('/products', (req, res) => {
   const db = getDb();
@@ -17,6 +44,7 @@ router.get('/products', (req, res) => {
       const secondaryPyg = p.secondaryPricePyg !== undefined ? p.secondaryPricePyg : (p.secondaryPriceUsd ? Math.round(p.secondaryPriceUsd * rate) : Math.round(primaryPyg * 0.65));
       const secondaryUsd = p.secondaryPriceUsd || parseFloat((secondaryPyg / rate).toFixed(2));
       const isAvail = p.isAvailable !== false;
+      const resolvedCover = p.coverUrl || p.coverImage || p.imageUrl || getGameCover(p.id, p.title);
 
       return {
         id: p.id,
@@ -32,9 +60,9 @@ router.get('/products', (req, res) => {
         secondaryPricePyg: secondaryPyg,
         badge: p.badge || (isAvail ? 'DISPONIBLE' : 'SIN STOCK'),
         icon: p.icon,
-        coverUrl: p.coverUrl || p.coverImage || p.imageUrl || '',
-        coverImage: p.coverImage || p.coverUrl || p.imageUrl || '',
-        screenshots: Array.isArray(p.screenshots) ? p.screenshots : [],
+        coverUrl: resolvedCover,
+        coverImage: resolvedCover,
+        screenshots: Array.isArray(p.screenshots) && p.screenshots.length > 0 ? p.screenshots : [resolvedCover],
         brand: p.brand,
         brandTheme: p.brandTheme,
         description: p.description || '',
@@ -49,7 +77,12 @@ router.get('/products', (req, res) => {
 // Get gift card brands (public storefront)
 router.get('/giftcards/brands', (req, res) => {
   const db = getDb();
-  const brands = db.giftcard_brands || [];
+  const rawBrands = db.giftcard_brands || [];
+  const brands = rawBrands.map(b => ({
+    ...b,
+    logoUrl: b.logoUrl || getGiftcardLogo(b.id, b.name),
+    coverUrl: b.coverUrl || b.logoUrl || getGiftcardLogo(b.id, b.name)
+  }));
   res.json({ success: true, count: brands.length, brands });
 });
 
