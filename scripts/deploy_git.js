@@ -10,17 +10,19 @@ const __dirname = path.dirname(__filename);
 const dir = path.resolve(__dirname, '..');
 
 function resolveToken() {
-  if (process.env.GITHUB_TOKEN) return process.env.GITHUB_TOKEN.trim();
-  if (process.argv[2] && !process.argv[2].startsWith('-')) return process.argv[2].trim();
+  if (process.env.GITHUB_TOKEN && process.env.GITHUB_TOKEN.trim()) return process.env.GITHUB_TOKEN.trim();
+  if (process.argv[2] && process.argv[2].trim() && !process.argv[2].startsWith('-')) return process.argv[2].trim();
   
   if (process.platform === 'win32') {
     try {
       const psScript = path.resolve(dir, 'scratch', 'get_cred.ps1');
       if (fs.existsSync(psScript)) {
-        const out = execSync(`powershell -ExecutionPolicy Bypass -File "${psScript}"`, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'ignore'] });
+        const out = execSync(`powershell -ExecutionPolicy Bypass -File "${psScript}"`, { encoding: 'utf8' });
         if (out && out.trim()) return out.trim();
       }
-    } catch (_) {}
+    } catch (e) {
+      console.warn('⚠️ Token resolution warning:', e.message);
+    }
   }
   return null;
 }
