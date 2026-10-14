@@ -29,7 +29,8 @@ function getGiftcardLogo(id, name) {
   if (clean.includes('net') || clean.includes('netflix')) return '/assets/giftcards/netflix.svg';
   if (clean.includes('google') || clean.includes('play')) return '/assets/giftcards/googleplay.svg';
   if (clean.includes('apple') || clean.includes('itunes')) return '/assets/giftcards/apple.svg';
-  return '/assets/branding/icon.png';
+  if (clean.includes('riot') || clean.includes('valorant') || clean.includes('league')) return '/assets/giftcards/steam.svg';
+  return '/assets/giftcards/playstation.svg';
 }
 
 // Get digital store products (digital games, gift cards, licenses)
@@ -44,7 +45,9 @@ router.get('/products', (req, res) => {
       const secondaryPyg = p.secondaryPricePyg !== undefined ? p.secondaryPricePyg : (p.secondaryPriceUsd ? Math.round(p.secondaryPriceUsd * rate) : Math.round(primaryPyg * 0.65));
       const secondaryUsd = p.secondaryPriceUsd || parseFloat((secondaryPyg / rate).toFixed(2));
       const isAvail = p.isAvailable !== false;
-      const resolvedCover = p.coverUrl || p.coverImage || p.imageUrl || p.cover || p.image || getGameCover(p.id, p.title);
+      const isGiftCard = p.category === 'gift_card';
+      const fallbackAsset = isGiftCard ? getGiftcardLogo(p.id, p.title) : getGameCover(p.id, p.title);
+      const resolvedCover = p.coverUrl || p.coverImage || p.imageUrl || p.cover || p.image || fallbackAsset;
 
       return {
         id: p.id,

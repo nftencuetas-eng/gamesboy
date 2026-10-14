@@ -1,0 +1,425 @@
+/**
+ * ==============================================================================
+ * GAMESBOY STUDIO — DESIGN SYSTEM: DARK OBSIDIAN (admin-studio.css)
+ * Version: 1.0 (Phase 1 Foundation)
+ * Scope: Exclusive to administrative interface (.admin-layout & descendants)
+ * Aesthetic: Matte Charcoal, Minimalist SaaS, Zero Neon
+ * ==============================================================================
+ */
+
+:root {
+  /* Dark Obsidian Color Tokens */
+  --obsidian-bg: #07090e;
+  --obsidian-surface: #0c1017;
+  --obsidian-surface-elevated: #141923;
+  --obsidian-surface-hover: #1b212f;
+  --obsidian-surface-subtle: rgba(255, 255, 255, 0.02);
+
+  /* Typography Colors */
+  --obsidian-text-primary: #f1f5f9;
+  --obsidian-text-secondary: #94a3b8;
+  --obsidian-text-muted: #64748b;
+  --obsidian-text-dim: #475569;
+
+  /* Subtle Borders & Dividers */
+  --obsidian-border-subtle: rgba(255, 255, 255, 0.06);
+  --obsidian-border-medium: rgba(255, 255, 255, 0.10);
+  --obsidian-border-strong: rgba(255, 255, 255, 0.16);
+
+  /* Functional Status Tokens (High Contrast, Non-Neon) */
+  --obsidian-action: #0070f3;
+  --obsidian-action-hover: #005bb5;
+  --obsidian-positive: #10b981;
+  --obsidian-positive-bg: rgba(16, 185, 129, 0.10);
+  --obsidian-pending: #d97706;
+  --obsidian-pending-bg: rgba(217, 119, 6, 0.12);
+  --obsidian-error: #e11d48;
+  --obsidian-error-bg: rgba(225, 29, 72, 0.12);
+  --obsidian-info: #0284c7;
+  --obsidian-info-bg: rgba(2, 132, 199, 0.10);
+
+  /* Typography Families */
+  --font-obsidian-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-obsidian-heading: 'Outfit', 'Inter', -apple-system, sans-serif;
+  --font-obsidian-mono: 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace;
+
+  /* Shadows (Discreet, Zero Glow Bloom) */
+  --obsidian-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --obsidian-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --obsidian-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.60);
+
+  /* Radii */
+  --obsidian-radius-sm: 6px;
+  --obsidian-radius-md: 10px;
+  --obsidian-radius-lg: 14px;
+}
+
+/* ==============================================================================
+ * BASE ADMINISTRATIVE SCOPE
+ * ============================================================================== */
+
+body.admin-body,
+.admin-layout {
+  background-color: var(--obsidian-bg) !important;
+  color: var(--obsidian-text-primary);
+  font-family: var(--font-obsidian-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==============================================================================
+ * SIDEBAR STYLING (DARK OBSIDIAN 5-CLUSTER ARCHITECTURE)
+ * ============================================================================== */
+
+.admin-sidebar {
+  background-color: var(--obsidian-surface) !important;
+  border-right: 1px solid var(--obsidian-border-subtle) !important;
+  box-shadow: none !important;
+}
+
+.admin-sidebar-header {
+  border-bottom: 1px solid var(--obsidian-border-subtle) !important;
+  background: transparent !important;
+}
+
+.sidebar-category-header {
+  font-family: var(--font-obsidian-heading) !important;
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: var(--obsidian-text-muted) !important;
+  padding: 14px 12px 6px 12px !important;
+  margin-top: 6px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.03) !important;
+}
+
+.sidebar-category-header:first-of-type {
+  border-top: none !important;
+  margin-top: 0 !important;
+}
+
+.sidebar-category-header svg {
+  color: var(--obsidian-text-dim) !important;
+}
+
+/* Sidebar Nav Items */
+.admin-menu-btn {
+  font-family: var(--font-obsidian-sans) !important;
+  font-size: 0.82rem !important;
+  font-weight: 500 !important;
+  color: var(--obsidian-text-secondary) !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--obsidian-radius-sm) !important;
+  padding: 8px 12px !important;
+  transition: all 0.15s ease-in-out !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+}
+
+.admin-menu-btn:hover {
+  background: var(--obsidian-surface-elevated) !important;
+  color: var(--obsidian-text-primary) !important;
+  border-color: var(--obsidian-border-subtle) !important;
+}
+
+.admin-menu-btn.active {
+  background: var(--obsidian-surface-elevated) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  font-weight: 600 !important;
+  box-shadow: var(--obsidian-shadow-sm) !important;
+}
+
+.admin-menu-btn.active svg {
+  color: var(--obsidian-action) !important;
+}
+
+/* Number indicators in sidebar buttons */
+.admin-menu-btn span:first-of-type {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Badge counts inside sidebar */
+.admin-menu-btn .badge-count {
+  font-family: var(--font-obsidian-mono) !important;
+  font-size: 0.70rem !important;
+  font-weight: 700 !important;
+  padding: 1px 7px !important;
+  border-radius: 12px !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.admin-menu-btn .badge-count.red {
+  background: var(--obsidian-error-bg) !important;
+  color: var(--obsidian-error) !important;
+}
+
+.admin-menu-btn .badge-count.amber {
+  background: var(--obsidian-pending-bg) !important;
+  color: var(--obsidian-pending) !important;
+}
+
+.admin-menu-btn .badge-count.emerald {
+  background: var(--obsidian-positive-bg) !important;
+  color: var(--obsidian-positive) !important;
+}
+
+.admin-menu-btn .badge-count.cyan {
+  background: var(--obsidian-info-bg) !important;
+  color: var(--obsidian-info) !important;
+}
+
+/* ==============================================================================
+ * TOP COMMAND BAR
+ * ============================================================================== */
+
+.admin-top-command-bar {
+  background-color: var(--obsidian-surface) !important;
+  border-bottom: 1px solid var(--obsidian-border-subtle) !important;
+  padding: 16px 28px !important;
+}
+
+.admin-top-heading-box h1 {
+  font-family: var(--font-obsidian-heading) !important;
+  color: var(--obsidian-text-primary) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+}
+
+.admin-breadcrumbs {
+  font-size: 0.76rem !important;
+  color: var(--obsidian-text-muted) !important;
+}
+
+.admin-breadcrumbs .active-bread {
+  color: var(--obsidian-text-secondary) !important;
+  font-weight: 600 !important;
+}
+
+.admin-rate-pill {
+  background: var(--obsidian-surface-elevated) !important;
+  border: 1px solid var(--obsidian-border-subtle) !important;
+  color: var(--obsidian-text-secondary) !important;
+  font-family: var(--font-obsidian-mono) !important;
+  font-size: 0.76rem !important;
+  padding: 6px 12px !important;
+  border-radius: var(--obsidian-radius-sm) !important;
+}
+
+.admin-rate-pill strong {
+  color: var(--obsidian-text-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* ==============================================================================
+ * CARDS & SURFACES (MATTE CHARCOAL, MINIMALIST ELEVATION)
+ * ============================================================================== */
+
+.admin-card {
+  background-color: var(--obsidian-surface) !important;
+  border: 1px solid var(--obsidian-border-subtle) !important;
+  border-radius: var(--obsidian-radius-md) !important;
+  box-shadow: var(--obsidian-shadow-sm) !important;
+  padding: 24px !important;
+}
+
+.kpi-card {
+  background: var(--obsidian-surface) !important;
+  border: 1px solid var(--obsidian-border-subtle) !important;
+  border-radius: var(--obsidian-radius-md) !important;
+  padding: 18px 20px !important;
+  box-shadow: var(--obsidian-shadow-sm) !important;
+  transition: border-color 0.15s ease, background-color 0.15s ease !important;
+}
+
+.kpi-card:hover {
+  border-color: var(--obsidian-border-medium) !important;
+  background: var(--obsidian-surface-elevated) !important;
+}
+
+.kpi-title {
+  font-family: var(--font-obsidian-sans) !important;
+  font-size: 0.76rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: var(--obsidian-text-muted) !important;
+}
+
+.kpi-value-gs {
+  font-family: var(--font-obsidian-mono) !important;
+  font-size: 1.45rem !important;
+  font-weight: 800 !important;
+  color: var(--obsidian-text-primary) !important;
+  letter-spacing: -0.02em !important;
+}
+
+.kpi-value-usd {
+  font-family: var(--font-obsidian-mono) !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  color: var(--obsidian-text-secondary) !important;
+}
+
+/* Overview Module Navigation Cards */
+.admin-module-card {
+  background-color: var(--obsidian-surface) !important;
+  border: 1px solid var(--obsidian-border-subtle) !important;
+  border-radius: var(--obsidian-radius-md) !important;
+  padding: 20px !important;
+  transition: all 0.18s ease-in-out !important;
+  cursor: pointer !important;
+}
+
+.admin-module-card:hover {
+  background-color: var(--obsidian-surface-elevated) !important;
+  border-color: var(--obsidian-border-medium) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--obsidian-shadow-md) !important;
+}
+
+.admin-module-card h4 {
+  font-family: var(--font-obsidian-heading) !important;
+  font-size: 1.02rem !important;
+  font-weight: 700 !important;
+  color: var(--obsidian-text-primary) !important;
+  margin-top: 12px !important;
+  margin-bottom: 6px !important;
+}
+
+.admin-module-card p {
+  font-size: 0.82rem !important;
+  line-height: 1.45 !important;
+  color: var(--obsidian-text-secondary) !important;
+}
+
+.admin-module-footer {
+  border-top: 1px solid var(--obsidian-border-subtle) !important;
+  padding-top: 12px !important;
+  margin-top: 16px !important;
+}
+
+.admin-module-btn {
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  color: var(--obsidian-action) !important;
+}
+
+/* ==============================================================================
+ * BUTTONS (SOBER, COMFORTABLE SIZES, ZERO NEON)
+ * ============================================================================== */
+
+.btn-admin-action {
+  font-family: var(--font-obsidian-sans) !important;
+  border-radius: var(--obsidian-radius-sm) !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
+  box-shadow: none !important;
+  border: 1px solid var(--obsidian-border-medium) !important;
+  cursor: pointer !important;
+}
+
+.btn-admin-action.emerald {
+  background: #064e3b !important;
+  color: #34d399 !important;
+  border-color: rgba(52, 211, 153, 0.25) !important;
+}
+
+.btn-admin-action.emerald:hover {
+  background: #047857 !important;
+  color: #ffffff !important;
+}
+
+.btn-admin-action.cyan {
+  background: #0c4a6e !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.25) !important;
+}
+
+.btn-admin-action.cyan:hover {
+  background: #0284c7 !important;
+  color: #ffffff !important;
+}
+
+.btn-admin-action.red {
+  background: #4c0519 !important;
+  color: #fb7185 !important;
+  border-color: rgba(251, 113, 133, 0.25) !important;
+}
+
+.btn-admin-action.red:hover {
+  background: #be123c !important;
+  color: #ffffff !important;
+}
+
+/* ==============================================================================
+ * DATA TABLES & FORM INPUTS
+ * ============================================================================== */
+
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.82rem;
+}
+
+.admin-table th {
+  background: var(--obsidian-surface-elevated) !important;
+  color: var(--obsidian-text-secondary) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  font-size: 0.72rem !important;
+  border-bottom: 1px solid var(--obsidian-border-subtle) !important;
+  padding: 12px 16px !important;
+}
+
+.admin-table td {
+  border-bottom: 1px solid var(--obsidian-border-subtle) !important;
+  color: var(--obsidian-text-primary) !important;
+  padding: 14px 16px !important;
+}
+
+.admin-table tr:hover td {
+  background: var(--obsidian-surface-hover) !important;
+}
+
+/* Monetary & Code Cells */
+.col-mono,
+.price-gs,
+.price-usd,
+.cell-code {
+  font-family: var(--font-obsidian-mono) !important;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Form Controls */
+.form-input-admin,
+.form-select-admin,
+.form-textarea-admin {
+  background: var(--obsidian-surface-elevated) !important;
+  border: 1px solid var(--obsidian-border-medium) !important;
+  color: var(--obsidian-text-primary) !important;
+  border-radius: var(--obsidian-radius-sm) !important;
+  padding: 10px 14px !important;
+  font-family: var(--font-obsidian-sans) !important;
+  font-size: 0.85rem !important;
+  outline: none !important;
+  transition: border-color 0.15s ease !important;
+}
+
+.form-input-admin:focus,
+.form-select-admin:focus,
+.form-textarea-admin:focus {
+  border-color: var(--obsidian-action) !important;
+  box-shadow: 0 0 0 1px var(--obsidian-action) !important;
+}

@@ -110,7 +110,7 @@ function autoDetectUserCountry() {
 }
 
 // Instant Cache Hydration with Versioning & Legacy Purge
-const GB_CATALOG_CACHE_VERSION = 'gb_v9_apps_pro_and_ai_accounts';
+const GB_CATALOG_CACHE_VERSION = 'gb_v10_hero_banners_and_giftcards_sync';
 const cachedCatalog = (() => {
   try {
     const v = localStorage.getItem('gb_catalog_cache_v');
@@ -171,7 +171,8 @@ function getGiftcardAsset(id, name) {
   if (clean.includes('net') || clean.includes('netflix')) return '/assets/giftcards/netflix.svg';
   if (clean.includes('google') || clean.includes('play')) return '/assets/giftcards/googleplay.svg';
   if (clean.includes('apple') || clean.includes('itunes')) return '/assets/giftcards/apple.svg';
-  return '/assets/branding/icon.png';
+  if (clean.includes('riot') || clean.includes('valorant') || clean.includes('league')) return '/assets/giftcards/steam.svg';
+  return '/assets/giftcards/playstation.svg';
 }
 
 
@@ -767,11 +768,12 @@ function initHeroAccordion() {
 
   const banners = (state.heroBanners && Array.isArray(state.heroBanners) && state.heroBanners.length > 0) ? state.heroBanners : null;
   if (!banners) {
-    container.innerHTML = `
-      <div class="eneba-slide active" style="background: linear-gradient(135deg, #091222 0%, #0d1a38 100%);">
+    container.innerHTML = [0, 1, 2, 3].map(i => `
+      <div class="eneba-slide ${i === 0 ? 'active' : ''} eneba-slide-skeleton" style="background: linear-gradient(135deg, #07090e 0%, #111520 50%, #07090e 100%);">
         <div class="eneba-slide-bg horizontal-bg" style="background: none;"></div>
+        <div class="eneba-slide-bg vertical-bg" style="background: none;"></div>
       </div>
-    `;
+    `).join('');
     return;
   }
 
@@ -1355,10 +1357,10 @@ function renderRetailGiftCards() {
   const container = document.getElementById('retail-giftcards-grid');
   if (!container) return;
 
-  // Prefer official giftcard brands from admin if available, or fallback to giftcard store products
-  const brandsList = (state.giftcardBrands && state.giftcardBrands.length > 0)
+  // Use exclusively official giftcard brands (anti-flicker: no fallback to generic product covers)
+  const brandsList = (state.giftcardBrands && Array.isArray(state.giftcardBrands) && state.giftcardBrands.length > 0)
     ? state.giftcardBrands
-    : (state.storeProducts ? state.storeProducts.filter(p => p.category === 'gift_card') : []);
+    : [];
 
   // Anti-Flicker: Skeletons while loading
   if (brandsList.length === 0) {
@@ -1372,8 +1374,8 @@ function renderRetailGiftCards() {
     const cardTitle = gc.name || gc.title || 'Gift Card';
     const cardId = gc.id || gc.brandId || `gc_${Math.random()}`;
     const fallbackGiftcard = getGiftcardAsset(cardId, cardTitle);
-    const rawImg = gc.logoImage || gc.logoUrl || gc.coverImage || gc.coverUrl || gc.icon || fallbackGiftcard;
-    const finalImg = (rawImg && !rawImg.includes('unsplash')) ? rawImg : fallbackGiftcard;
+    const rawImg = gc.logoUrl || gc.logoImage || gc.coverUrl || gc.coverImage || gc.icon || fallbackGiftcard;
+    const finalImg = (rawImg && !rawImg.includes('unsplash') && !rawImg.includes('hero-showcase') && !rawImg.includes('icon.png')) ? rawImg : fallbackGiftcard;
     const tiltVariance = (0.95 + ((idx % 4) * 0.08)).toFixed(2);
 
     return `
@@ -1729,9 +1731,13 @@ async function fetchStoreData() {
     .then(r => r.json())
     .then(bRes => {
       if (bRes && Array.isArray(bRes.banners) && bRes.banners.length > 0) {
-        state.heroBanners = bRes.banners;
-        initHeroAccordion();
-        saveCatalogCache();
+        const bannersJson = JSON.stringify(bRes.banners);
+        const currentJson = JSON.stringify(state.heroBanners || []);
+        if (bannersJson !== currentJson || (state.heroBanners || []).length === 0) {
+          state.heroBanners = bRes.banners;
+          initHeroAccordion();
+          saveCatalogCache();
+        }
       }
     })
     .catch(() => {});

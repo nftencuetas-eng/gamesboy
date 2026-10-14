@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getDb, saveStorage } from '../config/database.js';
+import requireAdminAuth from '../middleware/adminAuth.js';
 
 const router = Router();
 
@@ -236,6 +237,7 @@ Tasa de cambio actual: **1 USDT = ${rate.toLocaleString('es-PY')} Gs.**`;
 // =======================================================
 // 2. ADMIN ENDPOINTS (AI WHATSAPP MANAGEMENT & NOTES)
 // =======================================================
+router.use('/admin', requireAdminAuth);
 
 // GET AI Configuration for Admin
 router.get('/admin/config', (req, res) => {

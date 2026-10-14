@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import { getDb, saveDb } from '../config/database.js';
 import { DEFAULT_TENANT, DEFAULT_TENANT_ID } from '../middleware/tenantResolver.js';
+import requireAdminAuth from '../middleware/adminAuth.js';
 
 const router = Router();
 
@@ -127,7 +128,7 @@ router.get('/check-slug/:slug', (req, res) => {
 });
 
 // --- 3. LIST ALL TENANTS (SUPERADMIN / PLATFORM DASHBOARD) ---
-router.get('/tenants', (req, res) => {
+router.get('/tenants', requireAdminAuth, (req, res) => {
   const db = getDb();
   const tenants = db.tenants || [DEFAULT_TENANT];
 
@@ -238,7 +239,7 @@ router.post('/tenants', (req, res) => {
 });
 
 // --- 5. UPDATE TENANT SETTINGS & BRANDING ---
-router.put('/tenants/:id', (req, res) => {
+router.put('/tenants/:id', requireAdminAuth, (req, res) => {
   try {
     const db = getDb();
     if (!db.tenants) db.tenants = [DEFAULT_TENANT];

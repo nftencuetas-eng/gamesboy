@@ -141,7 +141,12 @@ app.get('/marketplace', (req, res) => res.sendFile(path.join(clientPath, 'store.
 app.get('/saas', (req, res) => res.sendFile(path.join(clientPath, 'index.html')));
 app.get('/landing', (req, res) => res.sendFile(path.join(clientPath, 'index.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(clientPath, 'login.html')));
-app.get('/admin', (req, res) => res.sendFile(path.join(clientPath, 'admin.html')));
+app.get('/admin', (req, res) => {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
+  res.sendFile(path.join(clientPath, 'admin.html'));
+});
 app.get('/admin/login', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
 app.get('/admin-login', (req, res) => res.sendFile(path.join(clientPath, 'admin-login.html')));
 app.get('/admid', (req, res) => res.redirect('/admin'));

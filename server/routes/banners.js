@@ -1,6 +1,7 @@
 import express from 'express';
 import database, { getDb, saveStorage } from '../config/database.js';
 import postgresAdapter from '../db/postgresAdapter.js';
+import requireAdminAuth from '../middleware/adminAuth.js';
 
 const router = express.Router();
 
@@ -76,15 +77,17 @@ router.get('/', (req, res) => {
     const db = getDb();
     const all = ensureDefaultBanners(db);
     const banners = all.filter(b => b.isActive !== false).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
-    return res.json({ success: true, banners: banners.length > 0 ? banners : all });
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    return res.json({ success: true, count: banners.length, banners: banners.length > 0 ? banners : all });
   } catch (err) {
     console.error('Error fetching hero banners:', err);
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.json({ success: true, banners: defaultHeroBanners });
   }
 });
 
 // GET /api/banners/admin - Fetch all hero banners for Admin Editor
-router.get('/admin', (req, res) => {
+router.get('/admin', requireAdminAuth, (req, res) => {
   try {
     const db = getDb();
     const all = ensureDefaultBanners(db);
@@ -95,7 +98,7 @@ router.get('/admin', (req, res) => {
 });
 
 // POST /api/banners/admin - Admin update/save hero banners (up to 4 items)
-router.post('/admin', async (req, res) => {
+router.post('/admin', requireAdminAuth, async (req, res) => {
   try {
     const { banners } = req.body;
     if (!Array.isArray(banners)) {

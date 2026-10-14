@@ -3,8 +3,12 @@ import { getDb, saveStorage } from '../config/database.js';
 import { approveDeposit, rejectDeposit, getWallet } from '../services/walletService.js';
 import { setExchangeRate, convertFromUsd } from '../services/currencyService.js';
 import cryptoService from '../services/cryptoService.js';
+import requireAdminAuth from '../middleware/adminAuth.js';
 
 const router = Router();
+
+// Apply strict server-side Admin Authentication to all administrative routes
+router.use(requireAdminAuth);
 
 // =======================================================
 // 1. MÉTRICAS & RESUMEN GENERAL (OVERVIEW & FINANCIALS)

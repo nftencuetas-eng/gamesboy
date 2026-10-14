@@ -146,12 +146,18 @@ router.post('/login', async (req, res) => {
   }
 
   const wallet = getWallet(user.id);
+  const sessionToken = cryptoService.generateToken({
+    userId: user.id,
+    role: user.role,
+    email: user.email
+  });
+
   res.json({
     success: true,
     message: `¡Bienvenido de nuevo, ${user.name}!`,
     user,
     wallet,
-    token: `gb_token_${user.id}_${Date.now()}`
+    token: sessionToken
   });
 });
 

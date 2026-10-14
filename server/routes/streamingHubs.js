@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getDb, saveStorage } from '../config/database.js';
 import { convertFromUsd } from '../services/currencyService.js';
 import cryptoService from '../services/cryptoService.js';
+import requireAdminAuth from '../middleware/adminAuth.js';
 
 const router = Router();
 
@@ -336,8 +337,8 @@ router.put('/:platform', (req, res) => {
   });
 });
 
-// 5. CREATE NEW STREAMING SERVICE (ADMIN)
-router.post('/', (req, res) => {
+// 5. CREATE NEW STREAMING SERVICE (ADMIN PROTECTED)
+router.post('/', requireAdminAuth, (req, res) => {
   try {
     const db = getDb();
     if (!db.streaming_services) db.streaming_services = [];
@@ -397,7 +398,7 @@ router.post('/', (req, res) => {
 });
 
 // 6. UPDATE STREAMING SERVICE BY ID (ADMIN - FULL UPDATE)
-router.put('/:serviceId', (req, res) => {
+router.put('/:serviceId', requireAdminAuth, (req, res) => {
   try {
     const db = getDb();
     const serviceId = req.params.serviceId;
@@ -448,8 +449,8 @@ router.put('/:serviceId', (req, res) => {
   }
 });
 
-// 7. DELETE STREAMING SERVICE (ADMIN)
-router.delete('/:serviceId', (req, res) => {
+// 7. DELETE STREAMING SERVICE (ADMIN PROTECTED)
+router.delete('/:serviceId', requireAdminAuth, (req, res) => {
   try {
     const db = getDb();
     const serviceId = req.params.serviceId;
@@ -473,7 +474,7 @@ router.delete('/:serviceId', (req, res) => {
 });
 
 // 8. AI / REAL-TIME LIVE RELEASES SYNCHRONIZER
-router.post('/:platform/sync-ai', async (req, res) => {
+router.post('/:platform/sync-ai', requireAdminAuth, async (req, res) => {
   try {
     const db = getDb();
     const service = getPlatformService(req.params.platform);
