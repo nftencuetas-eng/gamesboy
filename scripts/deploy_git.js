@@ -15,7 +15,10 @@ function resolveToken() {
   
   if (process.platform === 'win32') {
     try {
-      const psScript = path.resolve(dir, 'scratch', 'get_cred.ps1');
+      let psScript = path.resolve(dir, 'scripts', 'get_cred.ps1');
+      if (!fs.existsSync(psScript)) {
+        psScript = path.resolve(dir, 'scratch', 'get_cred.ps1');
+      }
       if (fs.existsSync(psScript)) {
         const out = execFileSync('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', psScript], { encoding: 'utf8' });
         if (out && out.trim()) return out.trim();
