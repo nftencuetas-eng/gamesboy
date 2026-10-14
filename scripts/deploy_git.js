@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import git from 'isomorphic-git';
 import http from 'isomorphic-git/http/node';
 
@@ -17,7 +17,7 @@ function resolveToken() {
     try {
       const psScript = path.resolve(dir, 'scratch', 'get_cred.ps1');
       if (fs.existsSync(psScript)) {
-        const out = execSync(`powershell -ExecutionPolicy Bypass -File "${psScript}"`, { encoding: 'utf8' });
+        const out = execFileSync('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', psScript], { encoding: 'utf8' });
         if (out && out.trim()) return out.trim();
       }
     } catch (e) {
